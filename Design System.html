@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System — Bibliothèque</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --bg:          #FFFFFF;
+    --bg2:         #FFFFFF;
+    --bg3:         #F7F7F7;
+    --card:        #FFFFFF;
+    --border:      #E0E0E0;
+    --shadow-sm:   0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-lg:   0 4px 20px rgba(0,0,0,0.14), 0 1px 6px rgba(0,0,0,0.08);
+    --accent:      #4959E6;
+    --accent-bg:   rgba(73,89,230,0.08);
+    --teal:        #00A699;
+    --teal-bg:     rgba(0,166,153,0.08);
+    --text:        #222222;
+    --text-2:      #555555;
+    --text-3:      #777777;
+    --nav:         rgba(255,255,255,0.96);
+    --radius:      8px;
+    --transition:  background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  [data-theme="dark"] {
+    --bg:          #0F0F0F;
+    --bg2:         #0F0F0F;
+    --bg3:         #1A1A1A;
+    --card:        #1E1E1E;
+    --border:      #2E2E2E;
+    --shadow-sm:   0 1px 4px rgba(0,0,0,0.4), 0 2px 12px rgba(0,0,0,0.3);
+    --shadow-lg:   0 6px 28px rgba(0,0,0,0.55);
+    --accent:      #7B89F8;
+    --accent-bg:   rgba(123,137,248,0.12);
+    --teal:        #00C9BE;
+    --teal-bg:     rgba(0,201,190,0.1);
+    --text:        #F0F0F0;
+    --text-2:      #909090;
+    --text-3:      #555555;
+    --nav:         rgba(15,15,15,0.96);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 14px; overflow-y: scroll; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    transition: var(--transition);
+  }
+
+  /* ─── DS LAYOUT ─── */
+  .ds-header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: var(--transition);
+    position: sticky;
+  }
+  .ds-header .theme-btn {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ds-header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 40px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  .ds-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .ds-logo:hover { opacity: 0.8; }
+  .ds-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+  }
+  .ds-logo span { color: var(--text-3); font-weight: 500; margin-left: 4px; }
+
+  .ds-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 40px 120px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ─── SIDEBAR NAV ─── */
+  .ds-nav {
+    position: sticky;
+    top: 84px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .ds-nav-section {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    padding: 16px 10px 6px;
+  }
+  .ds-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+  .ds-nav-link:hover { background: var(--bg3); color: var(--text); }
+  .ds-nav-link.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+  /* ─── CONTENT ─── */
+  .ds-content { min-width: 0; }
+
+  .ds-section {
+    margin-bottom: 80px;
+    scroll-margin-top: 84px;
+  }
+
+  .ds-section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .ds-section-sub {
+    font-size: 0.857rem;
+    color: var(--text-3);
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+  .ds-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 28px;
+  }
+
+  /* ─── DS CARD (container) ─── */
+  .ds-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .ds-card-label {
+    padding: 10px 16px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  .ds-card-body {
+    padding: 28px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .ds-card-body.col { flex-direction: column; }
+  .ds-card-body.center { align-items: center; }
+
+  /* ─── TOKEN LABEL ─── */
+  .ds-token-name {
+    font-size: 0.75rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-weight: 600;
+    color: var(--text-3);
+    margin-top: 6px;
+  }
+  .ds-token-val {
+    font-size: 0.68rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--text-3);
+    opacity: 0.7;
+  }
+
+  /* ─── COLORS ─── */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  .color-swatch {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .color-swatch-block {
+    height: 64px;
+  }
+  .color-swatch-info {
+    padding: 12px 12px 14px;
+    background: var(--bg3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .color-swatch-info .ds-token-name { margin-top: 0; }
+
+  /* ─── TOKEN USAGE TABLE ─── */
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  .token-table thead tr {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  .token-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .token-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .token-table tbody tr:last-child { border-bottom: none; }
+  .token-table tbody tr:hover { background: var(--bg3); }
+  .token-table td { padding: 12px 16px; vertical-align: middle; }
+  .token-table-component {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    width: 200px;
+  }
+  .token-table td:last-child { display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 16px; }
+
+  /* ─── TOKEN CHIPS ─── */
+  .ds-tokens {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .ds-tokens-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+  .ds-token-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .type-sample { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .type-sample:last-child { border-bottom: none; }
+  .type-meta {
+    font-size: 0.68rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
+
+  /* ─── SPACING ─── */
+  .spacing-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .spacing-row:last-child { border-bottom: none; }
+  .spacing-block { background: var(--accent-bg); flex-shrink: 0; height: 20px; }
+  .spacing-label { font-size: 0.857rem; font-weight: 600; color: var(--text); min-width: 40px; }
+  .spacing-use { font-size: 0.75rem; color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  /* ────────────────────────────────
+     LIVE COMPONENTS (copied exactly)
+  ──────────────────────────────── */
+
+  /* BUTTONS */
+  /* ── Button base ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border: none; font-family: inherit; font-weight: 500; cursor: pointer;
+    white-space: nowrap; transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Variants */
+  .btn-primary { background: var(--accent); color: #fff; border: none; }
+  .btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 80%, #000); }
+
+  .btn-ghost { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+
+  .btn-icon { background: transparent; color: var(--text-2); border: 1px solid var(--border); aspect-ratio: 1; }
+  .btn-icon:hover:not(:disabled) { border-color: var(--text); }
+  .btn-icon svg { pointer-events: none; }
+
+  /* Sizes */
+  .btn-xs { height: 24px; padding: 0 8px;  border-radius: 6px; font-size: 0.75rem; }
+  .btn-sm { height: 32px; padding: 0 12px; border-radius: 7px; font-size: 0.857rem; }
+  .btn-md { height: 40px; padding: 0 16px; border-radius: 8px; font-size: 1rem; }
+  .btn-lg { height: 48px; padding: 0 20px; border-radius: 8px; font-size: 1rem; }
+  .btn-xl { height: 56px; padding: 0 24px; border-radius: 8px; font-size: 1.07rem; }
+
+  /* Icon sizes */
+  .btn-icon.btn-xs { width: 24px; padding: 0; }
+  .btn-icon.btn-xs svg { width: 12px; height: 12px; }
+  .btn-icon.btn-sm { width: 32px; padding: 0; }
+  .btn-icon.btn-sm svg { width: 14px; height: 14px; }
+  .btn-icon.btn-md { width: 40px; padding: 0; }
+  .btn-icon.btn-md svg { width: 16px; height: 16px; }
+  .btn-icon.btn-lg { width: 48px; padding: 0; }
+  .btn-icon.btn-lg svg { width: 18px; height: 18px; }
+  .btn-icon.btn-xl { width: 56px; padding: 0; }
+  .btn-icon.btn-xl svg { width: 20px; height: 20px; }
+
+  /* Legacy aliases (used in component previews) */
+  .btn-primary-legacy {
+    height: 40px; padding: 0 20px; border-radius: 8px; border: none;
+    background: var(--accent); color: #fff; font-family: inherit;
+    font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary-legacy:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .btn-primary-legacy:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost-legacy {
+    height: 40px; padding: 0 20px; border-radius: 8px; border: 1.5px solid var(--border);
+    background: transparent; color: var(--text-2); font-family: inherit;
+    font-size: 1rem; font-weight: 500; cursor: pointer; transition: border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .btn-ghost-legacy:hover { border-color: var(--text); color: var(--text); }
+  .btn-icon-ghost {
+    width: 40px; height: 40px; border-radius: 8px;
+    border: 1px solid var(--border); background: transparent;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s;
+  }
+  .btn-icon-ghost:hover { border-color: var(--text); }
+  .btn-icon-ghost svg { width: 16px; height: 16px; color: var(--text-2); }
+
+  /* Aliases for modal/panel previews — sizing only, variant handled by .btn-primary / .btn-ghost above */
+
+  /* Button scale table */
+  .btn-scale-table { width: 100%; border-collapse: collapse; }
+  .btn-scale-table thead tr { background: var(--bg3); border-bottom: 1px solid var(--border); }
+  .btn-scale-table th {
+    padding: 10px 16px; text-align: left; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3);
+  }
+  .btn-scale-table tbody tr { border-bottom: 1px solid var(--border); }
+  .btn-scale-table tbody tr:last-child { border-bottom: none; }
+  .btn-scale-table tbody tr:hover { background: var(--bg3); }
+  .btn-scale-table td { padding: 16px; vertical-align: middle; }
+  .btn-scale-size {
+    font-size: 0.75rem; font-weight: 700; font-family: 'SF Mono','Fira Code',monospace;
+    color: var(--text-3); white-space: nowrap;
+  }
+  .btn-scale-spec {
+    font-size: 0.68rem; color: var(--text-3); margin-top: 3px; font-family: 'SF Mono','Fira Code',monospace;
+    white-space: nowrap;
+  }
+
+  /* SEGMENTED CONTROL */
+  .tabs {
+    display: inline-flex;
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .tab {
+    height: 32px; padding: 0 16px; display: flex; align-items: center; gap: 7px;
+    font-weight: 500; font-size: 1rem; color: var(--text-2); border: none;
+    background: none; cursor: pointer; border-radius: 8px; white-space: nowrap;
+    transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--bg); color: var(--text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  }
+  .badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 18px; padding: 0 6px; border-radius: 8px;
+    font-size: 0.68rem; font-weight: 700;
+    background: var(--border); color: var(--text-2); transition: all 0.2s;
+  }
+  .tab.active .badge { background: var(--bg3); color: var(--text); }
+
+  /* VIEW TOGGLE */
+  .view-btns {
+    display: flex; border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; flex-shrink: 0;
+  }
+  .view-btn {
+    width: 38px; height: 38px; border: none; background: var(--bg3);
+    color: var(--text-3); cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .view-btn:first-child { border-right: 1px solid var(--border); }
+  .view-btn:hover { background: var(--border); color: var(--text-2); }
+  .view-btn.active { background: var(--text); color: var(--bg); }
+  .view-btn svg { width: 15px; height: 15px; }
+
+  /* BADGE / PILL */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 32px;
+    font-size: 0.8rem; font-weight: 700;
+  }
+  .pill-owned    { background: var(--accent-bg); color: var(--accent); }
+  .pill-wishlist { background: var(--teal-bg);   color: var(--teal); }
+
+  .status-badge {
+    display: inline-flex; align-items: center; padding: 3px 10px;
+    border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+    background: var(--bg3); color: var(--text-3); white-space: nowrap;
+  }
+
+  /* SEARCH INPUT */
+  .search-box-demo {
+    position: relative; display: flex; align-items: center; width: 280px;
+  }
+  .search-box-demo svg {
+    position: absolute; left: 14px; width: 15px; height: 15px;
+    color: var(--text-3); pointer-events: none;
+  }
+  .search-box-demo input {
+    height: 36px; width: 100%; padding: 0 16px 0 38px;
+    border: 1px solid var(--border); border-radius: 32px;
+    background: var(--bg3); font-family: inherit; font-size: 1rem;
+    font-weight: 500; color: var(--text); outline: none; transition: all 0.2s;
+  }
+  .search-box-demo input::placeholder { color: var(--text-3); }
+  .search-box-demo input:focus { border: 2px solid var(--text); }
+
+  /* TEXT FIELD */
+  .field-demo {
+    display: flex; flex-direction: column; gap: 6px; width: 280px;
+  }
+  .field-demo label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); }
+  .field-demo input {
+    height: 42px; padding: 0 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: var(--bg3);
+    color: var(--text); font-family: inherit; font-size: 1rem;
+    font-weight: 500; outline: none; transition: border-color 0.15s;
+  }
+  .field-demo input:focus { border-color: var(--accent); }
+
+  /* BOOK CARD */
+  .book-card {
+    background: var(--card); border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border); transition: transform 0.22s ease, border-color 0.22s;
+    cursor: pointer; width: 180px;
+  }
+  .book-card:hover { transform: translateY(-4px); border-color: var(--text-3); background: var(--bg3); }
+  .book-cover {
+    height: 148px; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; background: var(--bg3);
+  }
+  .book-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; }
+  .book-title {
+    font-size: 1rem; font-weight: 700; line-height: 1.35; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .book-author {
+    font-size: 0.857rem; font-weight: 500; color: var(--text-2);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;
+  }
+  .book-year { display: block; margin-top: 5px; font-size: 1rem; font-weight: 500; color: var(--text-3); }
+
+  /* LIST ROW */
+  .list-demo {
+    border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; width: 100%;
+  }
+  .list-demo table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  .list-demo thead tr { background: var(--bg3); border-bottom: 1px solid var(--border); }
+  .list-demo th {
+    padding: 11px 16px; text-align: left; font-size: 0.75rem;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2);
+  }
+  .list-demo tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; cursor: pointer; }
+  .list-demo tbody tr:last-child { border-bottom: none; }
+  .list-demo tbody tr:hover { background: var(--bg3); }
+  .list-demo td { padding: 16px 16px; vertical-align: middle; }
+  .list-title-cell { font-weight: 700; color: var(--text); }
+  .list-author-cell { font-size: 1rem; font-weight: 500; color: var(--text-2); }
+  .list-year-cell { font-size: 1rem; font-weight: 600; color: var(--text-2); white-space: nowrap; }
+
+  /* CHECKBOX */
+  .checkbox-demo {
+    width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border);
+    background: var(--bg); display: inline-flex; align-items: center;
+    justify-content: center; flex-shrink: 0; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .checkbox-demo.checked { background: var(--text); border-color: var(--text); }
+  .checkbox-demo svg { width: 10px; height: 10px; color: var(--bg); }
+
+  /* PANEL PREVIEW */
+  .panel-preview {
+    width: 280px; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg);
+  }
+  .panel-preview-header {
+    padding: 16px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: flex-end;
+  }
+  .panel-preview-cover {
+    width: 100%; aspect-ratio: 4/3; background: var(--bg3);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .panel-preview-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .panel-preview-tag {
+    display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 700; background: var(--bg3); color: var(--text-3); width: fit-content;
+  }
+  .panel-preview-title { font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
+  .panel-preview-author { font-size: 0.857rem; font-weight: 500; color: var(--text-2); }
+  .panel-preview-divider { height: 1px; background: var(--border); }
+  .panel-preview-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+  .panel-preview-text { font-size: 0.857rem; line-height: 1.6; color: var(--text-2); }
+
+  /* MODAL PREVIEW */
+  .modal-preview {
+    background: var(--card); border-radius: 8px; padding: 28px 24px;
+    position: relative; width: 100%; max-width: 480px;
+    box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  }
+  .modal-preview-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 20px; }
+  .modal-preview-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .modal-preview-field { display: flex; flex-direction: column; gap: 5px; }
+  .modal-preview-field label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); }
+  .modal-preview-field input {
+    height: 38px; padding: 0 12px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: var(--bg3);
+    color: var(--text); font-family: inherit; font-size: 1rem; font-weight: 500; outline: none;
+  }
+  .modal-preview-actions { display: flex; justify-content: space-between; }
+
+  /* SELECTION BAR PREVIEW */
+  .sel-bar-preview {
+    background: var(--text); color: var(--bg); border-radius: 8px;
+    padding: 12px 16px; display: inline-flex; align-items: center; gap: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2); white-space: nowrap;
+  }
+  .sel-count { font-size: 0.857rem; font-weight: 600; opacity: 0.75; }
+  .sel-btn {
+    height: 36px; padding: 0 14px; border-radius: 8px; border: none;
+    font-family: inherit; font-size: 1rem; font-weight: 500; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: opacity 0.15s;
+  }
+  .sel-cancel { background: rgba(255,255,255,0.15); color: inherit; }
+  .sel-cancel:hover { background: rgba(255,255,255,0.25); }
+  .sel-confirm { background: var(--accent); color: #fff; }
+
+  /* THEME TOGGLE */
+  .theme-btn {
+    width: 48px; height: 26px; border-radius: 13px; border: none;
+    background: #E0E0E0; cursor: pointer; position: relative;
+    display: flex; align-items: center; padding: 0 6px;
+    transition: background 0.4s;
+  }
+  [data-theme="dark"] .theme-btn { background: #ffffff; }
+  .toggle-thumb {
+    position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .toggle-thumb svg { width: 10px; height: 10px; color: #888; }
+  [data-theme="dark"] .toggle-thumb { transform: translateX(22px); background: #111; }
+
+  /* AUTOCOMPLETE PREVIEW */
+  .autocomplete-preview {
+    border: 1.5px solid var(--border); border-radius: 8px;
+    background: var(--card); box-shadow: var(--shadow-lg);
+    overflow: hidden; width: 280px;
+  }
+  .ac-item {
+    padding: 10px 14px; font-size: 1rem; font-weight: 500; color: var(--text); cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .ac-item:last-child { border-bottom: none; }
+  .ac-item:hover, .ac-item.focused { background: var(--accent-bg); }
+  .ac-item span { font-size: 0.857rem; font-weight: 400; color: var(--text-2); margin-left: 8px; }
+  .ac-loading { padding: 10px 14px; font-size: 0.857rem; color: var(--text-3); }
+
+  /* SPINNER */
+  .spinner {
+    width: 24px; height: 24px; border: 2px solid var(--border);
+    border-top-color: var(--text); border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* EMPTY STATE */
+  .empty-preview { text-align: center; padding: 40px 20px; }
+  .empty-emoji { font-size: 3rem; margin-bottom: 12px; }
+  .empty-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .empty-sub { font-size: 1rem; color: var(--text-2); }
+
+  /* FOOTER PREVIEW */
+  .footer-preview {
+    border-top: 1px solid var(--border); padding: 16px 20px;
+    font-size: 0.78rem; font-weight: 500; color: var(--text-3); width: 100%;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+  @media (max-width: 900px) {
+    .ds-wrap { grid-template-columns: 1fr; padding: 32px 20px 80px; }
+    .ds-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="ds-header">
+  <div class="ds-header-inner">
+    <a class="ds-logo" href="Bibliothèque.html">
+      <div class="ds-logo-icon">R</div>
+      Readr <span>/ Design System</span>
+    </a>
+    <button class="theme-btn" onclick="toggleTheme()" title="Theme">
+      <span class="toggle-thumb">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </span>
+    </button>
+  </div>
+</header>
+
+<div class="ds-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="ds-nav">
+    <div class="ds-nav-section">Foundations</div>
+    <a class="ds-nav-link active" href="#colors">Colors</a>
+    <a class="ds-nav-link" href="#typography">Typography</a>
+    <a class="ds-nav-link" href="#spacing">Spacing</a>
+    <a class="ds-nav-link" href="#shadows">Shadows & Radius</a>
+
+    <div class="ds-nav-section">Components</div>
+    <a class="ds-nav-link" href="#buttons">Buttons</a>
+    <a class="ds-nav-link" href="#inputs">Inputs</a>
+    <a class="ds-nav-link" href="#segmented">Segmented Control</a>
+    <a class="ds-nav-link" href="#view-toggle">View Toggle</a>
+    <a class="ds-nav-link" href="#badges">Badges & Pills</a>
+    <a class="ds-nav-link" href="#checkbox">Checkbox</a>
+    <a class="ds-nav-link" href="#autocomplete">Autocomplete</a>
+    <a class="ds-nav-link" href="#theme-toggle">Theme Toggle</a>
+
+    <div class="ds-nav-section">Patterns</div>
+    <a class="ds-nav-link" href="#card">Book Card</a>
+    <a class="ds-nav-link" href="#list">List View</a>
+    <a class="ds-nav-link" href="#panel">Side Panel</a>
+    <a class="ds-nav-link" href="#modal">Modal</a>
+    <a class="ds-nav-link" href="#selection-bar">Selection Bar</a>
+    <a class="ds-nav-link" href="#empty">Empty State</a>
+    <a class="ds-nav-link" href="#footer">Footer</a>
+
+    <div class="ds-nav-section">Reference</div>
+    <a class="ds-nav-link" href="#token-usage">Token Usage</a>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="ds-content">
+
+    <!-- PAGE INTRO -->
+    <div style="margin-bottom: 64px;">
+      <p style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px;">Design System v1</p>
+      <h1 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 16px;">Bibliothèque</h1>
+      <p style="font-size: 1rem; color: var(--text-2); max-width: 480px; line-height: 1.65;">Complete reference of tokens, components and patterns. Native light and dark themes via <code style="font-size: 0.857rem; background: var(--bg3); padding: 2px 6px; border-radius: 4px;">data-theme</code>.</p>
+    </div>
+
+    <!-- ─── COLORS ─── -->
+    <section class="ds-section" id="colors">
+      <h2 class="ds-section-title">Colors</h2>
+      <p class="ds-section-sub">CSS tokens defined on <code>:root</code> et <code>[data-theme="dark"]</code></p>
+      <div class="ds-divider"></div>
+
+      <p style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px;">Surfaces</p>
+      <div class="color-grid" style="margin-bottom: 24px;">
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--bg); border-bottom: 1px solid var(--border);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Page</div>
+            <div class="ds-token-name">--bg</div>
+            <div class="ds-token-val">#FFF / #0F0F0F</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--bg3);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Subtle</div>
+            <div class="ds-token-name">--bg3</div>
+            <div class="ds-token-val">#F7F7F7 / #1A1A1A</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--card); border-bottom: 1px solid var(--border);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Card</div>
+            <div class="ds-token-name">--card</div>
+            <div class="ds-token-val">#FFF / #1E1E1E</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--border);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Divider</div>
+            <div class="ds-token-name">--border</div>
+            <div class="ds-token-val">#E0E0E0 / #2E2E2E</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px;">Accent</p>
+      <div class="color-grid" style="margin-bottom: 24px;">
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--accent);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Primary</div>
+            <div class="ds-token-name">--accent</div>
+            <div class="ds-token-val">#4959E6 / #7B89F8</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--accent-bg);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Primary Subtle</div>
+            <div class="ds-token-name">--accent-bg</div>
+            <div class="ds-token-val">rgba(92,108,246,.08)</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--teal);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Secondary</div>
+            <div class="ds-token-name">--teal</div>
+            <div class="ds-token-val">#00A699 / #00C9BE</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--teal-bg);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Secondary Subtle</div>
+            <div class="ds-token-name">--teal</div>
+            <div class="ds-token-val">rgba(0,166,153,.08)</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px;">Text</p>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--text);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Default</div>
+            <div class="ds-token-name">--text</div>
+            <div class="ds-token-val">#222 / #F0F0F0</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--text-2);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Secondary</div>
+            <div class="ds-token-name">--text-2</div>
+            <div class="ds-token-val">#555 / #909090</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background: var(--text-3);"></div>
+          <div class="color-swatch-info">
+            <div style="font-size: 0.857rem; font-weight: 700; color: var(--text);">Muted</div>
+            <div class="ds-token-name">--text-3</div>
+            <div class="ds-token-val">#777 / #555</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TYPOGRAPHY ─── -->
+    <section class="ds-section" id="typography">
+      <h2 class="ds-section-title">Typography</h2>
+      <p class="ds-section-sub">Plus Jakarta Sans — 14px base. All components inherit from <code>font-size: 1rem</code>.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Scale</div>
+        <div class="ds-card-body col" style="padding: 0 24px;">
+
+          <div class="type-sample">
+            <div style="font-size: clamp(2.4rem, 4.5vw, 3.3rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1;">Page Title</div>
+            <div class="type-meta">clamp(2.4rem, 4.5vw, 3.3rem) · weight 800 · tracking -0.04em</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;">Heading</div>
+            <div class="type-meta">2rem · weight 800 · tracking -0.02em</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em;">Section Heading</div>
+            <div class="type-meta">1.5rem · weight 800 · tracking -0.03em</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em;">Panel Title</div>
+            <div class="type-meta">1.15rem · weight 800 · tracking -0.02em</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 1rem; font-weight: 700;">Body Strong — Book title</div>
+            <div class="type-meta">1rem · weight 700</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 1rem; font-weight: 500; color: var(--text-2);">Body Regular — Author, values</div>
+            <div class="type-meta">1rem · weight 500 · color --text-2</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 0.857rem; font-weight: 500; color: var(--text-2);">Small — Counter, auteur card</div>
+            <div class="type-meta">0.857rem · weight 500 · color --text-2</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3);">EYEBROW LABEL</div>
+            <div class="type-meta">0.75rem · weight 700 · uppercase · tracking 0.08em · --text-3</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3);">SECTION NAV</div>
+            <div class="type-meta">0.68rem · weight 700 · uppercase · tracking 0.1em</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SPACING ─── -->
+    <section class="ds-section" id="spacing">
+      <h2 class="ds-section-title">Spacing</h2>
+      <p class="ds-section-sub">Values used across components and layout.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Scale</div>
+        <div class="ds-card-body col" style="padding: 20px 24px; gap: 0;">
+          <div class="spacing-row"><div class="spacing-block" style="width:4px;"></div><span class="spacing-label">4px</span><span class="spacing-use">margin-top .book-author</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:6px;"></div><span class="spacing-label">6px</span><span class="spacing-use">gap modal-field label→input</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:8px;"></div><span class="spacing-label">8px</span><span class="spacing-use">gap between buttons, sel-actions</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:12px;"></div><span class="spacing-label">12px</span><span class="spacing-use">gap counter-actions, panel-body</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:14px;"></div><span class="spacing-label">14px</span><span class="spacing-use">card body horizontal padding</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:16px;"></div><span class="spacing-label">16px</span><span class="spacing-use">gap search-row, tab padding, modal-fields gap</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:20px;"></div><span class="spacing-label">20px</span><span class="spacing-use">button padding, footer padding</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:24px;"></div><span class="spacing-label">24px</span><span class="spacing-use">modal padding, panel inner padding</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:28px;"></div><span class="spacing-label">28px</span><span class="spacing-use">counter-row margin-bottom</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:40px;"></div><span class="spacing-label">40px</span><span class="spacing-use">search-row margin-bottom, toolbar padding</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:56px;"></div><span class="spacing-label">56px</span><span class="spacing-use">page-title-row margin-bottom, main-wrap top, panel gap</span></div>
+          <div class="spacing-row"><div class="spacing-block" style="width:80px;"></div><span class="spacing-label">80px</span><span class="spacing-use">main-wrap bottom padding</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SHADOWS & RADIUS ─── -->
+    <section class="ds-section" id="shadows">
+      <h2 class="ds-section-title">Shadows & Radius</h2>
+      <p class="ds-section-sub">Depth and elevation tokens.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Shadows</div>
+        <div class="ds-card-body">
+          <div>
+            <div style="width: 120px; height: 64px; background: var(--card); border-radius: 8px; box-shadow: var(--shadow-sm);"></div>
+            <div class="ds-token-name">--shadow-sm</div>
+            <div class="ds-token-val">Cards, dropdowns</div>
+          </div>
+          <div>
+            <div style="width: 120px; height: 64px; background: var(--card); border-radius: 8px; box-shadow: var(--shadow-lg);"></div>
+            <div class="ds-token-name">--shadow-lg</div>
+            <div class="ds-token-val">Panel, modal, autocomplete</div>
+          </div>
+        </div>
+      </div>
+      <div class="ds-card" style="margin-top: 12px;">
+        <div class="ds-card-label">Border Radius</div>
+        <div class="ds-card-body">
+          <div>
+            <div style="width: 64px; height: 40px; background: var(--accent-bg); border-radius: 8px;"></div>
+            <div class="ds-token-name">--radius (8px)</div>
+            <div class="ds-token-val">Buttons, cards, inputs, modal</div>
+          </div>
+          <div>
+            <div style="width: 64px; height: 40px; background: var(--accent-bg); border-radius: 32px;"></div>
+            <div class="ds-token-name">32px</div>
+            <div class="ds-token-val">Search pill, pills</div>
+          </div>
+          <div>
+            <div style="width: 40px; height: 40px; background: var(--accent-bg); border-radius: 50%;"></div>
+            <div class="ds-token-name">50%</div>
+            <div class="ds-token-val">Theme toggle thumb</div>
+          </div>
+          <div>
+            <div style="width: 64px; height: 20px; background: var(--accent-bg); border-radius: 20px;"></div>
+            <div class="ds-token-name">20px</div>
+            <div class="ds-token-val">Badges, status tags, wishlist badge</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── BUTTONS ─── -->
+    <section class="ds-section" id="buttons">
+      <h2 class="ds-section-title">Buttons</h2>
+      <p class="ds-section-sub">5 sizes × 3 variants. MD (40px) is the app default. Font-weight 500 across all sizes.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-body" style="padding: 0;">
+          <table class="btn-scale-table">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Size</th>
+                <th>Primary</th>
+                <th>Ghost</th>
+                <th>Icon</th>
+                <th>Disabled</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- XS -->
+              <tr>
+                <td>
+                  <div class="btn-scale-size">XS</div>
+                  <div class="btn-scale-spec">h: 24px</div>
+                  <div class="btn-scale-spec">r: 6px</div>
+                  <div class="btn-scale-spec">0.75rem</div>
+                </td>
+                <td><button class="btn btn-primary btn-xs">Label</button></td>
+                <td><button class="btn btn-ghost btn-xs">Label</button></td>
+                <td>
+                  <button class="btn btn-icon btn-xs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                </td>
+                <td><button class="btn btn-primary btn-xs" disabled>Label</button></td>
+              </tr>
+
+              <!-- SM -->
+              <tr>
+                <td>
+                  <div class="btn-scale-size">SM</div>
+                  <div class="btn-scale-spec">h: 32px</div>
+                  <div class="btn-scale-spec">r: 7px</div>
+                  <div class="btn-scale-spec">0.857rem</div>
+                </td>
+                <td><button class="btn btn-primary btn-sm">Label</button></td>
+                <td><button class="btn btn-ghost btn-sm">Label</button></td>
+                <td>
+                  <button class="btn btn-icon btn-sm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                </td>
+                <td><button class="btn btn-primary btn-sm" disabled>Label</button></td>
+              </tr>
+
+              <!-- MD — default -->
+              <tr style="background: var(--accent-bg);">
+                <td>
+                  <div class="btn-scale-size" style="color: var(--accent);">MD ★</div>
+                  <div class="btn-scale-spec">h: 40px</div>
+                  <div class="btn-scale-spec">r: 8px</div>
+                  <div class="btn-scale-spec">1rem</div>
+                </td>
+                <td><button class="btn btn-primary btn-md">Label</button></td>
+                <td><button class="btn btn-ghost btn-md">Label</button></td>
+                <td>
+                  <button class="btn btn-icon btn-md">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                </td>
+                <td><button class="btn btn-primary btn-md" disabled>Label</button></td>
+              </tr>
+
+              <!-- LG -->
+              <tr>
+                <td>
+                  <div class="btn-scale-size">LG</div>
+                  <div class="btn-scale-spec">h: 48px</div>
+                  <div class="btn-scale-spec">r: 8px</div>
+                  <div class="btn-scale-spec">1rem</div>
+                </td>
+                <td><button class="btn btn-primary btn-lg">Label</button></td>
+                <td><button class="btn btn-ghost btn-lg">Label</button></td>
+                <td>
+                  <button class="btn btn-icon btn-lg">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                </td>
+                <td><button class="btn btn-primary btn-lg" disabled>Label</button></td>
+              </tr>
+
+              <!-- XL -->
+              <tr>
+                <td>
+                  <div class="btn-scale-size">XL</div>
+                  <div class="btn-scale-spec">h: 56px</div>
+                  <div class="btn-scale-spec">r: 8px</div>
+                  <div class="btn-scale-spec">1.07rem</div>
+                </td>
+                <td><button class="btn btn-primary btn-xl">Label</button></td>
+                <td><button class="btn btn-ghost btn-xl">Label</button></td>
+                <td>
+                  <button class="btn btn-icon btn-xl">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                </td>
+                <td><button class="btn btn-primary btn-xl" disabled>Label</button></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── INPUTS ─── -->
+    <section class="ds-section" id="inputs">
+      <h2 class="ds-section-title">Inputs</h2>
+      <p class="ds-section-sub">Height 42px for form fields, 36px for search.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Text Field — modal form</div>
+        <div class="ds-card-body">
+          <div class="field-demo">
+            <label>Title *</label>
+            <input type="text" placeholder="e.g. Les Misérables">
+          </div>
+          <div class="field-demo">
+            <label>Author *</label>
+            <input type="text" placeholder="e.g. Victor Hugo" style="border-color: var(--accent);">
+          </div>
+          <div class="field-demo">
+            <label>Year (optional)</label>
+            <input type="number" placeholder="e.g. 1862">
+          </div>
+        </div>
+      </div>
+      <div class="ds-card" style="margin-top: 12px;">
+        <div class="ds-card-label">Search — pill, border-radius 32px</div>
+        <div class="ds-card-body center">
+          <div class="search-box-demo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Title, author…">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SEGMENTED CONTROL ─── -->
+    <section class="ds-section" id="segmented">
+      <h2 class="ds-section-title">Segmented Control</h2>
+      <p class="ds-section-sub">iOS-style, centered in toolbar. Track uses --bg3, active tab on --bg with shadow.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Tabs</div>
+        <div class="ds-card-body center">
+          <div class="tabs">
+            <button class="tab active">Possédés <span class="badge">166</span></button>
+            <button class="tab">Wishlist <span class="badge">32</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── VIEW TOGGLE ─── -->
+    <section class="ds-section" id="view-toggle">
+      <h2 class="ds-section-title">View Toggle</h2>
+      <p class="ds-section-sub">Grid / list switcher. Active button uses inverted --text / --bg.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Grid / List</div>
+        <div class="ds-card-body center">
+          <div class="view-btns">
+            <button class="view-btn active" title="Vue cartes">
+              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            </button>
+            <button class="view-btn" title="Vue liste">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="view-btns" style="margin-left: 8px;">
+            <button class="view-btn" title="Vue cartes">
+              <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            </button>
+            <button class="view-btn active" title="Vue liste">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── BADGES & PILLS ─── -->
+    <section class="ds-section" id="badges">
+      <h2 class="ds-section-title">Badges & Pills</h2>
+      <p class="ds-section-sub">Counters, statuses, categories.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Badge — tabs</div>
+        <div class="ds-card-body center">
+          <span class="badge">166</span>
+          <span class="badge" style="background: var(--bg3); color: var(--text);">32</span>
+        </div>
+      </div>
+      <div class="ds-card" style="margin-top: 12px;">
+        <div class="ds-card-label">Pills — category</div>
+        <div class="ds-card-body center">
+          <span class="pill pill-owned">Owned</span>
+          <span class="pill pill-wishlist">Wishlist</span>
+        </div>
+      </div>
+      <div class="ds-card" style="margin-top: 12px;">
+        <div class="ds-card-label">Status Badge — list view</div>
+        <div class="ds-card-body center">
+          <span class="status-badge">Owned</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CHECKBOX ─── -->
+    <section class="ds-section" id="checkbox">
+      <h2 class="ds-section-title">Checkbox</h2>
+      <p class="ds-section-sub">18×18px, border-radius 5px. Unchecked → --border. Checked → --text / --bg.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">States</div>
+        <div class="ds-card-body center">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div class="checkbox-demo"></div>
+            <span style="font-size: 0.75rem; color: var(--text-3);">Unchecked</span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div class="checkbox-demo checked">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,6 5,9 10,3"/></svg>
+            </div>
+            <span style="font-size: 0.75rem; color: var(--text-3);">Checked</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── AUTOCOMPLETE ─── -->
+    <section class="ds-section" id="autocomplete">
+      <h2 class="ds-section-title">Autocomplete</h2>
+      <p class="ds-section-sub">Dropdown below title input, connected to Open Library API. 300ms debounce.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Dropdown — results</div>
+        <div class="ds-card-body">
+          <div class="autocomplete-preview">
+            <div class="ac-item focused">Les Misérables<span>Victor Hugo</span></div>
+            <div class="ac-item">Notre-Dame de Paris<span>Victor Hugo</span></div>
+            <div class="ac-item">L'Homme qui rit<span>Victor Hugo</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ds-card" style="margin-top: 12px;">
+        <div class="ds-card-label">Loading state</div>
+        <div class="ds-card-body">
+          <div class="autocomplete-preview">
+            <div class="ac-loading">Searching…</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── THEME TOGGLE ─── -->
+    <section class="ds-section" id="theme-toggle">
+      <h2 class="ds-section-title">Theme Toggle</h2>
+      <p class="ds-section-sub">Toggle switch in the toolbar. Spring transition via cubic-bezier.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Toggle</div>
+        <div class="ds-card-body center">
+          <button class="theme-btn" onclick="toggleTheme()">
+            <span class="toggle-thumb">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── BOOK CARD ─── -->
+    <section class="ds-section" id="card">
+      <h2 class="ds-section-title">Book Card</h2>
+      <p class="ds-section-sub">Auto-fill grid, minmax(195px, 1fr), gap 18px. Hover: translateY(-4px).</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Card — with cover placeholder</div>
+        <div class="ds-card-body">
+          <div class="book-card">
+            <div class="book-cover" style="background: var(--bg3);">
+            </div>
+            <div class="book-body">
+              <div class="book-title">Les Misérables</div>
+              <div class="book-author">Victor Hugo</div>
+              <span class="book-year">1862</span>
+            </div>
+          </div>
+          <div class="book-card">
+            <div class="book-cover" style="background: linear-gradient(135deg, #3B4FC4, #4959E6);">
+              <img src="https://covers.openlibrary.org/b/id/8739161-M.jpg" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+            </div>
+            <div class="book-body">
+              <div class="book-title">Le Petit Prince</div>
+              <div class="book-author">Antoine de Saint-Exupéry</div>
+              <span class="book-year">1943</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── LIST VIEW ─── -->
+    <section class="ds-section" id="list">
+      <h2 class="ds-section-title">List View</h2>
+      <p class="ds-section-sub">Full-width table, border-radius 8px. Uppercase 0.75rem header. Sortable columns.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Table</div>
+        <div class="ds-card-body" style="padding: 0;">
+          <div class="list-demo">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:48px;">#</th>
+                  <th>TITRE ↑</th>
+                  <th>AUTEUR</th>
+                  <th style="width:80px;">ANNÉE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align:center; color: var(--text-3); font-weight: 600;">1</td>
+                  <td><div class="list-title-cell">Les Misérables</div></td>
+                  <td><div class="list-author-cell">Victor Hugo</div></td>
+                  <td><div class="list-year-cell">1862</div></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center; color: var(--text-3); font-weight: 600;">2</td>
+                  <td><div class="list-title-cell">Le Petit Prince</div></td>
+                  <td><div class="list-author-cell">Antoine de Saint-Exupéry</div></td>
+                  <td><div class="list-year-cell">1943</div></td>
+                </tr>
+                <tr>
+                  <td style="text-align:center; color: var(--text-3); font-weight: 600;">3</td>
+                  <td><div class="list-title-cell">L'Étranger</div></td>
+                  <td><div class="list-author-cell">Albert Camus</div></td>
+                  <td><div class="list-year-cell">1942</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SIDE PANEL ─── -->
+    <section class="ds-section" id="panel">
+      <h2 class="ds-section-title">Side Panel</h2>
+      <p class="ds-section-sub">571px, position fixed right 0, top 60px. Slides from right. Closes on outside click.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Panel — reduced preview</div>
+        <div class="ds-card-body">
+          <div class="panel-preview">
+            <div class="panel-preview-header">
+              <button class="btn-icon-ghost" style="width:32px;height:32px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="panel-preview-cover">
+              <div style="color: var(--text-3); font-size: 2rem;">📖</div>
+            </div>
+            <div class="panel-preview-body">
+              <span class="panel-preview-tag">Owned</span>
+              <div class="panel-preview-title">Les Misérables</div>
+              <div class="panel-preview-author">Victor Hugo · 1862</div>
+              <div class="panel-preview-divider"></div>
+              <div class="panel-preview-label">Summary</div>
+              <div class="panel-preview-text">Social novel following Jean Valjean's life after years of forced labor...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── MODAL ─── -->
+    <section class="ds-section" id="modal">
+      <h2 class="ds-section-title">Modal</h2>
+      <p class="ds-section-sub">max-width 630px, margin 24px. Overlay blur(4px). Spring entry scale(0.98)→(1).</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Modal — Add a book</div>
+        <div class="ds-card-body">
+          <div class="modal-preview">
+            <button class="btn-icon-ghost" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:none;background:transparent;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="modal-preview-title">Add a book</div>
+            <div class="modal-preview-fields">
+              <div class="modal-preview-field"><label>Title *</label><input type="text" placeholder="e.g. Les Misérables"></div>
+              <div class="modal-preview-field"><label>Author *</label><input type="text" placeholder="e.g. Victor Hugo"></div>
+              <div class="modal-preview-field"><label>Year (optional)</label><input type="number" placeholder="e.g. 1862"></div>
+            </div>
+            <div class="modal-preview-actions">
+              <button class="btn-ghost">Cancel</button>
+              <button class="btn-primary" disabled>Add to my library</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SELECTION BAR ─── -->
+    <section class="ds-section" id="selection-bar">
+      <h2 class="ds-section-title">Selection Bar</h2>
+      <p class="ds-section-sub">Floats at the bottom of the screen. Inverted --text background. Spring entry from bottom: -80px.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Bar — 2 selected</div>
+        <div class="ds-card-body center">
+          <div class="sel-bar-preview">
+            <span class="sel-count">2 selected</span>
+            <div style="display:flex;gap:8px;">
+              <button class="sel-btn sel-cancel">Cancel</button>
+              <button class="sel-btn sel-confirm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg>
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── EMPTY STATE ─── -->
+    <section class="ds-section" id="empty">
+      <h2 class="ds-section-title">Empty State</h2>
+      <p class="ds-section-sub">Displayed when no books match the search query.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Empty</div>
+        <div class="ds-card-body">
+          <div class="empty-preview">
+            <div class="empty-emoji">📭</div>
+            <div class="empty-title">No results</div>
+            <div class="empty-sub">Try a different title or author.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── LOADING ─── -->
+    <section class="ds-section" id="loading">
+      <h2 class="ds-section-title">Spinner</h2>
+      <p class="ds-section-sub">Used in the side panel while the summary is loading.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Spinner</div>
+        <div class="ds-card-body center">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <section class="ds-section" id="footer">
+      <h2 class="ds-section-title">Footer</h2>
+      <p class="ds-section-sub">Border-top, 0.78rem, --text-3. Aligned with main content (padding 0 40px).</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-label">Footer</div>
+        <div class="ds-card-body" style="padding: 0;">
+          <div class="footer-preview">Copyright Pierre Blavette</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOKEN USAGE ─── -->
+    <section class="ds-section" id="token-usage">
+      <h2 class="ds-section-title">Token Usage</h2>
+      <p class="ds-section-sub">CSS tokens consumed by each component. Raw values (fixed sizes, font-weight) are excluded — only variable tokens are listed.</p>
+      <div class="ds-divider"></div>
+      <div class="ds-card">
+        <div class="ds-card-body" style="padding: 0;">
+          <table class="token-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Tokens</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="token-table-component">Button — Primary</td>
+                <td><span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Button — Ghost</td>
+                <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Button — Icon Ghost</td>
+                <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Text Field</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Search Input</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-3</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Segmented Control</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--bg</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--shadow-sm</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">View Toggle</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--bg</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Badge</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Pill</td>
+                <td><span class="ds-token-chip">--accent-bg</span> <span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--teal-bg</span> <span class="ds-token-chip">--teal</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Status Badge</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--text-3</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Checkbox</td>
+                <td><span class="ds-token-chip">--bg</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Autocomplete</td>
+                <td><span class="ds-token-chip">--card</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--accent-bg</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--shadow-lg</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Book Card</td>
+                <td><span class="ds-token-chip">--card</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">List View</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Side Panel</td>
+                <td><span class="ds-token-chip">--bg</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--shadow-lg</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Modal</td>
+                <td><span class="ds-token-chip">--card</span> <span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-3</span> <span class="ds-token-chip">--shadow-lg</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Selection Bar</td>
+                <td><span class="ds-token-chip">--text</span> <span class="ds-token-chip">--bg</span> <span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--shadow-lg</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Empty State</td>
+                <td><span class="ds-token-chip">--text</span> <span class="ds-token-chip">--text-2</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Spinner</td>
+                <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Footer</td>
+                <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text-3</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+
+  // Nav active link on scroll
+  const sections = document.querySelectorAll('.ds-section');
+  const links = document.querySelectorAll('.ds-nav-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector(`.ds-nav-link[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
