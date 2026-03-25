@@ -1307,7 +1307,8 @@
     white-space: nowrap;
   }
   .export-btn { margin-left: -8px; }
-  .export-btn:hover { border-color: var(--text); color: var(--text); }
+  .export-btn:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+  .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -1392,7 +1393,7 @@
     <div class="counter-actions">
       <button class="add-btn" id="addBookBtn" onclick="openAddModal()">Add</button>
       <button class="edit-btn" id="editWishBtn" onclick="toggleEditMode()">Edit</button>
-      <button class="export-btn" onclick="exportData()">Export</button>
+      <button class="export-btn" id="exportBtn" onclick="exportData()">Export</button>
       <div class="view-btns">
         <button class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Card view">
           <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
@@ -1844,6 +1845,7 @@ function init() {
   document.getElementById('owned-count').textContent   = oc;
   document.getElementById('wishlist-count').textContent = wc;
   document.getElementById('editWishBtn').classList.add('visible');
+  updateExportBtn();
 
 const saved = localStorage.getItem('biblio-theme') || 'light';
   applyTheme(saved);
@@ -2295,9 +2297,14 @@ function loadCustomBooks() {
 
 function saveData() {
   try { localStorage.setItem(READR_DATA_KEY, JSON.stringify(DATA)); } catch(e) {}
+  updateExportBtn();
 }
 
 /* ─── IMPORT / EXPORT ─── */
+function updateExportBtn() {
+  document.getElementById('exportBtn').disabled = DATA.owned.length + DATA.wishlist.length === 0;
+}
+
 function exportData() {
   const json = JSON.stringify(DATA, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
