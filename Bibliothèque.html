@@ -736,7 +736,7 @@
     text-align: center;
   }
 
-  .empty-icon { width: 96px; height: 96px; margin-bottom: 20px; }
+  .empty-icon { width: 80px; height: 80px; margin-bottom: 24px; }
 
   .empty-title {
     font-size: 1.15rem;
@@ -746,9 +746,28 @@
   }
 
   .empty-sub {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--text-2);
+    margin-bottom: 24px;
   }
+
+  .empty-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .empty-cta:hover { opacity: 0.88; }
 
   /* ─── BOOK PANEL ─── */
   .book-panel {
@@ -1880,17 +1899,49 @@ function render() {
 
   if (books.length === 0) {
     grid.className = 'books-grid';
-    grid.innerHTML = `
-      <div class="empty">
-        <svg class="empty-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="34" cy="34" r="22" fill="#DBEAFE"/>
-          <line x1="27" y1="27" x2="41" y2="41" stroke="#60A5FA" stroke-width="4" stroke-linecap="round"/>
-          <line x1="41" y1="27" x2="27" y2="41" stroke="#60A5FA" stroke-width="4" stroke-linecap="round"/>
-          <line x1="50" y1="50" x2="64" y2="64" stroke="#93C5FD" stroke-width="6" stroke-linecap="round"/>
-        </svg>
-        <div class="empty-title">No results</div>
-        <div class="empty-sub">Try a different title or author</div>
-      </div>`;
+    const isWishTab = currentTab === 'wishlist';
+    if (query) {
+      // ── Search returned nothing ──
+      grid.innerHTML = `
+        <div class="empty">
+          <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
+            <circle cx="34" cy="34" r="22" fill="var(--bg3)"/>
+            <line x1="27" y1="27" x2="41" y2="41" stroke="var(--text-3)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="41" y1="27" x2="27" y2="41" stroke="var(--text-3)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="50" x2="64" y2="64" stroke="var(--text-3)" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <div class="empty-title">No matches found</div>
+          <div class="empty-sub">Try a different title or author.</div>
+        </div>`;
+    } else if (isWishTab) {
+      // ── Wishlist empty ──
+      grid.innerHTML = `
+        <div class="empty">
+          <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
+            <rect x="18" y="12" width="34" height="54" rx="4" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
+            <path d="M18 12 h34 v32 l-17 10 l-17 -10 Z" fill="var(--accent)" opacity="0.15"/>
+            <line x1="35" y1="28" x2="35" y2="44" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="27" y1="36" x2="43" y2="36" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div class="empty-title">Nothing saved yet</div>
+          <div class="empty-sub">Add books you want to read — your future self will thank you.</div>
+          <button class="empty-cta" onclick="openAddModal()">+ Add to wishlist</button>
+        </div>`;
+    } else {
+      // ── My Library empty ──
+      grid.innerHTML = `
+        <div class="empty">
+          <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
+            <rect x="10" y="18" width="14" height="46" rx="3" fill="var(--accent)" opacity="0.7"/>
+            <rect x="27" y="12" width="14" height="52" rx="3" fill="var(--accent)"/>
+            <rect x="44" y="22" width="14" height="42" rx="3" fill="var(--accent)" opacity="0.5"/>
+            <rect x="61" y="16" width="10" height="48" rx="3" fill="var(--accent)" opacity="0.3"/>
+          </svg>
+          <div class="empty-title">Your library is empty</div>
+          <div class="empty-sub">Start building your collection — add your first read.</div>
+          <button class="empty-cta" onclick="openAddModal()">+ Add a book</button>
+        </div>`;
+    }
     return;
   }
 
