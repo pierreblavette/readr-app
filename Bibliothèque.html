@@ -2621,7 +2621,6 @@ function handlePhotoInput(e) {
 async function runOCR(file) {
   const errEl = document.getElementById('import-photo-error');
   errEl.style.display = 'none';
-  document.getElementById('ocrTextArea').style.display = 'none';
   document.getElementById('importPreview').style.display = 'none';
 
   // Convert HEIC/HEIF to JPEG (browsers can't decode HEIC natively)
