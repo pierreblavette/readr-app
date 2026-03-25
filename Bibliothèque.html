@@ -1572,13 +1572,6 @@
         </div>
       </div>
 
-      <div id="ocrTextArea" style="display:none">
-        <div class="import-text-label" style="margin-top:16px">Extracted text — correct if needed</div>
-        <textarea class="import-textarea" id="ocrText" style="height:110px"></textarea>
-        <div class="import-ai-actions">
-          <button class="import-analyze-btn" onclick="parseOCRText()">Parse books</button>
-        </div>
-      </div>
       <div class="import-error" id="import-photo-error"></div>
     </div>
 
@@ -2513,7 +2506,6 @@ function openImportModal() {
   document.getElementById('import-file-error').style.display = 'none';
   document.getElementById('import-photo-error').style.display = 'none';
   document.getElementById('ocrProgressArea').style.display = 'none';
-  document.getElementById('ocrTextArea').style.display = 'none';
   _importPreviewBooks = [];
 }
 
@@ -2678,10 +2670,9 @@ async function runOCR(file) {
     URL.revokeObjectURL(url);
 
     document.getElementById('ocrProgressFill').style.width = '100%';
-    document.getElementById('ocrStatusLabel').textContent = 'Done — review and edit text below';
+    document.getElementById('ocrStatusLabel').textContent = 'Analysing…';
 
-    document.getElementById('ocrText').value = text.trim();
-    document.getElementById('ocrTextArea').style.display = '';
+    parseOCRText(text.trim());
   } catch(e) {
     document.getElementById('ocrProgressArea').style.display = 'none';
     errEl.textContent = 'Could not read this image. Try a clearer photo.';
@@ -2689,16 +2680,14 @@ async function runOCR(file) {
   }
 }
 
-function parseOCRText() {
-  const text = document.getElementById('ocrText').value.trim();
+function parseOCRText(rawText) {
   const errEl = document.getElementById('import-photo-error');
   errEl.style.display = 'none';
-  if (!text) { errEl.textContent = 'No text to parse.'; errEl.style.display = 'block'; return; }
+  if (!rawText) { errEl.textContent = 'No text could be extracted from this image.'; errEl.style.display = 'block'; return; }
 
-  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+  const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
   const books = [];
   for (const line of lines) {
-    // Try "Title - Author" or "Title by Author" or "Author: Title" patterns
     let title = '', author = '';
     const byMatch = line.match(/^(.+?)\s+by\s+(.+)$/i);
     const dashMatch = line.match(/^(.+?)\s*[-–—]\s*(.+)$/);
@@ -2709,9 +2698,14 @@ function parseOCRText() {
     } else {
       title = line; author = '';
     }
-    if (title.length > 1) books.push({ title, author, year: null, list: 'owned' });
+    if (title.length > 2) books.push({ title, author, year: null, list: 'owned' });
   }
-  if (!books.length) { errEl.textContent = 'Could not detect any books. Try editing the text.'; errEl.style.display = 'block'; return; }
+  if (!books.length) {
+    errEl.textContent = 'Could not detect any books in this image. Make sure the text is clearly visible and try again.';
+    errEl.style.display = 'block';
+    document.getElementById('ocrStatusLabel').textContent = 'No books detected';
+    return;
+  }
   showImportPreview(books);
 }
 
