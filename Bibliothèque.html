@@ -1309,6 +1309,91 @@
   .export-btn { margin-left: -8px; }
   .export-btn:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
   .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ─── IMPORT MODAL ─── */
+  .import-tabs { display: flex; gap: 4px; margin: 20px 0 24px; border-bottom: 1.5px solid var(--border); }
+  .import-tab {
+    height: 36px; padding: 0 16px; border: none; background: transparent;
+    font-family: inherit; font-size: 0.95rem; font-weight: 500; color: var(--text-2);
+    cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1.5px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .import-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .import-tab:hover:not(.active) { color: var(--text); }
+
+  .import-dropzone {
+    border: 2px dashed var(--border); border-radius: 10px;
+    padding: 40px 24px; text-align: center; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    color: var(--text-2);
+  }
+  .import-dropzone:hover, .import-dropzone.dragover { border-color: var(--accent); background: var(--accent-bg); }
+  .import-dropzone svg { width: 36px; height: 36px; margin-bottom: 12px; color: var(--text-3); }
+  .import-dropzone-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .import-dropzone-sub { font-size: 0.857rem; color: var(--text-3); }
+
+  .import-key-section { margin-bottom: 20px; }
+  .import-key-label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .import-key-label a { font-weight: 500; color: var(--accent); text-decoration: none; font-size: 0.857rem; }
+  .import-key-label a:hover { text-decoration: underline; }
+  .import-key-row { display: flex; gap: 8px; }
+  .import-key-input {
+    flex: 1; height: 42px; padding: 0 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: var(--bg3);
+    font-family: inherit; font-size: 1rem; color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .import-key-input:focus { outline: none; border-color: var(--accent); }
+  .import-key-save {
+    height: 42px; padding: 0 16px; border-radius: 8px; border: none;
+    background: var(--bg3); color: var(--text); font-family: inherit;
+    font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    border: 1.5px solid var(--border); transition: border-color 0.15s;
+    white-space: nowrap;
+  }
+  .import-key-save:hover { border-color: var(--text); }
+  .import-key-saved { color: #22c55e; font-size: 0.857rem; margin-top: 6px; display: none; }
+
+  .import-text-label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); margin-bottom: 6px; }
+  .import-textarea {
+    width: 100%; height: 140px; padding: 12px 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: var(--bg3);
+    font-family: inherit; font-size: 0.95rem; color: var(--text);
+    resize: vertical; box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .import-textarea:focus { outline: none; border-color: var(--accent); }
+
+  .import-ai-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
+  .import-analyze-btn {
+    height: 40px; padding: 0 20px; border-radius: 8px; border: none;
+    background: var(--accent); color: #fff; font-family: inherit;
+    font-size: 1rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s; display: flex; align-items: center; gap: 8px;
+  }
+  .import-analyze-btn:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .import-analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .import-preview { margin-top: 24px; border-top: 1.5px solid var(--border); padding-top: 20px; }
+  .import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .import-preview-title { font-size: 0.857rem; font-weight: 700; color: var(--text-3); }
+  .import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+  .import-preview-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border-radius: 8px; background: var(--bg3);
+  }
+  .import-preview-book { font-size: 0.95rem; font-weight: 500; color: var(--text); }
+  .import-preview-author { font-size: 0.857rem; color: var(--text-2); margin-top: 1px; }
+  .import-preview-badge {
+    font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+    flex-shrink: 0; margin-left: 12px;
+  }
+  .import-preview-badge.owned { background: var(--accent-bg); color: var(--accent); }
+  .import-preview-badge.wishlist { background: var(--bg3); color: var(--text-2); border: 1px solid var(--border); }
+
+  .import-error { color: #ef4444; font-size: 0.857rem; margin-top: 8px; display: none; }
+  .import-spinner { display: none; align-items: center; gap: 8px; color: var(--text-2); font-size: 0.95rem; }
+  .import-spinner.visible { display: flex; }
 </style>
 </head>
 <body>
@@ -1393,6 +1478,7 @@
     <div class="counter-actions">
       <button class="add-btn" id="addBookBtn" onclick="openAddModal()">Add</button>
       <button class="edit-btn" id="editWishBtn" onclick="toggleEditMode()">Edit</button>
+      <button class="export-btn" id="importBtn" onclick="openImportModal()">Import</button>
       <button class="export-btn" id="exportBtn" onclick="exportData()">Export</button>
       <div class="view-btns">
         <button class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Card view">
@@ -1437,6 +1523,77 @@
     <div class="modal-actions">
       <button class="modal-cancel" onclick="closeAddModal()">Cancel</button>
       <button class="modal-submit" id="modalSubmitBtn" onclick="submitAddBook()" disabled>Add to my library</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="importModal" onclick="if(event.target===this)closeImportModal()">
+  <div class="modal" style="max-width:580px;">
+    <button class="modal-close" onclick="closeImportModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-title">Import books</div>
+
+    <div class="import-tabs">
+      <button class="import-tab active" id="import-tab-file" onclick="switchImportTab('file')">File</button>
+      <button class="import-tab" id="import-tab-ai" onclick="switchImportTab('ai')">AI</button>
+    </div>
+
+    <!-- FILE PANEL -->
+    <div id="import-panel-file">
+      <div class="import-dropzone" id="importDropzone"
+           onclick="document.getElementById('importFileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleImportDrop(event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div class="import-dropzone-title">Drop a file or click to browse</div>
+        <div class="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
+      </div>
+      <input type="file" id="importFileInput" accept=".json,.csv" style="display:none" onchange="handleImportFileInput(event)">
+      <div class="import-error" id="import-file-error"></div>
+    </div>
+
+    <!-- AI PANEL -->
+    <div id="import-panel-ai" style="display:none">
+      <div class="import-key-section">
+        <div class="import-key-label">
+          Gemini API Key
+          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free key →</a>
+        </div>
+        <div class="import-key-row">
+          <input class="import-key-input" type="password" id="geminiKeyInput" placeholder="AIza…" oninput="onGeminiKeyInput()">
+          <button class="import-key-save" onclick="saveGeminiKey()">Save</button>
+        </div>
+        <div class="import-key-saved" id="geminiKeySaved">Key saved</div>
+      </div>
+      <div class="import-text-label">Paste your book list</div>
+      <textarea class="import-textarea" id="aiImportText" placeholder="Paste any text containing book titles and authors — a screenshot transcription, a reading list, notes…"></textarea>
+      <div class="import-ai-actions">
+        <div class="import-spinner" id="importSpinner">
+          <div class="spinner"></div> Analyzing…
+        </div>
+        <button class="import-analyze-btn" id="analyzeBtn" onclick="processAIImport()">Analyze</button>
+      </div>
+      <div class="import-error" id="import-ai-error"></div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="import-preview" id="importPreview" style="display:none">
+      <div class="import-preview-header">
+        <span class="import-preview-title" id="importPreviewCount"></span>
+      </div>
+      <div class="import-preview-list" id="importPreviewList"></div>
+    </div>
+
+    <div class="modal-actions" style="margin-top:24px">
+      <button class="modal-cancel" onclick="closeImportModal()">Cancel</button>
+      <button class="modal-submit" id="importSubmitBtn" onclick="confirmImport()" disabled>Import</button>
     </div>
   </div>
 </div>
@@ -2343,6 +2500,219 @@ function importData() {
     reader.readAsText(file);
   };
   input.click();
+}
+
+/* ─── IMPORT MODAL ─── */
+const GEMINI_KEY_STORAGE = 'readr-gemini-key';
+let _importPreviewBooks = [];
+
+function openImportModal() {
+  document.getElementById('importModal').classList.add('open');
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('importPreviewList').innerHTML = '';
+  document.getElementById('importSubmitBtn').disabled = true;
+  document.getElementById('importSubmitBtn').textContent = 'Import';
+  document.getElementById('import-file-error').style.display = 'none';
+  document.getElementById('import-ai-error').style.display = 'none';
+  _importPreviewBooks = [];
+  // Restore saved Gemini key
+  const saved = localStorage.getItem(GEMINI_KEY_STORAGE);
+  if (saved) {
+    document.getElementById('geminiKeyInput').value = saved;
+    document.getElementById('geminiKeySaved').style.display = 'block';
+  }
+}
+
+function closeImportModal() {
+  document.getElementById('importModal').classList.remove('open');
+}
+
+function switchImportTab(tab) {
+  document.getElementById('import-panel-file').style.display = tab === 'file' ? '' : 'none';
+  document.getElementById('import-panel-ai').style.display  = tab === 'ai'   ? '' : 'none';
+  document.getElementById('import-tab-file').classList.toggle('active', tab === 'file');
+  document.getElementById('import-tab-ai').classList.toggle('active',   tab === 'ai');
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('importSubmitBtn').disabled = true;
+  document.getElementById('importSubmitBtn').textContent = 'Import';
+  _importPreviewBooks = [];
+}
+
+function handleImportDrop(e) {
+  e.preventDefault();
+  document.getElementById('importDropzone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) processImportFile(file);
+}
+
+function handleImportFileInput(e) {
+  const file = e.target.files[0];
+  if (file) processImportFile(file);
+}
+
+function processImportFile(file) {
+  const errEl = document.getElementById('import-file-error');
+  errEl.style.display = 'none';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      let books;
+      if (file.name.endsWith('.csv')) {
+        books = parseGoodreadsCSV(ev.target.result);
+      } else {
+        const parsed = JSON.parse(ev.target.result);
+        if (!Array.isArray(parsed.owned) || !Array.isArray(parsed.wishlist)) throw new Error('invalid');
+        books = [
+          ...parsed.owned.map(b => ({ ...b, list: 'owned' })),
+          ...parsed.wishlist.map(b => ({ ...b, list: 'wishlist' }))
+        ];
+      }
+      if (!books.length) throw new Error('No books found in this file.');
+      showImportPreview(books);
+    } catch(err) {
+      errEl.textContent = err.message || 'Could not read this file. Make sure it\'s a valid JSON or Goodreads CSV.';
+      errEl.style.display = 'block';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let cur = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuotes && line[i+1] === '"') { cur += '"'; i++; }
+      else inQuotes = !inQuotes;
+    } else if (c === ',' && !inQuotes) {
+      result.push(cur); cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
+function parseGoodreadsCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  if (!lines.length) return [];
+  const headers = parseCSVLine(lines[0]).map(h => h.trim().replace(/^\ufeff/, ''));
+  const books = [];
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseCSVLine(lines[i]);
+    const row = {};
+    headers.forEach((h, idx) => row[h] = (values[idx] || '').trim().replace(/^"|"$/g, ''));
+    const title = row['Title'] || row['title'];
+    let author = row['Author'] || row['Author l-f'] || row['Authors'] || row['author'] || '';
+    const shelf = row['Exclusive Shelf'] || row['exclusive_shelf'] || 'read';
+    const year = parseInt(row['Year Published'] || row['Original Publication Year'] || '') || null;
+    if (!title) continue;
+    // Convert "Last, First" to "First Last"
+    if (/^[^,]+,\s*\S/.test(author)) {
+      const [last, first] = author.split(/,\s*/);
+      author = `${first} ${last}`.trim();
+    }
+    const list = shelf === 'to-read' ? 'wishlist' : 'owned';
+    books.push({ title, author, year, list });
+  }
+  return books;
+}
+
+function onGeminiKeyInput() {
+  document.getElementById('geminiKeySaved').style.display = 'none';
+}
+
+function saveGeminiKey() {
+  const key = document.getElementById('geminiKeyInput').value.trim();
+  if (!key) return;
+  localStorage.setItem(GEMINI_KEY_STORAGE, key);
+  document.getElementById('geminiKeySaved').style.display = 'block';
+}
+
+async function processAIImport() {
+  const key = document.getElementById('geminiKeyInput').value.trim() || localStorage.getItem(GEMINI_KEY_STORAGE) || '';
+  const text = document.getElementById('aiImportText').value.trim();
+  const errEl = document.getElementById('import-ai-error');
+  errEl.style.display = 'none';
+
+  if (!key) { errEl.textContent = 'Please enter your Gemini API key.'; errEl.style.display = 'block'; return; }
+  if (!text) { errEl.textContent = 'Please paste some text to analyze.'; errEl.style.display = 'block'; return; }
+
+  const btn = document.getElementById('analyzeBtn');
+  const spinner = document.getElementById('importSpinner');
+  btn.style.display = 'none';
+  spinner.classList.add('visible');
+
+  const prompt = `Extract all book titles and authors from the following text. Return ONLY a JSON array, with no explanation, no markdown, no code block. Each object must have: "title" (string), "author" (string), "year" (number or null), "list" ("owned" for read books, "wishlist" for to-read books — default to "owned" if unclear).\n\nText:\n${text}`;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+    const data = await res.json();
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const match = content.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('No books could be extracted. Try rephrasing your text.');
+    const books = JSON.parse(match[0]);
+    if (!books.length) throw new Error('No books found in this text.');
+    showImportPreview(books);
+  } catch(e) {
+    errEl.textContent = e.message || 'Something went wrong. Check your API key and try again.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.style.display = '';
+    spinner.classList.remove('visible');
+  }
+}
+
+function showImportPreview(books) {
+  _importPreviewBooks = books;
+  const ownedCount = books.filter(b => b.list !== 'wishlist').length;
+  const wishCount  = books.filter(b => b.list === 'wishlist').length;
+  let label = `${books.length} book${books.length > 1 ? 's' : ''} detected`;
+  if (ownedCount && wishCount) label += ` — ${ownedCount} to library, ${wishCount} to wishlist`;
+  else if (wishCount) label += ` — to wishlist`;
+  document.getElementById('importPreviewCount').textContent = label;
+  document.getElementById('importPreviewList').innerHTML = books.map(b => `
+    <div class="import-preview-item">
+      <div>
+        <div class="import-preview-book">${esc(b.title)}</div>
+        <div class="import-preview-author">${esc(b.author)}${b.year ? ' · ' + b.year : ''}</div>
+      </div>
+      <span class="import-preview-badge ${b.list === 'wishlist' ? 'wishlist' : 'owned'}">${b.list === 'wishlist' ? 'Wishlist' : 'Library'}</span>
+    </div>`).join('');
+  document.getElementById('importPreview').style.display = 'block';
+  const btn = document.getElementById('importSubmitBtn');
+  btn.disabled = false;
+  btn.textContent = `Import ${books.length} book${books.length > 1 ? 's' : ''}`;
+}
+
+function confirmImport() {
+  if (!_importPreviewBooks.length) return;
+  const existingKeys = new Set([
+    ...DATA.owned.map(b => b.title + '||' + b.author),
+    ...DATA.wishlist.map(b => b.title + '||' + b.author)
+  ]);
+  let added = 0;
+  _importPreviewBooks.forEach(b => {
+    const key = b.title + '||' + b.author;
+    if (existingKeys.has(key)) return;
+    const book = { title: b.title, author: b.author };
+    if (b.year) { book.year = b.year; YEARS[b.title] = b.year; }
+    if (b.list === 'wishlist') DATA.wishlist.push(book);
+    else DATA.owned.push(book);
+    added++;
+  });
+  saveData();
+  document.getElementById('owned-count').textContent    = DATA.owned.length;
+  document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
+  closeImportModal();
+  render();
 }
 
 
