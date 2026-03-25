@@ -2618,6 +2618,31 @@ function handlePhotoInput(e) {
   if (file) runOCR(file);
 }
 
+// Pre-process image: resize + boost contrast for better OCR
+async function preprocessForOCR(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      // Resize to max 2400px on longest side (Tesseract prefers ~300dpi)
+      let w = img.width, h = img.height;
+      const maxDim = 2400;
+      if (Math.max(w, h) > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      // Grayscale + contrast boost to make text stand out
+      ctx.filter = 'grayscale(1) contrast(1.6) brightness(1.05)';
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(), 'image/png');
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 async function runOCR(file) {
   const errEl = document.getElementById('import-photo-error');
   errEl.style.display = 'none';
@@ -2641,32 +2666,36 @@ async function runOCR(file) {
     }
   }
 
-  // Show progress area with thumbnail
+  // Show thumbnail immediately
   const url = URL.createObjectURL(file);
   document.getElementById('ocrThumb').src = url;
   document.getElementById('ocrProgressArea').style.display = '';
-  document.getElementById('ocrStatusLabel').textContent = 'Loading OCR engine…';
-  document.getElementById('ocrProgressFill').style.width = '0%';
+  document.getElementById('ocrStatusLabel').textContent = 'Preprocessing image…';
+  document.getElementById('ocrProgressFill').style.width = '5%';
 
   try {
-    const worker = await Tesseract.createWorker('eng', 1, {
+    // Preprocess before OCR
+    const processed = await preprocessForOCR(file);
+    URL.revokeObjectURL(url);
+
+    const worker = await Tesseract.createWorker('eng+fra', 1, {
       logger: m => {
         if (m.status === 'recognizing text') {
           const pct = Math.round(m.progress * 100);
-          document.getElementById('ocrProgressFill').style.width = pct + '%';
+          document.getElementById('ocrProgressFill').style.width = (10 + pct * 0.9) + '%';
           document.getElementById('ocrStatusLabel').textContent = `Scanning… ${pct}%`;
         } else if (m.status === 'loading tesseract core') {
           document.getElementById('ocrStatusLabel').textContent = 'Loading OCR engine…';
-        } else if (m.status === 'initializing tesseract') {
-          document.getElementById('ocrStatusLabel').textContent = 'Initializing…';
+          document.getElementById('ocrProgressFill').style.width = '10%';
         } else if (m.status === 'loading language traineddata') {
           document.getElementById('ocrStatusLabel').textContent = 'Loading language data…';
         }
       }
     });
-    const { data: { text } } = await worker.recognize(file);
+    // PSM 11 = sparse text: finds as much text as possible regardless of layout
+    await worker.setParameters({ tessedit_pageseg_mode: '11' });
+    const { data: { text } } = await worker.recognize(processed);
     await worker.terminate();
-    URL.revokeObjectURL(url);
 
     document.getElementById('ocrProgressFill').style.width = '100%';
     document.getElementById('ocrStatusLabel').textContent = 'Analysing…';
@@ -2687,17 +2716,27 @@ function parseOCRText(rawText) {
   const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
   const books = [];
   for (const line of lines) {
+    // Skip lines that are mostly symbols/numbers/noise
+    const alphaChars = (line.match(/[a-zA-ZÀ-ÿ]/g) || []).length;
+    if (alphaChars < 4) continue; // not enough real letters
+    const noiseRatio = (line.match(/[^a-zA-ZÀ-ÿ0-9\s'",.:!?()-]/g) || []).length / line.length;
+    if (noiseRatio > 0.25) continue; // too many garbage characters
+
+    // Clean leading/trailing punctuation and OCR artefacts
+    const cleaned = line.replace(/^[\s|_=+\-*#]+/, '').replace(/[\s|_=+*#]+$/, '').trim();
+    if (cleaned.length < 4) continue;
+
     let title = '', author = '';
-    const byMatch = line.match(/^(.+?)\s+by\s+(.+)$/i);
-    const dashMatch = line.match(/^(.+?)\s*[-–—]\s*(.+)$/);
+    const byMatch = cleaned.match(/^(.+?)\s+by\s+(.+)$/i);
+    const dashMatch = cleaned.match(/^(.+?)\s*[-–—]\s*(.+)$/);
     if (byMatch) {
       title = byMatch[1].trim(); author = byMatch[2].trim();
     } else if (dashMatch) {
       title = dashMatch[1].trim(); author = dashMatch[2].trim();
     } else {
-      title = line; author = '';
+      title = cleaned; author = '';
     }
-    if (title.length > 2) books.push({ title, author, year: null, list: 'owned' });
+    if (title.length > 3) books.push({ title, author, year: null, list: 'owned' });
   }
   if (!books.length) {
     errEl.textContent = 'Could not detect any books in this image. Make sure the text is clearly visible and try again.';
