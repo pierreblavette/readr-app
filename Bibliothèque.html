@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
   /* ─── TOKENS ─── */
   :root {
@@ -1332,27 +1333,12 @@
   .import-dropzone-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
   .import-dropzone-sub { font-size: 0.857rem; color: var(--text-3); }
 
-  .import-key-section { margin-bottom: 20px; }
-  .import-key-label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-  .import-key-label a { font-weight: 500; color: var(--accent); text-decoration: none; font-size: 0.857rem; }
-  .import-key-label a:hover { text-decoration: underline; }
-  .import-key-row { display: flex; gap: 8px; }
-  .import-key-input {
-    flex: 1; height: 42px; padding: 0 14px; border-radius: 8px;
-    border: 1.5px solid var(--border); background: var(--bg3);
-    font-family: inherit; font-size: 1rem; color: var(--text);
-    transition: border-color 0.15s;
-  }
-  .import-key-input:focus { outline: none; border-color: var(--accent); }
-  .import-key-save {
-    height: 42px; padding: 0 16px; border-radius: 8px; border: none;
-    background: var(--bg3); color: var(--text); font-family: inherit;
-    font-size: 0.95rem; font-weight: 500; cursor: pointer;
-    border: 1.5px solid var(--border); transition: border-color 0.15s;
-    white-space: nowrap;
-  }
-  .import-key-save:hover { border-color: var(--text); }
-  .import-key-saved { color: #22c55e; font-size: 0.857rem; margin-top: 6px; display: none; }
+  .ocr-thumb-row { display: flex; gap: 16px; align-items: center; margin-top: 16px; }
+  .ocr-thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1.5px solid var(--border); }
+  .ocr-status { flex: 1; }
+  .ocr-status-label { font-size: 0.857rem; font-weight: 500; color: var(--text-2); margin-bottom: 8px; }
+  .ocr-progress-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+  .ocr-progress-fill { height: 100%; border-radius: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
 
   .import-text-label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); margin-bottom: 6px; }
   .import-textarea {
@@ -1537,7 +1523,7 @@
 
     <div class="import-tabs">
       <button class="import-tab active" id="import-tab-file" onclick="switchImportTab('file')">File</button>
-      <button class="import-tab" id="import-tab-ai" onclick="switchImportTab('ai')">AI</button>
+      <button class="import-tab" id="import-tab-photo" onclick="switchImportTab('photo')">Photo</button>
     </div>
 
     <!-- FILE PANEL -->
@@ -1559,28 +1545,40 @@
       <div class="import-error" id="import-file-error"></div>
     </div>
 
-    <!-- AI PANEL -->
-    <div id="import-panel-ai" style="display:none">
-      <div class="import-key-section">
-        <div class="import-key-label">
-          Gemini API Key
-          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free key →</a>
-        </div>
-        <div class="import-key-row">
-          <input class="import-key-input" type="password" id="geminiKeyInput" placeholder="AIza…" oninput="onGeminiKeyInput()">
-          <button class="import-key-save" onclick="saveGeminiKey()">Save</button>
-        </div>
-        <div class="import-key-saved" id="geminiKeySaved">Key saved</div>
+    <!-- PHOTO PANEL -->
+    <div id="import-panel-photo" style="display:none">
+      <div class="import-dropzone" id="photoDropzone"
+           onclick="document.getElementById('photoFileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handlePhotoDrop(event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <div class="import-dropzone-title">Drop a photo or click to browse</div>
+        <div class="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
       </div>
-      <div class="import-text-label">Paste your book list</div>
-      <textarea class="import-textarea" id="aiImportText" placeholder="Paste any text containing book titles and authors — a screenshot transcription, a reading list, notes…"></textarea>
-      <div class="import-ai-actions">
-        <div class="import-spinner" id="importSpinner">
-          <div class="spinner"></div> Analyzing…
+      <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoInput(event)">
+
+      <div id="ocrProgressArea" style="display:none">
+        <div class="ocr-thumb-row">
+          <img id="ocrThumb" class="ocr-thumb">
+          <div class="ocr-status">
+            <div class="ocr-status-label" id="ocrStatusLabel">Scanning…</div>
+            <div class="ocr-progress-bar"><div class="ocr-progress-fill" id="ocrProgressFill"></div></div>
+          </div>
         </div>
-        <button class="import-analyze-btn" id="analyzeBtn" onclick="processAIImport()">Analyze</button>
       </div>
-      <div class="import-error" id="import-ai-error"></div>
+
+      <div id="ocrTextArea" style="display:none">
+        <div class="import-text-label" style="margin-top:16px">Extracted text — correct if needed</div>
+        <textarea class="import-textarea" id="ocrText" style="height:110px"></textarea>
+        <div class="import-ai-actions">
+          <button class="import-analyze-btn" onclick="parseOCRText()">Parse books</button>
+        </div>
+      </div>
+      <div class="import-error" id="import-photo-error"></div>
     </div>
 
     <!-- PREVIEW -->
@@ -2503,7 +2501,6 @@ function importData() {
 }
 
 /* ─── IMPORT MODAL ─── */
-const GEMINI_KEY_STORAGE = 'readr-gemini-key';
 let _importPreviewBooks = [];
 
 function openImportModal() {
@@ -2513,14 +2510,10 @@ function openImportModal() {
   document.getElementById('importSubmitBtn').disabled = true;
   document.getElementById('importSubmitBtn').textContent = 'Import';
   document.getElementById('import-file-error').style.display = 'none';
-  document.getElementById('import-ai-error').style.display = 'none';
+  document.getElementById('import-photo-error').style.display = 'none';
+  document.getElementById('ocrProgressArea').style.display = 'none';
+  document.getElementById('ocrTextArea').style.display = 'none';
   _importPreviewBooks = [];
-  // Restore saved Gemini key
-  const saved = localStorage.getItem(GEMINI_KEY_STORAGE);
-  if (saved) {
-    document.getElementById('geminiKeyInput').value = saved;
-    document.getElementById('geminiKeySaved').style.display = 'block';
-  }
 }
 
 function closeImportModal() {
@@ -2528,10 +2521,10 @@ function closeImportModal() {
 }
 
 function switchImportTab(tab) {
-  document.getElementById('import-panel-file').style.display = tab === 'file' ? '' : 'none';
-  document.getElementById('import-panel-ai').style.display  = tab === 'ai'   ? '' : 'none';
-  document.getElementById('import-tab-file').classList.toggle('active', tab === 'file');
-  document.getElementById('import-tab-ai').classList.toggle('active',   tab === 'ai');
+  document.getElementById('import-panel-file').style.display  = tab === 'file'  ? '' : 'none';
+  document.getElementById('import-panel-photo').style.display = tab === 'photo' ? '' : 'none';
+  document.getElementById('import-tab-file').classList.toggle('active',  tab === 'file');
+  document.getElementById('import-tab-photo').classList.toggle('active', tab === 'photo');
   document.getElementById('importPreview').style.display = 'none';
   document.getElementById('importSubmitBtn').disabled = true;
   document.getElementById('importSubmitBtn').textContent = 'Import';
@@ -2620,54 +2613,87 @@ function parseGoodreadsCSV(text) {
   return books;
 }
 
-function onGeminiKeyInput() {
-  document.getElementById('geminiKeySaved').style.display = 'none';
+function handlePhotoDrop(e) {
+  e.preventDefault();
+  document.getElementById('photoDropzone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) runOCR(file);
 }
 
-function saveGeminiKey() {
-  const key = document.getElementById('geminiKeyInput').value.trim();
-  if (!key) return;
-  localStorage.setItem(GEMINI_KEY_STORAGE, key);
-  document.getElementById('geminiKeySaved').style.display = 'block';
+function handlePhotoInput(e) {
+  const file = e.target.files[0];
+  if (file) runOCR(file);
 }
 
-async function processAIImport() {
-  const key = document.getElementById('geminiKeyInput').value.trim() || localStorage.getItem(GEMINI_KEY_STORAGE) || '';
-  const text = document.getElementById('aiImportText').value.trim();
-  const errEl = document.getElementById('import-ai-error');
+async function runOCR(file) {
+  const errEl = document.getElementById('import-photo-error');
   errEl.style.display = 'none';
+  document.getElementById('ocrTextArea').style.display = 'none';
+  document.getElementById('importPreview').style.display = 'none';
 
-  if (!key) { errEl.textContent = 'Please enter your Gemini API key.'; errEl.style.display = 'block'; return; }
-  if (!text) { errEl.textContent = 'Please paste some text to analyze.'; errEl.style.display = 'block'; return; }
-
-  const btn = document.getElementById('analyzeBtn');
-  const spinner = document.getElementById('importSpinner');
-  btn.style.display = 'none';
-  spinner.classList.add('visible');
-
-  const prompt = `Extract all book titles and authors from the following text. Return ONLY a JSON array, with no explanation, no markdown, no code block. Each object must have: "title" (string), "author" (string), "year" (number or null), "list" ("owned" for read books, "wishlist" for to-read books — default to "owned" if unclear).\n\nText:\n${text}`;
+  // Show progress area with thumbnail
+  const url = URL.createObjectURL(file);
+  document.getElementById('ocrThumb').src = url;
+  document.getElementById('ocrProgressArea').style.display = '';
+  document.getElementById('ocrStatusLabel').textContent = 'Loading OCR engine…';
+  document.getElementById('ocrProgressFill').style.width = '0%';
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    const worker = await Tesseract.createWorker('eng', 1, {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          const pct = Math.round(m.progress * 100);
+          document.getElementById('ocrProgressFill').style.width = pct + '%';
+          document.getElementById('ocrStatusLabel').textContent = `Scanning… ${pct}%`;
+        } else if (m.status === 'loading tesseract core') {
+          document.getElementById('ocrStatusLabel').textContent = 'Loading OCR engine…';
+        } else if (m.status === 'initializing tesseract') {
+          document.getElementById('ocrStatusLabel').textContent = 'Initializing…';
+        } else if (m.status === 'loading language traineddata') {
+          document.getElementById('ocrStatusLabel').textContent = 'Loading language data…';
+        }
+      }
     });
-    if (!res.ok) throw new Error(`API error ${res.status}`);
-    const data = await res.json();
-    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const match = content.match(/\[[\s\S]*\]/);
-    if (!match) throw new Error('No books could be extracted. Try rephrasing your text.');
-    const books = JSON.parse(match[0]);
-    if (!books.length) throw new Error('No books found in this text.');
-    showImportPreview(books);
+    const { data: { text } } = await worker.recognize(file);
+    await worker.terminate();
+    URL.revokeObjectURL(url);
+
+    document.getElementById('ocrProgressFill').style.width = '100%';
+    document.getElementById('ocrStatusLabel').textContent = 'Done — review and edit text below';
+
+    document.getElementById('ocrText').value = text.trim();
+    document.getElementById('ocrTextArea').style.display = '';
   } catch(e) {
-    errEl.textContent = e.message || 'Something went wrong. Check your API key and try again.';
+    document.getElementById('ocrProgressArea').style.display = 'none';
+    errEl.textContent = 'Could not read this image. Try a clearer photo.';
     errEl.style.display = 'block';
-  } finally {
-    btn.style.display = '';
-    spinner.classList.remove('visible');
   }
+}
+
+function parseOCRText() {
+  const text = document.getElementById('ocrText').value.trim();
+  const errEl = document.getElementById('import-photo-error');
+  errEl.style.display = 'none';
+  if (!text) { errEl.textContent = 'No text to parse.'; errEl.style.display = 'block'; return; }
+
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+  const books = [];
+  for (const line of lines) {
+    // Try "Title - Author" or "Title by Author" or "Author: Title" patterns
+    let title = '', author = '';
+    const byMatch = line.match(/^(.+?)\s+by\s+(.+)$/i);
+    const dashMatch = line.match(/^(.+?)\s*[-–—]\s*(.+)$/);
+    if (byMatch) {
+      title = byMatch[1].trim(); author = byMatch[2].trim();
+    } else if (dashMatch) {
+      title = dashMatch[1].trim(); author = dashMatch[2].trim();
+    } else {
+      title = line; author = '';
+    }
+    if (title.length > 1) books.push({ title, author, year: null, list: 'owned' });
+  }
+  if (!books.length) { errEl.textContent = 'Could not detect any books. Try editing the text.'; errEl.style.display = 'block'; return; }
+  showImportPreview(books);
 }
 
 function showImportPreview(books) {
