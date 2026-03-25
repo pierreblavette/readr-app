@@ -351,6 +351,9 @@
   .btn-ghost { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
   .btn-ghost:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
 
+  .btn-secondary { background: var(--bg3); color: var(--text); border: none; }
+  .btn-secondary:hover:not(:disabled) { background: var(--border); }
+
   .btn-icon { background: transparent; color: var(--text-2); border: 1px solid var(--border); aspect-ratio: 1; }
   .btn-icon:hover:not(:disabled) { border-color: var(--text); }
   .btn-icon svg { pointer-events: none; }
@@ -976,7 +979,7 @@
     <!-- ─── BUTTONS ─── -->
     <section class="ds-section" id="buttons">
       <h2 class="ds-section-title">Buttons</h2>
-      <p class="ds-section-sub">5 sizes × 3 variants. MD (40px) is the app default. Font-weight 500 across all sizes.</p>
+      <p class="ds-section-sub">5 sizes × 4 variants. MD (40px) is the app default. Font-weight 500 across all sizes.</p>
       <div class="ds-divider"></div>
       <div class="ds-card">
         <div class="ds-card-body" style="padding: 0;">
@@ -985,6 +988,7 @@
               <tr>
                 <th style="width: 140px;">Size</th>
                 <th>Primary</th>
+                <th>Secondary</th>
                 <th>Ghost</th>
                 <th>Icon</th>
                 <th>Disabled</th>
@@ -1001,6 +1005,7 @@
                   <div class="btn-scale-spec">0.75rem</div>
                 </td>
                 <td><button class="btn btn-primary btn-xs">Label</button></td>
+                <td><button class="btn btn-secondary btn-xs">Label</button></td>
                 <td><button class="btn btn-ghost btn-xs">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-xs">
@@ -1019,6 +1024,7 @@
                   <div class="btn-scale-spec">0.857rem</div>
                 </td>
                 <td><button class="btn btn-primary btn-sm">Label</button></td>
+                <td><button class="btn btn-secondary btn-sm">Label</button></td>
                 <td><button class="btn btn-ghost btn-sm">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-sm">
@@ -1037,6 +1043,7 @@
                   <div class="btn-scale-spec">1rem</div>
                 </td>
                 <td><button class="btn btn-primary btn-md">Label</button></td>
+                <td><button class="btn btn-secondary btn-md">Label</button></td>
                 <td><button class="btn btn-ghost btn-md">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-md">
@@ -1055,6 +1062,7 @@
                   <div class="btn-scale-spec">1rem</div>
                 </td>
                 <td><button class="btn btn-primary btn-lg">Label</button></td>
+                <td><button class="btn btn-secondary btn-lg">Label</button></td>
                 <td><button class="btn btn-ghost btn-lg">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-lg">
@@ -1073,6 +1081,7 @@
                   <div class="btn-scale-spec">1.07rem</div>
                 </td>
                 <td><button class="btn btn-primary btn-xl">Label</button></td>
+                <td><button class="btn btn-secondary btn-xl">Label</button></td>
                 <td><button class="btn btn-ghost btn-xl">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-xl">

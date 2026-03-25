@@ -748,26 +748,26 @@
   .empty-sub {
     font-size: 0.95rem;
     color: var(--text-2);
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
 
   .empty-cta {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    height: 38px;
-    padding: 0 18px;
+    height: 40px;
+    padding: 0 20px;
     background: var(--accent);
     color: #fff;
     border: none;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
     font-family: inherit;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: background 0.15s;
   }
-  .empty-cta:hover { opacity: 0.88; }
+  .empty-cta:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
 
   /* ─── BOOK PANEL ─── */
   .book-panel {
@@ -1029,6 +1029,8 @@
   .sel-cancel:hover { background: rgba(255,255,255,0.25); }
   .sel-confirm { background: var(--accent); color: #fff; }
   .sel-confirm:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .sel-confirm.danger { background: #ef4444; }
+  .sel-confirm.danger:hover { background: #dc2626; }
 
   /* ─── FOOTER ─── */
   .footer {
@@ -1049,14 +1051,15 @@
     justify-content: space-between;
   }
 
-  .footer-ds-link {
+  .footer-link {
     font-size: 0.78rem;
     font-weight: 500;
-    color: var(--accent);
+    color: var(--text-2);
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: color 0.15s;
   }
-  .footer-ds-link:hover { text-decoration: underline; }
+  .footer-link:hover { color: var(--text); }
+  .footer-sep { color: var(--border); }
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
@@ -1096,7 +1099,7 @@
   .modal {
     background: var(--card);
     border-radius: 8px;
-    padding: 32px 24px;
+    padding: 32px 24px 24px;
     position: relative;
     width: 100%;
     max-width: 630px;
@@ -1150,6 +1153,48 @@
   .modal-submit:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 80%, #000); }
   .modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
+  .delete-row-btn {
+    width: 38px; height: 38px;
+    border: none; background: var(--bg3); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    color: var(--text);
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .delete-row-btn:hover { background: var(--border); }
+  .delete-row-btn svg { width: 18px; height: 18px; }
+
+  .confirm-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 900;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.15s;
+  }
+  .confirm-modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .confirm-modal {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 32px 24px 24px;
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 24px;
+    box-shadow: var(--shadow-lg);
+  }
+  .confirm-modal-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 16px; }
+  .confirm-modal-sub { font-size: 1rem; color: var(--text-2); line-height: 1.5; }
+  .confirm-modal-actions { display: flex; justify-content: space-between; margin-top: 24px; }
+  .confirm-modal-delete {
+    height: 40px; padding: 0 20px; border-radius: 8px; border: none;
+    background: #ef4444; color: #fff; font-family: inherit;
+    font-size: 1rem; font-weight: 500; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .confirm-modal-delete:hover { background: #dc2626; }
+
   .autocomplete-list {
     position: absolute;
     top: calc(100% + 4px);
@@ -1172,12 +1217,15 @@
     font-weight: 500;
     color: var(--text);
     border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .autocomplete-item span {
-    font-size: 0.857rem;
+    font-size: 1rem;
     font-weight: 400;
     color: var(--text-2);
-    margin-left: 8px;
+    margin-left: 12px;
   }
   .autocomplete-item:hover,
   .autocomplete-item.focused { background: var(--accent-bg); }
@@ -1240,6 +1288,26 @@
   }
   .edit-btn:hover { border-color: var(--text); color: var(--text); }
   .edit-btn.visible { display: flex; }
+
+  .export-btn {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-2);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .export-btn { margin-left: -8px; }
+  .export-btn:hover { border-color: var(--text); color: var(--text); }
 </style>
 </head>
 <body>
@@ -1297,9 +1365,9 @@
   <span class="selection-count" id="selectionCount"></span>
   <div class="selection-actions">
     <button class="sel-btn sel-cancel" onclick="clearSelection()">Cancel</button>
-    <button class="sel-btn sel-confirm" onclick="markAsOwned()">
+    <button class="sel-btn sel-confirm" id="selConfirmBtn" onclick="confirmSelection()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Mark as owned
+      <span id="selConfirmLabel">Mark as owned</span>
     </button>
   </div>
 </div>
@@ -1324,6 +1392,7 @@
     <div class="counter-actions">
       <button class="add-btn" id="addBookBtn" onclick="openAddModal()">Add</button>
       <button class="edit-btn" id="editWishBtn" onclick="toggleEditMode()">Edit</button>
+      <button class="export-btn" onclick="exportData()">Export</button>
       <div class="view-btns">
         <button class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Card view">
           <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
@@ -1371,11 +1440,36 @@
   </div>
 </div>
 
+<!-- DELETE CONFIRM MODAL -->
+<div class="confirm-modal-overlay" id="deleteConfirmModal" onclick="if(event.target===this)closeDeleteConfirm()">
+  <div class="confirm-modal">
+    <button class="modal-close" onclick="closeDeleteConfirm()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="confirm-modal-title">Remove this book?</div>
+    <div class="confirm-modal-sub" id="deleteConfirmSub"></div>
+    <div class="confirm-modal-actions">
+      <button class="modal-cancel" onclick="closeDeleteConfirm()">Cancel</button>
+      <button class="confirm-modal-delete" onclick="confirmDeleteBook()">Remove</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
-    <span>Copyright Pierre Blavette</span>
-    <a class="footer-ds-link" href="Design System.html" target="_blank" rel="noopener">Design System</a>
+    <span>© 2026 Pierre Blavette</span>
+    <span style="display:flex;align-items:center;gap:16px;">
+      <span>Data stored locally in your browser</span>
+      <span class="footer-sep">·</span>
+      <span>v1.0</span>
+      <span class="footer-sep">·</span>
+      <a class="footer-link" href="https://pierreblavette.com" target="_blank" rel="noopener">pierreblavette.com</a>
+      <span class="footer-sep">·</span>
+      <a class="footer-link" href="https://www.linkedin.com/in/pierreblavette/" target="_blank" rel="noopener" title="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </span>
   </div>
 </footer>
 
@@ -1772,6 +1866,7 @@ function init() {
   const wc = DATA.wishlist.length;
   document.getElementById('owned-count').textContent   = oc;
   document.getElementById('wishlist-count').textContent = wc;
+  document.getElementById('editWishBtn').classList.add('visible');
 
 const saved = localStorage.getItem('biblio-theme') || 'light';
   applyTheme(saved);
@@ -1820,7 +1915,7 @@ function switchTab(tab, el) {
   document.getElementById('pageTitle').textContent = tab === 'owned' ? 'My Library' : 'Wishlist';
   _editMode = false;
   document.getElementById('editWishBtn').textContent = 'Edit';
-  document.getElementById('editWishBtn').classList.toggle('visible', tab === 'wishlist');
+  document.getElementById('editWishBtn').classList.add('visible');
   selectedBooks.clear();
   updateSelectionBar();
   render();
@@ -1891,10 +1986,13 @@ function render() {
       grid.innerHTML = `
         <div class="empty">
           <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
-            <circle cx="34" cy="34" r="22" fill="var(--bg3)"/>
-            <line x1="27" y1="27" x2="41" y2="41" stroke="var(--text-3)" stroke-width="4" stroke-linecap="round"/>
-            <line x1="41" y1="27" x2="27" y2="41" stroke="var(--text-3)" stroke-width="4" stroke-linecap="round"/>
-            <line x1="50" y1="50" x2="64" y2="64" stroke="var(--text-3)" stroke-width="6" stroke-linecap="round"/>
+            <rect x="16" y="10" width="36" height="48" rx="4" fill="var(--bg3)"/>
+            <rect x="16" y="10" width="6" height="48" rx="2" fill="var(--text-3)"/>
+            <line x1="28" y1="24" x2="46" y2="24" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="32" x2="42" y2="32" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="52" cy="50" r="13" fill="var(--bg3)" stroke="var(--text-3)" stroke-width="3"/>
+            <line x1="47" y1="50" x2="57" y2="50" stroke="var(--text-3)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="52" y1="45" x2="52" y2="55" stroke="var(--text-3)" stroke-width="3" stroke-linecap="round"/>
           </svg>
           <div class="empty-title">No matches found</div>
           <div class="empty-sub">Try a different title or author.</div>
@@ -1904,28 +2002,36 @@ function render() {
       grid.innerHTML = `
         <div class="empty">
           <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
-            <rect x="18" y="12" width="34" height="54" rx="4" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
-            <path d="M18 12 h34 v32 l-17 10 l-17 -10 Z" fill="var(--accent)" opacity="0.15"/>
-            <line x1="35" y1="28" x2="35" y2="44" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="27" y1="36" x2="43" y2="36" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="16" y="10" width="36" height="48" rx="4" fill="var(--accent-bg)"/>
+            <rect x="16" y="10" width="6" height="48" rx="2" fill="var(--accent)" opacity="0.6"/>
+            <line x1="28" y1="24" x2="46" y2="24" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="32" x2="42" y2="32" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="40" x2="38" y2="40" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+            <circle cx="54" cy="54" r="13" fill="var(--accent)"/>
+            <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+            <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
           </svg>
           <div class="empty-title">Nothing saved yet</div>
           <div class="empty-sub">Add books you want to read — your future self will thank you.</div>
-          <button class="empty-cta" onclick="openAddModal()">+ Add to wishlist</button>
+          <button class="empty-cta" onclick="openAddModal()">Add to wishlist</button>
         </div>`;
     } else {
       // ── My Library empty ──
       grid.innerHTML = `
         <div class="empty">
           <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
-            <rect x="10" y="18" width="14" height="46" rx="3" fill="var(--accent)" opacity="0.7"/>
-            <rect x="27" y="12" width="14" height="52" rx="3" fill="var(--accent)"/>
-            <rect x="44" y="22" width="14" height="42" rx="3" fill="var(--accent)" opacity="0.5"/>
-            <rect x="61" y="16" width="10" height="48" rx="3" fill="var(--accent)" opacity="0.3"/>
+            <rect x="16" y="10" width="36" height="48" rx="4" fill="var(--accent-bg)"/>
+            <rect x="16" y="10" width="6" height="48" rx="2" fill="var(--accent)" opacity="0.6"/>
+            <line x1="28" y1="24" x2="46" y2="24" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="32" x2="42" y2="32" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="28" y1="40" x2="38" y2="40" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+            <circle cx="54" cy="54" r="13" fill="var(--accent)"/>
+            <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+            <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
           </svg>
           <div class="empty-title">Your library is empty</div>
           <div class="empty-sub">Start building your collection — add your first read.</div>
-          <button class="empty-cta" onclick="openAddModal()">+ Add a book</button>
+          <button class="empty-cta" onclick="openAddModal()">Add a book</button>
         </div>`;
     }
     return;
@@ -1937,7 +2043,7 @@ function render() {
       <table class="list-table">
         <thead>
           <tr>
-            ${isWish && _editMode ? '<th style="width:40px"></th>' : ''}
+            ${_editMode ? '<th style="width:40px"></th>' : ''}
             <th style="width:5%">#</th>
             <th style="width:28%" class="${sort === 'title' ? 'sorted' : ''}" onclick="sortBy('title')">
               Title <span class="sort-arrow">${sort === 'title' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
@@ -1951,6 +2057,7 @@ function render() {
             <th style="width:9%" class="${sort === 'year' ? 'sorted' : ''}" onclick="sortBy('year')">
               Year <span class="sort-arrow">${sort === 'year' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
+            <th style="width:60px"></th>
           </tr>
         </thead>
         <tbody>
@@ -1959,18 +2066,25 @@ function render() {
             const yr   = formatYear(b.title);
             const delay = _skipAnim ? 0 : Math.min(i * 6, 200);
             const key = `${b.title}||${b.author}`;
-            const isSel = isWish && selectedBooks.has(key);
+            const isSel = selectedBooks.has(key);
             return `
-            <tr class="${isWish ? 'selectable' : ''}${isSel ? ' selected' : ''}"
-                ${isWish ? `data-selkey="${esc(key)}"` : ''}
-                onclick="openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
+            <tr class="${_editMode ? 'selectable' : ''}${isSel ? ' selected' : ''}"
+                ${_editMode ? `data-selkey="${esc(key)}"` : ''}
+                onclick="_editMode ? toggleSelect(this) : openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
                 style="animation-delay:${delay}ms">
-              ${isWish && _editMode ? `<td style="overflow:visible;white-space:normal;width:40px;text-align:center"><span class="row-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>` : ''}
+              ${_editMode ? `<td style="overflow:visible;white-space:normal;width:40px;text-align:center"><span class="row-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>` : ''}
               <td class="list-num">${i + 1}</td>
               <td><div class="list-title">${esc(b.title)}</div></td>
               <td><div class="list-author">${esc(b.author)}</div></td>
               <td><span class="list-genre" data-genre-title="${esc(b.title)}">${GENRES[b.title] ?? '-'}</span></td>
               <td><span class="list-year">${yr ?? '—'}</span></td>
+              <td style="text-align:center;padding:0 11px;overflow:visible">
+                <button class="delete-row-btn" onclick="event.stopPropagation();openDeleteConfirm('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')" title="Remove">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                  </svg>
+                </button>
+              </td>
             </tr>`;
           }).join('')}
         </tbody>
@@ -1981,12 +2095,12 @@ function render() {
     grid.innerHTML = books.map((b, i) => {
       const delay    = _skipAnim ? 0 : Math.min(i * 10, 250);
       return `
-      <div class="book-card${isWish ? ' wishlist selectable' : ''}${isWish && selectedBooks.has(`${b.title}||${b.author}`) ? ' selected' : ''}"
+      <div class="book-card${isWish ? ' wishlist' : ''}${_editMode ? ' selectable' : ''}${selectedBooks.has(`${b.title}||${b.author}`) ? ' selected' : ''}"
            data-gkey="${esc(b.title)}||${esc(b.author)}"
-           ${isWish ? `data-selkey="${esc(b.title)}||${esc(b.author)}"` : ''}
-           onclick="openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
+           ${_editMode ? `data-selkey="${esc(b.title)}||${esc(b.author)}"` : ''}
+           onclick="_editMode ? toggleSelect(this) : openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
            style="animation-delay:${delay}ms">
-        ${isWish && _editMode ? `<span class="card-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>` : ''}
+        ${_editMode ? `<span class="card-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>` : ''}
         <div class="book-cover" style="background:var(--bg3)">
 
           ${isWish ? '<span class="wishlist-badge">To buy</span>' : ''}
@@ -2105,6 +2219,59 @@ function updateSelectionBar() {
   bar.classList.toggle('visible', count > 0);
   document.getElementById('selectionCount').textContent =
     count === 1 ? '1 book selected' : `${count} books selected`;
+  const isRemove = currentTab !== 'wishlist';
+  document.getElementById('selConfirmLabel').textContent = isRemove ? 'Remove' : 'Mark as owned';
+  document.getElementById('selConfirmBtn').classList.toggle('danger', isRemove);
+}
+
+function confirmSelection() {
+  if (currentTab === 'wishlist') markAsOwned();
+  else removeFromLibrary();
+}
+
+let _deleteTarget = null;
+
+function openDeleteConfirm(title, author) {
+  _deleteTarget = { title, author };
+  document.getElementById('deleteConfirmSub').textContent = `"${title}" will be permanently removed from your library.`;
+  document.getElementById('deleteConfirmModal').classList.add('open');
+}
+
+function closeDeleteConfirm() {
+  _deleteTarget = null;
+  document.getElementById('deleteConfirmModal').classList.remove('open');
+}
+
+function confirmDeleteBook() {
+  if (!_deleteTarget) return;
+  const { title, author } = _deleteTarget;
+  const ownedIdx = DATA.owned.findIndex(b => b.title === title && b.author === author);
+  if (ownedIdx !== -1) {
+    DATA.owned.splice(ownedIdx, 1);
+    document.getElementById('owned-count').textContent = DATA.owned.length;
+  } else {
+    const wishIdx = DATA.wishlist.findIndex(b => b.title === title && b.author === author);
+    if (wishIdx !== -1) {
+      DATA.wishlist.splice(wishIdx, 1);
+      document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
+    }
+  }
+  saveData();
+  closeDeleteConfirm();
+  render();
+}
+
+function removeFromLibrary() {
+  selectedBooks.forEach(key => {
+    const [title, author] = key.split('||');
+    const idx = DATA.owned.findIndex(b => b.title === title && b.author === author);
+    if (idx !== -1) DATA.owned.splice(idx, 1);
+  });
+  selectedBooks.clear();
+  saveData();
+  document.getElementById('owned-count').textContent = DATA.owned.length;
+  updateSelectionBar();
+  render();
 }
 
 function markAsOwned() {
@@ -2199,6 +2366,10 @@ function importData() {
 let _acFocusedIndex = -1;
 let _acDebounce = null;
 
+function normalize(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 function onTitleInput(input) {
   document.getElementById('modalSubmitBtn').disabled = !input.value.trim();
   const q = input.value.trim();
@@ -2214,14 +2385,29 @@ async function fetchTitleSuggestions(q) {
   list.innerHTML = '<li class="autocomplete-item autocomplete-loading">Searching…</li>';
   list.classList.add('open');
   try {
-    const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=8&fields=title,author_name,key`);
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=8&fields=items(volumeInfo(title,authors,publishedDate,categories))`;
+    const res = await fetch(url);
     const data = await res.json();
-    const docs = (data.docs || []).filter(d => d.title);
-    if (!docs.length) { list.classList.remove('open'); list.innerHTML = ''; return; }
-    list.innerHTML = docs.map((d, i) => {
-      const title = d.title || '';
-      const author = (d.author_name || [])[0] || '';
-      return `<li class="autocomplete-item" data-index="${i}" onmousedown="selectSuggestion('${title.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${author.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
+    const items = (data.items || []).filter(it => it.volumeInfo?.title);
+    if (!items.length) { list.classList.remove('open'); list.innerHTML = ''; return; }
+    const seen = new Set();
+    const unique = items.filter(it => {
+      const key = it.volumeInfo.title + '||' + (it.volumeInfo.authors?.[0] || '');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    list.innerHTML = unique.map((it, i) => {
+      const title  = it.volumeInfo.title || '';
+      const author = (it.volumeInfo.authors || [])[0] || '';
+      const year   = (it.volumeInfo.publishedDate || '').substring(0, 4);
+      const genre  = (it.volumeInfo.categories || [])[0]?.split('/')[0]?.trim() || '';
+      return `<li class="autocomplete-item" data-index="${i}"
+          data-title="${title.replace(/"/g,'&quot;')}"
+          data-author="${author.replace(/"/g,'&quot;')}"
+          data-year="${year}"
+          data-genre="${genre.replace(/"/g,'&quot;')}"
+          onmousedown="selectSuggestion(this)">
         ${esc(title)}<span>${esc(author)}</span>
       </li>`;
     }).join('');
@@ -2252,14 +2438,15 @@ function onTitleKeydown(e) {
   }
 }
 
-function selectSuggestion(title, author, key) {
-  document.getElementById('addTitle').value = title;
-  document.getElementById('addAuthor').value = author;
+function selectSuggestion(el) {
+  document.getElementById('addTitle').value  = el.dataset.title;
+  document.getElementById('addAuthor').value = el.dataset.author;
+  if (el.dataset.year)  document.getElementById('addYear').value  = el.dataset.year;
+  if (el.dataset.genre) document.getElementById('addGenre').value = el.dataset.genre;
   document.getElementById('modalSubmitBtn').disabled = false;
   const list = document.getElementById('titleSuggestions');
   list.classList.remove('open');
   list.innerHTML = '';
-  if (key) fetchGenre(key);
 }
 
 async function fetchGenre(olKey) {
