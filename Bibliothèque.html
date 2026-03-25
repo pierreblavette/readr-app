@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
   /* ─── TOKENS ─── */
   :root {
@@ -2630,6 +2631,24 @@ async function runOCR(file) {
   errEl.style.display = 'none';
   document.getElementById('ocrTextArea').style.display = 'none';
   document.getElementById('importPreview').style.display = 'none';
+
+  // Convert HEIC/HEIF to JPEG (browsers can't decode HEIC natively)
+  const isHeic = file.type === 'image/heic' || file.type === 'image/heif'
+    || /\.(heic|heif)$/i.test(file.name);
+  if (isHeic) {
+    document.getElementById('ocrProgressArea').style.display = '';
+    document.getElementById('ocrStatusLabel').textContent = 'Converting HEIC…';
+    document.getElementById('ocrProgressFill').style.width = '5%';
+    try {
+      const blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 });
+      file = new File([blob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' });
+    } catch(e) {
+      errEl.textContent = 'Could not convert this HEIC file. Try exporting it as JPG from Photos.';
+      errEl.style.display = 'block';
+      document.getElementById('ocrProgressArea').style.display = 'none';
+      return;
+    }
+  }
 
   // Show progress area with thumbnail
   const url = URL.createObjectURL(file);
