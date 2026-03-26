@@ -1418,8 +1418,8 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  #add-tab-photo:not(.active) .import-tab-ai { opacity: 0.45; }
-  #add-tab-photo:hover:not(.active) .import-tab-ai { opacity: 0.7; }
+  #add-tab-photo:not(.active) .import-tab-ai { opacity: 0.6; }
+  #add-tab-photo:hover:not(.active) .import-tab-ai { opacity: 0.85; }
   #add-tab-photo.active { border-bottom-color: #9B5CF6; }
 
   .import-dropzone {
@@ -1595,16 +1595,17 @@
       <button class="import-tab" id="add-tab-file" onclick="switchAddTab('file')">File</button>
       <button class="import-tab" id="add-tab-photo" onclick="switchAddTab('photo')">
         <span class="import-tab-ai">
-          <svg class="import-tab-ai-icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+          <svg class="import-tab-ai-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="aiTabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#4959E6"/>
                 <stop offset="100%" stop-color="#9B5CF6"/>
               </linearGradient>
             </defs>
-            <path d="M8.5 1l.55 1.65L10.7 3.2l-1.65.55L8.5 5.4l-.55-1.65L6.3 3.2l1.65-.55L8.5 1z" fill="url(#aiTabGrad)"/>
-            <path d="M3.5 6.5l.4 1.2 1.2.4-1.2.4-.4 1.2-.4-1.2-1.2-.4 1.2-.4.4-1.2z" fill="url(#aiTabGrad)"/>
-            <path d="M11.5 7.5l.28.84.84.28-.84.28-.28.84-.28-.84-.84-.28.84-.28.28-.84z" fill="url(#aiTabGrad)"/>
+            <!-- Orbital arc: large C-shape counterclockwise -->
+            <path d="M 12 2 A 13.3 13.3 0 1 0 2 12" stroke="url(#aiTabGrad)" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- 4-pointed star inside the arc -->
+            <path d="M 9.5 7.5 L 9.08 8.79 A 0.44 0.44 0 0 1 8.79 9.08 L 7.5 9.5 L 8.79 9.92 A 0.44 0.44 0 0 1 9.08 10.21 L 9.5 11.5 L 9.92 10.21 A 0.44 0.44 0 0 1 10.21 9.92 L 11.5 9.5 L 10.21 9.08 A 0.44 0.44 0 0 1 9.92 8.79 Z" fill="url(#aiTabGrad)"/>
           </svg>
           <span class="import-tab-ai-text">Photo</span>
         </span>
