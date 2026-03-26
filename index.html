@@ -1403,6 +1403,25 @@
   .import-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
   .import-tab:hover:not(.active) { color: var(--text); }
 
+  /* ── AI Photo tab ── */
+  .import-tab-ai { display: inline-flex; align-items: center; gap: 5px; }
+  .import-tab-ai-icon { width: 13px; height: 13px; flex-shrink: 0; }
+  .import-tab-ai-text {
+    background: linear-gradient(135deg, #4959E6 0%, #9B5CF6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  [data-theme="dark"] .import-tab-ai-text {
+    background: linear-gradient(135deg, #7B89F8 0%, #C084FC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  #add-tab-photo:not(.active) .import-tab-ai { opacity: 0.45; }
+  #add-tab-photo:hover:not(.active) .import-tab-ai { opacity: 0.7; }
+  #add-tab-photo.active { border-bottom-color: #9B5CF6; }
+
   .import-dropzone {
     border: 2px dashed var(--border); border-radius: 10px;
     padding: 40px 24px; text-align: center; cursor: pointer;
@@ -1574,7 +1593,22 @@
     <div class="import-tabs">
       <button class="import-tab active" id="add-tab-manual" onclick="switchAddTab('manual')">Manual</button>
       <button class="import-tab" id="add-tab-file" onclick="switchAddTab('file')">File</button>
-      <button class="import-tab" id="add-tab-photo" onclick="switchAddTab('photo')">Photo</button>
+      <button class="import-tab" id="add-tab-photo" onclick="switchAddTab('photo')">
+        <span class="import-tab-ai">
+          <svg class="import-tab-ai-icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="aiTabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4959E6"/>
+                <stop offset="100%" stop-color="#9B5CF6"/>
+              </linearGradient>
+            </defs>
+            <path d="M8.5 1l.55 1.65L10.7 3.2l-1.65.55L8.5 5.4l-.55-1.65L6.3 3.2l1.65-.55L8.5 1z" fill="url(#aiTabGrad)"/>
+            <path d="M3.5 6.5l.4 1.2 1.2.4-1.2.4-.4 1.2-.4-1.2-1.2-.4 1.2-.4.4-1.2z" fill="url(#aiTabGrad)"/>
+            <path d="M11.5 7.5l.28.84.84.28-.84.28-.28.84-.28-.84-.84-.28.84-.28.28-.84z" fill="url(#aiTabGrad)"/>
+          </svg>
+          <span class="import-tab-ai-text">Photo</span>
+        </span>
+      </button>
     </div>
 
     <!-- MANUAL PANEL -->
