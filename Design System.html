@@ -348,10 +348,11 @@
   .btn-primary { background: var(--accent); color: #fff; border: none; }
   .btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 80%, #000); }
 
-  .btn-outline { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
-  .btn-outline:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+  .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+  .btn-outline:hover:not(:disabled) { background: var(--bg3); border-color: var(--text-2); }
 
   .btn-solid { background: var(--bg3); color: var(--text); border: none; aspect-ratio: 1; }
+  .btn-solid svg { pointer-events: none; }
   .btn-solid:hover:not(:disabled) { background: var(--border); }
 
   .btn-secondary { background: var(--bg3); color: var(--text); border: none; }
@@ -379,6 +380,18 @@
   .btn-icon.btn-lg svg { width: 18px; height: 18px; }
   .btn-icon.btn-xl { width: 56px; padding: 0; }
   .btn-icon.btn-xl svg { width: 20px; height: 20px; }
+
+  /* Solid sizes */
+  .btn-solid.btn-xs { width: 24px; padding: 0; }
+  .btn-solid.btn-xs svg { width: 12px; height: 12px; }
+  .btn-solid.btn-sm { width: 32px; padding: 0; }
+  .btn-solid.btn-sm svg { width: 14px; height: 14px; }
+  .btn-solid.btn-md { width: 40px; padding: 0; }
+  .btn-solid.btn-md svg { width: 16px; height: 16px; }
+  .btn-solid.btn-lg { width: 48px; padding: 0; }
+  .btn-solid.btn-lg svg { width: 18px; height: 18px; }
+  .btn-solid.btn-xl { width: 56px; padding: 0; }
+  .btn-solid.btn-xl svg { width: 20px; height: 20px; }
 
   /* Legacy aliases (used in component previews) */
   .btn-primary-legacy {
