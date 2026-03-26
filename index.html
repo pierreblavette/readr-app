@@ -1104,20 +1104,21 @@
     .logo-icon { font-size: 16px; flex-shrink: 0; }
     /* Tabs: back in normal flow, centered */
     .toolbar-tabs { position: static; transform: none; flex: 1; display: flex; justify-content: center; }
-    /* Theme toggle: in flex flow at end of toolbar */
-    .toolbar .theme-btn { position: static; transform: none; flex-shrink: 0; }
+    /* Theme toggle: keep position:relative so toggle-thumb stays inside */
+    .toolbar .theme-btn { position: relative; top: auto; right: auto; transform: none; flex-shrink: 0; }
 
     /* ── Hero / page title ── */
     .hero, .main-wrap { padding-left: 16px; padding-right: 16px; }
-    .hero { padding-top: 24px; }
-    .page-title { font-size: 1.8rem; margin-bottom: 16px; }
+    .hero { padding-top: 16px; }
+    .page-title { font-size: 2.2rem; margin-bottom: 12px; }
+    .main-wrap { padding-top: 0; }
 
     /* ── Search row: search full width, buttons below ── */
-    .search-row { flex-direction: column; align-items: stretch; gap: 10px; }
+    .search-row { flex-direction: column; align-items: stretch; gap: 10px; margin-bottom: 20px; }
     .search-box { min-width: 0; flex: none; width: 100%; }
     .counter-actions { gap: 8px; }
     .add-btn, .edit-btn { height: 36px; padding: 0 14px; font-size: 0.9rem; }
-    .export-btn { display: none; }
+    .export-btn { display: none !important; }
     .view-btns { margin-left: auto; }
 
     /* ── Grid: single column ── */
@@ -1156,7 +1157,7 @@
   }
 
   @media (max-width: 480px) {
-    .tabs .tab { font-size: 0.82rem; padding: 5px 10px; }
+    .tabs .tab { font-size: 0.95rem; padding: 6px 14px; }
   }
 
   /* ─── ADD BOOK MODAL ─── */
