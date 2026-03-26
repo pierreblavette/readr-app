@@ -711,6 +711,7 @@
   /* Hover state simulation */
   .btn-primary.is-hover   { background: color-mix(in srgb, var(--accent) 80%, #000) !important; }
   .btn-secondary.is-hover { background: var(--border) !important; }
+  .btn-ghost.is-hover     { background: var(--bg3) !important; color: var(--text) !important; }
   .btn-outline.is-hover   { background: var(--bg3) !important; border-color: var(--text-2) !important; }
   .btn-solid.is-hover     { background: var(--border) !important; }
   .btn-critical.is-hover  { background: #DC2626 !important; }
@@ -719,6 +720,7 @@
   .btn.is-active { transform: scale(0.97); }
   .btn-primary.is-active   { background: color-mix(in srgb, var(--accent) 62%, #000) !important; }
   .btn-secondary.is-active { background: color-mix(in srgb, var(--border) 60%, #888) !important; }
+  .btn-ghost.is-active     { background: var(--border) !important; color: var(--text) !important; }
   .btn-outline.is-active   { background: var(--border) !important; border-color: var(--text) !important; }
   .btn-solid.is-active     { background: color-mix(in srgb, var(--border) 60%, #888) !important; }
   .btn-critical.is-active  { background: #B91C1C !important; }
@@ -1160,7 +1162,7 @@
     <!-- ─── BUTTON STATES ─── -->
     <section class="ds-section" id="btn-states">
       <h2 class="ds-section-title">Button States</h2>
-      <p class="ds-section-sub">All variants at MD (40px). 4 content types × 4 states. Critical = destructive red variant for delete/irreversible actions.</p>
+      <p class="ds-section-sub">All variants at MD (40px). 4 content types × 4 states. Ghost = text only, no border. Critical = destructive red for delete/irreversible actions.</p>
       <div class="ds-divider"></div>
       <div class="states-grid">
 
@@ -1273,6 +1275,44 @@
                 <td><button class="btn btn-outline btn-md btn-square is-hover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
                 <td><button class="btn btn-outline btn-md btn-square is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
                 <td><button class="btn btn-outline btn-md btn-square" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- GHOST -->
+        <div class="states-variant-card">
+          <div class="states-variant-header"><div class="states-variant-name">Ghost</div></div>
+          <table class="states-table">
+            <thead><tr><th style="width:130px">Content</th><th>Default</th><th>Hover</th><th>Active</th><th>Disabled</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="states-content-label">Text only</span></td>
+                <td><button class="btn btn-ghost btn-md">Label</button></td>
+                <td><button class="btn btn-ghost btn-md is-hover">Label</button></td>
+                <td><button class="btn btn-ghost btn-md is-active">Label</button></td>
+                <td><button class="btn btn-ghost btn-md" disabled>Label</button></td>
+              </tr>
+              <tr>
+                <td><span class="states-content-label">Icon + Text</span></td>
+                <td><button class="btn btn-ghost btn-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px;flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Label</button></td>
+                <td><button class="btn btn-ghost btn-md is-hover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px;flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Label</button></td>
+                <td><button class="btn btn-ghost btn-md is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px;flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Label</button></td>
+                <td><button class="btn btn-ghost btn-md" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px;flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Label</button></td>
+              </tr>
+              <tr>
+                <td><span class="states-content-label">Text + Icon</span></td>
+                <td><button class="btn btn-ghost btn-md">Label<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></td>
+                <td><button class="btn btn-ghost btn-md is-hover">Label<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></td>
+                <td><button class="btn btn-ghost btn-md is-active">Label<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></td>
+                <td><button class="btn btn-ghost btn-md" disabled>Label<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></td>
+              </tr>
+              <tr>
+                <td><span class="states-content-label">Icon only</span></td>
+                <td><button class="btn btn-ghost btn-md btn-square"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
+                <td><button class="btn btn-ghost btn-md btn-square is-hover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
+                <td><button class="btn btn-ghost btn-md btn-square is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
+                <td><button class="btn btn-ghost btn-md btn-square" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></td>
               </tr>
             </tbody>
           </table>
