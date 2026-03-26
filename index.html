@@ -1033,6 +1033,13 @@
   .sel-confirm:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
   .sel-confirm.danger { background: #ef4444; }
   .sel-confirm.danger:hover { background: #dc2626; }
+  .sel-confirm:disabled { opacity: 0.4; pointer-events: none; }
+  .sel-select-all { background: rgba(255,255,255,0.12); color: inherit; }
+  .sel-select-all:hover { background: rgba(255,255,255,0.22); }
+  /* Select-all checkbox in table header */
+  .th-checkbox-wrap { display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .th-checkbox-wrap .row-checkbox.all-selected { background: var(--text); border-color: var(--text); }
+  .th-checkbox-wrap .row-checkbox.all-selected svg { opacity: 1; }
 
   /* ─── FOOTER ─── */
   .footer {
@@ -1437,6 +1444,7 @@
 <div class="selection-bar" id="selectionBar">
   <span class="selection-count" id="selectionCount"></span>
   <div class="selection-actions">
+    <button class="sel-btn sel-select-all" id="selSelectAllBtn" onclick="toggleSelectAll()">Select all</button>
     <button class="sel-btn sel-cancel" onclick="clearSelection()">Cancel</button>
     <button class="sel-btn sel-confirm" id="selConfirmBtn" onclick="confirmSelection()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -2171,7 +2179,7 @@ function render() {
       <table class="list-table">
         <thead>
           <tr>
-            ${_editMode ? '<th style="width:40px"></th>' : ''}
+            ${_editMode ? `<th style="width:40px"><span class="th-checkbox-wrap" onclick="toggleSelectAll()" title="Select all"><span class="row-checkbox${books.length > 0 && books.every(b => selectedBooks.has(b.title+'||'+b.author)) ? ' all-selected' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></span></th>` : ''}
             <th style="width:5%">#</th>
             <th style="width:28%" class="${sort === 'title' ? 'sorted' : ''}" onclick="sortBy('title')">
               Title <span class="sort-arrow">${sort === 'title' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
@@ -2341,15 +2349,40 @@ function clearSelection() {
   updateSelectionBar();
 }
 
+function toggleSelectAll() {
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  let visBooks = [...DATA[currentTab]];
+  if (query) visBooks = visBooks.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query));
+  const allKeys = visBooks.map(b => `${b.title}||${b.author}`);
+  const allSel = allKeys.length > 0 && allKeys.every(k => selectedBooks.has(k));
+  if (allSel) {
+    allKeys.forEach(k => selectedBooks.delete(k));
+  } else {
+    allKeys.forEach(k => selectedBooks.add(k));
+  }
+  _skipAnim = true;
+  render();
+  _skipAnim = false;
+  updateSelectionBar();
+}
+
 function updateSelectionBar() {
   const bar = document.getElementById('selectionBar');
   const count = selectedBooks.size;
-  bar.classList.toggle('visible', count > 0);
+  bar.classList.toggle('visible', _editMode);
   document.getElementById('selectionCount').textContent =
-    count === 1 ? '1 book selected' : `${count} books selected`;
+    count === 0 ? '' : count === 1 ? '1 book selected' : `${count} books selected`;
   const isRemove = currentTab !== 'wishlist';
   document.getElementById('selConfirmLabel').textContent = isRemove ? 'Remove' : 'Mark as owned';
   document.getElementById('selConfirmBtn').classList.toggle('danger', isRemove);
+  document.getElementById('selConfirmBtn').disabled = count === 0;
+  // Sync select-all button label
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  let visBooks = [...DATA[currentTab]];
+  if (query) visBooks = visBooks.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query));
+  const allSel = visBooks.length > 0 && visBooks.every(b => selectedBooks.has(`${b.title}||${b.author}`));
+  const saBtn = document.getElementById('selSelectAllBtn');
+  if (saBtn) saBtn.textContent = allSel ? 'Deselect all' : 'Select all';
 }
 
 function confirmSelection() {
@@ -2943,7 +2976,8 @@ let _skipAnim = false;
 function toggleEditMode() {
   _editMode = !_editMode;
   document.getElementById('editWishBtn').textContent = _editMode ? 'Done' : 'Edit';
-  if (!_editMode) { selectedBooks.clear(); updateSelectionBar(); }
+  if (!_editMode) selectedBooks.clear();
+  updateSelectionBar();
   _skipAnim = true;
   render();
   _skipAnim = false;
