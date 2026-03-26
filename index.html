@@ -7,8 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
   /* ─── TOKENS ─── */
   :root {
@@ -27,6 +25,7 @@
     --text-2:      #555555;
     --text-3:      #777777;
     --nav:         rgba(255,255,255,0.96);
+    --ghost-hover: rgba(0,0,0,0.06);
     --radius:      8px;
     --transition:  background 0.25s, color 0.25s, border-color 0.25s;
   }
@@ -47,6 +46,7 @@
     --text-2:      #909090;
     --text-3:      #555555;
     --nav:         rgba(15,15,15,0.96);
+    --ghost-hover: rgba(255,255,255,0.08);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -609,17 +609,17 @@
     height: 38px;
     border: none;
     background: var(--bg3);
-    color: var(--text-3);
+    color: var(--text);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15s;
   }
 
   .view-btn:first-child { border-right: 1px solid var(--border); }
 
-  .view-btn:hover { background: var(--border); color: var(--text-2); }
+  .view-btn:hover { background: var(--ghost-hover); }
 
   .view-btn.active {
     background: var(--text);
@@ -805,17 +805,18 @@
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border: none;
     background: transparent;
+    color: var(--text);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: border-color 0.15s;
+    transition: background 0.15s;
   }
-  .panel-close:hover { border-color: var(--text); }
-  .panel-close svg { width: 16px; height: 16px; color: var(--text-2); }
+  .panel-close:hover { background: var(--ghost-hover); }
+  .panel-close svg { width: 16px; height: 16px; }
 
   .panel-cover-wrap {
     width: 50%;
@@ -996,23 +997,22 @@
     background: var(--text);
     color: var(--bg);
     border-radius: 8px;
-    padding: 10px 12px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 48px;
-    min-width: 560px;
+    gap: 12px;
+    min-width: 605px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     z-index: 500;
     transition: bottom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
   }
   .selection-bar.visible { bottom: 28px; }
-  .sel-left { display: flex; align-items: center; gap: 12px; }
-  .sel-right { display: flex; align-items: center; gap: 8px; }
+  .sel-actions { display: flex; align-items: center; gap: 12px; }
   .selection-count {
-    font-size: 0.857rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 400;
     opacity: 0.75;
   }
   .selection-actions { display: flex; gap: 8px; }
@@ -1131,7 +1131,7 @@
     margin-bottom: 24px;
   }
 
-  .modal-fields { margin: 40px 0; display: flex; flex-direction: column; gap: 16px; }
+  .modal-fields { margin: 0 0 24px; display: flex; flex-direction: column; gap: 16px; }
   .modal-field { display: flex; flex-direction: column; gap: 6px; }
   .modal-field label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); }
   .modal-field input {
@@ -1152,11 +1152,11 @@
   .modal-actions { display: flex; justify-content: space-between; margin-top: 24px; }
   .modal-cancel {
     height: 40px; padding: 0 20px; border-radius: 8px; border: 1.5px solid var(--border);
-    background: transparent; color: var(--text-2); font-family: inherit;
+    background: transparent; color: var(--text); font-family: inherit;
     font-size: 1rem; font-weight: 500; cursor: pointer; transition: border-color 0.15s;
     white-space: nowrap;
   }
-  .modal-cancel:hover { border-color: var(--text); color: var(--text); }
+  .modal-cancel:hover { border-color: var(--text); }
   .modal-submit {
     height: 40px; padding: 0 20px; border-radius: 8px; border: none;
     background: var(--accent); color: #fff; font-family: inherit;
@@ -1168,14 +1168,14 @@
 
   .delete-row-btn {
     width: 38px; height: 38px;
-    border: none; background: var(--bg3); cursor: pointer;
+    border: none; background: transparent; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     border-radius: 8px;
     color: var(--text);
     transition: background 0.15s;
     flex-shrink: 0;
   }
-  .delete-row-btn:hover { background: var(--border); }
+  .delete-row-btn:hover { background: var(--ghost-hover); }
   .delete-row-btn svg { width: 18px; height: 18px; }
 
   .confirm-modal-overlay {
@@ -1259,8 +1259,9 @@
     align-items: center;
     justify-content: center;
   }
-  .modal-close:hover { background: var(--bg3); }
-  .modal-close svg { width: 24px; height: 24px; color: var(--text-2); }
+  .modal-close { color: var(--text); transition: background 0.15s; }
+  .modal-close:hover { background: var(--ghost-hover); }
+  .modal-close svg { width: 24px; height: 24px; }
 
   .add-btn {
     height: 40px;
@@ -1288,7 +1289,7 @@
     border-radius: 8px;
     border: 1.5px solid var(--border);
     background: transparent;
-    color: var(--text-2);
+    color: var(--text);
     font-family: inherit;
     font-size: 1rem;
     font-weight: 500;
@@ -1296,10 +1297,10 @@
     display: none;
     align-items: center;
     gap: 8px;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s;
     white-space: nowrap;
   }
-  .edit-btn:hover { border-color: var(--text); color: var(--text); }
+  .edit-btn:hover { border-color: var(--text); }
   .edit-btn.visible { display: flex; }
 
   .export-btn {
@@ -1308,7 +1309,7 @@
     border-radius: 8px;
     border: 1.5px solid var(--border);
     background: transparent;
-    color: var(--text-2);
+    color: var(--text);
     font-family: inherit;
     font-size: 1rem;
     font-weight: 500;
@@ -1316,11 +1317,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s;
     white-space: nowrap;
   }
   .export-btn { margin-left: -8px; }
-  .export-btn:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+  .export-btn:hover:not(:disabled) { border-color: var(--text); }
   .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* ─── IMPORT MODAL ─── */
@@ -1345,10 +1346,10 @@
   .import-dropzone-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
   .import-dropzone-sub { font-size: 0.857rem; color: var(--text-3); }
 
-  .ocr-thumb-row { display: flex; gap: 16px; align-items: center; margin-top: 16px; }
+.ocr-thumb-row { display: flex; gap: 16px; align-items: center; margin-top: 16px; }
   .ocr-thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1.5px solid var(--border); }
   .ocr-status { flex: 1; }
-  .ocr-status-label { font-size: 0.857rem; font-weight: 500; color: var(--text-2); margin-bottom: 8px; }
+  .ocr-status-label { font-size: 0.857rem; font-weight: 400; color: var(--text-2); margin-bottom: 8px; }
   .ocr-progress-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
   .ocr-progress-fill { height: 100%; border-radius: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
 
@@ -1374,20 +1375,23 @@
 
   .import-preview { margin-top: 24px; border-top: 1.5px solid var(--border); padding-top: 20px; }
   .import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .import-preview-title { font-size: 0.857rem; font-weight: 700; color: var(--text-3); }
+  .import-preview-title { font-size: 0.857rem; font-weight: 400; color: var(--text-3); }
   .import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
   .import-preview-item {
     display: flex; align-items: center; justify-content: space-between;
     padding: 8px 12px; border-radius: 8px; background: var(--bg3);
   }
-  .import-preview-book { font-size: 0.95rem; font-weight: 500; color: var(--text); }
-  .import-preview-author { font-size: 0.857rem; color: var(--text-2); margin-top: 1px; }
-  .import-preview-badge {
-    font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 20px;
-    flex-shrink: 0; margin-left: 12px;
+  .import-preview-remove {
+    width: 28px; height: 28px; border: none; background: transparent;
+    color: var(--text); cursor: pointer; display: flex; align-items: center;
+    justify-content: center; border-radius: 6px; flex-shrink: 0; margin-left: 8px;
+    transition: background 0.15s;
   }
-  .import-preview-badge.owned { background: var(--accent-bg); color: var(--accent); }
-  .import-preview-badge.wishlist { background: var(--bg3); color: var(--text-2); border: 1px solid var(--border); }
+  .import-preview-remove:hover { background: var(--ghost-hover); }
+  .import-preview-remove svg { width: 14px; height: 14px; }
+  .import-preview-book { font-size: 0.95rem; font-weight: 500; color: var(--text); }
+  .import-preview-author { font-size: 0.857rem; color: var(--text-2); margin-top: 4px; }
+
 
   .import-error { color: #ef4444; font-size: 0.857rem; margin-top: 8px; display: none; }
   .import-spinner { display: none; align-items: center; gap: 8px; color: var(--text-2); font-size: 0.95rem; }
@@ -1446,14 +1450,11 @@
 
 <!-- SELECTION BAR -->
 <div class="selection-bar" id="selectionBar">
-  <div class="sel-left">
-    <span class="selection-count" id="selectionCount"></span>
-    <button class="sel-btn sel-cancel" onclick="clearSelection()">Cancel</button>
-  </div>
-  <div class="sel-right">
+  <button class="sel-btn sel-cancel" onclick="toggleEditMode()">Cancel</button>
+  <span class="selection-count" id="selectionCount"></span>
+  <div class="sel-actions">
     <button class="sel-btn sel-select-all" id="selSelectAllBtn" onclick="toggleSelectAll()">Select all</button>
     <button class="sel-btn sel-confirm" id="selConfirmBtn" onclick="confirmSelection()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       <span id="selConfirmLabel">Mark as owned</span>
     </button>
   </div>
@@ -1479,7 +1480,6 @@
     <div class="counter-actions">
       <button class="add-btn" id="addBookBtn" onclick="openAddModal()">Add</button>
       <button class="edit-btn" id="editWishBtn" onclick="toggleEditMode()">Edit</button>
-      <button class="export-btn" id="importBtn" onclick="openImportModal()">Import</button>
       <button class="export-btn" id="exportBtn" onclick="exportData()">Export</button>
       <div class="view-btns">
         <button class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Card view">
@@ -1497,52 +1497,43 @@
 
 <!-- ADD BOOK MODAL -->
 <div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAddModal()">
-  <div class="modal">
+  <div class="modal" style="max-width:540px;">
     <button class="modal-close" onclick="closeAddModal()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-title">Add a book</div>
-    <div class="modal-fields">
-      <div class="modal-field" style="position: relative;">
-        <label>Title *</label>
-        <input type="text" id="addTitle" placeholder="e.g. Les Misérables" autocomplete="off" oninput="onTitleInput(this)" onkeydown="onTitleKeydown(event)">
-        <ul class="autocomplete-list" id="titleSuggestions"></ul>
-      </div>
-      <div class="modal-field">
-        <label>Author *</label>
-        <input type="text" id="addAuthor" placeholder="e.g. Victor Hugo" autocomplete="off">
-      </div>
-      <div class="modal-field">
-        <label>Year (optional)</label>
-        <input type="number" id="addYear" placeholder="e.g. 1862" min="1000" max="2099">
-      </div>
-      <div class="modal-field">
-        <label>Genre (optional)</label>
-        <input type="text" id="addGenre" placeholder="e.g. Fiction, Biography…" autocomplete="off">
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-cancel" onclick="closeAddModal()">Cancel</button>
-      <button class="modal-submit" id="modalSubmitBtn" onclick="submitAddBook()" disabled>Add to my library</button>
-    </div>
-  </div>
-</div>
-
-<!-- IMPORT MODAL -->
-<div class="modal-overlay" id="importModal" onclick="if(event.target===this)closeImportModal()">
-  <div class="modal" style="max-width:580px;">
-    <button class="modal-close" onclick="closeImportModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div class="modal-title">Import books</div>
 
     <div class="import-tabs">
-      <button class="import-tab active" id="import-tab-file" onclick="switchImportTab('file')">File</button>
-      <button class="import-tab" id="import-tab-photo" onclick="switchImportTab('photo')">Photo</button>
+      <button class="import-tab active" id="add-tab-manual" onclick="switchAddTab('manual')">Manual</button>
+      <button class="import-tab" id="add-tab-file" onclick="switchAddTab('file')">File</button>
+      <button class="import-tab" id="add-tab-photo" onclick="switchAddTab('photo')">Photo</button>
+    </div>
+
+    <!-- MANUAL PANEL -->
+    <div id="add-panel-manual">
+      <div class="modal-fields">
+        <div class="modal-field" style="position: relative;">
+          <label>Title *</label>
+          <input type="text" id="addTitle" placeholder="e.g. Les Misérables" autocomplete="off" oninput="onTitleInput(this)" onkeydown="onTitleKeydown(event)">
+          <ul class="autocomplete-list" id="titleSuggestions"></ul>
+        </div>
+        <div class="modal-field">
+          <label>Author *</label>
+          <input type="text" id="addAuthor" placeholder="e.g. Victor Hugo" autocomplete="off">
+        </div>
+        <div class="modal-field">
+          <label>Year (optional)</label>
+          <input type="number" id="addYear" placeholder="e.g. 1862" min="1000" max="2099">
+        </div>
+        <div class="modal-field">
+          <label>Genre (optional)</label>
+          <input type="text" id="addGenre" placeholder="e.g. Fiction, Biography…" autocomplete="off">
+        </div>
+      </div>
     </div>
 
     <!-- FILE PANEL -->
-    <div id="import-panel-file">
+    <div id="add-panel-file" style="display:none">
       <div class="import-dropzone" id="importDropzone"
            onclick="document.getElementById('importFileInput').click()"
            ondragover="event.preventDefault();this.classList.add('dragover')"
@@ -1561,7 +1552,7 @@
     </div>
 
     <!-- PHOTO PANEL -->
-    <div id="import-panel-photo" style="display:none">
+    <div id="add-panel-photo" style="display:none">
       <div class="import-dropzone" id="photoDropzone"
            onclick="document.getElementById('photoFileInput').click()"
            ondragover="event.preventDefault();this.classList.add('dragover')"
@@ -1589,7 +1580,7 @@
       <div class="import-error" id="import-photo-error"></div>
     </div>
 
-    <!-- PREVIEW -->
+    <!-- PREVIEW (file + photo) -->
     <div class="import-preview" id="importPreview" style="display:none">
       <div class="import-preview-header">
         <span class="import-preview-title" id="importPreviewCount"></span>
@@ -1598,8 +1589,9 @@
     </div>
 
     <div class="modal-actions" style="margin-top:24px">
-      <button class="modal-cancel" onclick="closeImportModal()">Cancel</button>
-      <button class="modal-submit" id="importSubmitBtn" onclick="confirmImport()" disabled>Import</button>
+      <button class="modal-cancel" onclick="closeAddModal()">Cancel</button>
+      <button class="modal-submit" id="modalSubmitBtn" onclick="submitAddBook()" disabled>Add to my library</button>
+      <button class="modal-submit" id="importSubmitBtn" onclick="confirmImport()" disabled style="display:none">Import</button>
     </div>
   </div>
 </div>
@@ -2429,14 +2421,13 @@ function confirmDeleteBook() {
 }
 
 function removeFromLibrary() {
-  selectedBooks.forEach(key => {
-    const [title, author] = key.split('||');
-    const idx = DATA.owned.findIndex(b => b.title === title && b.author === author);
-    if (idx !== -1) DATA.owned.splice(idx, 1);
-  });
+  const toRemove = new Set(selectedBooks);
+  DATA.owned = DATA.owned.filter(b => !toRemove.has(`${b.title}||${b.author}`));
   selectedBooks.clear();
   saveData();
   document.getElementById('owned-count').textContent = DATA.owned.length;
+  _editMode = false;
+  document.getElementById('editWishBtn').textContent = 'Edit';
   updateSelectionBar();
   render();
 }
@@ -2454,6 +2445,8 @@ function markAsOwned() {
   saveData();
   document.getElementById('owned-count').textContent   = DATA.owned.length;
   document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
+  _editMode = false;
+  document.getElementById('editWishBtn').textContent = 'Edit';
   updateSelectionBar();
   render();
 }
@@ -2533,34 +2526,27 @@ function importData() {
   input.click();
 }
 
-/* ─── IMPORT MODAL ─── */
+/* ─── ADD MODAL (unified) ─── */
 let _importPreviewBooks = [];
 
-function openImportModal() {
-  document.getElementById('importModal').classList.add('open');
-  document.getElementById('importPreview').style.display = 'none';
-  document.getElementById('importPreviewList').innerHTML = '';
-  document.getElementById('importSubmitBtn').disabled = true;
-  document.getElementById('importSubmitBtn').textContent = 'Import';
+function switchAddTab(tab) {
+  document.getElementById('add-panel-manual').style.display = tab === 'manual' ? '' : 'none';
+  document.getElementById('add-panel-file').style.display   = tab === 'file'   ? '' : 'none';
+  document.getElementById('add-panel-photo').style.display  = tab === 'photo'  ? '' : 'none';
+  document.getElementById('add-tab-manual').classList.toggle('active', tab === 'manual');
+  document.getElementById('add-tab-file').classList.toggle('active',   tab === 'file');
+  document.getElementById('add-tab-photo').classList.toggle('active',  tab === 'photo');
+  document.getElementById('modalSubmitBtn').style.display  = tab === 'manual' ? '' : 'none';
+  document.getElementById('importSubmitBtn').style.display = tab !== 'manual' ? '' : 'none';
+  if (tab !== 'manual') {
+    document.getElementById('importPreview').style.display = 'none';
+    document.getElementById('importSubmitBtn').disabled = true;
+    document.getElementById('importSubmitBtn').textContent = 'Import';
+    _importPreviewBooks = [];
+  }
+  document.getElementById('ocrProgressArea').style.display = 'none';
   document.getElementById('import-file-error').style.display = 'none';
   document.getElementById('import-photo-error').style.display = 'none';
-  document.getElementById('ocrProgressArea').style.display = 'none';
-  _importPreviewBooks = [];
-}
-
-function closeImportModal() {
-  document.getElementById('importModal').classList.remove('open');
-}
-
-function switchImportTab(tab) {
-  document.getElementById('import-panel-file').style.display  = tab === 'file'  ? '' : 'none';
-  document.getElementById('import-panel-photo').style.display = tab === 'photo' ? '' : 'none';
-  document.getElementById('import-tab-file').classList.toggle('active',  tab === 'file');
-  document.getElementById('import-tab-photo').classList.toggle('active', tab === 'photo');
-  document.getElementById('importPreview').style.display = 'none';
-  document.getElementById('importSubmitBtn').disabled = true;
-  document.getElementById('importSubmitBtn').textContent = 'Import';
-  _importPreviewBooks = [];
 }
 
 function handleImportDrop(e) {
@@ -2573,6 +2559,7 @@ function handleImportDrop(e) {
 function handleImportFileInput(e) {
   const file = e.target.files[0];
   if (file) processImportFile(file);
+  e.target.value = '';
 }
 
 function processImportFile(file) {
@@ -2649,141 +2636,88 @@ function handlePhotoDrop(e) {
   e.preventDefault();
   document.getElementById('photoDropzone').classList.remove('dragover');
   const file = e.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) runOCR(file);
+  if (file && file.type.startsWith('image/')) runGeminiVision(file);
 }
 
 function handlePhotoInput(e) {
   const file = e.target.files[0];
-  if (file) runOCR(file);
+  if (file) runGeminiVision(file);
+  e.target.value = '';
 }
 
-// Pre-process image: resize + boost contrast for better OCR
-async function preprocessForOCR(file) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      // Resize to max 2400px on longest side (Tesseract prefers ~300dpi)
-      let w = img.width, h = img.height;
-      const maxDim = 2400;
-      if (Math.max(w, h) > maxDim) {
-        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
-        else { w = Math.round(w * maxDim / h); h = maxDim; }
-      }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      // Grayscale + contrast boost to make text stand out
-      ctx.filter = 'grayscale(1) contrast(1.6) brightness(1.05)';
-      ctx.drawImage(img, 0, 0, w, h);
-      canvas.toBlob(blob => blob ? resolve(blob) : reject(), 'image/png');
-    };
-    img.onerror = reject;
-    img.src = URL.createObjectURL(file);
+function toTitleCase(str) {
+  if (!str) return str;
+  // Only convert if the string is mostly uppercase
+  const upper = (str.match(/[A-ZÀ-Ü]/g) || []).length;
+  const letters = (str.match(/[A-Za-zÀ-ü]/g) || []).length;
+  if (letters === 0 || upper / letters < 0.7) return str;
+  const minors = new Set(['a','an','the','and','but','or','for','nor','on','at','to','by','in','of','up','as','de','du','le','la','les','un','une','des','et','en','au','aux','sur','par','avec']);
+  return str.toLowerCase().replace(/[\wÀ-ü''-]+/g, (word, offset) => {
+    if (offset > 0 && minors.has(word)) return word;
+    return word.charAt(0).toUpperCase() + word.slice(1);
   });
 }
 
-async function runOCR(file) {
+// Replace with your deployed Worker URL after running: wrangler deploy
+const VISION_WORKER_URL = 'https://readr-vision.pierreblavette.workers.dev';
+const VISION_TOKEN = '6400b645bb640fcaf29adfffbb87b52e1c222679ead80aeb';
+
+async function runGeminiVision(file) {
   const errEl = document.getElementById('import-photo-error');
   errEl.style.display = 'none';
   document.getElementById('importPreview').style.display = 'none';
 
-  // Convert HEIC/HEIF to JPEG (browsers can't decode HEIC natively)
-  const isHeic = file.type === 'image/heic' || file.type === 'image/heif'
-    || /\.(heic|heif)$/i.test(file.name);
-  if (isHeic) {
-    document.getElementById('ocrProgressArea').style.display = '';
-    document.getElementById('ocrStatusLabel').textContent = 'Converting HEIC…';
-    document.getElementById('ocrProgressFill').style.width = '5%';
-    try {
-      const blob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 });
-      file = new File([blob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' });
-    } catch(e) {
-      errEl.textContent = 'Could not convert this HEIC file. Try exporting it as JPG from Photos.';
-      errEl.style.display = 'block';
-      document.getElementById('ocrProgressArea').style.display = 'none';
-      return;
-    }
-  }
-
-  // Show thumbnail immediately
   const url = URL.createObjectURL(file);
   document.getElementById('ocrThumb').src = url;
   document.getElementById('ocrProgressArea').style.display = '';
-  document.getElementById('ocrStatusLabel').textContent = 'Preprocessing image…';
-  document.getElementById('ocrProgressFill').style.width = '5%';
+  document.getElementById('ocrStatusLabel').textContent = 'Reading image…';
+  document.getElementById('ocrProgressFill').style.width = '20%';
 
   try {
-    // Preprocess before OCR
-    const processed = await preprocessForOCR(file);
-    URL.revokeObjectURL(url);
-
-    const worker = await Tesseract.createWorker('eng+fra', 1, {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          const pct = Math.round(m.progress * 100);
-          document.getElementById('ocrProgressFill').style.width = (10 + pct * 0.9) + '%';
-          document.getElementById('ocrStatusLabel').textContent = `Scanning… ${pct}%`;
-        } else if (m.status === 'loading tesseract core') {
-          document.getElementById('ocrStatusLabel').textContent = 'Loading OCR engine…';
-          document.getElementById('ocrProgressFill').style.width = '10%';
-        } else if (m.status === 'loading language traineddata') {
-          document.getElementById('ocrStatusLabel').textContent = 'Loading language data…';
-        }
-      }
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
-    // PSM 11 = sparse text: finds as much text as possible regardless of layout
-    await worker.setParameters({ tessedit_pageseg_mode: '11' });
-    const { data: { text } } = await worker.recognize(processed);
-    await worker.terminate();
+
+    document.getElementById('ocrProgressFill').style.width = '50%';
+    document.getElementById('ocrStatusLabel').textContent = 'Detecting books…';
+
+    const res = await fetch(VISION_WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Readr-Token': VISION_TOKEN },
+      body: JSON.stringify({ image: base64, mimeType: file.type || 'image/jpeg' })
+    });
+
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || `Worker error ${res.status}`);
+
+    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     document.getElementById('ocrProgressFill').style.width = '100%';
-    document.getElementById('ocrStatusLabel').textContent = 'Analysing…';
+    document.getElementById('ocrStatusLabel').textContent = 'Done!';
 
-    parseOCRText(text.trim());
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) throw new Error('Unexpected response format');
+    const books = JSON.parse(jsonMatch[0])
+      .map(b => ({ title: toTitleCase(b.title || ''), author: toTitleCase(b.author || ''), year: null, list: 'owned' }))
+      .filter(b => b.title.length > 0);
+
+    if (!books.length) {
+      errEl.textContent = 'No books detected. Try a clearer photo with visible titles.';
+      errEl.style.display = 'block';
+      document.getElementById('ocrStatusLabel').textContent = 'No books detected';
+      return;
+    }
+
+    URL.revokeObjectURL(url);
+    showImportPreview(books);
   } catch(e) {
     document.getElementById('ocrProgressArea').style.display = 'none';
-    errEl.textContent = 'Could not read this image. Try a clearer photo.';
+    errEl.textContent = `Error: ${e.message || 'Could not analyse this image.'}`;
     errEl.style.display = 'block';
   }
-}
-
-function parseOCRText(rawText) {
-  const errEl = document.getElementById('import-photo-error');
-  errEl.style.display = 'none';
-  if (!rawText) { errEl.textContent = 'No text could be extracted from this image.'; errEl.style.display = 'block'; return; }
-
-  const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
-  const books = [];
-  for (const line of lines) {
-    // Skip lines that are mostly symbols/numbers/noise
-    const alphaChars = (line.match(/[a-zA-ZÀ-ÿ]/g) || []).length;
-    if (alphaChars < 4) continue; // not enough real letters
-    const noiseRatio = (line.match(/[^a-zA-ZÀ-ÿ0-9\s'",.:!?()-]/g) || []).length / line.length;
-    if (noiseRatio > 0.25) continue; // too many garbage characters
-
-    // Clean leading/trailing punctuation and OCR artefacts
-    const cleaned = line.replace(/^[\s|_=+\-*#]+/, '').replace(/[\s|_=+*#]+$/, '').trim();
-    if (cleaned.length < 4) continue;
-
-    let title = '', author = '';
-    const byMatch = cleaned.match(/^(.+?)\s+by\s+(.+)$/i);
-    const dashMatch = cleaned.match(/^(.+?)\s*[-–—]\s*(.+)$/);
-    if (byMatch) {
-      title = byMatch[1].trim(); author = byMatch[2].trim();
-    } else if (dashMatch) {
-      title = dashMatch[1].trim(); author = dashMatch[2].trim();
-    } else {
-      title = cleaned; author = '';
-    }
-    if (title.length > 3) books.push({ title, author, year: null, list: 'owned' });
-  }
-  if (!books.length) {
-    errEl.textContent = 'Could not detect any books in this image. Make sure the text is clearly visible and try again.';
-    errEl.style.display = 'block';
-    document.getElementById('ocrStatusLabel').textContent = 'No books detected';
-    return;
-  }
-  showImportPreview(books);
 }
 
 function showImportPreview(books) {
@@ -2794,18 +2728,31 @@ function showImportPreview(books) {
   if (ownedCount && wishCount) label += ` — ${ownedCount} to library, ${wishCount} to wishlist`;
   else if (wishCount) label += ` — to wishlist`;
   document.getElementById('importPreviewCount').textContent = label;
-  document.getElementById('importPreviewList').innerHTML = books.map(b => `
+  document.getElementById('importPreviewList').innerHTML = books.map((b, i) => `
     <div class="import-preview-item">
       <div>
         <div class="import-preview-book">${esc(b.title)}</div>
         <div class="import-preview-author">${esc(b.author)}${b.year ? ' · ' + b.year : ''}</div>
       </div>
-      <span class="import-preview-badge ${b.list === 'wishlist' ? 'wishlist' : 'owned'}">${b.list === 'wishlist' ? 'Wishlist' : 'Library'}</span>
+      <button class="import-preview-remove" onclick="removeImportBook(${i})" title="Remove">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>`).join('');
   document.getElementById('importPreview').style.display = 'block';
   const btn = document.getElementById('importSubmitBtn');
   btn.disabled = false;
   btn.textContent = `Import ${books.length} book${books.length > 1 ? 's' : ''}`;
+}
+
+function removeImportBook(index) {
+  _importPreviewBooks.splice(index, 1);
+  if (_importPreviewBooks.length === 0) {
+    document.getElementById('importPreview').style.display = 'none';
+    document.getElementById('importSubmitBtn').disabled = true;
+    document.getElementById('importSubmitBtn').textContent = 'Import';
+  } else {
+    showImportPreview(_importPreviewBooks);
+  }
 }
 
 function confirmImport() {
@@ -2827,7 +2774,7 @@ function confirmImport() {
   saveData();
   document.getElementById('owned-count').textContent    = DATA.owned.length;
   document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
-  closeImportModal();
+  closeAddModal();
   render();
 }
 
@@ -2931,7 +2878,7 @@ async function fetchGenre(olKey) {
   } catch(e) {}
 }
 
-function openAddModal() {
+function openAddModal(tab) {
   document.getElementById('addTitle').value = '';
   document.getElementById('addAuthor').value = '';
   document.getElementById('addYear').value = '';
@@ -2939,6 +2886,15 @@ function openAddModal() {
   const list = document.getElementById('titleSuggestions');
   list.classList.remove('open');
   list.innerHTML = '';
+  _importPreviewBooks = [];
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('importPreviewList').innerHTML = '';
+  document.getElementById('importSubmitBtn').disabled = true;
+  document.getElementById('importSubmitBtn').textContent = 'Import';
+  document.getElementById('import-file-error').style.display = 'none';
+  document.getElementById('import-photo-error').style.display = 'none';
+  document.getElementById('ocrProgressArea').style.display = 'none';
+  switchAddTab(tab || 'manual');
   document.getElementById('addModal').classList.add('open');
 }
 
@@ -2996,6 +2952,7 @@ function saveGenres() {
 function closeAddModal() {
   document.getElementById('addModal').classList.remove('open');
 }
+function closeImportModal() { closeAddModal(); }
 
 function submitAddBook() {
   const title  = document.getElementById('addTitle').value.trim();
@@ -3025,7 +2982,8 @@ function submitAddBook() {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeAddModal();
-  if (e.key === 'Enter' && document.getElementById('addModal').classList.contains('open')) submitAddBook();
+  const modal = document.getElementById('addModal');
+  if (e.key === 'Enter' && modal.classList.contains('open') && document.getElementById('add-tab-manual').classList.contains('active')) submitAddBook();
 });
 
 init();
