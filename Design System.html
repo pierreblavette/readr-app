@@ -348,8 +348,11 @@
   .btn-primary { background: var(--accent); color: #fff; border: none; }
   .btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 80%, #000); }
 
-  .btn-ghost { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
-  .btn-ghost:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+  .btn-outline { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
+  .btn-outline:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+
+  .btn-solid { background: var(--bg3); color: var(--text); border: none; aspect-ratio: 1; }
+  .btn-solid:hover:not(:disabled) { background: var(--border); }
 
   .btn-secondary { background: var(--bg3); color: var(--text); border: none; }
   .btn-secondary:hover:not(:disabled) { background: var(--border); }
@@ -386,23 +389,23 @@
   }
   .btn-primary-legacy:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
   .btn-primary-legacy:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-ghost-legacy {
+  .btn-outline-legacy {
     height: 40px; padding: 0 20px; border-radius: 8px; border: 1.5px solid var(--border);
     background: transparent; color: var(--text-2); font-family: inherit;
     font-size: 1rem; font-weight: 500; cursor: pointer; transition: border-color 0.15s, color 0.15s;
     white-space: nowrap;
   }
-  .btn-ghost-legacy:hover { border-color: var(--text); color: var(--text); }
-  .btn-icon-ghost {
+  .btn-outline-legacy:hover { border-color: var(--text); color: var(--text); }
+  .btn-icon-outline {
     width: 40px; height: 40px; border-radius: 8px;
     border: 1px solid var(--border); background: transparent;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
     transition: border-color 0.15s;
   }
-  .btn-icon-ghost:hover { border-color: var(--text); }
-  .btn-icon-ghost svg { width: 16px; height: 16px; color: var(--text-2); }
+  .btn-icon-outline:hover { border-color: var(--text); }
+  .btn-icon-outline svg { width: 16px; height: 16px; color: var(--text-2); }
 
-  /* Aliases for modal/panel previews — sizing only, variant handled by .btn-primary / .btn-ghost above */
+  /* Aliases for modal/panel previews — sizing only, variant handled by .btn-primary / .btn-outline above */
 
   /* Button scale table */
   .btn-scale-table { width: 100%; border-collapse: collapse; }
@@ -979,7 +982,7 @@
     <!-- ─── BUTTONS ─── -->
     <section class="ds-section" id="buttons">
       <h2 class="ds-section-title">Buttons</h2>
-      <p class="ds-section-sub">5 sizes × 4 variants. MD (40px) is the app default. Font-weight 500 across all sizes.</p>
+      <p class="ds-section-sub">5 sizes × 5 variants. MD (40px) is the app default. Font-weight 500 across all sizes.</p>
       <div class="ds-divider"></div>
       <div class="ds-card">
         <div class="ds-card-body" style="padding: 0;">
@@ -989,7 +992,8 @@
                 <th style="width: 140px;">Size</th>
                 <th>Primary</th>
                 <th>Secondary</th>
-                <th>Ghost</th>
+                <th>Outline</th>
+                <th>Solid</th>
                 <th>Icon</th>
                 <th>Disabled</th>
               </tr>
@@ -1006,7 +1010,12 @@
                 </td>
                 <td><button class="btn btn-primary btn-xs">Label</button></td>
                 <td><button class="btn btn-secondary btn-xs">Label</button></td>
-                <td><button class="btn btn-ghost btn-xs">Label</button></td>
+                <td><button class="btn btn-outline btn-xs">Label</button></td>
+                <td>
+                  <button class="btn btn-solid btn-xs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  </button>
+                </td>
                 <td>
                   <button class="btn btn-icon btn-xs">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1025,7 +1034,12 @@
                 </td>
                 <td><button class="btn btn-primary btn-sm">Label</button></td>
                 <td><button class="btn btn-secondary btn-sm">Label</button></td>
-                <td><button class="btn btn-ghost btn-sm">Label</button></td>
+                <td><button class="btn btn-outline btn-sm">Label</button></td>
+                <td>
+                  <button class="btn btn-solid btn-sm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  </button>
+                </td>
                 <td>
                   <button class="btn btn-icon btn-sm">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1044,7 +1058,12 @@
                 </td>
                 <td><button class="btn btn-primary btn-md">Label</button></td>
                 <td><button class="btn btn-secondary btn-md">Label</button></td>
-                <td><button class="btn btn-ghost btn-md">Label</button></td>
+                <td><button class="btn btn-outline btn-md">Label</button></td>
+                <td>
+                  <button class="btn btn-solid btn-md">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  </button>
+                </td>
                 <td>
                   <button class="btn btn-icon btn-md">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1063,7 +1082,12 @@
                 </td>
                 <td><button class="btn btn-primary btn-lg">Label</button></td>
                 <td><button class="btn btn-secondary btn-lg">Label</button></td>
-                <td><button class="btn btn-ghost btn-lg">Label</button></td>
+                <td><button class="btn btn-outline btn-lg">Label</button></td>
+                <td>
+                  <button class="btn btn-solid btn-lg">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  </button>
+                </td>
                 <td>
                   <button class="btn btn-icon btn-lg">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1082,7 +1106,12 @@
                 </td>
                 <td><button class="btn btn-primary btn-xl">Label</button></td>
                 <td><button class="btn btn-secondary btn-xl">Label</button></td>
-                <td><button class="btn btn-ghost btn-xl">Label</button></td>
+                <td><button class="btn btn-outline btn-xl">Label</button></td>
+                <td>
+                  <button class="btn btn-solid btn-xl">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  </button>
+                </td>
                 <td>
                   <button class="btn btn-icon btn-xl">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1350,7 +1379,7 @@
         <div class="ds-card-body">
           <div class="panel-preview">
             <div class="panel-preview-header">
-              <button class="btn-icon-ghost" style="width:32px;height:32px;">
+              <button class="btn-icon-outline" style="width:32px;height:32px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
@@ -1379,7 +1408,7 @@
         <div class="ds-card-label">Modal — Add a book</div>
         <div class="ds-card-body">
           <div class="modal-preview">
-            <button class="btn-icon-ghost" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:none;background:transparent;">
+            <button class="btn-icon-outline" style="position:absolute;top:16px;right:16px;width:44px;height:44px;border:none;background:transparent;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <div class="modal-preview-title">Add a book</div>
@@ -1389,7 +1418,7 @@
               <div class="modal-preview-field"><label>Year (optional)</label><input type="number" placeholder="e.g. 1862"></div>
             </div>
             <div class="modal-preview-actions">
-              <button class="btn-ghost">Cancel</button>
+              <button class="btn-outline">Cancel</button>
               <button class="btn-primary" disabled>Add to my library</button>
             </div>
           </div>
@@ -1482,11 +1511,15 @@
                 <td><span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--radius</span></td>
               </tr>
               <tr>
-                <td class="token-table-component">Button — Ghost</td>
+                <td class="token-table-component">Button — Outline</td>
                 <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--radius</span></td>
               </tr>
               <tr>
-                <td class="token-table-component">Button — Icon Ghost</td>
+                <td class="token-table-component">Button — Solid</td>
+                <td><span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
+                <td class="token-table-component">Button — Icon Outline</td>
                 <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--radius</span></td>
               </tr>
               <tr>
