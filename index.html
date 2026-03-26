@@ -1088,8 +1088,61 @@
     .books-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
   }
 
+  @media (max-width: 600px) {
+    /* Toolbar */
+    .toolbar-inner { padding: 0 16px; gap: 8px; }
+    .toolbar-tabs { position: static; transform: none; }
+    .toolbar .theme-btn { position: static; transform: none; margin-left: auto; }
+
+    /* Hero / page title */
+    .hero, .main-wrap { padding-left: 16px; padding-right: 16px; }
+    .hero { padding-top: 24px; }
+    .page-title { font-size: 1.8rem; margin-bottom: 16px; }
+
+    /* Search row: stack search above buttons */
+    .search-row { flex-direction: column; align-items: stretch; gap: 10px; }
+    .search-box { min-width: 0; flex: none; width: 100%; }
+    .counter-actions { justify-content: flex-end; }
+
+    /* Grid: single column */
+    .books-grid { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Table: horizontal scroll */
+    .books-list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .list-table { min-width: 520px; }
+
+    /* Selection bar: full width, stack on very small screens */
+    .selection-bar {
+      min-width: 0;
+      width: calc(100% - 32px);
+      left: 16px;
+      transform: none;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 14px;
+    }
+    .sel-actions { flex: 1; justify-content: flex-end; }
+
+    /* Modals: full width */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal {
+      max-width: 100% !important;
+      width: 100%;
+      border-radius: 16px 16px 0 0;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    /* Book panel: full screen */
+    .book-panel { width: 100%; }
+
+    /* Footer */
+    .footer-inner { padding-left: 16px; padding-right: 16px; }
+  }
+
   @media (max-width: 480px) {
     .books-grid { grid-template-columns: 1fr; }
+    .tabs .tab { font-size: 0.82rem; padding: 5px 10px; }
   }
 
   /* ─── ADD BOOK MODAL ─── */
