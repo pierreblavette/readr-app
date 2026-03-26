@@ -348,6 +348,9 @@
   .btn-primary { background: var(--accent); color: #fff; border: none; }
   .btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 80%, #000); }
 
+  .btn-ghost { background: transparent; color: var(--text-2); border: none; }
+  .btn-ghost:hover:not(:disabled) { background: var(--bg3); color: var(--text); }
+
   .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
   .btn-outline:hover:not(:disabled) { background: var(--bg3); border-color: var(--text-2); }
 
@@ -1041,7 +1044,7 @@
                 <th>Primary</th>
                 <th>Secondary</th>
                 <th>Outline</th>
-                <th>Solid</th>
+                <th>Ghost</th>
                 <th>Icon</th>
                 <th>Disabled</th>
               </tr>
@@ -1059,11 +1062,7 @@
                 <td><button class="btn btn-primary btn-xs">Label</button></td>
                 <td><button class="btn btn-secondary btn-xs">Label</button></td>
                 <td><button class="btn btn-outline btn-xs">Label</button></td>
-                <td>
-                  <button class="btn btn-solid btn-xs">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                  </button>
-                </td>
+                <td><button class="btn btn-ghost btn-xs">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-xs">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1083,11 +1082,7 @@
                 <td><button class="btn btn-primary btn-sm">Label</button></td>
                 <td><button class="btn btn-secondary btn-sm">Label</button></td>
                 <td><button class="btn btn-outline btn-sm">Label</button></td>
-                <td>
-                  <button class="btn btn-solid btn-sm">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                  </button>
-                </td>
+                <td><button class="btn btn-ghost btn-sm">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-sm">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1107,11 +1102,7 @@
                 <td><button class="btn btn-primary btn-md">Label</button></td>
                 <td><button class="btn btn-secondary btn-md">Label</button></td>
                 <td><button class="btn btn-outline btn-md">Label</button></td>
-                <td>
-                  <button class="btn btn-solid btn-md">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                  </button>
-                </td>
+                <td><button class="btn btn-ghost btn-md">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-md">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1131,11 +1122,7 @@
                 <td><button class="btn btn-primary btn-lg">Label</button></td>
                 <td><button class="btn btn-secondary btn-lg">Label</button></td>
                 <td><button class="btn btn-outline btn-lg">Label</button></td>
-                <td>
-                  <button class="btn btn-solid btn-lg">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                  </button>
-                </td>
+                <td><button class="btn btn-ghost btn-lg">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-lg">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1155,11 +1142,7 @@
                 <td><button class="btn btn-primary btn-xl">Label</button></td>
                 <td><button class="btn btn-secondary btn-xl">Label</button></td>
                 <td><button class="btn btn-outline btn-xl">Label</button></td>
-                <td>
-                  <button class="btn btn-solid btn-xl">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                  </button>
-                </td>
+                <td><button class="btn btn-ghost btn-xl">Label</button></td>
                 <td>
                   <button class="btn btn-icon btn-xl">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1761,8 +1744,12 @@
                 <td><span class="ds-token-chip">--accent</span> <span class="ds-token-chip">--radius</span></td>
               </tr>
               <tr>
+                <td class="token-table-component">Button — Ghost</td>
+                <td><span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--radius</span></td>
+              </tr>
+              <tr>
                 <td class="token-table-component">Button — Outline</td>
-                <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text-2</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--radius</span></td>
+                <td><span class="ds-token-chip">--border</span> <span class="ds-token-chip">--text</span> <span class="ds-token-chip">--bg3</span> <span class="ds-token-chip">--radius</span></td>
               </tr>
               <tr>
                 <td class="token-table-component">Button — Solid</td>
