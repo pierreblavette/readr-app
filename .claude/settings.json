@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -:*)",
+      "Read(//Users/pierreblavette/**)",
+      "Read(//tmp/**)",
+      "Bash(sudo launchctl:*)"
+    ]
+  }
+}

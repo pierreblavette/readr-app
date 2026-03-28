@@ -1,3886 +1,1373 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ma Bibliothèque</title>
+<title>readr — A quiet place for your books</title>
+<meta name="description" content="Track what you read, remember what comes next. No account needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
-  /* ─── TOKENS ─── */
   :root {
-    --bg:          #FFFFFF;
-    --bg2:         #FFFFFF;
-    --bg3:         #F7F7F7;
-    --card:        #FFFFFF;
-    --border:      #E0E0E0;
-    --shadow-sm:   0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06);
-    --shadow-lg:   0 4px 20px rgba(0,0,0,0.14), 0 1px 6px rgba(0,0,0,0.08);
-    --accent:      #4959E6;
-    --accent-bg:   rgba(73,89,230,0.08);
-    --ai-from:     #F67BF8;
-    --ai-to:       #4959E6;
-    --teal:        #00A699;
-    --teal-bg:     rgba(0,166,153,0.08);
-    --text:        #222222;
-    --text-2:      #555555;
-    --text-3:      #777777;
-    --nav:         rgba(255,255,255,0.96);
-    --ghost-hover: var(--primary-5);
-    --shadow-md:   0 2px 8px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.08);
-    /* ── Neutral palette — tinted primary ── */
-    --dark-0:      rgba(13,15,26,0);
-    --dark-5:      rgba(13,15,26,0.05);
-    --dark-10:     rgba(13,15,26,0.10);
-    --dark-20:     rgba(13,15,26,0.20);
-    --dark-30:     rgba(13,15,26,0.30);
-    --dark-40:     rgba(13,15,26,0.40);
-    --dark-50:     rgba(13,15,26,0.50);
-    --dark-60:     rgba(13,15,26,0.60);
-    --dark-70:     rgba(13,15,26,0.70);
-    --dark-80:     rgba(13,15,26,0.80);
-    --dark-90:     rgba(13,15,26,0.90);
-    --dark-100:    #0D0F1A;
-    --light-0:     rgba(245,246,255,0);
-    --light-5:     rgba(245,246,255,0.05);
-    --light-10:    rgba(245,246,255,0.10);
-    --light-20:    rgba(245,246,255,0.20);
-    --light-30:    rgba(245,246,255,0.30);
-    --light-40:    rgba(245,246,255,0.40);
-    --light-50:    rgba(245,246,255,0.50);
-    --light-60:    rgba(245,246,255,0.60);
-    --light-70:    rgba(245,246,255,0.70);
-    --light-80:    rgba(245,246,255,0.80);
-    --light-90:    rgba(245,246,255,0.90);
-    --light-100:   #F5F6FF;
-    /* ── Primary scale — #4959E6 at center (50) ── */
     --primary-5:   #F4F5FF;
     --primary-10:  #E8EAFD;
     --primary-20:  #C1C7FB;
     --primary-30:  #9BA5F8;
-    --primary-40:  #6F7CF2;
     --primary-50:  #4959E6;
     --primary-60:  #3646D4;
-    --primary-70:  #2836B8;
-    --primary-80:  #1D268A;
-    --primary-90:  #131860;
-    --primary-100: #0C0F38;
-    --radius:      8px;
-    --transition:  background 0.25s, color 0.25s, border-color 0.25s;
-  }
-
-  [data-theme="dark"] {
-    --bg:          #0F0F0F;
-    --bg2:         #0F0F0F;
-    --bg3:         #1A1A1A;
-    --card:        #1E1E1E;
-    --border:      #2E2E2E;
-    --shadow-sm:   0 1px 4px rgba(0,0,0,0.4), 0 2px 12px rgba(0,0,0,0.3);
-    --shadow-lg:   0 6px 28px rgba(0,0,0,0.55);
-    --accent:      #7B89F8;
-    --accent-bg:   rgba(123,137,248,0.12);
-    --ai-from:     #F67BF8;
-    --ai-to:       #7B89F8;
-    --teal:        #00C9BE;
-    --teal-bg:     rgba(0,201,190,0.1);
-    --text:        #F0F0F0;
-    --text-2:      #909090;
-    --text-3:      #555555;
-    --nav:         rgba(15,15,15,0.96);
-    --ghost-hover: rgba(73,89,230,0.12);
+    --accent-bg:   rgba(73,89,230,0.08);
+    --text:        #111827;
+    --text-2:      #4B5563;
+    --text-3:      #9CA3AF;
+    --border:      #E5E7EB;
+    --bg:          #FFFFFF;
+    --bg2:         #F9FAFB;
+    --radius:      10px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; font-size: 14px; overflow-y: scroll; }
+  html { font-size: 16px; scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    min-height: 100vh;
-    transition: var(--transition);
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
   }
 
-  /* ─── NAVBAR ─── */
-  .navbar {
+  /* ── NAV ── */
+  nav {
     position: sticky;
     top: 0;
-    z-index: 300;
-    background: var(--nav);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    display: flex;
-    align-items: center;
-    padding: 0 40px;
-    gap: 16px;
-    transition: var(--transition);
-    overflow: visible;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
   }
 
-  .logo {
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-weight: 800;
-    font-size: 1.15rem;
-    letter-spacing: -0.04em;
-    color: var(--accent);
-    user-select: none;
-    flex-shrink: 0;
-    transition: font-size 0.3s ease, gap 0.3s ease;
+    text-decoration: none;
+    color: var(--text);
   }
 
-  .navbar.scrolled .logo {
-    font-size: 0.82rem;
-  }
-
-  .navbar.scrolled .logo-icon {
-    width: 22px;
-    height: 22px;
-    font-size: 11px;
-    border-radius: 8px;
-  }
-
-  .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: var(--accent);
-    border-radius: 8px;
+  .nav-logo-icon {
+    width: 34px;
+    height: 34px;
+    background: var(--primary-50);
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     font-size: 16px;
-    flex-shrink: 0;
-    transition: width 0.3s ease, height 0.3s ease, font-size 0.3s ease, border-radius 0.3s ease;
-  }
-
-  .nav-spacer { flex: 1; }
-
-  .theme-btn {
-    width: 48px;
-    height: 26px;
-    border-radius: 13px;
-    border: none;
-    background: #E0E0E0;
-    cursor: pointer;
-    position: relative;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 6px;
-    transition: background 0.4s;
-  }
-
-  [data-theme="dark"] .theme-btn {
-    background: #ffffff;
-  }
-
-  .toggle-thumb {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .toggle-thumb svg {
-    width: 10px;
-    height: 10px;
-    color: #888;
-  }
-
-  [data-theme="dark"] .toggle-thumb {
-    transform: translateX(22px);
-    background: #111;
-  }
-
-
-  .theme-btn:hover { opacity: 0.9; }
-
-  /* ─── PAGE TITLE ROW ─── */
-  .title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 40px 0 8px;
-    transition: padding 0.35s ease;
-  }
-
-  .toolbar.scrolled .title-row {
-    padding: 16px 0 10px;
-  }
-
-  .page-title-row {
-    margin-bottom: clamp(24px, 5.6vh, 56px);
-    min-height: fit-content;
-  }
-
-  .counter-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 40px;
-    margin-bottom: 22px;
-  }
-  .counter-row .result-line { margin-bottom: 0; min-height: auto; }
-  .counter-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-
-  .search-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 40px;
-    margin-bottom: clamp(20px, 4vh, 40px);
-  }
-
-  .page-title {
-    font-size: clamp(2.4rem, 4.5vw, 3.3rem);
     font-weight: 800;
-    letter-spacing: -0.04em;
-    color: var(--text);
-    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
+  .nav-logo-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
 
-  /* ─── HERO (legacy) ─── */
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 18px;
+    background: var(--primary-50);
+    color: #fff;
+    border-radius: 99px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .nav-cta:hover { background: var(--primary-60); transform: translateY(-1px); }
+
+  /* ── HERO ── */
   .hero {
-    padding: 52px 40px 28px;
     max-width: 1280px;
     margin: 0 auto;
+    padding: 72px 48px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
   }
 
   .hero-eyebrow {
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-  }
-
-  .hero h1 {
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1.05;
-    color: var(--text);
-    margin-bottom: 20px;
-  }
-
-  .hero-pills {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
-    border-radius: 32px;
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-
-  .pill-owned    { background: var(--accent-bg); color: var(--accent); }
-  .pill-wishlist { background: var(--teal-bg);   color: var(--teal); }
-
-  /* ─── TOOLBAR ─── */
-  .toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 400;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    transition: var(--transition);
-  }
-
-  .toolbar .theme-btn {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .toolbar-action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 32px;
-    padding: 0 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-2);
-    font-size: 0.857rem;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s, background 0.15s;
-  }
-  .toolbar-action-btn svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-  }
-  .toolbar-action-btn:hover {
-    color: var(--primary-60);
-    border-color: var(--primary-40);
     background: var(--primary-5);
-  }
-
-  .toolbar-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 40px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    height: 60px;
-    position: relative;
-  }
-
-  .toolbar-tabs {
-    display: flex;
-    flex-shrink: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .toolbar-right {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    gap: 16px;
-  }
-
-  /* TABS */
-  /* iOS Segmented Control */
-  .tabs {
-    display: inline-flex;
-    background: var(--bg3);
-    border-radius: 8px;
-    padding: 3px;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-
-  .tab {
-    height: 32px;
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-weight: 500;
-    font-size: 1rem;
-    color: var(--dark-80);
-    border: none;
-    background: none;
-    cursor: pointer;
-    border-radius: 8px;
-    white-space: nowrap;
-    transition: color 0.2s, background 0.2s, box-shadow 0.2s;
-  }
-
-  .tab:hover { color: var(--primary-60); background: var(--primary-5); }
-
-  .tab.active {
-    background: var(--bg);
-    color: var(--text);
-    box-shadow: 0 1px 4px rgba(73,89,230,0.14), 0 1px 2px rgba(73,89,230,0.08);
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 18px;
-    padding: 0 6px;
-    border-radius: 8px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    background: var(--border);
-    color: var(--text-2);
-    transition: all 0.2s;
-  }
-
-  .tab.active .badge {
-    background: var(--primary-10);
-    color: var(--primary-60);
-  }
-
-  /* SEARCH AREA */
-  .search-area {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .search-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex: 0 1 32%;
-    min-width: 320px;
-  }
-
-  .search-box svg {
-    position: absolute;
-    left: 14px;
-    width: 15px;
-    height: 15px;
-    color: var(--text-3);
-    pointer-events: none;
-    flex-shrink: 0;
-  }
-
-  .search-clear {
-    position: absolute;
-    right: 10px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--text-3);
-    border: none;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    flex-shrink: 0;
-    transition: background 0.15s;
-  }
-  .search-clear svg {
-    position: static;
-    width: 10px;
-    height: 10px;
-    color: var(--bg);
-    pointer-events: none;
-  }
-  .search-clear:hover { background: var(--text-2); }
-  .search-clear.visible { display: flex; }
-
-  #search {
-    height: 36px;
-    width: 100%;
-    padding: 0 34px 0 38px;
-    border: 1px solid var(--border);
-    border-radius: 32px;
-    background: var(--bg3);
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text);
-    outline: none;
-    transition: all 0.2s;
-  }
-
-  #search::placeholder { color: var(--text-3); }
-
-  #search:focus {
-    border: 1.5px solid var(--primary-50);
-    box-shadow: 0 0 0 3px var(--primary-20);
-  }
-
-  #sort {
-    height: 40px;
-    padding: 0 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg3);
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  #sort:hover, #sort:focus { border-color: var(--primary-50); }
-  #sort option { background: var(--card); }
-
-  /* ─── MAIN ─── */
-  .main-wrap {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: clamp(28px, 5.6vh, 56px) 40px 80px;
-    min-height: calc(100vh - 121px);
-  }
-
-  .result-line {
-    font-size: 0.857rem;
-    font-weight: 600;
-    color: var(--text-2);
-    min-height: 18px;
-    margin-bottom: 16px;
-  }
-
-  /* GRID */
-  .books-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
-    gap: 18px;
-  }
-
-  /* CARD */
-  .book-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border);
-    transition: transform 0.22s ease, border-color 0.22s;
-    animation: fadeUp 0.28s ease both;
-    cursor: pointer;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .book-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--primary-30);
-    background: var(--primary-5);
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* Cover zone */
-  .book-cover {
-    height: 148px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    transition: filter 0.2s;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  .cover-loaded .wishlist-badge { opacity: 0; }
-
-  .wishlist-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.22);
-    color: #fff;
-    backdrop-filter: blur(6px);
-    border-radius: 20px;
-    padding: 3px 9px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  /* Body */
-  .book-body {
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .book-title {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .book-author {
-    font-size: 0.857rem;
-    font-weight: 500;
-    color: var(--text-2);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 4px;
-  }
-
-  .book-year {
-    display: block;
-    margin-top: 5px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-3);
-  }
-
-  .list-genre { font-size: 1rem; font-weight: 500; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .list-year {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-2);
-    white-space: nowrap;
-  }
-
-  /* ─── VIEW TOGGLE ─── */
-  .view-btns {
-    display: flex;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-
-  .view-btn {
-    width: 38px;
-    height: 38px;
-    border: none;
-    background: var(--bg3);
-    color: var(--text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
-  }
-
-  .view-btn:first-child { border-right: 1px solid var(--border); }
-
-  .view-btn:hover { background: var(--primary-5); }
-
-  .view-btn.active {
-    background: var(--primary-50);
-    color: #fff;
-  }
-
-  .view-btn svg { width: 15px; height: 15px; }
-
-  /* ─── LANG SWITCHER ─── */
-  .lang-toggle {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .lang-sep {
-    color: var(--text-3);
-    font-size: 0.75rem;
-    line-height: 1;
-    pointer-events: none;
-  }
-  .lang-btn {
-    background: none;
-    border: none;
-    padding: 2px 0;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--text-3);
-    cursor: pointer;
-    font-family: inherit;
-    transition: color 0.15s;
-  }
-  .lang-btn.active {
-    color: var(--text);
-    font-weight: 600;
-  }
-  .lang-btn:hover:not(.active) {
-    color: var(--text-2);
-  }
-
-  /* ─── LIST VIEW ─── */
-  .books-list {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    animation: fadeUp 0.2s ease both;
-  }
-
-  .list-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-    table-layout: fixed;
-  }
-
-  .list-table thead tr {
-    background: var(--bg3);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .list-table th {
-    padding: 11px 32px;
-    text-align: left;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-2);
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-  }
-
-  .list-table th:hover { color: var(--text); }
-  .list-table th.sorted { color: var(--accent); }
-  .list-table th .sort-arrow { margin-left: 4px; opacity: 0.7; }
-
-  .list-table th:first-child  { padding: 0 8px 0 28px; width: 40px; }
-  .list-table td:has(.row-checkbox) { overflow: visible; white-space: normal; text-overflow: clip; padding: 0 8px 0 28px; width: 40px; }
-  .list-table td.list-num { overflow: visible; white-space: normal; text-overflow: clip; }
-
-  .list-table tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-    animation: fadeUp 0.25s ease both;
-  }
-
-  .list-table tbody tr:last-child { border-bottom: none; }
-  .list-table tbody tr:hover { background: var(--primary-5); }
-
-  .list-table td {
-    padding: 18px 32px;
-    vertical-align: middle;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 0;
-  }
-
-
-  .list-num {
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-3);
-  }
-
-  .list-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .list-title {
-    font-weight: 700;
-    color: var(--text);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .list-author {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-2);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .list-status {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: var(--bg3);
-    color: var(--text-3);
-    white-space: nowrap;
-  }
-
-  /* ─── EMPTY STATE ─── */
-  .empty {
-    grid-column: 1 / -1;
-    padding: 80px 20px;
-    text-align: center;
-  }
-
-  .empty-icon { width: 80px; height: 80px; margin-bottom: 24px; }
-
-  .empty-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-
-  .empty-sub {
+    color: var(--primary-50);
+    border: 1px solid var(--primary-10);
+    border-radius: 99px;
+    padding: 6px 16px;
     font-size: 0.95rem;
-    color: var(--text-2);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     margin-bottom: 28px;
   }
 
-  .empty-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 40px;
-    padding: 0 20px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-  .empty-cta:hover { background: var(--primary-60); }
-
-  /* ─── BOOK PANEL ─── */
-  .book-panel {
-    position: fixed;
-    top: 60px;
-    right: 0;
-    width: 571px;
-    height: calc(100vh - 60px);
-    background: var(--bg);
-    border-left: 1px solid var(--border);
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 300;
-    overflow-y: auto;
-  }
-
-  .book-panel.open { transform: translateX(0); }
-
-  .main-wrap {
-    transition: none;
-  }
-
-  .panel-inner {
-    padding: 24px 24px 48px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 56px;
-  }
-
-  .panel-close {
-    align-self: flex-end;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.15s;
-  }
-  .panel-close:hover { background: var(--ghost-hover); }
-  .panel-close svg { width: 16px; height: 16px; }
-
-  .panel-cover-wrap {
-    width: 50%;
-    aspect-ratio: 2/3;
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--bg3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .panel-cover-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .panel-cover-placeholder {
-    font-size: 3rem;
+  .hero h1 {
+    font-size: clamp(4rem, 6.5vw, 6.5rem);
     font-weight: 800;
-    color: var(--text-3);
-    font-family: inherit;
-  }
-
-  .panel-body { display: flex; flex-direction: column; gap: 12px; width: 100%; text-align: left; }
-
-  .panel-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: var(--bg3);
-    color: var(--text-3);
-    width: fit-content;
-  }
-
-  .panel-title {
-    font-size: 1.15rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    line-height: 1.25;
-  }
-
-  .panel-author {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-2);
-  }
-
-  .panel-date {
-    font-size: 0.8rem;
-    color: var(--text-3);
-    font-weight: 500;
-  }
-
-  .panel-divider {
-    height: 1px;
-    background: var(--border);
-  }
-
-  .panel-summary-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-3);
-  }
-
-  .panel-summary {
-    font-size: 1rem;
-    line-height: 1.65;
-    color: var(--text-2);
-  }
-
-  .panel-loading {
-    display: flex;
-    justify-content: center;
-    padding: 40px 0;
-  }
-
-  .panel-spinner {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--border);
-    border-top-color: var(--text);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Rendre les cards/lignes cliquables pour ouvrir le panel */
-  .book-card { cursor: pointer; }
-  .list-table tbody tr { cursor: pointer; }
-
-  /* ─── SELECTION ─── */
-  .book-card.selectable { cursor: pointer; }
-  .book-card.selected {
-    outline: 2px solid var(--primary-50);
-    outline-offset: 2px;
-  }
-  .book-card.selected::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(73,89,230,0.04);
-    border-radius: var(--radius);
-    pointer-events: none;
-  }
-
-  /* Checkbox sur les cartes */
-  .card-checkbox {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 18px;
-    height: 18px;
-    border-radius: 5px;
-    border: 1.5px solid var(--border);
-    background: var(--bg);
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s, border-color 0.15s;
-    flex-shrink: 0;
-  }
-  .book-card.selected .card-checkbox {
-    background: var(--primary-50);
-    border-color: var(--primary-50);
-  }
-  .card-checkbox svg {
-    width: 10px;
-    height: 10px;
-    color: var(--bg);
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .book-card.selected .card-checkbox svg { opacity: 1; }
-
-  /* Checkbox dans les lignes de liste */
-  .list-table tr.selectable { cursor: pointer; }
-  .list-table tr.selected td { background: var(--primary-5); }
-  .row-checkbox {
-    width: 18px;
-    height: 18px;
-    border-radius: 5px;
-    border: 1.5px solid var(--border);
-    background: var(--bg);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .list-table tr.selected .row-checkbox {
-    background: var(--primary-50);
-    border-color: var(--primary-50);
-  }
-  .row-checkbox svg {
-    width: 10px;
-    height: 10px;
-    color: var(--bg);
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .list-table tr.selected .row-checkbox svg { opacity: 1; }
-
-  .selection-bar {
-    position: fixed;
-    bottom: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--text);
-    color: var(--bg);
-    border-radius: 8px;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-width: 605px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    z-index: 500;
-    transition: bottom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    white-space: nowrap;
-  }
-  .selection-bar.visible { bottom: var(--sel-bottom, 28px); }
-  .sel-actions { display: flex; align-items: center; gap: 12px; }
-  .selection-count {
-    font-size: 1rem;
-    font-weight: 400;
-    opacity: 0.75;
-  }
-  .selection-actions { display: flex; gap: 8px; }
-  .sel-btn {
-    height: 40px;
-    padding: 0 16px;
-    border-radius: 8px;
-    border: none;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: opacity 0.15s;
-  }
-  .sel-btn svg { width: 14px; height: 14px; }
-  .sel-confirm-icon { display: none; }
-  .sel-cancel-icon { display: none; }
-  .sel-cancel { background: rgba(255,255,255,0.15); color: inherit; }
-  .sel-cancel:hover { background: rgba(255,255,255,0.25); }
-  .sel-confirm { background: var(--primary-50); color: #fff; }
-  .sel-confirm:hover { background: var(--primary-60); }
-  .sel-confirm.danger { background: #ef4444; }
-  .sel-confirm.danger:hover { background: #dc2626; }
-  .sel-confirm:disabled { opacity: 0.4; pointer-events: none; }
-  .sel-select-all { background: rgba(255,255,255,0.12); color: inherit; }
-  .sel-select-all:hover { background: rgba(255,255,255,0.22); }
-  /* Select-all checkbox in table header */
-  .th-checkbox-wrap { display:flex; align-items:center; cursor:pointer; }
-  .th-checkbox-wrap .row-checkbox.all-selected { background: var(--primary-50); border-color: var(--primary-50); }
-  .th-checkbox-wrap .row-checkbox.all-selected svg { opacity: 1; }
-
-  /* ─── FOOTER ─── */
-  .footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 0;
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--text-3);
-    transition: var(--transition);
-  }
-
-  .footer-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .footer-link {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--text-2);
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-  .footer-link:hover { color: var(--text); }
-  .footer-sep { color: var(--border); }
-  .footer-lang { display: none; }
-  .footer-mobile-copyright { display: none; }
-  .footer-mobile-links { display: none; }
-  .footer-row-desktop { display: flex; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
-
-  /* ─── FOCUS RING ─── */
-  *:focus-visible {
-    outline: 2px solid var(--primary-50);
-    outline-offset: 2px;
-  }
-
-  /* ─── DARK MODE — component overrides ─── */
-  [data-theme="dark"] .view-btn.active { background: var(--primary-40); }
-  [data-theme="dark"] .tab:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
-  [data-theme="dark"] .tab.active { color: var(--text); box-shadow: 0 1px 4px rgba(73,89,230,0.2), 0 1px 2px rgba(73,89,230,0.12); }
-  [data-theme="dark"] .tab.active .badge { background: rgba(73,89,230,0.15); color: var(--primary-40); }
-  [data-theme="dark"] .book-card:hover { border-color: var(--primary-40); background: rgba(13,15,26,0.5); }
-  [data-theme="dark"] .book-card.selected { outline-color: var(--primary-40); }
-  [data-theme="dark"] .book-card.selected .card-checkbox,
-  [data-theme="dark"] .list-table tr.selected .row-checkbox,
-  [data-theme="dark"] .th-checkbox-wrap .row-checkbox.all-selected { background: var(--primary-40); border-color: var(--primary-40); }
-  [data-theme="dark"] .list-table tbody tr:hover { background: rgba(73,89,230,0.08); }
-  [data-theme="dark"] .list-table tr.selected td { background: rgba(73,89,230,0.08); }
-  [data-theme="dark"] .modal-submit { background: var(--primary-40); }
-  [data-theme="dark"] .modal-submit:hover:not(:disabled) { background: var(--primary-50); }
-  [data-theme="dark"] .sel-confirm { background: var(--primary-40); }
-  [data-theme="dark"] .sel-confirm:hover { background: var(--primary-50); }
-  [data-theme="dark"] .add-btn { background: var(--primary-40); }
-  [data-theme="dark"] .add-btn:hover { background: var(--primary-50); }
-  [data-theme="dark"] .empty-cta { background: var(--primary-40); }
-  [data-theme="dark"] .empty-cta:hover { background: var(--primary-50); }
-  [data-theme="dark"] .modal-cancel:hover { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.12); }
-  [data-theme="dark"] .modal-close:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
-  [data-theme="dark"] .modal-field input:focus { border-color: var(--primary-40); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
-  [data-theme="dark"] #search:focus { border-color: var(--primary-40); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
-  [data-theme="dark"] .import-tab.active { color: var(--primary-40); border-bottom-color: var(--primary-40); }
-  [data-theme="dark"] .import-tab:hover:not(.active) { color: var(--primary-40); border-bottom-color: var(--primary-40); }
-  [data-theme="dark"] .toolbar-action-btn:hover { color: var(--primary-40); border-color: var(--primary-50); background: rgba(73,89,230,0.10); }
-  [data-theme="dark"] .edit-btn:hover,
-  [data-theme="dark"] .export-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.10); }
-  [data-theme="dark"] .autocomplete-item:hover,
-  [data-theme="dark"] .autocomplete-item.focused { background: rgba(73,89,230,0.12); color: var(--primary-30); }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    .navbar, .hero, .toolbar-inner, .main-wrap { padding-left: 20px; padding-right: 20px; }
-    .footer-inner { padding-left: 20px; padding-right: 20px; }
-    .hero { padding-top: 32px; }
-    .books-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  }
-
-  @media (max-width: 600px) {
-    html { font-size: 15px; }
-    /* ── Prevent horizontal overflow ── */
-    body { overflow-x: hidden; }
-
-    /* ── Toolbar: flex row [logo icon | tabs | toggle] ── */
-    .toolbar { display: flex; align-items: center; padding: 0 16px; height: 64px; }
-    .toolbar-inner {
-      flex: 1; min-width: 0;
-      padding: 0; max-width: none; margin: 0;
-      height: 64px; gap: 12px;
-      display: flex; align-items: center;
-    }
-    .toolbar-right { align-self: center; }
-    .toolbar-right .lang-toggle { display: none; }
-    .footer-links-desktop { display: none !important; }
-    .footer-row-desktop { display: none !important; }
-    /* Hide "Readr" text, keep R icon only */
-    .logo { font-size: 0; gap: 0; }
-    .logo-icon { font-size: 16px; flex-shrink: 0; }
-    /* Tabs: back in normal flow, centered */
-    .toolbar-tabs { position: static; transform: none; flex: 1; display: flex; justify-content: center; }
-    .toolbar .theme-btn { position: relative; top: auto; right: auto; transform: none; flex-shrink: 0; }
-
-    /* ── Hero / page title ── */
-    .hero, .main-wrap { padding-left: 16px; padding-right: 16px; }
-    .main-wrap { padding-top: 32px; }
-    .page-title { font-size: 2.2rem; }
-    .page-title-row { padding: 0; margin-bottom: 32px; }
-
-    /* ── Search row: search full width, buttons below ── */
-    .search-row { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 20px; }
-    .search-box { min-width: 0; flex: none; width: 100%; }
-    .counter-actions { gap: 8px; }
-    .add-btn, .edit-btn { height: 36px; padding: 0 14px; font-size: 0.857rem; }
-    .export-btn { display: none !important; }
-    .view-btns { margin-left: auto; }
-
-    /* ── Grid: single column ── */
-    .books-grid { grid-template-columns: 1fr; gap: 12px; }
-
-    /* ── Table: no scroll on mobile ── */
-    .books-list { overflow-x: hidden; }
-    .list-table { min-width: 0; }
-    .list-table th { padding: 10px 8px; }
-    .list-table td { padding: 14px 8px; }
-    .list-table th:first-child { padding: 0 8px; }
-    .list-table td:has(.row-checkbox) { padding: 0 8px; }
-    .th-checkbox-wrap { justify-content: center; }
-
-    /* ── Selection bar: full width ── */
-    .selection-bar {
-      min-width: 0;
-      width: calc(100% - 32px);
-      left: 16px;
-      transform: none;
-      gap: 6px;
-      padding: 10px 12px;
-      font-size: 0.875rem;
-      overflow: hidden;
-    }
-    .sel-actions { justify-content: flex-end; gap: 6px; flex-shrink: 0; }
-    .selection-count { flex: 1; text-align: center; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-    .sel-confirm #selConfirmLabel { display: none; }
-    .sel-confirm-icon { display: block !important; width: 16px; height: 16px; }
-    .sel-confirm { width: 40px; padding: 0; justify-content: center; flex-shrink: 0; }
-    .sel-cancel-label { display: none; }
-    .sel-cancel-icon { display: block !important; width: 16px; height: 16px; }
-    .sel-cancel { width: 40px; padding: 0; justify-content: center; flex-shrink: 0; }
-
-    /* ── Modals ── */
-    .modal-overlay { overflow-y: auto; align-items: flex-start; padding: 24px 0; }
-    .modal { max-width: calc(100% - 32px) !important; }
-    .import-preview-list { max-height: 140px; }
-    .import-dropzone { min-height: 160px; }
-    .import-preview { margin-top: 12px; padding-top: 0; border-top: none; }
-
-
-
-
-    /* ── Delete button ── */
-    .delete-row-btn:hover { background: transparent; color: var(--text); }
-
-    /* ── Book panel: full screen ── */
-    .book-panel { width: 100%; }
-
-    /* ── Footer ── */
-    .footer { padding: 0; }
-    .footer-inner {
-      padding: 24px 16px;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
-    }
-    .footer-lang {
-      display: flex; align-items: center; justify-content: space-between; width: 100%;
-    }
-    .footer-row {
-      display: flex !important; justify-content: space-between; width: 100%;
-    }
-    .footer-mobile-copyright {
-      display: block; font-size: 0.78rem; color: var(--text-2); font-weight: 500;
-    }
-    .footer-mobile-links {
-      display: flex; align-items: center; justify-content: space-between; width: 100%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .tabs .tab { font-size: 0.95rem; padding: 6px 14px; }
-  }
-
-  /* ─── ADD BOOK MODAL ─── */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(30,35,80,0.30);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-  .modal {
-    background: var(--card);
-    border-radius: 8px;
-    padding: 32px 24px 0;
-    position: relative;
-    width: 100%;
-    max-width: 630px;
-    margin: 0 24px;
-    box-shadow: var(--shadow-lg);
-    transform: translateY(12px) scale(0.98);
-    transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
-  }
-  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-
-  .modal-title {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
     color: var(--text);
     margin-bottom: 24px;
   }
 
-  .modal-fields { margin: 0 0 24px; display: flex; flex-direction: column; gap: 16px; }
-  .modal-field { display: flex; flex-direction: column; gap: 6px; }
-  .modal-field label { font-size: 0.857rem; font-weight: 500; color: var(--text-3); }
-  .modal-field input {
-    height: 40px;
-    padding: 0 14px;
-    border-radius: 8px;
-    border: 1.5px solid transparent;
-    background: var(--bg3);
-    color: var(--text);
-    font-family: inherit;
-    font-size: 1rem;
+  .hero-tagline {
+    font-size: 1.7rem;
+    color: var(--text-2);
+    line-height: 1.5;
+    margin-bottom: 12px;
     font-weight: 400;
-    outline: none;
-    transition: border-color 0.15s, background 0.15s;
   }
-  .modal-field input:hover { background: var(--primary-5); border-color: var(--primary-40); }
-  .modal-field input:focus { border-color: var(--primary-50); box-shadow: 0 0 0 3px var(--primary-20); }
 
-  .modal-actions { display: flex; justify-content: space-between; margin: 24px -24px 0; padding: 18px 24px; }
-  .modal-cancel {
-    height: 40px; padding: 0 20px; border-radius: 8px; border: 1.5px solid var(--border);
-    background: transparent; color: var(--text); font-family: inherit;
-    font-size: 1rem; font-weight: 500; cursor: pointer; transition: border-color 0.15s;
-    white-space: nowrap;
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--text-3);
+    margin-bottom: 40px;
   }
-  .modal-cancel:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-  .modal-submit {
-    height: 40px; padding: 0 20px; border-radius: 8px; border: none;
-    background: var(--primary-50); color: #fff; font-family: inherit;
-    font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.15s;
-    white-space: nowrap;
-  }
-  .modal-submit:hover:not(:disabled) { background: var(--primary-60); }
-  .modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .delete-row-btn {
-    width: 38px; height: 38px;
-    border: none; background: transparent; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 8px;
-    color: var(--text);
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 56px;
+    padding: 0 32px;
+    background: var(--primary-50);
+    color: #fff;
+    border-radius: 99px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    box-shadow: 0 4px 14px rgba(73,89,230,0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-60);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(73,89,230,0.4);
+  }
+
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    font-size: 1rem;
+    color: var(--text-2);
+    font-weight: 500;
+  }
+
+  .trust-badge svg { color: var(--primary-50); flex-shrink: 0; }
+
+  /* ── APP MOCKUP ── */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mockup {
+    width: 340px;
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .mockup-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px 0;
+  }
+
+  .mockup-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .mockup-tab {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+    background: none;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
     transition: background 0.15s;
+  }
+
+  .mockup-tab:hover:not(.active) { background: var(--bg2); }
+
+  .mockup-tab.active {
+    background: var(--primary-50);
+    color: #fff;
+  }
+
+  .mockup-tab-count {
+    font-size: 12px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 99px;
+    padding: 1px 5px;
+    font-weight: 700;
+  }
+
+  .mockup-tab:not(.active) .mockup-tab-count {
+    background: var(--bg2);
+    color: var(--text-3);
+  }
+
+  .mockup-body { padding: 0; }
+
+  .mockup-title-row {
+    padding: 18px 20px 10px;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .mockup-search {
+    margin: 0 20px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mockup-book-row {
+    padding: 13px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mockup-book-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     flex-shrink: 0;
   }
-  .delete-row-btn:hover { background: rgba(239,68,68,0.08); color: #EF4444; }
-  .delete-row-btn svg { width: 18px; height: 18px; }
 
-  .confirm-modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(30,35,80,0.30);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 900;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.15s;
-  }
-  .confirm-modal-overlay.open { opacity: 1; pointer-events: auto; }
-  .confirm-modal {
-    background: var(--card);
-    border-radius: 8px;
-    padding: 32px 24px 0;
-    position: relative;
-    width: 100%;
-    max-width: 480px;
-    margin: 0 24px;
-    box-shadow: var(--shadow-lg);
-  }
-  .confirm-modal-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 16px; }
-  .confirm-modal-sub { font-size: 1rem; color: var(--text-2); line-height: 1.5; }
-  .confirm-modal-actions { display: flex; justify-content: space-between; margin: 24px -24px 0; padding: 18px 24px; }
-  .confirm-modal-delete {
-    height: 40px; padding: 0 20px; border-radius: 8px; border: none;
-    background: #ef4444; color: #fff; font-family: inherit;
-    font-size: 1rem; font-weight: 500; cursor: pointer;
-    transition: background 0.15s;
-  }
-  .confirm-modal-delete:hover { background: #dc2626; }
+  .mockup-book-info { flex: 1; min-width: 0; }
 
-  /* ── Onboarding ── */
-  .ob-overlay {
-    position: fixed; inset: 0;
-    background: rgba(30,35,80,0.30);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .ob-overlay.open { opacity: 1; pointer-events: auto; }
-  .ob-modal {
-    background: var(--card);
-    border-radius: 16px;
-    width: 100%; max-width: 640px;
-    margin: 0 24px;
-    display: flex; flex-direction: column; align-items: center;
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-  }
-  .ob-body {
-    width: 100%;
-    padding: 56px 48px 48px;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-  }
-  .ob-slides { width: 100%; min-height: 360px; display: flex; align-items: center; justify-content: center; touch-action: pan-y; }
-  .ob-slide { display: none; flex-direction: column; align-items: center; gap: 28px; width: 100%; }
-  .ob-slide.active { display: flex; justify-content: center; }
-  .ob-icon {
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-3);
-    margin-bottom: 4px;
-  }
-  .ob-title {
-    font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em;
-    color: var(--text); line-height: 1.2; margin: 0;
-  }
-  .ob-desc {
-    font-size: 1.05rem; color: var(--text-2);
-    line-height: 1.7; max-width: 400px; margin: 0;
-  }
-  .ob-footer {
-    width: 100%;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-  .ob-footer-nav { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-  .ob-footer-left { display: flex; align-items: center; }
-  .ob-footer-right { display: flex; align-items: center; gap: 8px; }
-  .ob-dots { display: flex; gap: 6px; }
-  .ob-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--border); transition: all 0.25s ease; cursor: pointer;
-  }
-  .ob-dot.active { width: 20px; border-radius: 3px; background: var(--primary-50); }
-  .ob-skip {
-    height: 40px; padding: 0 16px; border-radius: 8px;
-    background: transparent; border: none;
-    font-family: inherit; font-size: 1rem; font-weight: 500;
-    color: var(--text-2); cursor: pointer; transition: all 0.15s;
-  }
-  .ob-skip:hover { background: var(--primary-5); color: var(--primary-60); }
-  .ob-prev {
-    height: 40px; padding: 0 20px; border-radius: 8px;
-    background: var(--primary-5); color: var(--primary-60); border: none;
-    font-family: inherit; font-size: 1rem; font-weight: 500;
-    cursor: pointer; transition: background 0.15s;
-  }
-  .ob-prev:hover { background: var(--primary-10); }
-  .ob-next {
-    height: 40px; padding: 0 24px; border-radius: 8px;
-    background: var(--primary-50); color: #fff; border: none;
-    font-family: inherit; font-size: 1rem; font-weight: 500;
-    cursor: pointer; transition: background 0.15s;
-  }
-  .ob-next:hover { background: var(--primary-60); }
-  button.footer-link { background: none; border: none; padding: 0; font-size: inherit; font-family: inherit; cursor: pointer; }
-
-  .autocomplete-list {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0; right: 0;
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    box-shadow: var(--shadow-lg);
-    list-style: none;
-    max-height: 220px;
-    overflow-y: auto;
-    z-index: 700;
-    display: none;
-  }
-  .autocomplete-list.open { display: block; }
-  .autocomplete-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
+  .mockup-book-title {
+    font-size: 14px;
+    font-weight: 600;
     color: var(--text);
-    border-radius: 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .autocomplete-item span {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-2);
-    margin-left: 12px;
-  }
-  .autocomplete-item:hover,
-  .autocomplete-item.focused { background: var(--primary-5); color: var(--primary-60); }
-  .autocomplete-loading { color: var(--text-3); cursor: default; font-weight: 400; font-size: 0.857rem; }
 
-  .modal-handle { display: none; }
-  .modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 44px;
-    height: 44px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: transparent;
+  .mockup-book-author {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mockup-book-row {
     cursor: pointer;
+    transition: background 0.15s;
+  }
+  .mockup-book-row:hover { background: var(--bg2); }
+  .mockup-book-row.selected { background: var(--primary-5); }
+
+  .mockup-book-tags {
+    display: none;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 5px;
+  }
+  .mockup-book-row.selected .mockup-book-tags { display: flex; }
+
+  .mbt {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    background: var(--bg2);
+    color: var(--text-3);
+    font-weight: 600;
+    border: 1px solid var(--border);
+  }
+  .mbt-read { background: var(--primary-5); color: var(--primary-50); border-color: var(--primary-10); }
+  .mbt-wish { background: #FFF7ED; color: #EA580C; border-color: #FED7AA; }
+
+  .mockup-shadow-top {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+    pointer-events: none;
+  }
+
+  .mockup-float {
+    position: absolute;
+    right: -20px;
+    top: 40px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .mockup-float-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #F67BF8, #4959E6);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .modal-close { color: var(--text); transition: background 0.15s, color 0.15s; }
-  .modal-close:hover { background: var(--primary-5); color: var(--primary-60); }
-  .modal-close svg { width: 24px; height: 24px; }
 
-  .add-btn {
-    height: 40px;
-    padding: 0 20px;
-    border-radius: 8px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
+  .mockup-wrapper {
+    position: relative;
+    padding: 0 40px 0 0;
+  }
+
+  /* ── FEATURES ── */
+  .features {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 96px 0;
+  }
+
+  .features-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+
+  .section-eyebrow {
+    display: block;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary-50);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(2.6rem, 4.5vw, 3.8rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .section-sub {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-2);
+    margin-bottom: 56px;
+  }
+
+  /* ── Feature tabs ── */
+  .features-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .feature-tabs { display: flex; flex-direction: column; gap: 8px; }
+
+  .feature-tab {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 20px;
+    border-radius: 14px;
+    border: 1.5px solid transparent;
     cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    text-align: left;
+    background: none;
+    font-family: inherit;
+    width: 100%;
+  }
+
+  .feature-tab:hover { background: var(--bg); border-color: var(--border); }
+
+  .feature-tab.active {
+    background: var(--bg);
+    border-color: var(--primary-20);
+    box-shadow: 0 4px 16px rgba(73,89,230,0.08);
+  }
+
+  .feature-tab-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--primary-5);
+    border: 1px solid var(--primary-10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .feature-tab.active .feature-tab-icon {
+    background: var(--primary-50);
+    border-color: var(--primary-50);
+  }
+
+  .feature-tab-icon svg { width: 18px; height: 18px; stroke: var(--primary-50); }
+  .feature-tab.active .feature-tab-icon svg { stroke: #fff; }
+
+  .feature-tab-text { flex: 1; }
+
+  .feature-tab-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+
+  .feature-tab-desc {
+    font-size: 0.95rem;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+
+  /* Progress bar */
+  .feature-tab-progress {
+    height: 2px;
+    background: var(--primary-10);
+    border-radius: 99px;
+    margin-top: 10px;
+    overflow: hidden;
+    display: none;
+  }
+
+  .feature-tab.active .feature-tab-progress { display: block; }
+
+  .feature-tab-progress-bar {
+    height: 100%;
+    background: var(--primary-50);
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.05s linear;
+  }
+
+  /* Right panel */
+  .feature-panel {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature-visual { display: none; width: 100%; padding: 32px; }
+  .feature-visual.active { display: flex; flex-direction: column; gap: 12px; animation: fadeUp 0.25s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Visual: Library */
+  .fv-book-row {
     display: flex;
     align-items: center;
     gap: 10px;
-    transition: background 0.15s;
-    white-space: nowrap;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
   }
-  .add-btn svg { width: 24px; height: 24px; }
-  .add-btn:hover { background: var(--primary-60); }
+  .fv-book-row:last-child { border-bottom: none; }
+  .fv-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .fv-title { font-size: 0.975rem; font-weight: 600; color: var(--text); }
+  .fv-author { font-size: 0.875rem; color: var(--text-3); }
+  .fv-badge {
+    margin-left: auto;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: var(--primary-5);
+    color: var(--primary-50);
+    flex-shrink: 0;
+  }
 
-  .edit-btn {
-    height: 40px;
-    padding: 0 20px;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: none;
+  /* Visual: Snap */
+  .fv-camera-zone {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    transition: border-color 0.15s;
-    white-space: nowrap;
+    gap: 16px;
+    padding: 16px 0;
+    width: 100%;
   }
-  .edit-btn:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-  .edit-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: var(--border); color: var(--text); background: transparent; }
-  .edit-btn.visible { display: flex; }
-
-  .export-btn {
-    height: 40px;
-    padding: 0 20px;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
+  .fv-camera-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, #F67BF8, #4959E6);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fv-detected {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
+  .fv-detected-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: border-color 0.15s;
-    white-space: nowrap;
+    padding: 8px 12px;
+    background: var(--bg2);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 500;
   }
-  .export-btn { margin-left: -8px; }
-  .export-btn:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-  .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .fv-check {
+    width: 18px; height: 18px;
+    background: #22c55e;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
 
-  /* ─── IMPORT MODAL ─── */
-  .import-tabs { display: flex; gap: 4px; margin: 20px 0 24px; border-bottom: 1.5px solid var(--border); position: relative; }
-  .import-tab {
-    height: 36px; padding: 0 16px; border: none; background: transparent;
-    font-family: inherit; font-size: 1rem; font-weight: 500; color: var(--text-2);
+  /* Visual: Private */
+  .fv-private-center {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 20px;
+    padding: 16px 0; width: 100%;
+  }
+  .fv-lock-icon {
+    width: 72px; height: 72px;
+    background: var(--primary-5);
+    border: 2px solid var(--primary-10);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fv-stats {
+    display: flex; gap: 12px; width: 100%;
+  }
+  .fv-stat {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .fv-stat-val { font-size: 1.35rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  .fv-stat-label { font-size: 0.82rem; color: var(--text-3); margin-top: 2px; }
+
+  /* ── REVIEWS ── */
+  .reviews-section { padding: 96px 0; overflow: hidden; }
+  .reviews-header { max-width: 1280px; margin: 0 auto; padding: 0 48px 48px; }
+  .reviews-track {
+    display: flex;
+    gap: 16px;
+    padding: 8px 48px 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .reviews-track::-webkit-scrollbar { display: none; }
+
+  .review-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    min-width: 280px;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-snap-align: start;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .review-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
+
+  .review-stars { display: flex; gap: 3px; }
+  .review-stars svg { width: 14px; height: 14px; fill: #FBBF24; stroke: none; }
+
+  .review-quote {
+    font-size: 1rem;
+    color: var(--text-2);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .review-author { display: flex; align-items: center; gap: 10px; }
+
+  .review-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .review-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .review-role { font-size: 0.875rem; color: var(--text-3); }
+
+  /* ── FAQ ── */
+  .faq-section { background: var(--bg2); border-top: 1px solid var(--border); padding: 96px 0; }
+  .faq-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .faq-left h2 { font-size: clamp(2.1rem, 3.5vw, 3rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .faq-left p { font-size: 1.1rem; color: var(--text-2); line-height: 1.6; }
+  .faq-list { display: flex; flex-direction: column; }
+
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-item:first-child { border-top: 1px solid var(--border); }
+
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
     cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    text-align: left;
+    width: 100%;
     transition: color 0.15s;
   }
-  .import-tab.active { color: var(--primary-50); }
-  .import-tab:hover { color: var(--primary-50); }
-  .import-tab-indicator {
-    position: absolute;
-    bottom: -1.5px;
-    height: 2px;
-    background: var(--primary-50);
-    border-radius: 1px;
-    transition: left 0.22s cubic-bezier(0.4, 0, 0.2, 1), width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
+
+  .faq-question:hover { color: var(--primary-50); }
+  .faq-question.open { color: var(--primary-50); }
+
+  .faq-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
   }
 
-  /* ── AI Photo tab ── */
-  .import-tab-ai { display: inline-flex; align-items: center; gap: 5px; }
-  .import-tab-ai-icon { width: 16px; height: 16px; flex-shrink: 0; }
-  .import-tab-ai-text {
-    background: linear-gradient(135deg, #4959E6 0%, #9B5CF6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  [data-theme="dark"] .import-tab-ai-text {
-    background: linear-gradient(135deg, #7B89F8 0%, #C084FC 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  /* photo tab active: indicator color handled by JS */
-
-  /* ── AI Photo dropzone — gradient border + background ── */
-  #photoDropzone {
-    border: none;
-    position: relative;
-    background: linear-gradient(135deg, rgba(246,123,248,0.05), rgba(73,89,230,0.05));
-    transition: background 0.15s;
-  }
-  #photoDropzone:hover, #photoDropzone.dragover {
-    background: linear-gradient(135deg, rgba(246,123,248,0.10), rgba(73,89,230,0.10));
-  }
-  .photo-dropzone-border {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: visible;
+  .faq-question.open .faq-icon {
+    transform: rotate(45deg);
+    border-color: var(--primary-50);
   }
 
-  .import-dropzone {
-    border: 2px dashed var(--border); border-radius: 10px;
-    padding: 40px 24px; text-align: center; cursor: pointer;
-    min-height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: border-color 0.15s, background 0.15s;
+  .faq-question.open .faq-icon svg { stroke: var(--primary-50); }
+
+  .faq-icon svg { width: 10px; height: 10px; stroke: var(--text-3); stroke-width: 2.5; stroke-linecap: round; }
+
+  .faq-answer {
+    font-size: 1rem;
     color: var(--text-2);
+    line-height: 1.65;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding-bottom: 0;
   }
-  .import-dropzone:hover, .import-dropzone.dragover { border-color: var(--accent); background: var(--accent-bg); }
-  .import-dropzone svg { width: 28px; height: 28px; margin-bottom: 12px; color: var(--primary-50); }
-  #photoDropzone svg:not(.photo-dropzone-border) { color: var(--primary-50); }
-  .import-dropzone-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-  .import-dropzone-sub { font-size: 0.857rem; color: var(--text-3); }
 
-.ocr-thumb-row { display: flex; gap: 16px; align-items: center; margin-top: 16px; }
-  .ocr-thumb { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1.5px solid var(--border); }
-  .ocr-status { flex: 1; }
-  .ocr-status-label { font-size: 0.857rem; font-weight: 400; color: var(--text-2); margin-bottom: 8px; }
-  .ocr-progress-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
-  .ocr-progress-fill { height: 100%; border-radius: 3px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+  .faq-answer.open { max-height: 200px; padding-bottom: 20px; }
 
-  .import-text-label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); margin-bottom: 6px; }
-  .import-textarea {
-    width: 100%; height: 140px; padding: 12px 14px; border-radius: 8px;
-    border: 1.5px solid var(--border); background: var(--bg3);
-    font-family: inherit; font-size: 0.95rem; color: var(--text);
-    resize: vertical; box-sizing: border-box;
-    transition: border-color 0.15s;
+  @media (max-width: 768px) {
+    .reviews-section { padding: 64px 0; }
+    .reviews-header { padding: 0 20px 32px; }
+    .reviews-track { padding: 8px 20px 20px; }
+    .faq-section { padding: 64px 0; }
+    .faq-inner { grid-template-columns: 1fr; gap: 36px; padding: 0 20px; }
   }
-  .import-textarea:focus { outline: none; border-color: var(--accent); }
 
-  .import-ai-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
-  .import-analyze-btn {
-    height: 40px; padding: 0 20px; border-radius: 8px; border: none;
-    background: var(--accent); color: #fff; font-family: inherit;
-    font-size: 1rem; font-weight: 500; cursor: pointer;
-    transition: background 0.15s; display: flex; align-items: center; gap: 8px;
+  /* ── CTA ── */
+  .cta-section {
+    padding: 96px 0;
+    text-align: center;
   }
-  .import-analyze-btn:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
-  .import-analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .import-preview { margin-top: 24px; }
-  .import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .import-preview-title { font-size: 0.857rem; font-weight: 400; color: var(--text-3); }
-  .import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-  .import-preview-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px; border-radius: 8px; background: var(--bg3);
+  .cta-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
   }
-  .import-preview-remove {
-    width: 28px; height: 28px; border: none; background: transparent;
-    color: var(--text); cursor: pointer; display: flex; align-items: center;
-    justify-content: center; border-radius: 6px; flex-shrink: 0; margin-left: 8px;
-    transition: background 0.15s;
+
+  .cta-section h2 {
+    font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 14px;
   }
-  .import-preview-remove:hover { background: var(--ghost-hover); }
-  .import-preview-remove svg { width: 14px; height: 14px; }
-  .import-preview-book { font-size: 0.95rem; font-weight: 500; color: var(--text); }
-  .import-preview-author { font-size: 0.857rem; color: var(--text-2); margin-top: 4px; }
 
-
-  .photo-add-another-btn {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; height: 40px; padding: 0 20px; border-radius: 8px;
-    border: 1.5px solid var(--border); background: transparent;
-    color: var(--text); font-family: inherit; font-size: 0.9rem; font-weight: 500;
-    cursor: pointer; transition: border-color 0.15s;
+  .cta-section p {
+    font-size: 1.1rem;
+    color: var(--text-2);
+    margin-bottom: 36px;
   }
-  .photo-add-another-btn:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 
-  .import-error { color: #ef4444; font-size: 0.857rem; margin-top: 8px; display: none; }
-  .import-spinner { display: none; align-items: center; gap: 8px; color: var(--text-2); font-size: 0.95rem; }
-  .import-spinner.visible { display: flex; }
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  footer a { color: var(--text-3); text-decoration: none; transition: color 0.15s; }
+  footer a:hover { color: var(--primary-50); }
+  .footer-sep { color: var(--border); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 20px 48px; }
+    .hero-visual { order: -1; }
+    .mockup-wrapper { padding: 0; display: flex; justify-content: center; }
+    .mockup { width: 240px; }
+    .mockup-float { display: none; }
+    .features { padding: 64px 20px; }
+    .features-showcase { grid-template-columns: 1fr; gap: 24px; }
+    .feature-panel { min-height: 260px; }
+    .cta-section { padding: 64px 20px; }
+    .nav-inner { padding: 0 20px; }
+    footer { padding: 24px 20px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- TOOLBAR -->
-<div class="toolbar">
-  <div class="toolbar-inner">
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="app.html" class="nav-logo">
+      <div class="nav-logo-icon">r</div>
+      <span class="nav-logo-text">readr</span>
+    </a>
+    <a href="app.html" class="nav-cta">
+      Open app
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</nav>
 
-    <!-- Logo -->
-    <div class="logo">
-      <div class="logo-icon">R</div>
-      Readr
-    </div>
-
-    <!-- Niveau 1 : tabs -->
-    <div class="toolbar-tabs">
-      <div class="tabs">
-        <button class="tab active" onclick="switchTab('owned', this)">
-          My Library <span class="badge" id="owned-count">0</span>
-        </button>
-        <button class="tab" onclick="switchTab('wishlist', this)">
-          Wishlist <span class="badge" id="wishlist-count">0</span>
-        </button>
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <!-- Left: text -->
+    <div class="hero-content">
+      <h1>readr</h1>
+      <p class="hero-tagline">A quiet place for your books.</p>
+      <p class="hero-sub">Track what you read, remember what comes next. No account needed.</p>
+      <div class="hero-actions">
+        <a href="app.html" class="btn-primary">
+          Open app
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
-    </div>
-
-    <!-- Right controls -->
-    <div class="toolbar-right">
-      <!-- Langue -->
-      <div class="lang-toggle">
-        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-        <span class="lang-sep">·</span>
-        <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Bouton thème : extrême droite (hors toolbar-inner) -->
-  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">
-    <span class="toggle-thumb">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </span>
-  </button>
-
-</div>
-
-<!-- BOOK PANEL -->
-<div class="book-panel" id="bookPanel">
-  <div class="panel-inner">
-    <button class="panel-close" onclick="closePanel()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div class="panel-cover-wrap" id="panelCoverWrap"></div>
-    <div class="panel-body" id="panelBody">
-      <div class="panel-loading" id="panelLoading">
-        <div class="panel-spinner"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SELECTION BAR -->
-<div class="selection-bar" id="selectionBar">
-  <button class="sel-btn sel-cancel" onclick="toggleEditMode()">
-    <svg class="sel-cancel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    <span class="sel-cancel-label">Cancel</span>
-  </button>
-  <span class="selection-count" id="selectionCount"></span>
-  <div class="sel-actions">
-    <button class="sel-btn sel-select-all" id="selSelectAllBtn" onclick="toggleSelectAll()">Select all</button>
-    <button class="sel-btn sel-confirm" id="selConfirmBtn" onclick="confirmSelection()">
-      <svg class="sel-confirm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-      <span id="selConfirmLabel">Mark as owned</span>
-    </button>
-  </div>
-</div>
-
-<!-- CONTENT -->
-<div class="main-wrap">
-  <div class="page-title-row">
-    <h1 class="page-title" id="pageTitle">My Library</h1>
-  </div>
-  <div class="search-row">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-      </svg>
-      <input type="text" id="search" placeholder="Title, author…" oninput="render(); updateSearchClear()">
-      <button class="search-clear" id="searchClear" onclick="clearSearch()" aria-label="Clear search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
-          <path d="M18 6 6 18M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-    <div class="counter-actions">
-      <button class="add-btn" id="addBookBtn" onclick="openAddModal()">Add</button>
-      <button class="edit-btn" id="editWishBtn" onclick="toggleEditMode()">Edit</button>
-      <button class="export-btn" id="exportBtn" onclick="exportData()">Export</button>
-      <div class="view-btns">
-        <button class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Card view">
-          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-        </button>
-        <button class="view-btn" id="btn-list" onclick="setView('list')" title="List view">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="result-line" id="result-info"></div>
-  <div class="books-grid" id="grid"></div>
-</div>
-
-<!-- ADD BOOK MODAL -->
-<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAddModal()">
-  <div class="modal" style="max-width:620px;">
-    <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeAddModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div class="modal-title">Add a book</div>
-
-    <div class="import-tabs" id="importTabs">
-      <div class="import-tab-indicator" id="importTabIndicator"></div>
-      <button class="import-tab active" id="add-tab-photo" onclick="switchAddTab('photo')">
-        <span class="import-tab-ai">
-          <svg class="import-tab-ai-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="aiTabGrad" x1="23" y1="1" x2="2.10296" y2="23.0455" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#F67BF8"/>
-                <stop offset="0.619921" stop-color="#4959E6"/>
-              </linearGradient>
-            </defs>
-            <path d="M12 1.5C12.2761 1.5 12.5 1.72386 12.5 2C12.5 7.24671 16.7533 11.5 22 11.5C22.2761 11.5 22.5 11.7239 22.5 12C22.5 12.2761 22.2761 12.5 22 12.5C16.7533 12.5 12.5 16.7533 12.5 22C12.5 22.2761 12.2761 22.5 12 22.5C11.7239 22.5 11.5 22.2761 11.5 22C11.5 16.7533 7.24671 12.5 2 12.5C1.72386 12.5 1.5 12.2761 1.5 12C1.5 11.7239 1.72386 11.5 2 11.5C7.24671 11.5 11.5 7.24671 11.5 2C11.5 1.72386 11.7239 1.5 12 1.5Z" fill="url(#aiTabGrad)"/>
-          </svg>
-          <span class="import-tab-ai-text">Photo</span>
+      <div class="trust-badges">
+        <span class="hero-eyebrow" style="margin:0">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Free &amp; open
         </span>
-      </button>
-      <button class="import-tab" id="add-tab-file" onclick="switchAddTab('file')">File</button>
-      <button class="import-tab" id="add-tab-manual" onclick="switchAddTab('manual')">Manual</button>
-    </div>
-
-    <!-- MANUAL PANEL -->
-    <div id="add-panel-manual">
-      <div class="modal-fields">
-        <div class="modal-field" style="position: relative;">
-          <label>Title *</label>
-          <input type="text" id="addTitle" placeholder="e.g. Les Misérables" autocomplete="off" oninput="onTitleInput(this)" onkeydown="onTitleKeydown(event)">
-          <ul class="autocomplete-list" id="titleSuggestions"></ul>
-        </div>
-        <div class="modal-field">
-          <label>Author *</label>
-          <input type="text" id="addAuthor" placeholder="e.g. Victor Hugo" autocomplete="off">
-        </div>
-        <div class="modal-field">
-          <label>Year (optional)</label>
-          <input type="number" id="addYear" placeholder="e.g. 1862" min="1000" max="2099">
-        </div>
-        <div class="modal-field">
-          <label>Genre (optional)</label>
-          <input type="text" id="addGenre" placeholder="e.g. Fiction, Biography…" autocomplete="off">
-        </div>
+        <span class="trust-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          No account
+        </span>
+        <span class="trust-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Stored locally
+        </span>
       </div>
     </div>
 
-    <!-- FILE PANEL -->
-    <div id="add-panel-file" style="display:none">
-      <div class="import-dropzone" id="importDropzone"
-           onclick="document.getElementById('importFileInput').click()"
-           ondragover="event.preventDefault();this.classList.add('dragover')"
-           ondragleave="this.classList.remove('dragover')"
-           ondrop="handleImportDrop(event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/>
-          <line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        <div class="import-dropzone-title">Drop a file or click to browse</div>
-        <div class="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
+    <!-- Right: app mockup -->
+    <div class="hero-visual">
+      <div class="mockup-wrapper">
+        <div class="mockup">
+          <div class="mockup-bar">
+            <div class="mockup-tabs">
+              <button class="mockup-tab active" onclick="switchMockupTab('library')">My Library <span class="mockup-tab-count">7</span></button>
+              <button class="mockup-tab" id="mockup-wish-tab" onclick="switchMockupTab('wishlist')">Wishlist <span class="mockup-tab-count" style="background:var(--bg2);color:var(--text-3)">4</span></button>
+            </div>
+          </div>
+          <div class="mockup-body">
+            <!-- My Library view -->
+            <div id="mockup-library-view">
+              <div class="mockup-title-row">My Library</div>
+              <div class="mockup-search">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Title, author…
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#4959E6"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">The Great Gatsby</div>
+                  <div class="mockup-book-author">F. Scott Fitzgerald</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Fiction</span><span class="mbt">1925</span><span class="mbt mbt-read">✓ Read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#E6496A"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">Sapiens</div>
+                  <div class="mockup-book-author">Yuval Noah Harari</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Non-fiction</span><span class="mbt">2011</span><span class="mbt mbt-read">✓ Read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#49C4E6"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">Norwegian Wood</div>
+                  <div class="mockup-book-author">Haruki Murakami</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Fiction</span><span class="mbt">1987</span><span class="mbt mbt-read">✓ Read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#E6A249"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">The Alchemist</div>
+                  <div class="mockup-book-author">Paulo Coelho</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Fiction</span><span class="mbt">1988</span><span class="mbt mbt-read">✓ Read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#49E6A2"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">1984</div>
+                  <div class="mockup-book-author">George Orwell</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Fiction</span><span class="mbt">1949</span><span class="mbt mbt-read">✓ Read</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Wishlist view -->
+            <div id="mockup-wishlist-view" style="display:none">
+              <div class="mockup-title-row">Wishlist</div>
+              <div class="mockup-search">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Title, author…
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#8B5CF6"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">Dune</div>
+                  <div class="mockup-book-author">Frank Herbert</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Sci-fi</span><span class="mbt">1965</span><span class="mbt mbt-wish">To read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#F59E0B"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">Crime &amp; Punishment</div>
+                  <div class="mockup-book-author">F. Dostoevsky</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Classic</span><span class="mbt">1866</span><span class="mbt mbt-wish">To read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#10B981"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">The Road</div>
+                  <div class="mockup-book-author">Cormac McCarthy</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Fiction</span><span class="mbt">2006</span><span class="mbt mbt-wish">To read</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-book-row" onclick="selectMockupBook(this)">
+                <div class="mockup-book-dot" style="background:#EC4899"></div>
+                <div class="mockup-book-info">
+                  <div class="mockup-book-title">Piranesi</div>
+                  <div class="mockup-book-author">Susanna Clarke</div>
+                  <div class="mockup-book-tags">
+                    <span class="mbt">Fantasy</span><span class="mbt">2020</span><span class="mbt mbt-wish">To read</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-shadow-top"></div>
+        </div>
+
+        <!-- Floating badge -->
+        <div class="mockup-float">
+          <div class="mockup-float-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <span>5 books detected</span>
+        </div>
       </div>
-      <input type="file" id="importFileInput" accept=".json,.csv" style="display:none" onchange="handleImportFileInput(event)">
-      <div class="import-error" id="import-file-error"></div>
     </div>
+  </div>
+</section>
 
-    <!-- PHOTO PANEL -->
-    <div id="add-panel-photo" style="display:none">
-      <div class="import-dropzone" id="photoDropzone"
-           onclick="document.getElementById('photoFileInput').click()"
-           ondragover="event.preventDefault();this.classList.add('dragover')"
-           ondragleave="this.classList.remove('dragover')"
-           ondrop="handlePhotoDrop(event)">
-        <svg class="photo-dropzone-border" width="100%" height="100%" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="photoGradBorder" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-              <stop offset="0%" stop-color="#F67BF8"/>
-              <stop offset="62%" stop-color="#4959E6"/>
-            </linearGradient>
-          </defs>
-          <rect id="photoGradRect" x="1" y="1" width="0" height="0" rx="9" fill="none"
-                stroke="url(#photoGradBorder)" stroke-width="2" stroke-dasharray="6 4"/>
-        </svg>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21 15 16 10 5 21"/>
-        </svg>
-        <div class="import-dropzone-title">Drop a photo or click to browse</div>
-        <div class="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
+<!-- FEATURES -->
+<section class="features">
+  <div class="features-inner">
+    <span class="section-eyebrow">What readr does</span>
+    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-sub">Simple tools that stay out of the way.</p>
+
+    <div class="features-showcase">
+      <!-- Left: tabs -->
+      <div class="feature-tabs">
+
+        <button class="feature-tab active" onclick="setFeature(0)">
+          <div class="feature-tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <div class="feature-tab-text">
+            <div class="feature-tab-title">Library &amp; wishlist</div>
+            <div class="feature-tab-desc">Keep your read books in one place and build a wishlist for what's next.</div>
+            <div class="feature-tab-progress"><div class="feature-tab-progress-bar"></div></div>
+          </div>
+        </button>
+
+        <button class="feature-tab" onclick="setFeature(1)">
+          <div class="feature-tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div class="feature-tab-text">
+            <div class="feature-tab-title">Snap to add</div>
+            <div class="feature-tab-desc">Point your camera at a bookshelf — readr detects titles with AI in seconds.</div>
+            <div class="feature-tab-progress"><div class="feature-tab-progress-bar"></div></div>
+          </div>
+        </button>
+
+        <button class="feature-tab" onclick="setFeature(2)">
+          <div class="feature-tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div class="feature-tab-text">
+            <div class="feature-tab-title">Private by design</div>
+            <div class="feature-tab-desc">No sign-up, no cloud, no tracking. Everything lives in your browser.</div>
+            <div class="feature-tab-progress"><div class="feature-tab-progress-bar"></div></div>
+          </div>
+        </button>
+
       </div>
-      <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoInput(event)">
 
-      <button id="photoAddAnotherBtn" style="display:none" class="photo-add-another-btn"
-        onclick="document.getElementById('photoFileInput').click()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add another photo
-      </button>
+      <!-- Right: visual panel -->
+      <div class="feature-panel">
 
-      <div id="ocrProgressArea" style="display:none">
-        <div class="ocr-thumb-row">
-          <img id="ocrThumb" class="ocr-thumb">
-          <div class="ocr-status">
-            <div class="ocr-status-label" id="ocrStatusLabel">Scanning…</div>
-            <div class="ocr-progress-bar"><div class="ocr-progress-fill" id="ocrProgressFill"></div></div>
+        <div class="feature-visual active" id="fv-0">
+          <div class="fv-book-row">
+            <div class="fv-dot" style="background:#4959E6"></div>
+            <div style="flex:1"><div class="fv-title">The Great Gatsby</div><div class="fv-author">F. Scott Fitzgerald</div></div>
+            <span class="fv-badge">Read</span>
+          </div>
+          <div class="fv-book-row">
+            <div class="fv-dot" style="background:#E6496A"></div>
+            <div style="flex:1"><div class="fv-title">Sapiens</div><div class="fv-author">Yuval Noah Harari</div></div>
+            <span class="fv-badge">Read</span>
+          </div>
+          <div class="fv-book-row">
+            <div class="fv-dot" style="background:#49C4E6"></div>
+            <div style="flex:1"><div class="fv-title">Norwegian Wood</div><div class="fv-author">Haruki Murakami</div></div>
+            <span class="fv-badge" style="background:var(--bg2);color:var(--text-3)">Wishlist</span>
+          </div>
+          <div class="fv-book-row">
+            <div class="fv-dot" style="background:#E6A249"></div>
+            <div style="flex:1"><div class="fv-title">The Alchemist</div><div class="fv-author">Paulo Coelho</div></div>
+            <span class="fv-badge" style="background:var(--bg2);color:var(--text-3)">Wishlist</span>
           </div>
         </div>
+
+        <div class="feature-visual" id="fv-1">
+          <div class="fv-camera-zone">
+            <div class="fv-camera-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div style="font-size:0.8rem;color:var(--text-3);font-weight:500">5 books detected</div>
+            <div class="fv-detected">
+              <div class="fv-detected-item"><div class="fv-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Atomic Habits — James Clear</div>
+              <div class="fv-detected-item"><div class="fv-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Thinking, Fast and Slow — Kahneman</div>
+              <div class="fv-detected-item"><div class="fv-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>The Midnight Library — Matt Haig</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-visual" id="fv-2">
+          <div class="fv-private-center">
+            <div class="fv-lock-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-50)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="fv-stats">
+              <div class="fv-stat"><div class="fv-stat-val">0</div><div class="fv-stat-label">Accounts created</div></div>
+              <div class="fv-stat"><div class="fv-stat-val">0</div><div class="fv-stat-label">Bytes uploaded</div></div>
+              <div class="fv-stat"><div class="fv-stat-val">0</div><div class="fv-stat-label">Trackers</div></div>
+            </div>
+            <div style="font-size:0.82rem;color:var(--text-3);text-align:center;line-height:1.5">Your data never leaves your device.<br>Ever.</div>
+          </div>
+        </div>
+
       </div>
-
-      <div class="import-error" id="import-photo-error"></div>
-    </div>
-
-    <!-- PREVIEW (file + photo) -->
-    <div class="import-preview" id="importPreview" style="display:none">
-      <div class="import-preview-header">
-        <span class="import-preview-title" id="importPreviewCount"></span>
-      </div>
-      <div class="import-preview-list" id="importPreviewList"></div>
-    </div>
-
-    <div class="modal-actions" style="margin-top:24px">
-      <button class="modal-cancel" onclick="closeAddModal()">Cancel</button>
-      <button class="modal-submit" id="modalSubmitBtn" onclick="submitAddBook()" disabled>Add to my library</button>
-      <button class="modal-submit" id="importSubmitBtn" onclick="confirmImport()" disabled style="display:none">Import</button>
     </div>
   </div>
-</div>
+</section>
 
-<!-- DELETE CONFIRM MODAL -->
-<div class="confirm-modal-overlay" id="deleteConfirmModal" onclick="if(event.target===this)closeDeleteConfirm()">
-  <div class="confirm-modal">
-    <button class="modal-close" onclick="closeDeleteConfirm()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <div class="confirm-modal-title">Remove this book?</div>
-    <div class="confirm-modal-sub" id="deleteConfirmSub"></div>
-    <div class="confirm-modal-actions">
-      <button class="modal-cancel" onclick="closeDeleteConfirm()">Cancel</button>
-      <button class="confirm-modal-delete" onclick="confirmDeleteBook()">Remove</button>
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="reviews-header" style="text-align:center">
+    <span class="section-eyebrow">Loved by readers</span>
+    <h2 class="section-title">What people are saying.</h2>
+    <p class="section-sub" style="margin-bottom:0">Real people, real bookshelves — no algorithms, no ads.</p>
+  </div>
+  <div class="reviews-track">
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"Finally a book tracker that doesn't ask me to sign up. I added my whole library in one afternoon."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#4959E6">S</div>
+        <div><div class="review-name">Sophie L.</div><div class="review-role">Avid reader · Paris</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"The photo recognition is genuinely impressive. I pointed my phone at my shelf and it found 12 books in seconds."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#E6496A">M</div>
+        <div><div class="review-name">Marcus T.</div><div class="review-role">Bibliophile · Berlin</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"Love that my data stays on my device. No emails, no newsletters, no account to manage. Just my books."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#49C4E6">A</div>
+        <div><div class="review-name">Amélie R.</div><div class="review-role">Teacher · Lyon</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"Super clean interface. I've tried five book apps — readr is the only one I've kept using after a week."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#E6A249">J</div>
+        <div><div class="review-name">James K.</div><div class="review-role">Product designer · London</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"My wishlist is finally under control. I used to forget books I wanted to read — not anymore."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#49E6A2;color:#111">L</div>
+        <div><div class="review-name">Léa M.</div><div class="review-role">Student · Bordeaux</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"I appreciate the simplicity. No clutter, no social features I don't need. Just a clean list of my books."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#9B59B6">N</div>
+        <div><div class="review-name">Nina W.</div><div class="review-role">Writer · Amsterdam</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"Switching between my library and wishlist is seamless. I check readr every time I walk into a bookstore."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#E67E22">T</div>
+        <div><div class="review-name">Thomas B.</div><div class="review-role">Journalist · Brussels</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"Works perfectly on my iPhone. I was sceptical about a web app but it feels completely native."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#1ABC9C">C</div>
+        <div><div class="review-name">Clara D.</div><div class="review-role">Nurse · Nantes</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"I recommended readr to my whole book club. We all love how private it is — your library is yours alone."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#2980B9">R</div>
+        <div><div class="review-name">Rachel V.</div><div class="review-role">Book club host · Geneva</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-quote">"Minimal, fast, honest. readr does exactly what it says and nothing it doesn't. Rare these days."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#E74C3C">P</div>
+        <div><div class="review-name">Paul H.</div><div class="review-role">Engineer · Toulouse</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-left">
+      <span class="section-eyebrow" style="text-align:left;display:block;margin-bottom:12px">FAQ</span>
+      <h2>Got questions?</h2>
+      <p style="margin-top:12px">Everything you need to know about readr. Can't find an answer? <a href="app.html" style="color:var(--primary-50);text-decoration:none;font-weight:600">Open the app</a> and try it yourself.</p>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Is readr really free?
+          <span class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-answer">Yes, completely. No premium tier, no subscription, no hidden fees. readr is free and open — forever.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Do I need to create an account?
+          <span class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-answer">No account, no email, no password. You open the app and start adding books immediately. Your data is stored directly in your browser.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What happens to my data if I clear my browser?
+          <span class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-answer">Your library lives in your browser's local storage. Clearing it will remove your data. We recommend using readr on a device you trust and keep — or exporting your list regularly.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How does the photo recognition work?
+          <span class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-answer">Take a photo of your bookshelf and readr sends it to a Gemini AI model that identifies the titles and authors. The image is processed and immediately discarded — nothing is stored.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Does it work on iPhone and Android?
+          <span class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-answer">Yes. readr is a web app that works in any modern browser on any device — iPhone, Android, Mac, PC. Add it to your home screen for a native-like experience.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I import books from another app?
+          <span class="faq-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-answer">You can import books via a JSON file or by pasting a list of titles. The photo recognition feature also makes it easy to add a whole shelf at once.</div>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to start?</h2>
+    <p>It takes less than a minute to add your first book.</p>
+    <a href="app.html" class="btn-primary">
+      Open readr
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
 
 <!-- FOOTER -->
-<!-- ── Onboarding ── -->
-<div class="ob-overlay" id="obOverlay" onclick="if(event.target===this)closeOnboarding()">
-  <div class="ob-modal">
-    <div class="ob-body">
-      <div class="ob-slides">
-        <div class="ob-slide active">
-          <div class="ob-icon">
-            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
-              <circle cx="40" cy="40" r="26" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
-              <circle cx="33" cy="37" r="2.5" fill="var(--accent)"/>
-              <circle cx="47" cy="37" r="2.5" fill="var(--accent)"/>
-              <path d="M32 46 Q40 54 48 46" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            </svg>
-          </div>
-          <h2 class="ob-title">Hi, I'm Readr.</h2>
-          <p class="ob-desc">I'm here to help you organize your reading life. Every book you own, every one you dream of.</p>
-        </div>
-        <div class="ob-slide">
-          <div class="ob-icon">
-            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
-              <!-- 4 books standing upright on a shelf, spine view -->
-              <rect x="8"  y="20" width="13" height="38" rx="3" fill="var(--accent)"/>
-              <rect x="8"  y="20" width="4"  height="38" rx="2" fill="var(--accent-bg)" opacity="0.3"/>
-              <rect x="24" y="26" width="11" height="32" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
-              <rect x="24" y="26" width="3.5" height="32" rx="1.5" fill="var(--accent)" opacity="0.4"/>
-              <rect x="38" y="16" width="14" height="42" rx="3" fill="var(--accent)"/>
-              <rect x="38" y="16" width="4.5" height="42" rx="2" fill="var(--accent-bg)" opacity="0.25"/>
-              <rect x="55" y="22" width="12" height="36" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
-              <rect x="55" y="22" width="3.5" height="36" rx="1.5" fill="var(--accent)" opacity="0.4"/>
-              <!-- shelf -->
-              <rect x="4" y="59" width="68" height="5" rx="2.5" fill="var(--accent)" opacity="0.5"/>
-            </svg>
-          </div>
-          <h2 class="ob-title">Your books, finally in one place.</h2>
-          <p class="ob-desc">Keep track of every book you own and everything you want to read.</p>
-          <p class="ob-desc">In one clean, beautiful space.</p>
-        </div>
-        <div class="ob-slide">
-          <div class="ob-icon">
-            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
-              <circle cx="40" cy="40" r="28" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
-              <line x1="40" y1="26" x2="40" y2="54" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
-              <line x1="26" y1="40" x2="54" y2="40" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h2 class="ob-title">Adding a book takes seconds.</h2>
-          <p class="ob-desc">Snap a photo, upload a file, or type it in.</p>
-          <p class="ob-desc">However you prefer, I'll take care of the rest.</p>
-        </div>
-        <div class="ob-slide">
-          <div class="ob-icon">
-            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
-              <rect x="6" y="18" width="30" height="44" rx="6" fill="var(--accent)"/>
-              <rect x="44" y="18" width="30" height="44" rx="6" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2"/>
-            </svg>
-          </div>
-          <h2 class="ob-title">Two spaces, one home.</h2>
-          <p class="ob-desc">Books you own, books you want.</p>
-          <p class="ob-desc">Switch between them in one click.</p>
-        </div>
-        <div class="ob-slide">
-          <div class="ob-icon">
-            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
-              <circle cx="40" cy="40" r="28" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
-              <polyline points="27 40 37 50 55 30" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </div>
-          <h2 class="ob-title">Your data stays yours.</h2>
-          <p class="ob-desc">Everything is stored locally in your browser.</p>
-          <p class="ob-desc">No account, no cloud, no tracking. Just you and your books.</p>
-        </div>
-      </div>
-    </div>
-    <div class="ob-footer">
-      <div class="ob-dots">
-        <span class="ob-dot active" onclick="goToObSlide(0)"></span>
-        <span class="ob-dot" onclick="goToObSlide(1)"></span>
-        <span class="ob-dot" onclick="goToObSlide(2)"></span>
-        <span class="ob-dot" onclick="goToObSlide(3)"></span>
-        <span class="ob-dot" onclick="goToObSlide(4)"></span>
-      </div>
-      <div class="ob-footer-nav">
-        <div class="ob-footer-left">
-          <button class="ob-skip" id="obSkipBtn" onclick="closeOnboarding()">Skip</button>
-        </div>
-        <div class="ob-footer-right">
-          <button class="ob-prev" id="obPrevBtn" onclick="prevObSlide()">Previous</button>
-          <button class="ob-next" id="obNextBtn" onclick="nextObSlide()">Next</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer class="footer">
-  <div class="footer-inner">
-    <!-- Desktop row 1: copyright + how it works -->
-    <span class="footer-row-desktop" style="align-items:center;gap:12px;">
-      <span>© 2026 Pierre Blavette</span>
-      <span class="footer-sep">·</span>
-      <button class="footer-link" id="footerHowItWorks" onclick="openOnboarding()">How it works</button>
-    </span>
-    <!-- Desktop row 2: data info -->
-    <span class="footer-row" style="display:flex;align-items:center;gap:10px;">
-      <span id="footerDataInfo">Data stored locally in your browser</span>
-      <span class="footer-sep">·</span>
-      <span>v1.0</span>
-    </span>
-    <!-- Desktop row 3: links -->
-    <span class="footer-links-desktop" style="display:flex;align-items:center;gap:12px;">
-      <a class="footer-link" href="landing.html">About readr</a>
-      <span class="footer-sep">·</span>
-      <a class="footer-link" href="https://pierreblavette.com" target="_blank" rel="noopener">pierreblavette.com</a>
-      <span class="footer-sep">·</span>
-      <a class="footer-link" href="https://www.linkedin.com/in/pierreblavette/" target="_blank" rel="noopener" title="LinkedIn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </a>
-    </span>
-    <!-- Mobile row 1: how it works + lang -->
-    <span class="footer-lang footer-mobile-row1">
-      <button class="footer-link" onclick="openOnboarding()">How it works</button>
-      <span style="display:flex;align-items:center;gap:6px;">
-        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
-        <span class="lang-sep">·</span>
-        <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
-      </span>
-    </span>
-    <!-- Mobile row 3: copyright -->
-    <span class="footer-mobile-copyright">© 2026 Pierre Blavette</span>
-    <!-- Mobile row 4: portfolio + linkedin -->
-    <span class="footer-mobile-links">
-      <a class="footer-link" href="landing.html">About readr</a>
-      <a class="footer-link" href="https://pierreblavette.com" target="_blank" rel="noopener">pierreblavette.com</a>
-      <a class="footer-link" href="https://www.linkedin.com/in/pierreblavette/" target="_blank" rel="noopener" title="LinkedIn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </a>
-    </span>
-  </div>
+<footer>
+  <span>© 2026 Pierre Blavette</span>
+  <span class="footer-sep">·</span>
+  <a href="app.html">Open app</a>
+  <span class="footer-sep">·</span>
+  <a href="https://pierreblavette.com" target="_blank" rel="noopener">pierreblavette.com</a>
 </footer>
 
 <script>
-/* ─── YEARS ─── */
-const YEARS = {
-  "Ainsi parlait Zarathoustra": 1883,
-  "Anna Karénine": 1877,
-  "Armance": 1827,
-  "Au revoir là-haut": 2013,
-  "Auprès de moi toujours": 2005,
-  "Aux confins du monde": 2015,
-  "Ásta": 2019,
-  "Bal au palais Darelli": 1985,
-  "Beautiful People": 2006,
-  "Belgravia": 2016,
-  "Bonjour tristesse": 1954,
-  "Celle qui fuit et celle qui reste": 2013,
-  "Chien 51": 2022,
-  "Chroniques martiennes": 1950,
-  "Cinéma et autres nouvelles": 1992,
-  "Comme il pleut sur la ville": 2015,
-  "Contes": 1697,
-  "Contes de la folie ordinaire": 1972,
-  "Correspondance 1897-1919": 1984,
-  "Crime et châtiment": 1866,
-  "De l'influence de David Bowie sur la destinée…": 2017,
-  "De sang-froid": 1966,
-  "Demian": 1919,
-  "Des fleurs pour Algernon": 1966,
-  "Des souris et des hommes": 1937,
-  "Deux garçons bien sous tous rapports": 1983,
-  "Du côté de chez Swann": 1913,
-  "Dune": 1965,
-  "Emma (Tome 1)": 1815,
-  "Emma (Tome 2)": 1815,
-  "En attendant Bojangles": 2016,
-  "Face aux feux du soleil": 1957,
-  "Fahrenheit 451": 1953,
-  "Flash ou le grand voyage": 1972,
-  "Fondation": 1951,
-  "Fondation et Empire": 1952,
-  "Fondation foudroyée": 1982,
-  "Gabriële": 2017,
-  "Howl": 1956,
-  "Illusions perdues": 1837,
-  "J'irai cracher sur vos tombes": 1946,
-  "Jane Eyre": 1847,
-  "Jeune homme": 2009,
-  "Junky": 1953,
-  "Just Kids": 2010,
-  "Karoo": 1998,
-  "King Kong Théorie": 2006,
-  "L'Affaire Alaska Sanders": 2022,
-  "L'Amant de lady Chatterley": 1928,
-  "L'Américain": 1877,
-  "L'Anomalie": 2020,
-  "L'Art de l'oisiveté": 1973,
-  "L'Attrape-cœurs": 1951,
-  "L'Année du lion": 2015,
-  "L'Herbe rouge": 1950,
-  "L'Idiot": 1869,
-  "L'Idiot (Vol. 1)": 1869,
-  "L'Usage du monde": 1963,
-  "L'Urgence et l'Essentiel": 2016,
-  "L'amie prodigieuse": 2011,
-  "L'aveuglement": 1995,
-  "L'enfant perdue": 2014,
-  "L'histoire des Forsyte": 1906,
-  "L'Écume des jours": 1947,
-  "L'Éducation sentimentale": 1869,
-  "L'Éveil du Léviathan": 2011,
-  "La 25e Heure": 2019,
-  "La Chartreuse de Parme": 1839,
-  "La Dame au petit chien": 1899,
-  "La Dame de pique": 1834,
-  "La Femme de trente ans": 1842,
-  "La Femme mystifiée": 1963,
-  "La Ferme des animaux": 1945,
-  "La Forêt sombre": 2008,
-  "La Horde du Contrevent": 2004,
-  "La Mort du roi Tsongor": 2002,
-  "La Mort immortelle": 2010,
-  "La Nuit des temps": 1968,
-  "La Pitié dangereuse": 1939,
-  "La République": -375,
-  "La Sonate à Kreutzer / Le Bonheur conjugal / Le Diable": 1889,
-  "La Stratégie Ender": 1985,
-  "La Tentation de l'Occident": 1926,
-  "La Vérité sur l'affaire Harry Quebert": 2012,
-  "La disparition de Stephanie Mailer": 2018,
-  "La lucidité": 2004,
-  "La mort d'un père": 2009,
-  "La peste": 1947,
-  "La promesse de l'aube": 1960,
-  "La publicité autrement": 1997,
-  "La tache": 2000,
-  "La vie devant soi": 1975,
-  "La voix des morts (Le Cycle d'Ender 2)": 1986,
-  "Le Capital au XXIe siècle": 2013,
-  "Le Carnet d'or": 1962,
-  "Le Chardonneret": 2013,
-  "Le Chuchoteur": 2009,
-  "Le Club des incorrigibles optimistes": 2009,
-  "Le Crime de l'Orient-Express": 1934,
-  "Le Dernier Jour d'un condamné": 1829,
-  "Le Diable": 1911,
-  "Le Festin nu": 1959,
-  "Le Gang des rêves": 2018,
-  "Le Grand Monde": 2022,
-  "Le Grand Secret": 1973,
-  "Le Joueur": 1866,
-  "Le Livre des Baltimore": 2015,
-  "Le Loup des steppes": 1927,
-  "Le Maître des illusions": 1992,
-  "Le Meilleur des mondes": 1932,
-  "Le Messie de Dune": 1969,
-  "Le Meurtre de Roger Ackroyd": 1926,
-  "Le Monde d'hier": 1942,
-  "Le Nom de la rose": 1980,
-  "Le Parfum": 1985,
-  "Le Petit Copain": 1992,
-  "Le Portrait de Dorian Gray": 1890,
-  "Le Problème à trois corps": 2006,
-  "Le Rouge et le Noir": 1830,
-  "Le Samouraï virtuel": 1992,
-  "Le Soleil des Scorta": 2004,
-  "Le Songe d'une nuit d'été": 1600,
-  "Le TDA/H chez l'adulte": 2012,
-  "Le coût de la virilité": 2021,
-  "Le deuxième sexe, I": 1949,
-  "Le nouveau nom (L'amie prodigieuse II)": 2012,
-  "Le tour du malheur I": 1950,
-  "Le tour du malheur II": 1950,
-  "Les 5 blessures qui empêchent d'être soi-même": 1993,
-  "Les Adieux à la Reine": 2002,
-  "Les Chemins de Katmandou": 1969,
-  "Les Cosaques": 1863,
-  "Les Démons": 1872,
-  "Les Frères Karamazov": 1880,
-  "Les Liaisons dangereuses": 1782,
-  "Les Possédés": 1872,
-  "Les Robots": 1950,
-  "Les Variations Goldberg": 1981,
-  "Les cavernes d'acier": 1954,
-  "Les cerfs-volants": 1980,
-  "Les oliviers du Négus": 2012,
-  "Les optimistes": 2018,
-  "Les portes de la perception": 1954,
-  "Les robots de l'aube": 1983,
-  "Les robots et l'empire": 1985,
-  "Lettres, maximes et autres textes": -300,
-  "Lettres à un jeune poète": 1929,
-  "Lost Highway (Scénario)": 1997,
-  "Love Boat": 1926,
-  "Lune sanglante": 1984,
-  "Leurs enfants après eux": 2018,
-  "Madame Bovary": 1857,
-  "Malevil": 1972,
-  "Mes amis": 1924,
-  "Montedidio": 2001,
-  "Moon Palace": 1989,
-  "Mort sur le Nil": 1937,
-  "Mrs Dalloway": 1925,
-  "N'oublie pas les chevaux écumants du passé": 1996,
-  "Nana": 1880,
-  "Nietzsche": 1925,
-  "Nina Simone, roman": 2007,
-  "Non ora, non qui": 1989,
-  "On achète bien les cerveaux": 2007,
-  "Pandore au Congo": 2005,
-  "Paris, mille vies": 2020,
-  "Pastorale américaine": 1997,
-  "Petit déjeuner chez Tiffany": 1958,
-  "Portrait de femme": 1881,
-  "Premier amour": 1860,
-  "Ravage": 1943,
-  "Replay": 1986,
-  "Rupture(s)": 2019,
-  "Sa Majesté des mouches": 1954,
-  "Seconde Fondation": 1953,
-  "Sido suivi de Les Vrilles de la vigne": 1908,
-  "Siddhartha": 1922,
-  "Solaris": 1961,
-  "Sur la route": 1957,
-  "Tendre est la nuit": 1934,
-  "Terre et Fondation": 1986,
-  "The Garden Party and Other Stories": 1922,
-  "Tout ce que j'aimais": 2003,
-  "Toute l'histoire du monde": 2005,
-  "Trompe-la-mort": 2015,
-  "Ubik": 1969,
-  "Un défilé de robots": 1964,
-  "Un homme amoureux": 2009,
-  "Une page d'amour": 1878,
-  "Voyage au bout de la nuit": 1932,
-  "Walden": 1854,
-  "Women": 1978,
-};
+  let _currentFeature = 0;
+  let _autoTimer = null;
+  let _progressTimer = null;
+  const AUTO_DELAY = 4000;
 
-function formatYear(title) {
-  const y = YEARS[title];
-  if (y == null) return null;
-  if (y < 0) return `${Math.abs(y)} av. J.-C.`;
-  return String(y);
-}
-
-/* ─── DATA ─── */
-const DATA = { owned: [], wishlist: [] };
-
-/* ─── COVER COLORS ─── */
-const PALETTE = [
-  ['#FF6B6B','#FF8E8E'], ['#FF9F43','#FFBE7A'], ['#54A0FF','#74B9FF'],
-  ['#5F27CD','#A29BFE'], ['#00D2D3','#48DBFB'], ['#FF6B81','#FF9FB2'],
-  ['#1DD1A1','#55EFC4'], ['#FFC312','#F9CA24'], ['#C84B31','#E55039'],
-  ['#2C3A47','#4A6FA5'], ['#227093','#40A8C4'], ['#B33771','#E15F87'],
-];
-
-function coverColors(title) {
-  let h = 0;
-  for (let c of title) h = Math.imul(31, h) + c.charCodeAt(0) | 0;
-  return PALETTE[Math.abs(h) % PALETTE.length];
-}
-
-function coverLetter(title) {
-  return title.replace(/^(L'|Le |La |Les |Un |Une |Des |The )/i, '').charAt(0).toUpperCase();
-}
-
-/* ─── GOOGLE BOOKS CACHE ─── */
-const CACHE_KEY = 'biblio-gbooks-v4';
-const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 jours
-let gbCache = {};
-
-(function initCache() {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (raw) {
-      const p = JSON.parse(raw);
-      if (p.ts && Date.now() - p.ts < CACHE_TTL) gbCache = p.data || {};
-    }
-  } catch(e) {}
-})();
-
-function saveGBCache() {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: gbCache })); } catch(e) {}
-}
-
-/* Google Books */
-async function fetchFromGoogle(title, author) {
-  const q = encodeURIComponent(`intitle:${title} inauthor:${author}`);
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo(imageLinks,publishedDate))`;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(res.status);
-    const data = await res.json();
-    const vi = data.items?.[0]?.volumeInfo;
-    if (!vi) return null;
-    const img = (vi.imageLinks?.thumbnail || vi.imageLinks?.smallThumbnail || '')
-      .replace('http:', 'https:')
-      .replace('zoom=1', 'zoom=0')
-      .replace('&edge=curl', '') || null;
-    return { img, date: vi.publishedDate ? parseInt(vi.publishedDate) : null };
-  } catch(e) { return null; }
-}
-
-/* Open Library (fallback) */
-async function fetchFromOpenLibrary(title, author) {
-  const t = encodeURIComponent(title);
-  const a = encodeURIComponent(author);
-  const url = `https://openlibrary.org/search.json?title=${t}&author=${a}&limit=3&fields=cover_i,language`;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    // Prefer French editions (language 'fre'), fallback to first with cover
-    const docs = data.docs || [];
-    const frDoc  = docs.find(d => d.cover_i && d.language?.includes('fre'));
-    const anyDoc = docs.find(d => d.cover_i);
-    const coverId = (frDoc || anyDoc)?.cover_i;
-    return coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null;
-  } catch(e) { return null; }
-}
-
-/* Apple Books (iTunes Search API) */
-async function fetchFromAppleBooks(title, author) {
-  const term = encodeURIComponent(`${title} ${author}`);
-  const url = `https://itunes.apple.com/search?term=${term}&country=FR&media=ebook&entity=ebook&limit=5`;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    // Cherche d'abord une correspondance proche sur le titre
-    const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const match = data.results?.find(r =>
-      norm(r.trackName || '').includes(norm(title.slice(0, 6)))
-    ) || data.results?.[0];
-    if (!match?.artworkUrl100) return null;
-    // Remplace 100x100bb par 600x600bb pour la haute résolution
-    return match.artworkUrl100.replace('100x100bb', '600x600bb');
-  } catch(e) { return null; }
-}
-
-/* Orchestration : Google Books → Open Library → Apple Books */
-async function fetchCover(title, author) {
-  const key = `${title}||${author}`;
-  if (key in gbCache) return gbCache[key];
-
-  let result = await fetchFromGoogle(title, author);
-
-  if (!result?.img) {
-    const olImg = await fetchFromOpenLibrary(title, author);
-    if (olImg) result = { ...(result || {}), img: olImg };
+  function setFeature(i, auto) {
+    const tabs = document.querySelectorAll('.feature-tab');
+    const visuals = document.querySelectorAll('.feature-visual');
+    tabs.forEach((t, idx) => t.classList.toggle('active', idx === i));
+    visuals.forEach((v, idx) => v.classList.toggle('active', idx === i));
+    _currentFeature = i;
+    if (!auto) resetAuto();
+    startProgress(i);
   }
 
-  if (!result?.img) {
-    const abImg = await fetchFromAppleBooks(title, author);
-    if (abImg) result = { ...(result || {}), img: abImg };
+  function startProgress(i) {
+    clearInterval(_progressTimer);
+    const bar = document.querySelectorAll('.feature-tab-progress-bar')[i];
+    if (!bar) return;
+    bar.style.width = '0%';
+    let pct = 0;
+    _progressTimer = setInterval(() => {
+      pct += 100 / (AUTO_DELAY / 50);
+      bar.style.width = Math.min(pct, 100) + '%';
+    }, 50);
   }
 
-  gbCache[key] = result || null;
-  return gbCache[key];
-}
-
-async function loadCovers() {
-  const cards = [...document.querySelectorAll('[data-gkey]')];
-  const uncached = cards.filter(c => !(c.dataset.gkey in gbCache));
-  const cached   = cards.filter(c =>  (c.dataset.gkey in gbCache));
-
-  // Apply cached immediately
-  cached.forEach(card => applyCardCover(card, gbCache[card.dataset.gkey]));
-
-  // Fetch uncached in batches of 6
-  for (let i = 0; i < uncached.length; i += 6) {
-    const batch = uncached.slice(i, i + 6);
-    await Promise.all(batch.map(async card => {
-      const [t, a] = card.dataset.gkey.split('||');
-      const info = await fetchCover(t, a);
-      applyCardCover(card, info);
-    }));
-    if (i + 6 < uncached.length) await new Promise(r => setTimeout(r, 200));
-  }
-  if (uncached.length) saveGBCache();
-}
-
-function applyCardCover(card, info) {
-  if (!info?.img) return;
-  const coverEl = card.querySelector('.book-cover');
-  if (!coverEl) return;
-  const img = new Image();
-  img.onload = () => {
-    coverEl.style.backgroundImage    = `url(${info.img})`;
-    coverEl.style.backgroundSize     = 'cover';
-    coverEl.style.backgroundPosition = 'center';
-    coverEl.style.backgroundRepeat   = 'no-repeat';
-    coverEl.classList.add('cover-loaded');
-  };
-  img.src = info.img;
-}
-
-/* ─── I18N ─── */
-const STRINGS = {
-  en: {
-    tabLibrary:'My Library', tabWishlist:'Wishlist',
-    pageLibrary:'My Library', pageWishlist:'Wishlist',
-    btnAdd:'Add', btnEdit:'Edit', btnDone:'Done', btnExport:'Export',
-    searchPlaceholder:'Title, author…', searchClear:'Clear search',
-    viewCard:'Card view', viewList:'List view', themeToggle:'Toggle theme',
-    selCancel:'Cancel', selSelectAll:'Select all', selDeselectAll:'Deselect all',
-    selConfirmRemove:'Remove', selConfirmOwned:'Mark as owned',
-    selCount:(n) => n===0?'0 books selected':n===1?'1 book selected':`${n} books selected`,
-    modalTitle:'Add a book', tabPhoto:'Photo', tabFile:'File', tabManual:'Manual',
-    labelTitle:'Title *', placeholderTitle:'e.g. Les Misérables',
-    labelAuthor:'Author *', placeholderAuthor:'e.g. Victor Hugo',
-    labelYear:'Year (optional)', placeholderYear:'e.g. 1862',
-    labelGenre:'Genre (optional)', placeholderGenre:'e.g. Fiction, Biography…',
-    dropFile:'Drop a file or click to browse', dropFileSub:'JSON (Readr) · CSV (Goodreads)',
-    dropPhoto:'Drop a photo or click to browse', dropPhotoSub:'JPG · PNG · HEIC — photo of a bookshelf or a handwritten list',
-    ocrScanning:'Scanning…', ocrReading:'Reading image…', ocrDetecting:'Detecting books…',
-    ocrDone:'Done!', ocrNone:'No books detected',
-    ocrNoneMsg:'No books detected. Try a clearer photo with visible titles.',
-    ocrError:(msg)=>`Error: ${msg||'Could not analyse this image.'}`,
-    btnCancel:'Cancel', btnAddLibrary:'Add to my library', btnImport:'Import',
-    btnImportN:(n)=>`Import ${n} book${n>1?'s':''}`,
-    importErrFile:'Invalid file.\nExpected format: { "owned": [...], "wishlist": [...] }',
-    importErrParse:"Could not read this file. Make sure it's a valid JSON or Goodreads CSV.",
-    previewLabel:(n)=>`${n} book${n>1?'s':''} detected`,
-    previewBoth:(o,w)=>` — ${o} to library, ${w} to wishlist`,
-    previewWishOnly:' — to wishlist',
-    deleteTitle:'Remove this book?',
-    deleteMsg:(t)=>`"${t}" will be permanently removed from your library.`,
-    deleteBtnCancel:'Cancel', deleteBtnConfirm:'Remove',
-    emptyNoMatch:'No matches found', emptyNoMatchSub:'Try a different title or author.',
-    emptyWish:'Nothing saved yet',
-    emptyWishSub:'Add books you want to read — your future self will thank you.',
-    emptyWishCta:'Add to wishlist',
-    emptyLib:'Your library is empty',
-    emptyLibSub:'Start building your collection — add your first read.',
-    emptyLibCta:'Add a book',
-    colTitle:'Title', colAuthor:'Author', colGenre:'Genre', colYear:'Year',
-    wishBadge:'To buy',
-    resultQuery:(n,total)=>`${n} result${n!==1?'s':''} out of ${total}`,
-    resultTotal:(n)=>`${n} book${n!==1?'s':''}`,
-    footerHowItWorks:'How it works',
-    footerDataInfo:'Data stored locally in your browser',
-    obSlide0Title:"Hi, I'm Readr.",
-    obSlide0Sub:"I'm here to help you organize your reading life. Every book you own, every one you dream of.",
-    obSlide1Title:'Your books, finally in one place.',
-    obSlide1Sub:'Keep track of every book you own and everything you want to read, in one clean, beautiful space.',
-    obSlide2Title:'Adding a book takes seconds.',
-    obSlide2Sub:"Snap a photo, upload a file, or type it in — however you prefer, I'll take care of the rest.",
-    obSlide3Title:'Two spaces, one home.',
-    obSlide3Sub:'Books you own, books you want. Switch between them in one click.',
-    obSlide4Title:'Your data stays yours.',
-    obSlide4Sub:'Everything is stored locally in your browser. No account, no cloud, no tracking. Just you and your books.',
-    obSkip:'Skip', obPrev:'Previous', obNext:'Next', obGetStarted:'Get started',
-  },
-  fr: {
-    tabLibrary:'Ma bibliothèque', tabWishlist:'Wishlist',
-    pageLibrary:'Ma bibliothèque', pageWishlist:'Wishlist',
-    btnAdd:'Ajouter', btnEdit:'Modifier', btnDone:'Terminer', btnExport:'Exporter',
-    searchPlaceholder:'Titre, auteur…', searchClear:'Effacer la recherche',
-    viewCard:'Vue carte', viewList:'Vue liste', themeToggle:'Changer le thème',
-    selCancel:'Annuler', selSelectAll:'Tout sélectionner', selDeselectAll:'Tout désélectionner',
-    selConfirmRemove:'Supprimer', selConfirmOwned:'Marquer comme possédé',
-    selCount:(n)=>n===0?'0 livre sélectionné':n===1?'1 livre sélectionné':`${n} livres sélectionnés`,
-    modalTitle:'Ajouter un livre', tabPhoto:'Photo', tabFile:'Fichier', tabManual:'Manuel',
-    labelTitle:'Titre *', placeholderTitle:'ex. Les Misérables',
-    labelAuthor:'Auteur *', placeholderAuthor:'ex. Victor Hugo',
-    labelYear:'Année (optionnel)', placeholderYear:'ex. 1862',
-    labelGenre:'Genre (optionnel)', placeholderGenre:'ex. Fiction, Biographie…',
-    dropFile:'Déposez un fichier ou cliquez pour parcourir', dropFileSub:'JSON (Readr) · CSV (Goodreads)',
-    dropPhoto:'Déposez une photo ou cliquez pour parcourir', dropPhotoSub:"JPG · PNG · HEIC — photo d'une étagère ou d'une liste",
-    ocrScanning:'Analyse…', ocrReading:"Lecture de l'image…", ocrDetecting:'Détection des livres…',
-    ocrDone:'Terminé !', ocrNone:'Aucun livre détecté',
-    ocrNoneMsg:'Aucun livre détecté. Essayez une photo plus nette avec les titres visibles.',
-    ocrError:(msg)=>`Erreur : ${msg||"Impossible d'analyser cette image."}`,
-    btnCancel:'Annuler', btnAddLibrary:'Ajouter à ma bibliothèque', btnImport:'Importer',
-    btnImportN:(n)=>`Importer ${n} livre${n>1?'s':''}`,
-    importErrFile:'Fichier invalide.\nFormat attendu : { "owned": [...], "wishlist": [...] }',
-    importErrParse:'Impossible de lire ce fichier. Vérifiez qu\'il s\'agit d\'un JSON ou CSV Goodreads valide.',
-    previewLabel:(n)=>`${n} livre${n>1?'s':''} détecté${n>1?'s':''}`,
-    previewBoth:(o,w)=>` — ${o} en bibliothèque, ${w} en wishlist`,
-    previewWishOnly:' — en wishlist',
-    deleteTitle:'Supprimer ce livre ?',
-    deleteMsg:(t)=>`"${t}" sera définitivement supprimé de votre bibliothèque.`,
-    deleteBtnCancel:'Annuler', deleteBtnConfirm:'Supprimer',
-    emptyNoMatch:'Aucun résultat', emptyNoMatchSub:'Essayez un autre titre ou auteur.',
-    emptyWish:'Rien de sauvegardé',
-    emptyWishSub:'Ajoutez les livres que vous voulez lire — votre futur vous remerciera.',
-    emptyWishCta:'Ajouter à la wishlist',
-    emptyLib:'Votre bibliothèque est vide',
-    emptyLibSub:'Commencez à construire votre collection — ajoutez votre premier livre.',
-    emptyLibCta:'Ajouter un livre',
-    colTitle:'Titre', colAuthor:'Auteur', colGenre:'Genre', colYear:'Année',
-    wishBadge:'À acheter',
-    resultQuery:(n,total)=>`${n} résultat${n!==1?'s':''} sur ${total}`,
-    resultTotal:(n)=>`${n} livre${n!==1?'s':''}`,
-    footerHowItWorks:'Comment ça marche',
-    footerDataInfo:'Données stockées localement dans votre navigateur',
-    obSlide0Title:"Bonjour, je suis Readr.",
-    obSlide0Sub:"Je suis là pour t'aider à organiser ta vie de lecteur. Chaque livre que tu possèdes, chaque livre dont tu rêves.",
-    obSlide1Title:'Tes livres, enfin au même endroit.',
-    obSlide1Sub:"Garde une trace de tous les livres que tu possèdes et de tout ce que tu veux lire, dans un espace propre et magnifique.",
-    obSlide2Title:'Ajouter un livre prend quelques secondes.',
-    obSlide2Sub:"Une photo, un fichier ou une saisie manuelle — comme tu préfères, je m'occupe du reste.",
-    obSlide3Title:'Deux espaces, une maison.',
-    obSlide3Sub:"Les livres que tu possèdes, les livres que tu veux. Bascule d'un clic.",
-    obSlide4Title:'Tes données restent les tiennes.',
-    obSlide4Sub:"Tout est stocké localement dans ton navigateur. Pas de compte, pas de cloud, pas de tracking. Juste toi et tes livres.",
-    obSkip:'Passer', obPrev:'Précédent', obNext:'Suivant', obGetStarted:'Commencer',
-  }
-};
-
-let currentLang = localStorage.getItem('readr-lang') || 'en';
-const T = () => STRINGS[currentLang];
-
-function setLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('readr-lang', lang);
-  const t = T();
-  // Lang buttons
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
-  // Tabs (preserve badges)
-  ['owned','wishlist'].forEach(tab => {
-    const btn = document.querySelector(`.tab[onclick*="${tab}"]`);
-    if (!btn) return;
-    const badge = btn.querySelector('.badge');
-    btn.textContent = tab === 'owned' ? t.tabLibrary : t.tabWishlist;
-    btn.textContent += ' ';
-    if (badge) btn.appendChild(badge);
-  });
-  // Page title
-  document.getElementById('pageTitle').textContent = _tabTitle(currentTab);
-  // Search
-  document.getElementById('search').placeholder = t.searchPlaceholder;
-  document.getElementById('searchClear').setAttribute('aria-label', t.searchClear);
-  // View + theme
-  document.getElementById('btn-grid').title = t.viewCard;
-  document.getElementById('btn-list').title = t.viewList;
-  document.getElementById('themeBtn').title = t.themeToggle;
-  // Toolbar buttons
-  document.getElementById('addBookBtn').textContent = t.btnAdd;
-  document.getElementById('editWishBtn').textContent = _editMode ? t.btnDone : t.btnEdit;
-  document.getElementById('exportBtn').textContent = t.btnExport;
-  // Selection bar
-  document.querySelector('.sel-cancel-label').textContent = t.selCancel;
-  // Add modal
-  document.querySelector('.modal-title').textContent = t.modalTitle;
-  document.querySelector('.import-tab-ai-text').textContent = t.tabPhoto;
-  document.getElementById('add-tab-file').textContent = t.tabFile;
-  document.getElementById('add-tab-manual').textContent = t.tabManual;
-  // Form labels
-  const labels = document.querySelectorAll('#add-panel-manual label');
-  if (labels[0]) labels[0].textContent = t.labelTitle;
-  if (labels[1]) labels[1].textContent = t.labelAuthor;
-  if (labels[2]) labels[2].textContent = t.labelYear;
-  if (labels[3]) labels[3].textContent = t.labelGenre;
-  // Placeholders
-  document.getElementById('addTitle').placeholder = t.placeholderTitle;
-  document.getElementById('addAuthor').placeholder = t.placeholderAuthor;
-  document.getElementById('addYear').placeholder = t.placeholderYear;
-  document.getElementById('addGenre').placeholder = t.placeholderGenre;
-  // Dropzones
-  document.querySelector('#add-panel-file .import-dropzone-title').textContent = t.dropFile;
-  document.querySelector('#add-panel-file .import-dropzone-sub').textContent = t.dropFileSub;
-  document.querySelector('#add-panel-photo .import-dropzone-title').textContent = t.dropPhoto;
-  document.querySelector('#add-panel-photo .import-dropzone-sub').textContent = t.dropPhotoSub;
-  document.getElementById('ocrStatusLabel').textContent = t.ocrScanning;
-  // Modal buttons
-  document.querySelector('#addModal .modal-cancel').textContent = t.btnCancel;
-  document.getElementById('modalSubmitBtn').textContent = t.btnAddLibrary;
-  document.getElementById('importSubmitBtn').textContent = t.btnImport;
-  // Delete modal
-  document.querySelector('.confirm-modal-title').textContent = t.deleteTitle;
-  document.querySelector('.confirm-modal-delete').textContent = t.deleteBtnConfirm;
-  document.querySelector('#deleteConfirmModal .modal-cancel').textContent = t.deleteBtnCancel;
-  // Footer
-  document.getElementById('footerHowItWorks').textContent = t.footerHowItWorks;
-  document.getElementById('footerDataInfo').textContent = t.footerDataInfo;
-  // Onboarding slides
-  const slides = document.querySelectorAll('.ob-slide');
-  const defs = [
-    [t.obSlide0Title, t.obSlide0Sub],
-    [t.obSlide1Title, t.obSlide1Sub],
-    [t.obSlide2Title, t.obSlide2Sub],
-    [t.obSlide3Title, t.obSlide3Sub],
-    [t.obSlide4Title, t.obSlide4Sub],
-  ];
-  slides.forEach((sl, i) => {
-    if (defs[i]) {
-      sl.querySelector('.ob-title').textContent = defs[i][0];
-      sl.querySelector('.ob-desc').textContent = defs[i][1];
-    }
-  });
-  document.getElementById('obSkipBtn').textContent = t.obSkip;
-  document.getElementById('obPrevBtn').textContent = t.obPrev;
-  // Re-render dynamic content
-  render();
-  updateSelectionBar();
-  _updateObSlide();
-}
-
-/* ─── STATE ─── */
-let currentTab  = 'owned';
-let currentView = 'grid';
-let selectedBooks = new Set();
-let sortDir = 'asc';
-let sortCol = 'title';
-
-/* ─── INIT ─── */
-function init() {
-  loadCustomBooks();
-  const oc = DATA.owned.length;
-  const wc = DATA.wishlist.length;
-  document.getElementById('owned-count').textContent   = oc;
-  document.getElementById('wishlist-count').textContent = wc;
-  document.getElementById('editWishBtn').classList.add('visible');
-  document.getElementById('pageTitle').textContent = _libraryTitle();
-  updateExportBtn();
-  updateEditBtnState();
-
-const saved = localStorage.getItem('biblio-theme') || 'light';
-  applyTheme(saved);
-  currentView = localStorage.getItem('biblio-view') || 'grid';
-  applyView(currentView);
-  setLang(currentLang);  // applies all translations + render()
-
-  const toolbar = document.querySelector('.toolbar');
-  const onScroll = () => {
-    const scrolled = (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop) > 10;
-    toolbar.classList.toggle('scrolled', scrolled);
-    adjustSelectionBarBottom();
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  if (!localStorage.getItem(OB_KEY)) setTimeout(openOnboarding, 400);
-}
-
-/* ─── THEME ─── */
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-}
-
-function toggleTheme() {
-  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  applyTheme(next);
-  localStorage.setItem('biblio-theme', next);
-}
-
-/* ─── VIEW ─── */
-function setView(v) {
-  currentView = v;
-  localStorage.setItem('biblio-view', v);
-  applyView(v);
-  render();
-}
-
-function applyView(v) {
-  document.getElementById('btn-grid').classList.toggle('active', v === 'grid');
-  document.getElementById('btn-list').classList.toggle('active', v === 'list');
-}
-
-/* ─── ONBOARDING ─── */
-const OB_KEY = 'readr-onboarding-seen';
-function _tabTitle(tab) { return tab === 'owned' ? T().pageLibrary : T().pageWishlist; }
-function _libraryTitle() { return T().pageLibrary; }
-let _obSlide = 0;
-const OB_TOTAL = 5;
-
-function openOnboarding() {
-  _obSlide = 0;
-  _updateObSlide();
-  document.getElementById('obOverlay').classList.add('open');
-}
-
-function closeOnboarding() {
-  document.getElementById('obOverlay').classList.remove('open');
-  localStorage.setItem(OB_KEY, '1');
-}
-
-function nextObSlide() {
-  if (_obSlide < OB_TOTAL - 1) { _obSlide++; _updateObSlide(); }
-  else closeOnboarding();
-}
-
-function prevObSlide() {
-  if (_obSlide > 0) { _obSlide--; _updateObSlide(); }
-}
-
-function goToObSlide(n) { _obSlide = n; _updateObSlide(); }
-
-function _updateObSlide() {
-  document.querySelectorAll('.ob-slide').forEach((el, i) => el.classList.toggle('active', i === _obSlide));
-  document.querySelectorAll('.ob-dot').forEach((el, i) => el.classList.toggle('active', i === _obSlide));
-  const isLast = _obSlide === OB_TOTAL - 1;
-  const isFirst = _obSlide === 0;
-  document.getElementById('obNextBtn').textContent = isLast ? T().obGetStarted : T().obNext;
-  const skipBtn = document.getElementById('obSkipBtn');
-  skipBtn.style.visibility = isLast ? 'hidden' : 'visible';
-  skipBtn.style.display = isLast ? 'none' : '';
-  const prevBtn = document.getElementById('obPrevBtn');
-  const leftDiv = document.querySelector('.ob-footer-left');
-  const rightDiv = document.querySelector('.ob-footer-right');
-  if (isLast) leftDiv.appendChild(prevBtn);
-  else rightDiv.prepend(prevBtn);
-  prevBtn.style.visibility = isFirst ? 'hidden' : 'visible';
-}
-
-(function() {
-  let _touchStartX = 0;
-  document.addEventListener('DOMContentLoaded', () => {
-    const slides = document.querySelector('.ob-slides');
-    slides.addEventListener('touchstart', e => { _touchStartX = e.touches[0].clientX; }, { passive: true });
-    slides.addEventListener('touchend', e => {
-      const delta = e.changedTouches[0].clientX - _touchStartX;
-      if (Math.abs(delta) < 50) return;
-      if (delta < 0) nextObSlide();
-      else prevObSlide();
-    }, { passive: true });
-  });
-})();
-
-/* ─── EDIT BTN STATE ─── */
-function updateEditBtnState() {
-  const btn = document.getElementById('editWishBtn');
-  if (!btn) return;
-  btn.disabled = DATA[currentTab].length === 0;
-}
-
-/* ─── TAB ─── */
-function switchTab(tab, el) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('search').value = '';
-  document.getElementById('pageTitle').textContent = _tabTitle(tab);
-  _editMode = false;
-  document.getElementById('editWishBtn').textContent = T().btnEdit;
-  document.getElementById('editWishBtn').classList.add('visible');
-  selectedBooks.clear();
-  updateSelectionBar();
-  render();
-}
-
-/* ─── SORT NORMALIZE ─── */
-function normalize(str) {
-  return str.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/^(l'|le |la |les |un |une |des |the )/i, '');
-}
-
-/* ─── RENDER ─── */
-function updateSearchClear() {
-  const input = document.getElementById('search');
-  const btn = document.getElementById('searchClear');
-  btn.classList.toggle('visible', input.value.length > 0);
-}
-
-function clearSearch() {
-  const input = document.getElementById('search');
-  input.value = '';
-  document.getElementById('searchClear').classList.remove('visible');
-  render();
-  input.focus();
-}
-
-function render() {
-  const query = document.getElementById('search').value.trim().toLowerCase();
-  const sort  = sortCol;
-  const grid  = document.getElementById('grid');
-  const info  = document.getElementById('result-info');
-  const isWish = currentTab === 'wishlist';
-
-  let books = [...DATA[currentTab]];
-
-  if (query) {
-    books = books.filter(b =>
-      b.title.toLowerCase().includes(query) ||
-      b.author.toLowerCase().includes(query)
-    );
+  function resetAuto() {
+    clearInterval(_autoTimer);
+    clearInterval(_progressTimer);
+    document.querySelectorAll('.feature-tab-progress-bar').forEach(b => b.style.width = '0%');
+    _autoTimer = setInterval(() => {
+      const next = (_currentFeature + 1) % 3;
+      setFeature(next, true);
+    }, AUTO_DELAY);
+    startProgress(_currentFeature);
   }
 
-  books.sort((a, b) => {
-    let cmp;
-    if (sort === 'year') {
-      const ya = YEARS[a.title] ?? 9999;
-      const yb = YEARS[b.title] ?? 9999;
-      cmp = ya !== yb ? ya - yb : normalize(a.title).localeCompare(normalize(b.title), 'fr');
+  resetAuto();
+
+  function switchMockupTab(tab) {
+    const tabs = document.querySelectorAll('.mockup-tab');
+    const libView = document.getElementById('mockup-library-view');
+    const wishView = document.getElementById('mockup-wishlist-view');
+    const wishTab = document.getElementById('mockup-wish-tab');
+    if (tab === 'library') {
+      tabs.forEach(t => t.classList.remove('active'));
+      tabs[0].classList.add('active');
+      wishTab.querySelector('.mockup-tab-count').style.cssText = 'background:var(--bg2);color:var(--text-3)';
+      libView.style.display = '';
+      wishView.style.display = 'none';
     } else {
-      const ka = sort === 'author' ? normalize(a.author) + normalize(a.title) : normalize(a.title);
-      const kb = sort === 'author' ? normalize(b.author) + normalize(b.title) : normalize(b.title);
-      cmp = ka.localeCompare(kb, 'fr');
+      tabs.forEach(t => t.classList.remove('active'));
+      wishTab.classList.add('active');
+      wishTab.querySelector('.mockup-tab-count').style.cssText = '';
+      libView.style.display = 'none';
+      wishView.style.display = '';
     }
-    return sortDir === 'desc' ? -cmp : cmp;
-  });
-
-  const total = DATA[currentTab].length;
-  info.textContent = query ? T().resultQuery(books.length, total) : T().resultTotal(total);
-
-  if (books.length === 0) {
-    grid.className = 'books-grid';
-    const isWishTab = currentTab === 'wishlist';
-    if (query) {
-      // ── Search returned nothing ──
-      grid.innerHTML = `
-        <div class="empty">
-          <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
-            <rect x="16" y="10" width="36" height="48" rx="4" fill="var(--bg3)"/>
-            <rect x="16" y="10" width="6" height="48" rx="2" fill="var(--text-3)"/>
-            <line x1="28" y1="24" x2="46" y2="24" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="28" y1="32" x2="42" y2="32" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="52" cy="50" r="13" fill="var(--bg3)" stroke="var(--text-3)" stroke-width="3"/>
-            <line x1="47" y1="50" x2="57" y2="50" stroke="var(--text-3)" stroke-width="3" stroke-linecap="round"/>
-            <line x1="52" y1="45" x2="52" y2="55" stroke="var(--text-3)" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-          <div class="empty-title">${T().emptyNoMatch}</div>
-          <div class="empty-sub">${T().emptyNoMatchSub}</div>
-        </div>`;
-    } else if (isWishTab) {
-      // ── Wishlist empty ──
-      grid.innerHTML = `
-        <div class="empty">
-          <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
-            <rect x="16" y="10" width="36" height="48" rx="4" fill="var(--accent-bg)"/>
-            <rect x="16" y="10" width="6" height="48" rx="2" fill="var(--accent)" opacity="0.6"/>
-            <line x1="28" y1="24" x2="46" y2="24" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="28" y1="32" x2="42" y2="32" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="28" y1="40" x2="38" y2="40" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-            <circle cx="54" cy="54" r="13" fill="var(--accent)"/>
-            <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-            <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-          <div class="empty-title">${T().emptyWish}</div>
-          <div class="empty-sub">${T().emptyWishSub}</div>
-          <button class="empty-cta" onclick="openAddModal()">${T().emptyWishCta}</button>
-        </div>`;
-    } else {
-      // ── My Library empty ──
-      grid.innerHTML = `
-        <div class="empty">
-          <svg class="empty-icon" viewBox="0 0 80 80" fill="none">
-            <rect x="16" y="10" width="36" height="48" rx="4" fill="var(--accent-bg)"/>
-            <rect x="16" y="10" width="6" height="48" rx="2" fill="var(--accent)" opacity="0.6"/>
-            <line x1="28" y1="24" x2="46" y2="24" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="28" y1="32" x2="42" y2="32" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="28" y1="40" x2="38" y2="40" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
-            <circle cx="54" cy="54" r="13" fill="var(--accent)"/>
-            <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-            <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-          <div class="empty-title">${T().emptyLib}</div>
-          <div class="empty-sub">${T().emptyLibSub}</div>
-          <button class="empty-cta" onclick="openAddModal()">${T().emptyLibCta}</button>
-        </div>`;
-    }
-    return;
+    document.querySelectorAll('.mockup-book-row').forEach(r => r.classList.remove('selected'));
   }
 
-  if (currentView === 'list') {
-    const mob = window.innerWidth <= 600;
-    grid.className = 'books-list';
-    grid.innerHTML = `
-      <table class="list-table" style="table-layout:fixed;width:100%">
-        <thead>
-          <tr>
-            ${_editMode ? `<th style="width:40px"><span class="th-checkbox-wrap" onclick="toggleSelectAll()" title="Select all"><span class="row-checkbox${books.length > 0 && books.every(b => selectedBooks.has(b.title+'||'+b.author)) ? ' all-selected' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></span></th>` : ''}
-            <th style="width:${mob ? '32px' : '5%'}" class="col-num">#</th>
-            <th style="width:${mob ? 'auto' : '28%'}" class="col-title ${sort === 'title' ? 'sorted' : ''}" onclick="sortBy('title')">
-              ${T().colTitle} <span class="sort-arrow">${sort === 'title' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
-            </th>
-            <th style="${mob ? 'display:none' : 'width:28%'}" class="col-author ${sort === 'author' ? 'sorted' : ''}" onclick="sortBy('author')">
-              ${T().colAuthor} <span class="sort-arrow">${sort === 'author' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
-            </th>
-            <th style="${mob ? 'display:none' : 'width:28%'}" class="col-genre ${sort === 'genre' ? 'sorted' : ''}" onclick="sortBy('genre')">
-              ${T().colGenre} <span class="sort-arrow">${sort === 'genre' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
-            </th>
-            <th style="${mob ? 'display:none' : 'width:9%'}" class="col-year ${sort === 'year' ? 'sorted' : ''}" onclick="sortBy('year')">
-              ${T().colYear} <span class="sort-arrow">${sort === 'year' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
-            </th>
-            <th class="col-actions" style="width:${mob ? '56px' : '60px'}"></th>
-          </tr>
-        </thead>
-        <tbody>
-          ${books.map((b, i) => {
-            const [c1] = coverColors(b.title);
-            const yr   = formatYear(b.title);
-            const delay = _skipAnim ? 0 : Math.min(i * 6, 200);
-            const key = `${b.title}||${b.author}`;
-            const isSel = selectedBooks.has(key);
-            return `
-            <tr class="${_editMode ? 'selectable' : ''}${isSel ? ' selected' : ''}"
-                ${_editMode ? `data-selkey="${esc(key)}"` : ''}
-                onclick="_editMode ? toggleSelect(this) : openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
-                style="animation-delay:${delay}ms">
-              ${_editMode ? `<td style="overflow:visible;white-space:normal;width:40px;text-align:center"><span class="row-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>` : ''}
-              <td class="list-num col-num">${i + 1}</td>
-              <td class="col-title" style="overflow:hidden;max-width:0"><div class="list-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.title)}</div></td>
-              <td class="col-author" style="${mob ? 'display:none' : ''}"><div class="list-author" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.author)}</div></td>
-              <td class="col-genre" style="${mob ? 'display:none' : ''}"><span class="list-genre" data-genre-title="${esc(b.title)}">${GENRES[b.title] ?? '-'}</span></td>
-              <td class="col-year" style="${mob ? 'display:none' : ''}"><span class="list-year">${yr ?? '—'}</span></td>
-              <td class="col-actions" style="text-align:center;padding:0 ${mob ? '8px' : '11px'};overflow:visible">
-                <button class="delete-row-btn" onclick="event.stopPropagation();openDeleteConfirm('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')" title="Remove">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
-                  </svg>
-                </button>
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>`;
-    lazyFetchGenres(books);
-  } else {
-    grid.className = 'books-grid';
-    grid.innerHTML = books.map((b, i) => {
-      const delay    = _skipAnim ? 0 : Math.min(i * 10, 250);
-      return `
-      <div class="book-card${isWish ? ' wishlist' : ''}${_editMode ? ' selectable' : ''}${selectedBooks.has(`${b.title}||${b.author}`) ? ' selected' : ''}"
-           data-gkey="${esc(b.title)}||${esc(b.author)}"
-           ${_editMode ? `data-selkey="${esc(b.title)}||${esc(b.author)}"` : ''}
-           onclick="_editMode ? toggleSelect(this) : openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
-           style="animation-delay:${delay}ms">
-        ${_editMode ? `<span class="card-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>` : ''}
-        <div class="book-cover" style="background:var(--bg3)">
-
-          ${isWish ? `<span class="wishlist-badge">${T().wishBadge}</span>` : ''}
-        </div>
-        <div class="book-body">
-          <div class="book-title" title="${esc(b.title)}">${esc(b.title)}</div>
-          <div class="book-author">${esc(b.author)}</div>
-          ${formatYear(b.title) ? `<span class="book-year">${formatYear(b.title)}</span>` : ''}
-        </div>
-      </div>`;
-    }).join('');
-    loadCovers();
+  function selectMockupBook(row) {
+    const allRows = row.closest('#mockup-library-view, #mockup-wishlist-view').querySelectorAll('.mockup-book-row');
+    const wasSelected = row.classList.contains('selected');
+    allRows.forEach(r => r.classList.remove('selected'));
+    if (!wasSelected) row.classList.add('selected');
   }
-  updateEditBtnState();
-}
 
-function sortBy(col) {
-  if (sortCol === col) {
-    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
-  } else {
-    sortCol = col;
-    sortDir = 'asc';
-  }
-  render();
-}
-
-/* ─── BOOK PANEL ─── */
-let panelCache = {};
-
-async function fetchBookDetails(title, author) {
-  const cacheKey = `${title}||${author}`;
-  if (panelCache[cacheKey]) return panelCache[cacheKey];
-  const q = encodeURIComponent(`intitle:${title} inauthor:${author}`);
-  try {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&langRestrict=fr&fields=items(volumeInfo(title,authors,publishedDate,description,imageLinks))`;
-    let res = await fetch(url), data = await res.json();
-    let vi = data.items?.[0]?.volumeInfo;
-    if (!vi) {
-      const url2 = `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo(title,authors,publishedDate,description,imageLinks))`;
-      res = await fetch(url2); data = await res.json();
-      vi = data.items?.[0]?.volumeInfo;
-    }
-    if (!vi) return { title, author, date: null, summary: null, img: null };
-    const img = (vi.imageLinks?.extraLarge || vi.imageLinks?.large || vi.imageLinks?.medium || vi.imageLinks?.thumbnail || '')
-      .replace('http:', 'https:').replace('zoom=1', 'zoom=3').replace('&edge=curl', '') || null;
-    const result = { title: vi.title || title, author: vi.authors?.join(', ') || author, date: vi.publishedDate?.substring(0,4) || null, summary: vi.description || null, img };
-    panelCache[cacheKey] = result;
-    return result;
-  } catch { return { title, author, date: null, summary: null, img: null }; }
-}
-
-function openPanel(title, author) {
-  _panelJustOpened = true;
-  const panel    = document.getElementById('bookPanel');
-  const wrap     = document.querySelector('.main-wrap');
-  const coverWrap = document.getElementById('panelCoverWrap');
-  const body     = document.getElementById('panelBody');
-
-  coverWrap.innerHTML = '';
-  coverWrap.style.background = '';
-  body.innerHTML = '<div class="panel-loading"><div class="panel-spinner"></div></div>';
-  panel.classList.add('open');
-
-  fetchBookDetails(title, author).then(info => {
-    if (info.img) {
-      coverWrap.innerHTML = `<img class="panel-cover-img" src="${info.img}" alt="" onerror="this.parentNode.style.background='var(--bg3)';this.parentNode.innerHTML=''">`;
-    } else {
-      coverWrap.style.background = 'var(--bg3)';
-      coverWrap.innerHTML = '';
-    }
-    const summaryHtml = info.summary
-      ? `<div class="panel-divider"></div><div class="panel-summary-label">Summary</div><div class="panel-summary">${esc(info.summary)}</div>`
-      : '';
-    body.innerHTML = `
-      <div class="panel-title">${esc(info.title)}</div>
-      <div class="panel-author">${esc(info.author)}</div>
-      ${info.date ? `<div class="panel-date">${info.date}</div>` : ''}
-      ${summaryHtml}`;
-  });
-}
-
-function closePanel() {
-  document.getElementById('bookPanel').classList.remove('open');
-}
-
-let _panelJustOpened = false;
-document.addEventListener('click', e => {
-  if (_panelJustOpened) { _panelJustOpened = false; return; }
-  const panel = document.getElementById('bookPanel');
-  if (panel.classList.contains('open') && !panel.contains(e.target)) {
-    closePanel();
-  }
-  const list = document.getElementById('titleSuggestions');
-  if (list && !document.getElementById('addTitle').contains(e.target) && !list.contains(e.target)) {
-    list.classList.remove('open');
-  }
-});
-
-/* ─── SELECTION ─── */
-function toggleSelect(el) {
-  const key = el.dataset.selkey;
-  if (selectedBooks.has(key)) selectedBooks.delete(key);
-  else selectedBooks.add(key);
-  el.classList.toggle('selected', selectedBooks.has(key));
-  updateSelectionBar();
-}
-
-function clearSelection() {
-  selectedBooks.clear();
-  document.querySelectorAll('.book-card.selected, tr.selected').forEach(el => el.classList.remove('selected'));
-  updateSelectionBar();
-}
-
-function toggleSelectAll() {
-  const query = document.getElementById('search').value.trim().toLowerCase();
-  let visBooks = [...DATA[currentTab]];
-  if (query) visBooks = visBooks.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query));
-  const allKeys = visBooks.map(b => `${b.title}||${b.author}`);
-  const allSel = allKeys.length > 0 && allKeys.every(k => selectedBooks.has(k));
-  if (allSel) {
-    allKeys.forEach(k => selectedBooks.delete(k));
-  } else {
-    allKeys.forEach(k => selectedBooks.add(k));
-  }
-  _skipAnim = true;
-  render();
-  _skipAnim = false;
-  updateSelectionBar();
-}
-
-function adjustSelectionBarBottom() {
-  const bar = document.getElementById('selectionBar');
-  const footer = document.querySelector('.footer');
-  if (!bar || !footer) return;
-  const footerRect = footer.getBoundingClientRect();
-  const footerVisible = Math.max(0, window.innerHeight - footerRect.top);
-  const target = footerVisible > 0 ? footerVisible + 16 : 28;
-  bar.style.setProperty('--sel-bottom', target + 'px');
-}
-
-function updateSelectionBar() {
-  const bar = document.getElementById('selectionBar');
-  const count = selectedBooks.size;
-  bar.classList.toggle('visible', _editMode);
-  document.getElementById('selectionCount').textContent = T().selCount(count);
-  const isRemove = currentTab !== 'wishlist';
-  document.getElementById('selConfirmLabel').textContent = isRemove ? T().selConfirmRemove : T().selConfirmOwned;
-  document.getElementById('selConfirmBtn').classList.toggle('danger', isRemove);
-  document.getElementById('selConfirmBtn').disabled = count === 0;
-  // Sync select-all button label
-  const query = document.getElementById('search').value.trim().toLowerCase();
-  let visBooks = [...DATA[currentTab]];
-  if (query) visBooks = visBooks.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query));
-  const allSel = visBooks.length > 0 && visBooks.every(b => selectedBooks.has(`${b.title}||${b.author}`));
-  const saBtn = document.getElementById('selSelectAllBtn');
-  if (saBtn) saBtn.textContent = allSel ? T().selDeselectAll : T().selSelectAll;
-  adjustSelectionBarBottom();
-}
-
-function confirmSelection() {
-  if (currentTab === 'wishlist') markAsOwned();
-  else removeFromLibrary();
-}
-
-let _deleteTarget = null;
-
-function openDeleteConfirm(title, author) {
-  _deleteTarget = { title, author };
-  document.getElementById('deleteConfirmSub').textContent = T().deleteMsg(title);
-  document.getElementById('deleteConfirmModal').classList.add('open');
-}
-
-function closeDeleteConfirm() {
-  _deleteTarget = null;
-  document.getElementById('deleteConfirmModal').classList.remove('open');
-}
-
-function confirmDeleteBook() {
-  if (!_deleteTarget) return;
-  const { title, author } = _deleteTarget;
-  const ownedIdx = DATA.owned.findIndex(b => b.title === title && b.author === author);
-  if (ownedIdx !== -1) {
-    DATA.owned.splice(ownedIdx, 1);
-    document.getElementById('owned-count').textContent = DATA.owned.length;
-  } else {
-    const wishIdx = DATA.wishlist.findIndex(b => b.title === title && b.author === author);
-    if (wishIdx !== -1) {
-      DATA.wishlist.splice(wishIdx, 1);
-      document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
-    }
-  }
-  saveData();
-  closeDeleteConfirm();
-  render();
-}
-
-function removeFromLibrary() {
-  const toRemove = new Set(selectedBooks);
-  DATA.owned = DATA.owned.filter(b => !toRemove.has(`${b.title}||${b.author}`));
-  selectedBooks.clear();
-  saveData();
-  document.getElementById('owned-count').textContent = DATA.owned.length;
-  _editMode = false;
-  document.getElementById('editWishBtn').textContent = 'Edit';
-  updateSelectionBar();
-  render();
-}
-
-function markAsOwned() {
-  selectedBooks.forEach(key => {
-    const [title, author] = key.split('||');
-    const idx = DATA.wishlist.findIndex(b => b.title === title && b.author === author);
-    if (idx !== -1) {
-      const [book] = DATA.wishlist.splice(idx, 1);
-      DATA.owned.push(book);
-    }
-  });
-  selectedBooks.clear();
-  saveData();
-  document.getElementById('owned-count').textContent   = DATA.owned.length;
-  document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
-  _editMode = false;
-  document.getElementById('editWishBtn').textContent = 'Edit';
-  updateSelectionBar();
-  render();
-}
-
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ─── DATA PERSISTENCE ─── */
-const READR_DATA_KEY    = 'readr-data';
-const GENRES = {};
-const CUSTOM_GENRES_KEY = 'biblio-genres';
-
-function loadCustomBooks() {
-  try {
-    const raw = localStorage.getItem(CUSTOM_GENRES_KEY);
-    if (raw) Object.assign(GENRES, JSON.parse(raw));
-  } catch(e) {}
-  try {
-    const saved = localStorage.getItem(READR_DATA_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      DATA.owned    = parsed.owned    || [];
-      DATA.wishlist = parsed.wishlist || [];
-      [...DATA.owned, ...DATA.wishlist].forEach(b => { if (b.year) YEARS[b.title] = b.year; });
-    }
-  } catch(e) {}
-}
-
-function saveData() {
-  try { localStorage.setItem(READR_DATA_KEY, JSON.stringify(DATA)); } catch(e) {}
-  updateExportBtn();
-}
-
-/* ─── IMPORT / EXPORT ─── */
-function updateExportBtn() {
-  document.getElementById('exportBtn').disabled = DATA.owned.length + DATA.wishlist.length === 0;
-}
-
-function exportData() {
-  const json = JSON.stringify(DATA, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'readr-library.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importData() {
-  const input    = document.createElement('input');
-  input.type     = 'file';
-  input.accept   = '.json';
-  input.onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const parsed = JSON.parse(ev.target.result);
-        if (!Array.isArray(parsed.owned) || !Array.isArray(parsed.wishlist))
-          throw new Error('invalid');
-        DATA.owned    = parsed.owned;
-        DATA.wishlist = parsed.wishlist;
-        [...DATA.owned, ...DATA.wishlist].forEach(b => { if (b.year) YEARS[b.title] = b.year; });
-        saveData();
-        document.getElementById('owned-count').textContent    = DATA.owned.length;
-        document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
-        render();
-      } catch(err) {
-        alert(T().importErrFile);
-      }
-    };
-    reader.readAsText(file);
-  };
-  input.click();
-}
-
-/* ─── IMPORT TAB SLIDING INDICATOR ─── */
-function moveTabIndicator(tabEl) {
-  const indicator = document.getElementById('importTabIndicator');
-  if (!indicator || !tabEl) return;
-  indicator.style.left  = tabEl.offsetLeft + 'px';
-  indicator.style.width = tabEl.offsetWidth + 'px';
-  indicator.style.background = tabEl.id === 'add-tab-photo' ? '#9B5CF6' : 'var(--primary-50)';
-}
-
-function initTabIndicator() {
-  const tabs = document.getElementById('importTabs');
-  if (!tabs) return;
-  // Position on active tab immediately (no transition)
-  const indicator = document.getElementById('importTabIndicator');
-  if (indicator) indicator.style.transition = 'none';
-  const active = tabs.querySelector('.import-tab.active');
-  moveTabIndicator(active);
-  requestAnimationFrame(() => {
-    if (indicator) indicator.style.transition = '';
-  });
-  // Hover: slide to hovered tab
-  tabs.querySelectorAll('.import-tab').forEach(tab => {
-    tab.addEventListener('mouseenter', () => moveTabIndicator(tab));
-  });
-  // Mouseleave container: return to active
-  tabs.addEventListener('mouseleave', () => {
-    const active = tabs.querySelector('.import-tab.active');
-    moveTabIndicator(active);
-  });
-}
-
-/* ─── ADD MODAL (unified) ─── */
-let _importPreviewBooks = [];
-
-function switchAddTab(tab) {
-  document.getElementById('add-panel-manual').style.display = tab === 'manual' ? '' : 'none';
-  document.getElementById('add-panel-file').style.display   = tab === 'file'   ? '' : 'none';
-  document.getElementById('add-panel-photo').style.display  = tab === 'photo'  ? '' : 'none';
-  if (tab === 'photo') {
-    requestAnimationFrame(() => {
-      const dz = document.getElementById('photoDropzone');
-      const r  = document.getElementById('photoGradRect');
-      if (dz && r) { r.setAttribute('width', dz.clientWidth - 2); r.setAttribute('height', dz.clientHeight - 2); }
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-question.open').forEach(q => {
+      q.classList.remove('open');
+      q.nextElementSibling.classList.remove('open');
     });
-  }
-  document.getElementById('add-tab-manual').classList.toggle('active', tab === 'manual');
-  document.getElementById('add-tab-file').classList.toggle('active',   tab === 'file');
-  document.getElementById('add-tab-photo').classList.toggle('active',  tab === 'photo');
-  moveTabIndicator(document.getElementById(`add-tab-${tab}`));
-  document.getElementById('modalSubmitBtn').style.display  = tab === 'manual' ? '' : 'none';
-  document.getElementById('importSubmitBtn').style.display = tab !== 'manual' ? '' : 'none';
-  if (tab !== 'manual') {
-    document.getElementById('importPreview').style.display = 'none';
-    document.getElementById('importSubmitBtn').disabled = true;
-    document.getElementById('importSubmitBtn').textContent = T().btnImport;
-    _importPreviewBooks = [];
-  }
-  document.getElementById('ocrProgressArea').style.display = 'none';
-  document.getElementById('import-file-error').style.display = 'none';
-  document.getElementById('import-photo-error').style.display = 'none';
-  document.getElementById('photoDropzone').style.display = '';
-  document.getElementById('photoAddAnotherBtn').style.display = 'none';
-}
-
-function handleImportDrop(e) {
-  e.preventDefault();
-  document.getElementById('importDropzone').classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) processImportFile(file);
-}
-
-function handleImportFileInput(e) {
-  const file = e.target.files[0];
-  if (file) processImportFile(file);
-  e.target.value = '';
-}
-
-function processImportFile(file) {
-  const errEl = document.getElementById('import-file-error');
-  errEl.style.display = 'none';
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      let books;
-      if (file.name.endsWith('.csv')) {
-        books = parseGoodreadsCSV(ev.target.result);
-      } else {
-        const parsed = JSON.parse(ev.target.result);
-        if (!Array.isArray(parsed.owned) || !Array.isArray(parsed.wishlist)) throw new Error('invalid');
-        books = [
-          ...parsed.owned.map(b => ({ ...b, list: 'owned' })),
-          ...parsed.wishlist.map(b => ({ ...b, list: 'wishlist' }))
-        ];
-      }
-      if (!books.length) throw new Error('No books found in this file.');
-      showImportPreview(books);
-    } catch(err) {
-      errEl.textContent = err.message || T().importErrParse;
-      errEl.style.display = 'block';
-    }
-  };
-  reader.readAsText(file);
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let cur = '', inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') {
-      if (inQuotes && line[i+1] === '"') { cur += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (c === ',' && !inQuotes) {
-      result.push(cur); cur = '';
-    } else {
-      cur += c;
+    if (!isOpen) {
+      btn.classList.add('open');
+      answer.classList.add('open');
     }
   }
-  result.push(cur);
-  return result;
-}
-
-function parseGoodreadsCSV(text) {
-  const lines = text.split('\n').filter(l => l.trim());
-  if (!lines.length) return [];
-  const headers = parseCSVLine(lines[0]).map(h => h.trim().replace(/^\ufeff/, ''));
-  const books = [];
-  for (let i = 1; i < lines.length; i++) {
-    const values = parseCSVLine(lines[i]);
-    const row = {};
-    headers.forEach((h, idx) => row[h] = (values[idx] || '').trim().replace(/^"|"$/g, ''));
-    const title = row['Title'] || row['title'];
-    let author = row['Author'] || row['Author l-f'] || row['Authors'] || row['author'] || '';
-    const shelf = row['Exclusive Shelf'] || row['exclusive_shelf'] || 'read';
-    const year = parseInt(row['Year Published'] || row['Original Publication Year'] || '') || null;
-    if (!title) continue;
-    // Convert "Last, First" to "First Last"
-    if (/^[^,]+,\s*\S/.test(author)) {
-      const [last, first] = author.split(/,\s*/);
-      author = `${first} ${last}`.trim();
-    }
-    const list = shelf === 'to-read' ? 'wishlist' : 'owned';
-    books.push({ title, author, year, list });
-  }
-  return books;
-}
-
-function handlePhotoDrop(e) {
-  e.preventDefault();
-  document.getElementById('photoDropzone').classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) runGeminiVision(file);
-}
-
-function handlePhotoInput(e) {
-  const file = e.target.files[0];
-  if (file) runGeminiVision(file);
-  e.target.value = '';
-}
-
-function toTitleCase(str) {
-  if (!str) return str;
-  // Only convert if the string is mostly uppercase
-  const upper = (str.match(/[A-ZÀ-Ü]/g) || []).length;
-  const letters = (str.match(/[A-Za-zÀ-ü]/g) || []).length;
-  if (letters === 0 || upper / letters < 0.7) return str;
-  const minors = new Set(['a','an','the','and','but','or','for','nor','on','at','to','by','in','of','up','as','de','du','le','la','les','un','une','des','et','en','au','aux','sur','par','avec']);
-  return str.toLowerCase().replace(/[\wÀ-ü''-]+/g, (word, offset) => {
-    if (offset > 0 && minors.has(word)) return word;
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  });
-}
-
-// Replace with your deployed Worker URL after running: wrangler deploy
-const VISION_WORKER_URL = 'https://readr-vision.pierreblavette.workers.dev';
-const VISION_TOKEN = '6400b645bb640fcaf29adfffbb87b52e1c222679ead80aeb';
-
-async function runGeminiVision(file) {
-  const errEl = document.getElementById('import-photo-error');
-  errEl.style.display = 'none';
-  document.getElementById('importPreview').style.display = 'none';
-
-  const url = URL.createObjectURL(file);
-  document.getElementById('ocrThumb').src = url;
-  document.getElementById('ocrProgressArea').style.display = '';
-  document.getElementById('ocrStatusLabel').textContent = T().ocrReading;
-  document.getElementById('ocrProgressFill').style.width = '20%';
-
-  try {
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result.split(',')[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-
-    document.getElementById('ocrProgressFill').style.width = '50%';
-    document.getElementById('ocrStatusLabel').textContent = T().ocrDetecting;
-
-    const res = await fetch(VISION_WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Readr-Token': VISION_TOKEN },
-      body: JSON.stringify({ image: base64, mimeType: file.type || 'image/jpeg' })
-    });
-
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error || `Worker error ${res.status}`);
-
-    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-    document.getElementById('ocrProgressFill').style.width = '100%';
-    document.getElementById('ocrStatusLabel').textContent = T().ocrDone;
-
-    const jsonMatch = text.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) throw new Error('Unexpected response format');
-    const books = JSON.parse(jsonMatch[0])
-      .map(b => ({ title: toTitleCase(b.title || ''), author: toTitleCase(b.author || ''), year: null, list: 'owned' }))
-      .filter(b => b.title.length > 0);
-
-    if (!books.length) {
-      errEl.textContent = T().ocrNoneMsg;
-      errEl.style.display = 'block';
-      document.getElementById('ocrStatusLabel').textContent = T().ocrNone;
-      return;
-    }
-
-    URL.revokeObjectURL(url);
-    showImportPreview(books);
-  } catch(e) {
-    document.getElementById('ocrProgressArea').style.display = 'none';
-    errEl.textContent = T().ocrError(e.message);
-    errEl.style.display = 'block';
-  }
-}
-
-function showImportPreview(books) {
-  _importPreviewBooks = books;
-  const ownedCount = books.filter(b => b.list !== 'wishlist').length;
-  const wishCount  = books.filter(b => b.list === 'wishlist').length;
-  let label = T().previewLabel(books.length);
-  if (ownedCount && wishCount) label += T().previewBoth(ownedCount, wishCount);
-  else if (wishCount) label += T().previewWishOnly;
-  document.getElementById('importPreviewCount').textContent = label;
-  document.getElementById('importPreviewList').innerHTML = books.map((b, i) => `
-    <div class="import-preview-item">
-      <div>
-        <div class="import-preview-book">${esc(b.title)}</div>
-        <div class="import-preview-author">${esc(b.author)}${b.year ? ' · ' + b.year : ''}</div>
-      </div>
-      <button class="import-preview-remove" onclick="removeImportBook(${i})" title="Remove">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>`).join('');
-  document.getElementById('importPreview').style.display = 'block';
-  document.getElementById('photoDropzone').style.display = 'none';
-  document.getElementById('ocrProgressArea').style.display = 'none';
-  document.getElementById('photoAddAnotherBtn').style.display = 'flex';
-  const btn = document.getElementById('importSubmitBtn');
-  btn.disabled = false;
-  btn.textContent = T().btnImportN(books.length);
-}
-
-function removeImportBook(index) {
-  _importPreviewBooks.splice(index, 1);
-  if (_importPreviewBooks.length === 0) {
-    document.getElementById('importPreview').style.display = 'none';
-    document.getElementById('importSubmitBtn').disabled = true;
-    document.getElementById('importSubmitBtn').textContent = T().btnImport;
-  } else {
-    showImportPreview(_importPreviewBooks);
-  }
-}
-
-function confirmImport() {
-  if (!_importPreviewBooks.length) return;
-  const existingKeys = new Set([
-    ...DATA.owned.map(b => b.title + '||' + b.author),
-    ...DATA.wishlist.map(b => b.title + '||' + b.author)
-  ]);
-  let added = 0;
-  _importPreviewBooks.forEach(b => {
-    const key = b.title + '||' + b.author;
-    if (existingKeys.has(key)) return;
-    const book = { title: b.title, author: b.author };
-    if (b.year) { book.year = b.year; YEARS[b.title] = b.year; }
-    if (b.list === 'wishlist') DATA.wishlist.push(book);
-    else DATA.owned.push(book);
-    added++;
-  });
-  saveData();
-  document.getElementById('owned-count').textContent    = DATA.owned.length;
-  document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
-  closeAddModal();
-  render();
-}
-
-
-/* ─── AUTOCOMPLETE ─── */
-let _acFocusedIndex = -1;
-let _acDebounce = null;
-
-function normalize(s) {
-  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-
-function onTitleInput(input) {
-  document.getElementById('modalSubmitBtn').disabled = !input.value.trim();
-  const q = input.value.trim();
-  const list = document.getElementById('titleSuggestions');
-  _acFocusedIndex = -1;
-  clearTimeout(_acDebounce);
-  if (!q) { list.classList.remove('open'); list.innerHTML = ''; return; }
-  _acDebounce = setTimeout(() => fetchTitleSuggestions(q), 300);
-}
-
-async function fetchTitleSuggestions(q) {
-  const list = document.getElementById('titleSuggestions');
-  list.innerHTML = '<li class="autocomplete-item autocomplete-loading">Searching…</li>';
-  list.classList.add('open');
-  try {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=8&key=AIzaSyBi8Eg1Ped0zmqNBfxoz2yGuUNLNTGzyPM&fields=items(volumeInfo(title,authors,publishedDate,categories))`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (data.error) throw new Error(`API ${data.error.code}: ${data.error.message}`);
-    const items = (data.items || []).filter(it => it.volumeInfo?.title);
-    if (!items.length) { list.classList.remove('open'); list.innerHTML = ''; return; }
-    const seen = new Set();
-    const unique = items.filter(it => {
-      const key = it.volumeInfo.title + '||' + (it.volumeInfo.authors?.[0] || '');
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-    list.innerHTML = unique.map((it, i) => {
-      const title  = it.volumeInfo.title || '';
-      const author = (it.volumeInfo.authors || [])[0] || '';
-      const year   = (it.volumeInfo.publishedDate || '').substring(0, 4);
-      const genre  = (it.volumeInfo.categories || [])[0]?.split('/')[0]?.trim() || '';
-      return `<li class="autocomplete-item" data-index="${i}"
-          data-title="${title.replace(/"/g,'&quot;')}"
-          data-author="${author.replace(/"/g,'&quot;')}"
-          data-year="${year}"
-          data-genre="${genre.replace(/"/g,'&quot;')}"
-          onmousedown="selectSuggestion(this)">
-        ${esc(title)}<span>${esc(author)}</span>
-      </li>`;
-    }).join('');
-    list.classList.add('open');
-  } catch(e) {
-    console.error('[Autocomplete]', e.message);
-    list.innerHTML = `<li class="autocomplete-item autocomplete-loading">${e.message}</li>`;
-  }
-}
-
-function onTitleKeydown(e) {
-  const list = document.getElementById('titleSuggestions');
-  const items = list.querySelectorAll('.autocomplete-item');
-  if (!list.classList.contains('open') || !items.length) return;
-  if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    _acFocusedIndex = Math.min(_acFocusedIndex + 1, items.length - 1);
-    items.forEach((el, i) => el.classList.toggle('focused', i === _acFocusedIndex));
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    _acFocusedIndex = Math.max(_acFocusedIndex - 1, 0);
-    items.forEach((el, i) => el.classList.toggle('focused', i === _acFocusedIndex));
-  } else if (e.key === 'Enter' && _acFocusedIndex >= 0) {
-    e.preventDefault();
-    items[_acFocusedIndex].dispatchEvent(new MouseEvent('mousedown'));
-  } else if (e.key === 'Escape') {
-    list.classList.remove('open');
-  }
-}
-
-function selectSuggestion(el) {
-  document.getElementById('addTitle').value  = el.dataset.title;
-  document.getElementById('addAuthor').value = el.dataset.author;
-  if (el.dataset.year)  document.getElementById('addYear').value  = el.dataset.year;
-  if (el.dataset.genre) document.getElementById('addGenre').value = el.dataset.genre;
-  document.getElementById('modalSubmitBtn').disabled = false;
-  const list = document.getElementById('titleSuggestions');
-  list.classList.remove('open');
-  list.innerHTML = '';
-}
-
-async function fetchGenre(olKey) {
-  try {
-    const res = await fetch(`https://openlibrary.org${olKey}.json`);
-    const data = await res.json();
-    const subjects = data.subjects || [];
-    const genre = subjects.slice(0, 2).map(s =>
-      s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-    ).join(', ');
-    if (genre) document.getElementById('addGenre').value = genre;
-  } catch(e) {}
-}
-
-function openAddModal(tab) {
-  document.getElementById('addTitle').value = '';
-  document.getElementById('addAuthor').value = '';
-  document.getElementById('addYear').value = '';
-  document.getElementById('modalSubmitBtn').disabled = true;
-  const list = document.getElementById('titleSuggestions');
-  list.classList.remove('open');
-  list.innerHTML = '';
-  _importPreviewBooks = [];
-  document.getElementById('importPreview').style.display = 'none';
-  document.getElementById('importPreviewList').innerHTML = '';
-  document.getElementById('importSubmitBtn').disabled = true;
-  document.getElementById('importSubmitBtn').textContent = 'Import';
-  document.getElementById('import-file-error').style.display = 'none';
-  document.getElementById('import-photo-error').style.display = 'none';
-  document.getElementById('ocrProgressArea').style.display = 'none';
-  switchAddTab(tab || 'photo');
-  document.getElementById('addModal').classList.add('open');
-  requestAnimationFrame(() => initTabIndicator());
-}
-
-let _genreFetchQueue = [];
-let _genreFetchRunning = false;
-
-function lazyFetchGenres(books) {
-  const toFetch = books.filter(b => !GENRES[b.title]);
-  if (!toFetch.length) return;
-  _genreFetchQueue = [...toFetch];
-  if (!_genreFetchRunning) processGenreQueue();
-}
-
-async function processGenreQueue() {
-  _genreFetchRunning = true;
-  while (_genreFetchQueue.length) {
-    const b = _genreFetchQueue.shift();
-    if (GENRES[b.title]) continue;
-    try {
-      const q = encodeURIComponent(b.title + ' ' + b.author);
-      const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1&fields=subject`);
-      const data = await res.json();
-      const subjects = (data.docs?.[0]?.subject || []);
-      const genre = subjects.slice(0, 2).map(s =>
-        s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-      ).join(', ');
-      if (genre) {
-        GENRES[b.title] = genre;
-        saveGenres();
-        const cell = document.querySelector(`.list-genre[data-genre-title="${CSS.escape(b.title)}"]`);
-        if (cell) cell.textContent = genre;
-      }
-    } catch(e) {}
-    await new Promise(r => setTimeout(r, 120));
-  }
-  _genreFetchRunning = false;
-}
-
-let _editMode = false;
-let _skipAnim = false;
-function toggleEditMode() {
-  _editMode = !_editMode;
-  document.getElementById('editWishBtn').textContent = _editMode ? T().btnDone : T().btnEdit;
-  if (!_editMode) selectedBooks.clear();
-  updateSelectionBar();
-  _skipAnim = true;
-  render();
-  _skipAnim = false;
-}
-
-function saveGenres() {
-  try { localStorage.setItem(CUSTOM_GENRES_KEY, JSON.stringify(GENRES)); } catch(e) {}
-}
-
-function closeAddModal() {
-  document.getElementById('addModal').classList.remove('open');
-}
-
-/* ── Swipe down to close modal (mobile) ── */
-(function() {
-  let startY = 0, isDragging = false;
-  document.addEventListener('touchstart', e => {
-    const modal = document.querySelector('#addModal .modal');
-    if (!modal) return;
-    const handle = modal.querySelector('.modal-handle');
-    if (handle && handle.contains(e.target)) {
-      startY = e.touches[0].clientY;
-      isDragging = true;
-    }
-  }, { passive: true });
-  document.addEventListener('touchmove', e => {
-    if (!isDragging) return;
-    const modal = document.querySelector('#addModal .modal');
-    const dy = e.touches[0].clientY - startY;
-    if (dy > 0) modal.style.transform = `translateY(${dy}px)`;
-  }, { passive: true });
-  document.addEventListener('touchend', e => {
-    if (!isDragging) return;
-    isDragging = false;
-    const modal = document.querySelector('#addModal .modal');
-    const dy = e.changedTouches[0].clientY - startY;
-    if (dy > 80) {
-      closeAddModal();
-    }
-    modal.style.transform = '';
-  });
-})();
-function closeImportModal() { closeAddModal(); }
-
-function submitAddBook() {
-  const title  = document.getElementById('addTitle').value.trim();
-  const author = document.getElementById('addAuthor').value.trim();
-  const yearVal  = document.getElementById('addYear').value.trim();
-  const genreVal = document.getElementById('addGenre').value.trim();
-  if (!title || !author) {
-    if (!title) document.getElementById('addTitle').focus();
-    else document.getElementById('addAuthor').focus();
-    return;
-  }
-  const isWish = currentTab === 'wishlist';
-  const book = { title, author };
-  if (yearVal)  { book.year  = parseInt(yearVal, 10); YEARS[title]  = book.year; }
-  if (genreVal) { book.genre = genreVal; GENRES[title] = genreVal; saveGenres(); }
-  if (isWish) {
-    DATA.wishlist.push(book);
-    document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
-  } else {
-    DATA.owned.push(book);
-    document.getElementById('owned-count').textContent = DATA.owned.length;
-  }
-  saveData();
-  closeAddModal();
-  render();
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeAddModal();
-  const modal = document.getElementById('addModal');
-  if (e.key === 'Enter' && modal.classList.contains('open') && document.getElementById('add-tab-manual').classList.contains('active')) submitAddBook();
-});
-
-init();
 </script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+[     266ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8765/favicon.ico:0
+[   75764ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://openlibrary.org/search.json?title=Fahrenheit%20451&author=Ray%20Bradbury&limit=3&fields=cover_i,language:0
+[   76016ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://openlibrary.org/search.json?q=le%20c&limit=8&fields=title,author_name,key:0
+[   89953ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://openlibrary.org/search.json?q=le%20cy&limit=8&fields=title,author_name,key:0
+[   90811ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_TIMED_OUT @ https://openlibrary.org/search.json?q=le%20cycle%20de%20fon&limit=8&fields=title,author_name,key:0
