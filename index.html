@@ -1461,7 +1461,7 @@
     padding: 56px 48px 48px;
     display: flex; flex-direction: column; align-items: center; text-align: center;
   }
-  .ob-slides { width: 100%; min-height: 360px; display: flex; align-items: center; justify-content: center; }
+  .ob-slides { width: 100%; min-height: 360px; display: flex; align-items: center; justify-content: center; touch-action: pan-y; }
   .ob-slide { display: none; flex-direction: column; align-items: center; gap: 28px; width: 100%; }
   .ob-slide.active { display: flex; justify-content: center; }
   .ob-icon {
@@ -2815,6 +2815,20 @@ function _updateObSlide() {
   document.getElementById('obSkipBtn').style.visibility = isLast ? 'hidden' : 'visible';
   document.getElementById('obPrevBtn').style.visibility = isFirst ? 'hidden' : 'visible';
 }
+
+(function() {
+  let _touchStartX = 0;
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelector('.ob-slides');
+    slides.addEventListener('touchstart', e => { _touchStartX = e.touches[0].clientX; }, { passive: true });
+    slides.addEventListener('touchend', e => {
+      const delta = e.changedTouches[0].clientX - _touchStartX;
+      if (Math.abs(delta) < 50) return;
+      if (delta < 0) nextObSlide();
+      else prevObSlide();
+    }, { passive: true });
+  });
+})();
 
 /* ─── EDIT BTN STATE ─── */
 function updateEditBtnState() {
