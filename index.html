@@ -1264,6 +1264,9 @@
     /* ── Modals ── */
     .modal-overlay { overflow-y: auto; align-items: flex-start; padding: 24px 0; }
     .modal { max-width: calc(100% - 32px) !important; }
+    .import-preview-list { max-height: 140px; }
+    .import-dropzone { min-height: 160px; }
+    .import-preview { margin-top: 12px; padding-top: 0; border-top: none; }
 
 
     /* ── Book panel: full screen ── */
@@ -1704,7 +1707,7 @@
   .import-analyze-btn:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
   .import-analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .import-preview { margin-top: 24px; border-top: 1.5px solid var(--border); padding-top: 20px; }
+  .import-preview { margin-top: 24px; }
   .import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
   .import-preview-title { font-size: 0.857rem; font-weight: 400; color: var(--text-3); }
   .import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
@@ -1723,6 +1726,15 @@
   .import-preview-book { font-size: 0.95rem; font-weight: 500; color: var(--text); }
   .import-preview-author { font-size: 0.857rem; color: var(--text-2); margin-top: 4px; }
 
+
+  .photo-add-another-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; height: 40px; padding: 0 20px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: transparent;
+    color: var(--text); font-family: inherit; font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .photo-add-another-btn:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 
   .import-error { color: #ef4444; font-size: 0.857rem; margin-top: 8px; display: none; }
   .import-spinner { display: none; align-items: center; gap: 8px; color: var(--text-2); font-size: 0.95rem; }
@@ -1932,6 +1944,12 @@
         <div class="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
       </div>
       <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoInput(event)">
+
+      <button id="photoAddAnotherBtn" style="display:none" class="photo-add-another-btn"
+        onclick="document.getElementById('photoFileInput').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add another photo
+      </button>
 
       <div id="ocrProgressArea" style="display:none">
         <div class="ocr-thumb-row">
@@ -3334,6 +3352,8 @@ function switchAddTab(tab) {
   document.getElementById('ocrProgressArea').style.display = 'none';
   document.getElementById('import-file-error').style.display = 'none';
   document.getElementById('import-photo-error').style.display = 'none';
+  document.getElementById('photoDropzone').style.display = '';
+  document.getElementById('photoAddAnotherBtn').style.display = 'none';
 }
 
 function handleImportDrop(e) {
@@ -3526,6 +3546,9 @@ function showImportPreview(books) {
       </button>
     </div>`).join('');
   document.getElementById('importPreview').style.display = 'block';
+  document.getElementById('photoDropzone').style.display = 'none';
+  document.getElementById('ocrProgressArea').style.display = 'none';
+  document.getElementById('photoAddAnotherBtn').style.display = 'flex';
   const btn = document.getElementById('importSubmitBtn');
   btn.disabled = false;
   btn.textContent = T().btnImportN(books.length);
