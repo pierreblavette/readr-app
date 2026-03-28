@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Claude / IDE
+.claude/
+.playwright-mcp/
+
+# Cloudflare Wrangler
+.wrangler/
+
+# Images personnelles
+IMG_*.jpg
+IMG_*.jpeg
+IMG_*.png
+
+# Fichiers de test
+test-*.json
