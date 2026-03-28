@@ -721,22 +721,25 @@
   .faq-question.open { color: var(--primary-50); }
 
   .faq-icon {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    border: 1.5px solid var(--border);
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: var(--primary-5);
+    border: none;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    color: var(--primary-60);
+    transition: transform 0.2s, background 0.2s, color 0.2s;
   }
+
+  .faq-question:hover .faq-icon { background: var(--primary-10); }
 
   .faq-question.open .faq-icon {
     transform: rotate(45deg);
-    border-color: var(--primary-50);
+    background: var(--primary-20);
+    color: var(--primary-70);
   }
 
-  .faq-question.open .faq-icon svg { stroke: var(--primary-50); }
-
-  .faq-icon svg { width: 10px; height: 10px; stroke: var(--text-3); stroke-width: 2.5; stroke-linecap: round; }
+  .faq-icon svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
 
   .faq-answer {
     font-size: 1rem;
