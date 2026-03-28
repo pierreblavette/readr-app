@@ -19,13 +19,53 @@
     --shadow-lg:   0 4px 20px rgba(0,0,0,0.14), 0 1px 6px rgba(0,0,0,0.08);
     --accent:      #4959E6;
     --accent-bg:   rgba(73,89,230,0.08);
+    --ai-from:     #F67BF8;
+    --ai-to:       #4959E6;
     --teal:        #00A699;
     --teal-bg:     rgba(0,166,153,0.08);
     --text:        #222222;
     --text-2:      #555555;
     --text-3:      #777777;
     --nav:         rgba(255,255,255,0.96);
-    --ghost-hover: rgba(0,0,0,0.06);
+    --ghost-hover: var(--primary-5);
+    --shadow-md:   0 2px 8px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.08);
+    /* ── Neutral palette — tinted primary ── */
+    --dark-0:      rgba(13,15,26,0);
+    --dark-5:      rgba(13,15,26,0.05);
+    --dark-10:     rgba(13,15,26,0.10);
+    --dark-20:     rgba(13,15,26,0.20);
+    --dark-30:     rgba(13,15,26,0.30);
+    --dark-40:     rgba(13,15,26,0.40);
+    --dark-50:     rgba(13,15,26,0.50);
+    --dark-60:     rgba(13,15,26,0.60);
+    --dark-70:     rgba(13,15,26,0.70);
+    --dark-80:     rgba(13,15,26,0.80);
+    --dark-90:     rgba(13,15,26,0.90);
+    --dark-100:    #0D0F1A;
+    --light-0:     rgba(245,246,255,0);
+    --light-5:     rgba(245,246,255,0.05);
+    --light-10:    rgba(245,246,255,0.10);
+    --light-20:    rgba(245,246,255,0.20);
+    --light-30:    rgba(245,246,255,0.30);
+    --light-40:    rgba(245,246,255,0.40);
+    --light-50:    rgba(245,246,255,0.50);
+    --light-60:    rgba(245,246,255,0.60);
+    --light-70:    rgba(245,246,255,0.70);
+    --light-80:    rgba(245,246,255,0.80);
+    --light-90:    rgba(245,246,255,0.90);
+    --light-100:   #F5F6FF;
+    /* ── Primary scale — #4959E6 at center (50) ── */
+    --primary-5:   #F4F5FF;
+    --primary-10:  #E8EAFD;
+    --primary-20:  #C1C7FB;
+    --primary-30:  #9BA5F8;
+    --primary-40:  #6F7CF2;
+    --primary-50:  #4959E6;
+    --primary-60:  #3646D4;
+    --primary-70:  #2836B8;
+    --primary-80:  #1D268A;
+    --primary-90:  #131860;
+    --primary-100: #0C0F38;
     --radius:      8px;
     --transition:  background 0.25s, color 0.25s, border-color 0.25s;
   }
@@ -40,13 +80,15 @@
     --shadow-lg:   0 6px 28px rgba(0,0,0,0.55);
     --accent:      #7B89F8;
     --accent-bg:   rgba(123,137,248,0.12);
+    --ai-from:     #F67BF8;
+    --ai-to:       #7B89F8;
     --teal:        #00C9BE;
     --teal-bg:     rgba(0,201,190,0.1);
     --text:        #F0F0F0;
     --text-2:      #909090;
     --text-3:      #555555;
     --nav:         rgba(15,15,15,0.96);
-    --ghost-hover: rgba(255,255,255,0.08);
+    --ghost-hover: rgba(73,89,230,0.12);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -285,7 +327,7 @@
     border-radius: 8px;
     background: transparent;
     color: var(--text-2);
-    font-size: 0.8rem;
+    font-size: 0.857rem;
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
@@ -297,9 +339,9 @@
     flex-shrink: 0;
   }
   .toolbar-action-btn:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-    background: var(--accent-bg);
+    color: var(--primary-60);
+    border-color: var(--primary-40);
+    background: var(--primary-5);
   }
 
   .toolbar-inner {
@@ -347,7 +389,7 @@
     gap: 7px;
     font-weight: 500;
     font-size: 1rem;
-    color: var(--text-2);
+    color: var(--dark-80);
     border: none;
     background: none;
     cursor: pointer;
@@ -356,12 +398,12 @@
     transition: color 0.2s, background 0.2s, box-shadow 0.2s;
   }
 
-  .tab:hover { color: var(--text); }
+  .tab:hover { color: var(--primary-60); background: var(--primary-5); }
 
   .tab.active {
     background: var(--bg);
     color: var(--text);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 4px rgba(73,89,230,0.14), 0 1px 2px rgba(73,89,230,0.08);
   }
 
   .badge {
@@ -379,8 +421,8 @@
   }
 
   .tab.active .badge {
-    background: var(--bg3);
-    color: var(--text);
+    background: var(--primary-10);
+    color: var(--primary-60);
   }
 
   /* SEARCH AREA */
@@ -453,7 +495,8 @@
   #search::placeholder { color: var(--text-3); }
 
   #search:focus {
-    border: 2px solid var(--text);
+    border: 1.5px solid var(--primary-50);
+    box-shadow: 0 0 0 3px var(--primary-20);
   }
 
   #sort {
@@ -471,7 +514,7 @@
     transition: border-color 0.2s;
   }
 
-  #sort:hover, #sort:focus { border-color: var(--text); }
+  #sort:hover, #sort:focus { border-color: var(--primary-50); }
   #sort option { background: var(--card); }
 
   /* ─── MAIN ─── */
@@ -516,8 +559,9 @@
 
   .book-card:hover {
     transform: translateY(-4px);
-    border-color: var(--text-3);
-    background: var(--bg3);
+    border-color: var(--primary-30);
+    background: var(--primary-5);
+    box-shadow: var(--shadow-sm);
   }
 
   /* Cover zone */
@@ -619,14 +663,46 @@
 
   .view-btn:first-child { border-right: 1px solid var(--border); }
 
-  .view-btn:hover { background: var(--ghost-hover); }
+  .view-btn:hover { background: var(--primary-5); }
 
   .view-btn.active {
-    background: var(--text);
-    color: var(--bg);
+    background: var(--primary-50);
+    color: #fff;
   }
 
   .view-btn svg { width: 15px; height: 15px; }
+
+  /* ─── LANG SWITCHER ─── */
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .lang-sep {
+    color: var(--text-3);
+    font-size: 0.75rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .lang-btn {
+    background: none;
+    border: none;
+    padding: 2px 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-3);
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s;
+  }
+  .lang-btn.active {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .lang-btn:hover:not(.active) {
+    color: var(--text-2);
+  }
 
   /* ─── LIST VIEW ─── */
   .books-list {
@@ -676,7 +752,7 @@
   }
 
   .list-table tbody tr:last-child { border-bottom: none; }
-  .list-table tbody tr:hover { background: var(--bg3); }
+  .list-table tbody tr:hover { background: var(--primary-5); }
 
   .list-table td {
     padding: 18px 32px;
@@ -769,7 +845,7 @@
     cursor: pointer;
     transition: background 0.15s;
   }
-  .empty-cta:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .empty-cta:hover { background: var(--primary-60); }
 
   /* ─── BOOK PANEL ─── */
   .book-panel {
@@ -919,14 +995,14 @@
   /* ─── SELECTION ─── */
   .book-card.selectable { cursor: pointer; }
   .book-card.selected {
-    outline: 2px solid var(--text);
+    outline: 2px solid var(--primary-50);
     outline-offset: 2px;
   }
   .book-card.selected::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.03);
+    background: rgba(73,89,230,0.04);
     border-radius: var(--radius);
     pointer-events: none;
   }
@@ -949,8 +1025,8 @@
     flex-shrink: 0;
   }
   .book-card.selected .card-checkbox {
-    background: var(--text);
-    border-color: var(--text);
+    background: var(--primary-50);
+    border-color: var(--primary-50);
   }
   .card-checkbox svg {
     width: 10px;
@@ -963,7 +1039,7 @@
 
   /* Checkbox dans les lignes de liste */
   .list-table tr.selectable { cursor: pointer; }
-  .list-table tr.selected td { background: var(--bg3); }
+  .list-table tr.selected td { background: var(--primary-5); }
   .row-checkbox {
     width: 18px;
     height: 18px;
@@ -977,8 +1053,8 @@
     transition: background 0.15s, border-color 0.15s;
   }
   .list-table tr.selected .row-checkbox {
-    background: var(--text);
-    border-color: var(--text);
+    background: var(--primary-50);
+    border-color: var(--primary-50);
   }
   .row-checkbox svg {
     width: 10px;
@@ -1008,7 +1084,7 @@
     transition: bottom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
   }
-  .selection-bar.visible { bottom: 28px; }
+  .selection-bar.visible { bottom: var(--sel-bottom, 28px); }
   .sel-actions { display: flex; align-items: center; gap: 12px; }
   .selection-count {
     font-size: 1rem;
@@ -1033,8 +1109,8 @@
   .sel-btn svg { width: 14px; height: 14px; }
   .sel-cancel { background: rgba(255,255,255,0.15); color: inherit; }
   .sel-cancel:hover { background: rgba(255,255,255,0.25); }
-  .sel-confirm { background: var(--accent); color: #fff; }
-  .sel-confirm:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .sel-confirm { background: var(--primary-50); color: #fff; }
+  .sel-confirm:hover { background: var(--primary-60); }
   .sel-confirm.danger { background: #ef4444; }
   .sel-confirm.danger:hover { background: #dc2626; }
   .sel-confirm:disabled { opacity: 0.4; pointer-events: none; }
@@ -1042,7 +1118,7 @@
   .sel-select-all:hover { background: rgba(255,255,255,0.22); }
   /* Select-all checkbox in table header */
   .th-checkbox-wrap { display:flex; align-items:center; cursor:pointer; }
-  .th-checkbox-wrap .row-checkbox.all-selected { background: var(--text); border-color: var(--text); }
+  .th-checkbox-wrap .row-checkbox.all-selected { background: var(--primary-50); border-color: var(--primary-50); }
   .th-checkbox-wrap .row-checkbox.all-selected svg { opacity: 1; }
 
   /* ─── FOOTER ─── */
@@ -1073,12 +1149,54 @@
   }
   .footer-link:hover { color: var(--text); }
   .footer-sep { color: var(--border); }
+  .footer-lang { display: none; }
+  .footer-mobile-copyright { display: none; }
+  .footer-mobile-links { display: none; }
+  .footer-row-desktop { display: flex; }
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+  /* ─── FOCUS RING ─── */
+  *:focus-visible {
+    outline: 2px solid var(--primary-50);
+    outline-offset: 2px;
+  }
+
+  /* ─── DARK MODE — component overrides ─── */
+  [data-theme="dark"] .view-btn.active { background: var(--primary-40); }
+  [data-theme="dark"] .tab:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
+  [data-theme="dark"] .tab.active { color: var(--text); box-shadow: 0 1px 4px rgba(73,89,230,0.2), 0 1px 2px rgba(73,89,230,0.12); }
+  [data-theme="dark"] .tab.active .badge { background: rgba(73,89,230,0.15); color: var(--primary-40); }
+  [data-theme="dark"] .book-card:hover { border-color: var(--primary-40); background: rgba(13,15,26,0.5); }
+  [data-theme="dark"] .book-card.selected { outline-color: var(--primary-40); }
+  [data-theme="dark"] .book-card.selected .card-checkbox,
+  [data-theme="dark"] .list-table tr.selected .row-checkbox,
+  [data-theme="dark"] .th-checkbox-wrap .row-checkbox.all-selected { background: var(--primary-40); border-color: var(--primary-40); }
+  [data-theme="dark"] .list-table tbody tr:hover { background: rgba(73,89,230,0.08); }
+  [data-theme="dark"] .list-table tr.selected td { background: rgba(73,89,230,0.08); }
+  [data-theme="dark"] .modal-submit { background: var(--primary-40); }
+  [data-theme="dark"] .modal-submit:hover:not(:disabled) { background: var(--primary-50); }
+  [data-theme="dark"] .sel-confirm { background: var(--primary-40); }
+  [data-theme="dark"] .sel-confirm:hover { background: var(--primary-50); }
+  [data-theme="dark"] .add-btn { background: var(--primary-40); }
+  [data-theme="dark"] .add-btn:hover { background: var(--primary-50); }
+  [data-theme="dark"] .empty-cta { background: var(--primary-40); }
+  [data-theme="dark"] .empty-cta:hover { background: var(--primary-50); }
+  [data-theme="dark"] .modal-cancel:hover { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.12); }
+  [data-theme="dark"] .modal-close:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
+  [data-theme="dark"] .modal-field input:focus { border-color: var(--primary-40); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
+  [data-theme="dark"] #search:focus { border-color: var(--primary-40); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
+  [data-theme="dark"] .import-tab.active { color: var(--primary-40); border-bottom-color: var(--primary-40); }
+  [data-theme="dark"] .import-tab:hover:not(.active) { color: var(--primary-40); border-bottom-color: var(--primary-40); }
+  [data-theme="dark"] .toolbar-action-btn:hover { color: var(--primary-40); border-color: var(--primary-50); background: rgba(73,89,230,0.10); }
+  [data-theme="dark"] .edit-btn:hover,
+  [data-theme="dark"] .export-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.10); }
+  [data-theme="dark"] .autocomplete-item:hover,
+  [data-theme="dark"] .autocomplete-item.focused { background: rgba(73,89,230,0.12); color: var(--primary-30); }
 
   /* ─── RESPONSIVE ─── */
   @media (max-width: 768px) {
@@ -1093,18 +1211,22 @@
     body { overflow-x: hidden; }
 
     /* ── Toolbar: flex row [logo icon | tabs | toggle] ── */
-    .toolbar { display: flex; align-items: center; padding: 0 16px; height: 56px; }
+    .toolbar { display: flex; align-items: center; padding: 0 16px; height: 64px; }
     .toolbar-inner {
       flex: 1; min-width: 0;
       padding: 0; max-width: none; margin: 0;
-      height: 56px; gap: 12px;
+      height: 64px; gap: 12px;
+      display: flex; align-items: center;
     }
+    .toolbar-right { align-self: center; }
+    .toolbar-right .lang-toggle { display: none; }
+    .footer-links-desktop { display: none !important; }
+    .footer-row-desktop { display: none !important; }
     /* Hide "Readr" text, keep R icon only */
     .logo { font-size: 0; gap: 0; }
     .logo-icon { font-size: 16px; flex-shrink: 0; }
     /* Tabs: back in normal flow, centered */
     .toolbar-tabs { position: static; transform: none; flex: 1; display: flex; justify-content: center; }
-    /* Theme toggle: keep position:relative so toggle-thumb stays inside */
     .toolbar .theme-btn { position: relative; top: auto; right: auto; transform: none; flex-shrink: 0; }
 
     /* ── Hero / page title ── */
@@ -1114,10 +1236,10 @@
     .page-title-row { padding: 0; margin-bottom: 32px; }
 
     /* ── Search row: search full width, buttons below ── */
-    .search-row { flex-direction: column; align-items: stretch; gap: 10px; margin-bottom: 20px; }
+    .search-row { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 20px; }
     .search-box { min-width: 0; flex: none; width: 100%; }
     .counter-actions { gap: 8px; }
-    .add-btn, .edit-btn { height: 36px; padding: 0 14px; font-size: 0.9rem; }
+    .add-btn, .edit-btn { height: 36px; padding: 0 14px; font-size: 0.857rem; }
     .export-btn { display: none !important; }
     .view-btns { margin-left: auto; }
 
@@ -1139,21 +1261,43 @@
     }
     .sel-actions { flex: 1; justify-content: flex-end; }
 
-    /* ── Modals: bottom sheet ── */
+    /* ── Modals: full screen ── */
     .modal-overlay { align-items: flex-end; padding: 0; }
     .modal {
       max-width: 100% !important;
       width: 100%;
+      margin: 0;
+      height: 100dvh;
+      max-height: 100dvh;
       border-radius: 16px 16px 0 0;
-      max-height: 92vh;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
+    .modal-actions { margin-top: auto; }
 
     /* ── Book panel: full screen ── */
     .book-panel { width: 100%; }
 
     /* ── Footer ── */
-    .footer-inner { padding-left: 16px; padding-right: 16px; }
+    .footer-inner {
+      padding: 24px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .footer-lang {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+    }
+    .footer-row {
+      display: flex !important; justify-content: space-between; width: 100%;
+    }
+    .footer-mobile-copyright {
+      display: block; font-size: 0.78rem; color: var(--text-2); font-weight: 500;
+    }
+    .footer-mobile-links {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+    }
   }
 
   @media (max-width: 480px) {
@@ -1164,7 +1308,7 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgba(30,35,80,0.30);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     z-index: 600;
@@ -1180,7 +1324,7 @@
   .modal {
     background: var(--card);
     border-radius: 8px;
-    padding: 32px 24px 24px;
+    padding: 32px 24px 0;
     position: relative;
     width: 100%;
     max-width: 630px;
@@ -1201,37 +1345,38 @@
 
   .modal-fields { margin: 0 0 24px; display: flex; flex-direction: column; gap: 16px; }
   .modal-field { display: flex; flex-direction: column; gap: 6px; }
-  .modal-field label { font-size: 0.857rem; font-weight: 700; color: var(--text-3); }
+  .modal-field label { font-size: 0.857rem; font-weight: 500; color: var(--text-3); }
   .modal-field input {
-    height: 42px;
+    height: 40px;
     padding: 0 14px;
     border-radius: 8px;
-    border: 1.5px solid var(--border);
+    border: 1.5px solid transparent;
     background: var(--bg3);
     color: var(--text);
     font-family: inherit;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, background 0.15s;
   }
-  .modal-field input:focus { border-color: var(--accent); }
+  .modal-field input:hover { background: var(--primary-5); border-color: var(--primary-40); }
+  .modal-field input:focus { border-color: var(--primary-50); box-shadow: 0 0 0 3px var(--primary-20); }
 
-  .modal-actions { display: flex; justify-content: space-between; margin-top: 24px; }
+  .modal-actions { display: flex; justify-content: space-between; margin: 24px -24px 0; padding: 18px 24px; }
   .modal-cancel {
     height: 40px; padding: 0 20px; border-radius: 8px; border: 1.5px solid var(--border);
     background: transparent; color: var(--text); font-family: inherit;
     font-size: 1rem; font-weight: 500; cursor: pointer; transition: border-color 0.15s;
     white-space: nowrap;
   }
-  .modal-cancel:hover { border-color: var(--text); }
+  .modal-cancel:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
   .modal-submit {
     height: 40px; padding: 0 20px; border-radius: 8px; border: none;
-    background: var(--accent); color: #fff; font-family: inherit;
-    font-size: 1rem; font-weight: 500; cursor: pointer; transition: opacity 0.15s;
+    background: var(--primary-50); color: #fff; font-family: inherit;
+    font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.15s;
     white-space: nowrap;
   }
-  .modal-submit:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .modal-submit:hover:not(:disabled) { background: var(--primary-60); }
   .modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .delete-row-btn {
@@ -1243,12 +1388,12 @@
     transition: background 0.15s;
     flex-shrink: 0;
   }
-  .delete-row-btn:hover { background: var(--ghost-hover); }
+  .delete-row-btn:hover { background: rgba(239,68,68,0.08); color: #EF4444; }
   .delete-row-btn svg { width: 18px; height: 18px; }
 
   .confirm-modal-overlay {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(30,35,80,0.30);
     display: flex; align-items: center; justify-content: center;
     z-index: 900;
     opacity: 0; pointer-events: none;
@@ -1258,7 +1403,7 @@
   .confirm-modal {
     background: var(--card);
     border-radius: 8px;
-    padding: 32px 24px 24px;
+    padding: 32px 24px 0;
     position: relative;
     width: 100%;
     max-width: 480px;
@@ -1267,7 +1412,7 @@
   }
   .confirm-modal-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 16px; }
   .confirm-modal-sub { font-size: 1rem; color: var(--text-2); line-height: 1.5; }
-  .confirm-modal-actions { display: flex; justify-content: space-between; margin-top: 24px; }
+  .confirm-modal-actions { display: flex; justify-content: space-between; margin: 24px -24px 0; padding: 18px 24px; }
   .confirm-modal-delete {
     height: 40px; padding: 0 20px; border-radius: 8px; border: none;
     background: #ef4444; color: #fff; font-family: inherit;
@@ -1275,6 +1420,85 @@
     transition: background 0.15s;
   }
   .confirm-modal-delete:hover { background: #dc2626; }
+
+  /* ── Onboarding ── */
+  .ob-overlay {
+    position: fixed; inset: 0;
+    background: rgba(30,35,80,0.30);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .ob-overlay.open { opacity: 1; pointer-events: auto; }
+  .ob-modal {
+    background: var(--card);
+    border-radius: 16px;
+    width: 100%; max-width: 640px;
+    margin: 0 24px;
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .ob-body {
+    width: 100%;
+    padding: 56px 48px 48px;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .ob-slides { width: 100%; }
+  .ob-slide { display: none; flex-direction: column; align-items: center; gap: 28px; }
+  .ob-slide.active { display: flex; }
+  .ob-icon {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-3);
+    margin-bottom: 4px;
+  }
+  .ob-title {
+    font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em;
+    color: var(--text); line-height: 1.2; margin: 0;
+  }
+  .ob-desc {
+    font-size: 1.05rem; color: var(--text-2);
+    line-height: 1.7; max-width: 400px; margin: 0;
+  }
+  .ob-footer {
+    width: 100%;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+  }
+  .ob-footer-left { display: flex; align-items: center; }
+  .ob-footer-right { display: flex; align-items: center; gap: 8px; justify-self: end; }
+  .ob-dots { display: flex; gap: 6px; }
+  .ob-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border); transition: all 0.25s ease; cursor: pointer;
+  }
+  .ob-dot.active { width: 20px; border-radius: 3px; background: var(--primary-50); }
+  .ob-skip {
+    height: 40px; padding: 0 16px; border-radius: 8px;
+    background: transparent; border: none;
+    font-family: inherit; font-size: 1rem; font-weight: 500;
+    color: var(--text-2); cursor: pointer; transition: all 0.15s;
+  }
+  .ob-skip:hover { background: var(--primary-5); color: var(--primary-60); }
+  .ob-prev {
+    height: 40px; padding: 0 20px; border-radius: 8px;
+    background: var(--primary-5); color: var(--primary-60); border: none;
+    font-family: inherit; font-size: 1rem; font-weight: 500;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .ob-prev:hover { background: var(--primary-10); }
+  .ob-next {
+    height: 40px; padding: 0 24px; border-radius: 8px;
+    background: var(--primary-50); color: #fff; border: none;
+    font-family: inherit; font-size: 1rem; font-weight: 500;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .ob-next:hover { background: var(--primary-60); }
+  button.footer-link { background: none; border: none; padding: 0; font-size: inherit; font-family: inherit; cursor: pointer; }
 
   .autocomplete-list {
     position: absolute;
@@ -1309,7 +1533,7 @@
     margin-left: 12px;
   }
   .autocomplete-item:hover,
-  .autocomplete-item.focused { background: var(--accent-bg); }
+  .autocomplete-item.focused { background: var(--primary-5); color: var(--primary-60); }
   .autocomplete-loading { color: var(--text-3); cursor: default; font-weight: 400; font-size: 0.857rem; }
 
   .modal-close {
@@ -1327,8 +1551,8 @@
     align-items: center;
     justify-content: center;
   }
-  .modal-close { color: var(--text); transition: background 0.15s; }
-  .modal-close:hover { background: var(--ghost-hover); }
+  .modal-close { color: var(--text); transition: background 0.15s, color 0.15s; }
+  .modal-close:hover { background: var(--primary-5); color: var(--primary-60); }
   .modal-close svg { width: 24px; height: 24px; }
 
   .add-btn {
@@ -1349,7 +1573,7 @@
     white-space: nowrap;
   }
   .add-btn svg { width: 24px; height: 24px; }
-  .add-btn:hover { background: color-mix(in srgb, var(--accent) 80%, #000); }
+  .add-btn:hover { background: var(--primary-60); }
 
   .edit-btn {
     height: 40px;
@@ -1368,7 +1592,8 @@
     transition: border-color 0.15s;
     white-space: nowrap;
   }
-  .edit-btn:hover { border-color: var(--text); }
+  .edit-btn:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
+  .edit-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: var(--border); color: var(--text); background: transparent; }
   .edit-btn.visible { display: flex; }
 
   .export-btn {
@@ -1389,23 +1614,32 @@
     white-space: nowrap;
   }
   .export-btn { margin-left: -8px; }
-  .export-btn:hover:not(:disabled) { border-color: var(--text); }
+  .export-btn:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
   .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   /* ─── IMPORT MODAL ─── */
-  .import-tabs { display: flex; gap: 4px; margin: 20px 0 24px; border-bottom: 1.5px solid var(--border); }
+  .import-tabs { display: flex; gap: 4px; margin: 20px 0 24px; border-bottom: 1.5px solid var(--border); position: relative; }
   .import-tab {
     height: 36px; padding: 0 16px; border: none; background: transparent;
-    font-family: inherit; font-size: 0.95rem; font-weight: 500; color: var(--text-2);
-    cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1.5px;
-    transition: color 0.15s, border-color 0.15s;
+    font-family: inherit; font-size: 1rem; font-weight: 500; color: var(--text-2);
+    cursor: pointer;
+    transition: color 0.15s;
   }
-  .import-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .import-tab:hover:not(.active) { color: var(--text); }
+  .import-tab.active { color: var(--primary-50); }
+  .import-tab:hover { color: var(--primary-50); }
+  .import-tab-indicator {
+    position: absolute;
+    bottom: -1.5px;
+    height: 2px;
+    background: var(--primary-50);
+    border-radius: 1px;
+    transition: left 0.22s cubic-bezier(0.4, 0, 0.2, 1), width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
 
   /* ── AI Photo tab ── */
   .import-tab-ai { display: inline-flex; align-items: center; gap: 5px; }
-  .import-tab-ai-icon { width: 13px; height: 13px; flex-shrink: 0; }
+  .import-tab-ai-icon { width: 16px; height: 16px; flex-shrink: 0; }
   .import-tab-ai-text {
     background: linear-gradient(135deg, #4959E6 0%, #9B5CF6 100%);
     -webkit-background-clip: text;
@@ -1418,9 +1652,24 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  #add-tab-photo:not(.active) .import-tab-ai { opacity: 0.6; }
-  #add-tab-photo:hover:not(.active) .import-tab-ai { opacity: 0.85; }
-  #add-tab-photo.active { border-bottom-color: #9B5CF6; }
+  /* photo tab active: indicator color handled by JS */
+
+  /* ── AI Photo dropzone — gradient border + background ── */
+  #photoDropzone {
+    border: none;
+    position: relative;
+    background: linear-gradient(135deg, rgba(246,123,248,0.05), rgba(73,89,230,0.05));
+    transition: background 0.15s;
+  }
+  #photoDropzone:hover, #photoDropzone.dragover {
+    background: linear-gradient(135deg, rgba(246,123,248,0.10), rgba(73,89,230,0.10));
+  }
+  .photo-dropzone-border {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+  }
 
   .import-dropzone {
     border: 2px dashed var(--border); border-radius: 10px;
@@ -1429,7 +1678,8 @@
     color: var(--text-2);
   }
   .import-dropzone:hover, .import-dropzone.dragover { border-color: var(--accent); background: var(--accent-bg); }
-  .import-dropzone svg { width: 36px; height: 36px; margin-bottom: 12px; color: var(--text-3); }
+  .import-dropzone svg { width: 28px; height: 28px; margin-bottom: 12px; color: var(--text-3); }
+  #photoDropzone svg:not(.photo-dropzone-border) { color: var(--dark-50); }
   .import-dropzone-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
   .import-dropzone-sub { font-size: 0.857rem; color: var(--text-3); }
 
@@ -1509,9 +1759,19 @@
       </div>
     </div>
 
+    <!-- Right controls -->
+    <div class="toolbar-right">
+      <!-- Langue -->
+      <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Bouton thème -->
+  <!-- Bouton thème : extrême droite (hors toolbar-inner) -->
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">
     <span class="toggle-thumb">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1590,26 +1850,24 @@
     </button>
     <div class="modal-title">Add a book</div>
 
-    <div class="import-tabs">
-      <button class="import-tab active" id="add-tab-manual" onclick="switchAddTab('manual')">Manual</button>
-      <button class="import-tab" id="add-tab-file" onclick="switchAddTab('file')">File</button>
-      <button class="import-tab" id="add-tab-photo" onclick="switchAddTab('photo')">
+    <div class="import-tabs" id="importTabs">
+      <div class="import-tab-indicator" id="importTabIndicator"></div>
+      <button class="import-tab active" id="add-tab-photo" onclick="switchAddTab('photo')">
         <span class="import-tab-ai">
-          <svg class="import-tab-ai-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="import-tab-ai-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="aiTabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#4959E6"/>
-                <stop offset="100%" stop-color="#9B5CF6"/>
+              <linearGradient id="aiTabGrad" x1="23" y1="1" x2="2.10296" y2="23.0455" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#F67BF8"/>
+                <stop offset="0.619921" stop-color="#4959E6"/>
               </linearGradient>
             </defs>
-            <!-- Orbital arc: large C-shape counterclockwise -->
-            <path d="M 12 2 A 13.3 13.3 0 1 0 2 12" stroke="url(#aiTabGrad)" stroke-width="1.5" stroke-linecap="round"/>
-            <!-- 4-pointed star inside the arc -->
-            <path d="M 9.5 7.5 L 9.08 8.79 A 0.44 0.44 0 0 1 8.79 9.08 L 7.5 9.5 L 8.79 9.92 A 0.44 0.44 0 0 1 9.08 10.21 L 9.5 11.5 L 9.92 10.21 A 0.44 0.44 0 0 1 10.21 9.92 L 11.5 9.5 L 10.21 9.08 A 0.44 0.44 0 0 1 9.92 8.79 Z" fill="url(#aiTabGrad)"/>
+            <path d="M12 1.5C12.2761 1.5 12.5 1.72386 12.5 2C12.5 7.24671 16.7533 11.5 22 11.5C22.2761 11.5 22.5 11.7239 22.5 12C22.5 12.2761 22.2761 12.5 22 12.5C16.7533 12.5 12.5 16.7533 12.5 22C12.5 22.2761 12.2761 22.5 12 22.5C11.7239 22.5 11.5 22.2761 11.5 22C11.5 16.7533 7.24671 12.5 2 12.5C1.72386 12.5 1.5 12.2761 1.5 12C1.5 11.7239 1.72386 11.5 2 11.5C7.24671 11.5 11.5 7.24671 11.5 2C11.5 1.72386 11.7239 1.5 12 1.5Z" fill="url(#aiTabGrad)"/>
           </svg>
           <span class="import-tab-ai-text">Photo</span>
         </span>
       </button>
+      <button class="import-tab" id="add-tab-file" onclick="switchAddTab('file')">File</button>
+      <button class="import-tab" id="add-tab-manual" onclick="switchAddTab('manual')">Manual</button>
     </div>
 
     <!-- MANUAL PANEL -->
@@ -1661,6 +1919,16 @@
            ondragover="event.preventDefault();this.classList.add('dragover')"
            ondragleave="this.classList.remove('dragover')"
            ondrop="handlePhotoDrop(event)">
+        <svg class="photo-dropzone-border" width="100%" height="100%" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="photoGradBorder" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+              <stop offset="0%" stop-color="#F67BF8"/>
+              <stop offset="62%" stop-color="#4959E6"/>
+            </linearGradient>
+          </defs>
+          <rect id="photoGradRect" x="1" y="1" width="0" height="0" rx="9" fill="none"
+                stroke="url(#photoGradBorder)" stroke-width="2" stroke-dasharray="6 4"/>
+        </svg>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
           <polyline points="21 15 16 10 5 21"/>
@@ -1715,16 +1983,134 @@
 </div>
 
 <!-- FOOTER -->
+<!-- ── Onboarding ── -->
+<div class="ob-overlay" id="obOverlay" onclick="if(event.target===this)closeOnboarding()">
+  <div class="ob-modal">
+    <div class="ob-body">
+      <div class="ob-slides">
+        <div class="ob-slide active">
+          <div class="ob-icon">
+            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
+              <circle cx="40" cy="40" r="26" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
+              <circle cx="33" cy="37" r="2.5" fill="var(--accent)"/>
+              <circle cx="47" cy="37" r="2.5" fill="var(--accent)"/>
+              <path d="M32 46 Q40 54 48 46" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <h2 class="ob-title">Hi, I'm Readr.</h2>
+          <p class="ob-desc">I'm here to help you organize your reading life. Every book you own, every one you dream of.</p>
+        </div>
+        <div class="ob-slide">
+          <div class="ob-icon">
+            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
+              <!-- 4 books standing upright on a shelf, spine view -->
+              <rect x="8"  y="20" width="13" height="38" rx="3" fill="var(--accent)"/>
+              <rect x="8"  y="20" width="4"  height="38" rx="2" fill="var(--accent-bg)" opacity="0.3"/>
+              <rect x="24" y="26" width="11" height="32" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+              <rect x="24" y="26" width="3.5" height="32" rx="1.5" fill="var(--accent)" opacity="0.4"/>
+              <rect x="38" y="16" width="14" height="42" rx="3" fill="var(--accent)"/>
+              <rect x="38" y="16" width="4.5" height="42" rx="2" fill="var(--accent-bg)" opacity="0.25"/>
+              <rect x="55" y="22" width="12" height="36" rx="3" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+              <rect x="55" y="22" width="3.5" height="36" rx="1.5" fill="var(--accent)" opacity="0.4"/>
+              <!-- shelf -->
+              <rect x="4" y="59" width="68" height="5" rx="2.5" fill="var(--accent)" opacity="0.5"/>
+            </svg>
+          </div>
+          <h2 class="ob-title">Your books, finally in one place.</h2>
+          <p class="ob-desc">Keep track of every book you own and everything you want to read.</p>
+          <p class="ob-desc">In one clean, beautiful space.</p>
+        </div>
+        <div class="ob-slide">
+          <div class="ob-icon">
+            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
+              <circle cx="40" cy="40" r="28" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
+              <line x1="40" y1="26" x2="40" y2="54" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+              <line x1="26" y1="40" x2="54" y2="40" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2 class="ob-title">Adding a book takes seconds.</h2>
+          <p class="ob-desc">Snap a photo, upload a file, or type it in.</p>
+          <p class="ob-desc">However you prefer, I'll take care of the rest.</p>
+        </div>
+        <div class="ob-slide">
+          <div class="ob-icon">
+            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
+              <rect x="6" y="18" width="30" height="44" rx="6" fill="var(--accent)"/>
+              <rect x="44" y="18" width="30" height="44" rx="6" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2"/>
+            </svg>
+          </div>
+          <h2 class="ob-title">Two spaces, one home.</h2>
+          <p class="ob-desc">Books you own, books you want.</p>
+          <p class="ob-desc">Switch between them in one click.</p>
+        </div>
+        <div class="ob-slide">
+          <div class="ob-icon">
+            <svg viewBox="0 0 80 80" fill="none" width="80" height="80">
+              <circle cx="40" cy="40" r="28" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="2.5"/>
+              <polyline points="27 40 37 50 55 30" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <h2 class="ob-title">Your data stays yours.</h2>
+          <p class="ob-desc">Everything is stored locally in your browser.</p>
+          <p class="ob-desc">No account, no cloud, no tracking. Just you and your books.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ob-footer">
+      <div class="ob-footer-left">
+        <button class="ob-skip" id="obSkipBtn" onclick="closeOnboarding()">Skip</button>
+      </div>
+      <div class="ob-dots">
+        <span class="ob-dot active" onclick="goToObSlide(0)"></span>
+        <span class="ob-dot" onclick="goToObSlide(1)"></span>
+        <span class="ob-dot" onclick="goToObSlide(2)"></span>
+        <span class="ob-dot" onclick="goToObSlide(3)"></span>
+        <span class="ob-dot" onclick="goToObSlide(4)"></span>
+      </div>
+      <div class="ob-footer-right">
+        <button class="ob-prev" id="obPrevBtn" onclick="prevObSlide()">Previous</button>
+        <button class="ob-next" id="obNextBtn" onclick="nextObSlide()">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer class="footer">
   <div class="footer-inner">
-    <span>© 2026 Pierre Blavette</span>
-    <span style="display:flex;align-items:center;gap:16px;">
-      <span>Data stored locally in your browser</span>
+    <!-- Desktop row 1: copyright + how it works -->
+    <span class="footer-row-desktop" style="align-items:center;gap:12px;">
+      <span>© 2026 Pierre Blavette</span>
+      <span class="footer-sep">·</span>
+      <button class="footer-link" id="footerHowItWorks" onclick="openOnboarding()">How it works</button>
+    </span>
+    <!-- Desktop row 2: data info -->
+    <span class="footer-row" style="display:flex;align-items:center;gap:10px;">
+      <span id="footerDataInfo">Data stored locally in your browser</span>
       <span class="footer-sep">·</span>
       <span>v1.0</span>
-      <span class="footer-sep">·</span>
+    </span>
+    <!-- Desktop row 3: links -->
+    <span class="footer-links-desktop" style="display:flex;align-items:center;gap:12px;">
       <a class="footer-link" href="https://pierreblavette.com" target="_blank" rel="noopener">pierreblavette.com</a>
       <span class="footer-sep">·</span>
+      <a class="footer-link" href="https://www.linkedin.com/in/pierreblavette/" target="_blank" rel="noopener" title="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </span>
+    <!-- Mobile row 1: how it works + lang -->
+    <span class="footer-lang footer-mobile-row1">
+      <button class="footer-link" onclick="openOnboarding()">How it works</button>
+      <span style="display:flex;align-items:center;gap:6px;">
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
+      </span>
+    </span>
+    <!-- Mobile row 3: copyright -->
+    <span class="footer-mobile-copyright">© 2026 Pierre Blavette</span>
+    <!-- Mobile row 4: portfolio + linkedin -->
+    <span class="footer-mobile-links">
+      <a class="footer-link" href="https://pierreblavette.com" target="_blank" rel="noopener">pierreblavette.com</a>
       <a class="footer-link" href="https://www.linkedin.com/in/pierreblavette/" target="_blank" rel="noopener" title="LinkedIn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
@@ -2088,6 +2474,209 @@ function applyCardCover(card, info) {
   img.src = info.img;
 }
 
+/* ─── I18N ─── */
+const STRINGS = {
+  en: {
+    tabLibrary:'My Library', tabWishlist:'Wishlist',
+    pageLibrary:'My Library', pageWishlist:'Wishlist',
+    btnAdd:'Add', btnEdit:'Edit', btnDone:'Done', btnExport:'Export',
+    searchPlaceholder:'Title, author…', searchClear:'Clear search',
+    viewCard:'Card view', viewList:'List view', themeToggle:'Toggle theme',
+    selCancel:'Cancel', selSelectAll:'Select all', selDeselectAll:'Deselect all',
+    selConfirmRemove:'Remove', selConfirmOwned:'Mark as owned',
+    selCount:(n) => n===0?'0 books selected':n===1?'1 book selected':`${n} books selected`,
+    modalTitle:'Add a book', tabPhoto:'Photo', tabFile:'File', tabManual:'Manual',
+    labelTitle:'Title *', placeholderTitle:'e.g. Les Misérables',
+    labelAuthor:'Author *', placeholderAuthor:'e.g. Victor Hugo',
+    labelYear:'Year (optional)', placeholderYear:'e.g. 1862',
+    labelGenre:'Genre (optional)', placeholderGenre:'e.g. Fiction, Biography…',
+    dropFile:'Drop a file or click to browse', dropFileSub:'JSON (Readr) · CSV (Goodreads)',
+    dropPhoto:'Drop a photo or click to browse', dropPhotoSub:'JPG · PNG · HEIC — photo of a bookshelf or a handwritten list',
+    ocrScanning:'Scanning…', ocrReading:'Reading image…', ocrDetecting:'Detecting books…',
+    ocrDone:'Done!', ocrNone:'No books detected',
+    ocrNoneMsg:'No books detected. Try a clearer photo with visible titles.',
+    ocrError:(msg)=>`Error: ${msg||'Could not analyse this image.'}`,
+    btnCancel:'Cancel', btnAddLibrary:'Add to my library', btnImport:'Import',
+    btnImportN:(n)=>`Import ${n} book${n>1?'s':''}`,
+    importErrFile:'Invalid file.\nExpected format: { "owned": [...], "wishlist": [...] }',
+    importErrParse:"Could not read this file. Make sure it's a valid JSON or Goodreads CSV.",
+    previewLabel:(n)=>`${n} book${n>1?'s':''} detected`,
+    previewBoth:(o,w)=>` — ${o} to library, ${w} to wishlist`,
+    previewWishOnly:' — to wishlist',
+    deleteTitle:'Remove this book?',
+    deleteMsg:(t)=>`"${t}" will be permanently removed from your library.`,
+    deleteBtnCancel:'Cancel', deleteBtnConfirm:'Remove',
+    emptyNoMatch:'No matches found', emptyNoMatchSub:'Try a different title or author.',
+    emptyWish:'Nothing saved yet',
+    emptyWishSub:'Add books you want to read — your future self will thank you.',
+    emptyWishCta:'Add to wishlist',
+    emptyLib:'Your library is empty',
+    emptyLibSub:'Start building your collection — add your first read.',
+    emptyLibCta:'Add a book',
+    colTitle:'Title', colAuthor:'Author', colGenre:'Genre', colYear:'Year',
+    wishBadge:'To buy',
+    resultQuery:(n,total)=>`${n} result${n!==1?'s':''} out of ${total}`,
+    resultTotal:(n)=>`${n} book${n!==1?'s':''}`,
+    footerHowItWorks:'How it works',
+    footerDataInfo:'Data stored locally in your browser',
+    obSlide0Title:"Hi, I'm Readr.",
+    obSlide0Sub:"I'm here to help you organize your reading life. Every book you own, every one you dream of.",
+    obSlide1Title:'Your books, finally in one place.',
+    obSlide1Sub:'Keep track of every book you own and everything you want to read, in one clean, beautiful space.',
+    obSlide2Title:'Adding a book takes seconds.',
+    obSlide2Sub:"Snap a photo, upload a file, or type it in — however you prefer, I'll take care of the rest.",
+    obSlide3Title:'Two spaces, one home.',
+    obSlide3Sub:'Books you own, books you want. Switch between them in one click.',
+    obSlide4Title:'Your data stays yours.',
+    obSlide4Sub:'Everything is stored locally in your browser. No account, no cloud, no tracking. Just you and your books.',
+    obSkip:'Skip', obPrev:'Previous', obNext:'Next', obGetStarted:'Get started',
+  },
+  fr: {
+    tabLibrary:'Ma bibliothèque', tabWishlist:'Wishlist',
+    pageLibrary:'Ma bibliothèque', pageWishlist:'Wishlist',
+    btnAdd:'Ajouter', btnEdit:'Modifier', btnDone:'Terminer', btnExport:'Exporter',
+    searchPlaceholder:'Titre, auteur…', searchClear:'Effacer la recherche',
+    viewCard:'Vue carte', viewList:'Vue liste', themeToggle:'Changer le thème',
+    selCancel:'Annuler', selSelectAll:'Tout sélectionner', selDeselectAll:'Tout désélectionner',
+    selConfirmRemove:'Supprimer', selConfirmOwned:'Marquer comme possédé',
+    selCount:(n)=>n===0?'0 livre sélectionné':n===1?'1 livre sélectionné':`${n} livres sélectionnés`,
+    modalTitle:'Ajouter un livre', tabPhoto:'Photo', tabFile:'Fichier', tabManual:'Manuel',
+    labelTitle:'Titre *', placeholderTitle:'ex. Les Misérables',
+    labelAuthor:'Auteur *', placeholderAuthor:'ex. Victor Hugo',
+    labelYear:'Année (optionnel)', placeholderYear:'ex. 1862',
+    labelGenre:'Genre (optionnel)', placeholderGenre:'ex. Fiction, Biographie…',
+    dropFile:'Déposez un fichier ou cliquez pour parcourir', dropFileSub:'JSON (Readr) · CSV (Goodreads)',
+    dropPhoto:'Déposez une photo ou cliquez pour parcourir', dropPhotoSub:"JPG · PNG · HEIC — photo d'une étagère ou d'une liste",
+    ocrScanning:'Analyse…', ocrReading:"Lecture de l'image…", ocrDetecting:'Détection des livres…',
+    ocrDone:'Terminé !', ocrNone:'Aucun livre détecté',
+    ocrNoneMsg:'Aucun livre détecté. Essayez une photo plus nette avec les titres visibles.',
+    ocrError:(msg)=>`Erreur : ${msg||"Impossible d'analyser cette image."}`,
+    btnCancel:'Annuler', btnAddLibrary:'Ajouter à ma bibliothèque', btnImport:'Importer',
+    btnImportN:(n)=>`Importer ${n} livre${n>1?'s':''}`,
+    importErrFile:'Fichier invalide.\nFormat attendu : { "owned": [...], "wishlist": [...] }',
+    importErrParse:'Impossible de lire ce fichier. Vérifiez qu\'il s\'agit d\'un JSON ou CSV Goodreads valide.',
+    previewLabel:(n)=>`${n} livre${n>1?'s':''} détecté${n>1?'s':''}`,
+    previewBoth:(o,w)=>` — ${o} en bibliothèque, ${w} en wishlist`,
+    previewWishOnly:' — en wishlist',
+    deleteTitle:'Supprimer ce livre ?',
+    deleteMsg:(t)=>`"${t}" sera définitivement supprimé de votre bibliothèque.`,
+    deleteBtnCancel:'Annuler', deleteBtnConfirm:'Supprimer',
+    emptyNoMatch:'Aucun résultat', emptyNoMatchSub:'Essayez un autre titre ou auteur.',
+    emptyWish:'Rien de sauvegardé',
+    emptyWishSub:'Ajoutez les livres que vous voulez lire — votre futur vous remerciera.',
+    emptyWishCta:'Ajouter à la wishlist',
+    emptyLib:'Votre bibliothèque est vide',
+    emptyLibSub:'Commencez à construire votre collection — ajoutez votre premier livre.',
+    emptyLibCta:'Ajouter un livre',
+    colTitle:'Titre', colAuthor:'Auteur', colGenre:'Genre', colYear:'Année',
+    wishBadge:'À acheter',
+    resultQuery:(n,total)=>`${n} résultat${n!==1?'s':''} sur ${total}`,
+    resultTotal:(n)=>`${n} livre${n!==1?'s':''}`,
+    footerHowItWorks:'Comment ça marche',
+    footerDataInfo:'Données stockées localement dans votre navigateur',
+    obSlide0Title:"Bonjour, je suis Readr.",
+    obSlide0Sub:"Je suis là pour t'aider à organiser ta vie de lecteur. Chaque livre que tu possèdes, chaque livre dont tu rêves.",
+    obSlide1Title:'Tes livres, enfin au même endroit.',
+    obSlide1Sub:"Garde une trace de tous les livres que tu possèdes et de tout ce que tu veux lire, dans un espace propre et magnifique.",
+    obSlide2Title:'Ajouter un livre prend quelques secondes.',
+    obSlide2Sub:"Une photo, un fichier ou une saisie manuelle — comme tu préfères, je m'occupe du reste.",
+    obSlide3Title:'Deux espaces, une maison.',
+    obSlide3Sub:"Les livres que tu possèdes, les livres que tu veux. Bascule d'un clic.",
+    obSlide4Title:'Tes données restent les tiennes.',
+    obSlide4Sub:"Tout est stocké localement dans ton navigateur. Pas de compte, pas de cloud, pas de tracking. Juste toi et tes livres.",
+    obSkip:'Passer', obPrev:'Précédent', obNext:'Suivant', obGetStarted:'Commencer',
+  }
+};
+
+let currentLang = localStorage.getItem('readr-lang') || 'en';
+const T = () => STRINGS[currentLang];
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('readr-lang', lang);
+  const t = T();
+  // Lang buttons
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  // Tabs (preserve badges)
+  ['owned','wishlist'].forEach(tab => {
+    const btn = document.querySelector(`.tab[onclick*="${tab}"]`);
+    if (!btn) return;
+    const badge = btn.querySelector('.badge');
+    btn.textContent = tab === 'owned' ? t.tabLibrary : t.tabWishlist;
+    btn.textContent += ' ';
+    if (badge) btn.appendChild(badge);
+  });
+  // Page title
+  document.getElementById('pageTitle').textContent = _tabTitle(currentTab);
+  // Search
+  document.getElementById('search').placeholder = t.searchPlaceholder;
+  document.getElementById('searchClear').setAttribute('aria-label', t.searchClear);
+  // View + theme
+  document.getElementById('btn-grid').title = t.viewCard;
+  document.getElementById('btn-list').title = t.viewList;
+  document.getElementById('themeBtn').title = t.themeToggle;
+  // Toolbar buttons
+  document.getElementById('addBookBtn').textContent = t.btnAdd;
+  document.getElementById('editWishBtn').textContent = _editMode ? t.btnDone : t.btnEdit;
+  document.getElementById('exportBtn').textContent = t.btnExport;
+  // Selection bar
+  document.querySelector('.sel-cancel').textContent = t.selCancel;
+  // Add modal
+  document.querySelector('.modal-title').textContent = t.modalTitle;
+  document.querySelector('.import-tab-ai-text').textContent = t.tabPhoto;
+  document.getElementById('add-tab-file').textContent = t.tabFile;
+  document.getElementById('add-tab-manual').textContent = t.tabManual;
+  // Form labels
+  const labels = document.querySelectorAll('#add-panel-manual label');
+  if (labels[0]) labels[0].textContent = t.labelTitle;
+  if (labels[1]) labels[1].textContent = t.labelAuthor;
+  if (labels[2]) labels[2].textContent = t.labelYear;
+  if (labels[3]) labels[3].textContent = t.labelGenre;
+  // Placeholders
+  document.getElementById('addTitle').placeholder = t.placeholderTitle;
+  document.getElementById('addAuthor').placeholder = t.placeholderAuthor;
+  document.getElementById('addYear').placeholder = t.placeholderYear;
+  document.getElementById('addGenre').placeholder = t.placeholderGenre;
+  // Dropzones
+  document.querySelector('#add-panel-file .import-dropzone-title').textContent = t.dropFile;
+  document.querySelector('#add-panel-file .import-dropzone-sub').textContent = t.dropFileSub;
+  document.querySelector('#add-panel-photo .import-dropzone-title').textContent = t.dropPhoto;
+  document.querySelector('#add-panel-photo .import-dropzone-sub').textContent = t.dropPhotoSub;
+  document.getElementById('ocrStatusLabel').textContent = t.ocrScanning;
+  // Modal buttons
+  document.querySelector('#addModal .modal-cancel').textContent = t.btnCancel;
+  document.getElementById('modalSubmitBtn').textContent = t.btnAddLibrary;
+  document.getElementById('importSubmitBtn').textContent = t.btnImport;
+  // Delete modal
+  document.querySelector('.confirm-modal-title').textContent = t.deleteTitle;
+  document.querySelector('.confirm-modal-delete').textContent = t.deleteBtnConfirm;
+  document.querySelector('#deleteConfirmModal .modal-cancel').textContent = t.deleteBtnCancel;
+  // Footer
+  document.getElementById('footerHowItWorks').textContent = t.footerHowItWorks;
+  document.getElementById('footerDataInfo').textContent = t.footerDataInfo;
+  // Onboarding slides
+  const slides = document.querySelectorAll('.ob-slide');
+  const defs = [
+    [t.obSlide0Title, t.obSlide0Sub],
+    [t.obSlide1Title, t.obSlide1Sub],
+    [t.obSlide2Title, t.obSlide2Sub],
+    [t.obSlide3Title, t.obSlide3Sub],
+    [t.obSlide4Title, t.obSlide4Sub],
+  ];
+  slides.forEach((sl, i) => {
+    if (defs[i]) {
+      sl.querySelector('.ob-title').textContent = defs[i][0];
+      sl.querySelector('.ob-desc').textContent = defs[i][1];
+    }
+  });
+  document.getElementById('obSkipBtn').textContent = t.obSkip;
+  document.getElementById('obPrevBtn').textContent = t.obPrev;
+  // Re-render dynamic content
+  render();
+  updateSelectionBar();
+  _updateObSlide();
+}
+
 /* ─── STATE ─── */
 let currentTab  = 'owned';
 let currentView = 'grid';
@@ -2103,20 +2692,24 @@ function init() {
   document.getElementById('owned-count').textContent   = oc;
   document.getElementById('wishlist-count').textContent = wc;
   document.getElementById('editWishBtn').classList.add('visible');
+  document.getElementById('pageTitle').textContent = _libraryTitle();
   updateExportBtn();
+  updateEditBtnState();
 
 const saved = localStorage.getItem('biblio-theme') || 'light';
   applyTheme(saved);
   currentView = localStorage.getItem('biblio-view') || 'grid';
   applyView(currentView);
-  render();
+  setLang(currentLang);  // applies all translations + render()
 
   const toolbar = document.querySelector('.toolbar');
   const onScroll = () => {
     const scrolled = (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop) > 10;
     toolbar.classList.toggle('scrolled', scrolled);
+    adjustSelectionBarBottom();
   };
   window.addEventListener('scroll', onScroll, { passive: true });
+  if (!localStorage.getItem(OB_KEY)) setTimeout(openOnboarding, 400);
 }
 
 /* ─── THEME ─── */
@@ -2143,15 +2736,61 @@ function applyView(v) {
   document.getElementById('btn-list').classList.toggle('active', v === 'list');
 }
 
+/* ─── ONBOARDING ─── */
+const OB_KEY = 'readr-onboarding-seen';
+function _tabTitle(tab) { return tab === 'owned' ? T().pageLibrary : T().pageWishlist; }
+function _libraryTitle() { return T().pageLibrary; }
+let _obSlide = 0;
+const OB_TOTAL = 5;
+
+function openOnboarding() {
+  _obSlide = 0;
+  _updateObSlide();
+  document.getElementById('obOverlay').classList.add('open');
+}
+
+function closeOnboarding() {
+  document.getElementById('obOverlay').classList.remove('open');
+  localStorage.setItem(OB_KEY, '1');
+}
+
+function nextObSlide() {
+  if (_obSlide < OB_TOTAL - 1) { _obSlide++; _updateObSlide(); }
+  else closeOnboarding();
+}
+
+function prevObSlide() {
+  if (_obSlide > 0) { _obSlide--; _updateObSlide(); }
+}
+
+function goToObSlide(n) { _obSlide = n; _updateObSlide(); }
+
+function _updateObSlide() {
+  document.querySelectorAll('.ob-slide').forEach((el, i) => el.classList.toggle('active', i === _obSlide));
+  document.querySelectorAll('.ob-dot').forEach((el, i) => el.classList.toggle('active', i === _obSlide));
+  const isLast = _obSlide === OB_TOTAL - 1;
+  const isFirst = _obSlide === 0;
+  document.getElementById('obNextBtn').textContent = isLast ? T().obGetStarted : T().obNext;
+  document.getElementById('obSkipBtn').style.visibility = isLast ? 'hidden' : 'visible';
+  document.getElementById('obPrevBtn').style.visibility = isFirst ? 'hidden' : 'visible';
+}
+
+/* ─── EDIT BTN STATE ─── */
+function updateEditBtnState() {
+  const btn = document.getElementById('editWishBtn');
+  if (!btn) return;
+  btn.disabled = DATA[currentTab].length === 0;
+}
+
 /* ─── TAB ─── */
 function switchTab(tab, el) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('search').value = '';
-  document.getElementById('pageTitle').textContent = tab === 'owned' ? 'My Library' : 'Wishlist';
+  document.getElementById('pageTitle').textContent = _tabTitle(tab);
   _editMode = false;
-  document.getElementById('editWishBtn').textContent = 'Edit';
+  document.getElementById('editWishBtn').textContent = T().btnEdit;
   document.getElementById('editWishBtn').classList.add('visible');
   selectedBooks.clear();
   updateSelectionBar();
@@ -2211,9 +2850,7 @@ function render() {
   });
 
   const total = DATA[currentTab].length;
-  info.textContent = query
-    ? `${books.length} result${books.length !== 1 ? 's' : ''} out of ${total}`
-    : `${total} book${total !== 1 ? 's' : ''}`;
+  info.textContent = query ? T().resultQuery(books.length, total) : T().resultTotal(total);
 
   if (books.length === 0) {
     grid.className = 'books-grid';
@@ -2231,8 +2868,8 @@ function render() {
             <line x1="47" y1="50" x2="57" y2="50" stroke="var(--text-3)" stroke-width="3" stroke-linecap="round"/>
             <line x1="52" y1="45" x2="52" y2="55" stroke="var(--text-3)" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          <div class="empty-title">No matches found</div>
-          <div class="empty-sub">Try a different title or author.</div>
+          <div class="empty-title">${T().emptyNoMatch}</div>
+          <div class="empty-sub">${T().emptyNoMatchSub}</div>
         </div>`;
     } else if (isWishTab) {
       // ── Wishlist empty ──
@@ -2248,9 +2885,9 @@ function render() {
             <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
             <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          <div class="empty-title">Nothing saved yet</div>
-          <div class="empty-sub">Add books you want to read — your future self will thank you.</div>
-          <button class="empty-cta" onclick="openAddModal()">Add to wishlist</button>
+          <div class="empty-title">${T().emptyWish}</div>
+          <div class="empty-sub">${T().emptyWishSub}</div>
+          <button class="empty-cta" onclick="openAddModal()">${T().emptyWishCta}</button>
         </div>`;
     } else {
       // ── My Library empty ──
@@ -2266,9 +2903,9 @@ function render() {
             <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
             <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          <div class="empty-title">Your library is empty</div>
-          <div class="empty-sub">Start building your collection — add your first read.</div>
-          <button class="empty-cta" onclick="openAddModal()">Add a book</button>
+          <div class="empty-title">${T().emptyLib}</div>
+          <div class="empty-sub">${T().emptyLibSub}</div>
+          <button class="empty-cta" onclick="openAddModal()">${T().emptyLibCta}</button>
         </div>`;
     }
     return;
@@ -2283,16 +2920,16 @@ function render() {
             ${_editMode ? `<th style="width:40px"><span class="th-checkbox-wrap" onclick="toggleSelectAll()" title="Select all"><span class="row-checkbox${books.length > 0 && books.every(b => selectedBooks.has(b.title+'||'+b.author)) ? ' all-selected' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></span></th>` : ''}
             <th style="width:5%">#</th>
             <th style="width:28%" class="${sort === 'title' ? 'sorted' : ''}" onclick="sortBy('title')">
-              Title <span class="sort-arrow">${sort === 'title' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
+              ${T().colTitle} <span class="sort-arrow">${sort === 'title' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
             <th style="width:28%" class="${sort === 'author' ? 'sorted' : ''}" onclick="sortBy('author')">
-              Author <span class="sort-arrow">${sort === 'author' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
+              ${T().colAuthor} <span class="sort-arrow">${sort === 'author' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
             <th style="width:28%" class="${sort === 'genre' ? 'sorted' : ''}" onclick="sortBy('genre')">
-              Genre <span class="sort-arrow">${sort === 'genre' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
+              ${T().colGenre} <span class="sort-arrow">${sort === 'genre' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
             <th style="width:9%" class="${sort === 'year' ? 'sorted' : ''}" onclick="sortBy('year')">
-              Year <span class="sort-arrow">${sort === 'year' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
+              ${T().colYear} <span class="sort-arrow">${sort === 'year' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
             <th style="width:60px"></th>
           </tr>
@@ -2340,7 +2977,7 @@ function render() {
         ${_editMode ? `<span class="card-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>` : ''}
         <div class="book-cover" style="background:var(--bg3)">
 
-          ${isWish ? '<span class="wishlist-badge">To buy</span>' : ''}
+          ${isWish ? `<span class="wishlist-badge">${T().wishBadge}</span>` : ''}
         </div>
         <div class="book-body">
           <div class="book-title" title="${esc(b.title)}">${esc(b.title)}</div>
@@ -2351,6 +2988,7 @@ function render() {
     }).join('');
     loadCovers();
   }
+  updateEditBtnState();
 }
 
 function sortBy(col) {
@@ -2467,14 +3105,23 @@ function toggleSelectAll() {
   updateSelectionBar();
 }
 
+function adjustSelectionBarBottom() {
+  const bar = document.getElementById('selectionBar');
+  const footer = document.querySelector('.footer');
+  if (!bar || !footer) return;
+  const footerRect = footer.getBoundingClientRect();
+  const footerVisible = Math.max(0, window.innerHeight - footerRect.top);
+  const target = footerVisible > 0 ? footerVisible + 16 : 28;
+  bar.style.setProperty('--sel-bottom', target + 'px');
+}
+
 function updateSelectionBar() {
   const bar = document.getElementById('selectionBar');
   const count = selectedBooks.size;
   bar.classList.toggle('visible', _editMode);
-  document.getElementById('selectionCount').textContent =
-    count === 0 ? '0 books selected' : count === 1 ? '1 book selected' : `${count} books selected`;
+  document.getElementById('selectionCount').textContent = T().selCount(count);
   const isRemove = currentTab !== 'wishlist';
-  document.getElementById('selConfirmLabel').textContent = isRemove ? 'Remove' : 'Mark as owned';
+  document.getElementById('selConfirmLabel').textContent = isRemove ? T().selConfirmRemove : T().selConfirmOwned;
   document.getElementById('selConfirmBtn').classList.toggle('danger', isRemove);
   document.getElementById('selConfirmBtn').disabled = count === 0;
   // Sync select-all button label
@@ -2483,7 +3130,8 @@ function updateSelectionBar() {
   if (query) visBooks = visBooks.filter(b => b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query));
   const allSel = visBooks.length > 0 && visBooks.every(b => selectedBooks.has(`${b.title}||${b.author}`));
   const saBtn = document.getElementById('selSelectAllBtn');
-  if (saBtn) saBtn.textContent = allSel ? 'Deselect all' : 'Select all';
+  if (saBtn) saBtn.textContent = allSel ? T().selDeselectAll : T().selSelectAll;
+  adjustSelectionBarBottom();
 }
 
 function confirmSelection() {
@@ -2495,7 +3143,7 @@ let _deleteTarget = null;
 
 function openDeleteConfirm(title, author) {
   _deleteTarget = { title, author };
-  document.getElementById('deleteConfirmSub').textContent = `"${title}" will be permanently removed from your library.`;
+  document.getElementById('deleteConfirmSub').textContent = T().deleteMsg(title);
   document.getElementById('deleteConfirmModal').classList.add('open');
 }
 
@@ -2621,12 +3269,43 @@ function importData() {
         document.getElementById('wishlist-count').textContent = DATA.wishlist.length;
         render();
       } catch(err) {
-        alert('Invalid file.\nExpected format: { "owned": [...], "wishlist": [...] }');
+        alert(T().importErrFile);
       }
     };
     reader.readAsText(file);
   };
   input.click();
+}
+
+/* ─── IMPORT TAB SLIDING INDICATOR ─── */
+function moveTabIndicator(tabEl) {
+  const indicator = document.getElementById('importTabIndicator');
+  if (!indicator || !tabEl) return;
+  indicator.style.left  = tabEl.offsetLeft + 'px';
+  indicator.style.width = tabEl.offsetWidth + 'px';
+  indicator.style.background = tabEl.id === 'add-tab-photo' ? '#9B5CF6' : 'var(--primary-50)';
+}
+
+function initTabIndicator() {
+  const tabs = document.getElementById('importTabs');
+  if (!tabs) return;
+  // Position on active tab immediately (no transition)
+  const indicator = document.getElementById('importTabIndicator');
+  if (indicator) indicator.style.transition = 'none';
+  const active = tabs.querySelector('.import-tab.active');
+  moveTabIndicator(active);
+  requestAnimationFrame(() => {
+    if (indicator) indicator.style.transition = '';
+  });
+  // Hover: slide to hovered tab
+  tabs.querySelectorAll('.import-tab').forEach(tab => {
+    tab.addEventListener('mouseenter', () => moveTabIndicator(tab));
+  });
+  // Mouseleave container: return to active
+  tabs.addEventListener('mouseleave', () => {
+    const active = tabs.querySelector('.import-tab.active');
+    moveTabIndicator(active);
+  });
 }
 
 /* ─── ADD MODAL (unified) ─── */
@@ -2636,15 +3315,23 @@ function switchAddTab(tab) {
   document.getElementById('add-panel-manual').style.display = tab === 'manual' ? '' : 'none';
   document.getElementById('add-panel-file').style.display   = tab === 'file'   ? '' : 'none';
   document.getElementById('add-panel-photo').style.display  = tab === 'photo'  ? '' : 'none';
+  if (tab === 'photo') {
+    requestAnimationFrame(() => {
+      const dz = document.getElementById('photoDropzone');
+      const r  = document.getElementById('photoGradRect');
+      if (dz && r) { r.setAttribute('width', dz.clientWidth - 2); r.setAttribute('height', dz.clientHeight - 2); }
+    });
+  }
   document.getElementById('add-tab-manual').classList.toggle('active', tab === 'manual');
   document.getElementById('add-tab-file').classList.toggle('active',   tab === 'file');
   document.getElementById('add-tab-photo').classList.toggle('active',  tab === 'photo');
+  moveTabIndicator(document.getElementById(`add-tab-${tab}`));
   document.getElementById('modalSubmitBtn').style.display  = tab === 'manual' ? '' : 'none';
   document.getElementById('importSubmitBtn').style.display = tab !== 'manual' ? '' : 'none';
   if (tab !== 'manual') {
     document.getElementById('importPreview').style.display = 'none';
     document.getElementById('importSubmitBtn').disabled = true;
-    document.getElementById('importSubmitBtn').textContent = 'Import';
+    document.getElementById('importSubmitBtn').textContent = T().btnImport;
     _importPreviewBooks = [];
   }
   document.getElementById('ocrProgressArea').style.display = 'none';
@@ -2685,7 +3372,7 @@ function processImportFile(file) {
       if (!books.length) throw new Error('No books found in this file.');
       showImportPreview(books);
     } catch(err) {
-      errEl.textContent = err.message || 'Could not read this file. Make sure it\'s a valid JSON or Goodreads CSV.';
+      errEl.textContent = err.message || T().importErrParse;
       errEl.style.display = 'block';
     }
   };
@@ -2773,7 +3460,7 @@ async function runGeminiVision(file) {
   const url = URL.createObjectURL(file);
   document.getElementById('ocrThumb').src = url;
   document.getElementById('ocrProgressArea').style.display = '';
-  document.getElementById('ocrStatusLabel').textContent = 'Reading image…';
+  document.getElementById('ocrStatusLabel').textContent = T().ocrReading;
   document.getElementById('ocrProgressFill').style.width = '20%';
 
   try {
@@ -2785,7 +3472,7 @@ async function runGeminiVision(file) {
     });
 
     document.getElementById('ocrProgressFill').style.width = '50%';
-    document.getElementById('ocrStatusLabel').textContent = 'Detecting books…';
+    document.getElementById('ocrStatusLabel').textContent = T().ocrDetecting;
 
     const res = await fetch(VISION_WORKER_URL, {
       method: 'POST',
@@ -2799,7 +3486,7 @@ async function runGeminiVision(file) {
     const text = result.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     document.getElementById('ocrProgressFill').style.width = '100%';
-    document.getElementById('ocrStatusLabel').textContent = 'Done!';
+    document.getElementById('ocrStatusLabel').textContent = T().ocrDone;
 
     const jsonMatch = text.match(/\[[\s\S]*\]/);
     if (!jsonMatch) throw new Error('Unexpected response format');
@@ -2808,9 +3495,9 @@ async function runGeminiVision(file) {
       .filter(b => b.title.length > 0);
 
     if (!books.length) {
-      errEl.textContent = 'No books detected. Try a clearer photo with visible titles.';
+      errEl.textContent = T().ocrNoneMsg;
       errEl.style.display = 'block';
-      document.getElementById('ocrStatusLabel').textContent = 'No books detected';
+      document.getElementById('ocrStatusLabel').textContent = T().ocrNone;
       return;
     }
 
@@ -2818,7 +3505,7 @@ async function runGeminiVision(file) {
     showImportPreview(books);
   } catch(e) {
     document.getElementById('ocrProgressArea').style.display = 'none';
-    errEl.textContent = `Error: ${e.message || 'Could not analyse this image.'}`;
+    errEl.textContent = T().ocrError(e.message);
     errEl.style.display = 'block';
   }
 }
@@ -2827,9 +3514,9 @@ function showImportPreview(books) {
   _importPreviewBooks = books;
   const ownedCount = books.filter(b => b.list !== 'wishlist').length;
   const wishCount  = books.filter(b => b.list === 'wishlist').length;
-  let label = `${books.length} book${books.length > 1 ? 's' : ''} detected`;
-  if (ownedCount && wishCount) label += ` — ${ownedCount} to library, ${wishCount} to wishlist`;
-  else if (wishCount) label += ` — to wishlist`;
+  let label = T().previewLabel(books.length);
+  if (ownedCount && wishCount) label += T().previewBoth(ownedCount, wishCount);
+  else if (wishCount) label += T().previewWishOnly;
   document.getElementById('importPreviewCount').textContent = label;
   document.getElementById('importPreviewList').innerHTML = books.map((b, i) => `
     <div class="import-preview-item">
@@ -2844,7 +3531,7 @@ function showImportPreview(books) {
   document.getElementById('importPreview').style.display = 'block';
   const btn = document.getElementById('importSubmitBtn');
   btn.disabled = false;
-  btn.textContent = `Import ${books.length} book${books.length > 1 ? 's' : ''}`;
+  btn.textContent = T().btnImportN(books.length);
 }
 
 function removeImportBook(index) {
@@ -2852,7 +3539,7 @@ function removeImportBook(index) {
   if (_importPreviewBooks.length === 0) {
     document.getElementById('importPreview').style.display = 'none';
     document.getElementById('importSubmitBtn').disabled = true;
-    document.getElementById('importSubmitBtn').textContent = 'Import';
+    document.getElementById('importSubmitBtn').textContent = T().btnImport;
   } else {
     showImportPreview(_importPreviewBooks);
   }
@@ -2997,8 +3684,9 @@ function openAddModal(tab) {
   document.getElementById('import-file-error').style.display = 'none';
   document.getElementById('import-photo-error').style.display = 'none';
   document.getElementById('ocrProgressArea').style.display = 'none';
-  switchAddTab(tab || 'manual');
+  switchAddTab(tab || 'photo');
   document.getElementById('addModal').classList.add('open');
+  requestAnimationFrame(() => initTabIndicator());
 }
 
 let _genreFetchQueue = [];
@@ -3040,7 +3728,7 @@ let _editMode = false;
 let _skipAnim = false;
 function toggleEditMode() {
   _editMode = !_editMode;
-  document.getElementById('editWishBtn').textContent = _editMode ? 'Done' : 'Edit';
+  document.getElementById('editWishBtn').textContent = _editMode ? T().btnDone : T().btnEdit;
   if (!_editMode) selectedBooks.clear();
   updateSelectionBar();
   _skipAnim = true;
