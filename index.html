@@ -2812,8 +2812,15 @@ function _updateObSlide() {
   const isLast = _obSlide === OB_TOTAL - 1;
   const isFirst = _obSlide === 0;
   document.getElementById('obNextBtn').textContent = isLast ? T().obGetStarted : T().obNext;
-  document.getElementById('obSkipBtn').style.visibility = isLast ? 'hidden' : 'visible';
-  document.getElementById('obPrevBtn').style.visibility = isFirst ? 'hidden' : 'visible';
+  const skipBtn = document.getElementById('obSkipBtn');
+  skipBtn.style.visibility = isLast ? 'hidden' : 'visible';
+  skipBtn.style.display = isLast ? 'none' : '';
+  const prevBtn = document.getElementById('obPrevBtn');
+  const leftDiv = document.querySelector('.ob-footer-left');
+  const rightDiv = document.querySelector('.ob-footer-right');
+  if (isLast) leftDiv.appendChild(prevBtn);
+  else rightDiv.prepend(prevBtn);
+  prevBtn.style.visibility = isFirst ? 'hidden' : 'visible';
 }
 
 (function() {
