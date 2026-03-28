@@ -1107,6 +1107,8 @@
     transition: opacity 0.15s;
   }
   .sel-btn svg { width: 14px; height: 14px; }
+  .sel-confirm-icon { display: none; }
+  .sel-cancel-icon { display: none; }
   .sel-cancel { background: rgba(255,255,255,0.15); color: inherit; }
   .sel-cancel:hover { background: rgba(255,255,255,0.25); }
   .sel-confirm { background: var(--primary-50); color: #fff; }
@@ -1207,6 +1209,7 @@
   }
 
   @media (max-width: 600px) {
+    html { font-size: 15px; }
     /* ── Prevent horizontal overflow ── */
     body { overflow-x: hidden; }
 
@@ -1246,9 +1249,14 @@
     /* ── Grid: single column ── */
     .books-grid { grid-template-columns: 1fr; gap: 12px; }
 
-    /* ── Table: horizontal scroll ── */
-    .books-list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .list-table { min-width: 520px; }
+    /* ── Table: no scroll on mobile ── */
+    .books-list { overflow-x: hidden; }
+    .list-table { min-width: 0; }
+    .list-table th { padding: 10px 8px; }
+    .list-table td { padding: 14px 8px; }
+    .list-table th:first-child { padding: 0 8px; }
+    .list-table td:has(.row-checkbox) { padding: 0 8px; }
+    .th-checkbox-wrap { justify-content: center; }
 
     /* ── Selection bar: full width ── */
     .selection-bar {
@@ -1256,10 +1264,19 @@
       width: calc(100% - 32px);
       left: 16px;
       transform: none;
-      gap: 8px;
-      padding: 10px 14px;
+      gap: 6px;
+      padding: 10px 12px;
+      font-size: 0.875rem;
+      overflow: hidden;
     }
-    .sel-actions { flex: 1; justify-content: flex-end; }
+    .sel-actions { justify-content: flex-end; gap: 6px; flex-shrink: 0; }
+    .selection-count { flex: 1; text-align: center; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .sel-confirm #selConfirmLabel { display: none; }
+    .sel-confirm-icon { display: block !important; width: 16px; height: 16px; }
+    .sel-confirm { width: 40px; padding: 0; justify-content: center; flex-shrink: 0; }
+    .sel-cancel-label { display: none; }
+    .sel-cancel-icon { display: block !important; width: 16px; height: 16px; }
+    .sel-cancel { width: 40px; padding: 0; justify-content: center; flex-shrink: 0; }
 
     /* ── Modals ── */
     .modal-overlay { overflow-y: auto; align-items: flex-start; padding: 24px 0; }
@@ -1268,6 +1285,11 @@
     .import-dropzone { min-height: 160px; }
     .import-preview { margin-top: 12px; padding-top: 0; border-top: none; }
 
+
+
+
+    /* ── Delete button ── */
+    .delete-row-btn:hover { background: transparent; color: var(--text); }
 
     /* ── Book panel: full screen ── */
     .book-panel { width: 100%; }
@@ -1803,11 +1825,15 @@
 
 <!-- SELECTION BAR -->
 <div class="selection-bar" id="selectionBar">
-  <button class="sel-btn sel-cancel" onclick="toggleEditMode()">Cancel</button>
+  <button class="sel-btn sel-cancel" onclick="toggleEditMode()">
+    <svg class="sel-cancel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <span class="sel-cancel-label">Cancel</span>
+  </button>
   <span class="selection-count" id="selectionCount"></span>
   <div class="sel-actions">
     <button class="sel-btn sel-select-all" id="selSelectAllBtn" onclick="toggleSelectAll()">Select all</button>
     <button class="sel-btn sel-confirm" id="selConfirmBtn" onclick="confirmSelection()">
+      <svg class="sel-confirm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       <span id="selConfirmLabel">Mark as owned</span>
     </button>
   </div>
@@ -2635,7 +2661,7 @@ function setLang(lang) {
   document.getElementById('editWishBtn').textContent = _editMode ? t.btnDone : t.btnEdit;
   document.getElementById('exportBtn').textContent = t.btnExport;
   // Selection bar
-  document.querySelector('.sel-cancel').textContent = t.selCancel;
+  document.querySelector('.sel-cancel-label').textContent = t.selCancel;
   // Add modal
   document.querySelector('.modal-title').textContent = t.modalTitle;
   document.querySelector('.import-tab-ai-text').textContent = t.tabPhoto;
@@ -2927,26 +2953,27 @@ function render() {
   }
 
   if (currentView === 'list') {
+    const mob = window.innerWidth <= 600;
     grid.className = 'books-list';
     grid.innerHTML = `
-      <table class="list-table">
+      <table class="list-table" style="table-layout:fixed;width:100%">
         <thead>
           <tr>
             ${_editMode ? `<th style="width:40px"><span class="th-checkbox-wrap" onclick="toggleSelectAll()" title="Select all"><span class="row-checkbox${books.length > 0 && books.every(b => selectedBooks.has(b.title+'||'+b.author)) ? ' all-selected' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></span></th>` : ''}
-            <th style="width:5%">#</th>
-            <th style="width:28%" class="${sort === 'title' ? 'sorted' : ''}" onclick="sortBy('title')">
+            <th style="width:${mob ? '32px' : '5%'}" class="col-num">#</th>
+            <th style="width:${mob ? 'auto' : '28%'}" class="col-title ${sort === 'title' ? 'sorted' : ''}" onclick="sortBy('title')">
               ${T().colTitle} <span class="sort-arrow">${sort === 'title' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
-            <th style="width:28%" class="${sort === 'author' ? 'sorted' : ''}" onclick="sortBy('author')">
+            <th style="${mob ? 'display:none' : 'width:28%'}" class="col-author ${sort === 'author' ? 'sorted' : ''}" onclick="sortBy('author')">
               ${T().colAuthor} <span class="sort-arrow">${sort === 'author' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
-            <th style="width:28%" class="${sort === 'genre' ? 'sorted' : ''}" onclick="sortBy('genre')">
+            <th style="${mob ? 'display:none' : 'width:28%'}" class="col-genre ${sort === 'genre' ? 'sorted' : ''}" onclick="sortBy('genre')">
               ${T().colGenre} <span class="sort-arrow">${sort === 'genre' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
-            <th style="width:9%" class="${sort === 'year' ? 'sorted' : ''}" onclick="sortBy('year')">
+            <th style="${mob ? 'display:none' : 'width:9%'}" class="col-year ${sort === 'year' ? 'sorted' : ''}" onclick="sortBy('year')">
               ${T().colYear} <span class="sort-arrow">${sort === 'year' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</span>
             </th>
-            <th style="width:60px"></th>
+            <th class="col-actions" style="width:${mob ? '56px' : '60px'}"></th>
           </tr>
         </thead>
         <tbody>
@@ -2962,12 +2989,12 @@ function render() {
                 onclick="_editMode ? toggleSelect(this) : openPanel('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')"
                 style="animation-delay:${delay}ms">
               ${_editMode ? `<td style="overflow:visible;white-space:normal;width:40px;text-align:center"><span class="row-checkbox" onclick="event.stopPropagation();toggleSelect(this.closest('[data-selkey]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>` : ''}
-              <td class="list-num">${i + 1}</td>
-              <td><div class="list-title">${esc(b.title)}</div></td>
-              <td><div class="list-author">${esc(b.author)}</div></td>
-              <td><span class="list-genre" data-genre-title="${esc(b.title)}">${GENRES[b.title] ?? '-'}</span></td>
-              <td><span class="list-year">${yr ?? '—'}</span></td>
-              <td style="text-align:center;padding:0 11px;overflow:visible">
+              <td class="list-num col-num">${i + 1}</td>
+              <td class="col-title" style="overflow:hidden;max-width:0"><div class="list-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.title)}</div></td>
+              <td class="col-author" style="${mob ? 'display:none' : ''}"><div class="list-author" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(b.author)}</div></td>
+              <td class="col-genre" style="${mob ? 'display:none' : ''}"><span class="list-genre" data-genre-title="${esc(b.title)}">${GENRES[b.title] ?? '-'}</span></td>
+              <td class="col-year" style="${mob ? 'display:none' : ''}"><span class="list-year">${yr ?? '—'}</span></td>
+              <td class="col-actions" style="text-align:center;padding:0 ${mob ? '8px' : '11px'};overflow:visible">
                 <button class="delete-row-btn" onclick="event.stopPropagation();openDeleteConfirm('${esc(b.title).replace(/'/g,"\\'")}','${esc(b.author).replace(/'/g,"\\'")}')" title="Remove">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
