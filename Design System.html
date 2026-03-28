@@ -959,6 +959,79 @@
     .ds-wrap { grid-template-columns: 1fr; padding: 32px 20px 80px; }
     .ds-nav { display: none; }
   }
+
+  /* ── Mobile nav ── */
+  .ds-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    padding: 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+  .ds-drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(30,35,80,0.30);
+    z-index: 500;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .ds-drawer-overlay.open { opacity: 1; }
+  .ds-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-radius: 16px 16px 0 0;
+    z-index: 501;
+    padding: 20px 20px 40px;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .ds-drawer.open { transform: translateY(0); }
+  .ds-drawer-handle {
+    width: 36px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .ds-drawer-section {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 32px 0 8px;
+  }
+  .ds-drawer-link {
+    display: block;
+    padding: 13px 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-2);
+    text-decoration: none;
+  }
+  .ds-drawer-link:hover { background: var(--bg3); color: var(--text); }
+  .ds-drawer-link.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .ds-header-inner { height: 64px; padding: 0 16px; }
+    .ds-logo-text { display: none; }
+    .ds-logo span { display: none; }
+    .ds-hamburger { display: flex; align-items: center; justify-content: center; }
+    .ds-drawer-overlay { display: block; pointer-events: none; }
+    .ds-drawer-overlay.open { pointer-events: auto; }
+  }
 </style>
 </head>
 <body>
@@ -966,9 +1039,14 @@
 <!-- HEADER -->
 <header class="ds-header">
   <div class="ds-header-inner">
-    <a class="ds-logo" href="Bibliothèque.html">
+    <button class="ds-hamburger" onclick="toggleDsDrawer()" aria-label="Navigation">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <a class="ds-logo" href="index.html">
       <div class="ds-logo-icon">R</div>
-      Readr <span>/ Design System</span>
+      <span class="ds-logo-text">Readr</span><span> / Design System</span>
     </a>
     <button class="theme-btn" onclick="toggleTheme()" title="Theme">
       <span class="toggle-thumb">
@@ -977,6 +1055,38 @@
     </button>
   </div>
 </header>
+
+<!-- Mobile nav drawer -->
+<div class="ds-drawer-overlay" id="dsDrawerOverlay" onclick="toggleDsDrawer()"></div>
+<div class="ds-drawer" id="dsDrawer">
+  <div class="ds-drawer-handle"></div>
+  <div class="ds-drawer-section">Foundations</div>
+  <a class="ds-drawer-link" href="#colors" onclick="toggleDsDrawer()">Colors</a>
+  <a class="ds-drawer-link" href="#typography" onclick="toggleDsDrawer()">Typography</a>
+  <a class="ds-drawer-link" href="#spacing" onclick="toggleDsDrawer()">Spacing</a>
+  <a class="ds-drawer-link" href="#shadows" onclick="toggleDsDrawer()">Shadows & Radius</a>
+  <div class="ds-drawer-section">Components</div>
+  <a class="ds-drawer-link" href="#buttons" onclick="toggleDsDrawer()">Buttons</a>
+  <a class="ds-drawer-link" href="#btn-states" onclick="toggleDsDrawer()">Button States</a>
+  <a class="ds-drawer-link" href="#inputs" onclick="toggleDsDrawer()">Inputs</a>
+  <a class="ds-drawer-link" href="#segmented" onclick="toggleDsDrawer()">Segmented Control</a>
+  <a class="ds-drawer-link" href="#view-toggle" onclick="toggleDsDrawer()">View Toggle</a>
+  <a class="ds-drawer-link" href="#badges" onclick="toggleDsDrawer()">Badges & Pills</a>
+  <a class="ds-drawer-link" href="#checkbox" onclick="toggleDsDrawer()">Checkbox</a>
+  <a class="ds-drawer-link" href="#autocomplete" onclick="toggleDsDrawer()">Autocomplete</a>
+  <a class="ds-drawer-link" href="#lang-switcher" onclick="toggleDsDrawer()">Language Switcher</a>
+  <a class="ds-drawer-link" href="#theme-toggle" onclick="toggleDsDrawer()">Theme Toggle</a>
+  <div class="ds-drawer-section">Patterns</div>
+  <a class="ds-drawer-link" href="#card" onclick="toggleDsDrawer()">Book Card</a>
+  <a class="ds-drawer-link" href="#list" onclick="toggleDsDrawer()">List View</a>
+  <a class="ds-drawer-link" href="#panel" onclick="toggleDsDrawer()">Side Panel</a>
+  <a class="ds-drawer-link" href="#modal" onclick="toggleDsDrawer()">Modal</a>
+  <a class="ds-drawer-link" href="#selection-bar" onclick="toggleDsDrawer()">Selection Bar</a>
+  <a class="ds-drawer-link" href="#empty" onclick="toggleDsDrawer()">Empty State</a>
+  <a class="ds-drawer-link" href="#footer" onclick="toggleDsDrawer()">Footer</a>
+  <div class="ds-drawer-section">Reference</div>
+  <a class="ds-drawer-link" href="#token-usage" onclick="toggleDsDrawer()">Token Usage</a>
+</div>
 
 <div class="ds-wrap">
 
@@ -2318,6 +2428,13 @@
 </div>
 
 <script>
+  function toggleDsDrawer() {
+    const drawer = document.getElementById('dsDrawer');
+    const overlay = document.getElementById('dsDrawerOverlay');
+    const open = drawer.classList.toggle('open');
+    overlay.classList.toggle('open', open);
+  }
+
   function toggleTheme() {
     const html = document.documentElement;
     html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
