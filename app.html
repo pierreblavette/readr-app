@@ -3663,7 +3663,7 @@ async function fetchTitleSuggestions(q) {
   list.innerHTML = '<li class="autocomplete-item autocomplete-loading">Searching…</li>';
   list.classList.add('open');
   try {
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=8&key=AIzaSyBi8Eg1Ped0zmqNBfxoz2yGuUNLNTGzyPM&fields=items(volumeInfo(title,authors,publishedDate,categories))`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=8&key=AIzaSyAZYCliITFCBl5iPL3LbjOu1KSSEAUud-s&fields=items(volumeInfo(title,authors,publishedDate,categories))`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
