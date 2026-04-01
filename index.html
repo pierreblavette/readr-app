@@ -108,11 +108,12 @@
   .hero {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 72px 48px 64px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    padding: 96px 48px 80px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    text-align: center;
+    gap: 56px;
   }
 
   .hero-eyebrow {
@@ -158,6 +159,7 @@
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    justify-content: center;
     margin-bottom: 36px;
   }
 
@@ -187,6 +189,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    justify-content: center;
   }
 
   .trust-badge {
@@ -212,7 +215,7 @@
   }
 
   .mockup {
-    width: 340px;
+    width: 480px;
     background: #fff;
     border-radius: 24px;
     border: 1px solid var(--border);
@@ -723,20 +726,20 @@
   .faq-icon {
     width: 40px; height: 40px;
     border-radius: 8px;
-    background: var(--primary-5);
+    background: transparent;
     border: none;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    color: var(--primary-60);
+    color: var(--text-3);
     transition: transform 0.2s, background 0.2s, color 0.2s;
   }
 
-  .faq-question:hover .faq-icon { background: var(--primary-10); }
+  .faq-question:hover .faq-icon { background: var(--primary-5); color: var(--primary-60); }
 
   .faq-question.open .faq-icon {
     transform: rotate(45deg);
-    background: var(--primary-20);
-    color: var(--primary-70);
+    background: var(--primary-10);
+    color: var(--primary-60);
   }
 
   .faq-icon svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
@@ -807,12 +810,12 @@
 
   /* ── MOBILE ── */
   @media (max-width: 768px) {
-    .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 20px 48px; }
-    .hero-visual { order: -1; }
+    .hero { padding: 56px 20px 48px; gap: 40px; }
     .mockup-wrapper { padding: 0; display: flex; justify-content: center; }
-    .mockup { width: 240px; }
+    .mockup { width: 100%; max-width: 360px; }
     .mockup-float { display: none; }
     .features { padding: 64px 20px; }
+    .features-inner { padding: 0; }
     .features-showcase { grid-template-columns: 1fr; gap: 24px; }
     .feature-panel { min-height: 260px; }
     .cta-section { padding: 64px 20px; }

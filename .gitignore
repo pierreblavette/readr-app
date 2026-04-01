@@ -6,6 +6,8 @@
 # Claude / IDE
 .claude/
 .playwright-mcp/
+.agents/
+skills-lock.json
 
 # Cloudflare Wrangler
 .wrangler/
