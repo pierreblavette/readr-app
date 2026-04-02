@@ -6,7 +6,7 @@
 <title>Readr - Design System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ─── TOKENS ─── */
   :root {
@@ -282,6 +282,28 @@
     background: var(--dark-80);
     padding: 10px;
     border-radius: 10px;
+  }
+  .palette-grid.on-white {
+    background: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .palette-grid.on-dark-bg {
+    background: #0F0F0F;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .palette-grid.on-dark-bg .palette-chip {
+    border-color: rgba(255,255,255,0.12);
+  }
+  .palette-grid.on-dark-bg .palette-chip-meta {
+    background: rgba(255,255,255,0.08);
+  }
+  .palette-grid.on-dark-bg .palette-chip-step,
+  .palette-grid.on-dark-bg .palette-chip-hex {
+    color: rgba(255,255,255,0.75);
+    opacity: 1;
   }
   .palette-chip {
     display: flex;
@@ -955,6 +977,97 @@
   .states-table tbody tr:hover { background: var(--bg3); }
   .states-content-label { font-size: 0.75rem; font-weight: 600; color: var(--text-3); white-space: nowrap; font-family: 'SF Mono', 'Fira Code', monospace; }
 
+  /* ─── LOGO ─── */
+  .logo-wordmark {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .logo-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    padding: 40px 32px;
+    flex: 1;
+    min-width: 160px;
+  }
+  .logo-bg-light   { background: #F4F6F9; border: 1px solid var(--border); }
+  .logo-bg-white   { background: #ffffff; border: 1px solid var(--border); }
+  .logo-bg-dark    { background: #1B1B1B; }
+  .logo-bg-accent  { background: #4959E6; }
+  .logo-bg-row     { display: flex; gap: 12px; flex-wrap: wrap; }
+  .logo-spec-row   { display: flex; gap: 32px; flex-wrap: wrap; padding: 20px 0; border-top: 1px solid var(--border); margin-top: 8px; }
+  .logo-spec-item  { display: flex; flex-direction: column; gap: 3px; }
+  .logo-spec-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+  .logo-spec-val   { font-size: 0.857rem; font-weight: 500; color: var(--text); font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  /* ─── FRAUNCES HEADING ─── */
+  .fraunces { font-family: 'Fraunces', serif; }
+
+  /* ─── HAND-DRAWN HIGHLIGHT ─── */
+  .hl {
+    position: relative;
+    display: inline;
+    font-style: italic;
+  }
+  .hl svg.wave {
+    position: absolute;
+    left: -4px; bottom: -6px;
+    width: calc(100% + 8px);
+    height: 10px;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .hl svg.wave path {
+    fill: none;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 1;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: draw-wave 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+  }
+  @keyframes draw-wave {
+    to { stroke-dashoffset: 0; }
+  }
+  .hl-demo-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .hl-demo-row:last-child { border-bottom: none; }
+  .hl-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-size: 0.68rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-weight: 600;
+    color: var(--text-3);
+    white-space: nowrap;
+    margin-left: auto;
+  }
+  .hl-chip-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .hl-usage-note {
+    font-size: 0.75rem;
+    color: var(--text-3);
+    font-style: italic;
+  }
+
   @media (max-width: 900px) {
     .ds-wrap { grid-template-columns: 1fr; padding: 32px 20px 80px; }
     .ds-nav { display: none; }
@@ -1062,8 +1175,10 @@
 <div class="ds-drawer" id="dsDrawer">
   <div class="ds-drawer-handle"></div>
   <div class="ds-drawer-section">Foundations</div>
+  <a class="ds-drawer-link" href="#logo" onclick="toggleDsDrawer()">Logo</a>
   <a class="ds-drawer-link" href="#colors" onclick="toggleDsDrawer()">Colors</a>
   <a class="ds-drawer-link" href="#typography" onclick="toggleDsDrawer()">Typography</a>
+  <a class="ds-drawer-link" href="#highlight" onclick="toggleDsDrawer()">Hand-drawn Highlight</a>
   <a class="ds-drawer-link" href="#spacing" onclick="toggleDsDrawer()">Spacing</a>
   <a class="ds-drawer-link" href="#shadows" onclick="toggleDsDrawer()">Shadows & Radius</a>
   <div class="ds-drawer-section">Components</div>
@@ -1094,8 +1209,10 @@
   <!-- SIDEBAR -->
   <nav class="ds-nav">
     <div class="ds-nav-section">Foundations</div>
-    <a class="ds-nav-link active" href="#colors">Colors</a>
+    <a class="ds-nav-link active" href="#logo">Logo</a>
+    <a class="ds-nav-link" href="#colors">Colors</a>
     <a class="ds-nav-link" href="#typography">Typography</a>
+    <a class="ds-nav-link" href="#highlight">Hand-drawn Highlight</a>
     <a class="ds-nav-link" href="#spacing">Spacing</a>
     <a class="ds-nav-link" href="#shadows">Shadows & Radius</a>
 
@@ -1133,6 +1250,68 @@
       <h1 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 16px;">Design System</h1>
       <p style="font-size: 1rem; color: var(--text-2); max-width: 480px; line-height: 1.65;">Complete reference of tokens, components and patterns. Native light and dark themes via <code style="font-size: 0.857rem; background: var(--bg3); padding: 2px 6px; border-radius: 4px;">data-theme</code>.</p>
     </div>
+
+    <!-- ─── LOGO ─── -->
+    <section class="ds-section" id="logo">
+      <h2 class="ds-section-title">Logo</h2>
+      <p class="ds-section-sub">Wordmark uniquement — Fraunces Regular. Pas d'icône, pas de version bold, pas de substitution de police.</p>
+
+      <div class="ds-card" style="margin-bottom:12px;">
+        <div class="ds-card-label">Contextes d'utilisation</div>
+        <div class="ds-card-body col">
+          <div class="logo-bg-row">
+            <div class="logo-bg logo-bg-light">
+              <span class="logo-wordmark" style="font-size:24px; color:#1B1B1B;">readr</span>
+            </div>
+            <div class="logo-bg logo-bg-white">
+              <span class="logo-wordmark" style="font-size:24px; color:#1B1B1B;">readr</span>
+            </div>
+            <div class="logo-bg logo-bg-dark">
+              <span class="logo-wordmark" style="font-size:24px; color:#ffffff;">readr</span>
+            </div>
+            <div class="logo-bg logo-bg-accent">
+              <span class="logo-wordmark" style="font-size:24px; color:#ffffff;">readr</span>
+            </div>
+          </div>
+          <div class="logo-spec-row">
+            <div class="logo-spec-item"><span class="logo-spec-label">Font</span><span class="logo-spec-val">Fraunces</span></div>
+            <div class="logo-spec-item"><span class="logo-spec-label">Weight</span><span class="logo-spec-val">400</span></div>
+            <div class="logo-spec-item"><span class="logo-spec-label">Letter-spacing</span><span class="logo-spec-val">-0.02em</span></div>
+            <div class="logo-spec-item"><span class="logo-spec-label">Couleur défaut</span><span class="logo-spec-val">#1B1B1B</span></div>
+            <div class="logo-spec-item"><span class="logo-spec-label">Couleur on-dark</span><span class="logo-spec-val">#FFFFFF</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ds-card" style="margin-bottom:12px;">
+        <div class="ds-card-label">Tailles</div>
+        <div class="ds-card-body col" style="padding: 0 24px; gap:0;">
+          <div class="type-sample">
+            <span class="logo-wordmark" style="font-size:40px; color:var(--text);">readr</span>
+            <div class="type-meta">40px · display / splash screen</div>
+          </div>
+          <div class="type-sample">
+            <span class="logo-wordmark" style="font-size:28px; color:var(--text);">readr</span>
+            <div class="type-meta">28px · page header</div>
+          </div>
+          <div class="type-sample">
+            <span class="logo-wordmark" style="font-size:19px; color:var(--text);">readr</span>
+            <div class="type-meta">19px · nav (taille de référence)</div>
+          </div>
+          <div class="type-sample">
+            <span class="logo-wordmark" style="font-size:14px; color:var(--text);">readr</span>
+            <div class="type-meta">14px · footer / taille minimale</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ds-card">
+        <div class="ds-card-label">Règles d'usage</div>
+        <div class="ds-card-body col" style="gap:8px;">
+          <p style="font-size:0.857rem;color:var(--text-2);line-height:1.7;">Toujours en minuscules — <strong>readr</strong>, jamais <em>Readr</em> ni <em>READR</em>. Ne pas modifier la police, le weight ou le letter-spacing. Taille minimale : 14px. Sur fond coloré, utiliser uniquement blanc (#FFFFFF).</p>
+        </div>
+      </div>
+    </section>
 
     <!-- ─── COLORS ─── -->
     <section class="ds-section" id="colors">
@@ -1313,7 +1492,7 @@
 
       <!-- ── Neutrals Dark ── -->
       <p class="palette-section-label">Neutrals — Dark (tinted primary)</p>
-      <div class="palette-grid">
+      <div class="palette-grid on-white">
         <div class="palette-chip">
           <div class="palette-chip-swatch" style="background:var(--dark-5);"></div>
           <div class="palette-chip-meta"><span class="palette-chip-step">5</span><span class="palette-chip-hex">4%</span></div>
@@ -1363,7 +1542,7 @@
 
       <!-- ── Neutrals Light ── -->
       <p class="palette-section-label">Neutrals — Light (tinted primary)</p>
-      <div class="palette-grid on-dark">
+      <div class="palette-grid on-dark-bg">
         <div class="palette-chip">
           <div class="palette-chip-swatch" style="background:var(--light-5);"></div>
           <div class="palette-chip-meta"><span class="palette-chip-step">5</span><span class="palette-chip-hex">5%</span></div>
@@ -1411,14 +1590,91 @@
       </div>
       <div style="font-size:0.65rem;color:var(--text-3);font-family:'SF Mono','Fira Code',monospace;margin-bottom:8px;margin-top:2px;">--light-N &nbsp;·&nbsp; base #F5F6FF</div>
 
+      <!-- ── Hand-drawn highlight colors ── -->
+      <p class="color-section-label" style="margin-top:48px;">Hand-drawn highlight — couleurs landing</p>
+      <p style="font-size:0.857rem;color:var(--text-3);margin-bottom:20px;margin-top:-6px;">Couleurs réservées à l'effet SVG wave sur les headings. Usage principal : landing page. À utiliser avec parcimonie dans le produit.</p>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background:#4959E6;"></div>
+          <div class="color-swatch-info">
+            <div class="color-swatch-title">Accent</div>
+            <div class="ds-token-name" style="margin-top:0;">--accent</div>
+            <div class="ds-token-val">#4959E6 — défaut</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background:#9DCCFA;"></div>
+          <div class="color-swatch-info">
+            <div class="color-swatch-title">Sky</div>
+            <div class="ds-token-name" style="margin-top:0;">#9DCCFA</div>
+            <div class="ds-token-val">Bleu ciel doux</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background:#FE7E4E;"></div>
+          <div class="color-swatch-info">
+            <div class="color-swatch-title">Coral</div>
+            <div class="ds-token-name" style="margin-top:0;">#FE7E4E</div>
+            <div class="ds-token-val">Corail chaud</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background:#FFCEE3;"></div>
+          <div class="color-swatch-info">
+            <div class="color-swatch-title">Blush</div>
+            <div class="ds-token-name" style="margin-top:0;">#FFCEE3</div>
+            <div class="ds-token-val">Rose pâle</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background:#FFE92D;"></div>
+          <div class="color-swatch-info">
+            <div class="color-swatch-title">Lemon</div>
+            <div class="ds-token-name" style="margin-top:0;">#FFE92D</div>
+            <div class="ds-token-val">Jaune vif</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch-block" style="background:#9EEB97;"></div>
+          <div class="color-swatch-info">
+            <div class="color-swatch-title">Mint</div>
+            <div class="ds-token-name" style="margin-top:0;">#9EEB97</div>
+            <div class="ds-token-val">Vert menthe</div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ─── TYPOGRAPHY ─── -->
     <section class="ds-section" id="typography">
       <h2 class="ds-section-title">Typography</h2>
-      <p class="ds-section-sub">Plus Jakarta Sans — 14px base. All components inherit from <code>font-size: 1rem</code>.</p>
+      <p class="ds-section-sub">Deux fonts : <strong>Fraunces</strong> (serif, headings uniquement) + <strong>Plus Jakarta Sans</strong> (tout le reste). Base 14px.</p>
+
+      <div class="ds-card" style="margin-bottom: 12px;">
+        <div class="ds-card-label">Fraunces — Headings</div>
+        <div class="ds-card-body col" style="padding: 0 24px;">
+          <div class="type-sample">
+            <div style="font-family:'Fraunces',serif; font-size: 64px; font-weight: 400; letter-spacing: -0.025em; line-height: 1.04; color: var(--text);">Hero Title</div>
+            <div class="type-meta">Fraunces · 64px · weight 400 · tracking -0.025em · line-height 1.04</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-family:'Fraunces',serif; font-size: 64px; font-weight: 400; letter-spacing: -0.025em; line-height: 1.04; font-style: italic; color: var(--text);">Hero Title italic</div>
+            <div class="type-meta">Fraunces · 64px · weight 400 · italic — usage : mot clé surligné avec wave</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-family:'Fraunces',serif; font-size: 28px; font-weight: 300; letter-spacing: -0.02em; line-height: 1.2; color: var(--text);">Section heading</div>
+            <div class="type-meta">Fraunces · 28px · weight 300 · tracking -0.02em</div>
+          </div>
+          <div class="type-sample">
+            <div style="font-family:'Fraunces',serif; font-size: 20px; font-weight: 300; letter-spacing: -0.01em; line-height: 1.2; color: var(--text);">Card heading</div>
+            <div class="type-meta">Fraunces · 20px · weight 300 · tracking -0.01em</div>
+          </div>
+        </div>
+      </div>
+
       <div class="ds-card">
-        <div class="ds-card-label">Scale</div>
+        <div class="ds-card-label">Plus Jakarta Sans — Interface</div>
         <div class="ds-card-body col" style="padding: 0 24px;">
 
           <div class="type-sample">
@@ -1466,6 +1722,129 @@
             <div class="type-meta">0.857rem · weight 500 · line-height 1.5</div>
           </div>
 
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── HAND-DRAWN HIGHLIGHT ─── -->
+    <section class="ds-section" id="highlight">
+      <h2 class="ds-section-title">Hand-drawn Highlight</h2>
+      <p class="ds-section-sub">Effet SVG wave animé appliqué sur le mot clé en italic du hero heading. Utilise <code>stroke-dashoffset</code> pour l'animation de tracé.</p>
+
+      <div class="ds-card" style="margin-bottom: 12px;">
+        <div class="ds-card-label">Démonstration</div>
+        <div class="ds-card-body col">
+          <div class="hl-demo-row">
+            <div style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.025em;color:var(--text);">
+              Tes livres, <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#4959E6;"/></svg></span>
+            </div>
+          </div>
+          <div style="padding: 16px 0; font-size: 0.857rem; color: var(--text-3);">Recharge la page pour rejouer l'animation (0.9s, delay 0.3s, ease cubic-bezier).</div>
+        </div>
+      </div>
+
+      <div class="ds-card" style="margin-bottom: 12px;">
+        <div class="ds-card-label">Couleurs disponibles</div>
+        <div class="ds-card-body col" style="padding: 0 24px;">
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);position:relative;">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#4959E6;"/></svg></span>
+            </span>
+            <span class="hl-chip"><span class="hl-chip-dot" style="background:#4959E6;"></span>#4959E6 — Accent (défaut)</span>
+          </div>
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);position:relative;">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#9DCCFA;"/></svg></span>
+            </span>
+            <span class="hl-chip"><span class="hl-chip-dot" style="background:#9DCCFA;"></span>#9DCCFA — Sky</span>
+          </div>
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);position:relative;">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#FE7E4E;"/></svg></span>
+            </span>
+            <span class="hl-chip"><span class="hl-chip-dot" style="background:#FE7E4E;"></span>#FE7E4E — Coral</span>
+          </div>
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);position:relative;">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#FFCEE3;"/></svg></span>
+            </span>
+            <span class="hl-chip"><span class="hl-chip-dot" style="background:#FFCEE3;"></span>#FFCEE3 — Blush</span>
+          </div>
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);position:relative;">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#FFE92D;"/></svg></span>
+            </span>
+            <span class="hl-chip"><span class="hl-chip-dot" style="background:#FFE92D;"></span>#FFE92D — Lemon</span>
+          </div>
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);position:relative;">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#9EEB97;"/></svg></span>
+            </span>
+            <span class="hl-chip"><span class="hl-chip-dot" style="background:#9EEB97;"></span>#9EEB97 — Mint</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ds-card" style="margin-bottom: 12px;">
+        <div class="ds-card-label">Variantes de tracé</div>
+        <div class="ds-card-body col" style="padding: 0 24px;">
+
+          <!-- Vague douce -->
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" style="stroke:#4959E6; stroke-dasharray:400; stroke-dashoffset:400;"/></svg></span>
+            </span>
+            <span class="hl-chip">Vague douce — défaut</span>
+          </div>
+
+          <!-- Zigzag -->
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 8 L28 2 L56 8 L84 2 L112 8 L140 2 L168 8 L196 2 L224 8 L252 2 L280 8 L308 2 L340 8" style="stroke:#4959E6; stroke-dasharray:400; stroke-dashoffset:400;"/></svg></span>
+            </span>
+            <span class="hl-chip">Zigzag</span>
+          </div>
+
+          <!-- Boucles -->
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 14" preserveAspectRatio="none" style="height:14px;bottom:-13px;"><path d="M0 3 Q17 12, 34 3 Q51 12, 68 3 Q85 12, 102 3 Q119 12, 136 3 Q153 12, 170 3 Q187 12, 204 3 Q221 12, 238 3 Q255 12, 272 3 Q289 12, 306 3 Q323 12, 340 3" style="stroke:#4959E6; stroke-dasharray:600; stroke-dashoffset:600;"/></svg></span>
+            </span>
+            <span class="hl-chip">Boucles</span>
+          </div>
+
+          <!-- Trait irrégulier -->
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 6 C15 5, 25 7, 45 6 C65 5, 80 7, 100 6 C120 5, 140 7, 160 6 C180 5, 200 7, 220 6 C240 5, 255 7, 280 5 C300 4, 320 6, 340 5" style="stroke:#4959E6; stroke-dasharray:400; stroke-dashoffset:400;"/></svg></span>
+            </span>
+            <span class="hl-chip">Trait irrégulier</span>
+          </div>
+
+          <!-- 1 boucle cursive -->
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 12" preserveAspectRatio="none" style="height:14px;bottom:-13px;"><path d="M0 6 C70 5, 125 7, 143 6 C148 6, 150 2, 155 0 C160 -2, 167 -1, 170 2 C173 5, 172 9, 167 10 C162 11, 155 10, 152 7 C149 5, 151 5, 160 6 C185 5, 265 7, 340 6" style="stroke:#4959E6; stroke-dasharray:500; stroke-dashoffset:500;"/></svg></span>
+            </span>
+            <span class="hl-chip">1 boucle cursive</span>
+          </div>
+
+          <!-- 3 boucles cursives -->
+          <div class="hl-demo-row">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;font-style:italic;color:var(--text);">
+              <span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 12" preserveAspectRatio="none" style="height:14px;bottom:-13px;"><path d="M0 6 C18 5, 52 7, 68 6 C73 6, 75 2, 80 0 C85 -2, 92 -1, 95 2 C98 5, 97 9, 92 10 C87 11, 80 10, 77 7 C74 5, 76 5, 85 6 C110 5, 148 7, 163 6 C168 6, 170 2, 175 0 C180 -2, 187 -1, 190 2 C193 5, 192 9, 187 10 C182 11, 175 10, 172 7 C169 5, 171 5, 180 6 C205 5, 243 7, 258 6 C263 6, 265 2, 270 0 C275 -2, 282 -1, 285 2 C288 5, 287 9, 282 10 C277 11, 270 10, 267 7 C264 5, 266 5, 275 6 C300 5, 325 7, 340 6" style="stroke:#4959E6; stroke-dasharray:700; stroke-dashoffset:700;"/></svg></span>
+            </span>
+            <span class="hl-chip">3 boucles cursives</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ds-card">
+        <div class="ds-card-label">Usage</div>
+        <div class="ds-card-body col" style="gap: 8px;">
+          <p style="font-size:0.857rem;color:var(--text-2);line-height:1.7;">Réservé aux <strong>headings landing page</strong>. Ne pas utiliser dans l'interface produit (bibliothèque, recherche, wishlist). L'italic est porté par la balise <code style="font-size:0.75rem;background:var(--bg3);padding:2px 6px;border-radius:4px;">.hl</code>, le SVG wave est positionné en <code style="font-size:0.75rem;background:var(--bg3);padding:2px 6px;border-radius:4px;">absolute</code> sous le texte via <code style="font-size:0.75rem;background:var(--bg3);padding:2px 6px;border-radius:4px;">bottom: -6px</code>.</p>
+          <p style="font-size:0.857rem;color:var(--text-3);line-height:1.7;">Couleur validée par défaut : <strong style="color:#4959E6;">#4959E6</strong>. Les autres couleurs sont disponibles pour des variantes de la landing.</p>
         </div>
       </div>
     </section>
