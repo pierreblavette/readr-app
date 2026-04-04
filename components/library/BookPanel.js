@@ -2,71 +2,103 @@
 import { useState, useEffect } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 
-export default function BookPanel({ book, onClose, onDelete, t }) {
+export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, t }) {
   const [cover, setCover] = useState(null);
+  const [synopsis, setSynopsis] = useState(null);
+
+  useEffect(() => {
+    if (book) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+    } else {
+      const top = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, parseInt(top || '0') * -1);
+    }
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    };
+  }, [book]);
 
   useEffect(() => {
     if (!book) return;
     setCover(null);
+    setSynopsis(null);
     const cache = loadGBCache();
     const key   = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
+    if (cache[key] !== undefined) {
+      setCover(cache[key]?.thumb || null);
+      setSynopsis(cache[key]?.description || null);
+      return;
+    }
     fetchBookCover(book.title, book.author, cache).then(res => {
       const next = { ...cache, [key]: res };
       saveGBCache(next);
       setCover(res?.thumb || null);
+      setSynopsis(res?.description || null);
     });
   }, [book]);
 
-  const [c1, c2] = book ? coverColors(book.title) : ['#ccc','#aaa'];
+  const [c1, c2] = book ? coverColors(book.title) : ['#ccc', '#aaa'];
   const letter   = book ? coverLetter(book.title) : '';
 
   return (
-    <div className={`fixed top-[60px] right-0 h-[calc(100vh-60px)] w-[420px] border-l border-[var(--border)] z-40 overflow-y-auto transition-transform duration-300 ${book ? 'translate-x-0' : 'translate-x-full'}`}
-      style={{ background: 'var(--card)', backdropFilter: 'blur(16px)' }}>
-
+    <div className={`book-panel${book ? ' open' : ''}`}>
       {book && (
-        <div className="flex flex-col">
+        <div className="panel-inner">
+
+          {/* Share button */}
+          <button className="panel-share">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </button>
+
+          {/* Close button */}
+          <button className="panel-close" onClick={onClose}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+
           {/* Cover */}
-          <div className="relative w-full h-56 flex items-center justify-center flex-shrink-0"
-            style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }}>
-            {cover
-              ? <img src={cover} alt={book.title} className="h-full w-auto max-w-full object-contain p-4" />
-              : <span className="text-white text-6xl font-bold opacity-80 select-none">{letter}</span>
-            }
-            <button onClick={onClose}
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white hover:bg-black/50 transition-colors">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
+          <div className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`} style={{ background: cover ? `linear-gradient(135deg, ${c1}, ${c2})` : undefined }}>
+            {cover && <img src={cover} alt={book.title} className="panel-cover-img" />}
           </div>
 
-          {/* Info */}
-          <div className="p-6 flex flex-col gap-4">
-            <div>
-              <h2 className="font-heading text-[1.75rem] font-normal leading-tight tracking-[-0.02em] text-[var(--text)]">
-                {book.title}
-              </h2>
-              <p className="text-base text-[var(--text-2)] mt-1">{book.author}</p>
+          {/* Body */}
+          <div className="panel-body">
+            <div className="panel-title">{book.title}</div>
+            <div className="panel-author">{book.author}</div>
+            <div className="panel-meta">
+              {book.genre && <span>{book.genre}</span>}
+              {book.genre && book.year && <span className="panel-meta-sep">·</span>}
+              {book.year && <span>{book.year}</span>}
             </div>
-
-            <div className="flex flex-wrap gap-2">
-              {book.genre && <span className="text-xs font-semibold bg-[var(--bg3)] text-[var(--text-2)] px-2.5 py-1 rounded-full">{book.genre}</span>}
-              {book.year  && <span className="text-xs font-semibold bg-[var(--bg3)] text-[var(--text-2)] px-2.5 py-1 rounded-full">{book.year}</span>}
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-[var(--border)]">
-              <button onClick={() => onDelete(book)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                  <path d="M10 11v6M14 11v6M9 6V4h6v2"/>
-                </svg>
-                {t.deleteBtnConfirm}
+            {synopsis
+              ? <div className="panel-synopsis">{synopsis}</div>
+              : <div className="panel-synopsis-placeholder">No synopsis available.</div>
+            }
+            <div className="panel-actions">
+              {tab === 'wishlist' && (
+                <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
+                  {t.selConfirmOwned || 'Move to Library'}
+                </button>
+              )}
+              <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
+                {t.btnDelete || 'Delete'}
               </button>
             </div>
           </div>
+
         </div>
       )}
     </div>

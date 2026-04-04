@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
       className={`${fraunces.variable} ${jakarta.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false}>
           {children}
         </ThemeProvider>
       </body>
