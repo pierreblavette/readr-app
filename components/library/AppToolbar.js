@@ -2,57 +2,33 @@
 import { useTheme } from "next-themes";
 
 export default function AppToolbar({
-  tab, setTab, lang, setLang, t,
-  data, view, switchView,
+  lang, setLang, t,
+  view, switchView,
   editMode, setEditMode, setSelected,
   setAddModal, exportData,
+  onOpenSidebar,
 }) {
   const { theme, setTheme } = useTheme();
-  const ownedCount    = data.owned.length;
-  const wishlistCount = data.wishlist.length;
-
-  function handleTab(newTab) {
-    setTab(newTab);
-    setEditMode(false);
-    setSelected(new Set());
-  }
 
   return (
-    <div className="toolbar">
+    <div className="toolbar toolbar-mobile-only">
       <div className="toolbar-inner">
+
+        {/* Hamburger (mobile) */}
+        <button className="toolbar-hamburger" onClick={onOpenSidebar} aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
 
         {/* Logo */}
         <div className="logo">readr</div>
 
-        {/* Tabs */}
-        <div className="toolbar-tabs">
-          <div className="tabs">
-            {[
-              { key: 'owned',    label: t.tabLibrary,  count: ownedCount },
-              { key: 'wishlist', label: t.tabWishlist, count: wishlistCount },
-            ].map(({ key, label, count }) => (
-              <button key={key}
-                onClick={() => handleTab(key)}
-                className={`tab${tab === key ? ' active' : ''}`}>
-                {label}
-                <span className="badge">{count}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Right controls */}
         <div className="toolbar-right">
-          {/* Lang */}
-          <div className="lang-toggle">
-            <button onClick={() => setLang('en')} className={`lang-btn${lang === 'en' ? ' active' : ''}`}>EN</button>
-            <span className="lang-sep">·</span>
-            <button onClick={() => setLang('fr')} className={`lang-btn${lang === 'fr' ? ' active' : ''}`}>FR</button>
-          </div>
 
-          <div className="toolbar-divider" />
-
-          {/* Theme toggle */}
           <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="theme-btn" aria-label="Toggle theme">
             <span className="toggle-thumb">

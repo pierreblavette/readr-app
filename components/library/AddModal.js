@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 
 const TABS = ['photo', 'file', 'manual'];
 
-function PhotoDropzone() {
+function PhotoDropzone({ onClick }) {
   const ref = useRef(null);
   const [dims, setDims] = useState({ w: 0, h: 0 });
 
@@ -14,7 +14,7 @@ function PhotoDropzone() {
   }, []);
 
   return (
-    <div ref={ref} className="import-dropzone import-dropzone-photo">
+    <div ref={ref} className="import-dropzone import-dropzone-photo" onClick={onClick} style={{ cursor: 'pointer' }}>
       {dims.w > 0 && (
         <svg className="photo-dropzone-border" width={dims.w} height={dims.h} aria-hidden="true">
           <defs>
@@ -50,7 +50,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
   const [error,  setError]  = useState('');
   const [importError, setImportError] = useState('');
   const [previewBooks, setPreviewBooks] = useState([]);
-  const fileInputRef = useRef(null);
+  const fileInputRef  = useRef(null);
+  const photoInputRef = useRef(null);
 
   // Tab indicator
   const tabRefs = useRef([]);
@@ -215,7 +216,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
         {/* Photo tab (placeholder) */}
         {activeTab === 'photo' && (
           <div>
-            <PhotoDropzone />
+            <PhotoDropzone onClick={() => photoInputRef.current?.click()} />
+            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} />
             <div className="modal-actions">
               <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
               <button type="button" className="modal-submit" disabled>{t.btnAdd}</button>
@@ -226,20 +228,31 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
         {/* File tab */}
         {activeTab === 'file' && (
           <div>
-            <div
-              className="import-dropzone"
-              onClick={() => fileInputRef.current?.click()}
-              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add('dragover'); }}
-              onDragLeave={e => e.currentTarget.classList.remove('dragover')}
-              onDrop={handleDrop}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-              <div className="import-dropzone-title">Drop a file or click to browse</div>
-              <div className="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
-            </div>
+            {previewBooks.length === 0 ? (
+              <div
+                className="import-dropzone"
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add('dragover'); }}
+                onDragLeave={e => e.currentTarget.classList.remove('dragover')}
+                onDrop={handleDrop}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <div className="import-dropzone-title">Drop a file or click to browse</div>
+                <div className="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
+              </div>
+            ) : (
+              <button className="import-change-file" onClick={() => fileInputRef.current?.click()}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Change file
+              </button>
+            )}
             <input ref={fileInputRef} type="file" accept=".json,.csv" style={{ display: 'none' }} onChange={handleFileChange} />
 
             {importError && <div className="import-error">{importError}</div>}

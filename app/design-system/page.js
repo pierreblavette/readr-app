@@ -6,7 +6,7 @@ import Link from "next/link";
 const NAV = {
   Foundations: ["logo","colors","typography","highlight","spacing","shadows"],
   Components:  ["buttons","btn-states","inputs","segmented","view-toggle","badges","checkbox","autocomplete","lang-switcher","theme-toggle"],
-  Patterns:    ["card","list","panel","modal","selection-bar","empty","footer"],
+  Patterns:    ["card","list","sidebar","panel","modal","selection-bar","empty","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -14,7 +14,7 @@ const NAV_LABELS = {
   "spacing":"Spacing","shadows":"Shadows & Radius","buttons":"Buttons","btn-states":"Button States",
   "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges & Pills",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
-  "theme-toggle":"Theme Toggle","card":"Book Card","list":"List View","panel":"Side Panel",
+  "theme-toggle":"Theme Toggle","card":"Book Card","list":"List View","sidebar":"Sidebar","panel":"Side Panel",
   "modal":"Modal","selection-bar":"Selection Bar","empty":"Empty State","footer":"Footer",
   "token-usage":"Token Usage",
 };
@@ -263,42 +263,47 @@ export default function DesignSystemPage() {
 
           {/* ── TYPOGRAPHY ── */}
           <section className="ds-section" id="typography">
-            <SectionTitle title="Typography" sub="Plus Jakarta Sans (UI) · Fraunces (headings/logo) · Base : 14px" />
+            <SectionTitle title="Typography" sub="Base : 14px — 1rem = 14px" />
             <div className="ds-card">
-              <div className="ds-card-label">Échelle — Plus Jakarta Sans</div>
+              <div className="ds-card-label">Plus Jakarta Sans</div>
               <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
                 {[
-                  ["clamp(2.4rem,4.5vw,3.3rem)","800","Page title","letterSpacing:'-0.04em'"],
-                  ["1.5rem","800","Section title","letterSpacing:'-0.03em'"],
-                  ["1.071rem","600","Buttons / inputs",""],
-                  ["1rem","700","Card titles",""],
-                  ["1rem","600","Active buttons, active tab state",""],
-                  ["1rem","500","Body, inactive tabs, author/year",""],
-                  ["0.857rem","700","Uppercase labels, table headers",""],
-                  ["0.857rem","500","Field labels, secondary text",""],
-                  ["0.75rem","700","Micro-labels uppercase",""],
-                  ["0.68rem","700","Token labels, small caps",""],
-                ].map(([size,weight,use]) => (
-                  <div key={use} className="type-sample">
-                    <div style={{ fontSize: size, fontWeight: weight }}>{use}</div>
-                    <div className="type-meta">{size} · weight {weight}</div>
+                  [48, "3.43rem", "800", "Page title"],
+                  [21, "1.5rem",  "800", "Section title"],
+                  [18, "1.29rem", "700", "Empty state title"],
+                  [15, "1.07rem", "600", "Buttons / inputs"],
+                  [14, "1rem",    "700", "Card titles"],
+                  [14, "1rem",    "600", "Active buttons, tab state"],
+                  [14, "1rem",    "500", "Body, author/year"],
+                  [12, "0.86rem", "700", "Uppercase labels, table headers"],
+                  [12, "0.86rem", "500", "Field labels, secondary text"],
+                  [11, "0.79rem", "700", "Micro-labels uppercase"],
+                  [10, "0.71rem", "700", "Token labels, small caps"],
+                ].map(([px, rem, weight, use]) => (
+                  <div key={use + px} className="type-sample">
+                    <div className="type-sample-preview">
+                      <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{use}</div>
+                    </div>
+                    <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
                 ))}
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Fraunces — Headings & Logo</div>
+              <div className="ds-card-label">Fraunces</div>
               <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
                 {[
-                  [48,"300","Heading display"],
-                  [36,"300","Heading XL"],
-                  [28,"400","Heading LG"],
-                  [19,"400","Logo nav"],
-                  [14,"400","Logo footer / minimum"],
-                ].map(([sz,wt,use]) => (
-                  <div key={sz} className="type-sample">
-                    <div style={{ fontSize: sz, fontWeight: wt, fontFamily: "var(--font-fraunces), serif" }}>{use}</div>
-                    <div className="type-meta">{sz}px · Fraunces weight {wt}</div>
+                  [48, "3.43rem", "500", "Heading display"],
+                  [36, "2.57rem", "300", "Heading XL"],
+                  [24, "1.71rem", "500", "Heading LG"],
+                  [19, "1.36rem", "400", "Logo nav"],
+                  [14, "1rem",    "400", "Logo footer / minimum"],
+                ].map(([px, rem, weight, use]) => (
+                  <div key={use} className="type-sample">
+                    <div className="type-sample-preview">
+                      <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{use}</div>
+                    </div>
+                    <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
                 ))}
               </div>
@@ -436,6 +441,38 @@ export default function DesignSystemPage() {
                 {[["btn-icon","btn-xs"],["btn-icon","btn-sm"],["btn-icon","btn-md"],["btn-icon","btn-lg"]].map(([v,sz]) => (
                   <button key={v+sz} className={`btn ${v} ${sz}`}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Icon + Text — toutes variantes, taille MD</div>
+              <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+                {[
+                  ["btn-primary",  "Add"],
+                  ["btn-secondary","Edit"],
+                  ["btn-ghost",    "Export"],
+                  ["btn-outline",  "Filter"],
+                  ["btn-critical", "Delete"],
+                ].map(([variant, label]) => (
+                  <button key={variant} className={`btn ${variant} btn-md`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" width="15" height="15">
+                      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Icon + Text — tailles, variante Primary</div>
+              <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+                {[["btn-xs","XS"],["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"],["btn-xl","XL"]].map(([sz, label]) => (
+                  <button key={sz} className={`btn btn-primary ${sz}`} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    {label}
                   </button>
                 ))}
               </div>
@@ -700,6 +737,96 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* ── SIDEBAR ── */}
+          <section className="ds-section" id="sidebar">
+            <SectionTitle title="Sidebar" sub="Navigation latérale fixe. Expanded 260px · Collapsed 60px. Persisté en localStorage." />
+            <div className="ds-card">
+              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-body" style={{ gap: 24, alignItems: 'flex-start' }}>
+                {/* Expanded */}
+                <div style={{ width: 200, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 380 }}>
+                  {/* Logo row */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
+                    <span style={{ fontFamily: 'var(--font-fraunces)', fontSize: 16, letterSpacing: '-0.02em' }}>readr</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                  </div>
+                  {/* Nav */}
+                  <div style={{ padding: '12px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '0 8px 6px' }}>My Library</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, background: 'var(--primary-10)', color: 'var(--primary)' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                      <span style={{ fontSize: '0.857rem', fontWeight: 600, flex: 1 }}>My Library</span>
+                      <span style={{ fontSize: '0.75rem', background: 'var(--primary)', color: '#fff', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>20</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, color: 'var(--text-2)' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                      <span style={{ fontSize: '0.857rem', flex: 1 }}>Wishlist</span>
+                      <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>1</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 8px 6px', color: 'var(--text-3)' }}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', flex: 1 }}>Collections</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-3)', padding: '4px 10px' }}>No collections yet</div>
+                  </div>
+                  {/* Bottom */}
+                  <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div style={{ display: 'flex', gap: 6, fontSize: '0.8rem', color: 'var(--text-2)' }}>
+                      <span style={{ fontWeight: 600, color: 'var(--text)' }}>EN</span>
+                      <span>·</span>
+                      <span>FR</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-2)' }}>Appearance</span>
+                      <div style={{ width: 36, height: 20, borderRadius: 10, background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px' }}>
+                        <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff' }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Collapsed */}
+                <div style={{ width: 52, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 240, gap: 4, padding: '10px 0' }}>
+                  <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 15, letterSpacing: '-0.02em', padding: '8px 0 12px', borderBottom: '1px solid var(--border)', width: '100%', textAlign: 'center' }}>r</div>
+                  <div style={{ padding: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: '100%' }}>
+                    <div style={{ padding: '8px', borderRadius: 8, background: 'var(--primary-10)', color: 'var(--primary)', display: 'flex' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <DSCard label="Nav items — états" tokens={["--primary-10","--primary-50","--primary-5","--primary"]}>
+              <table className="btn-scale-table">
+                <thead><tr><th>État</th><th>Background</th><th>Couleur</th><th>Badge bg</th><th>Badge color</th></tr></thead>
+                <tbody>
+                  <tr><td>Default</td><td>transparent</td><td>--text-2</td><td>--primary-10</td><td>--primary-50</td></tr>
+                  <tr><td>Hover</td><td>--primary-5</td><td>--text</td><td>—</td><td>—</td></tr>
+                  <tr><td>Active</td><td>--primary-10</td><td>--primary</td><td>--primary-50</td><td>#fff</td></tr>
+                </tbody>
+              </table>
+            </DSCard>
+            <DSCard label="Tokens & comportement" tokens={["--bg","--border","--primary-10","--primary-50"]}>
+              <table className="btn-scale-table">
+                <thead><tr><th>Propriété</th><th>Valeur</th></tr></thead>
+                <tbody>
+                  <tr><td>Expanded width</td><td>260px</td></tr>
+                  <tr><td>Collapsed width</td><td>60px</td></tr>
+                  <tr><td>Page shell padding</td><td>260px → 60px (collapsed)</td></tr>
+                  <tr><td>Persistance</td><td><code>readr-sidebar-collapsed</code> (localStorage)</td></tr>
+                  <tr><td>Mobile</td><td>Overlay fixe, ouverture via hamburger</td></tr>
+                  <tr><td>Collections chevron</td><td>rotate(90deg) animé</td></tr>
+                </tbody>
+              </table>
+            </DSCard>
           </section>
 
           {/* ── PANEL ── */}
