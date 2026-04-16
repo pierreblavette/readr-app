@@ -1,6 +1,7 @@
 "use client";
+import ExportMenu from "@/components/library/ExportMenu";
 
-export default function SearchBar({ search, setSearch, t, editMode, setEditMode, setSelected, tab, data, exportData, setAddModal, view, switchView }) {
+export default function SearchBar({ search, setSearch, t, editMode, setEditMode, setSelected, tab, data, exportData, exportPDF, setAddModal, view, switchView }) {
   return (
     <div className="search-row">
       {/* Search box */}
@@ -42,12 +43,12 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
           </button>
         )}
 
-        <button
-          onClick={exportData}
-          disabled={data.owned.length + data.wishlist.length === 0}
-          className="export-btn">
-          {t.btnExport}
-        </button>
+        <ExportMenu
+          exportData={exportData}
+          exportPDF={exportPDF}
+          disabled={data[tab].length === 0}
+          t={t}
+        />
 
         {/* View toggle */}
         <div className="view-btns">

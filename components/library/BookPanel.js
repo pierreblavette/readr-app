@@ -2,9 +2,21 @@
 import { useState, useEffect } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 
-export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, t }) {
+export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, quotes, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
+  const [shared, setShared] = useState(false);
+
+  async function handleShare() {
+    const text = t.shareText ? t.shareText(book.title, book.author) : `"${book.title}" — ${book.author}`;
+    if (navigator.share) {
+      try { await navigator.share({ text }); } catch {}
+    } else {
+      await navigator.clipboard.writeText(text);
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    }
+  }
 
   useEffect(() => {
     if (book) {
@@ -54,11 +66,17 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
         <div className="panel-inner">
 
           {/* Share button */}
-          <button className="panel-share">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
+          <button className="panel-share" onClick={handleShare} title={shared ? (t.shareCopied || 'Copied!') : 'Share'}>
+            {shared ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            )}
           </button>
 
           {/* Close button */}
@@ -83,10 +101,15 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
               {book.genre && book.year && <span className="panel-meta-sep">·</span>}
               {book.year && <span>{book.year}</span>}
             </div>
-            {synopsis
-              ? <div className="panel-synopsis">{synopsis}</div>
-              : <div className="panel-synopsis-placeholder">No synopsis available.</div>
-            }
+            {/* About section */}
+            <div className="panel-section">
+              <span className="panel-section-eyebrow">About</span>
+              {synopsis
+                ? <div className="panel-synopsis">{synopsis}</div>
+                : <div className="panel-synopsis-placeholder">No synopsis available.</div>
+              }
+            </div>
+
             <div className="panel-actions">
               {tab === 'wishlist' && (
                 <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
@@ -97,6 +120,30 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                 {t.btnDelete || 'Delete'}
               </button>
             </div>
+
+            {/* Quotes section */}
+            <div className="panel-quotes">
+              <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
+              {quotes && quotes.length > 0 ? (
+                <div className="panel-quotes-list">
+                  {quotes.map(q => (
+                    <div key={q.id} className="panel-quote-item">
+                      <p className="panel-quote-text">"{q.text}"</p>
+                      {q.page && <span className="panel-quote-page">p. {q.page}</span>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
+              )}
+              <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Add a quote
+              </button>
+            </div>
+
           </div>
 
         </div>

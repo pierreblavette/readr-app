@@ -14,8 +14,13 @@ out/
 .agents/
 skills-lock.json
 
+# Env
+.env.local
+.env*.local
+
 # Cloudflare Wrangler
 .wrangler/
+worker/.dev.vars
 
 # Images personnelles
 IMG_*.jpg

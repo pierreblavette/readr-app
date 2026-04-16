@@ -1,32 +1,12 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import GradientDropzone from "./GradientDropzone";
 
 const TABS = ['photo', 'file', 'manual'];
 
 function PhotoDropzone({ onClick }) {
-  const ref = useRef(null);
-  const [dims, setDims] = useState({ w: 0, h: 0 });
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const { offsetWidth, offsetHeight } = ref.current;
-    setDims({ w: offsetWidth, h: offsetHeight });
-  }, []);
-
   return (
-    <div ref={ref} className="import-dropzone import-dropzone-photo" onClick={onClick} style={{ cursor: 'pointer' }}>
-      {dims.w > 0 && (
-        <svg className="photo-dropzone-border" width={dims.w} height={dims.h} aria-hidden="true">
-          <defs>
-            <linearGradient id="photoGradBorder" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-              <stop offset="0%" stopColor="#F67BF8"/>
-              <stop offset="62%" stopColor="#4959E6"/>
-            </linearGradient>
-          </defs>
-          <rect x="1" y="1" width={dims.w - 2} height={dims.h - 2} rx="9" fill="none"
-            stroke="url(#photoGradBorder)" strokeWidth="2" strokeDasharray="6 4"/>
-        </svg>
-      )}
+    <GradientDropzone onClick={onClick} gradientId="photoGradBorder">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -34,7 +14,7 @@ function PhotoDropzone({ onClick }) {
       </svg>
       <div className="import-dropzone-title">Drop a photo or click to browse</div>
       <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
-    </div>
+    </GradientDropzone>
   );
 }
 
@@ -50,6 +30,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
   const [error,  setError]  = useState('');
   const [importError, setImportError] = useState('');
   const [previewBooks, setPreviewBooks] = useState([]);
+  const [photoState, setPhotoState] = useState('idle');
+  const [photoError, setPhotoError] = useState('');
   const fileInputRef  = useRef(null);
   const photoInputRef = useRef(null);
 
@@ -74,7 +56,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
     if (val.trim().length < 2) { setSuggestions([]); return; }
     debounceRef.current = setTimeout(async () => {
       try {
-        const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(val)}&maxResults=8&fields=items(volumeInfo(title,authors,publishedDate,categories))`;
+        const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
+        const url = `${workerUrl}/books?q=${encodeURIComponent(val)}`;
         const res = await fetch(url);
         const data = await res.json();
         const items = (data.items || []).map(item => ({
@@ -114,8 +97,45 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
 
   function resetAndClose() {
     setTitle(''); setAuthor(''); setYear(''); setGenre(''); setError('');
-    setImportError(''); setPreviewBooks([]); setActiveTab('photo');
+    setImportError(''); setPreviewBooks([]); setSuggestions([]); setSugFocused(-1);
+    setPhotoState('idle'); setPhotoError('');
+    setActiveTab('photo');
     onClose();
+  }
+
+  async function handlePhotoChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (photoInputRef.current) photoInputRef.current.value = '';
+    setPhotoError(''); setPhotoState('scanning');
+    try {
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = ev => resolve(ev.target.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
+      const token = process.env.NEXT_PUBLIC_WORKER_TOKEN || '';
+      const res = await fetch(`${workerUrl}/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Readr-Token': token },
+        body: JSON.stringify({ image: base64, mimeType: file.type }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Worker error');
+      const raw = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+      const cleaned = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      const match = cleaned.match(/\[[\s\S]*\]/);
+      const books = JSON.parse(match?.[0] || '[]');
+      if (!books.length) throw new Error('no books');
+      setPreviewBooks(prev => [...prev, ...books.filter(b => b.title)]);
+      setPhotoError('');
+      setPhotoState('idle');
+    } catch {
+      setPhotoError('No books detected. Try a clearer photo with visible titles.');
+      setPhotoState('idle');
+    }
   }
 
   function handleFileChange(e) {
@@ -213,14 +233,65 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
           </button>
         </div>
 
-        {/* Photo tab (placeholder) */}
+        {/* Photo tab */}
         {activeTab === 'photo' && (
           <div>
-            <PhotoDropzone onClick={() => photoInputRef.current?.click()} />
-            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} />
+            <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
+            {photoState === 'scanning' ? (
+              <GradientDropzone>
+                <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
+                <div className="import-dropzone-title">Scanning cover...</div>
+                <div className="import-dropzone-sub">Detecting title and author from your photo</div>
+              </GradientDropzone>
+            ) : previewBooks.length === 0 ? (
+              <PhotoDropzone onClick={() => photoInputRef.current?.click()} />
+            ) : (
+              <button className="import-change-file" onClick={() => photoInputRef.current?.click()}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                Add another photo
+              </button>
+            )}
+            {photoError && (
+              <div className="scan-alert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                {photoError}
+              </div>
+            )}
+            {previewBooks.length > 0 && (
+              <div className="import-preview">
+                <div className="import-preview-header">
+                  <span className="import-preview-title">{previewBooks.length} book{previewBooks.length > 1 ? 's' : ''} detected</span>
+                </div>
+                <div className="import-preview-list">
+                  {previewBooks.map((b, i) => (
+                    <div key={i} className="import-preview-item">
+                      <div>
+                        <div className="import-preview-book">{b.title}</div>
+                        <div className="import-preview-author">{b.author}</div>
+                      </div>
+                      <button className="import-preview-remove" onClick={() => setPreviewBooks(prev => prev.filter((_, j) => j !== i))}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="modal-actions">
               <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
-              <button type="button" className="modal-submit" disabled>{t.btnAdd}</button>
+              <button type="button" className="modal-submit"
+                disabled={photoState === 'scanning' || previewBooks.length === 0}
+                onClick={handleImportConfirm}>
+                Import {previewBooks.length > 0 ? `(${previewBooks.length})` : ''}
+              </button>
             </div>
           </div>
         )}

@@ -6,10 +6,11 @@ export default function Sidebar({
   tab, setTab, data, collections,
   collapsed, onToggleCollapse,
   onCreateCollection, onOpenCollection, activeCollection,
-  t, lang, setLang,
+  t,
   mobileOpen, onCloseMobile,
 }) {
   const { theme, setTheme } = useTheme();
+  const [shelvesOpen, setShelvesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
 
   function handleNav(key) {
@@ -46,11 +47,15 @@ export default function Sidebar({
         {/* Primary nav */}
         <nav className="sidebar-nav">
           {!collapsed && (
-            <div className="sidebar-section-head sidebar-section-head--no-action">
-              <span className="sidebar-section-label">{t.tabLibrary || 'My Library'}</span>
+            <div className="sidebar-section-head" onClick={() => setShelvesOpen(o => !o)}>
+              <svg className={`sidebar-section-chevron${shelvesOpen ? ' open' : ''}`}
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+              <span className="sidebar-section-label">Shelves</span>
             </div>
           )}
-          {[
+          {(!collapsed ? shelvesOpen : true) && [
             { key: 'owned',    label: t.tabLibrary,  count: data.owned.length,    icon: <LibIcon /> },
             { key: 'wishlist', label: t.tabWishlist, count: data.wishlist.length,  icon: <WishIcon /> },
           ].map(({ key, label, count, icon }) => (
@@ -68,8 +73,29 @@ export default function Sidebar({
           ))}
         </nav>
 
-        {/* Collections */}
+        {/* Quotes */}
         <div className="sidebar-section">
+          {!collapsed ? (
+            <div className="sidebar-section-head" onClick={() => handleNav('quotes')}>
+              <span className="sidebar-section-label">{t.tabQuotes || 'Quotes'}</span>
+            </div>
+          ) : (
+            <button className={`sidebar-item${tab === 'quotes' ? ' active' : ''}`} onClick={() => handleNav('quotes')}>
+              <span className="sidebar-icon"><QuoteIcon /></span>
+            </button>
+          )}
+          {!collapsed && (
+            <button
+              className={`sidebar-item${tab === 'quotes' ? ' active' : ''}`}
+              onClick={() => handleNav('quotes')}>
+              <span className="sidebar-icon"><QuoteIcon /></span>
+              <span className="sidebar-label">{t.tabQuotes || 'Quotes'}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Collections — hidden temporarily */}
+        <div className="sidebar-section" style={{ display: 'none' }}>
           {!collapsed ? (
             <div className="sidebar-section-head-row">
               <div className="sidebar-section-head" onClick={() => { setCollectionsOpen(o => !o); setTab('collections'); onCloseMobile?.(); }}>
@@ -150,6 +176,15 @@ function WishIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  );
+}
+
+function QuoteIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
+      <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>
     </svg>
   );
 }

@@ -1,21 +1,22 @@
 "use client";
 import "./ds.css";
-import { useState, useEffect } from "react";
+import "../library/library.css";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const NAV = {
   Foundations: ["logo","colors","typography","highlight","spacing","shadows"],
-  Components:  ["buttons","btn-states","inputs","segmented","view-toggle","badges","checkbox","autocomplete","lang-switcher","theme-toggle"],
-  Patterns:    ["card","list","sidebar","panel","modal","selection-bar","empty","footer"],
+  Components:  ["autocomplete","badges","btn-states","buttons","checkbox","dropdown","inputs","lang-switcher","segmented","theme-toggle","view-toggle"],
+  Patterns:    ["card","empty","footer","list","modal","panel","selection-bar","sidebar","upload-box"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
   "logo":"Logo","colors":"Colors","typography":"Typography","highlight":"Hand-drawn Highlight",
-  "spacing":"Spacing","shadows":"Shadows & Radius","buttons":"Buttons","btn-states":"Button States",
+  "spacing":"Spacing","shadows":"Shadows & Radius","buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
   "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges & Pills",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
   "theme-toggle":"Theme Toggle","card":"Book Card","list":"List View","sidebar":"Sidebar","panel":"Side Panel",
-  "modal":"Modal","selection-bar":"Selection Bar","empty":"Empty State","footer":"Footer",
+  "modal":"Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -48,6 +49,84 @@ export default function DesignSystemPage() {
   const [importTab, setImportTab]           = useState("photo");
   const [chk1, setChk1]                     = useState(false);
   const [chk2, setChk2]                     = useState(true);
+
+  function UploadBoxDemo({ state, variant }) {
+    const ref = useRef(null);
+    const [dims, setDims] = useState({ w: 0, h: 0 });
+    useEffect(() => {
+      if (!ref.current) return;
+      setDims({ w: ref.current.offsetWidth, h: ref.current.offsetHeight });
+    }, [state]);
+    return (
+      <div ref={ref} className="import-dropzone import-dropzone-photo" style={{ cursor: "default", width: "40%" }}>
+        {dims.w > 0 && (
+          <svg className="photo-dropzone-border" width={dims.w} height={dims.h} aria-hidden="true">
+            <defs>
+              <linearGradient id="dsGradBorder" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stopColor="#F67BF8"/>
+                <stop offset="62%" stopColor="#4959E6"/>
+              </linearGradient>
+            </defs>
+            <rect x="1" y="1" width={dims.w - 2} height={dims.h - 2} rx="9" fill="none"
+              stroke="url(#dsGradBorder)" strokeWidth="2" strokeDasharray="6 4"/>
+          </svg>
+        )}
+        {state === "idle" && (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <div className="import-dropzone-title">Drop a photo or click to browse</div>
+            <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
+          </>
+        )}
+        {state === "scanning" && (
+          <>
+            <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
+            <div className="import-dropzone-title">Scanning cover...</div>
+            <div className="import-dropzone-sub">Detecting title and author from your photo</div>
+          </>
+        )}
+        {state === "error" && (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <div className="import-dropzone-title">Drop a photo or click to browse</div>
+            <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  function DropdownDemo({ label, items }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+    useEffect(() => {
+      if (!open) return;
+      function close(e) { if (!ref.current?.contains(e.target)) setOpen(false); }
+      document.addEventListener('mousedown', close);
+      return () => document.removeEventListener('mousedown', close);
+    }, [open]);
+    return (
+      <div className="dropdown-wrap" ref={ref}>
+        <button className="btn btn-outline btn-md" onClick={() => setOpen(o => !o)} style={{ gap: 8 }}>
+          {label}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ width: 13, height: 13, transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        {open && (
+          <div className="dropdown-menu">
+            {items.map(item => (
+              <button key={item} className="dropdown-item" onClick={() => setOpen(false)}>
+                {item}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   function SectionTitle({ title, sub }) {
     return (
@@ -513,6 +592,28 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── DROPDOWN ── */}
+          <section className="ds-section" id="dropdown">
+            <SectionTitle title="Dropdown Menu" sub="Bouton outline + chevron rotatif · Menu animé spring · Dark mode complet" />
+            <div className="ds-card">
+              <div className="ds-card-label">Exemples</div>
+              <div className="ds-card-body" style={{ alignItems: "flex-start", gap: 32, flexWrap: "wrap" }}>
+                <DropdownDemo label="Export" items={["json", "pdf"]} />
+                <DropdownDemo label="Options" items={["renommer", "dupliquer", "supprimer"]} />
+                <DropdownDemo label="Trier par" items={["titre", "auteur", "année"]} />
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomie</div>
+              <div className="ds-card-body" style={{ flexDirection: "column", gap: 8, fontSize: "0.82rem", color: "var(--text-2)", fontFamily: "var(--font-mono)" }}>
+                <span><strong>.dropdown-wrap</strong> — position: relative, conteneur</span>
+                <span><strong>button.btn.btn-outline</strong> — trigger, avec chevron SVG rotatif sur open</span>
+                <span><strong>.dropdown-menu</strong> — absolute, top: 100%+6px, right: 0, animation dropdownIn</span>
+                <span><strong>.dropdown-item</strong> — flex row, gap 8, padding 8/12, border-radius 7px</span>
+              </div>
+            </div>
+          </section>
+
           {/* ── INPUTS ── */}
           <section className="ds-section" id="inputs">
             <SectionTitle title="Inputs" sub="Search input & text field. font-weight 600. Hover = primary tint, Focus = ring primary-20." />
@@ -831,24 +932,43 @@ export default function DesignSystemPage() {
 
           {/* ── PANEL ── */}
           <section className="ds-section" id="panel">
-            <SectionTitle title="Side Panel" sub="Slide depuis la droite. Largeur 571px. Shadow lg." />
+            <SectionTitle title="Side Panel" sub="Full height, fixed right, width 480px, border-left, no shadow, no radius. Slides in on row click." />
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
-              <div className="ds-card-body">
-                <div className="panel-preview">
-                  <div className="panel-preview-header">
-                    <button className="btn btn-icon btn-sm">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
+              <div className="ds-card-label">Layout</div>
+              <div className="ds-card-body" style={{ padding: 0 }}>
+                <div className="panel-ds-viewport">
+                  <div className="panel-ds-content">
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
                   </div>
-                  <div className="panel-preview-cover" />
-                  <div className="panel-preview-body">
-                    <span className="panel-preview-tag">Library</span>
-                    <div className="panel-preview-title">A Brief History of Time</div>
-                    <div className="panel-preview-author">Stephen Hawking</div>
-                    <div className="panel-preview-divider" />
-                    <div className="panel-preview-label">Year</div>
-                    <div className="panel-preview-text">1988</div>
+                  <div className="panel-ds-panel">
+                    <div className="panel-preview-header">
+                      <button className="btn btn-icon btn-sm">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    </div>
+                    <div className="panel-preview-cover" />
+                    <div className="panel-preview-body">
+                      <span className="panel-preview-tag">Library</span>
+                      <div className="panel-preview-title">A Brief History of Time</div>
+                      <div className="panel-preview-author">Stephen Hawking</div>
+                      <div className="panel-preview-meta">Science · 1988</div>
+                      <div className="panel-preview-section">
+                        <span className="panel-section-eyebrow">About</span>
+                        <div className="panel-preview-synopsis">A landmark volume in science writing by one of the great minds of our time...</div>
+                      </div>
+                      <div className="panel-preview-section">
+                        <span className="panel-section-eyebrow">Quotes</span>
+                        <div className="panel-preview-quote">"We are just an advanced breed of monkeys on a minor planet of a very average star."</div>
+                        <button className="panel-quotes-add" style={{ marginTop: 12 }}>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                          Add a quote
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -891,6 +1011,50 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* ── UPLOAD BOX ── */}
+          <section className="ds-section" id="upload-box">
+            <SectionTitle title="Upload Box" sub="Dropzone with gradient dashed border (Photo/AI) or standard border (File). Three states: idle, scanning, error." />
+
+            {/* Photo / AI dropzone — all states */}
+            {[
+              { key: "idle", label: "Idle" },
+              { key: "scanning", label: "Scanning" },
+              { key: "error", label: "Error" },
+            ].map(({ key, label }) => (
+              <div className="ds-card" key={key}>
+                <div className="ds-card-label">Photo / AI — {label}</div>
+                <div className="ds-card-body col" style={{ gap: 16 }}>
+                  <UploadBoxDemo state={key} variant="photo" />
+                  {key === "error" && (
+                    <div className="scan-alert" style={{ width: "40%" }}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      No books detected. Try a clearer photo with visible titles.
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {/* File dropzone */}
+            <div className="ds-card">
+              <div className="ds-card-label">File — standard border</div>
+              <div className="ds-card-body">
+                <div className="import-dropzone" style={{ cursor: "default", width: "40%" }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <div className="import-dropzone-title">Drop a file or click to browse</div>
+                  <div className="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
+                </div>
+              </div>
+            </div>
+
           </section>
 
           {/* ── SELECTION BAR ── */}

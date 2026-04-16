@@ -16,6 +16,8 @@ import CreateCollectionModal from "@/components/library/CreateCollectionModal";
 import CollectionsView from "@/components/library/CollectionsView";
 import CollectionDetailView from "@/components/library/CollectionDetailView";
 import AddBooksToCollectionModal from "@/components/library/AddBooksToCollectionModal";
+import QuotesView    from "@/components/library/QuotesView";
+import AddQuoteModal from "@/components/library/AddQuoteModal";
 import Onboarding    from "@/components/library/Onboarding";
 import Toast         from "@/components/library/Toast";
 
@@ -24,6 +26,8 @@ export default function LibraryPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [createColOpen, setCreateColOpen] = useState(false);
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
+  const [addQuoteOpen, setAddQuoteOpen] = useState(false);
+  const [quotePrefilBook, setQuotePrefillBook] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
   const lib = useLibrary();
 
@@ -42,17 +46,19 @@ export default function LibraryPage() {
     addModalOpen, setAddModal,
     deleteTarget, setDeleteTarget,
     books,
-    addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData,
+    addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     collections, createCollection, deleteCollection,
     addBookToCollection, removeBookFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
+    quotes, addQuote, deleteQuote, getQuotesForBook,
     sidebarCollapsed, toggleSidebarCollapsed,
   } = lib;
 
   const isCollections = tab === 'collections';
+  const isQuotes = tab === 'quotes';
   const currentCollection = activeCollection ? collections.find(c => c.id === activeCollection) : null;
-  const pageTitle = tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : t.pageCollections;
-  const resultInfo = !isCollections
+  const pageTitle = tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : tab === 'collections' ? t.pageCollections : t.pageQuotes;
+  const resultInfo = !isCollections && !isQuotes && data[tab]
     ? search.trim()
       ? t.resultQuery(books.length, data[tab].length)
       : t.resultTotal(data[tab].length)
@@ -100,28 +106,46 @@ export default function LibraryPage() {
         onClose={() => setPanelBook(null)}
         onDelete={b => { setPanelBook(null); setDeleteTarget(b); }}
         onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); }}
+        onAddQuote={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+        quotes={panelBook ? getQuotesForBook(panelBook.id) : []}
         t={t}
       />
 
       {/* Main */}
       <div className="main-wrap">
 
+        {/* Quotes view */}
+        {isQuotes && (
+          <>
+            <h1 className="page-title">{t.pageQuotes}</h1>
+            <QuotesView
+              quotes={quotes}
+              onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
+              onDelete={deleteQuote}
+              t={t}
+            />
+          </>
+        )}
+
         {/* Collections view */}
         {isCollections && !currentCollection && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-              <h1 className="page-title" style={{ margin: 0 }}>{t.pageCollections}</h1>
-              <div style={{ display: 'flex', gap: 12 }}>
-                <button className={`view-btn${view === 'grid' ? ' active' : ''}`} onClick={() => switchView('grid')} aria-label="Grid view">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                </button>
-                <button className={`view-btn${view === 'list' ? ' active' : ''}`} onClick={() => switchView('list')} aria-label="List view">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                </button>
-                <button className="btn btn-md btn-primary" onClick={() => setCreateColOpen(true)}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <h1 className="page-title">{t.pageCollections}</h1>
+            <div className="search-row" style={{ marginBottom: 16 }}>
+              <div />
+              <div className="counter-actions">
+                <button className="add-btn" onClick={() => setCreateColOpen(true)}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{width:18,height:18}}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   {t.colNewCollection}
                 </button>
+                <div className="view-btns">
+                  <button onClick={() => switchView('grid')} className={`view-btn${view === 'grid' ? ' active' : ''}`} aria-label="Grid view">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                  </button>
+                  <button onClick={() => switchView('list')} className={`view-btn${view === 'list' ? ' active' : ''}`} aria-label="List view">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                  </button>
+                </div>
               </div>
             </div>
             <CollectionsView
@@ -153,14 +177,14 @@ export default function LibraryPage() {
         )}
 
         {/* Library / Wishlist view */}
-        {!isCollections && (
+        {!isCollections && !isQuotes && (
           <>
             <h1 className="page-title">{pageTitle}</h1>
 
             <SearchBar
               search={search} setSearch={setSearch} t={t}
               editMode={editMode} setEditMode={setEditMode} setSelected={setSelected}
-              tab={tab} data={data} exportData={exportData}
+              tab={tab} data={data} exportData={exportData} exportPDF={exportPDF}
               setAddModal={setAddModal} view={view} switchView={switchView}
             />
 
@@ -215,6 +239,14 @@ export default function LibraryPage() {
         t={t} />
       <DeleteModal book={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={deleteBook} t={t} />
       <CreateCollectionModal open={createColOpen} onClose={() => setCreateColOpen(false)} onCreate={createCollection} t={t} />
+      <AddQuoteModal
+        open={addQuoteOpen}
+        onClose={() => { setAddQuoteOpen(false); setQuotePrefillBook(null); }}
+        onSave={q => { addQuote(q); setToastMsg(t.quoteAdd); }}
+        allBooks={[...data.owned, ...data.wishlist]}
+        prefillBook={quotePrefilBook}
+        t={t}
+      />
       <AddBooksToCollectionModal
         open={addBooksColOpen}
         collection={currentCollection}

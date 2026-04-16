@@ -61,14 +61,20 @@ export default function CollectionDetailView({
 
       {filtered.length === 0 && books.length === 0 && (
         <div className="empty">
-          <div className="empty-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-            </svg>
-          </div>
-          <div className="empty-title">{t.colDetailEmpty}</div>
-          <div className="empty-sub">{t.colDetailEmptySub}</div>
-          <button className="btn btn-md btn-primary" onClick={onAddBooks}>{t.colDetailEmptyCta}</button>
+          <svg className="empty-icon" viewBox="0 0 80 80" fill="none">
+            <path d="M8 30C8 27.8 9.8 26 12 26H32L38 32H68C70.2 32 72 33.8 72 36V62C72 64.2 70.2 66 68 66H12C9.8 66 8 64.2 8 62V30Z" fill="var(--accent-bg)"/>
+            <path d="M8 30C8 27.8 9.8 26 12 26H32L38 32H8V30Z" fill="var(--accent)" opacity="0.5"/>
+            <rect x="24" y="38" width="20" height="18" rx="2" fill="var(--accent)" opacity="0.6"/>
+            <rect x="24" y="38" width="4" height="18" rx="1" fill="var(--accent)"/>
+            <line x1="32" y1="44" x2="40" y2="44" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="32" y1="49" x2="38" y2="49" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" opacity="0.7"/>
+            <circle cx="54" cy="54" r="13" fill="var(--accent)"/>
+            <line x1="49" y1="54" x2="59" y2="54" stroke="#fff" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="54" y1="49" x2="54" y2="59" stroke="#fff" strokeWidth="3" strokeLinecap="round"/>
+          </svg>
+          <p className="empty-title">{t.colDetailEmpty}</p>
+          <p className="empty-sub">{t.colDetailEmptySub}</p>
+          <button className="empty-cta" onClick={onAddBooks}>{t.colDetailEmptyCta}</button>
         </div>
       )}
 
