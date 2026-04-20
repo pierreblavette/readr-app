@@ -47,6 +47,15 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
     }
   }, [activeTab, open]);
 
+  useEffect(() => {
+    if (open) {
+      setPhotoState('idle'); setPhotoError(''); setPreviewBooks([]);
+      setTitle(''); setAuthor(''); setYear(''); setGenre(''); setError('');
+      setImportError(''); setSuggestions([]); setSugFocused(-1);
+      setActiveTab('photo');
+    }
+  }, [open]);
+
   if (!open) return null;
 
   function handleTitleInput(val) {
@@ -115,11 +124,9 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
-      const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
-      const token = process.env.NEXT_PUBLIC_WORKER_TOKEN || '';
-      const res = await fetch(`${workerUrl}/`, {
+      const res = await fetch('/api/vision/books', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Readr-Token': token },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64, mimeType: file.type }),
       });
       const data = await res.json();

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# pre-commit: block commits containing secrets (tokens, API keys, credentials).
+# Uses gitleaks. Install with: brew install gitleaks
+# Bypass (only if you're 100% sure it's a false positive): git commit --no-verify
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not installed. Run: brew install gitleaks"
+  echo "pre-commit: allowing commit (install gitleaks locally for secret scanning)"
+  exit 0
+fi
+
+echo "pre-commit: scanning staged changes for secrets..."
+if ! gitleaks protect --staged --redact --verbose; then
+  echo ""
+  echo "pre-commit: commit BLOCKED — a secret was detected in staged files."
+  echo "Remove the secret (and rotate it if it already left your machine)."
+  exit 1
+fi
+
+echo "pre-commit: no secrets detected. OK."

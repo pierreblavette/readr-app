@@ -2,8 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import GradientDropzone from "./GradientDropzone";
 
-const WORKER_URL   = process.env.NEXT_PUBLIC_WORKER_URL   || 'https://readr-vision.pierreblavette.workers.dev';
-const WORKER_TOKEN = process.env.NEXT_PUBLIC_WORKER_TOKEN || '';
+const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
 const INPUT_TABS = ['photo', 'manual'];
 
@@ -46,9 +45,9 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
     setScanError(''); setPhotoState('scanning'); setText('');
     try {
       const base64 = await toBase64(file);
-      const res = await fetch(`${WORKER_URL}/quote`, {
+      const res = await fetch('/api/vision/quote', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Readr-Token': WORKER_TOKEN },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64, mimeType: file.type }),
       });
       const data = await res.json();

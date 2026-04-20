@@ -15,8 +15,31 @@ out/
 skills-lock.json
 
 # Env
+.env
 .env.local
 .env*.local
+.env.production
+.env.development
+
+# Secrets & credentials
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+credentials.json
+*credentials*.json
+.netrc
+secrets/
+.secrets/
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
 
 # Cloudflare Wrangler
 .wrangler/
@@ -29,3 +52,4 @@ IMG_*.png
 
 # Fichiers de test
 test-*.json
+.vercel

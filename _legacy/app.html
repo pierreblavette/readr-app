@@ -3518,7 +3518,7 @@ function toTitleCase(str) {
 
 // Replace with your deployed Worker URL after running: wrangler deploy
 const VISION_WORKER_URL = 'https://readr-vision.pierreblavette.workers.dev';
-const VISION_TOKEN = '6400b645bb640fcaf29adfffbb87b52e1c222679ead80aeb';
+const VISION_TOKEN = ''; // legacy file — token removed (leaked & rotated); live app reads token from .env.local
 
 async function runGeminiVision(file) {
   const errEl = document.getElementById('import-photo-error');
