@@ -236,6 +236,23 @@ rm security-test.js
 
 ---
 
+## Commit signing SSH
+
+Depuis le 20 avril 2026, tous les commits (et tags) créés depuis cette machine sont signés avec une clé **Ed25519 dédiée** (`~/.ssh/id_ed25519_signing`). La clé publique est enregistrée sur GitHub comme Signing Key, ce qui fait apparaître le badge **Verified** à côté de chaque commit sur github.com/pierreblavette/readr-app.
+
+Config globale git (`~/.gitconfig`) :
+- `gpg.format = ssh`
+- `user.signingkey = ~/.ssh/id_ed25519_signing.pub`
+- `commit.gpgsign = true`
+- `tag.gpgsign = true`
+- `gpg.ssh.allowedSignersFile = ~/.ssh/allowed_signers`
+
+Vérifier une signature en local :
+```bash
+git log --show-signature -1
+# doit afficher: Good "git" signature for pierre.blavette@gmail.com
+```
+
 ## Historique des incidents
 
 | Date | Incident | Résolution |
