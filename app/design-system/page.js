@@ -1025,7 +1025,7 @@ export default function DesignSystemPage() {
             ].map(({ key, label }) => (
               <div className="ds-card" key={key}>
                 <div className="ds-card-label">Photo / AI — {label}</div>
-                <div className="ds-card-body col" style={{ gap: 16 }}>
+                <div className="ds-card-body col" style={{ gap: 0 }}>
                   <UploadBoxDemo state={key} variant="photo" />
                   {key === "error" && (
                     <div className="scan-alert" style={{ width: "40%" }}>

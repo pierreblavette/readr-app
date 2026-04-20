@@ -691,7 +691,65 @@
 .card-delete-btn:hover { background: var(--primary-60); }
 [data-theme="dark"] .card-delete-btn { background: var(--primary-40); }
 [data-theme="dark"] .card-delete-btn:hover { background: var(--primary-50); }
-.card-delete-btn svg { width: 14px; height: 14px; }
+.card-delete-btn svg { width: 14px; height: 14px; pointer-events: none; }
+
+/* ─── BOOK CARD — Craft additions (a11y + touch + reduced motion) ─── */
+
+/* Suppress hover flash on touch devices (invisible on desktop) */
+@media (hover: none) {
+  .book-card:hover {
+    transform: none;
+    border-color: #EFEFEF;
+    background: var(--card);
+    box-shadow: none;
+  }
+  [data-theme="dark"] .book-card:hover {
+    border-color: var(--border);
+    background: transparent;
+  }
+}
+
+/* Focus-visible ring (keyboard navigation only) */
+.book-card:focus-visible {
+  outline: none;
+  border-color: var(--primary-50);
+  box-shadow: 0 0 0 3px var(--primary-20);
+}
+[data-theme="dark"] .book-card:focus-visible {
+  border-color: var(--primary-40);
+  box-shadow: 0 0 0 3px rgba(73,89,230,0.25);
+}
+.card-delete-btn:focus-visible {
+  outline: 2px solid var(--primary-50);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* Extended touch targets (visuellement invisible, zone tappable augmentée) */
+.card-delete-btn::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  pointer-events: auto;
+}
+.card-checkbox::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  pointer-events: none;
+}
+
+/* Reduced motion — respecte la préférence système */
+@media (prefers-reduced-motion: reduce) {
+  .book-card,
+  .card-delete-btn,
+  .card-checkbox,
+  .panel-cover-img {
+    animation: none !important;
+    transition: opacity 120ms ease, background-color 120ms ease, border-color 120ms ease;
+    transform: none !important;
+  }
+}
 
 .page-shell { background: rgba(73,89,230,0.015); }
 [data-theme="dark"] .page-shell { background: var(--bg); }
@@ -1777,6 +1835,7 @@
   padding: 12px 14px; border-radius: 10px;
   background: rgba(239,68,68,0.08); border: none;
   color: #dc2626; font-size: 13px; line-height: 1.4;
+  margin-top: 16px;
 }
 [data-theme="dark"] .scan-alert { background: rgba(239,68,68,0.12); color: #f87171; }
 .scan-alert svg { flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px; }

@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 
-export default function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, t }) {
+function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, t }) {
   const [cover, setCover] = useState(null);
   const isSelected = selected.has(book.id);
   const [c1, c2] = coverColors(book.title);
@@ -19,14 +19,40 @@ export default function BookCard({ book, tab, editMode, selected, onToggleSelect
     });
   }, [book.title, book.author]);
 
+  const handleActivate = useCallback(() => {
+    editMode ? onToggleSelect(book.id) : onOpen(book);
+  }, [editMode, book, onToggleSelect, onOpen]);
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleActivate();
+    }
+  }, [handleActivate]);
+
   return (
     <div
-      onClick={() => editMode ? onToggleSelect(book.id) : onOpen(book)}
+      role={editMode ? "checkbox" : "button"}
+      aria-checked={editMode ? isSelected : undefined}
+      aria-label={`${book.title}, ${book.author}`}
+      tabIndex={0}
+      onClick={handleActivate}
+      onKeyDown={handleKeyDown}
       className={`book-card${isSelected ? ' selected' : ''}`}>
 
       {/* Cover */}
       <div className={`book-cover${cover ? '' : ' book-cover-placeholder'}`} style={{ background: cover ? `linear-gradient(135deg, ${c1}, ${c2})` : undefined }}>
-        {cover && <img src={cover} alt={book.title} className="panel-cover-img" />}
+        {cover && (
+          <img
+            src={cover}
+            alt=""
+            width="160"
+            height="148"
+            loading="lazy"
+            decoding="async"
+            className="panel-cover-img"
+          />
+        )}
 
         {tab === 'wishlist' && !cover && (
           <span className="wishlist-badge">{t.wishBadge}</span>
@@ -34,7 +60,7 @@ export default function BookCard({ book, tab, editMode, selected, onToggleSelect
 
         {/* Checkbox in edit mode */}
         {editMode && (
-          <div className="card-checkbox">
+          <div className="card-checkbox" aria-hidden="true">
             {isSelected && (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
@@ -46,9 +72,11 @@ export default function BookCard({ book, tab, editMode, selected, onToggleSelect
         {/* Delete button (non-edit mode) */}
         {!editMode && (
           <button
+            type="button"
             className="card-delete-btn"
+            aria-label={t.deleteBookLabel || `Supprimer ${book.title}`}
             onClick={e => { e.stopPropagation(); onDelete(book); }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="3 6 5 6 21 6"/>
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
               <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
@@ -65,10 +93,12 @@ export default function BookCard({ book, tab, editMode, selected, onToggleSelect
         <div className="book-author">{book.author}</div>
         <div className="book-meta">
           {book.genre && <span>{book.genre}</span>}
-          {book.genre && book.year && <span className="book-meta-sep">·</span>}
+          {book.genre && book.year && <span className="book-meta-sep" aria-hidden="true">·</span>}
           {book.year && <span>{book.year}</span>}
         </div>
       </div>
     </div>
   );
 }
+
+export default memo(BookCard);
