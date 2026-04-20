@@ -186,6 +186,14 @@ Pas encore configurés. Objectifs :
 
 À configurer dans `~/.claude/settings.json` section `hooks` (voir doc Claude Code — skill `update-config`).
 
+### Sandbox Claude Code — étudié, volontairement non activé
+
+Claude Code propose un mode sandbox macOS-natif (section `sandbox` dans `~/.claude/settings.json`) qui cage les commandes bash : filesystem restreint, network allowlist, etc. Il offrirait une défense en profondeur contre le prompt injection (ex. une commande `curl pastebin.com` exfiltration qui serait bloquée même si elle passait les permissions et hooks).
+
+**Décision au 20 avril 2026 : non activé.** Le stack existant (allowlist de permissions, hook `security-guard.sh`, gitleaks, secrets en Keychain, commits signés) couvre déjà largement le modèle de menace d'un dev solo. L'activation du sandbox implique 30-60 min de tuning (npm/wrangler/Next.js cassent à la première exécution tant que les exceptions ne sont pas écrites), et chaque nouveau projet demande re-tuning.
+
+**Seuils de déclenchement pour réévaluer** : incident réel de prompt injection, ajout d'un teammate au projet, ou élévation du profil de risque (clés payantes importantes dans le compte).
+
 ### Audit MCP
 
 7 serveurs MCP actifs sur ce compte Claude Code : Figma, Playwright, GitHub, Notion, Gmail, Calendar, Drive. Chacun a ses propres credentials.
@@ -259,4 +267,5 @@ git log --show-signature -1
 |---|---|---|
 | 2026-04-20 | PAT GitHub en clair dans `.git/config` remote URL | PAT révoqué, remote réécrit, helper Keychain activé |
 | 2026-04-20 | Vision Worker token en clair dans `_legacy/app.html` + historique git public | Token Cloudflare rotaté, fichier purgé |
-| 2026-04-20 | PAT GitHub en clair dans `~/.claude/settings.json` | PAT révoqué, plan Keychain défini |
+| 2026-04-20 | PAT GitHub en clair dans `~/.claude/settings.json` | PAT révoqué, remplacé par nouveau PAT fine-grained dans Keychain + `~/.zshenv` |
+| 2026-04-20 | Google API Key en clair dans `~/.claude/.env` (découvert pendant sweep étendu) | Clé déplacée dans Keychain (`claude-google-api-key`), fichier supprimé, chargée via `~/.zshenv` comme `GOOGLE_API_KEY` |
