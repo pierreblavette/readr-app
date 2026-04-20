@@ -6,13 +6,23 @@ Document vivant. Date de création : 20 avril 2026. Synthèse de la session de d
 
 ## TL;DR
 
-Durant une session de 20 avril 2026, **trois secrets en clair** ont été découverts et remédiés. L'ensemble du système de permissions Claude Code a été audité et nettoyé. Un filet de sécurité automatique (pre-commit) a été mis en place.
+Session du 20 avril 2026 : **quatre secrets en clair** ont été découverts puis remédiés (3 initiaux + 1 découvert pendant le sweep étendu). L'ensemble du système de permissions Claude Code a été audité et nettoyé. Plusieurs filets de sécurité automatiques ont été mis en place.
 
-**Reste à faire** :
-- Générer un nouveau PAT GitHub (fine-grained) et l'installer via Keychain macOS
-- Ajouter des hooks Claude Code qui bloquent les actions risquées (touche `.env`, force-push sur main…)
-- Auditer les MCPs actifs et désactiver ceux non utilisés sur Readr
-- Dette architecturale : `NEXT_PUBLIC_WORKER_TOKEN` fuit dans le bundle JS navigateur — à migrer vers une API route Next.js
+**Livrables finaux** :
+- ✅ Tous les secrets sur disque en clair déplacés vers Keychain macOS ou rotatés
+- ✅ PAT GitHub fine-grained chargé depuis Keychain via `~/.zshenv` (plus jamais sur disque en clair)
+- ✅ `NEXT_PUBLIC_WORKER_TOKEN` supprimé du bundle navigateur — remplacé par API routes Next.js (`app/api/vision/books`, `/quote`)
+- ✅ Pre-commit `gitleaks` versionné via husky — versionné dans le repo, réinstallé à chaque `npm install`
+- ✅ Hook Claude Code global `security-guard.sh` qui bloque sudo, force-push, rm -rf, écritures sur SSH keys/credentials
+- ✅ Permissions Claude Code purgées (plus de wildcards dangereux / interpréteurs / sudo)
+- ✅ Commit signing SSH Ed25519 configuré, tous les commits depuis le 20 avril sont signés et Verified sur GitHub
+- ✅ `.gitignore` durci (env variants, clés privées, credentials, databases)
+- ✅ Connecteurs claude.ai inutilisés déconnectés (Gmail, Calendar, Drive)
+- ✅ Plugin Claude Code tiers désactivé
+
+**Reste ouvert** (non-bloquant, à évaluer plus tard) :
+- Sandbox Claude Code volontairement non activé (voir section dédiée plus bas)
+- Audit MCP : scope fin des credentials des MCPs restants (Figma/Notion/GitHub), à faire si niveau de paranoïa augmente
 
 ---
 
@@ -160,31 +170,19 @@ echo "${GITHUB_PERSONAL_ACCESS_TOKEN:0:8}..."
 
 ---
 
-## Dette architecturale à corriger plus tard
+## Suivi des dettes architecturales
 
-### `NEXT_PUBLIC_WORKER_TOKEN` fuite dans le bundle navigateur
+### ✅ `NEXT_PUBLIC_WORKER_TOKEN` fuite dans le bundle — résolu
 
-Le code Next.js (`components/library/AddModal.js`, `AddQuoteModal.js`) utilise `process.env.NEXT_PUBLIC_WORKER_TOKEN` pour authentifier les appels au Worker Vision. **Toute variable `NEXT_PUBLIC_*` est inlined dans le bundle JavaScript livré au navigateur** — donc visible par n'importe quel visiteur via DevTools.
+Les appels Vision Worker passent désormais par des API routes Next.js serveur-side (`app/api/vision/books/route.js`, `app/api/vision/quote/route.js`) qui lisent `WORKER_TOKEN` via `process.env` (sans préfixe `NEXT_PUBLIC_`). Le token vit uniquement dans `.env.local` côté serveur et dans le Worker Cloudflare — il ne touche plus jamais le bundle JS navigateur.
 
-**Solution propre** : une API route Next.js (`app/api/vision/route.js`) qui :
-- Lit le token côté serveur (via `process.env.WORKER_TOKEN`, sans préfixe `NEXT_PUBLIC_`)
-- Reçoit l'image depuis le front, forward la requête au Worker Cloudflare avec le header `X-Readr-Token`
-- Renvoie la réponse au front
+### ✅ Hook pre-commit versionné — résolu
 
-Le token ne quitte jamais le serveur Next.js. À faire lors de la prochaine itération sur la feature OCR.
+Husky installé (`npm install --save-dev husky`), hook `gitleaks` vit dans `.husky/pre-commit` versionné dans le repo. À chaque `npm install`, husky réinstalle automatiquement le hook. Plus de dépendance à `.git/hooks/` local.
 
-### Hook pre-commit non versionné
+### ✅ Hooks Claude Code automatiques — résolu
 
-Le filet `gitleaks` est dans `.git/hooks/pre-commit`, non versionné. Pour qu'il suive le repo et ne dépende pas de cette machine : versionner via [husky](https://typicode.github.io/husky/) (`npm install --save-dev husky`) ou via `core.hooksPath` pointant vers un dossier `scripts/hooks/` versionné.
-
-### Hooks Claude Code automatiques
-
-Pas encore configurés. Objectifs :
-- Bloquer avant exécution toute commande qui touche `.env`, `.env.local`, `.ssh/`, `credentials.json`, etc.
-- Bloquer `git push --force` sur `main` / `master` / `production`
-- Alerter si Claude tente d'éditer des fichiers qui ressemblent à de la config sensible
-
-À configurer dans `~/.claude/settings.json` section `hooks` (voir doc Claude Code — skill `update-config`).
+`~/.claude/hooks/security-guard.sh` branché sur `PreToolUse` (Bash/Edit/Write) dans `~/.claude/settings.json`. Bloque sudo, `git push --force`, `rm -rf` sur paths critiques, `chmod 777`, écritures sur clés SSH privées ou fichiers de credentials, écritures sur `.env.production`.
 
 ### Sandbox Claude Code — étudié, volontairement non activé
 

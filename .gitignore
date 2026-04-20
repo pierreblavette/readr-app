@@ -52,4 +52,11 @@ IMG_*.png
 
 # Fichiers de test
 test-*.json
+capture-*.jpeg
+capture-*.jpg
+capture-*.png
+capture-*.heic
 .vercel
+
+# Skills context (local)
+.impeccable.md
