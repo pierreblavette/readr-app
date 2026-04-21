@@ -1,3 +1,8 @@
+# Next.js
+.next/
+node_modules/
+out/
+
 # macOS
 .DS_Store
 .AppleDouble
@@ -9,8 +14,36 @@
 .agents/
 skills-lock.json
 
+# Env
+.env
+.env.local
+.env*.local
+.env.production
+.env.development
+
+# Secrets & credentials
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+credentials.json
+*credentials*.json
+.netrc
+secrets/
+.secrets/
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+
 # Cloudflare Wrangler
 .wrangler/
+worker/.dev.vars
 
 # Images personnelles
 IMG_*.jpg
@@ -19,3 +52,11 @@ IMG_*.png
 
 # Fichiers de test
 test-*.json
+capture-*.jpeg
+capture-*.jpg
+capture-*.png
+capture-*.heic
+.vercel
+
+# Skills context (local)
+.impeccable.md

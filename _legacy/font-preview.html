@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>readr — DA v5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F4F6F9; color: #1B1B1B; }
+
+    /* ---- HAND-DRAWN HIGHLIGHT ---- */
+    .hl { position: relative; display: inline; font-style: italic; }
+    .hl svg.wave {
+      position: absolute;
+      left: -4px; bottom: -6px;
+      width: calc(100% + 8px);
+      height: 10px;
+      overflow: visible;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .hl svg.wave path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 1;
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+      animation: draw-wave 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    }
+    @keyframes draw-wave {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 64px;
+      border-bottom: 1px solid rgba(27,27,27,0.08);
+      background: rgba(244,246,249,0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: 19px; font-weight: 400;
+      color: #1B1B1B; letter-spacing: -0.02em;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; font-size: 13px; font-weight: 500; color: #3A3A3A; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-search {
+      display: flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid rgba(27,27,27,0.1);
+      border-radius: 8px; padding: 7px 14px;
+      font-size: 13px; color: #AAA; width: 196px;
+    }
+    .nav-btn {
+      font-size: 13px; font-weight: 500;
+      padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer;
+      background: var(--accent); color: var(--accent-text);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+      align-items: center; padding: 80px 64px 64px; max-width: 1280px;
+    }
+    .eyebrow {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #AAA; margin-bottom: 18px;
+    }
+    .hero-h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 64px; font-weight: 400; line-height: 1.04;
+      letter-spacing: -0.025em; color: #1B1B1B; margin-bottom: 22px;
+    }
+    .hero-sub {
+      font-size: 16px; font-weight: 300; line-height: 1.8;
+      color: #777; margin-bottom: 36px; max-width: 440px;
+    }
+    .ctas { display: flex; gap: 10px; align-items: center; }
+    .cta-p {
+      font-size: 13px; font-weight: 500;
+      padding: 12px 24px; border-radius: 9px; border: none; cursor: pointer;
+      background: var(--accent); color: var(--accent-text);
+    }
+    .cta-s {
+      background: transparent; color: #4959E6;
+      font-size: 13px; font-weight: 500;
+      padding: 12px 24px; border-radius: 9px;
+      border: 1.5px solid #4959E6; cursor: pointer;
+    }
+
+    /* ---- HERO PREVIEW CARD ---- */
+    .preview {
+      background: white; border-radius: 18px;
+      padding: 20px; border: 1px solid rgba(27,27,27,0.07);
+      box-shadow: 0 12px 48px rgba(27,27,27,0.07);
+    }
+    .preview-topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(27,27,27,0.06);
+    }
+    .topbar-title { font-size: 13px; font-weight: 500; color: #1B1B1B; }
+    .topbar-meta { font-size: 11px; color: #AAA; }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .mini-cover { width: 100%; aspect-ratio: 2/3; border-radius: 7px; margin-bottom: 8px; }
+    .mini-title { font-size: 11px; font-weight: 500; line-height: 1.3; color: #1B1B1B; margin-bottom: 2px; }
+    .mini-author { font-size: 10px; color: #AAA; }
+    .stats-row { display: flex; border-top: 1px solid rgba(27,27,27,0.06); padding-top: 14px; }
+    .stat { flex: 1; text-align: center; }
+    .stat-n { font-size: 20px; font-weight: 600; color: #1B1B1B; line-height: 1; }
+    .stat-l { font-size: 10px; color: #AAA; margin-top: 3px; }
+    .stat + .stat { border-left: 1px solid rgba(27,27,27,0.06); }
+
+    /* ---- BUTTON COMPARISON STRIP ---- */
+    .btn-compare {
+      padding: 40px 64px;
+      background: white;
+      border-top: 1px solid rgba(27,27,27,0.06);
+      border-bottom: 1px solid rgba(27,27,27,0.06);
+    }
+    .btn-compare-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #AAA; margin-bottom: 28px;
+    }
+    .btn-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .btn-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .btn-item-label { font-size: 10px; color: #AAA; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+    .btn-test {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      padding: 13px 28px; border-radius: 10px;
+      border: none; cursor: pointer; white-space: nowrap;
+    }
+    .btn-ghost {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      padding: 13px 28px; border-radius: 10px;
+      cursor: pointer; white-space: nowrap; background: transparent;
+    }
+
+    /* ---- FEATURE STRIP ---- */
+    .strip {
+      background: #1B1B1B; padding: 18px 64px;
+      display: flex; gap: 36px; align-items: center;
+    }
+    .strip-item { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.75); }
+    .strip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* ---- BOOKS SECTION ---- */
+    .books-section { padding: 56px 64px; }
+    .sec-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+    .sec-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 300; letter-spacing: -0.02em; color: #1B1B1B; }
+    .sec-link { font-size: 12px; font-weight: 500; color: #AAA; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .book-card {
+      background: white; border-radius: 14px; padding: 16px;
+      border: 1px solid rgba(27,27,27,0.07);
+    }
+    .book-cover { width: 100%; aspect-ratio: 2/3; border-radius: 8px; margin-bottom: 12px; }
+    .book-title { font-size: 13px; font-weight: 500; line-height: 1.3; color: #1B1B1B; margin-bottom: 3px; }
+    .book-author { font-size: 11px; color: rgba(27,27,27,0.45); margin-bottom: 10px; }
+    .book-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 500; color: rgba(27,27,27,0.5);
+    }
+    .tag-dot { width: 5px; height: 5px; border-radius: 50%; }
+    .tag-dot.reading { background: var(--accent); }
+    .tag-dot.wishlist { background: #8A7A6A; }
+    .tag-dot.done { background: rgba(27,27,27,0.2); }
+
+    /* ---- BRANDING SECTION (landing-only) ---- */
+    .brand-section { padding: 56px 64px; background: #F4F6F9; }
+    .brand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+    .brand-card {
+      border-radius: 18px; padding: 36px 32px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .brand-card-ink { background: #1B1B1B; }
+    .brand-card-accent { background: var(--accent); }
+    .brand-card-muted { background: white; border: 1px solid rgba(27,27,27,0.07); }
+    .brand-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-icon svg { width: 20px; height: 20px; }
+    .brand-card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 20px; font-weight: 300; line-height: 1.2;
+    }
+    .brand-card-body { font-size: 14px; font-weight: 300; line-height: 1.7; }
+    .on-dark { color: rgba(255,255,255,0.9); }
+    .on-dark .brand-card-body { color: rgba(255,255,255,0.55); }
+    .on-dark .brand-icon { background: rgba(255,255,255,0.1); }
+    .on-accent-text { color: #ffffff; }
+    .on-accent-text .brand-card-body { color: rgba(255,255,255,0.65); }
+    .on-accent-text .brand-icon { background: rgba(255,255,255,0.18); }
+    .on-light { color: #1B1B1B; }
+    .on-light .brand-card-body { color: #777; }
+    .on-light .brand-icon { background: rgba(27,27,27,0.05); }
+
+    /* ---- DISCOVER ---- */
+    .discover { padding: 0 64px 64px; }
+    .disc-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+    .disc-featured {
+      background: #1B1B1B; border-radius: 16px; padding: 36px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      min-height: 260px; position: relative; overflow: hidden;
+    }
+    .disc-featured::before {
+      content: ''; position: absolute; top: -50px; right: -50px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: var(--accent); opacity: 0.15;
+    }
+    .feat-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+    .feat-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 300; line-height: 1.1; color: white; margin-bottom: 5px; }
+    .feat-author { font-size: 12px; color: rgba(255,255,255,0.35); }
+    .disc-card {
+      background: white; border-radius: 16px; padding: 20px;
+      border: 1px solid rgba(27,27,27,0.07);
+    }
+    .disc-cover { width: 100%; aspect-ratio: 3/2; border-radius: 8px; margin-bottom: 12px; }
+    .disc-title { font-size: 14px; font-weight: 500; color: #1B1B1B; margin-bottom: 3px; }
+    .disc-author { font-size: 11px; color: rgba(27,27,27,0.45); }
+
+    /* ---- PALETTE ---- */
+    .palette-row {
+      display: flex; gap: 8px; padding: 24px 64px;
+      border-top: 1px solid rgba(27,27,27,0.07); align-items: center;
+    }
+    .pl-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-right: 8px; }
+    .pl-swatch { width: 26px; height: 26px; border-radius: 50%; }
+    .pl-hex { font-size: 10px; color: #555; margin-left: 1px; margin-right: 8px; }
+
+    /* ---- COVER PLACEHOLDERS ---- */
+    .cv1 { background: #C8D4E0; }
+    .cv2 { background: #B8C8D8; }
+    .cv3 { background: #D0D8E4; }
+    .cv4 { background: #BEC8D6; }
+    .cv5 { background: #C4D0DC; }
+
+    /* ---- ACCENT THEMES ---- */
+    /* Applied via JS on .root — default: forest */
+    :root {
+      --accent: #4959E6;
+      --accent-text: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="logo">readr</span>
+    <ul class="nav-links"><li>Bibliothèque</li><li>Découvrir</li><li>Wishlist</li><li>Recherche</li></ul>
+    <div class="nav-right">
+      <div class="nav-search">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#BBB" stroke-width="1.5"/><path d="m11 11 3 3" stroke="#BBB" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Chercher un livre…
+      </div>
+      <button class="nav-btn">Commencer</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Ta bibliothèque personnelle</p>
+      <h1 class="hero-h1">Tes livres,<br><span class="hl">enfin à leur place.<svg class="wave" viewBox="0 0 340 10" preserveAspectRatio="none"><path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5"/></svg></span></h1>
+      <p class="hero-sub">readr centralise toutes tes lectures en un seul endroit. Retrouve, explore et sauvegarde tes livres préférés.</p>
+      <div class="ctas">
+        <button class="cta-p">Créer mon espace</button>
+        <button class="cta-s">Voir la démo →</button>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="preview-topbar">
+        <span class="topbar-title">En cours de lecture</span>
+        <span class="topbar-meta">3 livres actifs</span>
+      </div>
+      <div class="mini-grid">
+        <div><div class="mini-cover cv1"></div><p class="mini-title">L'Élégance du hérisson</p><p class="mini-author">Muriel Barbery</p></div>
+        <div><div class="mini-cover cv2"></div><p class="mini-title">The Midnight Library</p><p class="mini-author">Matt Haig</p></div>
+        <div><div class="mini-cover cv3"></div><p class="mini-title">Sapiens</p><p class="mini-author">Y. N. Harari</p></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><p class="stat-n">243</p><p class="stat-l">livres</p></div>
+        <div class="stat"><p class="stat-n">12</p><p class="stat-l">en cours</p></div>
+        <div class="stat"><p class="stat-n">38</p><p class="stat-l">wishlist</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WAVE HIGHLIGHT COLOR TESTS -->
+  <div style="padding:40px 64px; background:white; border-top:1px solid rgba(27,27,27,0.06); border-bottom:1px solid rgba(27,27,27,0.06);">
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#AAA;margin-bottom:32px;">Hand-drawn highlight — tests couleurs</p>
+    <div style="display:flex;flex-direction:column;gap:24px;">
+
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div style="position:relative;display:inline-block;">
+          <svg style="position:absolute;left:-4px;bottom:-8px;width:calc(100% + 8px);height:12px;overflow:visible;" viewBox="0 0 340 10" preserveAspectRatio="none">
+            <path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" fill="none" stroke="#4959E6" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:draw-wave 0.9s cubic-bezier(0.4,0,0.2,1) 0.1s forwards;"/>
+          </svg>
+          <span style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;font-style:italic;position:relative;">enfin à leur place.</span>
+        </div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#4959E6;">#4959E6</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div style="position:relative;display:inline-block;">
+          <svg style="position:absolute;left:-4px;bottom:-8px;width:calc(100% + 8px);height:12px;overflow:visible;" viewBox="0 0 340 10" preserveAspectRatio="none">
+            <path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" fill="none" stroke="#9DCCFA" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:draw-wave 0.9s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;"/>
+          </svg>
+          <span style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;font-style:italic;position:relative;">enfin à leur place.</span>
+        </div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#5A9ACC;">#9DCCFA</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div style="position:relative;display:inline-block;">
+          <svg style="position:absolute;left:-4px;bottom:-8px;width:calc(100% + 8px);height:12px;overflow:visible;" viewBox="0 0 340 10" preserveAspectRatio="none">
+            <path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" fill="none" stroke="#FE7E4E" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:draw-wave 0.9s cubic-bezier(0.4,0,0.2,1) 0.3s forwards;"/>
+          </svg>
+          <span style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;font-style:italic;position:relative;">enfin à leur place.</span>
+        </div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#FE7E4E;">#FE7E4E</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div style="position:relative;display:inline-block;">
+          <svg style="position:absolute;left:-4px;bottom:-8px;width:calc(100% + 8px);height:12px;overflow:visible;" viewBox="0 0 340 10" preserveAspectRatio="none">
+            <path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" fill="none" stroke="#FFCEE3" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:draw-wave 0.9s cubic-bezier(0.4,0,0.2,1) 0.4s forwards;"/>
+          </svg>
+          <span style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;font-style:italic;position:relative;">enfin à leur place.</span>
+        </div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#D080A0;">#FFCEE3</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div style="position:relative;display:inline-block;">
+          <svg style="position:absolute;left:-4px;bottom:-8px;width:calc(100% + 8px);height:12px;overflow:visible;" viewBox="0 0 340 10" preserveAspectRatio="none">
+            <path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" fill="none" stroke="#FFE92D" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:draw-wave 0.9s cubic-bezier(0.4,0,0.2,1) 0.5s forwards;"/>
+          </svg>
+          <span style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;font-style:italic;position:relative;">enfin à leur place.</span>
+        </div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#C0A000;">#FFE92D</span>
+      </div>
+
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div style="position:relative;display:inline-block;">
+          <svg style="position:absolute;left:-4px;bottom:-8px;width:calc(100% + 8px);height:12px;overflow:visible;" viewBox="0 0 340 10" preserveAspectRatio="none">
+            <path d="M0 5 C20 2, 35 8, 55 5 C75 2, 90 8, 110 5 C130 2, 145 8, 165 5 C185 2, 200 8, 220 5 C240 2, 255 8, 275 5 C295 2, 310 8, 340 5" fill="none" stroke="#9EEB97" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:draw-wave 0.9s cubic-bezier(0.4,0,0.2,1) 0.6s forwards;"/>
+          </svg>
+          <span style="font-family:'Fraunces',serif;font-size:48px;font-weight:400;line-height:1.1;letter-spacing:-0.02em;font-style:italic;position:relative;">enfin à leur place.</span>
+        </div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#4A9A44;">#9EEB97</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BUTTON VARIANTS — comparaison pour choix accent -->
+  <div class="btn-compare">
+    <p class="btn-compare-label">Comparaison accent — primary button</p>
+    <div class="btn-row">
+      <div class="btn-item">
+        <button class="btn-test" style="background:#1B1B1B; color:#FAF8F5;">Créer mon espace</button>
+        <span class="btn-item-label">Ink · actuel</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#1F5C3A; color:#ffffff;">Créer mon espace</button>
+        <span class="btn-item-label">Vert sapin</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#2A6B4A; color:#ffffff;">Créer mon espace</button>
+        <span class="btn-item-label">Forest</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#3A5FA0; color:#ffffff;">Créer mon espace</button>
+        <span class="btn-item-label">Bleu primary DS</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#4959E6; color:#ffffff;">Créer mon espace</button>
+        <span class="btn-item-label">Bleu actuel DS</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#2B4C8C; color:#ffffff;">Créer mon espace</button>
+        <span class="btn-item-label">Indigo profond</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#E8F0FE; color:#1B2F6E; border:1px solid rgba(27,47,110,0.15);">Créer mon espace</button>
+        <span class="btn-item-label">Blue tinted ghost</span>
+      </div>
+      <div class="btn-item">
+        <button class="btn-test" style="background:#D4E8DC; color:#1F5C3A; border:1px solid rgba(31,92,58,0.15);">Créer mon espace</button>
+        <span class="btn-item-label">Sage ghost</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-item"><div class="strip-dot"></div>Bibliothèque personnelle</div>
+    <div class="strip-item"><div class="strip-dot"></div>Recherche ISBN & titre</div>
+    <div class="strip-item"><div class="strip-dot"></div>Mode sombre inclus</div>
+    <div class="strip-item"><div class="strip-dot"></div>Français & English</div>
+  </div>
+
+  <!-- BOOKS -->
+  <div class="books-section">
+    <div class="sec-header">
+      <h2 class="sec-title">Lectures en cours</h2>
+      <span class="sec-link">Voir tout →</span>
+    </div>
+    <div class="grid-5">
+      <div class="book-card"><div class="book-cover cv1"></div><p class="book-title">L'Élégance du hérisson</p><p class="book-author">Muriel Barbery</p><span class="book-tag"><span class="tag-dot reading"></span>En cours</span></div>
+      <div class="book-card"><div class="book-cover cv2"></div><p class="book-title">The Midnight Library</p><p class="book-author">Matt Haig</p><span class="book-tag"><span class="tag-dot wishlist"></span>Wishlist</span></div>
+      <div class="book-card"><div class="book-cover cv3"></div><p class="book-title">Sapiens</p><p class="book-author">Yuval Noah Harari</p><span class="book-tag"><span class="tag-dot done"></span>Lu</span></div>
+      <div class="book-card"><div class="book-cover cv4"></div><p class="book-title">Normal People</p><p class="book-author">Sally Rooney</p><span class="book-tag"><span class="tag-dot reading"></span>En cours</span></div>
+      <div class="book-card"><div class="book-cover cv5"></div><p class="book-title">Station Eleven</p><p class="book-author">Emily St. John Mandel</p><span class="book-tag"><span class="tag-dot wishlist"></span>Wishlist</span></div>
+    </div>
+  </div>
+
+  <!-- BRAND SECTION — landing page only -->
+  <div class="brand-section">
+    <div class="sec-header">
+      <h2 class="sec-title">Pourquoi readr ?</h2>
+    </div>
+    <div class="brand-grid">
+      <div class="brand-card brand-card-ink on-dark">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <p class="brand-card-title">Ta bibliothèque, toujours avec toi.</p>
+        <p class="brand-card-body">Tous tes livres en un seul endroit. Accessible depuis n'importe quel appareil, en ligne comme hors connexion.</p>
+      </div>
+      <div class="brand-card brand-card-accent on-accent-text">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg>
+        </div>
+        <p class="brand-card-title">Trouve n'importe quel livre en secondes.</p>
+        <p class="brand-card-body">Recherche par titre, auteur ou ISBN. readr interroge des millions de références pour toi.</p>
+      </div>
+      <div class="brand-card brand-card-muted on-light">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1B1B1B" stroke-width="1.5"><path d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16l-7-3.5L5 21V5z"/></svg>
+        </div>
+        <p class="brand-card-title">Une wishlist qui ne s'oublie pas.</p>
+        <p class="brand-card-body">Sauvegarde les livres qui t'attirent. Retrouve-les quand tu es prêt·e à lire — sans jamais en perdre la trace.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCOVER -->
+  <div class="discover">
+    <div class="sec-header" style="margin-top:56px;">
+      <h2 class="sec-title">Découvrir</h2>
+      <span class="sec-link">Explorer →</span>
+    </div>
+    <div class="disc-grid">
+      <div class="disc-featured">
+        <p class="feat-eyebrow">Coup de coeur</p>
+        <p class="feat-title">L'Anomalie</p>
+        <p class="feat-author">Hervé Le Tellier</p>
+      </div>
+      <div class="disc-card">
+        <div class="disc-cover cv2"></div>
+        <p class="disc-title">Klara and the Sun</p>
+        <p class="disc-author">Kazuo Ishiguro</p>
+      </div>
+      <div class="disc-card">
+        <div class="disc-cover cv4"></div>
+        <p class="disc-title">Drive Your Plow</p>
+        <p class="disc-author">Olga Tokarczuk</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALETTE -->
+  <div class="palette-row">
+    <span class="pl-label">Palette</span>
+    <div class="pl-swatch" style="background:#F4F6F9;border:1px solid #ddd;"></div><span class="pl-hex">#F4F6F9</span>
+    <div class="pl-swatch" style="background:#1B1B1B;"></div><span class="pl-hex">#1B1B1B</span>
+    <div class="pl-swatch" style="background:var(--accent);"></div><span class="pl-hex">accent</span>
+    <div class="pl-swatch" style="background:#ffffff;border:1px solid #ddd;"></div><span class="pl-hex">#FFFFFF</span>
+  </div>
+
+</body>
+</html>

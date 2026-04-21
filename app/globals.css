@@ -1,0 +1,173 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is([data-theme="dark"] *));
+
+@theme inline {
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-destructive:          var(--destructive);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-ring:                 var(--ring);
+  --radius-sm:  calc(var(--radius) * 0.75);
+  --radius-md:  var(--radius);
+  --radius-lg:  calc(var(--radius) * 1.5);
+  --radius-xl:  calc(var(--radius) * 2);
+  --font-sans:    var(--font-jakarta);
+  --font-heading: var(--font-fraunces);
+}
+
+/* ─── READR TOKENS ─── */
+:root {
+  /* shadcn compat */
+  --background:            #FEFEFF;
+  --foreground:            #222222;
+  --card:                  #FFFFFF;
+  --card-foreground:       #222222;
+  --popover:               #FFFFFF;
+  --popover-foreground:    #222222;
+  --primary:               #4959E6;
+  --primary-foreground:    #FFFFFF;
+  --secondary:             #F0F2FF;
+  --secondary-foreground:  #4959E6;
+  --muted:                 #F7F7F7;
+  --muted-foreground:      #777777;
+  --accent:                #4959E6;
+  --accent-foreground:     #FFFFFF;
+  --destructive:           #E63946;
+  --border:                #E0E0E0;
+  --input:                 #E0E0E0;
+  --ring:                  #4959E6;
+  --radius:                8px;
+  /* Original readr palette */
+  --bg:                    #FEFEFF;
+  --bg2:                   #FEFEFF;
+  --bg3:                   #F7F7F7;
+  --text:                  #222222;
+  --text-2:                #555555;
+  --text-3:                #777777;
+  --nav:                   rgba(255,255,255,0.90);
+  --accent-bg:             rgba(73,89,230,0.08);
+  --teal:                  #00A699;
+  --teal-bg:               rgba(0,166,153,0.08);
+  --ai-from:               #F67BF8;
+  --ai-to:                 #4959E6;
+  --ghost-hover:           #F4F5FF;
+  --transition:            background 0.25s, color 0.25s, border-color 0.25s;
+  --shadow-sm:             0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-md:             0 2px 8px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:             0 4px 20px rgba(0,0,0,0.14), 0 1px 6px rgba(0,0,0,0.08);
+  /* Neutral palette — tinted primary */
+  --dark-0:      rgba(13,15,26,0);
+  --dark-5:      rgba(13,15,26,0.05);
+  --dark-10:     rgba(13,15,26,0.10);
+  --dark-20:     rgba(13,15,26,0.20);
+  --dark-30:     rgba(13,15,26,0.30);
+  --dark-40:     rgba(13,15,26,0.40);
+  --dark-50:     rgba(13,15,26,0.50);
+  --dark-60:     rgba(13,15,26,0.60);
+  --dark-70:     rgba(13,15,26,0.70);
+  --dark-80:     rgba(13,15,26,0.80);
+  --dark-90:     rgba(13,15,26,0.90);
+  --dark-100:    #0D0F1A;
+  --light-0:     rgba(245,246,255,0);
+  --light-5:     rgba(245,246,255,0.05);
+  --light-10:    rgba(245,246,255,0.10);
+  --light-20:    rgba(245,246,255,0.20);
+  --light-30:    rgba(245,246,255,0.30);
+  --light-40:    rgba(245,246,255,0.40);
+  --light-50:    rgba(245,246,255,0.50);
+  --light-60:    rgba(245,246,255,0.60);
+  --light-70:    rgba(245,246,255,0.70);
+  --light-80:    rgba(245,246,255,0.80);
+  --light-90:    rgba(245,246,255,0.90);
+  --light-100:   #F5F6FF;
+  /* Primary scale */
+  --primary-5:   #F4F5FF;
+  --primary-10:  #E8EAFD;
+  --primary-20:  #C1C7FB;
+  --primary-30:  #9BA5F8;
+  --primary-40:  #6F7CF2;
+  --primary-50:  #4959E6;
+  --primary-60:  #3646D4;
+  --primary-70:  #2836B8;
+  --primary-80:  #1D268A;
+  --primary-90:  #131860;
+  --primary-100: #0C0F38;
+}
+
+[data-theme="dark"] {
+  /* shadcn compat */
+  --background:            #0F0F0F;
+  --foreground:            #F0F0F0;
+  --card:                  #1E1E1E;
+  --card-foreground:       #F0F0F0;
+  --popover:               #1E1E1E;
+  --popover-foreground:    #F0F0F0;
+  --primary:               #7B89F8;
+  --primary-foreground:    #0F0F0F;
+  --secondary:             #1A1A2E;
+  --secondary-foreground:  #7B89F8;
+  --muted:                 #1A1A1A;
+  --muted-foreground:      #909090;
+  --accent:                #7B89F8;
+  --accent-foreground:     #0F0F0F;
+  --destructive:           #FF6B6B;
+  --border:                #2E2E2E;
+  --input:                 #2E2E2E;
+  --ring:                  #7B89F8;
+  /* Original readr palette */
+  --bg:                    #0F0F0F;
+  --bg2:                   #0F0F0F;
+  --bg3:                   #1A1A1A;
+  --text:                  #F0F0F0;
+  --text-2:                #909090;
+  --text-3:                #555555;
+  --nav:                   rgba(15,15,15,0.96);
+  --accent-bg:             rgba(123,137,248,0.12);
+  --teal:                  #00C9BE;
+  --teal-bg:               rgba(0,201,190,0.1);
+  --ai-from:               #F67BF8;
+  --ai-to:                 #7B89F8;
+  --ghost-hover:           rgba(73,89,230,0.12);
+  --shadow-sm:             0 1px 4px rgba(0,0,0,0.4), 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-lg:             0 6px 28px rgba(0,0,0,0.55);
+}
+
+@layer base {
+  html {
+    font-size: 14px;
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    transition: var(--transition);
+  }
+  button, input, select, textarea {
+    font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    font-size: 1.071rem;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-fraunces), serif;
+  }
+}
