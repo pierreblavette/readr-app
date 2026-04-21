@@ -130,17 +130,27 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
         body: JSON.stringify({ image: base64, mimeType: file.type }),
       });
       const data = await res.json();
-      if (!res.ok || data.error) throw new Error(data.error || 'Worker error');
+      if (!res.ok || data.error) {
+        console.error('[vision/books] upstream error', { status: res.status, data });
+        throw new Error(data.error || `Worker error ${res.status}`);
+      }
       const raw = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
       const cleaned = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
       const match = cleaned.match(/\[[\s\S]*\]/);
       const books = JSON.parse(match?.[0] || '[]');
-      if (!books.length) throw new Error('no books');
+      if (!books.length) {
+        console.warn('[vision/books] no books detected in Gemini response', { raw });
+        throw new Error('no books');
+      }
       setPreviewBooks(prev => [...prev, ...books.filter(b => b.title)]);
       setPhotoError('');
       setPhotoState('idle');
-    } catch {
-      setPhotoError('No books detected. Try a clearer photo with visible titles.');
+    } catch (err) {
+      console.error('[vision/books] scan failed', err);
+      const msg = err?.message === 'no books'
+        ? 'No books detected. Try a clearer photo with visible titles.'
+        : `Scan failed: ${err?.message || 'unknown error'}`;
+      setPhotoError(msg);
       setPhotoState('idle');
     }
   }
