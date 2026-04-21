@@ -65,10 +65,23 @@ export default function LibraryPage() {
     : '';
 
   function handleConfirmSelection(action) {
-    if (action === 'delete') deleteMany(selected);
-    else if (action === 'move') moveToLibrary(selected);
+    if (action === 'delete') {
+      setDeleteTarget({ bulk: true, ids: new Set(selected), count: selected.size });
+      return;
+    }
+    if (action === 'move') moveToLibrary(selected);
     setSelected(new Set());
     setEditMode(false);
+  }
+
+  function handleDeleteConfirm(payload) {
+    if (payload instanceof Set) {
+      deleteMany(payload);
+      setSelected(new Set());
+      setEditMode(false);
+    } else {
+      deleteBook(payload);
+    }
   }
 
   return (
@@ -237,7 +250,7 @@ export default function LibraryPage() {
         onAdd={b => { const ok = addBook(b); if (ok) setToastMsg(t.toastAdded || 'Book added to your library'); }}
         onAddMany={b => { addMany(b); setToastMsg(t.toastImported?.(b.length) || `${b.length} book${b.length > 1 ? 's' : ''} imported`); }}
         t={t} />
-      <DeleteModal book={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={deleteBook} t={t} />
+      <DeleteModal target={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={handleDeleteConfirm} t={t} />
       <CreateCollectionModal open={createColOpen} onClose={() => setCreateColOpen(false)} onCreate={createCollection} t={t} />
       <AddQuoteModal
         open={addQuoteOpen}

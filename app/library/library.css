@@ -373,6 +373,13 @@
 
 .add-btn:hover { background: var(--primary-60); }
 
+.add-btn:disabled,
+.add-btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 [data-theme="dark"] .add-btn { background: var(--primary-40); }
 [data-theme="dark"] .add-btn:hover { background: var(--primary-50); }
 
