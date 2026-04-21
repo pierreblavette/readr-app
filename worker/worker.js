@@ -16,16 +16,31 @@ Return ONLY the extracted text, preserving line breaks where appropriate.
 No explanation, no formatting, no quotes around the result.
 If no readable text is found, return an empty string.`;
 
-async function getFlashModel(apiKey) {
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-  const data = await res.json();
-  const models = (data.models || [])
-    .filter(m =>
-      m.name.includes('flash') &&
-      (m.supportedGenerationMethods || []).includes('generateContent')
-    )
-    .map(m => m.name);
-  return models[0] || 'models/gemini-2.0-flash';
+const MODEL_CASCADE = [
+  'models/gemini-2.5-flash',
+  'models/gemini-2.5-flash-lite',
+];
+
+async function callGemini(apiKey, body) {
+  let last = { status: 503, data: { error: { message: 'No model attempted' } } };
+  for (const model of MODEL_CASCADE) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        }
+      );
+      const data = await res.json();
+      if (res.ok) return { ok: true, status: res.status, data };
+      last = { status: res.status, data };
+      if (res.status !== 503 && res.status !== 429) return { ok: false, ...last };
+      if (attempt === 0) await new Promise(r => setTimeout(r, 1000));
+    }
+  }
+  return { ok: false, ...last };
 }
 
 export default {
@@ -79,32 +94,21 @@ export default {
           return json({ error: 'Missing image or mimeType' }, 400);
         }
 
-        const model = await getFlashModel(env.GEMINI_API_KEY);
+        const result = await callGemini(env.GEMINI_API_KEY, {
+          contents: [{
+            parts: [
+              { text: QUOTE_PROMPT },
+              { inline_data: { mime_type: mimeType, data: image } }
+            ]
+          }],
+          generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }
+        });
 
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{
-                parts: [
-                  { text: QUOTE_PROMPT },
-                  { inline_data: { mime_type: mimeType, data: image } }
-                ]
-              }],
-              generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }
-            })
-          }
-        );
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          return json({ error: data.error?.message || `Gemini error ${res.status}` }, res.status);
+        if (!result.ok) {
+          return json({ error: result.data?.error?.message || `Gemini error ${result.status}` }, result.status);
         }
 
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+        const text = result.data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
         return json({ text });
       } catch (e) {
         return json({ error: e.message || 'Internal error' }, 500);
@@ -119,32 +123,21 @@ export default {
         return json({ error: 'Missing image or mimeType' }, 400);
       }
 
-      const model = await getFlashModel(env.GEMINI_API_KEY);
+      const result = await callGemini(env.GEMINI_API_KEY, {
+        contents: [{
+          parts: [
+            { text: PROMPT },
+            { inline_data: { mime_type: mimeType, data: image } }
+          ]
+        }],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 1024 }
+      });
 
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { text: PROMPT },
-                { inline_data: { mime_type: mimeType, data: image } }
-              ]
-            }],
-            generationConfig: { temperature: 0.1, maxOutputTokens: 1024 }
-          })
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        return json({ error: data.error?.message || `Gemini error ${res.status}` }, res.status);
+      if (!result.ok) {
+        return json({ error: result.data?.error?.message || `Gemini error ${result.status}` }, result.status);
       }
 
-      return json(data);
+      return json(result.data);
     } catch (e) {
       return json({ error: e.message || 'Internal error' }, 500);
     }
