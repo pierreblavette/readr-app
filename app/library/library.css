@@ -1564,7 +1564,7 @@
 }
 
 .modal-title {
-  font-size: 21px;
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text);
@@ -1654,7 +1654,7 @@
 }
 
 /* Modal fields */
-.modal-fields { margin: 0 0 24px; display: flex; flex-direction: column; gap: 16px; }
+.modal-fields { margin: 0 0 24px; display: flex; flex-direction: column; gap: 24px; }
 .modal-field { display: flex; flex-direction: column; gap: 6px; }
 .modal-field label { font-size: 12px; font-weight: 500; color: var(--text-3); }
 
@@ -1928,7 +1928,7 @@
   border-radius: 8px;
   background: var(--bg3);
 }
-.import-preview-book { font-size: 14px; font-weight: 500; color: var(--text); }
+.import-preview-book { font-size: 14px; font-weight: 600; color: var(--text); }
 .import-preview-author { font-size: 12px; color: var(--text-2); margin-top: 4px; }
 .import-preview-remove {
   width: 32px; height: 32px; border: none; background: transparent;
@@ -1961,7 +1961,7 @@
   border: 1.5px solid var(--border);
   background: #FFFFFF; color: var(--text);
   font-family: inherit; font-size: 14px; font-weight: 600;
-  cursor: pointer; margin-bottom: 16px;
+  cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 .import-change-file:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
