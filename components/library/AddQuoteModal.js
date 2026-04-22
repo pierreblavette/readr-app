@@ -11,6 +11,7 @@ const INPUT_TABS = ['photo', 'manual'];
 export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefillBook, t }) {
   const [inputMode, setInputMode]     = useState('photo');
   const [photoState, setPhotoState]   = useState('idle'); // 'idle' | 'scanning' | 'done'
+  const [scanStep, setScanStep]       = useState('prep'); // 'prep' | 'reading'
   const [scanError, setScanError]     = useState('');
   const [text, setText]               = useState('');
   const [bookSearch, setBookSearch]   = useState('');
@@ -80,9 +81,14 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
   async function handlePhotoChange(e) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setScanError(''); setPhotoState('scanning'); setText('');
+    setScanError(''); setScanStep('prep'); setPhotoState('scanning'); setText('');
     try {
-      const { base64, mimeType } = await prepareImage(file);
+      const [{ base64, mimeType }] = await Promise.all([
+        prepareImage(file),
+        new Promise(r => setTimeout(r, 600)),
+      ]);
+      setScanStep('reading');
+      const readingStart = Date.now();
       const res = await fetch('/api/vision/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,6 +101,8 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
         throw new Error(data.error || `Worker error ${res.status}`);
       }
       if (!data.text) throw new Error('empty');
+      const readingElapsed = Date.now() - readingStart;
+      if (readingElapsed < 700) await new Promise(r => setTimeout(r, 700 - readingElapsed));
       setText(data.text.replace(/([^\n])\n([^\n])/g, '$1 $2').trim());
       setPhotoState('done');
       setTimeout(() => textareaRef.current?.focus(), 80);
@@ -270,8 +278,8 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {inputMode === 'photo' && photoState === 'scanning' && (
             <GradientDropzone gradientId="quoteGradScan">
               <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
-              <div className="import-dropzone-title">{t.quoteScanning}</div>
-              <div className="import-dropzone-sub">Extracting text from your photo</div>
+              <div className="import-dropzone-title">{scanStep === 'prep' ? t.quoteStepPrep : t.quoteStepReading}</div>
+              <div className="import-dropzone-sub">{scanStep === 'prep' ? t.quoteStepPrepSub : t.quoteStepReadingSub}</div>
             </GradientDropzone>
           )}
 

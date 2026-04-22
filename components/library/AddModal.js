@@ -32,6 +32,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
   const [importError, setImportError] = useState('');
   const [previewBooks, setPreviewBooks] = useState([]);
   const [photoState, setPhotoState] = useState('idle');
+  const [scanStep, setScanStep] = useState('prep');
   const [photoError, setPhotoError] = useState('');
   const fileInputRef  = useRef(null);
   const photoInputRef = useRef(null);
@@ -117,9 +118,14 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
     const file = e.target.files?.[0];
     if (!file) return;
     if (photoInputRef.current) photoInputRef.current.value = '';
-    setPhotoError(''); setPhotoState('scanning');
+    setPhotoError(''); setScanStep('prep'); setPhotoState('scanning');
     try {
-      const { base64, mimeType } = await prepareImage(file);
+      const [{ base64, mimeType }] = await Promise.all([
+        prepareImage(file),
+        new Promise(r => setTimeout(r, 600)),
+      ]);
+      setScanStep('reading');
+      const readingStart = Date.now();
       const res = await fetch('/api/vision/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -139,6 +145,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
         console.warn('[vision/books] no books detected in Gemini response', { raw });
         throw new Error('no books');
       }
+      const readingElapsed = Date.now() - readingStart;
+      if (readingElapsed < 700) await new Promise(r => setTimeout(r, 700 - readingElapsed));
       setPreviewBooks(prev => [...prev, ...books.filter(b => b.title)]);
       setPhotoError('');
       setPhotoState('idle');
@@ -254,8 +262,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
             {photoState === 'scanning' ? (
               <GradientDropzone>
                 <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
-                <div className="import-dropzone-title">Scanning cover...</div>
-                <div className="import-dropzone-sub">Detecting title and author from your photo</div>
+                <div className="import-dropzone-title">{scanStep === 'prep' ? t.ocrStepPrep : t.ocrStepReading}</div>
+                <div className="import-dropzone-sub">{scanStep === 'prep' ? t.ocrStepPrepSub : t.ocrStepReadingSub}</div>
               </GradientDropzone>
             ) : previewBooks.length === 0 ? (
               <PhotoDropzone onClick={() => photoInputRef.current?.click()} />
