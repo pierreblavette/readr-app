@@ -3,7 +3,7 @@
 
 /* ─── BUTTON SYSTEM ─── */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
   border: none; font-family: inherit; font-weight: 600; cursor: pointer;
   white-space: nowrap; transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
   flex-shrink: 0;
@@ -15,10 +15,10 @@
 .btn-primary:active:not(:disabled) { background: var(--primary-70); }
 .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-.btn-sm { height: 32px; padding: 0 12px; border-radius: 7px; font-size: 12px; }
-.btn-sm svg { width: 14px; height: 14px; }
-.btn-md { height: 40px; padding: 0 16px; border-radius: 8px; font-size: 14px; }
-.btn-md svg { width: 16px; height: 16px; }
+.btn-sm { height: 32px; padding: 0 16px; border-radius: 7px; font-size: 12px; gap: 6px; }
+.btn-sm svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
+.btn-md { height: 40px; padding: 0 20px; border-radius: 8px; font-size: 14px; gap: 8px; }
+.btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
 [data-theme="dark"] .btn-outline { border-color: var(--light-20); color: var(--light-90); background: transparent; }
@@ -1009,13 +1009,14 @@
 .col-empty-title { font-size: 24px; font-weight: 500; font-family: var(--font-fraunces), serif; color: var(--text); }
 .col-empty-sub { font-size: 12px; color: var(--text-2); max-width: 320px; }
 .col-empty-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 20px; border-radius: var(--radius); border: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 16px 0 12px; border-radius: 7px; border: none;
   background: var(--primary-50); color: #fff; font-size: 12px; font-weight: 600;
   cursor: pointer; transition: background 0.15s; margin-top: 8px;
   font-family: var(--font-jakarta), sans-serif;
 }
-.col-empty-cta svg { width: 16px; height: 16px; }
+.col-empty-cta svg,
+.col-back-btn svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; flex-shrink: 0; }
 .col-empty-cta:hover { background: var(--primary-60); }
 
 .col-grid {
@@ -1066,13 +1067,16 @@
 .col-detail-header { margin-bottom: 8px; }
 .col-back-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  background: none; border: none; cursor: pointer;
-  font-size: 12px; color: var(--text-2); font-weight: 500;
-  padding: 6px 0; transition: color 0.15s;
+  height: 32px; padding: 0 16px 0 12px;
+  border-radius: 7px; border: none;
+  background: none; color: var(--text-2);
   font-family: var(--font-jakarta), sans-serif;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
 }
-.col-back-btn:hover { color: var(--primary); }
-.col-back-btn svg { width: 16px; height: 16px; }
+.col-back-btn:hover { color: var(--primary-50); background: var(--primary-5); }
+[data-theme="dark"] .col-back-btn:hover { color: var(--primary-40); background: rgba(73,89,230,0.10); }
 .col-detail-title-row {
   display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
 }
@@ -1356,26 +1360,46 @@
 [data-theme="dark"] .panel-delete-btn { background: var(--bg3); }
 [data-theme="dark"] .panel-delete-btn:hover { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.10); }
 
-/* ─── MD BUTTONS — CANONICAL ANATOMY ─── */
-/* Height 40, radius 8, font 14/600, gap 8. */
+/* ─── BUTTON ANATOMY — CANONICAL SPECS BY SIZE ─── */
 /*
- * ICON+TEXT variant:
- *   - icon frame: 20×20 with a 16×16 glyph (80%) and 2px internal padding
+ * MD  (height 40, radius 8, font 14/600, gap 8)
+ * ────────────────────────────────────────────────
+ * ICON+TEXT:
+ *   - icon frame 20×20 with 16×16 glyph (80%) and 2px internal padding
  *   - L/R padding asymmetry to compensate icon visual weight:
- *     - icon-left  (icon + text)  : padding 0 20 0 16
- *     - icon-right (text + icon)  : padding 0 16 0 20
- *     - text-only                 : padding 0 20 (symmetric)
- *
- * ICON-ONLY variant:
- *   - container 40×40 (same height as icon+text for visual alignment)
- *   - glyph 18×18 centered directly in container (no internal frame, no padding)
- *     Larger than icon+text's 16px glyph because a lone glyph needs more visual weight.
+ *     - icon-left   : padding 0 20 0 16
+ *     - icon-right  : padding 0 16 0 20
+ *     - text-only   : padding 0 20 (symmetric)
+ * ICON-ONLY:
+ *   - container 40×40 (same height for visual alignment)
+ *   - glyph 18×18 centered directly (no internal frame)
+ *     Larger than icon+text's 16px because a lone glyph needs more weight.
  *   - border-radius 8
  *
- * Exceptions:
- *   - chevrons/dropdown markers keep their smaller size (e.g. .export-btn caret 14px)
- *   - .card-delete-btn stays 30×30 (SM contextual, revisit in SM/XS chantier)
- *   - .search-clear is an inline utility (18×18 round, not a standard button)
+ * SM  (height 32, radius 7, font 12/600, gap 6)
+ * ────────────────────────────────────────────────
+ * ICON+TEXT:
+ *   - icon frame 16×16 with 12×12 glyph (75%) and 2px internal padding
+ *     Same conceptual frame as MD, scaled down -4.
+ *   - L/R padding asymmetry:
+ *     - icon-left   : padding 0 16 0 12
+ *     - icon-right  : padding 0 12 0 16
+ *     - text-only   : padding 0 16 (symmetric)
+ * ICON-ONLY: container 32×32, glyph 14×14 centered (no internal frame).
+ *
+ * TEXT-LINK (inline, no fixed height)
+ * ────────────────────────────────────────────────
+ * - No background, no border, font-weight 500
+ * - Action variant: color primary-50, hover underline (.quote-retry-btn, SM fs 12)
+ * - Ghost variant: color text-3, hover color change (.lang-btn, XS fs 11)
+ *
+ * Exceptions (not subject to the above):
+ *   - chevrons/dropdown markers (.export-btn caret 14px) — interaction markers
+ *   - .card-delete-btn (30×30 SM contextual, inside BookCard)
+ *   - .search-clear (18×18 round utility inside input)
+ *   - .quote-photo-btn (vertical icon-on-top layout)
+ *   - .theme-btn (slider toggle)
+ *   - .col-delete-btn (coloration override on .edit-btn)
  */
 .add-btn svg,
 .edit-btn svg,
@@ -1383,12 +1407,51 @@
 .panel-move-btn svg,
 .panel-delete-btn svg,
 .panel-quotes-add svg,
-.import-change-file svg {
+.import-change-file svg,
+.sel-btn svg {
   width: 16px;
   height: 16px;
   padding: 2px;
   box-sizing: content-box;
   flex-shrink: 0;
+}
+
+/* Canonical stroke-width — adaptive to glyph size for ~1.5px visual stroke. */
+/* Formula: stroke_viewBox × (glyph_size / 24) = 1.5 → stroke = 36 / glyph_size */
+
+/* Glyph 12 (SM icon+text, frame 16) */
+.btn-sm svg *,
+.col-empty-cta svg *,
+.col-back-btn svg * {
+  stroke-width: 3;
+}
+
+/* Glyph 14 (SM icon-only + .export-btn chevron marker) */
+.card-delete-btn svg *,
+.import-preview-remove svg *,
+.export-btn svg * {
+  stroke-width: 2.5;
+}
+
+/* Glyph 16 (MD icon+text, frame 20) */
+.add-btn svg *,
+.edit-btn svg *,
+.empty-cta svg *,
+.panel-move-btn svg *,
+.panel-delete-btn svg *,
+.panel-quotes-add svg *,
+.import-change-file svg *,
+.sel-btn svg *,
+.btn-md svg * {
+  stroke-width: 2.25;
+}
+
+/* Glyph 18 (MD icon-only) */
+.view-btn svg *,
+.delete-row-btn svg *,
+.toolbar-hamburger svg *,
+.modal-close svg * {
+  stroke-width: 2;
 }
 
 /* ─── SELECTION BAR ─── */
@@ -1427,7 +1490,7 @@
 
 .sel-btn {
   height: 40px;
-  padding: 0 16px;
+  padding: 0 20px;
   border-radius: 8px;
   border: none;
   font-family: inherit;
@@ -1440,7 +1503,6 @@
   transition: opacity 0.15s;
 }
 
-.sel-btn svg { width: 14px; height: 14px; }
 .sel-cancel { background: rgba(255,255,255,0.15); color: inherit; }
 .sel-cancel:hover { background: rgba(255,255,255,0.25); }
 .sel-confirm { background: var(--primary-50); color: #fff; }
@@ -1505,8 +1567,8 @@
   position: absolute;
   top: 16px;
   right: 16px;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 8px;
   border: none;
   outline: none;
@@ -1521,7 +1583,7 @@
 }
 
 .modal-close:hover { background: var(--primary-5); color: var(--primary-60); }
-.modal-close svg { width: 24px; height: 24px; }
+.modal-close svg { width: 18px; height: 18px; }
 
 [data-theme="dark"] .modal-close:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
 
@@ -1618,12 +1680,12 @@
   height: 40px;
   padding: 0 20px;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   background: transparent;
   color: var(--text);
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s;
   white-space: nowrap;
@@ -1642,7 +1704,7 @@
   color: #fff;
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
   white-space: nowrap;
@@ -1712,7 +1774,7 @@
   color: #fff;
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -1860,14 +1922,14 @@
 .import-preview-book { font-size: 14px; font-weight: 500; color: var(--text); }
 .import-preview-author { font-size: 12px; color: var(--text-2); margin-top: 4px; }
 .import-preview-remove {
-  width: 28px; height: 28px; border: none; background: transparent;
+  width: 32px; height: 32px; border: none; background: transparent;
   color: var(--text); cursor: pointer; display: flex; align-items: center;
-  justify-content: center; border-radius: 6px; flex-shrink: 0; margin-left: 8px;
+  justify-content: center; border-radius: 7px; flex-shrink: 0; margin-left: 8px;
   transition: background 0.15s; font-family: inherit;
 }
 .import-preview-remove:hover { background: var(--primary-10); color: var(--primary-50); }
 [data-theme="dark"] .import-preview-remove:hover { background: rgba(73,89,230,0.22); color: var(--primary-30); }
-.import-preview-remove svg { width: 16px; height: 16px; }
+.import-preview-remove svg { width: 14px; height: 14px; }
 
 .import-error { color: #ef4444; font-size: 12px; margin-top: 8px; }
 
@@ -2029,23 +2091,23 @@
 }
 .ob-dot.active { width: 20px; border-radius: 3px; background: var(--primary-50); }
 .ob-skip {
-  height: 40px; padding: 0 16px; border-radius: 8px;
+  height: 40px; padding: 0 20px; border-radius: 8px;
   background: transparent; border: none;
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  font-family: inherit; font-size: 14px; font-weight: 600;
   color: var(--text-2); cursor: pointer; transition: all 0.15s;
 }
 .ob-skip:hover { background: var(--primary-5); color: var(--primary-60); }
 .ob-prev {
   height: 40px; padding: 0 20px; border-radius: 8px;
   background: var(--primary-5); color: var(--primary-60); border: none;
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  font-family: inherit; font-size: 14px; font-weight: 600;
   cursor: pointer; transition: background 0.15s;
 }
 .ob-prev:hover { background: var(--primary-10); }
 .ob-next {
-  height: 40px; padding: 0 24px; border-radius: 8px;
+  height: 40px; padding: 0 20px; border-radius: 8px;
   background: var(--primary-50); color: #fff; border: none;
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  font-family: inherit; font-size: 14px; font-weight: 600;
   cursor: pointer; transition: background 0.15s;
 }
 .ob-next:hover { background: var(--primary-60); }
