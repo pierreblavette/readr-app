@@ -1669,6 +1669,7 @@
   outline: none;
   transition: border-color 0.15s, background 0.15s;
 }
+.modal-field input::placeholder { font-weight: 500; color: var(--text-2); }
 
 .modal-field input:hover:not(:focus) { background: var(--primary-5); border: 1.5px solid var(--primary-50); }
 .modal-field input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
@@ -2583,6 +2584,8 @@
 /* ─── ADD QUOTE MODAL ─── */
 .quote-modal { width: 480px; max-width: calc(100vw - 32px); }
 
+.quote-scan-result { display: flex; flex-direction: column; gap: 24px; }
+
 .quote-textarea {
   width: 100%;
   padding: 12px 14px;
@@ -2598,6 +2601,7 @@
   outline: none;
   transition: border-color 0.15s, background 0.15s;
 }
+.quote-textarea::placeholder { font-weight: 500; color: var(--text-2); }
 .quote-textarea:hover:not(:focus) { background: var(--primary-5); border-color: var(--primary-50); }
 .quote-textarea:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); }
 [data-theme="dark"] .quote-textarea:hover:not(:focus) { border-color: var(--primary-40); background: rgba(73,89,230,0.10); }
@@ -2611,32 +2615,7 @@
 .quote-link-select-input {
   width: 100%;
   padding: 0 38px 0 14px;
-  border: 1.5px solid var(--border);
-  background: #FFFFFF;
   cursor: pointer;
-}
-.quote-link-select-input::placeholder { color: var(--text-2); font-weight: 500; }
-.quote-link-select-input:hover:not(:focus) {
-  border-color: var(--primary-50);
-  color: var(--primary-50);
-  background: var(--primary-5);
-}
-.quote-link-select-input:focus {
-  border-color: var(--primary-50);
-  background: var(--primary-5);
-  box-shadow: 0 0 0 3px var(--primary-20);
-}
-
-[data-theme="dark"] .quote-link-select-input { background: var(--bg3); border-color: var(--border); }
-[data-theme="dark"] .quote-link-select-input:hover:not(:focus) {
-  border-color: var(--primary-40);
-  color: var(--primary-40);
-  background: rgba(73,89,230,0.10);
-}
-[data-theme="dark"] .quote-link-select-input:focus {
-  border-color: var(--primary-40);
-  background: rgba(73,89,230,0.10);
-  box-shadow: 0 0 0 3px rgba(73,89,230,0.25);
 }
 
 .quote-link-select-chevron {
@@ -2662,11 +2641,9 @@
   gap: 12px;
   padding: 10px 12px;
   background: var(--bg3);
-  border: 1.5px solid var(--border);
   border-radius: 8px;
   animation: fadeUp 0.2s ease both;
 }
-[data-theme="dark"] .quote-book-chip { background: var(--bg3); }
 
 .quote-book-chip-cover {
   width: 32px;
@@ -2721,12 +2698,12 @@
   border-radius: 6px;
   background: none;
   border: none;
-  color: var(--text-2);
+  color: var(--text);
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.quote-book-chip-remove:hover { background: rgba(0,0,0,0.05); color: var(--text); }
-[data-theme="dark"] .quote-book-chip-remove:hover { background: rgba(255,255,255,0.08); }
+.quote-book-chip-remove:hover { background: var(--primary-10); color: var(--primary-50); }
+[data-theme="dark"] .quote-book-chip-remove:hover { background: rgba(73,89,230,0.22); color: var(--primary-30); }
 .quote-book-chip-remove:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
@@ -2848,6 +2825,7 @@
   outline: none;
   transition: border-color 0.15s, background 0.15s;
 }
+.modal-field-input::placeholder { font-weight: 500; color: var(--text-2); }
 .modal-field-input:hover:not(:focus) { background: var(--primary-5); border-color: var(--primary-50); }
 .modal-field-input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); }
 [data-theme="dark"] .modal-field-input:hover:not(:focus) { border-color: var(--primary-40); background: rgba(73,89,230,0.10); }

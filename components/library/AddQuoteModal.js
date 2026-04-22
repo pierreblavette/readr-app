@@ -12,6 +12,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
   const [inputMode, setInputMode]     = useState('photo');
   const [photoState, setPhotoState]   = useState('idle'); // 'idle' | 'scanning' | 'done'
   const [scanStep, setScanStep]       = useState('prep'); // 'prep' | 'reading'
+  const [readingIdx, setReadingIdx]   = useState(0);
   const [scanError, setScanError]     = useState('');
   const [text, setText]               = useState('');
   const [bookSearch, setBookSearch]   = useState('');
@@ -29,6 +30,18 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
   const linkDebounceRef = useRef(null);
   const linkDropdownRef = useRef(null);
   const linkInputRef = useRef(null);
+
+  // Rotate reading-phase messages while scanning
+  useEffect(() => {
+    if (photoState !== 'scanning' || scanStep !== 'reading') return;
+    const pool = t.quoteReadingPool || [];
+    if (pool.length < 2) return;
+    setReadingIdx(0);
+    const id = setInterval(() => {
+      setReadingIdx(i => (i + 1) % pool.length);
+    }, 2200);
+    return () => clearInterval(id);
+  }, [photoState, scanStep, t]);
 
   // Tab indicator
   const tabRefs = useRef([]);
@@ -229,7 +242,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           <div className={`import-tab-indicator${inputMode === 'photo' ? ' gradient' : ''}`} style={{ left: indicator.left, width: indicator.width }} />
           <button ref={el => tabRefs.current[0] = el}
             className={`import-tab${inputMode === 'photo' ? ' active' : ''}`}
-            onClick={() => { setInputMode('photo'); setPhotoState('idle'); setScanError(''); setShowDrop(false); }}>
+            onClick={() => { setInputMode('photo'); setShowDrop(false); }}>
             <span className="import-tab-ai">
               <svg className="import-tab-ai-icon" viewBox="0 0 24 24" fill="none">
                 <defs>
@@ -259,7 +272,9 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                 style={{ display: 'none' }} onChange={handlePhotoChange} />
               <GradientDropzone onClick={() => fileRef.current?.click()} gradientId="quoteGradBorder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
                 </svg>
                 <div className="import-dropzone-title">Drop a photo or click to browse</div>
                 <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
@@ -278,14 +293,14 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {inputMode === 'photo' && photoState === 'scanning' && (
             <GradientDropzone gradientId="quoteGradScan">
               <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
-              <div key={`qtitle-${scanStep}`} className="import-dropzone-title scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrep : t.quoteStepReading}</div>
+              <div key={`qtitle-${scanStep}-${readingIdx}`} className="import-dropzone-title scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrep : (t.quoteReadingPool?.[readingIdx] || t.quoteStepReading)}</div>
               <div key={`qsub-${scanStep}`} className="import-dropzone-sub scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrepSub : t.quoteStepReadingSub}</div>
             </GradientDropzone>
           )}
 
           {inputMode === 'photo' && photoState === 'done' && (
             <>
-              <div className="modal-field">
+              <div className="quote-scan-result">
                 <button className="import-change-file"
                   onClick={() => { setPhotoState('idle'); setText(''); setScanError(''); }}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -294,9 +309,12 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                   </svg>
                   {t.quoteTryAgain}
                 </button>
-                <textarea ref={textareaRef} className="quote-textarea"
-                  placeholder={t.quotePlaceholder}
-                  value={text} onChange={e => setText(e.target.value)} rows={5} />
+                <div className="modal-field">
+                  <label className="modal-field-label">{t.quoteLabel}</label>
+                  <textarea ref={textareaRef} className="quote-textarea"
+                    placeholder={t.quotePlaceholder}
+                    value={text} onChange={e => setText(e.target.value)} rows={5} />
+                </div>
               </div>
 
               <div className={`modal-field quote-link-section${linkDropOpen && !selectedBook ? ' is-open' : ''}`} style={{ position: 'relative' }}>
@@ -330,7 +348,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                     </svg>
                     {linkDropOpen && linkCombined.length > 0 && (
                       <ul ref={linkDropdownRef} id="quote-link-listbox" className="autocomplete-list open" role="listbox">
-                        {linkCombined.slice(0, 6).map((b, i) => (
+                        {linkCombined.map((b, i) => (
                           <li key={b.id || `g-${i}`} className="autocomplete-item" role="option" onMouseDown={() => handleLinkSelect(b)}>
                             {b.title}<span className="autocomplete-sep">·</span><span>{b.author}</span>
                           </li>
@@ -347,6 +365,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {inputMode === 'manual' && (
             <>
               <div className="modal-field">
+                <label className="modal-field-label">{t.quoteLabel}</label>
                 <textarea ref={textareaRef} className="quote-textarea"
                   placeholder={t.quotePlaceholder}
                   value={text} onChange={e => setText(e.target.value)} rows={5} />
