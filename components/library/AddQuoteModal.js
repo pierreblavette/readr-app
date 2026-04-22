@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import GradientDropzone from "./GradientDropzone";
+import { prepareImage } from "../../lib/prepareImage";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
@@ -44,19 +45,24 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
     if (!file) return;
     setScanError(''); setPhotoState('scanning'); setText('');
     try {
-      const base64 = await toBase64(file);
+      const { base64, mimeType } = await prepareImage(file);
       const res = await fetch('/api/vision/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64, mimeType: file.type }),
+        body: JSON.stringify({ image: base64, mimeType }),
       });
+      if (res.status === 413) throw new Error('Photo too large after resizing. Try a smaller image.');
       const data = await res.json();
-      if (!res.ok || data.error) throw new Error(data.error || 'Worker error');
+      if (!res.ok || data.error) {
+        console.error('[vision/quote] upstream error', { status: res.status, data });
+        throw new Error(data.error || `Worker error ${res.status}`);
+      }
       if (!data.text) throw new Error('empty');
       setText(data.text.replace(/([^\n])\n([^\n])/g, '$1 $2').trim());
       setPhotoState('done');
       setTimeout(() => textareaRef.current?.focus(), 80);
-    } catch {
+    } catch (err) {
+      console.error('[vision/quote] scan failed', err);
       setScanError(t.quotePhotoError);
       setPhotoState('idle');
     } finally {
@@ -250,13 +256,4 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
       </div>
     </div>
   );
-}
-
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
 }

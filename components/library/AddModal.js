@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import GradientDropzone from "./GradientDropzone";
+import { prepareImage } from "../../lib/prepareImage";
 
 const TABS = ['photo', 'file', 'manual'];
 
@@ -118,17 +119,13 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
     if (photoInputRef.current) photoInputRef.current.value = '';
     setPhotoError(''); setPhotoState('scanning');
     try {
-      const base64 = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = ev => resolve(ev.target.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+      const { base64, mimeType } = await prepareImage(file);
       const res = await fetch('/api/vision/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64, mimeType: file.type }),
+        body: JSON.stringify({ image: base64, mimeType }),
       });
+      if (res.status === 413) throw new Error('Photo too large after resizing. Try a smaller image.');
       const data = await res.json();
       if (!res.ok || data.error) {
         console.error('[vision/books] upstream error', { status: res.status, data });
