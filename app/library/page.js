@@ -27,7 +27,7 @@ export default function LibraryPage() {
   const [createColOpen, setCreateColOpen] = useState(false);
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
   const [addQuoteOpen, setAddQuoteOpen] = useState(false);
-  const [quotePrefilBook, setQuotePrefillBook] = useState(null);
+  const [quotePrefillBook, setQuotePrefillBook] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
   const lib = useLibrary();
 
@@ -258,7 +258,7 @@ export default function LibraryPage() {
         onClose={() => { setAddQuoteOpen(false); setQuotePrefillBook(null); }}
         onSave={q => { addQuote(q); setToastMsg(t.quoteAdd); }}
         allBooks={[...data.owned, ...data.wishlist]}
-        prefillBook={quotePrefilBook}
+        prefillBook={quotePrefillBook}
         t={t}
       />
       <AddBooksToCollectionModal

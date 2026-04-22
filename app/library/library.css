@@ -2457,6 +2457,136 @@
 [data-theme="dark"] .quote-textarea:hover:not(:focus) { border-color: var(--primary-40); background: rgba(73,89,230,0.10); }
 [data-theme="dark"] .quote-textarea:focus { border-color: var(--primary-40); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
 
+/* ─── QUOTE LINK-TO-BOOK (photo mode) ─── */
+.quote-link-section { display: flex; flex-direction: column; gap: 8px; }
+.quote-link-section.is-open { padding-bottom: 24px; }
+
+.quote-link-select { position: relative; }
+.quote-link-select-input {
+  width: 100%;
+  padding: 0 38px 0 14px;
+  border: 1.5px solid var(--border);
+  background: #FFFFFF;
+  cursor: pointer;
+}
+.quote-link-select-input::placeholder { color: var(--text-2); font-weight: 500; }
+.quote-link-select-input:hover:not(:focus) {
+  border-color: var(--primary-50);
+  color: var(--primary-50);
+  background: var(--primary-5);
+}
+.quote-link-select-input:focus {
+  border-color: var(--primary-50);
+  background: var(--primary-5);
+  box-shadow: 0 0 0 3px var(--primary-20);
+}
+
+[data-theme="dark"] .quote-link-select-input { background: var(--bg3); border-color: var(--border); }
+[data-theme="dark"] .quote-link-select-input:hover:not(:focus) {
+  border-color: var(--primary-40);
+  color: var(--primary-40);
+  background: rgba(73,89,230,0.10);
+}
+[data-theme="dark"] .quote-link-select-input:focus {
+  border-color: var(--primary-40);
+  background: rgba(73,89,230,0.10);
+  box-shadow: 0 0 0 3px rgba(73,89,230,0.25);
+}
+
+.quote-link-select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  width: 16px;
+  height: 16px;
+  color: var(--text-2);
+  pointer-events: none;
+  transition: transform 0.2s ease, color 0.15s;
+}
+.quote-link-select.open .quote-link-select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+  color: var(--primary-50);
+}
+[data-theme="dark"] .quote-link-select.open .quote-link-select-chevron { color: var(--primary-40); }
+
+.quote-book-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  animation: fadeUp 0.2s ease both;
+}
+[data-theme="dark"] .quote-book-chip { background: var(--bg3); }
+
+.quote-book-chip-cover {
+  width: 32px;
+  height: 44px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.quote-book-chip-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.quote-book-chip-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.quote-book-chip-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.quote-book-chip-author {
+  font-size: 12px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.quote-book-chip-remove {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.quote-book-chip-remove:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+[data-theme="dark"] .quote-book-chip-remove:hover { background: rgba(255,255,255,0.08); }
+.quote-book-chip-remove:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-50);
+}
+.quote-book-chip-remove svg { width: 14px; height: 14px; }
+
 .quote-mode-tabs {
   display: flex;
   gap: 4px;

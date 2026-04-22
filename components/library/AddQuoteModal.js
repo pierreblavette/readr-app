@@ -2,24 +2,32 @@
 import { useState, useEffect, useRef } from "react";
 import GradientDropzone from "./GradientDropzone";
 import { prepareImage } from "../../lib/prepareImage";
+import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "../../lib/bookUtils";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
 const INPUT_TABS = ['photo', 'manual'];
 
 export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefillBook, t }) {
-  const [inputMode, setInputMode]   = useState('photo');
-  const [photoState, setPhotoState] = useState('idle'); // 'idle' | 'scanning' | 'done'
-  const [scanError, setScanError]   = useState('');
-  const [text, setText]             = useState('');
-  const [bookSearch, setBookSearch] = useState('');
-  const [bookAuthor, setBookAuthor] = useState('');
-  const [bookId, setBookId]         = useState(null);
+  const [inputMode, setInputMode]     = useState('photo');
+  const [photoState, setPhotoState]   = useState('idle'); // 'idle' | 'scanning' | 'done'
+  const [scanError, setScanError]     = useState('');
+  const [text, setText]               = useState('');
+  const [bookSearch, setBookSearch]   = useState('');
+  const [bookAuthor, setBookAuthor]   = useState('');
+  const [bookId, setBookId]           = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [linkSearch, setLinkSearch]   = useState('');
+  const [linkSuggestions, setLinkSuggestions] = useState([]);
+  const [linkDropOpen, setLinkDropOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const [showDrop, setShowDrop]     = useState(false);
+  const [showDrop, setShowDrop]       = useState(false);
   const textareaRef  = useRef(null);
   const fileRef      = useRef(null);
   const debounceRef  = useRef(null);
+  const linkDebounceRef = useRef(null);
+  const linkDropdownRef = useRef(null);
+  const linkInputRef = useRef(null);
 
   // Tab indicator
   const tabRefs = useRef([]);
@@ -29,12 +37,41 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
     if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
   }, [inputMode, open]);
 
+  // Ensure link dropdown is visible when opened (modal has overflow-y: auto)
+  // Add a bit of breathing room so the dropdown doesn't stick to the modal bottom
+  useEffect(() => {
+    if (!linkDropOpen) return;
+    const id = requestAnimationFrame(() => {
+      const el = linkDropdownRef.current;
+      if (!el) return;
+      el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      const modal = el.closest('.modal');
+      if (!modal) return;
+      const BOTTOM_GAP = 24;
+      setTimeout(() => {
+        const dropdownBottom = el.getBoundingClientRect().bottom;
+        const modalBottom = modal.getBoundingClientRect().bottom;
+        const overflow = dropdownBottom + BOTTOM_GAP - modalBottom;
+        if (overflow > 0) modal.scrollTop += overflow;
+      }, 320);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [linkDropOpen]);
+
   useEffect(() => {
     setText(''); setBookSearch(''); setBookAuthor(''); setBookId(null);
     setSuggestions([]); setShowDrop(false);
+    setLinkSearch(''); setLinkSuggestions([]); setLinkDropOpen(false);
     setInputMode('photo'); setPhotoState('idle'); setScanError('');
+    setSelectedBook(prefillBook ? {
+      id: prefillBook.id,
+      title: prefillBook.title,
+      author: prefillBook.author || '',
+      source: 'library',
+    } : null);
     clearTimeout(debounceRef.current);
-  }, [open]);
+    clearTimeout(linkDebounceRef.current);
+  }, [open, prefillBook]);
 
   if (!open) return null;
 
@@ -70,7 +107,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
     }
   }
 
-  // Local library matches first, then remote
+  // Manual-mode autocomplete (unchanged)
   const localMatches = allBooks.filter(b => {
     const q = bookSearch.toLowerCase();
     return q.length > 0 && (b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q));
@@ -108,9 +145,62 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
     }, 300);
   }
 
+  // Photo-mode link selector — shows all library books on focus, filters on type
+  const linkQuery = linkSearch.toLowerCase();
+  const linkLocalMatches = linkQuery
+    ? allBooks.filter(b => b.title.toLowerCase().includes(linkQuery) || b.author.toLowerCase().includes(linkQuery))
+    : allBooks;
+  const linkCombined = [
+    ...linkLocalMatches.map(b => ({ ...b, source: 'library' })),
+    ...linkSuggestions
+      .filter(s => !linkLocalMatches.some(b => b.title.toLowerCase() === s.title.toLowerCase()))
+      .map(s => ({ ...s, source: 'google' })),
+  ];
+
+  function handleLinkSelect(item) {
+    setSelectedBook({
+      id: item.source === 'library' ? item.id : null,
+      title: item.title,
+      author: item.author || '',
+      source: item.source,
+    });
+    setLinkSearch('');
+    setLinkSuggestions([]);
+    setLinkDropOpen(false);
+  }
+
+  function handleLinkSearchChange(val) {
+    setLinkSearch(val);
+    clearTimeout(linkDebounceRef.current);
+    if (val.trim().length < 2) { setLinkSuggestions([]); setLinkDropOpen(false); return; }
+    setLinkDropOpen(true);
+    linkDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`${WORKER_URL}/books?q=${encodeURIComponent(val)}`);
+        const data = await res.json();
+        const items = (data.items || []).map(item => ({
+          title: item.volumeInfo?.title || '',
+          author: (item.volumeInfo?.authors || []).join(', '),
+        })).filter(s => s.title);
+        setLinkSuggestions(items.slice(0, 6));
+      } catch { setLinkSuggestions([]); }
+    }, 300);
+  }
+
   function handleSave() {
     if (!canSave) return;
-    onSave({ text: text.trim(), bookTitle: bookSearch.trim(), bookAuthor: bookAuthor.trim(), bookId, page: '' });
+    const bookData = inputMode === 'photo'
+      ? {
+          bookTitle: selectedBook?.title || '',
+          bookAuthor: selectedBook?.author || '',
+          bookId: selectedBook?.id || null,
+        }
+      : {
+          bookTitle: bookSearch.trim(),
+          bookAuthor: bookAuthor.trim(),
+          bookId,
+        };
+    onSave({ text: text.trim(), ...bookData, page: '' });
     onClose();
   }
 
@@ -186,19 +276,63 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           )}
 
           {inputMode === 'photo' && photoState === 'done' && (
-            <div className="modal-field">
-              <button className="import-change-file"
-                onClick={() => { setPhotoState('idle'); setText(''); setScanError(''); }}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                  <circle cx="12" cy="13" r="4"/>
-                </svg>
-                {t.quoteTryAgain}
-              </button>
-              <textarea ref={textareaRef} className="quote-textarea"
-                placeholder={t.quotePlaceholder}
-                value={text} onChange={e => setText(e.target.value)} rows={5} />
-            </div>
+            <>
+              <div className="modal-field">
+                <button className="import-change-file"
+                  onClick={() => { setPhotoState('idle'); setText(''); setScanError(''); }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  {t.quoteTryAgain}
+                </button>
+                <textarea ref={textareaRef} className="quote-textarea"
+                  placeholder={t.quotePlaceholder}
+                  value={text} onChange={e => setText(e.target.value)} rows={5} />
+              </div>
+
+              <div className={`modal-field quote-link-section${linkDropOpen && !selectedBook ? ' is-open' : ''}`} style={{ position: 'relative' }}>
+                <label className="modal-field-label">{t.quoteLinkToBook}</label>
+                {selectedBook ? (
+                  <BookChip book={selectedBook} onRemove={() => setSelectedBook(null)} ariaLabel={t.quoteLinkRemove} />
+                ) : (
+                  <div className={`quote-link-select${linkDropOpen ? ' open' : ''}`}>
+                    <input
+                      ref={linkInputRef}
+                      className="modal-field-input quote-link-select-input"
+                      placeholder={t.quoteLinkSearch}
+                      value={linkSearch}
+                      onChange={e => handleLinkSearchChange(e.target.value)}
+                      onMouseDown={e => {
+                        if (linkDropOpen && document.activeElement === linkInputRef.current) {
+                          e.preventDefault();
+                          setLinkDropOpen(false);
+                          linkInputRef.current?.blur();
+                        }
+                      }}
+                      onFocus={() => setLinkDropOpen(true)}
+                      onBlur={() => setTimeout(() => setLinkDropOpen(false), 150)}
+                      autoComplete="off"
+                      role="combobox"
+                      aria-expanded={linkDropOpen}
+                      aria-controls="quote-link-listbox"
+                    />
+                    <svg className="quote-link-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                    {linkDropOpen && linkCombined.length > 0 && (
+                      <ul ref={linkDropdownRef} id="quote-link-listbox" className="autocomplete-list open" role="listbox">
+                        {linkCombined.slice(0, 6).map((b, i) => (
+                          <li key={b.id || `g-${i}`} className="autocomplete-item" role="option" onMouseDown={() => handleLinkSelect(b)}>
+                            {b.title}<span className="autocomplete-sep">·</span><span>{b.author}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
+            </>
           )}
 
           {/* ── Manual tab ── */}
@@ -254,6 +388,42 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
         </div>
 
       </div>
+    </div>
+  );
+}
+
+function BookChip({ book, onRemove, ariaLabel }) {
+  const [cover, setCover] = useState(null);
+  const [c1, c2] = coverColors(book.title);
+  const letter = coverLetter(book.title);
+
+  useEffect(() => {
+    const cache = loadGBCache();
+    const key = `${book.title}||${book.author}`;
+    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
+    fetchBookCover(book.title, book.author, cache).then(res => {
+      saveGBCache({ ...cache, [key]: res });
+      setCover(res?.thumb || null);
+    });
+  }, [book.title, book.author]);
+
+  return (
+    <div className="quote-book-chip">
+      <div
+        className={`quote-book-chip-cover${cover ? '' : ' quote-book-chip-cover-placeholder'}`}
+        style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
+      >
+        {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
+      </div>
+      <div className="quote-book-chip-body">
+        <div className="quote-book-chip-title">{book.title}</div>
+        {book.author && <div className="quote-book-chip-author">{book.author}</div>}
+      </div>
+      <button type="button" className="quote-book-chip-remove" onClick={onRemove} aria-label={ariaLabel}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
   );
 }
