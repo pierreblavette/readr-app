@@ -366,7 +366,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   transition: background 0.15s;
   white-space: nowrap;
 }
@@ -981,7 +981,7 @@
 .empty-cta {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   height: 40px;
   padding: 0 20px;
   background: var(--accent);
@@ -989,7 +989,7 @@
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: background 0.15s;
@@ -1355,7 +1355,20 @@
 .panel-delete-btn:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 [data-theme="dark"] .panel-delete-btn { background: var(--bg3); }
 [data-theme="dark"] .panel-delete-btn:hover { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.10); }
-.panel-delete-btn svg { width: 16px; height: 16px; }
+
+/* ─── MD BUTTONS — CANONICAL ICON FRAME (20×20, 80% glyph) ─── */
+/* Content icons on MD buttons use a 20×20 frame with a 16×16 glyph (80% ratio) and 2px padding. Exception: chevrons/dropdown markers (e.g. .export-btn) keep their smaller size. */
+.add-btn svg,
+.edit-btn svg,
+.empty-cta svg,
+.panel-move-btn svg,
+.panel-delete-btn svg {
+  width: 16px;
+  height: 16px;
+  padding: 2px;
+  box-sizing: content-box;
+  flex-shrink: 0;
+}
 
 /* ─── SELECTION BAR ─── */
 .selection-bar {
