@@ -6,7 +6,7 @@ export default function AppToolbar({
   view, switchView,
   editMode, setEditMode, setSelected,
   setAddModal, exportData,
-  onOpenSidebar,
+  mobileSidebarOpen, onToggleSidebar,
 }) {
   const { theme, setTheme } = useTheme();
 
@@ -14,13 +14,16 @@ export default function AppToolbar({
     <div className="toolbar toolbar-mobile-only">
       <div className="toolbar-inner">
 
-        {/* Hamburger (mobile) */}
-        <button className="toolbar-hamburger" onClick={onOpenSidebar} aria-label="Open menu">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
+        {/* Hamburger / close (mobile) */}
+        <button
+          className={`toolbar-hamburger${mobileSidebarOpen ? ' open' : ''}`}
+          onClick={onToggleSidebar}
+          aria-label={mobileSidebarOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileSidebarOpen}
+        >
+          <span className="hamburger-line hamburger-line-top" />
+          <span className="hamburger-line hamburger-line-mid" />
+          <span className="hamburger-line hamburger-line-bot" />
         </button>
 
         {/* Logo */}

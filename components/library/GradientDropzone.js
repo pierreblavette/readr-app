@@ -7,7 +7,12 @@ export default function GradientDropzone({ onClick, children, gradientId = "grad
 
   useEffect(() => {
     if (!ref.current) return;
-    setDims({ w: ref.current.offsetWidth, h: ref.current.offsetHeight });
+    const el = ref.current;
+    const update = () => setDims({ w: el.offsetWidth, h: el.offsetHeight });
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   return (

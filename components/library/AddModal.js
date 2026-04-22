@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import GradientDropzone from "./GradientDropzone";
 import { prepareImage } from "../../lib/prepareImage";
+import { toTitleCase } from "../../lib/bookUtils";
 
 const TABS = ['photo', 'file', 'manual'];
 
@@ -147,7 +148,10 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
       }
       const readingElapsed = Date.now() - readingStart;
       if (readingElapsed < 700) await new Promise(r => setTimeout(r, 700 - readingElapsed));
-      setPreviewBooks(prev => [...prev, ...books.filter(b => b.title)]);
+      const normalized = books
+        .filter(b => b.title)
+        .map(b => ({ ...b, title: toTitleCase(b.title), author: toTitleCase(b.author) }));
+      setPreviewBooks(prev => [...prev, ...normalized]);
       setPhotoError('');
       setPhotoState('idle');
     } catch (err) {
@@ -262,8 +266,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
             {photoState === 'scanning' ? (
               <GradientDropzone>
                 <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
-                <div className="import-dropzone-title">{scanStep === 'prep' ? t.ocrStepPrep : t.ocrStepReading}</div>
-                <div className="import-dropzone-sub">{scanStep === 'prep' ? t.ocrStepPrepSub : t.ocrStepReadingSub}</div>
+                <div key={`title-${scanStep}`} className="import-dropzone-title scan-step-fade">{scanStep === 'prep' ? t.ocrStepPrep : t.ocrStepReading}</div>
+                <div key={`sub-${scanStep}`} className="import-dropzone-sub scan-step-fade">{scanStep === 'prep' ? t.ocrStepPrepSub : t.ocrStepReadingSub}</div>
               </GradientDropzone>
             ) : previewBooks.length === 0 ? (
               <PhotoDropzone onClick={() => photoInputRef.current?.click()} />

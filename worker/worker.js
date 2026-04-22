@@ -5,10 +5,19 @@ const CORS_HEADERS = {
 };
 
 const PROMPT = `You are a book detection assistant. Look at this image and identify all visible book titles and authors.
+
 Return ONLY a JSON array with no markdown, no explanation — just raw JSON like:
 [{"title":"The Great Gatsby","author":"F. Scott Fitzgerald"},{"title":"1984","author":"George Orwell"}]
 If you cannot identify any books, return an empty array: []
-Use the exact text visible on the covers or spines. If the author is not visible, use an empty string.`;
+
+CRITICAL SEPARATION RULES:
+- The title and the author are ALWAYS separate fields. NEVER concatenate them.
+- A book cover typically shows: the TITLE (often largest/boldest text) and the AUTHOR NAME (typically smaller, often prefixed by "by" or placed above/below the title).
+- If you see "FLASH / Charles Duchaussois" on a cover, return {"title":"Flash","author":"Charles Duchaussois"} — NOT {"title":"Flash Charles Duchaussois","author":""}.
+- If a person's name appears on the cover, it is almost certainly the author, not part of the title.
+- If the author is genuinely not visible (e.g., spine only shows title), use an empty string for author. Do not guess.
+
+Use the exact text visible on the covers or spines.`;
 
 const QUOTE_PROMPT = `You are extracting a book quote from a photo of a page.
 

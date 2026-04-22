@@ -278,8 +278,8 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {inputMode === 'photo' && photoState === 'scanning' && (
             <GradientDropzone gradientId="quoteGradScan">
               <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
-              <div className="import-dropzone-title">{scanStep === 'prep' ? t.quoteStepPrep : t.quoteStepReading}</div>
-              <div className="import-dropzone-sub">{scanStep === 'prep' ? t.quoteStepPrepSub : t.quoteStepReadingSub}</div>
+              <div key={`qtitle-${scanStep}`} className="import-dropzone-title scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrep : t.quoteStepReading}</div>
+              <div key={`qsub-${scanStep}`} className="import-dropzone-sub scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrepSub : t.quoteStepReadingSub}</div>
             </GradientDropzone>
           )}
 
