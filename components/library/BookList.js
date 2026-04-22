@@ -70,8 +70,8 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
 
               <td><span className="list-title">{book.title}</span></td>
               <td><span className="list-author">{book.author}</span></td>
-              <td><span className="list-genre">{book.genre || '—'}</span></td>
-              <td><span className="list-year">{book.year || '—'}</span></td>
+              <td><span className="list-genre">{book.genre || 'NC'}</span></td>
+              <td><span className="list-year">{book.year || 'NC'}</span></td>
 
               <td style={{ overflow: 'visible', maxWidth: 'none', padding: '0 8px' }}>
                 <button

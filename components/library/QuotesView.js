@@ -1,7 +1,7 @@
 "use client";
-import { useState, Fragment } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, t }) {
+export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, onOpen, t }) {
   const [search, setSearch] = useState('');
 
   const filtered = search.trim()
@@ -56,7 +56,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, t }
       ) : (
         <div className="quotes-list">
           {filtered.map(q => (
-            <QuoteCard key={q.id} quote={q} book={allBooks.find(b => b.id === q.bookId)} onDelete={onDelete} t={t} />
+            <QuoteCard key={q.id} quote={q} book={allBooks.find(b => b.id === q.bookId)} onDelete={onDelete} onOpen={onOpen} t={t} />
           ))}
         </div>
       )}
@@ -64,42 +64,65 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, t }
   );
 }
 
-function QuoteCard({ quote, book, onDelete, t }) {
-  const metaParts = [];
-  if (book?.genre) metaParts.push(book.genre);
-  if (book?.year)  metaParts.push(book.year);
-  if (quote.page)  metaParts.push(`p. ${quote.page}`);
+function QuoteCard({ quote, book, onDelete, onOpen, t }) {
+  const [expanded, setExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const measure = () => {
+      const hadExpanded = el.classList.contains('expanded');
+      if (hadExpanded) el.classList.remove('expanded');
+      const overflow = el.scrollHeight > el.clientHeight + 1;
+      if (hadExpanded) el.classList.add('expanded');
+      setOverflows(overflow);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [quote.text]);
+
+  const activate = () => onOpen?.(quote);
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+  };
 
   return (
-    <div className="quote-card">
-      <button className="card-delete-btn" onClick={e => { e.stopPropagation(); onDelete(quote.id); }} aria-label={t.quoteDelete}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14H6L5 6"/>
-          <path d="M10 11v6"/><path d="M14 11v6"/>
-          <path d="M9 6V4h6v2"/>
-        </svg>
-      </button>
-      <div className="quote-card-book">
-        <div className="book-title">{quote.bookTitle}</div>
-        {quote.bookAuthor && <div className="book-author">{quote.bookAuthor}</div>}
-        {metaParts.length > 0 && (
-          <div className="book-meta">
-            {metaParts.map((p, i) => (
-              <Fragment key={i}>
-                {i > 0 && <span className="book-meta-sep" aria-hidden="true">·</span>}
-                <span>{p}</span>
-              </Fragment>
-            ))}
-          </div>
-        )}
+    <div
+      className="quote-card"
+      role="button"
+      tabIndex={0}
+      onClick={activate}
+      onKeyDown={onKeyDown}
+      aria-label={quote.bookTitle || t.quoteAdd}
+    >
+      <div className="quote-card-head">
+        <span className="list-title">{quote.bookTitle}</span>
+        <span className="list-author">{quote.bookAuthor || 'NC'}</span>
+        <span className="list-genre">{book?.genre || 'NC'}</span>
+        <span className="list-year">{book?.year || 'NC'}</span>
+        <button className="delete-row-btn" onClick={e => { e.stopPropagation(); onDelete(quote.id); }} aria-label={t.quoteDelete}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 3h4"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+          </svg>
+        </button>
       </div>
       <div className="quote-card-divider" />
-      <div className="quote-card-text">
+      <div ref={textRef} className={`quote-card-text${expanded ? ' expanded' : ''}`}>
         <span className="quote-mark">"</span>
         {quote.text}
         <span className="quote-mark">"</span>
       </div>
+      {overflows && (
+        <button type="button" className="quote-see-more" onClick={e => { e.stopPropagation(); setExpanded(ex => !ex); }}>
+          {expanded ? t.quoteSeeLess : t.quoteSeeMore}
+        </button>
+      )}
     </div>
   );
 }

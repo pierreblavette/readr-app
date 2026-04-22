@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import GradientDropzone from "./GradientDropzone";
+import BookChip from "./BookChip";
 import { prepareImage } from "../../lib/prepareImage";
-import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "../../lib/bookUtils";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
 const INPUT_TABS = ['photo', 'manual'];
 
-export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefillBook, t }) {
+export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefillBook, editing, t }) {
   const [inputMode, setInputMode]     = useState('photo');
   const [photoState, setPhotoState]   = useState('idle'); // 'idle' | 'scanning' | 'done'
   const [scanStep, setScanStep]       = useState('prep'); // 'prep' | 'reading'
@@ -73,19 +73,47 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
   }, [linkDropOpen]);
 
   useEffect(() => {
-    setText(''); setBookSearch(''); setBookAuthor(''); setBookId(null);
+    setBookSearch(''); setBookAuthor(''); setBookId(null);
     setSuggestions([]); setShowDrop(false);
     setLinkSearch(''); setLinkSuggestions([]); setLinkDropOpen(false);
-    setInputMode('photo'); setPhotoState('idle'); setScanError('');
-    setSelectedBook(prefillBook ? {
-      id: prefillBook.id,
-      title: prefillBook.title,
-      author: prefillBook.author || '',
-      source: 'library',
-    } : null);
+    setScanError('');
     clearTimeout(debounceRef.current);
     clearTimeout(linkDebounceRef.current);
-  }, [open, prefillBook]);
+
+    if (editing) {
+      setInputMode('photo');
+      setPhotoState('done');
+      setText(editing.text || '');
+      if (editing.bookId) {
+        const book = allBooks.find(b => b.id === editing.bookId);
+        setSelectedBook({
+          id: editing.bookId,
+          title: book?.title || editing.bookTitle || '',
+          author: book?.author || editing.bookAuthor || '',
+          source: 'library',
+        });
+      } else if (editing.bookTitle) {
+        setSelectedBook({
+          id: null,
+          title: editing.bookTitle,
+          author: editing.bookAuthor || '',
+          source: 'manual',
+        });
+      } else {
+        setSelectedBook(null);
+      }
+    } else {
+      setInputMode('photo'); setPhotoState('idle');
+      setText('');
+      setSelectedBook(prefillBook ? {
+        id: prefillBook.id,
+        title: prefillBook.title,
+        author: prefillBook.author || '',
+        source: 'library',
+      } : null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, prefillBook, editing]);
 
   if (!open) return null;
 
@@ -221,7 +249,10 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           bookAuthor: bookAuthor.trim(),
           bookId,
         };
-    onSave({ text: text.trim(), ...bookData, page: '' });
+    const payload = editing
+      ? { text: text.trim(), ...bookData }
+      : { text: text.trim(), ...bookData, page: '' };
+    onSave(payload);
     onClose();
   }
 
@@ -235,10 +266,10 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           </svg>
         </button>
 
-        <div className="modal-title">{t.quoteAdd}</div>
+        <div className="modal-title">{editing ? t.quoteEdit : t.quoteAdd}</div>
 
-        {/* Tabs: Photo | Manual */}
-        <div className="import-tabs">
+        {/* Tabs: Photo | Manual — hidden in edit mode */}
+        {!editing && <div className="import-tabs">
           <div className={`import-tab-indicator${inputMode === 'photo' ? ' gradient' : ''}`} style={{ left: indicator.left, width: indicator.width }} />
           <button ref={el => tabRefs.current[0] = el}
             className={`import-tab${inputMode === 'photo' ? ' active' : ''}`}
@@ -261,7 +292,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
             onClick={() => { setInputMode('manual'); setShowDrop(false); }}>
             {t.quoteInputManual}
           </button>
-        </div>
+        </div>}
 
         <div className="modal-fields">
 
@@ -301,14 +332,16 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {inputMode === 'photo' && photoState === 'done' && (
             <>
               <div className="quote-scan-result">
-                <button className="import-change-file"
-                  onClick={() => { setPhotoState('idle'); setText(''); setScanError(''); }}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
-                  </svg>
-                  {t.quoteTryAgain}
-                </button>
+                {!editing && (
+                  <button className="import-change-file"
+                    onClick={() => { setPhotoState('idle'); setText(''); setScanError(''); }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                      <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    {t.quoteTryAgain}
+                  </button>
+                )}
                 <div className="modal-field">
                   <label className="modal-field-label">{t.quoteLabel}</label>
                   <textarea ref={textareaRef} className="quote-textarea"
@@ -410,7 +443,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
         <div className="modal-actions">
           <button className="modal-cancel" onClick={onClose}>{t.btnCancel}</button>
           <button className="modal-submit" onClick={handleSave} disabled={!canSave}>
-            {t.quoteSave}
+            {editing ? t.quoteSaveEdit : t.quoteSave}
           </button>
         </div>
 
@@ -419,38 +452,3 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
   );
 }
 
-function BookChip({ book, onRemove, ariaLabel }) {
-  const [cover, setCover] = useState(null);
-  const [c1, c2] = coverColors(book.title);
-  const letter = coverLetter(book.title);
-
-  useEffect(() => {
-    const cache = loadGBCache();
-    const key = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
-    fetchBookCover(book.title, book.author, cache).then(res => {
-      saveGBCache({ ...cache, [key]: res });
-      setCover(res?.thumb || null);
-    });
-  }, [book.title, book.author]);
-
-  return (
-    <div className="quote-book-chip">
-      <div
-        className={`quote-book-chip-cover${cover ? '' : ' quote-book-chip-cover-placeholder'}`}
-        style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
-      >
-        {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
-      </div>
-      <div className="quote-book-chip-body">
-        <div className="quote-book-chip-title">{book.title}</div>
-        {book.author && <div className="quote-book-chip-author">{book.author}</div>}
-      </div>
-      <button type="button" className="quote-book-chip-remove" onClick={onRemove} aria-label={ariaLabel}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </div>
-  );
-}

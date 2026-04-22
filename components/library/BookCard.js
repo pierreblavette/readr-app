@@ -92,9 +92,9 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
         <div className="book-title">{book.title}</div>
         <div className="book-author">{book.author}</div>
         <div className="book-meta">
-          <span>{book.genre || '-'}</span>
+          <span>{book.genre || 'NC'}</span>
           <span className="book-meta-sep" aria-hidden="true">·</span>
-          <span>{book.year || '-'}</span>
+          <span>{book.year || 'NC'}</span>
         </div>
       </div>
     </div>

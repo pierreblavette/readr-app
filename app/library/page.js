@@ -8,6 +8,7 @@ import SearchBar     from "@/components/library/SearchBar";
 import BookCard      from "@/components/library/BookCard";
 import BookList      from "@/components/library/BookList";
 import BookPanel     from "@/components/library/BookPanel";
+import QuotePanel    from "@/components/library/QuotePanel";
 import EmptyState    from "@/components/library/EmptyState";
 import SelectionBar  from "@/components/library/SelectionBar";
 import AddModal      from "@/components/library/AddModal";
@@ -28,6 +29,8 @@ export default function LibraryPage() {
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
   const [addQuoteOpen, setAddQuoteOpen] = useState(false);
   const [quotePrefillBook, setQuotePrefillBook] = useState(null);
+  const [panelQuote, setPanelQuote] = useState(null);
+  const [editingQuote, setEditingQuote] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
   const lib = useLibrary();
 
@@ -50,7 +53,7 @@ export default function LibraryPage() {
     collections, createCollection, deleteCollection,
     addBookToCollection, removeBookFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
-    quotes, addQuote, deleteQuote, getQuotesForBook,
+    quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook,
     sidebarCollapsed, toggleSidebarCollapsed,
   } = lib;
 
@@ -111,8 +114,8 @@ export default function LibraryPage() {
       />
 
       {/* Panel overlay */}
-      {panelBook && (
-        <div className="panel-overlay" onClick={() => setPanelBook(null)} />
+      {(panelBook || panelQuote) && (
+        <div className="panel-overlay" onClick={() => { setPanelBook(null); setPanelQuote(null); }} />
       )}
       <BookPanel
         book={panelBook}
@@ -121,7 +124,18 @@ export default function LibraryPage() {
         onDelete={b => { setPanelBook(null); setDeleteTarget(b); }}
         onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); }}
         onAddQuote={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+        onOpenQuote={q => { setPanelBook(null); setPanelQuote(q); }}
         quotes={panelBook ? getQuotesForBook(panelBook.id) : []}
+        t={t}
+      />
+      <QuotePanel
+        quote={panelQuote}
+        book={panelQuote?.bookId ? [...data.owned, ...data.wishlist].find(b => b.id === panelQuote.bookId) : null}
+        onClose={() => setPanelQuote(null)}
+        onDelete={id => deleteQuote(id)}
+        onEdit={q => { setPanelQuote(null); setEditingQuote(q); setAddQuoteOpen(true); }}
+        onOpenBook={b => { setPanelQuote(null); setPanelBook(b); }}
+        lang={lang}
         t={t}
       />
 
@@ -137,6 +151,7 @@ export default function LibraryPage() {
               allBooks={[...data.owned, ...data.wishlist]}
               onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
               onDelete={deleteQuote}
+              onOpen={q => setPanelQuote(q)}
               t={t}
             />
           </>
@@ -256,10 +271,19 @@ export default function LibraryPage() {
       <CreateCollectionModal open={createColOpen} onClose={() => setCreateColOpen(false)} onCreate={createCollection} t={t} />
       <AddQuoteModal
         open={addQuoteOpen}
-        onClose={() => { setAddQuoteOpen(false); setQuotePrefillBook(null); }}
-        onSave={q => { addQuote(q); setToastMsg(t.quoteAdd); }}
+        onClose={() => { setAddQuoteOpen(false); setQuotePrefillBook(null); setEditingQuote(null); }}
+        onSave={q => {
+          if (editingQuote) {
+            updateQuote(editingQuote.id, q);
+            setToastMsg(t.quoteUpdated);
+          } else {
+            addQuote(q);
+            setToastMsg(t.quoteAdd);
+          }
+        }}
         allBooks={[...data.owned, ...data.wishlist]}
         prefillBook={quotePrefillBook}
+        editing={editingQuote}
         t={t}
       />
       <AddBooksToCollectionModal

@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 
-export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, quotes, t }) {
+export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, quotes, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
   const [shared, setShared] = useState(false);
@@ -127,10 +127,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
               {quotes && quotes.length > 0 ? (
                 <div className="panel-quotes-list">
                   {quotes.map(q => (
-                    <div key={q.id} className="panel-quote-item">
-                      <p className="panel-quote-text">"{q.text}"</p>
-                      {q.page && <span className="panel-quote-page">p. {q.page}</span>}
-                    </div>
+                    <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
                   ))}
                 </div>
               ) : (
@@ -149,5 +146,51 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
         </div>
       )}
     </div>
+  );
+}
+
+function PanelQuoteItem({ quote, onOpen, t }) {
+  const [expanded, setExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const measure = () => {
+      const hadExpanded = el.classList.contains('expanded');
+      if (hadExpanded) el.classList.remove('expanded');
+      const overflow = el.scrollHeight > el.clientHeight + 1;
+      if (hadExpanded) el.classList.add('expanded');
+      setOverflows(overflow);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [quote.text]);
+
+  return (
+    <button type="button" className="panel-quote-item" onClick={() => onOpen?.(quote)}>
+      <p ref={textRef} className={`panel-quote-text${expanded ? ' expanded' : ''}`}>"{quote.text}"</p>
+      {quote.page && <span className="panel-quote-page">p. {quote.page}</span>}
+      {overflows && (
+        <span
+          role="button"
+          tabIndex={0}
+          className="quote-see-more panel-quote-see-more"
+          onClick={e => { e.stopPropagation(); setExpanded(v => !v); }}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              e.stopPropagation();
+              setExpanded(v => !v);
+            }
+          }}
+        >
+          {expanded ? t.quoteSeeLess : t.quoteSeeMore}
+        </span>
+      )}
+    </button>
   );
 }

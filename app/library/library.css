@@ -1118,7 +1118,7 @@
   box-shadow: none;
   transform: translateX(100%);
   transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 300;
+  z-index: 320;
   overflow-y: auto;
 }
 .book-panel .panel-scroll-fade {
@@ -1832,7 +1832,7 @@
 .panel-overlay {
   position: fixed;
   inset: 0;
-  z-index: 250;
+  z-index: 310;
   background: rgba(30,38,120,0.12);
 }
 
@@ -2520,6 +2520,7 @@
   transition: transform 0.22s ease, border-color 0.22s;
   animation: fadeUp 0.28s ease both;
   position: relative;
+  cursor: pointer;
 }
 .quote-card:hover {
   transform: translateY(-2px);
@@ -2530,9 +2531,13 @@
 [data-theme="dark"] .quote-card { border-color: var(--border); }
 [data-theme="dark"] .quote-card:hover { border-color: var(--primary-40); background: rgba(73,89,230,0.10); }
 
-.quote-card:hover .card-delete-btn { opacity: 1; }
-
-.quote-card-book { display: flex; flex-direction: column; gap: 3px; padding-right: 40px; }
+.quote-card-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 60px;
+  align-items: center;
+  gap: 32px;
+  font-size: 14px;
+}
 
 .quote-card-divider {
   height: 1px;
@@ -2540,18 +2545,70 @@
 }
 
 .quote-card-text {
-  font-family: var(--font-fraunces), Georgia, serif;
+  font-family: var(--font-jakarta), sans-serif;
   font-size: 15px;
   line-height: 1.65;
   color: var(--text);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.quote-card-text.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
 }
 .quote-mark {
-  font-family: var(--font-fraunces), Georgia, serif;
   font-size: 1.4em;
   line-height: 0;
   vertical-align: -0.25em;
   color: var(--accent);
   margin: 0 2px;
+}
+
+.quote-panel-body { padding-top: 8px; }
+.quote-panel-text {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--text-2);
+  margin-bottom: 0;
+}
+.quote-panel-date {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+}
+.quote-panel-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+
+
+.quote-see-more {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-50);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.quote-see-more:hover { color: var(--primary-60); text-decoration: underline; }
+[data-theme="dark"] .quote-see-more { color: var(--primary-40); }
+[data-theme="dark"] .quote-see-more:hover { color: var(--primary-30); }
+.quote-see-more:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-50);
+  border-radius: 4px;
 }
 
 /* A11y + touch + reduced motion parity with BookCard */
@@ -2644,6 +2701,23 @@
   border-radius: 8px;
   animation: fadeUp 0.2s ease both;
 }
+button.quote-book-chip {
+  width: 100%;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+}
+.quote-book-chip-interactive {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.quote-book-chip-interactive:hover { background: var(--primary-5); }
+[data-theme="dark"] .quote-book-chip-interactive:hover { background: rgba(73,89,230,0.10); }
+.quote-book-chip-interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-50);
+}
 
 .quote-book-chip-cover {
   width: 32px;
@@ -2683,6 +2757,7 @@
 }
 .quote-book-chip-author {
   font-size: 12px;
+  font-weight: 500;
   color: var(--text-2);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2881,17 +2956,42 @@
 .panel-quote-item {
   padding: 10px 12px;
   background: var(--bg3);
+  border: none;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.panel-quote-item:hover { background: var(--primary-5); }
+[data-theme="dark"] .panel-quote-item:hover { background: rgba(73,89,230,0.10); }
+.panel-quote-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-50);
 }
 .panel-quote-text {
-  font-family: var(--font-fraunces), Georgia, serif;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text);
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--text-2);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
+.panel-quote-text.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.panel-quote-see-more { margin-top: 6px; }
 .panel-quote-page {
   font-size: 11px;
   color: var(--text-2);
