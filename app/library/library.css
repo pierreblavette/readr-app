@@ -2033,6 +2033,22 @@
   .list-table td:nth-child(5) {
     display: none;
   }
+
+  /* Quote card head: same pattern as list-table. Only title + delete stay visible. */
+  .quote-card-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .quote-card-head .list-title {
+    flex: 1;
+    min-width: 0;
+  }
+  .quote-card-head .list-author,
+  .quote-card-head .list-genre,
+  .quote-card-head .list-year {
+    display: none;
+  }
 }
 
 @media (max-width: 600px) {
