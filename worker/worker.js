@@ -10,11 +10,18 @@ Return ONLY a JSON array with no markdown, no explanation — just raw JSON like
 If you cannot identify any books, return an empty array: []
 Use the exact text visible on the covers or spines. If the author is not visible, use an empty string.`;
 
-const QUOTE_PROMPT = `Extract the text visible in this image as precisely as possible.
-The image is likely a photo of a book page or a highlighted passage.
-Return ONLY the extracted text, preserving line breaks where appropriate.
-No explanation, no formatting, no quotes around the result.
-If no readable text is found, return an empty string.`;
+const QUOTE_PROMPT = `You are extracting a book quote from a photo of a page.
+
+PRIORITY RULE: If any portion of the text is visually marked by the reader, return ONLY the marked portion. Marks include:
+- Fluorescent highlighter (yellow, pink, green, orange, blue)
+- Underline in pencil, pen, or ink
+- Bracket, vertical line, or star in the margin
+- Arrow pointing to a passage
+- Any visible annotation framing a specific sentence or paragraph
+
+If no such mark is present, extract the main body of text visible on the page.
+
+FORMAT: Return ONLY the extracted text. Preserve line breaks where they separate sentences or paragraphs. No quotes around the result, no explanation, no markdown. If no readable text is found, return an empty string.`;
 
 const MODEL_CASCADE = [
   'models/gemini-2.5-flash',
