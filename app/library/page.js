@@ -133,6 +133,7 @@ export default function LibraryPage() {
             <h1 className="page-title">{t.pageQuotes}</h1>
             <QuotesView
               quotes={quotes}
+              allBooks={[...data.owned, ...data.wishlist]}
               onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
               onDelete={deleteQuote}
               t={t}

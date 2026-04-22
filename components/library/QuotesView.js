@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 
-export default function QuotesView({ quotes, onAdd, onDelete, t }) {
+export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, t }) {
   const [search, setSearch] = useState('');
 
   const filtered = search.trim()
@@ -56,7 +56,7 @@ export default function QuotesView({ quotes, onAdd, onDelete, t }) {
       ) : (
         <div className="quotes-list">
           {filtered.map(q => (
-            <QuoteCard key={q.id} quote={q} onDelete={onDelete} t={t} />
+            <QuoteCard key={q.id} quote={q} book={allBooks.find(b => b.id === q.bookId)} onDelete={onDelete} t={t} />
           ))}
         </div>
       )}
@@ -64,32 +64,41 @@ export default function QuotesView({ quotes, onAdd, onDelete, t }) {
   );
 }
 
-function QuoteCard({ quote, onDelete, t }) {
+function QuoteCard({ quote, book, onDelete, t }) {
+  const metaParts = [];
+  if (book?.genre) metaParts.push(book.genre);
+  if (book?.year)  metaParts.push(book.year);
+  if (quote.page)  metaParts.push(`p. ${quote.page}`);
+
   return (
     <div className="quote-card">
+      <button className="card-delete-btn" onClick={e => { e.stopPropagation(); onDelete(quote.id); }} aria-label={t.quoteDelete}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14H6L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4h6v2"/>
+        </svg>
+      </button>
+      <div className="quote-card-book">
+        <div className="book-title">{quote.bookTitle}</div>
+        {quote.bookAuthor && <div className="book-author">{quote.bookAuthor}</div>}
+        {metaParts.length > 0 && (
+          <div className="book-meta">
+            {metaParts.map((p, i) => (
+              <Fragment key={i}>
+                {i > 0 && <span className="book-meta-sep" aria-hidden="true">·</span>}
+                <span>{p}</span>
+              </Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="quote-card-divider" />
       <div className="quote-card-text">
         <span className="quote-mark">"</span>
         {quote.text}
         <span className="quote-mark">"</span>
-      </div>
-      <div className="quote-card-footer">
-        <div className="quote-card-meta">
-          <span className="quote-book-title">{quote.bookTitle}</span>
-          {quote.bookAuthor && (
-            <span className="quote-book-author"> — {quote.bookAuthor}</span>
-          )}
-          {quote.page && (
-            <span className="quote-page"> · p. {quote.page}</span>
-          )}
-        </div>
-        <button className="quote-delete-btn" onClick={() => onDelete(quote.id)}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14H6L5 6"/>
-            <path d="M10 11v6"/><path d="M14 11v6"/>
-            <path d="M9 6V4h6v2"/>
-          </svg>
-        </button>
       </div>
     </div>
   );

@@ -1849,7 +1849,8 @@
 
 /* Change file button (post-import) */
 .import-change-file {
-  display: flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
+  align-self: flex-start;
   padding: 8px 14px; border-radius: 8px;
   border: 1.5px solid var(--border);
   background: transparent; color: var(--text);
@@ -2363,15 +2364,33 @@
 
 .quote-card {
   background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 20px 14px;
+  border: 1.5px solid #EFEFEF;
+  border-radius: var(--radius);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: border-color 0.15s;
+  gap: 14px;
+  transition: transform 0.22s ease, border-color 0.22s;
+  animation: fadeUp 0.28s ease both;
+  position: relative;
 }
-.quote-card:hover { border-color: var(--primary-20); }
+.quote-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-50);
+  background: var(--primary-5);
+  box-shadow: 0 4px 16px rgba(73,89,230,0.12);
+}
+[data-theme="dark"] .quote-card { border-color: var(--border); }
+[data-theme="dark"] .quote-card:hover { border-color: var(--primary-40); background: rgba(73,89,230,0.10); }
+
+.quote-card:hover .card-delete-btn { opacity: 1; }
+
+.quote-card-book { display: flex; flex-direction: column; gap: 3px; padding-right: 40px; }
+
+.quote-card-divider {
+  height: 1px;
+  background: var(--border);
+}
 
 .quote-card-text {
   font-family: var(--font-fraunces), Georgia, serif;
@@ -2388,35 +2407,32 @@
   margin: 0 2px;
 }
 
-.quote-card-footer {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px;
+/* A11y + touch + reduced motion parity with BookCard */
+@media (hover: none) {
+  .quote-card:hover {
+    transform: none;
+    border-color: #EFEFEF;
+    background: var(--bg2);
+    box-shadow: none;
+  }
+  [data-theme="dark"] .quote-card:hover {
+    border-color: var(--border);
+    background: var(--bg2);
+  }
 }
-.quote-card-meta {
-  font-size: 12px;
-  color: var(--text-2);
-  line-height: 1.4;
+.quote-card:focus-visible {
+  outline: none;
+  border-color: var(--primary-50);
+  box-shadow: 0 0 0 3px var(--primary-20);
 }
-.quote-book-title { font-weight: 600; color: var(--text); }
-.quote-book-author { color: var(--text-2); }
-.quote-page { color: var(--text-3, var(--text-2)); opacity: 0.7; }
-
-.quote-delete-btn {
-  flex-shrink: 0;
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 6px;
-  background: none; border: none;
-  color: var(--text-2);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s, background 0.15s, color 0.15s;
+[data-theme="dark"] .quote-card:focus-visible {
+  border-color: var(--primary-40);
+  box-shadow: 0 0 0 3px rgba(73,89,230,0.25);
 }
-.quote-card:hover .quote-delete-btn { opacity: 1; }
-.quote-delete-btn:hover { background: var(--danger-bg, #fee2e2); color: var(--danger, #ef4444); }
-.quote-delete-btn svg { width: 14px; height: 14px; }
+@media (prefers-reduced-motion: reduce) {
+  .quote-card { animation: none; transition: none; }
+  .quote-card:hover { transform: none; }
+}
 
 /* ─── ADD QUOTE MODAL ─── */
 .quote-modal { width: 480px; max-width: calc(100vw - 32px); }
