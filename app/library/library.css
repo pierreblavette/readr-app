@@ -355,7 +355,7 @@
 /* ─── BUTTONS ─── */
 .add-btn {
   height: 40px;
-  padding: 0 20px;
+  padding: 0 20px 0 16px;
   border-radius: 8px;
   border: none;
   background: var(--accent);
@@ -409,7 +409,7 @@
 
 .export-btn {
   height: 40px;
-  padding: 0 20px;
+  padding: 0 16px 0 20px;
   border-radius: 8px;
   border: 1.5px solid var(--border);
   background: #FFFFFF;
@@ -473,8 +473,8 @@
 }
 
 .view-btn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: #FFFFFF;
   color: var(--text);
@@ -489,7 +489,7 @@
 .view-btn:first-child { border-right: 1px solid var(--border); }
 .view-btn:hover { background: var(--primary-10); color: var(--primary-60); }
 .view-btn.active { background: var(--primary-50); color: #fff; }
-.view-btn svg { width: 15px; height: 15px; }
+.view-btn svg { width: 18px; height: 18px; }
 
 [data-theme="dark"] .view-btn { background: var(--bg3); }
 [data-theme="dark"] .view-btn:hover:not(.active) { background: rgba(73,89,230,0.22); color: var(--text); }
@@ -933,7 +933,7 @@
 
 /* Delete button in list rows */
 .delete-row-btn {
-  width: 38px; height: 38px;
+  width: 40px; height: 40px;
   border: none; background: var(--primary-5); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
@@ -1356,13 +1356,34 @@
 [data-theme="dark"] .panel-delete-btn { background: var(--bg3); }
 [data-theme="dark"] .panel-delete-btn:hover { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.10); }
 
-/* ─── MD BUTTONS — CANONICAL ICON FRAME (20×20, 80% glyph) ─── */
-/* Content icons on MD buttons use a 20×20 frame with a 16×16 glyph (80% ratio) and 2px padding. Exception: chevrons/dropdown markers (e.g. .export-btn) keep their smaller size. */
+/* ─── MD BUTTONS — CANONICAL ANATOMY ─── */
+/* Height 40, radius 8, font 14/600, gap 8. */
+/*
+ * ICON+TEXT variant:
+ *   - icon frame: 20×20 with a 16×16 glyph (80%) and 2px internal padding
+ *   - L/R padding asymmetry to compensate icon visual weight:
+ *     - icon-left  (icon + text)  : padding 0 20 0 16
+ *     - icon-right (text + icon)  : padding 0 16 0 20
+ *     - text-only                 : padding 0 20 (symmetric)
+ *
+ * ICON-ONLY variant:
+ *   - container 40×40 (same height as icon+text for visual alignment)
+ *   - glyph 18×18 centered directly in container (no internal frame, no padding)
+ *     Larger than icon+text's 16px glyph because a lone glyph needs more visual weight.
+ *   - border-radius 8
+ *
+ * Exceptions:
+ *   - chevrons/dropdown markers keep their smaller size (e.g. .export-btn caret 14px)
+ *   - .card-delete-btn stays 30×30 (SM contextual, revisit in SM/XS chantier)
+ *   - .search-clear is an inline utility (18×18 round, not a standard button)
+ */
 .add-btn svg,
 .edit-btn svg,
 .empty-cta svg,
 .panel-move-btn svg,
-.panel-delete-btn svg {
+.panel-delete-btn svg,
+.panel-quotes-add svg,
+.import-change-file svg {
   width: 16px;
   height: 16px;
   padding: 2px;
@@ -1864,14 +1885,17 @@
 .import-change-file {
   display: inline-flex; align-items: center; gap: 8px;
   align-self: flex-start;
-  padding: 8px 14px; border-radius: 8px;
+  height: 40px; padding: 0 20px 0 16px;
+  border-radius: 8px;
   border: 1.5px solid var(--border);
-  background: transparent; color: var(--text);
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  background: #FFFFFF; color: var(--text);
+  font-family: inherit; font-size: 14px; font-weight: 600;
   cursor: pointer; margin-bottom: 16px;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 .import-change-file:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
+[data-theme="dark"] .import-change-file { background: var(--bg3); }
+[data-theme="dark"] .import-change-file:hover { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.10); }
 [data-theme="dark"] .import-change-file:hover { background: rgba(123,137,248,0.12); border-color: var(--primary); color: var(--primary); }
 .import-change-file svg { width: 18px; height: 18px; flex-shrink: 0; }
 
@@ -2320,13 +2344,13 @@
 /* Mobile toolbar: show only on small screens */
 .toolbar-mobile-only { display: none; }
 .toolbar-hamburger {
-  width: 36px; height: 36px;
+  width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px; background: none; border: none;
   cursor: pointer; color: var(--text-2);
   padding: 0; flex-shrink: 0;
 }
-.toolbar-hamburger svg { width: 20px; height: 20px; }
+.toolbar-hamburger svg { width: 18px; height: 18px; }
 .toolbar-hamburger:hover { background: var(--ghost-hover); color: var(--text); }
 
 /* Create collection modal */
@@ -2336,7 +2360,7 @@
   margin: 12px 0 16px;
 }
 .col-emoji-btn {
-  width: 36px; height: 36px;
+  width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
   background: var(--bg3); border: 1.5px solid transparent;
@@ -2756,15 +2780,14 @@
 }
 .panel-quotes-add {
   display: flex; align-items: center; gap: 8px;
-  height: 40px; padding: 0 20px;
-  border-radius: 10px; margin-top: 16px;
+  height: 40px; padding: 0 20px 0 16px;
+  border-radius: 8px; margin-top: 16px;
   background: var(--primary-50); border: none;
   color: #fff; cursor: pointer;
   font-family: inherit; font-size: 14px; font-weight: 600;
   transition: background 0.15s;
 }
 .panel-quotes-add:hover { background: var(--primary-60); }
-.panel-quotes-add svg { width: 16px; height: 16px; }
 
 .panel-quotes-list { display: flex; flex-direction: column; gap: 10px; }
 
