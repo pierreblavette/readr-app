@@ -125,7 +125,7 @@ export default function LibraryPage() {
         onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); }}
         onAddQuote={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
         onOpenQuote={q => { setPanelBook(null); setPanelQuote(q); }}
-        quotes={panelBook ? getQuotesForBook(panelBook.id) : []}
+        quotes={panelBook ? getQuotesForBook(panelBook) : []}
         t={t}
       />
       <QuotePanel
