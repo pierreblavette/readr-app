@@ -299,7 +299,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {/* ── Photo tab ── */}
           {inputMode === 'photo' && photoState === 'idle' && (
             <>
-              <input ref={fileRef} type="file" accept="image/*" capture="environment"
+              <input ref={fileRef} type="file" accept="image/*"
                 style={{ display: 'none' }} onChange={handlePhotoChange} />
               <GradientDropzone onClick={() => fileRef.current?.click()} gradientId="quoteGradBorder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

@@ -47,6 +47,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, onO
           </svg>
           <p className="empty-title">{t.quoteEmpty}</p>
           <p className="empty-sub">{t.quoteEmptySub}</p>
+          <button className="empty-cta" onClick={onAdd}>{t.quoteEmptyCta}</button>
         </div>
       ) : filtered.length === 0 ? (
         <div className="empty">
