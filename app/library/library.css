@@ -2727,12 +2727,22 @@ button.quote-book-chip {
 .quote-book-chip-interactive {
   cursor: pointer;
   transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
-.quote-book-chip-interactive:hover { background: var(--primary-5); }
-[data-theme="dark"] .quote-book-chip-interactive:hover { background: rgba(73,89,230,0.10); }
+.quote-book-chip-interactive:hover,
+.quote-book-chip-interactive:active { background: var(--primary-5); }
+[data-theme="dark"] .quote-book-chip-interactive:hover,
+[data-theme="dark"] .quote-book-chip-interactive:active { background: rgba(73,89,230,0.10); }
 .quote-book-chip-interactive:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
+}
+.quote-book-chip-chevron {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--text-3);
+  margin-left: 4px;
 }
 
 .quote-book-chip-cover {
