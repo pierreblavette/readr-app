@@ -161,7 +161,7 @@ export default function LibraryPage() {
         {isCollections && !currentCollection && (
           <>
             <h1 className="page-title">{t.pageCollections}</h1>
-            <div className="search-row" style={{ marginBottom: 16 }}>
+            <div className="search-row">
               <div />
               <div className="counter-actions">
                 <button className="add-btn" onClick={() => setCreateColOpen(true)}>
