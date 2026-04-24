@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, t }) {
+export default function SortMenu({ current, onChange, options, ariaLabel }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -14,16 +14,19 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
     return () => document.removeEventListener('mousedown', close);
   }, [open]);
 
+  const currentOpt = options.find(o => o.key === current) || options[0];
+
   return (
-    <div className="dropdown-wrap" ref={ref}>
+    <div className="dropdown-wrap sort-menu" ref={ref}>
       <button
-        className="export-btn"
-        disabled={disabled}
+        type="button"
+        className="export-btn sort-menu-btn"
         onClick={() => setOpen(o => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label={ariaLabel}
       >
-        {t.btnExport}
+        {currentOpt.label}
         <svg
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
@@ -35,33 +38,25 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
 
       {open && (
         <div className="dropdown-menu" role="listbox">
-          {exportPDF && (
+          {options.map(opt => (
             <button
+              key={opt.key}
               className="dropdown-item"
               role="option"
-              onClick={() => { exportPDF(); setOpen(false); }}
+              aria-selected={opt.key === current}
+              onClick={() => { onChange(opt.key); setOpen(false); }}
             >
-              pdf
+              <svg
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                style={{ width: 14, height: 14, flexShrink: 0, opacity: opt.key === current ? 1 : 0 }}
+                aria-hidden="true"
+              >
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              {opt.label}
             </button>
-          )}
-          {exportMD && (
-            <button
-              className="dropdown-item"
-              role="option"
-              onClick={() => { exportMD(); setOpen(false); }}
-            >
-              md
-            </button>
-          )}
-          {exportData && (
-            <button
-              className="dropdown-item"
-              role="option"
-              onClick={() => { exportData(); setOpen(false); }}
-            >
-              json
-            </button>
-          )}
+          ))}
         </div>
       )}
     </div>

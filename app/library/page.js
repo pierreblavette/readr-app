@@ -18,6 +18,7 @@ import CollectionsView from "@/components/library/CollectionsView";
 import CollectionDetailView from "@/components/library/CollectionDetailView";
 import AddBooksToCollectionModal from "@/components/library/AddBooksToCollectionModal";
 import QuotesView    from "@/components/library/QuotesView";
+import DictionaryView from "@/components/library/DictionaryView";
 import AddQuoteModal from "@/components/library/AddQuoteModal";
 import Onboarding    from "@/components/library/Onboarding";
 import Toast         from "@/components/library/Toast";
@@ -53,15 +54,17 @@ export default function LibraryPage() {
     collections, createCollection, deleteCollection,
     addBookToCollection, removeBookFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
-    quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook,
+    quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook, exportQuotesMD, exportQuotesPDF,
+    words, saveWord, deleteWord, exportWordsMD, exportWordsPDF,
     sidebarCollapsed, toggleSidebarCollapsed,
   } = lib;
 
   const isCollections = tab === 'collections';
   const isQuotes = tab === 'quotes';
+  const isDictionary = tab === 'dictionary';
   const currentCollection = activeCollection ? collections.find(c => c.id === activeCollection) : null;
-  const pageTitle = tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : tab === 'collections' ? t.pageCollections : t.pageQuotes;
-  const resultInfo = !isCollections && !isQuotes && data[tab]
+  const pageTitle = tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : tab === 'collections' ? t.pageCollections : tab === 'dictionary' ? t.pageDictionary : t.pageQuotes;
+  const resultInfo = !isCollections && !isQuotes && !isDictionary && data[tab]
     ? search.trim()
       ? t.resultQuery(books.length, data[tab].length)
       : t.resultTotal(data[tab].length)
@@ -82,8 +85,14 @@ export default function LibraryPage() {
       deleteMany(payload);
       setSelected(new Set());
       setEditMode(false);
+      return;
+    }
+    if (payload?.type === 'quote') {
+      deleteQuote(payload.id);
+    } else if (payload?.type === 'word') {
+      deleteWord(payload.id);
     } else {
-      deleteBook(payload);
+      deleteBook(payload.id);
     }
   }
 
@@ -95,6 +104,7 @@ export default function LibraryPage() {
       <Sidebar
         tab={tab} setTab={setTab}
         data={data} collections={collections}
+        quotes={quotes} words={words}
         collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebarCollapsed}
         onCreateCollection={() => setCreateColOpen(true)}
         onOpenCollection={col => { setActiveCollection(col.id); }}
@@ -130,9 +140,21 @@ export default function LibraryPage() {
       />
       <QuotePanel
         quote={panelQuote}
-        book={panelQuote?.bookId ? [...data.owned, ...data.wishlist].find(b => b.id === panelQuote.bookId) : null}
+        book={(() => {
+          if (!panelQuote) return null;
+          const all = [...data.owned, ...data.wishlist];
+          const byId = panelQuote.bookId ? all.find(b => b.id === panelQuote.bookId) : null;
+          if (byId) return byId;
+          const t = (panelQuote.bookTitle || '').toLowerCase().trim();
+          const a = (panelQuote.bookAuthor || '').toLowerCase().trim();
+          if (!t) return null;
+          return all.find(b =>
+            (b.title || '').toLowerCase().trim() === t &&
+            (b.author || '').toLowerCase().trim() === a
+          ) || null;
+        })()}
         onClose={() => setPanelQuote(null)}
-        onDelete={id => deleteQuote(id)}
+        onDelete={id => { setPanelQuote(null); setDeleteTarget({ type: 'quote', id }); }}
         onEdit={q => { setPanelQuote(null); setEditingQuote(q); setAddQuoteOpen(true); }}
         onOpenBook={b => { setPanelQuote(null); setPanelBook(b); }}
         lang={lang}
@@ -142,6 +164,22 @@ export default function LibraryPage() {
       {/* Main */}
       <div className="main-wrap">
 
+        {/* Dictionary view */}
+        {isDictionary && (
+          <>
+            <h1 className="page-title">{t.pageDictionary}</h1>
+            <DictionaryView
+              lang={lang}
+              t={t}
+              words={words}
+              onSave={saveWord}
+              onDelete={id => setDeleteTarget({ type: 'word', id, title: words.find(w => w.id === id)?.word || '' })}
+              exportMD={exportWordsMD}
+              exportPDF={exportWordsPDF}
+            />
+          </>
+        )}
+
         {/* Quotes view */}
         {isQuotes && (
           <>
@@ -150,8 +188,12 @@ export default function LibraryPage() {
               quotes={quotes}
               allBooks={[...data.owned, ...data.wishlist]}
               onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
-              onDelete={deleteQuote}
+              onDelete={id => setDeleteTarget({ type: 'quote', id })}
               onOpen={q => setPanelQuote(q)}
+              onOpenBook={b => setPanelBook(b)}
+              exportMD={exportQuotesMD}
+              exportPDF={exportQuotesPDF}
+              lang={lang}
               t={t}
             />
           </>
@@ -207,7 +249,7 @@ export default function LibraryPage() {
         )}
 
         {/* Library / Wishlist view */}
-        {!isCollections && !isQuotes && (
+        {!isCollections && !isQuotes && !isDictionary && (
           <>
             <h1 className="page-title">{pageTitle}</h1>
 
@@ -218,37 +260,39 @@ export default function LibraryPage() {
               setAddModal={setAddModal} view={view} switchView={switchView}
             />
 
-            {data[tab].length > 0 && (
-              <div className="result-line">{resultInfo}</div>
-            )}
+            <div className="books-section">
+              {data[tab].length > 0 && (
+                <div className="result-line">{resultInfo}</div>
+              )}
 
-            {view === 'grid' ? (
-              <div className="books-grid">
-                {books.length === 0
-                  ? <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} />
-                  : books.map(book => (
-                      <BookCard key={book.id} book={book} tab={tab}
-                        editMode={editMode} selected={selected}
-                        onToggleSelect={toggleSelected}
-                        onOpen={b => setPanelBook(b)}
-                        onDelete={b => setDeleteTarget(b)}
-                        t={t}
-                      />
-                    ))
-                }
-              </div>
-            ) : books.length === 0 ? (
-              <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} />
-            ) : (
-              <BookList books={books} tab={tab}
-                editMode={editMode} selected={selected}
-                onToggleSelect={toggleSelected}
-                onSelectAll={toggleSelectAll}
-                onOpen={b => setPanelBook(b)}
-                onDelete={b => setDeleteTarget(b)}
-                t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
-              />
-            )}
+              {view === 'grid' ? (
+                <div className="books-grid">
+                  {books.length === 0
+                    ? <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} />
+                    : books.map(book => (
+                        <BookCard key={book.id} book={book} tab={tab}
+                          editMode={editMode} selected={selected}
+                          onToggleSelect={toggleSelected}
+                          onOpen={b => setPanelBook(b)}
+                          onDelete={b => setDeleteTarget(b)}
+                          t={t}
+                        />
+                      ))
+                  }
+                </div>
+              ) : books.length === 0 ? (
+                <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} />
+              ) : (
+                <BookList books={books} tab={tab}
+                  editMode={editMode} selected={selected}
+                  onToggleSelect={toggleSelected}
+                  onSelectAll={toggleSelectAll}
+                  onOpen={b => setPanelBook(b)}
+                  onDelete={b => setDeleteTarget(b)}
+                  t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
+                />
+              )}
+            </div>
           </>
         )}
       </div>

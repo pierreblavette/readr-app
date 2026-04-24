@@ -4,13 +4,13 @@ import { useTheme } from "next-themes";
 
 export default function Sidebar({
   tab, setTab, data, collections,
+  quotes = [], words = [],
   collapsed, onToggleCollapse,
   onCreateCollection, onOpenCollection, activeCollection,
   t,
   mobileOpen, onCloseMobile,
 }) {
   const { theme, setTheme } = useTheme();
-  const [shelvesOpen, setShelvesOpen] = useState(true);
   const [collectionsOpen, setCollectionsOpen] = useState(true);
 
   function handleNav(key) {
@@ -47,15 +47,11 @@ export default function Sidebar({
         {/* Primary nav */}
         <nav className="sidebar-nav">
           {!collapsed && (
-            <div className="sidebar-section-head" onClick={() => setShelvesOpen(o => !o)}>
-              <svg className={`sidebar-section-chevron${shelvesOpen ? ' open' : ''}`}
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <polyline points="9 18 15 12 9 6"/>
-              </svg>
-              <span className="sidebar-section-label">Shelves</span>
+            <div className="sidebar-section-head sidebar-section-head--no-action">
+              <span className="sidebar-section-label">{t.sidebarShelves || 'Shelves'}</span>
             </div>
           )}
-          {(!collapsed ? shelvesOpen : true) && [
+          {[
             { key: 'owned',    label: t.tabLibrary,  count: data.owned.length,    icon: <LibIcon /> },
             { key: 'wishlist', label: t.tabWishlist, count: data.wishlist.length,  icon: <WishIcon /> },
           ].map(({ key, label, count, icon }) => (
@@ -76,7 +72,7 @@ export default function Sidebar({
         {/* Quotes */}
         <div className="sidebar-section">
           {!collapsed ? (
-            <div className="sidebar-section-head" onClick={() => handleNav('quotes')}>
+            <div className="sidebar-section-head sidebar-section-head--no-action">
               <span className="sidebar-section-label">{t.tabQuotes || 'Quotes'}</span>
             </div>
           ) : (
@@ -90,6 +86,29 @@ export default function Sidebar({
               onClick={() => handleNav('quotes')}>
               <span className="sidebar-icon"><QuoteIcon /></span>
               <span className="sidebar-label">{t.tabQuotes || 'Quotes'}</span>
+              <span className="sidebar-badge">{quotes.length}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Dictionary */}
+        <div className="sidebar-section">
+          {!collapsed ? (
+            <div className="sidebar-section-head sidebar-section-head--no-action">
+              <span className="sidebar-section-label">{t.tabDictionary || 'Dictionary'}</span>
+            </div>
+          ) : (
+            <button className={`sidebar-item${tab === 'dictionary' ? ' active' : ''}`} onClick={() => handleNav('dictionary')}>
+              <span className="sidebar-icon"><DictIcon /></span>
+            </button>
+          )}
+          {!collapsed && (
+            <button
+              className={`sidebar-item${tab === 'dictionary' ? ' active' : ''}`}
+              onClick={() => handleNav('dictionary')}>
+              <span className="sidebar-icon"><DictIcon /></span>
+              <span className="sidebar-label">{t.tabDictionary || 'Dictionary'}</span>
+              <span className="sidebar-badge">{words.length}</span>
             </button>
           )}
         </div>
@@ -185,6 +204,17 @@ function QuoteIcon() {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
       <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>
+    </svg>
+  );
+}
+
+function DictIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h11a4 4 0 0 1 4 4v12"/>
+      <path d="M4 4v14a2 2 0 0 0 2 2h13"/>
+      <line x1="8" y1="9" x2="14" y2="9"/>
+      <line x1="8" y1="13" x2="12" y2="13"/>
     </svg>
   );
 }

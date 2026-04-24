@@ -3,12 +3,22 @@
 export default function DeleteModal({ target, onClose, onConfirm, t }) {
   if (!target) return null;
   const isBulk = target.bulk === true;
-  const title  = isBulk ? t.deleteBulkTitle(target.count) : t.deleteTitle;
-  const msg    = isBulk ? t.deleteBulkMsg(target.count)   : t.deleteMsg(target.title);
+  const isQuote = target.type === 'quote';
+  const isWord = target.type === 'word';
+  const title = isBulk
+    ? t.deleteBulkTitle(target.count)
+    : isQuote ? t.quoteDeleteTitle
+    : isWord  ? t.wordDeleteTitle
+    : t.deleteTitle;
+  const msg = isBulk
+    ? t.deleteBulkMsg(target.count)
+    : isQuote ? t.quoteDeleteMsg
+    : isWord  ? t.wordDeleteMsg(target.title)
+    : t.deleteMsg(target.title);
 
   function handleConfirm() {
     if (isBulk) onConfirm(target.ids);
-    else        onConfirm(target.id);
+    else        onConfirm(target);
     onClose();
   }
 

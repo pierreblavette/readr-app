@@ -87,60 +87,63 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
             </svg>
           </button>
 
-          {/* Cover */}
-          <div className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`} style={{ background: cover ? `linear-gradient(135deg, ${c1}, ${c2})` : undefined }}>
-            {cover && <img src={cover} alt={book.title} className="panel-cover-img" />}
+          {/* Main — cover + info block (gap 40px between them) */}
+          <div className="panel-main">
+            <div className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`} style={{ background: cover ? `linear-gradient(135deg, ${c1}, ${c2})` : undefined }}>
+              {cover && <img src={cover} alt={book.title} className="panel-cover-img" />}
+            </div>
+            <div className="panel-info">
+              <div className="panel-title">{book.title}</div>
+              <div className="panel-byline">
+                <div className="panel-author">{book.author}</div>
+                <div className="panel-meta">
+                  {book.genre && <span>{book.genre}</span>}
+                  {book.genre && book.year && <span className="panel-meta-sep">·</span>}
+                  {book.year && <span>{book.year}</span>}
+                </div>
+              </div>
+              {/* About section */}
+              <div className="panel-section">
+                <span className="panel-section-eyebrow">About</span>
+                {synopsis
+                  ? <div className="panel-synopsis">{synopsis}</div>
+                  : <div className="panel-synopsis-placeholder">No synopsis available.</div>
+                }
+              </div>
+
+              <div className="panel-actions">
+                {tab === 'wishlist' && (
+                  <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
+                    {t.selConfirmOwned || 'Move to Library'}
+                  </button>
+                )}
+                <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
+                  {t.btnDelete || 'Delete'}
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* Body */}
-          <div className="panel-body">
-            <div className="panel-title">{book.title}</div>
-            <div className="panel-author">{book.author}</div>
-            <div className="panel-meta">
-              {book.genre && <span>{book.genre}</span>}
-              {book.genre && book.year && <span className="panel-meta-sep">·</span>}
-              {book.year && <span>{book.year}</span>}
-            </div>
-            {/* About section */}
-            <div className="panel-section">
-              <span className="panel-section-eyebrow">About</span>
-              {synopsis
-                ? <div className="panel-synopsis">{synopsis}</div>
-                : <div className="panel-synopsis-placeholder">No synopsis available.</div>
-              }
-            </div>
+          <div className="panel-divider" />
 
-            <div className="panel-actions">
-              {tab === 'wishlist' && (
-                <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
-                  {t.selConfirmOwned || 'Move to Library'}
-                </button>
-              )}
-              <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
-                {t.btnDelete || 'Delete'}
-              </button>
-            </div>
-
-            {/* Quotes section */}
-            <div className="panel-quotes">
-              <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
-              {quotes && quotes.length > 0 ? (
-                <div className="panel-quotes-list">
-                  {quotes.map(q => (
-                    <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
-                  ))}
-                </div>
-              ) : (
-                <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
-              )}
-              <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                Add a quote
-              </button>
-            </div>
-
+          {/* Quotes section — eyebrow + list + add button (gap-driven) */}
+          <div className="panel-quotes">
+            <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
+            {quotes && quotes.length > 0 ? (
+              <div className="panel-quotes-list">
+                {quotes.map(q => (
+                  <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
+                ))}
+              </div>
+            ) : (
+              <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
+            )}
+            <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add a quote
+            </button>
           </div>
 
         </div>

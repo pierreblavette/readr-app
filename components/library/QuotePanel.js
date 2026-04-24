@@ -72,9 +72,8 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
             </svg>
           </button>
 
-          <div className="panel-body quote-panel-body">
-
-            <div className="quote-panel-book-section">
+          <div className="panel-main">
+            <div className="panel-section">
               <span className="panel-section-eyebrow">{t.quoteLabel}</span>
               <div className="quote-panel-text">
                 <span className="quote-mark">"</span>
@@ -95,21 +94,20 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
                 {t.btnDelete || 'Delete'}
               </button>
             </div>
-
-            {(book || quote.bookTitle) && (
-              <>
-                <div className="quote-panel-divider" />
-                <div className="quote-panel-book-section">
-                  <span className="panel-section-eyebrow">{t.quoteBookSection}</span>
-                  <BookChip
-                    book={book || { title: quote.bookTitle, author: quote.bookAuthor || '' }}
-                    onClick={quote.bookId && book ? () => onOpenBook(book) : undefined}
-                  />
-                </div>
-              </>
-            )}
-
           </div>
+
+          {(book || quote.bookTitle) && (
+            <>
+              <div className="panel-divider" />
+              <div className="panel-section">
+                <span className="panel-section-eyebrow">{t.quoteBookSection}</span>
+                <BookChip
+                  book={book || { title: quote.bookTitle, author: quote.bookAuthor || '' }}
+                  onClick={onOpenBook ? () => { if (book) onOpenBook(book); } : undefined}
+                />
+              </div>
+            </>
+          )}
 
         </div>
       )}

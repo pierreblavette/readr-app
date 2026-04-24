@@ -50,6 +50,7 @@
   --accent-foreground:     #FFFFFF;
   --destructive:           #E63946;
   --border:                #E0E0E0;
+  --border-subtle:         #EFEFEF;
   --input:                 #E0E0E0;
   --ring:                  #4959E6;
   --radius:                8px;
@@ -128,6 +129,7 @@
   --accent-foreground:     #0F0F0F;
   --destructive:           #FF6B6B;
   --border:                #2E2E2E;
+  --border-subtle:         #2E2E2E;
   --input:                 #2E2E2E;
   --ring:                  #7B89F8;
   /* Original readr palette */

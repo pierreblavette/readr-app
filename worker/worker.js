@@ -37,6 +37,30 @@ const MODEL_CASCADE = [
   'models/gemini-2.5-flash-lite',
 ];
 
+function buildDefinePrompt(word, lang) {
+  const langName = lang === 'fr' ? 'French' : 'English';
+  return `You are a dictionary assistant. Define the word "${word}" in ${langName}.
+
+Return ONLY a JSON object (no markdown, no commentary) with this exact structure:
+{
+  "definitions": [
+    {
+      "pos": "<part of speech, written in ${langName}>",
+      "meaning": "<concise definition in ${langName}>",
+      "example": "<short, natural example sentence in ${langName} using the word>"
+    }
+  ]
+}
+
+Rules:
+- Provide up to 3 distinct meanings if the word is polysemous. Order by most common usage.
+- Use natural, idiomatic ${langName} throughout.
+- The example must contain the word itself.
+- If the word is not a real word in ${langName} (or is gibberish), return exactly: {"error":"not_found"}
+- Do not invent meanings. Do not translate the word to another language in the meaning.
+- Return ONLY the JSON, no backticks, no preamble.`;
+}
+
 async function callGemini(apiKey, body) {
   let last = { status: 503, data: { error: { message: 'No model attempted' } } };
   for (const model of MODEL_CASCADE) {
@@ -99,6 +123,39 @@ export default {
     const token = request.headers.get('X-Readr-Token');
     if (!token || token !== env.READR_TOKEN) {
       return json({ error: 'Unauthorized' }, 401);
+    }
+
+    // POST /define — dictionary lookup via Gemini
+    if (url.pathname === '/define') {
+      try {
+        const { word, lang } = await request.json();
+        if (!word || typeof word !== 'string') {
+          return json({ error: 'Missing word' }, 400);
+        }
+        const clean = word.trim().slice(0, 80);
+        if (!clean) return json({ error: 'Empty word' }, 400);
+
+        const result = await callGemini(env.GEMINI_API_KEY, {
+          contents: [{ parts: [{ text: buildDefinePrompt(clean, lang === 'fr' ? 'fr' : 'en') }] }],
+          generationConfig: { temperature: 0.2, maxOutputTokens: 1024, responseMimeType: 'application/json' }
+        });
+
+        if (!result.ok) {
+          return json({ error: result.data?.error?.message || `Gemini error ${result.status}` }, result.status);
+        }
+
+        const raw = result.data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { return json({ error: 'Bad model response' }, 502); }
+
+        if (parsed.error === 'not_found') return json({ error: 'not_found' }, 404);
+        if (!Array.isArray(parsed.definitions) || parsed.definitions.length === 0) {
+          return json({ error: 'not_found' }, 404);
+        }
+        return json({ word: clean, lang: lang === 'fr' ? 'fr' : 'en', definitions: parsed.definitions });
+      } catch (e) {
+        return json({ error: e.message || 'Internal error' }, 500);
+      }
     }
 
     // POST /quote — extract text from a photo for quote capture
