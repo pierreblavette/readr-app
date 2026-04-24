@@ -5,18 +5,21 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const NAV = {
-  Foundations: ["logo","colors","typography","highlight","spacing","shadows"],
-  Components:  ["autocomplete","badges","btn-states","buttons","checkbox","dropdown","inputs","lang-switcher","segmented","theme-toggle","view-toggle"],
-  Patterns:    ["card","empty","footer","list","modal","panel","selection-bar","sidebar","upload-box"],
+  Foundations: ["logo","colors","typography","highlight","spacing","shadows","strokes"],
+  Components:  ["autocomplete","badges","book-chip","btn-states","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
   "logo":"Logo","colors":"Colors","typography":"Typography","highlight":"Hand-drawn Highlight",
-  "spacing":"Spacing","shadows":"Shadows & Radius","buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
+  "spacing":"Spacing","shadows":"Shadows & Radius","strokes":"Strokes & Borders",
+  "buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
   "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges & Pills",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
-  "theme-toggle":"Theme Toggle","card":"Book Card","list":"List View","sidebar":"Sidebar","panel":"Side Panel",
-  "modal":"Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","footer":"Footer",
+  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu",
+  "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
+  "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
+  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -264,7 +267,25 @@ export default function DesignSystemPage() {
               <ColorSwatch bg="var(--bg)" title="Page" token="--bg" light="#FEFEFF" dark="#0F0F0F" />
               <ColorSwatch bg="var(--bg3)" title="Subtle" token="--bg3" light="#F7F7F7" dark="#1A1A1A" />
               <ColorSwatch bg="var(--card)" title="Card" token="--card" light="#FFFFFF" dark="#1E1E1E" />
-              <ColorSwatch bg="var(--border)" title="Divider" token="--border" light="#E0E0E0" dark="#2E2E2E" />
+            </div>
+
+            <p className="color-section-label">Strokes</p>
+            <div className="color-grid">
+              <ColorSwatch bg="var(--border-subtle)" title="Subtle" token="--border-subtle" light="#EFEFEF" dark="#2E2E2E" />
+              <ColorSwatch bg="var(--border)" title="Strong" token="--border" light="#E0E0E0" dark="#2E2E2E" />
+            </div>
+            <div className="ds-card" style={{ marginBottom: 24 }}>
+              <div className="ds-card-body col" style={{ gap: 8 }}>
+                <p style={{ fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  <strong>--border-subtle</strong> — default stroke for all components (buttons, inputs, cards, containers) and most dividers (row separators, section separators). 1.5px on components, 1px on dividers.
+                </p>
+                <p style={{ fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  <strong>--border</strong> — reserved for stronger visual affordances where a subtle stroke isn't enough : <code>.panel-spinner</code> ring (2px), <code>.import-dropzone</code> dashed border (2px), <code>.ob-dot</code> background. Do not use for regular component strokes.
+                </p>
+                <p style={{ fontSize: "0.82rem", color: "var(--text-3)", lineHeight: 1.7 }}>
+                  In dark mode both tokens resolve to <code>#2E2E2E</code> — divergence exists only in light mode.
+                </p>
+              </div>
             </div>
 
             <p className="color-section-label">Accent</p>
@@ -448,6 +469,36 @@ export default function DesignSystemPage() {
                 ))}
               </div>
             </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Page rhythm — applied scale</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Container</th><th>Gap</th><th>Separates</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component"><code>.main-wrap</code></td>
+                      <td style={{ fontFamily: "monospace" }}>48px</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Top-level page blocks — page-title, search-row, content section</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>.dictionary-wrap</code></td>
+                      <td style={{ fontFamily: "monospace" }}>48px</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Mirrors <code>.main-wrap</code> — between lookup form and saved section</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>.books-section</code><br /><code>.quotes-section</code><br /><code>.dictionary-saved-section</code></td>
+                      <td style={{ fontFamily: "monospace" }}>16px</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Internal sub-header (eyebrow / result-line) → content list</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Two-tier rhythm: <strong>48px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.
+                </div>
+              </div>
+            </div>
           </section>
 
           {/* ── SHADOWS & RADIUS ── */}
@@ -483,9 +534,133 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── STROKES & BORDERS ── */}
+          <section className="ds-section" id="strokes">
+            <SectionTitle title="Strokes & Borders" sub="Canonical rules for borders across components, cards, inputs and dividers." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Weight × Token</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Context</th><th>Weight</th><th>Color token</th><th>Applied via</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component">Component strokes<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>buttons, inputs, cards, containers</span></td>
+                      <td style={{ fontFamily: "monospace" }}>1.5px</td>
+                      <td><span className="ds-token-chip">--border-subtle</span></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>border: 1.5px solid var(--border-subtle)</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Dividers<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>row separators, section lines</span></td>
+                      <td style={{ fontFamily: "monospace" }}>1px</td>
+                      <td><span className="ds-token-chip">--border-subtle</span></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>border-top/bottom: 1px solid var(--border-subtle)</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Strong affordances<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>spinner, dropzone</span></td>
+                      <td style={{ fontFamily: "monospace" }}>2px</td>
+                      <td><span className="ds-token-chip">--border</span></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>border: 2px {`{solid|dashed}`} var(--border)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Visual samples</div>
+              <div className="ds-card-body" style={{ gap: 24, flexWrap: "wrap" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                  <div style={{ width: 96, height: 64, borderRadius: 8, background: "var(--card)", border: "1.5px solid var(--border-subtle)" }} />
+                  <div className="ds-token-name" style={{ textAlign: "center" }}>Component 1.5px</div>
+                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border-subtle</div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                  <div style={{ width: 96, height: 64, borderRadius: 0, borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)", background: "transparent" }} />
+                  <div className="ds-token-name" style={{ textAlign: "center" }}>Divider 1px</div>
+                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border-subtle</div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                  <div style={{ width: 96, height: 64, borderRadius: 8, background: "var(--card)", border: "2px solid var(--border)" }} />
+                  <div className="ds-token-name" style={{ textAlign: "center" }}>Strong 2px</div>
+                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border</div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                  <div style={{ width: 96, height: 64, borderRadius: 8, background: "var(--card)", border: "2px dashed var(--border)" }} />
+                  <div className="ds-token-name" style={{ textAlign: "center" }}>Dropzone 2px</div>
+                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border dashed</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Stroke position — inside</div>
+              <div className="ds-card-body col" style={{ gap: 8 }}>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  All strokes are rendered <strong>inside</strong> the declared size (equivalent to Figma's "Inside" stroke). This is enforced globally by Tailwind's <code>box-sizing: border-box</code> reset — the stroke eats into the content area without enlarging the element.
+                </p>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  <strong>Exception — stretch containers</strong>: when a container wraps flex children of a fixed pixel height (e.g. <code>.view-btns</code> wrapping two 40px buttons), a standard <code>border</code> adds <code>2 × weight</code> to the container's natural height. Use <code>outline</code> with negative offset instead:
+                </p>
+                <pre style={{ fontFamily: "monospace", fontSize: "0.75rem", background: "var(--bg3)", padding: "12px 14px", borderRadius: 6, color: "var(--text)", lineHeight: 1.6, margin: 0 }}>
+{`.view-btns {
+  height: 40px;
+  outline: 1.5px solid var(--border-subtle);
+  outline-offset: -1.5px;
+  border-radius: 8px;
+  overflow: hidden;
+}`}
+                </pre>
+                <p style={{ fontSize: "0.82rem", color: "var(--text-3)", lineHeight: 1.7 }}>
+                  <code>outline</code> is painted outside the element by default ; a negative offset pulls it back inside, over the children. Doesn't consume layout space. Respects <code>border-radius</code> in modern browsers.
+                </p>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Why two tokens ?</div>
+              <div className="ds-card-body col" style={{ gap: 8 }}>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  <strong>Light mode</strong> : <code>--border-subtle</code> (#EFEFEF) keeps the component frames airy without feeling heavy on large surfaces like cards. <code>--border</code> (#E0E0E0) is reserved for affordances that need stronger contrast (dashed dropzones, spinner rings) where a subtle stroke would disappear.
+                </p>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  <strong>Dark mode</strong> : both tokens collapse to <code>#2E2E2E</code>. The light/dark distinction is intentional — dark backgrounds don't need two stroke strengths.
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* ── BUTTONS ── */}
           <section className="ds-section" id="buttons">
-            <SectionTitle title="Buttons" sub="6 variantes · 5 tailles · font-weight 600 sur tous les boutons." />
+            <SectionTitle title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all." />
+            <div className="ds-card">
+              <div className="ds-card-label">Canonical → Named class mapping</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Role</th><th>Canonical</th><th>Named classes used in app</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
+                      ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".export-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".quote-photo-btn", ".col-delete-btn"]],
+                      ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
+                      ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
+                      ["Text / ghost link", "btn-ghost", [".footer-link", ".quote-see-more"]],
+                      ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
+                    ].map(([role, canon, classes]) => (
+                      <tr key={role}>
+                        <td className="token-table-component">{role}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{canon}</td>
+                        <td>{classes.map(c => <span key={c} className="ds-token-chip" style={{ fontFamily: "monospace" }}>{c}</span>)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <div className="ds-card">
               <div className="ds-card-label">Variantes — taille MD</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap" }}>
@@ -507,6 +682,38 @@ export default function DesignSystemPage() {
                 {[["btn-xs","XS"],["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"],["btn-xl","XL"]].map(([sz,label]) => (
                   <button key={sz} className={`btn btn-primary ${sz}`}>{label}</button>
                 ))}
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="btn-scale-table">
+                  <thead>
+                    <tr><th>Size</th><th>Height</th><th>Padding (h)</th><th>Radius</th><th>Font</th><th>Gap</th><th>Icon-only</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["XS", "24", "8", "6", "11", "4", "24×24 · svg 12"],
+                      ["SM", "32", "16", "7", "12", "6", "32×32 · svg 14"],
+                      ["MD ★", "40", "20", "8", "14", "8", "40×40 · svg 18"],
+                      ["LG", "48", "24", "8", "14", "8", "48×48 · svg 20"],
+                      ["XL", "56", "28", "8", "15", "10", "—"],
+                    ].map(([sz, h, p, r, f, g, io]) => (
+                      <tr key={sz}>
+                        <td className="btn-scale-size">{sz}</td>
+                        <td>{h}px</td>
+                        <td>0 {p}px</td>
+                        <td>{r}px</td>
+                        <td>{f}px</td>
+                        <td>{g}px</td>
+                        <td style={{ color: "var(--text-3)", fontSize: "0.75rem" }}>{io}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  ★ Default size used across the app. Outline buttons: stroke <code>1.5px</code> inside (box-sizing: border-box). Icon destructive (.delete-row-btn) uses fill <code>--primary-5</code> default, <code>--primary-10</code> hover.
+                </div>
               </div>
             </div>
             <div className="ds-card">
@@ -614,11 +821,98 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── EXPORT MENU ── */}
+          <section className="ds-section" id="export-menu">
+            <SectionTitle title="Export Menu" sub="Dropdown specialized for exports — PDF, Markdown, JSON. Used in Library, Quotes, Dictionary." />
+            <div className="ds-card">
+              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-body">
+                <DropdownDemo label="Export" items={["pdf", "md", "json"]} />
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Props</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>exportPDF</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows <code>pdf</code> item. Omit to hide.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>exportMD</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows <code>md</code> item. Omit to hide.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>exportData</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows <code>json</code> item (raw data). Omit to hide.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>disabled</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>boolean</td><td style={{ fontSize: "0.82rem" }}>Disables the trigger button (list empty cases).</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>t</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>i18n object</td><td style={{ fontSize: "0.82rem" }}>Reads <code>t.btnExport</code> for the trigger label.</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Source: <code>components/library/ExportMenu.js</code>. Trigger class: <code>.export-btn</code>. Menu reuses the generic <code>.dropdown-menu</code>.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── SORT MENU ── */}
+          <section className="ds-section" id="sort-menu">
+            <SectionTitle title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists." />
+            <div className="ds-card">
+              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-body">
+                <DropdownDemo label="Recent" items={["Recent", "A–Z"]} />
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Props</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>current</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Key of the active option. Trigger label reflects its label.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onChange</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(key) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Fires with the selected option key.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>options</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ key, label }[]"}</td><td style={{ fontSize: "0.82rem" }}>Options list. Selected one gets a checkmark icon.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Accessibility label for the trigger button.</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.export-btn.sort-menu-btn</code> (shares the outline button anatomy).
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* ── INPUTS ── */}
           <section className="ds-section" id="inputs">
-            <SectionTitle title="Inputs" sub="Search input & text field. font-weight 600. Hover = primary tint, Focus = ring primary-20." />
+            <SectionTitle title="Inputs" sub="5 variants — all 40px height, font-size 14px, weight 600. Hover/focus share the same primary tint + ring." />
+
             <div className="ds-card">
-              <div className="ds-card-label">Search input</div>
+              <div className="ds-card-label">Variants overview</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Class</th><th>Used in</th><th>Padding</th><th>Radius</th><th>Default bg</th><th>Default border</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      [".search-input", "Search bars (Library, Quotes, Dictionary)", "0 34 0 38", "32", "#FFFFFF", "1.5px --border-subtle"],
+                      [".modal-field input", "Add/edit book modal", "0 14", "8", "--bg3", "1.5px transparent"],
+                      [".modal-field-input", "Add quote modal", "0 14", "8", "--bg3", "1.5px transparent"],
+                      [".quote-textarea", "Add quote modal (multi-line)", "12 14", "8", "--bg3", "1.5px transparent"],
+                      [".col-name-input", "Create collection modal", "0 12", "8", "--bg", "1.5px --border-subtle"],
+                    ].map(([cls, where, pad, r, bg, bd]) => (
+                      <tr key={cls}>
+                        <td className="token-table-component" style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{cls}</td>
+                        <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>{where}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{pad}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{r}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{bg}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{bd}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Search input — pill radius, visible default border</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap", gap: 24 }}>
                 <div>
                   <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Default</div>
@@ -637,19 +931,58 @@ export default function DesignSystemPage() {
               </div>
               <div className="ds-tokens">
                 <span className="ds-tokens-label">Tokens</span>
-                {["--border","--primary-50","--primary-20","--bg3"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
+                {["--border-subtle","--primary-50","--primary-20","--primary-5"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Text field</div>
+              <div className="ds-card-label">Text field — bg3 variant, transparent border default</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap", gap: 24 }}>
                 <div className="field-demo">
-                  <label>Title</label>
+                  <label>Title · Default</label>
                   <input placeholder="e.g. 1984" readOnly />
                 </div>
                 <div className="field-demo">
-                  <label>Author</label>
+                  <label>Author · Focus</label>
                   <input placeholder="e.g. George Orwell" style={{ borderColor: "var(--primary-50)", boxShadow: "0 0 0 3px var(--primary-20)" }} readOnly />
+                </div>
+              </div>
+              <div className="ds-tokens">
+                <span className="ds-tokens-label">Tokens</span>
+                {["--bg3","--primary-50","--primary-5","--primary-20"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Common state rules</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>State</th><th>Border</th><th>Background</th><th>Ring</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component">Default</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1.5px --border-subtle (or transparent for bg3 variants)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>--bg3 / #FFFFFF / --bg</td>
+                      <td style={{ color: "var(--text-3)" }}>—</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Hover</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1.5px --primary-50</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>--primary-5</td>
+                      <td style={{ color: "var(--text-3)" }}>—</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Focus</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1.5px --primary-50</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>--primary-5</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>0 0 0 3px --primary-20</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Dark mode: swap <code>--primary-50</code> → <code>--primary-40</code>, <code>--primary-5</code> → <code>rgba(73,89,230,0.10)</code>, ring → <code>rgba(73,89,230,0.2)</code>.
                 </div>
               </div>
             </div>
@@ -748,6 +1081,103 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── BOOK CHIP ── */}
+          <section className="ds-section" id="book-chip">
+            <SectionTitle title="Book Chip" sub="Reusable book reference block — cover thumbnail + title + author. Three modes : display, interactive, with remove." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Modes</div>
+              <div className="ds-card-body" style={{ gap: 16, flexWrap: "wrap" }}>
+                {/* Display (no onClick, no onRemove) */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Display</div>
+                  <div className="quote-book-chip">
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">Tropique du Cancer</div>
+                      <div className="quote-book-chip-author">Henry Miller</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Interactive (with onClick → chevron) */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Interactive</div>
+                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #9EEB97, #4959E6)" }}><span>1</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">1984</div>
+                      <div className="quote-book-chip-author">George Orwell</div>
+                    </div>
+                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </button>
+                </div>
+
+                {/* With remove */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>With remove</div>
+                  <div className="quote-book-chip">
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #FE7E4E, #FFCEE3)" }}><span>B</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">A Brief History of Time</div>
+                      <div className="quote-book-chip-author">Stephen Hawking</div>
+                    </div>
+                    <button type="button" className="quote-book-chip-remove" aria-label="Remove">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Context overrides</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Context</th><th>Default bg</th><th>Hover bg (interactive)</th><th>Why</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component">Base<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>QuotePanel, AddQuoteModal</span></td>
+                      <td><span className="ds-token-chip">--bg3</span></td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Neutral backgrounds where the chip sits on its own.</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Inside <code>.quote-card</code></td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
+                      <td><span className="ds-token-chip">--primary-10</span></td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Card itself tints primary on hover — chip needs stronger saturation to stay visible.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Props</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>book</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ title, author, id? }"}</td><td style={{ fontSize: "0.82rem" }}>Required. Cover is auto-fetched from Google Books via title/author.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onClick</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(e) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>If provided: renders as <code>&lt;button&gt;</code> with chevron + hover. Use <code>e.stopPropagation()</code> inside parent-clickable contexts.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onRemove</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows an X button on the right. Mutually exclusive with <code>onClick</code>.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Label for the remove button.</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Source: <code>components/library/BookChip.js</code>. Cover 32×44, radius 4. Fallback: gradient from <code>coverColors(title)</code> + first letter.
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* ── LANG SWITCHER ── */}
           <section className="ds-section" id="lang-switcher">
             <SectionTitle title="Language Switcher" />
@@ -811,6 +1241,178 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── QUOTE CARD ── */}
+          <section className="ds-section" id="quote-card">
+            <SectionTitle title="Quote Card" sub="Card for a single quote. Padding 20px. Body in flex-row (text + delete), divider, BookChip below. Whole card is role='button' → opens QuotePanel; BookChip is nested button → opens BookPanel (stopPropagation)." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-body">
+                <div className="quote-card" style={{ maxWidth: 520, cursor: "default" }}>
+                  <div className="quote-card-body">
+                    <div className="quote-card-text-wrap">
+                      <div className="quote-card-text">
+                        <span className="quote-mark">"</span>
+                        Qui suis-je ? Qu'est-ce que je fais là ? Il y a quelque chose qui ressemble à la vérité, jusqu'au fond du lac glacé, avec une note d'indigo.
+                        <span className="quote-mark">"</span>
+                      </div>
+                    </div>
+                    <button type="button" className="delete-row-btn quote-card-delete" aria-label="Delete">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M10 3h4"/><line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="quote-card-divider" />
+                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">Tropique du Cancer</div>
+                      <div className="quote-book-chip-author">Henry Miller</div>
+                    </div>
+                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Role</th><th>Key styles</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.quote-card</code></td><td style={{ fontSize: "0.82rem" }}>Outer clickable container</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 20, gap 20, role=button, hover: lift + border-primary-50 + shadow</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-body</code></td><td style={{ fontSize: "0.82rem" }}>Text + delete row</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex-row, gap 20, align-items: flex-start</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-text-wrap</code></td><td style={{ fontSize: "0.82rem" }}>Text column</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex: 1, min-width: 0, flex-col, gap 12</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-text</code></td><td style={{ fontSize: "0.82rem" }}>The quote</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-see-more</code></td><td style={{ fontSize: "0.82rem" }}>Expand toggle (conditional)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-delete</code></td><td style={{ fontSize: "0.82rem" }}>Destructive icon</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>40×40, flex-shrink: 0, --primary-5/--primary-10</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-divider</code></td><td style={{ fontSize: "0.82rem" }}>Separator</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1px, --border-subtle</td></tr>
+                    <tr><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td style={{ fontSize: "0.82rem" }}>Book reference</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Override bg --primary-5 / --primary-10 when inside .quote-card</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          {/* ── DICTIONARY CARD ── */}
+          <section className="ds-section" id="dictionary-card">
+            <SectionTitle title="Dictionary Card" sub="Saved word — collapsible. Head is the only clickable surface (hover bg primary-5). Body expanded shows definitions on neutral bg (readable). Card-level lift + border on any hover." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Collapsed</div>
+              <div className="ds-card-body">
+                <div className="dictionary-saved-card" style={{ maxWidth: 520, width: "100%" }}>
+                  <div className="dictionary-saved-head" role="button" tabIndex={0}>
+                    <span className="dictionary-saved-toggle">
+                      <svg className="dictionary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"/>
+                      </svg>
+                      <span className="dictionary-saved-word">Voiture</span>
+                    </span>
+                    <button type="button" className="dictionary-delete-btn" aria-label="Delete">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M10 3h4"/><line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Expanded — body has neutral bg so hover on head doesn't bleed into reading zone</div>
+              <div className="ds-card-body">
+                <div className="dictionary-saved-card expanded" style={{ maxWidth: 520, width: "100%" }}>
+                  <div className="dictionary-saved-head" role="button" tabIndex={0} aria-expanded="true">
+                    <span className="dictionary-saved-toggle">
+                      <svg className="dictionary-chevron open" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"/>
+                      </svg>
+                      <span className="dictionary-saved-word">Voiture</span>
+                    </span>
+                    <button type="button" className="dictionary-delete-btn" aria-label="Delete">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M10 3h4"/><line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="dictionary-saved-body">
+                    <div className="dictionary-definition">
+                      <span className="dictionary-pos">nom féminin</span>
+                      <p className="dictionary-meaning">Véhicule à roues mû par un moteur, destiné au transport de personnes ou de marchandises.</p>
+                      <div className="dictionary-example">
+                        <span className="dictionary-example-label">Exemple</span>
+                        <p className="dictionary-example-text">Ils ont acheté une nouvelle voiture électrique le mois dernier.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Dictionary Result — lookup output (primary-tinted card)</div>
+              <div className="ds-card-body">
+                <div className="dictionary-result" style={{ maxWidth: 520, width: "100%" }}>
+                  <div className="dictionary-result-head">
+                    <div className="dictionary-word">Voiture</div>
+                    <button type="button" className="edit-btn dictionary-save-toggle">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                      Save
+                    </button>
+                  </div>
+                  <div className="dictionary-definitions">
+                    <div className="dictionary-definition">
+                      <span className="dictionary-pos">nom féminin</span>
+                      <p className="dictionary-meaning">Véhicule à roues mû par un moteur.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Hover rules</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Hover target</th><th>Card effect</th><th>Head bg</th><th>Body bg</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component">Card (any zone)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>lift -2px · border --primary-50 · shadow</td>
+                      <td style={{ color: "var(--text-3)" }}>—</td>
+                      <td style={{ color: "var(--text-3)" }}>—</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Head specifically</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(inherited from card hover)</td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
+                      <td style={{ color: "var(--text-3)" }}>—</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Body (expanded)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(inherited from card hover)</td>
+                      <td style={{ color: "var(--text-3)" }}>—</td>
+                      <td style={{ color: "var(--text-3)" }}>— (stays on --bg2)</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Why body stays neutral : blue tint on content-rich zones hurts readability. The head — the only clickable affordance — carries the explicit hover bg.
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* ── LIST VIEW ── */}
           <section className="ds-section" id="list">
             <SectionTitle title="List View" />
@@ -847,15 +1449,15 @@ export default function DesignSystemPage() {
               <div className="ds-card-label">Preview</div>
               <div className="ds-card-body" style={{ gap: 24, alignItems: 'flex-start' }}>
                 {/* Expanded */}
-                <div style={{ width: 200, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 380 }}>
+                <div style={{ width: 200, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 420 }}>
                   {/* Logo row */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
                     <span style={{ fontFamily: 'var(--font-fraunces)', fontSize: 16, letterSpacing: '-0.02em' }}>readr</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
                   </div>
-                  {/* Nav */}
+                  {/* Shelves */}
                   <div style={{ padding: '12px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '0 8px 6px' }}>My Library</div>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '0 8px 6px' }}>Shelves</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, background: 'var(--primary-10)', color: 'var(--primary)' }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                       <span style={{ fontSize: '0.857rem', fontWeight: 600, flex: 1 }}>My Library</span>
@@ -866,12 +1468,24 @@ export default function DesignSystemPage() {
                       <span style={{ fontSize: '0.857rem', flex: 1 }}>Wishlist</span>
                       <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>1</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '12px 8px 6px', color: 'var(--text-3)' }}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-                      <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', flex: 1 }}>Collections</span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </div>
+                  {/* Quotes section */}
+                  <div style={{ padding: '4px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '12px 8px 6px' }}>Quotes</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, color: 'var(--text-2)' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+                      <span style={{ fontSize: '0.857rem', flex: 1 }}>Quotes</span>
+                      <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>4</span>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-3)', padding: '4px 10px' }}>No collections yet</div>
+                  </div>
+                  {/* Dictionary section */}
+                  <div style={{ padding: '4px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '12px 8px 6px' }}>Dictionary</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, color: 'var(--text-2)' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h11a4 4 0 0 1 4 4v12"/><path d="M4 4v14a2 2 0 0 0 2 2h13"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg>
+                      <span style={{ fontSize: '0.857rem', flex: 1 }}>Dictionary</span>
+                      <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>12</span>
+                    </div>
                   </div>
                   {/* Bottom */}
                   <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -889,7 +1503,7 @@ export default function DesignSystemPage() {
                   </div>
                 </div>
                 {/* Collapsed */}
-                <div style={{ width: 52, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 240, gap: 4, padding: '10px 0' }}>
+                <div style={{ width: 52, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 280, gap: 4, padding: '10px 0' }}>
                   <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 15, letterSpacing: '-0.02em', padding: '8px 0 12px', borderBottom: '1px solid var(--border)', width: '100%', textAlign: 'center' }}>r</div>
                   <div style={{ padding: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: '100%' }}>
                     <div style={{ padding: '8px', borderRadius: 8, background: 'var(--primary-10)', color: 'var(--primary)', display: 'flex' }}>
@@ -899,7 +1513,10 @@ export default function DesignSystemPage() {
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     </div>
                     <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+                    </div>
+                    <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h11a4 4 0 0 1 4 4v12"/><path d="M4 4v14a2 2 0 0 0 2 2h13"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg>
                     </div>
                   </div>
                 </div>
@@ -924,7 +1541,8 @@ export default function DesignSystemPage() {
                   <tr><td>Page shell padding</td><td>260px → 60px (collapsed)</td></tr>
                   <tr><td>Persistance</td><td><code>readr-sidebar-collapsed</code> (localStorage)</td></tr>
                   <tr><td>Mobile</td><td>Overlay fixe, ouverture via hamburger</td></tr>
-                  <tr><td>Collections chevron</td><td>rotate(90deg) animé</td></tr>
+                  <tr><td>Sections</td><td>Shelves · Quotes · Dictionary <span style={{ color: 'var(--text-3)' }}>(Collections : hidden via <code>display: none</code>, pending redesign)</span></td></tr>
+                  <tr><td>Badge canon</td><td><code>.sidebar-badge</code> — bg <code>--primary-10</code>, color <code>--primary-50</code>. Active item: bg <code>--primary</code>, color <code>#fff</code>.</td></tr>
                 </tbody>
               </table>
             </DSCard>
@@ -932,7 +1550,7 @@ export default function DesignSystemPage() {
 
           {/* ── PANEL ── */}
           <section className="ds-section" id="panel">
-            <SectionTitle title="Side Panel" sub="Full height, fixed right, width 480px, border-left, no shadow, no radius. Slides in on row click." />
+            <SectionTitle title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm: 24px inner / 60px cover→info (24 gap + 36 cover margin-bottom) / 24px inter-sections / 8px byline cluster." />
             <div className="ds-card">
               <div className="ds-card-label">Layout</div>
               <div className="ds-card-body" style={{ padding: 0 }}>
@@ -944,32 +1562,141 @@ export default function DesignSystemPage() {
                     <div className="panel-ds-placeholder-row" />
                     <div className="panel-ds-placeholder-row" />
                   </div>
-                  <div className="panel-ds-panel">
+                  <div className="panel-ds-panel" style={{ padding: "24px 20px", display: "flex", flexDirection: "column", gap: 24 }}>
                     <div className="panel-preview-header">
-                      <button className="btn btn-icon btn-sm">
+                      <button className="panel-share" style={{ position: "static" }} aria-label="Share">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                      </button>
+                      <button className="panel-close" style={{ position: "static" }} aria-label="Close">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                       </button>
                     </div>
-                    <div className="panel-preview-cover" />
-                    <div className="panel-preview-body">
-                      <span className="panel-preview-tag">Library</span>
-                      <div className="panel-preview-title">A Brief History of Time</div>
-                      <div className="panel-preview-author">Stephen Hawking</div>
-                      <div className="panel-preview-meta">Science · 1988</div>
-                      <div className="panel-preview-section">
-                        <span className="panel-section-eyebrow">About</span>
-                        <div className="panel-preview-synopsis">A landmark volume in science writing by one of the great minds of our time...</div>
-                      </div>
-                      <div className="panel-preview-section">
-                        <span className="panel-section-eyebrow">Quotes</span>
-                        <div className="panel-preview-quote">"We are just an advanced breed of monkeys on a minor planet of a very average star."</div>
-                        <button className="panel-quotes-add" style={{ marginTop: 12 }}>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                          Add a quote
-                        </button>
+                    <div className="panel-main">
+                      <div className="panel-preview-cover panel-cover-wrap" />
+                      <div className="panel-info">
+                        <div className="panel-preview-title">A Brief History of Time</div>
+                        <div className="panel-byline">
+                          <div className="panel-preview-author">Stephen Hawking</div>
+                          <div className="panel-preview-meta">Science · 1988</div>
+                        </div>
+                        <div className="panel-section">
+                          <span className="panel-section-eyebrow">About</span>
+                          <div className="panel-preview-synopsis">A landmark volume in science writing by one of the great minds of our time...</div>
+                        </div>
+                        <div className="panel-actions">
+                          <button className="panel-delete-btn">Delete</button>
+                        </div>
                       </div>
                     </div>
+                    <div className="panel-divider" />
+                    <div className="panel-quotes">
+                      <span className="panel-section-eyebrow">Quotes</span>
+                      <div className="panel-preview-quote">"We are just an advanced breed of monkeys on a minor planet of a very average star."</div>
+                      <button className="panel-quotes-add" style={{ alignSelf: "flex-start" }}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add a quote
+                      </button>
+                    </div>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy (BookPanel)</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Wrapper</th><th>Role</th><th>Gap</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.panel-inner</code></td><td style={{ fontSize: "0.82rem" }}>Outer container. Padding 96 / 32 / 32. Hosts share + close absolute</td><td style={{ fontFamily: "monospace" }}>24px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-main</code></td><td style={{ fontSize: "0.82rem" }}>Cover + info block</td><td style={{ fontFamily: "monospace" }}>24px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-cover-wrap</code></td><td style={{ fontSize: "0.82rem" }}>Cover. align-self: center + margin-bottom 36px (= 60px total to info)</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-info</code></td><td style={{ fontSize: "0.82rem" }}>Title / byline / About / actions</td><td style={{ fontFamily: "monospace" }}>24px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-byline</code></td><td style={{ fontSize: "0.82rem" }}>Author + meta (tight cluster)</td><td style={{ fontFamily: "monospace" }}>8px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-section</code></td><td style={{ fontSize: "0.82rem" }}>Semantic wrapper : eyebrow + content. Width 100%</td><td style={{ color: "var(--text-3)" }}>eyebrow margin-bottom 12</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-actions</code></td><td style={{ fontSize: "0.82rem" }}>Flex row, justify-between. Move + Delete buttons</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-divider</code></td><td style={{ fontSize: "0.82rem" }}>Canonical 1px separator. Used between panel-main and panel-quotes</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-quotes</code></td><td style={{ fontSize: "0.82rem" }}>Eyebrow + list + add button. Width 100%</td><td style={{ fontFamily: "monospace" }}>16px</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          {/* ── QUOTE PANEL ── */}
+          <section className="ds-section" id="quote-panel">
+            <SectionTitle title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Same drawer mechanics as Book Panel, with quote-specific content : text, book chip (clickable → BookPanel), edit/delete." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Content layout</div>
+              <div className="ds-card-body">
+                <div style={{ maxWidth: 420, width: "100%", border: "1.5px solid var(--border-subtle)", borderRadius: 8, padding: 24, background: "var(--bg)", display: "flex", flexDirection: "column", gap: 24 }}>
+                  {/* Header row: share + close (absolute in real panel, inline here) */}
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <button className="panel-share" style={{ position: "static" }} aria-label="Share">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                      </svg>
+                    </button>
+                    <button className="panel-close" style={{ position: "static" }} aria-label="Close">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </div>
+                  {/* .panel-main — quote section + date + actions */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                    <div>
+                      <span className="panel-section-eyebrow">Quote</span>
+                      <p className="quote-panel-text" style={{ margin: 0 }}>
+                        "Qui suis-je ? Qu'est-ce que je fais là ? Il y a quelque chose qui ressemble à la vérité."
+                      </p>
+                    </div>
+                    <div className="quote-panel-date">Added Mar 14, 2026</div>
+                    <div className="panel-actions">
+                      <button className="panel-move-btn">Edit</button>
+                      <button className="panel-delete-btn">Delete</button>
+                    </div>
+                  </div>
+                  {/* divider */}
+                  <div className="panel-divider" />
+                  {/* book section */}
+                  <div>
+                    <span className="panel-section-eyebrow">Book</span>
+                    <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ marginTop: 12 }}>
+                      <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                      <div className="quote-book-chip-body">
+                        <div className="quote-book-chip-title">Tropique du Cancer</div>
+                        <div className="quote-book-chip-author">Henry Miller</div>
+                      </div>
+                      <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy — shares primitives with BookPanel</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Wrapper / element</th><th>Role</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.panel-inner</code></td><td style={{ fontSize: "0.82rem" }}>Same as BookPanel — padding 96/32/32, gap 24, hosts share + close absolute</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-main</code></td><td style={{ fontSize: "0.82rem" }}>Quote section + date + actions. Gap 24px, width 100%</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td style={{ fontSize: "0.82rem" }}>Eyebrow "Quote" + <code>.quote-panel-text</code></td></tr>
+                    <tr><td className="token-table-component"><code>.quote-panel-text</code></td><td style={{ fontSize: "0.82rem" }}>Font 16 / line-height 1.7 — matches <code>.quote-card-text</code> for continuity</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-panel-date</code></td><td style={{ fontSize: "0.82rem" }}>Subtitle (12px, text-3). Conditional on <code>createdAt</code></td></tr>
+                    <tr><td className="token-table-component"><code>.panel-actions</code></td><td style={{ fontSize: "0.82rem" }}>Edit (move-btn) + Delete. Delete triggers <code>DeleteModal</code> with <code>type: 'quote'</code></td></tr>
+                    <tr><td className="token-table-component"><code>.panel-divider</code></td><td style={{ fontSize: "0.82rem" }}>Canonical 1px separator (conditional — only if book exists)</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-section</code> (Book)</td><td style={{ fontSize: "0.82rem" }}>Eyebrow "Book" + <code>&lt;BookChip&gt;</code> (base palette, <code>--bg3</code> default)</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Drawer mechanics (position, width, slide-in transition) identical to Book Panel. <code>.quote-panel-divider</code> was replaced by the canonical <code>.panel-divider</code>.
                 </div>
               </div>
             </div>
@@ -1008,6 +1735,94 @@ export default function DesignSystemPage() {
                     <button className="btn btn-ghost btn-md">Cancel</button>
                     <button className="btn btn-primary btn-md">Add to Library</button>
                   </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── DELETE MODAL ── */}
+          <section className="ds-section" id="delete-modal">
+            <SectionTitle title="Delete Modal" sub="Confirmation modal for destructive actions. Type-routed i18n — same component handles books, quotes, words, and bulk deletions." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-body">
+                <div style={{ maxWidth: 380, margin: "0 auto", background: "var(--card)", border: "1.5px solid var(--border-subtle)", borderRadius: 12, padding: 24, boxShadow: "var(--shadow-lg)" }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>Remove this quote?</div>
+                  <div style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 20 }}>This quote will be permanently removed.</div>
+                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+                    <button className="btn btn-outline btn-md">Cancel</button>
+                    <button className="btn btn-primary btn-md" style={{ background: "#EF4444" }}>Remove</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Target routing — <code>target.type</code> dispatches the i18n</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>target shape</th><th>Title i18n</th><th>Message i18n</th><th>onConfirm handler</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ bulk: true, ids, count }"}</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteBulkTitle(count)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteBulkMsg(count)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteMany(ids)</td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ type: 'quote', id }"}</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.quoteDeleteTitle</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.quoteDeleteMsg</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteQuote(id)</td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ type: 'word', id, title }"}</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.wordDeleteTitle</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.wordDeleteMsg(title)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteWord(id)</td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ id, title, ... }"} (book, no type)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteTitle</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteMsg(title)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteBook(id)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Usage</div>
+              <div className="ds-card-body col" style={{ gap: 12 }}>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  Trigger the modal by setting <code>deleteTarget</code> state. The <code>onConfirm</code> callback receives the full target — dispatch in the parent based on <code>target.type</code>.
+                </p>
+                <pre style={{ fontFamily: "monospace", fontSize: "0.75rem", background: "var(--bg3)", padding: "12px 14px", borderRadius: 6, color: "var(--text)", lineHeight: 1.6, margin: 0, overflow: "auto" }}>
+{`// Open
+<button onClick={() => setDeleteTarget({ type: 'quote', id: q.id })}>…</button>
+
+// Render
+<DeleteModal
+  target={deleteTarget}
+  onClose={() => setDeleteTarget(null)}
+  onConfirm={handleDeleteConfirm}
+  t={t}
+/>
+
+// Dispatch
+function handleDeleteConfirm(payload) {
+  if (payload instanceof Set) return deleteMany(payload);
+  if (payload?.type === 'quote') return deleteQuote(payload.id);
+  if (payload?.type === 'word')  return deleteWord(payload.id);
+  return deleteBook(payload.id);
+}`}
+                </pre>
+                <div style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>
+                  Source: <code>components/library/DeleteModal.js</code>. The Cancel button is <code>.modal-cancel</code> (outline). The confirm is <code>.confirm-modal-delete</code> (red fill).
                 </div>
               </div>
             </div>
@@ -1103,43 +1918,108 @@ export default function DesignSystemPage() {
 
           {/* ── TOKEN USAGE ── */}
           <section className="ds-section" id="token-usage">
-            <SectionTitle title="Token Usage" sub="Mapping composants → tokens CSS." />
-            <div className="ds-card">
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Composant</th><th>État</th><th>Tokens</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Page background","—",["--bg (#FEFEFF)"]],
-                      ["Card","default",["--card (#FFF)","border: transparent"]],
-                      ["Card","hover",["--primary-30","--primary-5","translateY(-4px)"]],
-                      ["Book cover","placeholder",["--primary-5","no letter"]],
-                      ["Button Primary","default",["--primary-50","color: #fff","weight: 600"]],
-                      ["Button Primary","hover",["--primary-60"]],
-                      ["Button Outline","default",["--border","--dark-80","weight: 600"]],
-                      ["Button Outline","hover",["--primary-50","--primary-5"]],
-                      ["Tab","inactif",["--dark-80","weight: 500"]],
-                      ["Tab","actif",["--text","--bg","weight: 600","shadow bleue"]],
-                      ["Import tab","actif",["--primary-50","weight: 600"]],
-                      ["Indicateur tab Photo","actif",["gradient #F67BF8 → #4959E6"]],
-                      ["Indicateur tab File/Manual","actif",["--primary-50"]],
-                      ["Search input","hover",["--primary-50","--primary-5"]],
-                      ["Search input","focus",["--primary-50","--primary-20 ring"]],
-                      ["Text input","hover",["--primary-40","--primary-5"]],
-                      ["Text input","focus",["--primary-50","--primary-20 ring"]],
-                    ].map(([comp, state, tokens]) => (
-                      <tr key={comp+state}>
-                        <td className="token-table-component">{comp}</td>
-                        <td style={{ color: "var(--text-3)", fontSize: "0.857rem" }}>{state}</td>
-                        <td>{tokens.map(t => <span key={t} className="ds-token-chip">{t}</span>)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <SectionTitle title="Token Usage" sub="Authoritative mapping component → tokens. Reflects the current lib state (post border-subtle migration)." />
+
+            {[
+              {
+                label: "Structure — surfaces, strokes, rhythm",
+                rows: [
+                  ["Page bg", "—", ["--bg"]],
+                  ["Card bg — books", "default", ["--card"]],
+                  ["Card bg — quote/dict", "default", ["--bg2"]],
+                  ["Component stroke", "default", ["1.5px", "--border-subtle"]],
+                  ["Divider line", "—", ["1px", "--border-subtle"]],
+                  ["Strong stroke — spinner/dropzone", "—", ["2px", "--border"]],
+                  ["Main-wrap gap", "—", ["48px"]],
+                  ["Section gap — .books-section, .quotes-section, .dictionary-saved-section", "—", ["16px"]],
+                ],
+              },
+              {
+                label: "Buttons",
+                rows: [
+                  ["Primary CTA (.add-btn, .empty-cta, .panel-move-btn)", "default", ["bg --primary-50", "color #fff", "weight 600"]],
+                  ["Primary CTA", "hover", ["bg --primary-60"]],
+                  ["Primary CTA", "active", ["bg --primary-70"]],
+                  ["Outline (.edit-btn, .export-btn, .modal-cancel…)", "default", ["1.5px --border-subtle", "bg #FFFFFF (light)", "color --text"]],
+                  ["Outline", "hover", ["border --primary-50", "bg --primary-5", "color --primary-50"]],
+                  ["Destructive icon (.delete-row-btn, .dictionary-delete-btn)", "default", ["bg --primary-5", "color --primary-60", "40×40"]],
+                  ["Destructive icon", "hover", ["bg --primary-10"]],
+                  ["Destructive icon", "active", ["bg --primary-20", "color --primary-70"]],
+                  ["Destructive icon", "dark default", ["bg --primary-90", "color --primary-30"]],
+                  ["Destructive icon", "dark hover", ["bg --primary-80"]],
+                ],
+              },
+              {
+                label: "Inputs — common state rules",
+                rows: [
+                  ["All inputs", "default", ["1.5px --border-subtle (or transparent for bg3 variants)", "bg varies per variant"]],
+                  ["All inputs", "hover", ["1.5px --primary-50", "bg --primary-5"]],
+                  ["All inputs", "focus", ["1.5px --primary-50", "bg --primary-5", "ring 0 0 0 3px --primary-20"]],
+                  ["All inputs", "dark hover/focus", ["border --primary-40", "bg rgba(73,89,230,0.10)", "ring rgba(73,89,230,0.2)"]],
+                ],
+              },
+              {
+                label: "Cards & Chips",
+                rows: [
+                  ["Book card", "default", ["--card", "1.5px --border-subtle"]],
+                  ["Book card", "hover", ["border --primary-50", "bg --primary-5", "translateY(-2px)", "shadow"]],
+                  ["Quote card", "default", ["--bg2", "1.5px --border-subtle", "padding 20 · gap 20"]],
+                  ["Quote card", "hover", ["border --primary-50", "translateY(-2px)", "shadow (no bg change)"]],
+                  ["Dictionary saved card", "default", ["--bg2", "1.5px --border-subtle"]],
+                  ["Dictionary saved card", "hover (card)", ["border --primary-50", "translateY(-2px)", "shadow — body stays on --bg2"]],
+                  ["Dictionary saved head", "hover", ["bg --primary-5"]],
+                  ["Dictionary result", "default", ["--bg2", "1.5px --border-subtle"]],
+                  ["BookChip — base (QuotePanel, AddQuoteModal)", "default", ["bg --bg3"]],
+                  ["BookChip — base", "hover (interactive)", ["bg --primary-5"]],
+                  ["BookChip inside .quote-card", "default", ["bg --primary-5"]],
+                  ["BookChip inside .quote-card", "hover (interactive)", ["bg --primary-10"]],
+                ],
+              },
+              {
+                label: "Navigation & Panels",
+                rows: [
+                  ["Sidebar nav item", "default", ["bg transparent", "color --text-2"]],
+                  ["Sidebar nav item", "hover", ["bg --primary-5", "color --primary-50"]],
+                  ["Sidebar nav item", "active", ["bg --primary-10", "color --primary"]],
+                  ["Sidebar badge", "default", ["bg --primary-10", "color --primary-50"]],
+                  ["Sidebar badge", "on active item", ["bg --primary", "color #fff"]],
+                  ["Tab (Library / Wishlist)", "inactive", ["color --text-2", "weight 500"]],
+                  ["Tab", "active", ["bg --bg", "color --text", "weight 600", "shadow"]],
+                  ["Panel drawer (.book-panel)", "—", ["bg rgba(255,255,255,0.95)", "backdrop-filter: blur(24px)", "border-left 1px --border-subtle"]],
+                  ["Panel inner (.panel-inner)", "—", ["padding 96/32/32", "flex col, align-items: center", "gap 24"]],
+                  ["Panel main (.panel-main)", "—", ["flex col, gap 24", "width 100%"]],
+                  ["Panel cover (.panel-cover-wrap)", "—", ["align-self: center", "margin-bottom 36 (total 60 to info)"]],
+                  ["Panel info (.panel-info)", "—", ["flex col, gap 24"]],
+                  ["Panel byline (.panel-byline)", "—", ["flex col, gap 8", "groups author + meta tight"]],
+                  ["Panel section (.panel-section)", "—", ["width 100%", "eyebrow margin-bottom 12 handles inner spacing"]],
+                  ["Panel divider (.panel-divider)", "—", ["1px --border-subtle", "width 100%", "canonical — shared by Book + Quote panels"]],
+                  ["Panel quotes (.panel-quotes)", "—", ["flex col, gap 16", "width 100%"]],
+                  ["Panel actions (.panel-actions)", "—", ["flex row, justify-between"]],
+                  ["Import tab — Photo active", "—", ["indicator gradient #F67BF8 → #4959E6", "weight 600"]],
+                  ["Import tab — File/Manual active", "—", ["indicator --primary-50", "weight 600"]],
+                ],
+              },
+            ].map(({ label, rows }) => (
+              <div className="ds-card" key={label}>
+                <div className="ds-card-label">{label}</div>
+                <div className="ds-card-body col" style={{ padding: 0 }}>
+                  <table className="token-table">
+                    <thead>
+                      <tr><th>Component</th><th>State</th><th>Tokens / specs</th></tr>
+                    </thead>
+                    <tbody>
+                      {rows.map(([comp, state, tokens], i) => (
+                        <tr key={comp + state + i}>
+                          <td className="token-table-component">{comp}</td>
+                          <td style={{ color: "var(--text-3)", fontSize: "0.857rem" }}>{state}</td>
+                          <td>{tokens.map((t, j) => <span key={t + j} className="ds-token-chip">{t}</span>)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            ))}
           </section>
 
         </main>
