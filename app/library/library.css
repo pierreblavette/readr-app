@@ -1516,7 +1516,7 @@
 
 .selection-bar.visible { transform: translateX(-50%) translateY(0px); opacity: 1; }
 
-.sel-actions { display: flex; align-items: center; gap: 12px; }
+.sel-actions { display: flex; align-items: center; gap: 8px; }
 
 .selection-count {
   font-size: 14px;
@@ -1524,7 +1524,6 @@
   opacity: 0.75;
 }
 
-.selection-actions { display: flex; gap: 12px; }
 
 .sel-btn {
   height: 40px;
@@ -2084,7 +2083,26 @@
   .view-btns { margin-left: auto; }
   .books-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .books-list { overflow-x: hidden; }
-  .selection-bar { min-width: 0; width: calc(100% - 32px); left: 16px; transform: none; }
+  .selection-bar {
+    min-width: 0;
+    width: calc(100% - 32px);
+    left: 16px;
+    transform: translateY(120px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .selection-bar.visible { transform: translateY(0px); }
+  /* .sel-actions stacks its children vertically on mobile (Select All, Mark, Remove)
+     — order naturally follows JSX: count → actions → cancel */
+  .sel-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+  .sel-btn { width: 100%; justify-content: center; }
+  .selection-count { text-align: center; margin: 8px 0; }
   .book-panel { width: 100%; top: 64px; height: calc(100vh - 64px); }
   .library-footer-inner { padding: 24px 16px; flex-direction: column; align-items: stretch; gap: clamp(16px, 4vw, 24px); }
   .library-footer-inner > span { width: 100%; justify-content: space-between; flex-wrap: wrap; }

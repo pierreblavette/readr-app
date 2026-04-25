@@ -7,28 +7,25 @@ export default function SelectionBar({ editMode, selected, books, tab, t, onCanc
   return (
     <div className={`selection-bar${editMode ? ' visible' : ''}`}>
 
-      <button className="sel-btn sel-cancel" onClick={onCancel}>
-        <span>{t.selCancel}</span>
-      </button>
-
       <span className="selection-count">{t.selCount(count)}</span>
 
       <div className="sel-actions">
         <button className="sel-btn sel-select-all" onClick={onSelectAll}>
           {allSelected ? t.selDeselectAll : t.selSelectAll}
         </button>
-
-        <div className="selection-actions">
-          {tab === 'wishlist' && (
-            <button className="sel-btn sel-confirm" disabled={count === 0} onClick={() => onConfirm('move')}>
-              {t.selConfirmOwned}
-            </button>
-          )}
-          <button className="sel-btn sel-confirm danger" disabled={count === 0} onClick={() => { if (count > 0) onConfirm('delete'); }}>
-            {t.selConfirmRemove}
+        {tab === 'wishlist' && (
+          <button className="sel-btn sel-confirm" disabled={count === 0} onClick={() => onConfirm('move')}>
+            {t.selConfirmOwned}
           </button>
-        </div>
+        )}
+        <button className="sel-btn sel-confirm danger" disabled={count === 0} onClick={() => { if (count > 0) onConfirm('delete'); }}>
+          {t.selConfirmRemove}
+        </button>
       </div>
+
+      <button className="sel-btn sel-cancel" onClick={onCancel}>
+        <span>{t.selCancel}</span>
+      </button>
 
     </div>
   );
