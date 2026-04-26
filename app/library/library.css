@@ -2099,15 +2099,16 @@
     padding: 12px;
   }
   .selection-bar.visible { transform: translateY(0px); }
-  /* .sel-actions stacks its children vertically on mobile (Select All, Mark, Remove)
-     — order naturally follows JSX: count → actions → cancel */
+  /* .sel-actions: horizontal row on mobile, equal-width buttons.
+     Order follows JSX: count → actions → cancel */
   .sel-actions {
-    flex-direction: column;
+    flex-direction: row;
     align-items: stretch;
     gap: 8px;
     width: 100%;
   }
-  .sel-btn { width: 100%; justify-content: center; }
+  .sel-actions .sel-btn { flex: 1; width: auto; justify-content: center; }
+  .sel-cancel { width: 100%; justify-content: center; }
   .selection-count { text-align: center; margin: 8px 0; }
   .book-panel {
     width: 100%; top: 64px;
