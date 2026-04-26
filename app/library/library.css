@@ -967,22 +967,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
+}
+.empty-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
-.empty-icon { width: 80px; height: 80px; margin-bottom: 24px; display: block; }
+.empty-icon { width: 80px; height: 80px; display: block; }
 
 .empty-title {
   font-size: 18px;
   font-weight: 700;
   font-family: var(--font-jakarta), sans-serif;
   color: var(--text);
-  margin-bottom: 8px;
 }
 
 .empty-sub {
   font-size: 14px;
   color: var(--text-2);
-  margin-bottom: 28px;
   max-width: 280px;
 }
 
@@ -1501,7 +1506,7 @@
   background: var(--primary-60);
   color: #fff;
   border-radius: 8px;
-  padding: 12px 12px;
+  padding: 12px 12px 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1543,7 +1548,7 @@
 .sel-cancel { background: rgba(255,255,255,0.15); color: inherit; }
 .sel-cancel:hover { background: rgba(255,255,255,0.25); }
 .sel-confirm { background: var(--primary-50); color: #fff; }
-.sel-confirm:hover { background: var(--primary-60); }
+.sel-confirm:hover { background: var(--primary-40); }
 .sel-confirm.danger { background: rgba(255,255,255,0.15) !important; color: #fff !important; }
 .sel-confirm.danger:hover { background: rgba(255,255,255,0.25) !important; }
 .sel-confirm:disabled { opacity: 0.4; pointer-events: none; }
@@ -1552,7 +1557,7 @@
 
 [data-theme="dark"] .selection-bar { background: var(--primary-60); color: #fff; }
 [data-theme="dark"] .sel-confirm { background: var(--primary-40); }
-[data-theme="dark"] .sel-confirm:hover { background: var(--primary-50); }
+[data-theme="dark"] .sel-confirm:hover { background: var(--primary-30); }
 
 /* ─── MODALS ─── */
 @keyframes overlayIn {
@@ -2091,6 +2096,7 @@
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
+    padding: 12px;
   }
   .selection-bar.visible { transform: translateY(0px); }
   /* .sel-actions stacks its children vertically on mobile (Select All, Mark, Remove)

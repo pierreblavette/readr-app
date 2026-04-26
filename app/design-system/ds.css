@@ -555,13 +555,6 @@
 }
 
 /* ─── SELECTION BAR ─── */
-.sel-bar-preview { background: var(--text); color: var(--bg); border-radius: 8px; padding: 12px 16px; display: inline-flex; align-items: center; gap: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); white-space: nowrap; }
-.sel-count { font-size: 0.857rem; font-weight: 600; opacity: 0.75; }
-.sel-btn-ds { height: 36px; padding: 0 14px; border-radius: 8px; border: none; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
-.sel-cancel-ds { background: rgba(255,255,255,0.15); color: inherit; }
-.sel-cancel-ds:hover { background: rgba(255,255,255,0.25); }
-.sel-confirm-ds { background: var(--primary-50); color: #fff; }
-
 /* ─── EMPTY STATE ─── */
 .empty-preview { text-align: center; padding: 40px 20px; }
 .empty-emoji { font-size: 3rem; margin-bottom: 12px; }

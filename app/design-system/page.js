@@ -1874,15 +1874,37 @@ function handleDeleteConfirm(payload) {
 
           {/* ── SELECTION BAR ── */}
           <section className="ds-section" id="selection-bar">
-            <SectionTitle title="Selection Bar" sub="Floating bar in Edit mode. Background var(--text), text var(--bg)." />
+            <SectionTitle title="Selection Bar" sub="Floating bar fixed bottom-center in Edit mode. Background --primary-60 (light & dark). Slides up from below via translateY(120 → 0)." />
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
-              <div className="ds-card-body">
-                <div className="sel-bar-preview">
-                  <span className="sel-count">3 selected</span>
-                  <button className="sel-btn-ds sel-cancel-ds">Cancel</button>
-                  <button className="sel-btn-ds" style={{ background: "rgba(255,255,255,0.15)", color: "inherit" }}>Move</button>
-                  <button className="sel-btn-ds sel-confirm-ds">Delete</button>
+              <div className="ds-card-label">Preview — Wishlist edit mode (3 buttons in .sel-actions)</div>
+              <div className="ds-card-body" style={{ justifyContent: "center" }}>
+                <div className="selection-bar visible" style={{ position: "static", transform: "none" }}>
+                  <span className="selection-count">3 selected</span>
+                  <div className="sel-actions">
+                    <button className="sel-btn sel-select-all">Select all</button>
+                    <button className="sel-btn sel-confirm">Mark as owned</button>
+                    <button className="sel-btn sel-confirm danger">Remove</button>
+                  </div>
+                  <button className="sel-btn sel-cancel">Cancel</button>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Background</th><th>Border / color</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.selection-bar</code></td><td><span className="ds-token-chip">--primary-60</span></td><td>color #fff · gap 16</td></tr>
+                    <tr><td className="token-table-component"><code>.sel-actions</code></td><td style={{ color: "var(--text-3)" }}>—</td><td>flex row, gap 8 (desktop) / column on mobile</td></tr>
+                    <tr><td className="token-table-component"><code>.sel-select-all</code></td><td>transparent</td><td>border 1.5px rgba(255,255,255,0.5), color #fff</td></tr>
+                    <tr><td className="token-table-component"><code>.sel-confirm</code> (Mark as owned)</td><td><span className="ds-token-chip">--primary-50</span></td><td>color #fff</td></tr>
+                    <tr><td className="token-table-component"><code>.sel-confirm.danger</code> (Remove)</td><td>rgba(255,255,255,0.15)</td><td>color #fff</td></tr>
+                    <tr><td className="token-table-component"><code>.sel-cancel</code></td><td>rgba(255,255,255,0.15)</td><td>color #fff</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
                 </div>
               </div>
             </div>
@@ -1890,14 +1912,120 @@ function handleDeleteConfirm(payload) {
 
           {/* ── EMPTY STATE ── */}
           <section className="ds-section" id="empty">
-            <SectionTitle title="Empty State" />
+            <SectionTitle title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Icons 80×80 illustrative SVGs, custom per page (Library, Wishlist, Quotes, Dictionary)." />
+
             <div className="ds-card">
-              <div className="ds-card-label">Library vide</div>
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.empty</code></td><td style={{ fontSize: "0.82rem" }}>Outer container</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align center, gap 20, padding 80/20</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-icon</code></td><td style={{ fontSize: "0.82rem" }}>Illustration SVG</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>80×80, viewBox 60</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-text</code></td><td style={{ fontSize: "0.82rem" }}>Title + sub wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, gap 8</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-title</code></td><td style={{ fontSize: "0.82rem" }}>Headline</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Jakarta 18 / 700</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-sub</code></td><td style={{ fontSize: "0.82rem" }}>Helper text</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>14 / --text-2 / max-width 280</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-cta</code></td><td style={{ fontSize: "0.82rem" }}>Primary action (optional)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Same anatomy as .add-btn (h 40, --primary-50)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Icon set — 4 illustrative SVGs (80×80, viewBox 60)</div>
+              <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                    <path d="M14 8H51C47 11 47 17 51 20H14C10.6863 20 8 17.3137 8 14C8 10.6863 10.6863 8 14 8Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M24.5 7C20.3579 7 17 10.3579 17 14.5C17 18.6421 20.3579 22 24.5 22H14.5C10.3579 22 7 18.6421 7 14.5C7 10.3579 10.3579 7 14.5 7H24.5Z" fill="#C1C7FB"/>
+                    <path d="M14 10H52C53.1046 10 54 9.10457 54 8C54 6.89543 53.1046 6 52 6H14C9.58172 6 6 9.58172 6 14C6 18.4183 9.58172 22 14 22H52C53.1046 22 54 21.1046 54 20C54 18.8954 53.1046 18 52 18H14C11.7909 18 10 16.2091 10 14C10 11.7909 11.7909 10 14 10Z" fill="#6F7CF2"/>
+                    <path d="M37 6H14C9.58172 6 6 9.58172 6 14C6 18.4183 9.58172 22 14 22H52C53.1046 22 54 21.1046 54 20C54 18.8954 53.1046 18 52 18H14C11.7909 18 10 16.2091 10 14C10 11.7909 11.7909 10 14 10H52C53.1046 10 54 9.10457 54 8C54 6.89543 53.1046 6 52 6H43" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M46 24H9C13 27 13 33 9 36H46C49.3137 36 52 33.3137 52 30C52 26.6863 49.3137 24 46 24Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M35.5 23C39.6421 23 43 26.3579 43 30.5C43 34.6421 39.6421 38 35.5 38H45.5C49.6421 38 53 34.6421 53 30.5C53 26.3579 49.6421 23 45.5 23H35.5Z" fill="#C1C7FB"/>
+                    <path d="M46 26H8C6.89543 26 6 25.1046 6 24C6 22.8954 6.89543 22 8 22H46C50.4183 22 54 25.5817 54 30C54 34.4183 50.4183 38 46 38H8C6.89543 38 6 37.1046 6 36C6 34.8954 6.89543 34 8 34H46C48.2091 34 50 32.2091 50 30C50 27.7909 48.2091 26 46 26Z" fill="#C1C7FB"/>
+                    <path d="M22 26H46C48.2091 26 50 27.7909 50 30C50 32.2091 48.2091 34 46 34H8C6.89543 34 6 34.8954 6 36C6 37.1046 6.89543 38 8 38H46C50.4183 38 54 34.4183 54 30C54 25.5817 50.4183 22 46 22H8C6.89543 22 6 22.8954 6 24C6 25.1046 6.89543 26 8 26H16" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M24.5 39C20.3579 39 17 42.3579 17 46.5C17 50.6421 20.3579 54 24.5 54H14.5C10.3579 54 7 50.6421 7 46.5C7 42.3579 10.3579 39 14.5 39H24.5Z" fill="#C1C7FB"/>
+                    <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#3646D4"/>
+                    <path d="M33 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H39" stroke="#131860" strokeLinecap="round"/>
+                  </svg>
+                  <span className="ds-token-name">Library</span>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                    <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M24.5 39C20.3579 39 17 42.3579 17 46.5C17 50.6421 20.3579 54 24.5 54H14.5C10.3579 54 7 50.6421 7 46.5C7 42.3579 10.3579 39 14.5 39H24.5Z" fill="#C1C7FB"/>
+                    <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#6F7CF2"/>
+                    <path d="M37 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H43" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M46 24H9C13 27 13 33 9 36H46C49.3137 36 52 33.3137 52 30C52 26.6863 49.3137 24 46 24Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M35.5 23C39.6421 23 43 26.3579 43 30.5C43 34.6421 39.6421 38 35.5 38H45.5C49.6421 38 53 34.6421 53 30.5C53 26.3579 49.6421 23 45.5 23H35.5Z" fill="#C1C7FB"/>
+                    <path d="M46 26H8C6.89543 26 6 25.1046 6 24C6 22.8954 6.89543 22 8 22H46C50.4183 22 54 25.5817 54 30C54 34.4183 50.4183 38 46 38H8C6.89543 38 6 37.1046 6 36C6 34.8954 6.89543 34 8 34H46C48.2091 34 50 32.2091 50 30C50 27.7909 48.2091 26 46 26Z" fill="#C1C7FB"/>
+                    <path d="M22 26H46C48.2091 26 50 27.7909 50 30C50 32.2091 48.2091 34 46 34H8C6.89543 34 6 34.8954 6 36C6 37.1046 6.89543 38 8 38H46C50.4183 38 54 34.4183 54 30C54 25.5817 50.4183 22 46 22H8C6.89543 22 6 22.8954 6 24C6 25.1046 6.89543 26 8 26H16" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M40 11.8622C40 13.4087 39.4062 14.8941 38.3458 15.9929C35.9049 18.523 33.5374 21.1613 31.0053 23.5997C30.4249 24.1505 29.5042 24.1304 28.9488 23.5547L21.6538 15.9929C19.4487 13.7072 19.4487 10.0172 21.6538 7.73157C23.8804 5.42345 27.5079 5.42345 29.7346 7.73157C29.8794 7.88165 30.12 7.88182 30.2648 7.73173C31.3324 6.6245 32.7864 6 34.3053 6C35.8242 6 37.2781 6.62444 38.3458 7.73157C39.4063 8.83045 40 10.3158 40 11.8622Z" fill="#6F7CF2"/>
+                    <path d="M21.654 7.73145C23.2834 6.04255 25.6623 5.59108 27.694 6.37402C26.9495 6.66099 26.2511 7.11253 25.654 7.73145C23.449 10.0171 23.449 13.7075 25.654 15.9932L32.0251 22.5977C31.6876 22.9345 31.3485 23.2693 31.0055 23.5996C30.4252 24.1504 29.5043 24.1303 28.9489 23.5547L21.654 15.9932C19.449 13.7075 19.449 10.0171 21.654 7.73145Z" fill="#3646D4"/>
+                    <path d="M40 11.8622C40 13.4087 39.4062 14.8941 38.3458 15.9929C35.9049 18.523 33.5374 21.1613 31.0053 23.5997C30.4249 24.1505 29.5042 24.1304 28.9488 23.5547L21.6538 15.9929C19.4487 13.7072 19.4487 10.0172 21.6538 7.73157C23.8804 5.42345 27.5079 5.42345 29.7346 7.73157L29.9998 8.00642L30.2648 7.73173C31.3324 6.6245 32.7864 6 34.3053 6C35.8242 6 37.2781 6.62444 38.3458 7.73157C39.4063 8.83045 40 10.3158 40 11.8622Z" stroke="#131860" strokeLinecap="round"/>
+                  </svg>
+                  <span className="ds-token-name">Wishlist</span>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                    <path d="M6 14C6 10.2288 6 8.34315 7.17157 7.17157C8.34315 6 10.2288 6 14 6H46C49.7712 6 51.6569 6 52.8284 7.17157C54 8.34315 54 10.2288 54 14V36C54 39.7712 54 41.6569 52.8284 42.8284C51.6569 44 49.7712 44 46 44H40L36.5099 48.8862C33.5423 53.0408 32.0585 55.1181 30 55.1181C27.9415 55.1181 26.4577 53.0408 23.4901 48.8862L20 44H14C10.2288 44 8.34315 44 7.17157 42.8284C6 41.6569 6 39.7712 6 36V14Z" fill="#E8EAFD"/>
+                    <path d="M26 44L29.4902 48.8857C30.9309 50.9026 32.0232 52.429 33 53.4668C31.9647 54.5668 31.0592 55.1182 30 55.1182C27.9415 55.1182 26.4578 53.0404 23.4902 48.8857L20 44H26ZM20 6C16.2288 6 14.3434 6.0003 13.1719 7.17188C12.0003 8.34345 12 10.2288 12 14V36C12 39.7712 12.0003 41.6566 13.1719 42.8281C14.3434 43.9997 16.2288 44 20 44H14C10.2288 44 8.34345 43.9997 7.17188 42.8281C6.0003 41.6566 6 39.7712 6 36V14C6 10.2288 6.0003 8.34345 7.17188 7.17188C8.34345 6.0003 10.2288 6 14 6H20Z" fill="#C1C7FB"/>
+                    <path d="M20 44H14C10.2288 44 8.34315 44 7.17157 42.8284C6 41.6569 6 39.7712 6 36V14C6 10.2288 6 8.34315 7.17157 7.17157C8.34315 6 10.2288 6 14 6H38M22.5 47.5L23.4901 48.8862C26.4577 53.0408 27.9415 55.1181 30 55.1181C32.0585 55.1181 33.5423 53.0408 36.5099 48.8862L40 44H46C49.7712 44 51.6569 44 52.8284 42.8284C54 41.6569 54 39.7712 54 36V14C54 10.2288 54 8.34315 52.8284 7.17157C51.6569 6 49.7712 6 46 6H42" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M28 34C28 35.1046 27.1046 36 26 36H19C18.4477 36 18 35.5523 18 35V33C18 32.4477 18.4477 32 19 32H23C23.5523 32 24 31.5523 24 31V29C24 28.4477 23.5523 28 23 28H18C16.8954 28 16 27.1046 16 26V18C16 16.8954 16.8954 16 18 16H26C27.1046 16 28 16.8954 28 18V34Z" fill="#9BA5F8"/>
+                    <path d="M28 32C28 33.8856 28 34.8284 27.4142 35.4142C26.8284 36 25.8856 36 24 36H20C19.0572 36 18.5858 36 18.2929 35.7071C18 35.4142 18 34.9428 18 34C18 33.0572 18 32.5858 18.2929 32.2929C18.5858 32 19.0572 32 20 32H22C22.9428 32 23.4142 32 23.7071 31.7071C24 31.4142 24 30.9428 24 30C24 29.0572 24 28.5858 23.7071 28.2929C23.4142 28 22.9428 28 22 28H20C18.1144 28 17.1716 28 16.5858 27.4142C16 26.8284 16 25.8856 16 24V20C16 18.1144 16 17.1716 16.5858 16.5858C17.1716 16 18.1144 16 20 16H24C25.8856 16 26.8284 16 27.4142 16.5858C28 17.1716 28 18.1144 28 20V32Z" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M44 34C44 35.1046 43.1046 36 42 36H35C34.4477 36 34 35.5523 34 35V33C34 32.4477 34.4477 32 35 32H39C39.5523 32 40 31.5523 40 31V29C40 28.4477 39.5523 28 39 28H34C32.8954 28 32 27.1046 32 26V18C32 16.8954 32.8954 16 34 16H42C43.1046 16 44 16.8954 44 18V34Z" fill="#6F7CF2"/>
+                    <path d="M44 32C44 33.8856 44 34.8284 43.4142 35.4142C42.8284 36 41.8856 36 40 36H36C35.0572 36 34.5858 36 34.2929 35.7071C34 35.4142 34 34.9428 34 34C34 33.0572 34 32.5858 34.2929 32.2929C34.5858 32 35.0572 32 36 32H38C38.9428 32 39.4142 32 39.7071 31.7071C40 31.4142 40 30.9428 40 30C40 29.0572 40 28.5858 39.7071 28.2929C39.4142 28 38.9428 28 38 28H36C34.1144 28 33.1716 28 32.5858 27.4142C32 26.8284 32 25.8856 32 24V20C32 18.1144 32 17.1716 32.5858 16.5858C33.1716 16 34.1144 16 36 16H40C41.8856 16 42.8284 16 43.4142 16.5858C44 17.1716 44 18.1144 44 20V32Z" stroke="#131860" strokeLinecap="round"/>
+                  </svg>
+                  <span className="ds-token-name">Quotes</span>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                    <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
+                    <rect x="22" y="13" width="24" height="16" rx="2" fill="white"/>
+                    <path d="M32 13H44C45.1046 13 46 13.8954 46 15V27C46 28.1046 45.1046 29 44 29H24C22.8954 29 22 28.1046 22 27V15C22 13.8954 22.8954 13 24 13H28" stroke="#131860" strokeLinecap="round"/>
+                    <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
+                    <rect x="23" y="36" width="12" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M10 10C10 7.79086 11.7909 6 14 6H18V54H14C11.7909 54 10 52.2091 10 50L10 10Z" fill="#4959E6" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="#F4F5FF"/>
+                    <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M26 24L29 18L32 24" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M27.5 21H30.5" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M26 24L29 18L32 24" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M27.5 21H30.5" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M42 24H38L42 18H38" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M42 24H38L42 18H38" stroke="#6F7CF2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M34 21H36" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M19 50H27V55.5858C27 56.4767 25.9229 56.9229 25.2929 56.2929L23.1768 54.1768C23.0791 54.0791 22.9209 54.0791 22.8232 54.1768L20.7071 56.2929C20.0771 56.9229 19 56.4767 19 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M17 50H29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span className="ds-token-name">Dictionary</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Live preview — Library empty</div>
               <div className="ds-card-body">
-                <div className="empty-preview">
-                  <div className="empty-emoji">📚</div>
-                  <div className="empty-title">Your library is empty</div>
-                  <div className="empty-sub">Add your first book to get started</div>
+                <div className="empty" style={{ padding: "40px 20px" }}>
+                  <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                    <path d="M14 8H51C47 11 47 17 51 20H14C10.6863 20 8 17.3137 8 14C8 10.6863 10.6863 8 14 8Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M14 10H52C53.1046 10 54 9.10457 54 8C54 6.89543 53.1046 6 52 6H14C9.58172 6 6 9.58172 6 14C6 18.4183 9.58172 22 14 22H52C53.1046 22 54 21.1046 54 20C54 18.8954 53.1046 18 52 18H14C11.7909 18 10 16.2091 10 14C10 11.7909 11.7909 10 14 10Z" fill="#6F7CF2"/>
+                    <path d="M37 6H14C9.58172 6 6 9.58172 6 14C6 18.4183 9.58172 22 14 22H52C53.1046 22 54 21.1046 54 20C54 18.8954 53.1046 18 52 18H14C11.7909 18 10 16.2091 10 14C10 11.7909 11.7909 10 14 10H52C53.1046 10 54 9.10457 54 8C54 6.89543 53.1046 6 52 6H43" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M46 24H9C13 27 13 33 9 36H46C49.3137 36 52 33.3137 52 30C52 26.6863 49.3137 24 46 24Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M22 26H46C48.2091 26 50 27.7909 50 30C50 32.2091 48.2091 34 46 34H8C6.89543 34 6 34.8954 6 36C6 37.1046 6.89543 38 8 38H46C50.4183 38 54 34.4183 54 30C54 25.5817 50.4183 22 46 22H8C6.89543 22 6 22.8954 6 24C6 25.1046 6.89543 26 8 26H16" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#3646D4"/>
+                    <path d="M33 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H39" stroke="#131860" strokeLinecap="round"/>
+                  </svg>
+                  <div className="empty-text">
+                    <p className="empty-title">Your library is empty</p>
+                    <p className="empty-sub">Start building your collection. Add your first read.</p>
+                  </div>
+                  <button className="empty-cta">Add a book</button>
                 </div>
               </div>
             </div>

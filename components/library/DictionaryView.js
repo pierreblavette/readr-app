@@ -178,15 +178,29 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
 
         {sortedWords.length === 0 ? (
           <div className="empty dictionary-saved-empty">
-            <svg className="empty-icon" viewBox="0 0 80 80" fill="none">
-              <rect x="12" y="16" width="56" height="48" rx="4" fill="var(--accent-bg)"/>
-              <path d="M28 44 L36 26 L44 44" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="31" y1="38" x2="41" y2="38" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round"/>
-              <line x1="24" y1="52" x2="56" y2="52" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" opacity="0.5"/>
-              <line x1="24" y1="58" x2="48" y2="58" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" opacity="0.3"/>
+            <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+              <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
+              <rect x="22" y="13" width="24" height="16" rx="2" fill="white"/>
+              <path d="M32 13H44C45.1046 13 46 13.8954 46 15V27C46 28.1046 45.1046 29 44 29H24C22.8954 29 22 28.1046 22 27V15C22 13.8954 22.8954 13 24 13H28" stroke="#131860" strokeLinecap="round"/>
+              <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
+              <rect x="23" y="36" width="12" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
+              <path d="M10 10C10 7.79086 11.7909 6 14 6H18V54H14C11.7909 54 10 52.2091 10 50L10 10Z" fill="#4959E6" stroke="#131860" strokeLinecap="round"/>
+              <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="#F4F5FF"/>
+              <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="#131860" strokeLinecap="round"/>
+              <path d="M26 24L29 18L32 24" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M27.5 21H30.5" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M26 24L29 18L32 24" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M27.5 21H30.5" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M42 24H38L42 18H38" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M42 24H38L42 18H38" stroke="#6F7CF2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M34 21H36" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M19 50H27V55.5858C27 56.4767 25.9229 56.9229 25.2929 56.2929L23.1768 54.1768C23.0791 54.0791 22.9209 54.0791 22.8232 54.1768L20.7071 56.2929C20.0771 56.9229 19 56.4767 19 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M17 50H29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <p className="empty-title">{t.dictionarySavedEmpty}</p>
-            <p className="empty-sub">{t.dictionarySavedEmptySub}</p>
+            <div className="empty-text">
+              <p className="empty-title">{t.dictionarySavedEmpty}</p>
+              <p className="empty-sub">{t.dictionarySavedEmptySub}</p>
+            </div>
           </div>
         ) : (
           <>
@@ -227,8 +241,10 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
 
             {filteredSavedWords.length === 0 ? (
               <div className="empty dictionary-saved-empty">
-                <p className="empty-title">{t.emptyNoMatch}</p>
-                <p className="empty-sub">{t.emptyNoMatchSub}</p>
+                <div className="empty-text">
+                  <p className="empty-title">{t.emptyNoMatch}</p>
+                  <p className="empty-sub">{t.emptyNoMatchSub}</p>
+                </div>
               </div>
             ) : (
               <div className="dictionary-saved-list">
