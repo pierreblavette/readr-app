@@ -150,6 +150,12 @@
   --shadow-lg:             0 6px 28px rgba(0,0,0,0.55);
 }
 
+/* iOS Safari auto-zooms any input/textarea/select with font-size < 16px on focus.
+   Force 16px on mobile to suppress that zoom — desktop typography unaffected. */
+@media (max-width: 600px) {
+  input, textarea, select { font-size: 16px; }
+}
+
 @layer base {
   html {
     font-size: 14px;
