@@ -179,6 +179,17 @@
 .lang-btn.active { color: var(--text); font-weight: 600; }
 .lang-btn:hover:not(.active) { color: var(--text-2); }
 
+/* Mobile: extend invisible hit area to ~44×44 without changing visible size.
+   The 11px buttons in the footer were too small to tap reliably on touch. */
+@media (max-width: 768px) {
+  .lang-btn { position: relative; }
+  .lang-btn::before {
+    content: '';
+    position: absolute;
+    inset: -14px -10px;
+  }
+}
+
 /* ─── THEME TOGGLE ─── */
 .theme-btn {
   width: 48px;
@@ -2125,7 +2136,7 @@
     -webkit-backdrop-filter: none;
   }
   [data-theme="dark"] .book-panel { background: var(--bg); }
-  .library-footer-inner { padding: 24px 16px; flex-direction: column; align-items: stretch; gap: clamp(16px, 4vw, 24px); }
+  .library-footer-inner { padding: 0 16px; flex-direction: column; align-items: stretch; gap: clamp(16px, 4vw, 24px); }
   .library-footer-inner > span { width: 100%; justify-content: space-between; flex-wrap: wrap; }
   /* Only hide separators that sit directly between groups (children of row spans), not those inside .footer-group */
   .library-footer-inner > span > .footer-sep { display: none; }
@@ -2134,6 +2145,12 @@
   .footer-link-icon { display: inline-block; }
   /* Tighter gap between the two icons in row 3 */
   .footer-links-desktop .footer-group { gap: 8px; }
+  /* Global readability bump on mobile for footer text, buttons, icons */
+  .library-footer { font-size: 13px; }
+  .footer-link { font-size: 13px; }
+  .lang-btn { font-size: 13px; }
+  .lang-sep { font-size: 13px; }
+  .footer-link svg { width: 18px; height: 18px; }
 }
 
 @media (max-width: 480px) {

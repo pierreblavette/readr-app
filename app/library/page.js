@@ -102,7 +102,13 @@ export default function LibraryPage() {
     <div className={`page-shell${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
 
       <Sidebar
-        tab={tab} setTab={setTab}
+        tab={tab}
+        setTab={next => {
+          setTab(next);
+          setPanelBook(null);
+          setPanelQuote(null);
+          if (typeof window !== 'undefined') window.scrollTo(0, 0);
+        }}
         data={data} collections={collections}
         quotes={quotes} words={words}
         collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebarCollapsed}
