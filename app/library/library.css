@@ -1636,7 +1636,7 @@
 }
 
 .modal-close:hover { background: var(--primary-5); color: var(--primary-60); }
-.modal-close svg { width: 18px; height: 18px; }
+.modal-close svg { width: 24px; height: 24px; }
 
 [data-theme="dark"] .modal-close:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
 
