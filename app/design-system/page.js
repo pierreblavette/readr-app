@@ -1985,13 +1985,13 @@ function handleDeleteConfirm(payload) {
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                     <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
-                    <rect x="22" y="13" width="24" height="16" rx="2" fill="white"/>
-                    <path d="M32 13H44C45.1046 13 46 13.8954 46 15V27C46 28.1046 45.1046 29 44 29H24C22.8954 29 22 28.1046 22 27V15C22 13.8954 22.8954 13 24 13H28" stroke="#131860" strokeLinecap="round"/>
                     <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
                     <rect x="23" y="36" width="12" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
-                    <path d="M10 10C10 7.79086 11.7909 6 14 6H18V54H14C11.7909 54 10 52.2091 10 50L10 10Z" fill="#4959E6" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M10 10C10 7.79086 11.7909 6 14 6H18V54H14C11.7909 54 10 52.2091 10 50L10 10Z" fill="#C1C7FB" stroke="#131860" strokeLinecap="round"/>
                     <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="#F4F5FF"/>
                     <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="#131860" strokeLinecap="round"/>
+                    <rect x="22" y="13" width="24" height="16" rx="2" fill="white"/>
+                    <path d="M32 13H44C45.1046 13 46 13.8954 46 15V27C46 28.1046 45.1046 29 44 29H24C22.8954 29 22 28.1046 22 27V15C22 13.8954 22.8954 13 24 13H28" stroke="#131860" strokeLinecap="round"/>
                     <path d="M26 24L29 18L32 24" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M27.5 21H30.5" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M26 24L29 18L32 24" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>

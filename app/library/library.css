@@ -2146,25 +2146,32 @@
 }
 .ob-body {
   width: 100%;
-  padding: 32px 48px 24px;
+  padding: 48px 32px 32px;
   display: flex; flex-direction: column; align-items: center; text-align: center;
 }
-.ob-slides { width: 100%; min-height: 260px; display: flex; align-items: center; justify-content: center; }
-.ob-slide { display: none; flex-direction: column; align-items: center; gap: 28px; width: 100%; }
-.ob-slide.active { display: flex; justify-content: center; }
+.ob-slides { width: 100%; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 40px; }
+.ob-text { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
 .ob-icon {
   display: flex; align-items: center; justify-content: center;
   color: var(--text-3);
-  margin-bottom: 4px;
 }
+/* 120×120 placeholder slot — replace with designed SVG per slide */
+.ob-icon-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  background: var(--primary-5);
+}
+[data-theme="dark"] .ob-icon-placeholder { background: rgba(73,89,230,0.10); }
 .ob-title {
-  font-size: 21px; font-weight: 800; letter-spacing: -0.02em;
-  color: var(--text); line-height: 1.2; margin: 0;
+  font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+  color: var(--text); line-height: 1.3; margin: 0;
   font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
 }
 .ob-desc {
-  font-size: 14px; color: var(--text-2);
-  line-height: 1.7; max-width: 400px; margin: 0;
+  font-size: 16px; font-weight: 500; color: var(--text-2);
+  line-height: 1.7; max-width: 464px; margin: 0;
+  white-space: pre-line;
 }
 .ob-footer {
   width: 100%;
@@ -2695,6 +2702,7 @@
 .dictionary-saved-search-row { min-height: 40px; }
 @media (max-width: 600px) {
   .dictionary-saved-search-row .export-btn { display: inline-flex !important; }
+  .ob-title { white-space: pre-line; }
 }
 .sort-menu-btn { margin-left: 0; }
 

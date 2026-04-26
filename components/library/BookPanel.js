@@ -8,7 +8,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   const [shared, setShared] = useState(false);
 
   async function handleShare() {
-    const text = t.shareText ? t.shareText(book.title, book.author) : `"${book.title}" — ${book.author}`;
+    const text = t.shareText ? t.shareText(book.title, book.author) : `"${book.title}"\n${book.author}`;
     if (navigator.share) {
       try { await navigator.share({ text }); } catch {}
     } else {

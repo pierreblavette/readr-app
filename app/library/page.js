@@ -24,7 +24,6 @@ import Onboarding    from "@/components/library/Onboarding";
 import Toast         from "@/components/library/Toast";
 
 export default function LibraryPage() {
-  const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [createColOpen, setCreateColOpen] = useState(false);
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
@@ -49,6 +48,7 @@ export default function LibraryPage() {
     panelBook, setPanelBook,
     addModalOpen, setAddModal,
     deleteTarget, setDeleteTarget,
+    obOpen, openOb, closeOb,
     books,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     collections, createCollection, deleteCollection,
@@ -338,7 +338,7 @@ export default function LibraryPage() {
         onClose={() => setAddBooksColOpen(false)}
         t={t}
       />
-      <Onboarding open={onboardingOpen} onClose={() => setOnboardingOpen(false)} />
+      <Onboarding open={obOpen} onClose={closeOb} t={t} />
       <Toast message={toastMsg} onDismiss={() => setToastMsg('')} />
 
     </div>{/* end page-shell */}
@@ -350,7 +350,7 @@ export default function LibraryPage() {
           <span className="footer-group">
             <a className="footer-link" href="/">About readr</a>
             <span className="footer-sep">·</span>
-            <button className="footer-link" onClick={() => setOnboardingOpen(true)}>{t.footerHowItWorks}</button>
+            <button className="footer-link" onClick={openOb}>{t.footerHowItWorks}</button>
           </span>
           <span className="footer-sep">·</span>
           <div className="lang-toggle">

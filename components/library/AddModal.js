@@ -15,7 +15,7 @@ function PhotoDropzone({ onClick }) {
         <polyline points="21 15 16 10 5 21"/>
       </svg>
       <div className="import-dropzone-title">Drop a photo or click to browse</div>
-      <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
+      <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
     </GradientDropzone>
   );
 }

@@ -308,7 +308,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                   <line x1="12" y1="3" x2="12" y2="15"/>
                 </svg>
                 <div className="import-dropzone-title">Drop a photo or click to browse</div>
-                <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
+                <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
               </GradientDropzone>
               {scanError && (
                 <div className="scan-alert">

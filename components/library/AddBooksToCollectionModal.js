@@ -27,7 +27,7 @@ export default function AddBooksToCollectionModal({ open, collection, allBooks, 
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
-        <div className="modal-title">{t.colAddBooks} — {collection.emoji} {collection.name}</div>
+        <div className="modal-title">{t.colAddBooks}: {collection.emoji} {collection.name}</div>
         <div className="modal-field" style={{ marginBottom: 12 }}>
           <input
             className="search-input"

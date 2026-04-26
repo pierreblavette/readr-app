@@ -16,7 +16,7 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
 
   async function handleShare() {
     if (!quote) return;
-    const source = quote.bookTitle ? ` — ${quote.bookTitle}${quote.bookAuthor ? ', ' + quote.bookAuthor : ''}` : '';
+    const source = quote.bookTitle ? `\n${quote.bookTitle}${quote.bookAuthor ? ', ' + quote.bookAuthor : ''}` : '';
     const text = `"${quote.text}"${source}`;
     if (navigator.share) {
       try { await navigator.share({ text }); } catch {}
