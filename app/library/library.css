@@ -2110,7 +2110,12 @@
   .sel-btn { width: 100%; justify-content: center; }
   .selection-count { text-align: center; margin: 8px 0; }
   .book-panel {
-    width: 100%; top: 64px; height: calc(100vh - 64px);
+    width: 100%; top: 64px;
+    /* iOS Safari URL bar shrinks viewport: dvh tracks the visible area
+       so the panel doesn't extend under the address bar (was cutting off
+       bottom of scroll). */
+    height: calc(100dvh - 64px);
+    -webkit-overflow-scrolling: touch;
     /* iOS Safari/Chromium-WebKit: backdrop-filter: blur over the scrollable
        library is GPU-heavy and causes multi-second freezes on open. Drop the
        blur on mobile and use a solid bg instead. */
@@ -3351,9 +3356,10 @@ button.quote-book-chip {
 }
 
 @media (max-width: 768px) {
-  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: var(--shadow-lg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  /* z-index above .book-panel (320) so the mobile drawer covers the panel */
+  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: var(--shadow-lg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; }
   .sidebar.mobile-open { transform: translateX(0); }
-  .sidebar-overlay { display: block; }
+  .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
 }
