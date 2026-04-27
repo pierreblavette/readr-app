@@ -3,11 +3,14 @@ import "./ds.css";
 import "../library/library.css";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import {
+  ReadrIcon, TrackingIcon, ScanIcon, QuoteIcon, WordsIcon, DataControlIcon
+} from "@/components/library/Onboarding";
 
 const NAV = {
   Foundations: ["logo","colors","typography","highlight","spacing","shadows","strokes"],
   Components:  ["autocomplete","badges","book-chip","btn-states","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
-  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","footer"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -19,7 +22,7 @@ const NAV_LABELS = {
   "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
-  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","footer":"Footer",
+  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","onboarding":"Onboarding","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -600,21 +603,6 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col" style={{ gap: 8 }}>
                 <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
                   All strokes are rendered <strong>inside</strong> the declared size (equivalent to Figma's "Inside" stroke). This is enforced globally by Tailwind's <code>box-sizing: border-box</code> reset — the stroke eats into the content area without enlarging the element.
-                </p>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <strong>Exception — stretch containers</strong>: when a container wraps flex children of a fixed pixel height (e.g. <code>.view-btns</code> wrapping two 40px buttons), a standard <code>border</code> adds <code>2 × weight</code> to the container's natural height. Use <code>outline</code> with negative offset instead:
-                </p>
-                <pre style={{ fontFamily: "monospace", fontSize: "0.75rem", background: "var(--bg3)", padding: "12px 14px", borderRadius: 6, color: "var(--text)", lineHeight: 1.6, margin: 0 }}>
-{`.view-btns {
-  height: 40px;
-  outline: 1.5px solid var(--border-subtle);
-  outline-offset: -1.5px;
-  border-radius: 8px;
-  overflow: hidden;
-}`}
-                </pre>
-                <p style={{ fontSize: "0.82rem", color: "var(--text-3)", lineHeight: 1.7 }}>
-                  <code>outline</code> is painted outside the element by default ; a negative offset pulls it back inside, over the children. Doesn't consume layout space. Respects <code>border-radius</code> in modern browsers.
                 </p>
               </div>
             </div>
@@ -2026,6 +2014,63 @@ function handleDeleteConfirm(payload) {
                     <p className="empty-sub">Start building your collection. Add your first read.</p>
                   </div>
                   <button className="empty-cta">Add a book</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── ONBOARDING ── */}
+          <section className="ds-section" id="onboarding">
+            <SectionTitle title="Onboarding" sub="6-slide modal shown on first visit (persisted via readr-onboarding-seen) and reopenable from the footer. Each slide pairs an illustrative SVG (120×120) with a verb-led title and a single-sentence desc. Mobile titles use \\n + white-space: pre-line for controlled line breaks." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.ob-overlay</code></td><td style={{ fontSize: "0.82rem" }}>Backdrop, click outside to close</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>fixed, z-index 400, blur 20</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-modal</code></td><td style={{ fontSize: "0.82rem" }}>Modal shell</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>max-width ~520, --bg2, --shadow-lg</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-body</code></td><td style={{ fontSize: "0.82rem" }}>Inner padding</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 48 32 32</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-slides</code></td><td style={{ fontSize: "0.82rem" }}>Vertical stack: icon → text → dots</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align center, gap 40</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-icon</code></td><td style={{ fontSize: "0.82rem" }}>SVG slot</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>120×120, viewBox 60</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td style={{ fontSize: "0.82rem" }}>Fallback when no icon</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>120×120, --primary-5, radius 16</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-text</code></td><td style={{ fontSize: "0.82rem" }}>Title + desc wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align center, gap 20</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-title</code></td><td style={{ fontSize: "0.82rem" }}>Slide title</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Jakarta 20 / 800, line-height 1.3</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-desc</code></td><td style={{ fontSize: "0.82rem" }}>Slide description</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>16 / 500, line-height 1.7, max-width 464</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-dots</code></td><td style={{ fontSize: "0.82rem" }}>Pagination indicator</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex row, gap 6, dot 6×6 → 20×6 active</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-footer</code></td><td style={{ fontSize: "0.82rem" }}>Skip + Previous + Next/Get started</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 18, flex col, gap 24</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Icon set — 6 illustrative SVGs (120×120, viewBox 60)</div>
+              <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <ReadrIcon />
+                  <span className="ds-token-name">Readr (slide 1)</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <TrackingIcon />
+                  <span className="ds-token-name">Tracking (slide 2)</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <ScanIcon />
+                  <span className="ds-token-name">Scan (slide 3)</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <QuoteIcon />
+                  <span className="ds-token-name">Quote (slide 4)</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <WordsIcon />
+                  <span className="ds-token-name">Words (slide 5)</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <DataControlIcon />
+                  <span className="ds-token-name">Data control (slide 6)</span>
                 </div>
               </div>
             </div>

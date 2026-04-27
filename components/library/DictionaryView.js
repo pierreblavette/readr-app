@@ -135,7 +135,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                   </svg>
-                  {t.dictionarySave}
+                  <span className="dict-save-label">{t.dictionarySave}</span>
                 </>
               )}
               {alreadySaved && (
@@ -144,13 +144,13 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
-                    {t.dictionarySaved}
+                    <span className="dict-save-label">{t.dictionarySaved}</span>
                   </span>
                   <span className="dict-save-hover">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>
-                    {t.dictionaryDelete}
+                    <span className="dict-save-label">{t.dictionaryDelete}</span>
                   </span>
                 </>
               )}
