@@ -963,8 +963,8 @@
 
 .delete-row-btn:hover { background: var(--primary-10); }
 .delete-row-btn:active { background: var(--primary-20); color: var(--primary-70); }
-[data-theme="dark"] .delete-row-btn { background: var(--primary-90); color: var(--primary-30); }
-[data-theme="dark"] .delete-row-btn:hover { background: var(--primary-80); }
+[data-theme="dark"] .delete-row-btn { background: var(--primary-80); color: var(--primary-30); }
+[data-theme="dark"] .delete-row-btn:hover { background: var(--primary-70); color: var(--primary-20); }
 .delete-row-btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 .delete-row-btn svg { width: 18px; height: 18px; }
 
@@ -2261,7 +2261,9 @@
   position: sticky;
   top: 0;
   width: 260px;
-  height: 100vh;
+  /* dvh tracks iOS Safari's visible area (URL bar shrinks viewport),
+     so .sidebar-bottom stays reachable instead of being pushed under the bar. */
+  height: 100dvh;
   max-height: 100%;
   flex-shrink: 0;
   background: var(--bg);
@@ -3406,5 +3408,8 @@ button.quote-book-chip {
   .sidebar.mobile-open { transform: translateX(0); }
   .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }
+  /* theme-btn is already exposed in the mobile toolbar — drop the sidebar
+     bottom block to avoid duplication. */
+  .sidebar-bottom { display: none; }
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
 }
