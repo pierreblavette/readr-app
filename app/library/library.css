@@ -2501,13 +2501,15 @@
   .export-btn { padding: 0; width: 40px; justify-content: center; }
   .export-btn-label,
   .export-btn-chevron { display: none; }
+  /* Mobile: panel-header Share collapses to icon-only (40×40) */
+  .panel-header-share { padding: 0; width: 40px; justify-content: center; }
+  .panel-header-share-label { display: none; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
 }
 
 /* Very small screens (iPhone SE etc.) — grid layout for panel-header-actions
-   so Share aligns under .panel-move-btn instead of sticking to the right.
-   Share also collapses to icon-only at this breakpoint. */
+   so Share aligns under .panel-move-btn instead of sticking to the right. */
 @media (max-width: 400px) {
   .panel-header-actions {
     display: grid;
@@ -2515,8 +2517,7 @@
     gap: 12px;
     justify-content: start;
   }
-  .panel-header-share { margin-left: 0; padding: 0; width: 40px; justify-content: center; }
-  .panel-header-share-label { display: none; }
+  .panel-header-share { margin-left: 0; }
   .view-btns { margin-left: auto; }
   .books-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .now-reading-list { grid-template-columns: 1fr; gap: 12px; }
