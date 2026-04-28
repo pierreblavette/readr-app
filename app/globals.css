@@ -97,7 +97,8 @@
   --light-80:    rgba(245,246,255,0.80);
   --light-90:    rgba(245,246,255,0.90);
   --light-100:   #F5F6FF;
-  /* Primary scale */
+  /* Primary scale — light tier (--primary-3/5/10 are overridden in dark theme below to keep the
+     "card hover / button tinted" pattern as solid colors instead of rgba over varying baselines) */
   --primary-3:   #FAFAFF;
   --primary-5:   #F4F5FF;
   --primary-10:  #E8EAFD;
@@ -149,6 +150,12 @@
   --ghost-hover:           rgba(73,89,230,0.12);
   --shadow-sm:             0 1px 4px rgba(0,0,0,0.4), 0 2px 12px rgba(0,0,0,0.3);
   --shadow-lg:             0 6px 28px rgba(0,0,0,0.55);
+  /* Solid dark equivalents of light tints — computed over card baseline #1E1E1E
+     (the dominant baseline: cards, books-list, modals all sit on var(--card)).
+     Solid (not rgba) so render is identical regardless of actual parent baseline. */
+  --primary-3:             #222432;  /* card hover (was rgba 0.10) */
+  --primary-5:             #232536;  /* button bg / input hover (was rgba 0.12) */
+  --primary-10:            #272B4A;  /* button hover stronger (was rgba 0.22) */
 }
 
 /* iOS Safari auto-zooms any input/textarea/select with font-size < 16px on focus.
