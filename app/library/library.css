@@ -2504,6 +2504,8 @@
   /* Mobile: panel-header Share collapses to icon-only (40×40) */
   .panel-header-share { padding: 0; width: 40px; justify-content: center; }
   .panel-header-share-label { display: none; }
+  /* Mobile: tighter horizontal padding for the panel content */
+  .panel-inner { padding-left: 16px; padding-right: 16px; }
   .view-btns { margin-left: auto; }
   .books-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .now-reading-list { grid-template-columns: 1fr; gap: 12px; }
