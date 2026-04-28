@@ -123,9 +123,9 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                 <div className="panel-byline">
                   <div className="panel-author">{book.author}</div>
                   <div className="panel-meta">
-                    {book.genre && <span>{book.genre}</span>}
-                    {book.genre && book.year && <span className="panel-meta-sep">·</span>}
-                    {book.year && <span>{book.year}</span>}
+                    <span>{book.genre || 'NC'}</span>
+                    <span className="panel-meta-sep" aria-hidden="true">·</span>
+                    <span>{book.year || 'NC'}</span>
                   </div>
                 </div>
               </div>
