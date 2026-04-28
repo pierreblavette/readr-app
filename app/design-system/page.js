@@ -320,8 +320,11 @@ export default function DesignSystemPage() {
               ))}
             </div>
             <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 6, marginTop: 2 }}>--primary-N · ★ anchor = --accent (#4959E6)</div>
+            <div style={{ fontSize: "0.75rem", color: "var(--text-2)", lineHeight: 1.6, marginBottom: 8 }}>
+              <strong>--primary-3</strong> (#FAFAFF) — ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below --primary-5 so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at --primary-5) stay visible without blending into the hovered card.
+            </div>
             <div style={{ fontSize: "0.75rem", color: "var(--text-2)", lineHeight: 1.6, marginBottom: 28 }}>
-              <strong>--primary-3</strong> (#FAFAFF) — ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row). One tier below --primary-5 so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at --primary-5) stay visible without blending into the hovered card.
+              <strong>Dark mode override</strong> — --primary-3, --primary-5 and --primary-10 resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <code>var(--card)</code> #1E1E1E to preserve visual rendering: <code>--primary-3</code>=#222432 (card hover), <code>--primary-5</code>=#232536 (button bg), <code>--primary-10</code>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <code>.list-row</code> hover (parent <code>.books-list</code> on --card) looked different from <code>.now-reading-card</code> hover (no parent bg, mixed with --bg).
             </div>
 
             <p className="palette-section-label">Neutrals — Dark (tinted primary)</p>
@@ -1204,7 +1207,7 @@ export default function DesignSystemPage() {
 
           {/* ── BOOK CARD ── */}
           <section className="ds-section" id="card">
-            <SectionTitle title="Book Card" sub="White bg, transparent border by default. Hover: border primary-30 + primary-5 bg + lift. No shadow. Placeholder: primary-5, no letter." />
+            <SectionTitle title="Book Card" sub="--card bg, 1.5px --border-subtle. Hover: border primary-50, bg --primary-3, transform translateY -2 + shadow. Placeholder cover: gradient (coverColors hash) + Jakarta letter (white-85, 3.5rem/800) — same pattern across BookCard, BookPanel, NowReadingCard, BookChip." />
             <div className="ds-card">
               <div className="ds-card-label">Grid view</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap" }}>
@@ -1541,7 +1544,7 @@ export default function DesignSystemPage() {
 
           {/* ── PANEL ── */}
           <section className="ds-section" id="panel">
-            <SectionTitle title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm: 24px inner / 60px cover→info (24 gap + 36 cover margin-bottom) / 24px inter-sections / 8px byline cluster." />
+            <SectionTitle title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info meta↔actions / 24 .panel-info-header title+byline / 16 .panel-section eyebrow→content / 40 .panel-quotes content↔add. Finished section uses .panel-section.is-finished modifier (border-top + border-bottom + padding 24) for visual emphasis. Edit/Remove buttons use .panel-finished-btn (small ghost, 32 height, 13/600, --bg3 dark)." />
             <div className="ds-card">
               <div className="ds-card-label">Layout</div>
               <div className="ds-card-body" style={{ padding: 0 }}>
