@@ -1401,8 +1401,11 @@
   flex-wrap: wrap;
 }
 /* Asymmetric padding for icon-left button (mirrors .panel-quotes-add, .btn-ai)
-   + push to the right edge of .panel-header-actions */
+   + push to the right edge of .panel-header-actions when siblings exist. */
 .panel-header-share { padding: 0 20px 0 12px; margin-left: auto; }
+/* Finished books: Share is the only button in the row — align to the left
+   instead of floating alone on the right. */
+.panel-header-share:only-child { margin-left: 0; }
 .panel-byline {
   display: flex;
   flex-direction: column;
@@ -1462,9 +1465,14 @@
   gap: 16px;
 }
 .panel-section.is-finished {
-  padding: 24px 0;
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  /* Same outer rhythm as .panel-quiz: gap 24 between content and trailing
+     actions/disclaimer. The global panel-divider handles separation. */
+  gap: 24px;
+}
+.panel-finished-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 .panel-section-eyebrow {
   display: block;
@@ -1496,7 +1504,7 @@
   gap: 16px;
 }
 .panel-cast-hint {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1575,13 +1583,13 @@
   color: var(--text-3);
 }
 .panel-cast-role {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
 }
 .panel-cast-relations {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1603,10 +1611,23 @@
   gap: 16px;
 }
 .panel-quiz-hint {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
+  margin: 0;
+}
+.panel-quiz-hint-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.panel-quiz-hint-note {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-3);
+  font-style: italic;
+  line-height: 1.5;
   margin: 0;
 }
 .panel-quiz-action { align-self: flex-start; }
@@ -1650,20 +1671,22 @@
   font-size: 17px;
   font-weight: 600;
   color: var(--text);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 .panel-quiz-choices {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+/* Mirrors .panel-quote-item: padding 10/12, bg --bg3, no border, hover
+   --primary-5 (light) / --primary-3 (dark), focus-visible ring. */
 .panel-quiz-choice {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 10px 12px;
   background: var(--bg3);
-  border: 1.5px solid transparent;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   font-family: inherit;
@@ -1671,15 +1694,24 @@
   font-weight: 500;
   color: var(--text);
   text-align: left;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  width: 100%;
+  transition: background 0.15s, color 0.15s;
 }
-.panel-quiz-choice:hover { background: var(--primary-3); }
-.panel-quiz-choice.is-selected {
-  background: var(--primary-5);
-  border-color: var(--primary-50);
-  color: var(--text);
+.panel-quiz-choice:hover { background: var(--primary-10); }
+[data-theme="dark"] .panel-quiz-choice:hover { background: var(--primary-5); }
+.panel-quiz-choice:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-50);
 }
-[data-theme="dark"] .panel-quiz-choice.is-selected { border-color: var(--primary-40); }
+.panel-quiz-choice.is-selected,
+.panel-quiz-choice.is-selected:hover {
+  background: var(--primary-50);
+  color: #fff;
+}
+[data-theme="dark"] .panel-quiz-choice.is-selected,
+[data-theme="dark"] .panel-quiz-choice.is-selected:hover {
+  background: var(--primary-40);
+}
 .panel-quiz-choice-letter {
   display: inline-flex;
   align-items: center;
@@ -1694,21 +1726,25 @@
   flex-shrink: 0;
 }
 .panel-quiz-choice.is-selected .panel-quiz-choice-letter {
-  background: var(--primary-50);
-  color: #fff;
+  background: #fff;
+  color: var(--primary-50);
 }
-[data-theme="dark"] .panel-quiz-choice.is-selected .panel-quiz-choice-letter { background: var(--primary-40); }
+[data-theme="dark"] .panel-quiz-choice.is-selected .panel-quiz-choice-letter {
+  background: #fff;
+  color: var(--primary-40);
+}
 .panel-quiz-choice-text {
   flex: 1;
   line-height: 1.4;
 }
 .panel-quiz-nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
   margin-top: 8px;
 }
-.panel-quiz-nav .btn-sm { min-width: 64px; }
+/* Asymmetric padding when icon is on the trailing edge */
+.panel-quiz-nav-next { padding: 0 12px 0 20px; }
 
 /* Result */
 .panel-quiz-result {
@@ -1716,15 +1752,20 @@
   flex-direction: column;
   gap: 24px;
 }
+.panel-quiz-score-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 .panel-quiz-score {
   font-size: 24px;
   font-weight: 700;
   color: var(--text);
-  font-family: var(--font-fraunces), serif;
+  font-family: var(--font-jakarta), sans-serif;
   letter-spacing: -0.02em;
 }
 .panel-quiz-score-msg {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1746,7 +1787,7 @@
 .panel-quiz-review-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   padding: 16px;
   background: var(--bg3);
   border-radius: 8px;
@@ -1793,13 +1834,19 @@
   letter-spacing: 0.08em;
   color: var(--text-3);
 }
+/* Mirrors .panel-cast-role */
+.panel-quiz-review-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2);
+  line-height: 1.8;
+}
 .panel-quiz-review-explanation {
   font-size: 13px;
   font-weight: 500;
   font-style: italic;
-  color: var(--text-3);
+  color: var(--text-2);
   line-height: 1.6;
-  margin-top: 4px;
 }
 .panel-quiz-end-actions {
   display: flex;
@@ -1808,7 +1855,7 @@
 
 /* Finished reading display */
 .panel-finished-date {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1838,7 +1885,7 @@
   color: var(--text-2);
 }
 .panel-finished-note {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1853,14 +1900,14 @@
   margin-top: 4px;
 }
 .panel-finished-btn {
-  height: 32px;
-  padding: 0 16px;
-  border-radius: 7px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF;
   color: var(--text);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
@@ -4046,7 +4093,7 @@ button.quote-book-chip {
   color: var(--text-2);
 }
 .panel-quotes-empty {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;

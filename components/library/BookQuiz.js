@@ -26,7 +26,20 @@ export default function BookQuiz({ book, lang, t }) {
     if (!book) return;
     const cache = loadQuizCache();
     const cached = cache[quizKey(book.title, book.author, lang)];
-    if (cached) setQuestions(cached);
+    if (!cached) return;
+    // Backward compat: legacy cache stored a bare array of questions.
+    if (Array.isArray(cached)) {
+      setQuestions(cached);
+      return;
+    }
+    if (cached.questions) {
+      setQuestions(cached.questions);
+      // If the user already completed this quiz, restore the result view.
+      if (cached.completed && Array.isArray(cached.answers)) {
+        setAnswers(cached.answers);
+        setStage(STAGE.COMPLETED);
+      }
+    }
   }, [book?.id, lang]);
 
   async function handleGenerate() {
@@ -36,10 +49,14 @@ export default function BookQuiz({ book, lang, t }) {
     try {
       const qs = await fetchQuiz(book.title, book.author, lang);
       const cache = loadQuizCache();
-      cache[quizKey(book.title, book.author, lang)] = qs;
+      cache[quizKey(book.title, book.author, lang)] = { questions: qs, answers: null, completed: false };
       saveQuizCache(cache);
       setQuestions(qs);
-      setStage(STAGE.IDLE);
+      // Skip the "Start" intermediate step — drop straight into the quiz
+      // once the questions are ready.
+      setAnswers(new Array(qs.length).fill(null));
+      setCurrentIdx(0);
+      setStage(STAGE.PLAYING);
     } catch (e) {
       setError(e.status === 404 ? 'not_found' : 'error');
       setStage(STAGE.ERROR);
@@ -62,12 +79,30 @@ export default function BookQuiz({ book, lang, t }) {
 
   function handleSubmit() {
     setStage(STAGE.COMPLETED);
+    // Persist the completed answers so reopening the panel restores the
+    // result view without forcing the user to re-take the quiz.
+    const cache = loadQuizCache();
+    cache[quizKey(book.title, book.author, lang)] = {
+      questions,
+      answers,
+      completed: true,
+    };
+    saveQuizCache(cache);
   }
 
   function handleReplay() {
-    setAnswers(new Array(questions.length).fill(null));
+    const fresh = new Array(questions.length).fill(null);
+    setAnswers(fresh);
     setCurrentIdx(0);
     setStage(STAGE.PLAYING);
+    // Reset the persisted completion so the user can take the quiz fresh.
+    const cache = loadQuizCache();
+    cache[quizKey(book.title, book.author, lang)] = {
+      questions,
+      answers: null,
+      completed: false,
+    };
+    saveQuizCache(cache);
   }
 
   const total = questions?.length || 0;
@@ -84,12 +119,16 @@ export default function BookQuiz({ book, lang, t }) {
     return t.quizScoreLow;
   }
 
-  const showHint = !questions && stage === STAGE.IDLE;
+  const isLoading = stage === STAGE.LOADING;
   const showError = stage === STAGE.ERROR;
   const showStartBtn = questions && stage === STAGE.IDLE;
   const showPlaying = stage === STAGE.PLAYING;
   const showCompleted = stage === STAGE.COMPLETED;
-  const isLoading = stage === STAGE.LOADING;
+  // Hint stays visible in IDLE + LOADING (until the quiz is actually
+  // generated and ready to play). It disappears in PLAYING / COMPLETED
+  // / ERROR (error has its own message in the same slot) and when a
+  // cached quiz is ready to start (showStartBtn handles its own copy).
+  const showHint = !showPlaying && !showCompleted && !showError && !showStartBtn;
 
   return (
     <div className="panel-section panel-quiz">
@@ -97,7 +136,10 @@ export default function BookQuiz({ book, lang, t }) {
         <span className="panel-section-eyebrow">{t.quizSectionTitle}</span>
 
         {showHint && (
-          <p className="panel-quiz-hint">{t.quizEmptyHint}</p>
+          <div className="panel-quiz-hint-group">
+            <p className="panel-quiz-hint">{t.quizEmptyHint}</p>
+            <p className="panel-quiz-hint-note">{t.quizEmptyHintTimer}</p>
+          </div>
         )}
 
         {showError && (
@@ -168,7 +210,7 @@ export default function BookQuiz({ book, lang, t }) {
             </defs>
             <path d="M12 1.5C12.28 1.5 12.5 1.72 12.5 2C12.5 7.25 16.75 11.5 22 11.5C22.28 11.5 22.5 11.72 22.5 12C22.5 12.28 22.28 12.5 22 12.5C16.75 12.5 12.5 16.75 12.5 22C12.5 22.28 12.28 22.5 12 22.5C11.72 22.5 11.5 22.28 11.5 22C11.5 16.75 7.25 12.5 2 12.5C1.72 12.5 1.5 12.28 1.5 12C1.5 11.72 1.72 11.5 2 11.5C7.25 11.5 11.5 7.25 11.5 2C11.5 1.72 11.72 1.5 12 1.5Z" fill="url(#aiQuizGrad2)"/>
           </svg>
-          {t.quizGenerateBtn}
+          {t.quizStartBtn}
         </button>
       )}
 
@@ -223,24 +265,22 @@ function QuizPlayer({ questions, currentIdx, setCurrentIdx, answers, onPick, onS
       </div>
 
       <div className="panel-quiz-nav">
-        <button
-          type="button"
-          className="btn btn-outline btn-sm"
-          onClick={() => setCurrentIdx(i => Math.max(0, i - 1))}
-          disabled={currentIdx === 0}>
-          ←
-        </button>
         {!isLast ? (
           <button
             type="button"
-            className="btn btn-outline btn-sm"
-            onClick={() => setCurrentIdx(i => Math.min(total - 1, i + 1))}>
-            →
+            className="btn btn-primary btn-md panel-quiz-nav-next"
+            onClick={() => setCurrentIdx(i => Math.min(total - 1, i + 1))}
+            disabled={answers[currentIdx] === null}>
+            {t.quizNext}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
           </button>
         ) : (
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-md"
             onClick={onSubmit}
             disabled={!allAnswered}>
             {t.quizSubmit}
@@ -254,8 +294,10 @@ function QuizPlayer({ questions, currentIdx, setCurrentIdx, answers, onPick, onS
 function QuizResult({ questions, answers, score, total, scoreMessage, t }) {
   return (
     <div className="panel-quiz-result">
-      <div className="panel-quiz-score">{t.quizScore(score, total)}</div>
-      <p className="panel-quiz-score-msg">{scoreMessage}</p>
+      <div className="panel-quiz-score-block">
+        <div className="panel-quiz-score">{t.quizScore(score, total)}</div>
+        <p className="panel-quiz-score-msg">{scoreMessage}</p>
+      </div>
 
       <div className="panel-quiz-review">
         <span className="panel-section-eyebrow">{t.quizReviewTitle}</span>
@@ -270,12 +312,12 @@ function QuizResult({ questions, answers, score, total, scoreMessage, t }) {
                 <div className="panel-quiz-review-q">{q.q}</div>
                 <div className="panel-quiz-review-row">
                   <span className="panel-quiz-review-label">{t.quizYourAnswer}</span>
-                  <span>{answers[i] !== null ? q.choices[answers[i]] : '—'}</span>
+                  <span className="panel-quiz-review-value">{answers[i] !== null ? q.choices[answers[i]] : '—'}</span>
                 </div>
                 {!correct && (
                   <div className="panel-quiz-review-row">
                     <span className="panel-quiz-review-label">{t.quizCorrectAnswer}</span>
-                    <span>{q.choices[q.answerIndex]}</span>
+                    <span className="panel-quiz-review-value">{q.choices[q.answerIndex]}</span>
                   </div>
                 )}
                 {q.explanation && (
