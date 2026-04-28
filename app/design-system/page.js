@@ -10,7 +10,7 @@ import {
 const NAV = {
   Foundations: ["logo","colors","typography","highlight","spacing","shadows","strokes"],
   Components:  ["autocomplete","badges","book-chip","btn-states","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
-  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","onboarding","footer"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -22,7 +22,7 @@ const NAV_LABELS = {
   "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
-  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","onboarding":"Onboarding","footer":"Footer",
+  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","now-reading":"Now Reading","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -309,7 +309,7 @@ export default function DesignSystemPage() {
 
             <p className="palette-section-label">Primary scale</p>
             <div className="palette-grid">
-              {[["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
+              {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
                 <div key={step} className="palette-chip">
                   <div className={`palette-chip-swatch${step==="50★"?" anchor":""}`} style={{ background: `var(--primary-${step.replace("★","")})` }} />
                   <div className="palette-chip-meta">
@@ -319,7 +319,10 @@ export default function DesignSystemPage() {
                 </div>
               ))}
             </div>
-            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 28, marginTop: 2 }}>--primary-N · ★ anchor = --accent (#4959E6)</div>
+            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 6, marginTop: 2 }}>--primary-N · ★ anchor = --accent (#4959E6)</div>
+            <div style={{ fontSize: "0.75rem", color: "var(--text-2)", lineHeight: 1.6, marginBottom: 28 }}>
+              <strong>--primary-3</strong> (#FAFAFF) — ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row). One tier below --primary-5 so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at --primary-5) stay visible without blending into the hovered card.
+            </div>
 
             <p className="palette-section-label">Neutrals — Dark (tinted primary)</p>
             <div className="palette-grid on-white">
@@ -1692,9 +1695,30 @@ export default function DesignSystemPage() {
 
           {/* ── MODAL ── */}
           <section className="ds-section" id="modal">
-            <SectionTitle title="Modal" sub="Centered, max-width 620px, max-height calc(100vh - 80px), overflow-y auto. Import tabs: Photo / File / Manual." />
+            <SectionTitle title="Modal" sub="Centered form modal — max-width 630px, gap-driven layout (display: flex column, gap 32). Used by Add a book, Add a quote, Mark as finished. Submit button outside the <form>, linked via form='id' attr (preserves Enter-to-submit)." />
+
             <div className="ds-card">
-              <div className="ds-card-label">Add a book</div>
+              <div className="ds-card-label">Anatomy (gap-driven, no margins)</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.modal-overlay</code></td><td style={{ fontSize: "0.82rem" }}>Backdrop</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>fixed, padding 40 24, light overlay</td></tr>
+                    <tr><td className="token-table-component"><code>.modal</code></td><td style={{ fontSize: "0.82rem" }}>Modal shell</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>max-width 630, padding 32 24 0, flex col gap 32</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-close</code></td><td style={{ fontSize: "0.82rem" }}>X button (absolute)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>top:16 right:16, 40×40, svg 24×24</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-title</code></td><td style={{ fontSize: "0.82rem" }}>Heading</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>28/800/-0.02em (no margin — parent gap)</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-tabs-section</code></td><td style={{ fontSize: "0.82rem" }}>Tabs + active content (only if tabs)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 20</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-form</code></td><td style={{ fontSize: "0.82rem" }}>{'<form>'} wrapping inputs only</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>id="..." — referenced by submit button outside</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-fields</code></td><td style={{ fontSize: "0.82rem" }}>Body content stack</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 24</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-field</code></td><td style={{ fontSize: "0.82rem" }}>Label + input pair</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 8 — label 13/500/--text-2</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-actions</code></td><td style={{ fontSize: "0.82rem" }}>Footer button row (sibling of form)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Add a book — preview</div>
               <div className="ds-card-body">
                 <div className="modal-preview">
                   <div className="modal-preview-title">Add a book</div>
@@ -1730,7 +1754,7 @@ export default function DesignSystemPage() {
 
           {/* ── DELETE MODAL ── */}
           <section className="ds-section" id="delete-modal">
-            <SectionTitle title="Delete Modal" sub="Confirmation modal for destructive actions. Type-routed i18n — same component handles books, quotes, words, and bulk deletions." />
+            <SectionTitle title="Delete Modal" sub="Type-routed confirmation modal — same component handles books, quotes, words, bulk, cancelReading and removeFinished. Uses .confirm-modal pattern (aligned with .modal: max-width 630, gap 32). Single-book/cancelReading variants show a BookChip preview ; quote variant shows the quote text in a .panel-quote-item-style box with line-clamp + see more ; removeFinished shows the rating + comment to be deleted." />
 
             <div className="ds-card">
               <div className="ds-card-label">Preview</div>
@@ -2015,6 +2039,89 @@ function handleDeleteConfirm(payload) {
                   </div>
                   <button className="empty-cta">Add a book</button>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── NOW READING ── */}
+          <section className="ds-section" id="now-reading">
+            <SectionTitle title="Now Reading" sub="Section pinned at the top of the Library tab. Max 3 books simultaneously (MAX_READING). Visual differentiator from the BookCard grid below — same card family tokens but distinct vertical layout with a primary badge + kebab quick-actions." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.now-reading-section</code></td><td style={{ fontSize: "0.82rem" }}>Section root</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-list</code></td><td style={{ fontSize: "0.82rem" }}>Cards grid</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-card</code></td><td style={{ fontSize: "0.82rem" }}>Card root (role=button)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 14 56 14 16 (right reserves kebab), --card bg, 1.5px --border-subtle, --radius, fadeUp animation</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-body</code></td><td style={{ fontSize: "0.82rem" }}>Vertical content stack</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align-items flex-start, gap 16</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-date</code></td><td style={{ fontSize: "0.82rem" }}>"Started on" badge</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>solid primary fill (--primary-50 / --primary-40 dark) · white text · h 20 · 11/600</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-row</code></td><td style={{ fontSize: "0.82rem" }}>Cover + text horizontal block</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex row, gap 16, align-items center</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-cover</code></td><td style={{ fontSize: "0.82rem" }}>Cover thumbnail</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>60×90 (ratio 2:3), radius 4 · gradient + Jakarta letter (white-85) when no image</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-text</code></td><td style={{ fontSize: "0.82rem" }}>Title + meta wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, gap 8, flex 1, min-width 0</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-title</code></td><td style={{ fontSize: "0.82rem" }}>Book title</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>16/700/lh 1.35 (one tier above .book-title for differentiation)</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td style={{ fontSize: "0.82rem" }}>Kebab "more actions"</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Quick actions (kebab dropdown)</div>
+              <div className="ds-card-body col" style={{ gap: 8 }}>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>3 actions, all <code>stopPropagation</code> on the card click :</p>
+                <ul style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
+                  <li><strong>Mark as finished</strong> — opens FinishReadingModal</li>
+                  <li><strong>Add a quote</strong> — opens AddQuoteModal pre-filled with the book context (BookChip in both Photo + Manual tabs, no inputs to edit)</li>
+                  <li><strong>Cancel reading</strong> — opens DeleteModal (type=cancelReading) explaining the book stays in library, only removed from Now Reading. Confirm style is <code>.ob-next</code> (non-destructive)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Card hierarchy</div>
+              <div className="ds-card-body col" style={{ gap: 8 }}>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>The Now Reading card belongs to the same visual family as <code>.book-card</code> (same radius, border, hover transition, fadeUp animation) but adopts a different layout to differentiate without competing visually with the Library grid below. The badge in primary fill anchors the "active reading" status.</p>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>Order rule : <code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first).</p>
+              </div>
+            </div>
+          </section>
+
+          {/* ── FINISH READING MODAL ── */}
+          <section className="ds-section" id="finish-reading">
+            <SectionTitle title="Finish Reading Modal" sub="Form modal opened from BookPanel 'Mark as finished' or NowReading kebab. Saves rating (1-5 stars) + optional comment. Reopens pre-filled when the user edits an already-finished book." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component"><code>.modal.finish-modal</code></td><td style={{ fontSize: "0.82rem" }}>Modal shell (.modal pattern)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>max-width 630, padding 32 24 0, flex col gap 32</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-form</code></td><td style={{ fontSize: "0.82rem" }}>{'<form>'} wrapping inputs only</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>id="finish-reading-form" — submit button outside form via form="" attr (Enter-to-submit preserved)</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-fields</code></td><td style={{ fontSize: "0.82rem" }}>Body content stack</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 24, contains chip + 2 .modal-field</td></tr>
+                    <tr><td className="token-table-component"><code>.finish-modal-chip</code></td><td style={{ fontSize: "0.82rem" }}>BookChip wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>just for spacing — gap-driven by parent .modal-fields</td></tr>
+                    <tr><td className="token-table-component"><code>.finish-stars</code></td><td style={{ fontSize: "0.82rem" }}>5 star rating buttons</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex row gap 4, svg 28×28, --border default → --primary-50 filled</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-textarea</code></td><td style={{ fontSize: "0.82rem" }}>Comment textarea</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>same shared input style as AddQuoteModal — bg --bg3, focus primary glow</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Display in BookPanel (after save)</div>
+              <div className="ds-card-body col" style={{ gap: 8 }}>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>Once saved, the finished metadata appears as a dedicated section in <code>.panel-info</code> :</p>
+                <ul style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
+                  <li><code>.panel-section.is-finished</code> — framed by border-top + border-bottom + padding 24, visually emphasized vs other sections</li>
+                  <li><code>.panel-finished-date</code> — "Finished on Apr 27" (15/500/lh 1.8, matches .panel-synopsis)</li>
+                  <li><code>.panel-rating-stars</code> — read-only stars in primary fill, displayed in a tinted box (--bg3)</li>
+                  <li><code>.panel-finished-note</code> — italic comment in tinted box (--bg3, 15/500/lh 1.8)</li>
+                  <li><code>.panel-finished-actions</code> — Edit + Remove buttons (Edit becomes "Add rating" if no rating/note set yet)</li>
+                </ul>
+                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>Remove triggers DeleteModal type=removeFinished — preserves book.finishedAt, only clears rating + note. Modal previews the removed content (rating + note) before confirm.</p>
               </div>
             </div>
           </section>
