@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 import CharacterCast from "./CharacterCast";
+import BookQuiz from "./BookQuiz";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -151,23 +152,27 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   </button>
                 </div>
               </div>
-              {/* Finished section — framed by border-top + border-bottom for emphasis */}
+              {/* Finished section — same outer rhythm as .panel-quiz */}
               {book.finishedAt && (
+                <>
+                <div className="panel-divider" />
                 <div className="panel-section is-finished">
-                  <span className="panel-section-eyebrow">{t.finishedSectionTitle}</span>
-                  <div className="panel-finished-date">{t.nowReadingFinishedOn(formatDate(book.finishedAt, lang))}</div>
-                  {book.rating && (
-                    <div className="panel-finished-field">
-                      <span className="panel-finished-label">{t.finishedRatingLabel}</span>
-                      <StarsDisplay value={book.rating} />
-                    </div>
-                  )}
-                  {book.note && (
-                    <div className="panel-finished-field">
-                      <span className="panel-finished-label">{t.finishedNoteLabel}</span>
-                      <div className="panel-finished-note">{book.note}</div>
-                    </div>
-                  )}
+                  <div className="panel-finished-content">
+                    <span className="panel-section-eyebrow">{t.finishedSectionTitle}</span>
+                    <div className="panel-finished-date">{t.nowReadingFinishedOn(formatDate(book.finishedAt, lang))}</div>
+                    {book.rating && (
+                      <div className="panel-finished-field">
+                        <span className="panel-finished-label">{t.finishedRatingLabel}</span>
+                        <StarsDisplay value={book.rating} />
+                      </div>
+                    )}
+                    {book.note && (
+                      <div className="panel-finished-field">
+                        <span className="panel-finished-label">{t.finishedNoteLabel}</span>
+                        <div className="panel-finished-note">{book.note}</div>
+                      </div>
+                    )}
+                  </div>
                   <div className="panel-finished-actions">
                     <button type="button" className="panel-finished-btn" onClick={() => onEditFinished?.(book)}>
                       {(book.rating || book.note) ? t.btnEdit : t.btnAddRating}
@@ -179,6 +184,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                     )}
                   </div>
                 </div>
+                </>
               )}
             </div>
           </div>
@@ -189,6 +195,14 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
           {book.startedAt && !book.finishedAt && (
             <>
               <CharacterCast book={book} lang={lang} t={t} />
+              <div className="panel-divider" />
+            </>
+          )}
+
+          {/* Quiz — finished books only (reward for completion) */}
+          {book.finishedAt && (
+            <>
+              <BookQuiz book={book} lang={lang} t={t} />
               <div className="panel-divider" />
             </>
           )}

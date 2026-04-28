@@ -37,6 +37,35 @@ const MODEL_CASCADE = [
   'models/gemini-2.5-flash-lite',
 ];
 
+function buildQuizPrompt(title, author, lang) {
+  const langName = lang === 'fr' ? 'French' : 'English';
+  return `You are a literature teacher creating a comprehension quiz for a reader who has just finished "${title}" by ${author || 'unknown author'}.
+
+Return ONLY a JSON object (no markdown, no commentary) with this exact structure:
+{
+  "questions": [
+    {
+      "q": "<the question, in ${langName}>",
+      "choices": ["<choice A>", "<choice B>", "<choice C>", "<choice D>"],
+      "answerIndex": 0,
+      "explanation": "<one short sentence explaining why this answer is correct, in ${langName}>"
+    }
+  ]
+}
+
+Rules:
+- Generate EXACTLY 10 multiple-choice questions, ordered roughly from easy to harder.
+- Each question MUST have exactly 4 choices with ONE objectively correct answer.
+- ANTI-HALLUCINATION: only use widely-known plot points, characters, and themes that any educated reader would agree on. SKIP ambiguous interpretations, minor details, exact dates, page numbers, or trivia that depends on a specific edition. If you cannot find 10 verifiable questions, generate fewer (minimum 5).
+- Vary the question types: characters, plot, setting, themes, key quotes if iconic.
+- Wrong choices ("distractors") should be plausible but clearly incorrect to a reader who actually finished the book.
+- "answerIndex" is a 0-based index into "choices" pointing to the correct one.
+- "explanation" is one short sentence (max 25 words) confirming the correct answer.
+- Write all text fields in ${langName}.
+- If the book is unknown or you cannot generate reliable questions, return exactly: {"error":"not_found"}
+- Return ONLY the JSON, no backticks, no preamble.`;
+}
+
 function buildCastPrompt(title, author, lang) {
   const langName = lang === 'fr' ? 'French' : 'English';
   return `You are a literature assistant helping a reader keep track of characters while reading "${title}" by ${author || 'unknown author'}.
@@ -177,6 +206,48 @@ export default {
           return json({ error: 'not_found' }, 404);
         }
         return json({ word: clean, lang: lang === 'fr' ? 'fr' : 'en', definitions: parsed.definitions });
+      } catch (e) {
+        return json({ error: e.message || 'Internal error' }, 500);
+      }
+    }
+
+    // POST /quiz — generate a 10-question comprehension quiz via Gemini
+    if (url.pathname === '/quiz') {
+      try {
+        const { title, author, lang } = await request.json();
+        if (!title || typeof title !== 'string') {
+          return json({ error: 'Missing title' }, 400);
+        }
+        const cleanTitle  = title.trim().slice(0, 200);
+        const cleanAuthor = (author || '').trim().slice(0, 200);
+        if (!cleanTitle) return json({ error: 'Empty title' }, 400);
+
+        const result = await callGemini(env.GEMINI_API_KEY, {
+          contents: [{ parts: [{ text: buildQuizPrompt(cleanTitle, cleanAuthor, lang === 'fr' ? 'fr' : 'en') }] }],
+          generationConfig: { temperature: 0.4, maxOutputTokens: 4096, responseMimeType: 'application/json' }
+        });
+
+        if (!result.ok) {
+          return json({ error: result.data?.error?.message || `Gemini error ${result.status}` }, result.status);
+        }
+
+        const raw = result.data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { return json({ error: 'Bad model response' }, 502); }
+
+        if (parsed.error === 'not_found') return json({ error: 'not_found' }, 404);
+        if (!Array.isArray(parsed.questions) || parsed.questions.length < 5) {
+          return json({ error: 'not_found' }, 404);
+        }
+        // Validate the shape of each question to fail loud rather than break the UI later.
+        const valid = parsed.questions.every(q =>
+          q && typeof q.q === 'string' &&
+          Array.isArray(q.choices) && q.choices.length === 4 &&
+          typeof q.answerIndex === 'number' && q.answerIndex >= 0 && q.answerIndex < 4
+        );
+        if (!valid) return json({ error: 'Bad model response' }, 502);
+
+        return json({ title: cleanTitle, author: cleanAuthor, lang: lang === 'fr' ? 'fr' : 'en', questions: parsed.questions });
       } catch (e) {
         return json({ error: e.message || 'Internal error' }, 500);
       }
