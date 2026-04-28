@@ -21,6 +21,11 @@
 .btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
+.btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
+.btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
+.btn-secondary:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
+[data-theme="dark"] .btn-secondary { background: var(--primary-90); color: var(--primary-30); }
+[data-theme="dark"] .btn-secondary:hover:not(:disabled) { background: var(--primary-80); }
 [data-theme="dark"] .btn-outline { border-color: var(--light-20); color: var(--light-90); background: transparent; }
 [data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-5); }
 
@@ -1316,25 +1321,6 @@
   gap: 40px;
 }
 
-.panel-share {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  border: none;
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-}
-.panel-share:hover { background: var(--ghost-hover); }
-.panel-share svg { width: 24px; height: 24px; }
-
 .panel-close {
   position: absolute;
   top: 16px;
@@ -1404,8 +1390,19 @@
 .panel-info-header {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 24px;
 }
+.panel-header-actions {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 12px;
+  flex-shrink: 0;
+}
+/* Asymmetric padding for icon-left button (mirrors .panel-quotes-add, .btn-ai)
+   + push to the right edge of .panel-header-actions */
+.panel-header-share { padding: 0 20px 0 12px; margin-left: auto; }
 .panel-byline {
   display: flex;
   flex-direction: column;
@@ -1489,40 +1486,64 @@
   font-style: italic;
 }
 
-/* Character cast (Now Reading only) */
-.panel-cast-empty {
+/* Character cast (Now Reading only) — spacing mirrors .panel-quotes */
+.panel-cast {
+  gap: 40px;
+}
+.panel-cast-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 16px;
 }
 .panel-cast-hint {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-2);
-  font-style: italic;
+  line-height: 1.8;
   margin: 0;
 }
-.panel-cast-loading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  color: var(--text-2);
-  padding: 8px 0;
+.panel-cast-action {
+  align-self: flex-start;
+  /* Asymmetric padding for icon-left button (mirrors .btn-ai, .panel-quotes-add) */
+  padding: 0 20px 0 12px;
 }
-.panel-cast-error {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 14px;
-  color: var(--text-2);
+/* AI button — gradient border + tinted gradient fill
+   (gradient stops mirror .import-tab-indicator.gradient).
+   Triple-layer background:
+     1. translucent gradient tint (top)
+     2. opaque page bg — masks the solid gradient inside the padding-box
+     3. solid gradient — only visible in the 1.5px border ring */
+.btn-ai,
+.btn-ai:disabled {
+  border: 1.5px solid transparent;
+  /* Asymmetric padding: 12px left for the leading sparkle icon, 20px right
+     for label breathing — mirrors .panel-quotes-add. */
+  padding: 0 20px 0 12px;
+  background:
+    linear-gradient(to right, rgba(246,123,248,0.05), rgba(73,89,230,0.05)) padding-box,
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(to right, #F67BF8, #4959E6) border-box;
+  color: var(--text);
 }
-.panel-cast-error p { margin: 0; }
+.btn-ai:hover:not(:disabled) {
+  background:
+    linear-gradient(to right, rgba(246,123,248,0.1), rgba(73,89,230,0.1)) padding-box,
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(to right, #F67BF8, #4959E6) border-box;
+  color: var(--text);
+}
+.panel-cast-spinner {
+  width: 16px; height: 16px;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-cast-spinner { animation: none; }
+}
 .panel-cast-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -1530,37 +1551,44 @@
 .panel-cast-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px 16px;
-  background: var(--card);
-  border: 1.5px solid var(--border-subtle);
-  border-radius: 10px;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg3);
+  border: none;
+  border-radius: 8px;
 }
 .panel-cast-name {
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
 }
+.panel-cast-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.panel-cast-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
 .panel-cast-role {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
-  line-height: 1.5;
+  line-height: 1.8;
 }
 .panel-cast-relations {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--text-3);
-  line-height: 1.5;
-}
-.panel-cast-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  color: var(--text-2);
+  line-height: 1.8;
 }
 .panel-cast-disclaimer {
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 400;
   color: var(--text-3);
   font-style: italic;
 }
@@ -1657,7 +1685,9 @@
 .panel-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 12px;
 }
 
 .panel-move-btn {
@@ -3786,9 +3816,10 @@ button.quote-book-chip {
   color: var(--text-2);
 }
 .panel-quotes-empty {
-  font-size: 12px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-2);
-  font-style: italic;
+  line-height: 1.8;
 }
 
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {

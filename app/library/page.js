@@ -168,6 +168,7 @@ export default function LibraryPage() {
         onOpenQuote={q => { setPanelBook(null); setPanelQuote(q); }}
         onStartReading={b => { startReading(b.id); }}
         onFinishReading={b => { setFinishBook(b); }}
+        onCancelReading={b => { setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author }); setPanelBook(null); }}
         onEditFinished={b => { setFinishBook(b); }}
         onRemoveFinished={b => { setDeleteTarget({ type: 'removeFinished', id: b.id, rating: b.rating, note: b.note }); }}
         readingCount={readingBooks.length}
