@@ -2433,6 +2433,12 @@
     background: var(--bg);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    /* Touch handling fixes for iOS Safari : prevent scroll-chain to body
+       (overscroll-behavior) and remove the 300ms tap delay (touch-action). */
+    overscroll-behavior: contain;
+    touch-action: manipulation;
+    /* Shorter transition on mobile to reduce window where touches are lost during slide-in animation. */
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   [data-theme="dark"] .book-panel { background: var(--bg); }
   .library-footer-inner { padding: 0 16px; flex-direction: column; align-items: stretch; gap: clamp(16px, 4vw, 24px); }
@@ -3710,8 +3716,8 @@ button.quote-book-chip {
 
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   /* z-index above .book-panel (320) so the mobile drawer covers the panel */
-  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: var(--shadow-lg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; }
-  .sidebar.mobile-open { transform: translateX(0); }
+  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: var(--shadow-lg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; pointer-events: none; }
+  .sidebar.mobile-open { transform: translateX(0); pointer-events: auto; }
   .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }
   /* theme-btn is already exposed in the mobile toolbar — drop the sidebar
