@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 import CharacterCast from "./CharacterCast";
+import BookQuiz from "./BookQuiz";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -201,6 +202,14 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
               : <div className="panel-synopsis-placeholder">No synopsis available.</div>
             }
           </div>
+
+          {/* Quiz — finished books only (reward for completion) */}
+          {book.finishedAt && (
+            <>
+              <div className="panel-divider" />
+              <BookQuiz book={book} lang={lang} t={t} />
+            </>
+          )}
 
           <div className="panel-divider" />
 
