@@ -72,25 +72,27 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
             </svg>
           </button>
 
-          <div className="panel-main">
-            <div className="panel-section">
-              <span className="panel-section-eyebrow">{t.quoteLabel}</span>
-              <div className="quote-panel-text">
-                <span className="quote-mark">"</span>
-                {quote.text}
-                <span className="quote-mark">"</span>
+          <div className="panel-info">
+            <div className="panel-info-meta">
+              <div className="panel-section">
+                <span className="panel-section-eyebrow">{t.quoteLabel}</span>
+                <div className="quote-panel-text">
+                  <span className="quote-mark">"</span>
+                  {quote.text}
+                  <span className="quote-mark">"</span>
+                </div>
               </div>
-            </div>
 
-            {quote.createdAt && (
-              <div className="quote-panel-date">{t.quoteAddedOn(formatDate(quote.createdAt, lang))}</div>
-            )}
+              {quote.createdAt && (
+                <div className="quote-panel-date">{t.quoteAddedOn(formatDate(quote.createdAt, lang))}</div>
+              )}
+            </div>
 
             <div className="panel-actions">
               <button className="panel-move-btn" onClick={() => onEdit(quote)}>
                 {t.quoteEdit}
               </button>
-              <button className="panel-delete-btn" onClick={() => { onDelete(quote.id); onClose(); }}>
+              <button className="panel-delete-btn" onClick={() => { onDelete(quote); onClose(); }}>
                 {t.btnDelete || 'Delete'}
               </button>
             </div>

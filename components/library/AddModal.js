@@ -223,7 +223,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
 
         <div className="modal-title">{t.modalTitle}</div>
 
-        {/* Tabs */}
+        {/* Tabs + active tab content */}
+        <div className="modal-tabs-section">
         <div className="import-tabs">
           <div className={`import-tab-indicator${activeTab === 'photo' ? ' gradient' : ''}`} style={{ left: indicator.left, width: indicator.width }} />
           <button
@@ -311,14 +312,6 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
                 </div>
               </div>
             )}
-            <div className="modal-actions">
-              <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
-              <button type="button" className="modal-submit"
-                disabled={photoState === 'scanning' || previewBooks.length === 0}
-                onClick={handleImportConfirm}>
-                Import {previewBooks.length > 0 ? `(${previewBooks.length})` : ''}
-              </button>
-            </div>
           </div>
         )}
 
@@ -376,23 +369,12 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
                 </div>
               </div>
             )}
-
-            <div className="modal-actions">
-              <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
-              <button
-                type="button"
-                className="modal-submit"
-                disabled={previewBooks.length === 0}
-                onClick={handleImportConfirm}>
-                Import {previewBooks.length > 0 ? `(${previewBooks.length})` : ''}
-              </button>
-            </div>
           </div>
         )}
 
         {/* Manual tab */}
         {activeTab === 'manual' && (
-          <form onSubmit={handleSubmit}>
+          <form id="add-book-form" className="modal-form" onSubmit={handleSubmit}>
             <div className="modal-fields">
               {/* Title with autocomplete */}
               <div className="modal-field" style={{ position: 'relative' }}>
@@ -429,14 +411,27 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
                 </div>
               ))}
             </div>
-
             {error && <div className="modal-error">{error}</div>}
-
-            <div className="modal-actions">
-              <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
-              <button type="submit" className="modal-submit" disabled={!title.trim() || !author.trim()}>{t.btnAddLibrary}</button>
-            </div>
           </form>
+        )}
+        </div>{/* end modal-tabs-section */}
+
+        {/* Actions — direct child of .modal so they get the 32px gap (matches finish-modal pattern) */}
+        {(activeTab === 'photo' || activeTab === 'file') && (
+          <div className="modal-actions">
+            <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
+            <button type="button" className="modal-submit"
+              disabled={photoState === 'scanning' || previewBooks.length === 0}
+              onClick={handleImportConfirm}>
+              Import {previewBooks.length > 0 ? `(${previewBooks.length})` : ''}
+            </button>
+          </div>
+        )}
+        {activeTab === 'manual' && (
+          <div className="modal-actions">
+            <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
+            <button type="submit" form="add-book-form" className="modal-submit" disabled={!title.trim() || !author.trim()}>{t.btnAddLibrary}</button>
+          </div>
         )}
 
       </div>

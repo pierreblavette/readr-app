@@ -52,7 +52,7 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
           {books.map((book, i) => (
             <tr key={book.id}
               onClick={() => editMode ? onToggleSelect(book.id) : onOpen(book)}
-              className={selected.has(book.id) ? 'selected' : ''}>
+              className={`list-row${selected.has(book.id) ? ' selected' : ''}`}>
 
               {editMode ? (
                 <td style={{ padding: '0 8px 0 28px', width: 40, overflow: 'visible', whiteSpace: 'normal', textOverflow: 'clip', verticalAlign: 'middle' }}>

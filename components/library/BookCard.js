@@ -41,8 +41,10 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
       className={`book-card${isSelected ? ' selected' : ''}`}>
 
       {/* Cover */}
-      <div className={`book-cover${cover ? '' : ' book-cover-placeholder'}`} style={{ background: cover ? `linear-gradient(135deg, ${c1}, ${c2})` : undefined }}>
-        {cover && (
+      <div
+        className={`book-cover${cover ? '' : ' book-cover-placeholder'}`}
+        style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
+        {cover ? (
           <img
             src={cover}
             alt=""
@@ -52,6 +54,8 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
             decoding="async"
             className="panel-cover-img"
           />
+        ) : (
+          <span className="cover-letter">{letter}</span>
         )}
 
         {tab === 'wishlist' && !cover && (

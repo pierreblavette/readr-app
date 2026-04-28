@@ -2,7 +2,28 @@
 import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 
-export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, quotes, t }) {
+function formatDate(ts, lang) {
+  if (!ts) return '';
+  try {
+    return new Date(ts).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+      year: 'numeric', month: 'short', day: 'numeric',
+    });
+  } catch { return ''; }
+}
+
+function StarsDisplay({ value }) {
+  return (
+    <div className="panel-rating-stars" aria-label={`Rating ${value} out of 5`}>
+      {[1, 2, 3, 4, 5].map(n => (
+        <svg key={n} viewBox="0 0 24 24" fill="currentColor" className={value >= n ? 'is-filled' : ''}>
+          <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onEditFinished, onRemoveFinished, readingCount, maxReading, quotes, lang, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
   const [shared, setShared] = useState(false);
@@ -89,19 +110,54 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
 
           {/* Main — cover + info block (gap 40px between them) */}
           <div className="panel-main">
-            <div className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`} style={{ background: cover ? `linear-gradient(135deg, ${c1}, ${c2})` : undefined }}>
-              {cover && <img src={cover} alt={book.title} className="panel-cover-img" />}
+            <div
+              className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`}
+              style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
+              {cover
+                ? <img src={cover} alt={book.title} className="panel-cover-img" />
+                : <span className="panel-cover-letter">{letter}</span>}
             </div>
             <div className="panel-info">
-              <div className="panel-title">{book.title}</div>
-              <div className="panel-byline">
-                <div className="panel-author">{book.author}</div>
-                <div className="panel-meta">
-                  {book.genre && <span>{book.genre}</span>}
-                  {book.genre && book.year && <span className="panel-meta-sep">·</span>}
-                  {book.year && <span>{book.year}</span>}
+              <div className="panel-info-header">
+                <div className="panel-title">{book.title}</div>
+                <div className="panel-byline">
+                  <div className="panel-author">{book.author}</div>
+                  <div className="panel-meta">
+                    {book.genre && <span>{book.genre}</span>}
+                    {book.genre && book.year && <span className="panel-meta-sep">·</span>}
+                    {book.year && <span>{book.year}</span>}
+                  </div>
                 </div>
               </div>
+              {/* Finished section — framed by border-top + border-bottom for emphasis */}
+              {book.finishedAt && (
+                <div className="panel-section is-finished">
+                  <span className="panel-section-eyebrow">{t.finishedSectionTitle}</span>
+                  <div className="panel-finished-date">{t.nowReadingFinishedOn(formatDate(book.finishedAt, lang))}</div>
+                  {book.rating && (
+                    <div className="panel-finished-field">
+                      <span className="panel-finished-label">{t.finishedRatingLabel}</span>
+                      <StarsDisplay value={book.rating} />
+                    </div>
+                  )}
+                  {book.note && (
+                    <div className="panel-finished-field">
+                      <span className="panel-finished-label">{t.finishedNoteLabel}</span>
+                      <div className="panel-finished-note">{book.note}</div>
+                    </div>
+                  )}
+                  <div className="panel-finished-actions">
+                    <button type="button" className="panel-finished-btn" onClick={() => onEditFinished?.(book)}>
+                      {(book.rating || book.note) ? t.btnEdit : t.btnAddRating}
+                    </button>
+                    {(book.rating || book.note) && (
+                      <button type="button" className="panel-finished-btn" onClick={() => onRemoveFinished?.(book)}>
+                        {t.btnDelete}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
               {/* About section */}
               <div className="panel-section">
                 <span className="panel-section-eyebrow">About</span>
@@ -117,6 +173,20 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                     {t.selConfirmOwned || 'Move to Library'}
                   </button>
                 )}
+                {tab === 'owned' && book.startedAt && !book.finishedAt && (
+                  <button className="panel-move-btn" onClick={() => onFinishReading?.(book)}>
+                    {t.btnFinishReading}
+                  </button>
+                )}
+                {tab === 'owned' && !book.startedAt && (
+                  <button
+                    className="panel-move-btn"
+                    onClick={() => onStartReading?.(book)}
+                    disabled={readingCount >= maxReading}
+                    title={readingCount >= maxReading ? t.nowReadingLimit : undefined}>
+                    {t.btnStartReading}
+                  </button>
+                )}
                 <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
                   {t.btnDelete || 'Delete'}
                 </button>
@@ -128,16 +198,18 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
 
           {/* Quotes section — eyebrow + list + add button (gap-driven) */}
           <div className="panel-quotes">
-            <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
-            {quotes && quotes.length > 0 ? (
-              <div className="panel-quotes-list">
-                {quotes.map(q => (
-                  <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
-                ))}
-              </div>
-            ) : (
-              <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
-            )}
+            <div className="panel-quotes-content">
+              <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
+              {quotes && quotes.length > 0 ? (
+                <div className="panel-quotes-list">
+                  {quotes.map(q => (
+                    <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
+                  ))}
+                </div>
+              ) : (
+                <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
+              )}
+            </div>
             <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>

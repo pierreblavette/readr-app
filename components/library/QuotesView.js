@@ -189,7 +189,7 @@ function QuoteCard({ quote, book, onDelete, onOpen, onOpenBook, t }) {
         <button
           type="button"
           className="delete-row-btn quote-card-delete"
-          onClick={e => { e.stopPropagation(); onDelete(quote.id); }}
+          onClick={e => { e.stopPropagation(); onDelete(quote); }}
           aria-label={t.quoteDelete}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M10 3h4"/>

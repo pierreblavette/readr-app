@@ -1,7 +1,7 @@
 "use client";
 import "./library.css";
 import { useState } from "react";
-import { useLibrary } from "@/lib/useLibrary";
+import { useLibrary, MAX_READING } from "@/lib/useLibrary";
 import Sidebar       from "@/components/Sidebar";
 import AppToolbar    from "@/components/library/AppToolbar";
 import SearchBar     from "@/components/library/SearchBar";
@@ -10,6 +10,8 @@ import BookList      from "@/components/library/BookList";
 import BookPanel     from "@/components/library/BookPanel";
 import QuotePanel    from "@/components/library/QuotePanel";
 import EmptyState    from "@/components/library/EmptyState";
+import NowReadingSection from "@/components/library/NowReadingSection";
+import FinishReadingModal from "@/components/library/FinishReadingModal";
 import SelectionBar  from "@/components/library/SelectionBar";
 import AddModal      from "@/components/library/AddModal";
 import DeleteModal   from "@/components/library/DeleteModal";
@@ -31,6 +33,7 @@ export default function LibraryPage() {
   const [quotePrefillBook, setQuotePrefillBook] = useState(null);
   const [panelQuote, setPanelQuote] = useState(null);
   const [editingQuote, setEditingQuote] = useState(null);
+  const [finishBook, setFinishBook] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
   const lib = useLibrary();
 
@@ -51,6 +54,7 @@ export default function LibraryPage() {
     obOpen, openOb, closeOb,
     books,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
+    readingBooks, startReading, finishReading, cancelReading, updateFinished,
     collections, createCollection, deleteCollection,
     addBookToCollection, removeBookFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
@@ -91,6 +95,10 @@ export default function LibraryPage() {
       deleteQuote(payload.id);
     } else if (payload?.type === 'word') {
       deleteWord(payload.id);
+    } else if (payload?.type === 'cancelReading') {
+      cancelReading(payload.id);
+    } else if (payload?.type === 'removeFinished') {
+      updateFinished(payload.id, { rating: null, note: null });
     } else {
       deleteBook(payload.id);
     }
@@ -134,14 +142,23 @@ export default function LibraryPage() {
         <div className="panel-overlay" onClick={() => { setPanelBook(null); setPanelQuote(null); }} />
       )}
       <BookPanel
-        book={panelBook}
+        /* Re-resolve the book from current data so the panel reflects
+           reading state changes (startReading/finishReading) immediately. */
+        book={panelBook ? [...data.owned, ...data.wishlist].find(b => b.id === panelBook.id) || panelBook : null}
         tab={tab}
         onClose={() => setPanelBook(null)}
         onDelete={b => { setPanelBook(null); setDeleteTarget(b); }}
         onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); }}
         onAddQuote={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
         onOpenQuote={q => { setPanelBook(null); setPanelQuote(q); }}
+        onStartReading={b => { startReading(b.id); }}
+        onFinishReading={b => { setFinishBook(b); }}
+        onEditFinished={b => { setFinishBook(b); }}
+        onRemoveFinished={b => { setDeleteTarget({ type: 'removeFinished', id: b.id, rating: b.rating, note: b.note }); }}
+        readingCount={readingBooks.length}
+        maxReading={MAX_READING}
         quotes={panelBook ? getQuotesForBook(panelBook) : []}
+        lang={lang}
         t={t}
       />
       <QuotePanel
@@ -160,7 +177,7 @@ export default function LibraryPage() {
           ) || null;
         })()}
         onClose={() => setPanelQuote(null)}
-        onDelete={id => { setPanelQuote(null); setDeleteTarget({ type: 'quote', id }); }}
+        onDelete={q => { setPanelQuote(null); setDeleteTarget({ type: 'quote', id: q.id, text: q.text }); }}
         onEdit={q => { setPanelQuote(null); setEditingQuote(q); setAddQuoteOpen(true); }}
         onOpenBook={b => { setPanelQuote(null); setPanelBook(b); }}
         lang={lang}
@@ -194,7 +211,7 @@ export default function LibraryPage() {
               quotes={quotes}
               allBooks={[...data.owned, ...data.wishlist]}
               onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
-              onDelete={id => setDeleteTarget({ type: 'quote', id })}
+              onDelete={q => setDeleteTarget({ type: 'quote', id: q.id, text: q.text })}
               onOpen={q => setPanelQuote(q)}
               onOpenBook={b => setPanelBook(b)}
               exportMD={exportQuotesMD}
@@ -258,6 +275,18 @@ export default function LibraryPage() {
         {!isCollections && !isQuotes && !isDictionary && (
           <>
             <h1 className="page-title">{pageTitle}</h1>
+
+            {tab === 'owned' && (
+              <NowReadingSection
+                books={readingBooks}
+                onOpenBook={b => setPanelBook(b)}
+                onFinish={b => setFinishBook(b)}
+                onAddQuote={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+                onCancel={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
+                lang={lang}
+                t={t}
+              />
+            )}
 
             <SearchBar
               search={search} setSearch={setSearch} t={t}
@@ -342,6 +371,21 @@ export default function LibraryPage() {
         allBooks={[...data.owned, ...data.wishlist]}
         onAdd={addBookToCollection}
         onClose={() => setAddBooksColOpen(false)}
+        t={t}
+      />
+      <FinishReadingModal
+        open={!!finishBook}
+        book={finishBook}
+        onClose={() => setFinishBook(null)}
+        onConfirm={({ rating, note }) => {
+          if (finishBook?.finishedAt) {
+            // Editing an already-finished book
+            updateFinished(finishBook.id, { rating, note });
+          } else {
+            // Marking as finished for the first time
+            finishReading(finishBook.id, { finishedAt: Date.now(), rating, note });
+          }
+        }}
         t={t}
       />
       <Onboarding open={obOpen} onClose={closeOb} t={t} />

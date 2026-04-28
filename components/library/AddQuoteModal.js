@@ -105,12 +105,20 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
     } else {
       setInputMode('photo'); setPhotoState('idle');
       setText('');
-      setSelectedBook(prefillBook ? {
-        id: prefillBook.id,
-        title: prefillBook.title,
-        author: prefillBook.author || '',
-        source: 'library',
-      } : null);
+      if (prefillBook) {
+        setSelectedBook({
+          id: prefillBook.id,
+          title: prefillBook.title,
+          author: prefillBook.author || '',
+          source: 'library',
+        });
+        // Pre-fill Manual tab fields too so switching tabs keeps the context
+        setBookSearch(prefillBook.title);
+        setBookAuthor(prefillBook.author || '');
+        setBookId(prefillBook.id);
+      } else {
+        setSelectedBook(null);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, prefillBook, editing]);
@@ -268,6 +276,8 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
 
         <div className="modal-title">{editing ? t.quoteEdit : t.quoteAdd}</div>
 
+        {/* Tabs + active tab content */}
+        <div className="modal-tabs-section">
         {/* Tabs: Photo | Manual — hidden in edit mode */}
         {!editing && <div className="import-tabs">
           <div className={`import-tab-indicator${inputMode === 'photo' ? ' gradient' : ''}`} style={{ left: indicator.left, width: indicator.width }} />
@@ -353,7 +363,11 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
               <div className={`modal-field quote-link-section${linkDropOpen && !selectedBook ? ' is-open' : ''}`} style={{ position: 'relative' }}>
                 <label className="modal-field-label">{t.quoteLinkToBook}</label>
                 {selectedBook ? (
-                  <BookChip book={selectedBook} onRemove={() => setSelectedBook(null)} ariaLabel={t.quoteLinkRemove} />
+                  <BookChip
+                    book={selectedBook}
+                    onRemove={prefillBook && !editing ? undefined : () => setSelectedBook(null)}
+                    ariaLabel={t.quoteLinkRemove}
+                  />
                 ) : (
                   <div className={`quote-link-select${linkDropOpen ? ' open' : ''}`}>
                     <input
@@ -404,41 +418,51 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                   value={text} onChange={e => setText(e.target.value)} rows={5} />
               </div>
 
-              <div className="modal-field" style={{ position: 'relative' }}>
-                <label className="modal-field-label">{t.quoteBookTitle}</label>
-                <input
-                  className="modal-field-input"
-                  placeholder={t.placeholderTitle}
-                  value={bookSearch}
-                  onChange={e => handleBookSearchChange(e.target.value)}
-                  onFocus={() => bookSearch.trim().length > 0 && setShowDrop(true)}
-                  onBlur={() => setTimeout(() => setShowDrop(false), 150)}
-                  autoComplete="off"
-                />
-                {showDrop && combined.length > 0 && (
-                  <ul className="autocomplete-list open">
-                    {combined.slice(0, 6).map((b, i) => (
-                      <li key={b.id || i} className="autocomplete-item" onMouseDown={() => handleSelectBook(b)}>
-                        {b.title}<span className="autocomplete-sep">·</span><span>{b.author}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              {prefillBook && !editing ? (
+                <div className="modal-field">
+                  <label className="modal-field-label">{t.quoteLinkToBook}</label>
+                  <BookChip book={{ title: prefillBook.title, author: prefillBook.author || '' }} />
+                </div>
+              ) : (
+                <>
+                  <div className="modal-field" style={{ position: 'relative' }}>
+                    <label className="modal-field-label">{t.quoteBookTitle}</label>
+                    <input
+                      className="modal-field-input"
+                      placeholder={t.placeholderTitle}
+                      value={bookSearch}
+                      onChange={e => handleBookSearchChange(e.target.value)}
+                      onFocus={() => bookSearch.trim().length > 0 && setShowDrop(true)}
+                      onBlur={() => setTimeout(() => setShowDrop(false), 150)}
+                      autoComplete="off"
+                    />
+                    {showDrop && combined.length > 0 && (
+                      <ul className="autocomplete-list open">
+                        {combined.slice(0, 6).map((b, i) => (
+                          <li key={b.id || i} className="autocomplete-item" onMouseDown={() => handleSelectBook(b)}>
+                            {b.title}<span className="autocomplete-sep">·</span><span>{b.author}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
 
-              <div className="modal-field">
-                <label className="modal-field-label">{t.quoteBookAuthor}</label>
-                <input
-                  className="modal-field-input"
-                  placeholder={t.placeholderAuthor}
-                  value={bookAuthor}
-                  onChange={e => setBookAuthor(e.target.value)}
-                />
-              </div>
+                  <div className="modal-field">
+                    <label className="modal-field-label">{t.quoteBookAuthor}</label>
+                    <input
+                      className="modal-field-input"
+                      placeholder={t.placeholderAuthor}
+                      value={bookAuthor}
+                      onChange={e => setBookAuthor(e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
             </>
           )}
 
         </div>
+        </div>{/* end modal-tabs-section */}
 
         <div className="modal-actions">
           <button className="modal-cancel" onClick={onClose}>{t.btnCancel}</button>
