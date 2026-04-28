@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import CharacterCast from "./CharacterCast";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -166,6 +167,11 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   : <div className="panel-synopsis-placeholder">No synopsis available.</div>
                 }
               </div>
+
+              {/* Character cast — Now reading only */}
+              {book.startedAt && !book.finishedAt && (
+                <CharacterCast book={book} lang={lang} t={t} />
+              )}
 
               <div className="panel-actions">
                 {tab === 'wishlist' && (
