@@ -557,6 +557,7 @@
   box-shadow: 0 4px 16px rgba(73,89,230,0.12);
 }
 [data-theme="dark"] .now-reading-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
+.now-reading-card:has(.dropdown-menu) { z-index: 10; }
 .now-reading-body {
   display: flex;
   flex-direction: column;
