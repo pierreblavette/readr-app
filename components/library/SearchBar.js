@@ -39,20 +39,22 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
           {t.btnAdd}
         </button>
 
-        {data[tab].length > 0 && (
-          <button
-            onClick={() => { setEditMode(!editMode); if (editMode) setSelected(new Set()); }}
-            className="edit-btn">
-            {editMode ? t.btnDone : t.btnEdit}
-          </button>
-        )}
+        <div className="counter-secondary-actions">
+          {data[tab].length > 0 && (
+            <button
+              onClick={() => { setEditMode(!editMode); if (editMode) setSelected(new Set()); }}
+              className="edit-btn">
+              {editMode ? t.btnDone : t.btnEdit}
+            </button>
+          )}
 
-        <ExportMenu
-          exportData={exportData}
-          exportPDF={exportPDF}
-          disabled={data[tab].length === 0}
-          t={t}
-        />
+          <ExportMenu
+            exportData={exportData}
+            exportPDF={exportPDF}
+            disabled={data[tab].length === 0}
+            t={t}
+          />
+        </div>
 
         {/* View toggle */}
         <div className="view-btns">

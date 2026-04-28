@@ -1065,7 +1065,7 @@ export default function DesignSystemPage() {
 
           {/* ── CHECKBOX ── */}
           <section className="ds-section" id="checkbox">
-            <SectionTitle title="Checkbox" />
+            <SectionTitle title="Checkbox" sub="Canonical checkbox 18×18, used inside row contexts (modal toggle, list selection)." />
             <div className="ds-card">
               <div className="ds-card-label">États</div>
               <div className="ds-card-body" style={{ gap: 24 }}>
@@ -1077,6 +1077,62 @@ export default function DesignSystemPage() {
                   <div className={`checkbox-demo${chk2?" checked":""}`} onClick={() => setChk2(v => !v)}>{chk2 && <svg viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
                   <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Checked</span>
                 </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Modal toggle row — canonical 40h container</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Property</th><th>Value</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["Container class", ".modal-toggle-row"],
+                      ["min-height", "40px (md, mirrors btn-md / input)"],
+                      ["gap", "10px"],
+                      ["check (18×18) default", "border --border-subtle, bg transparent (light) · border --light-20 (dark)"],
+                      ["check hover", "border --primary-50 + bg --primary-5 (light) · border --primary-40 + bg --primary-5 (dark)"],
+                      ["check checked", "bg --primary-50, border transparent (light) · bg --primary-40 (dark)"],
+                      ["check checked hover", "bg --primary-60 (light) · bg --primary-50 (dark) — mirrors .btn-primary"],
+                      ["label", "14/500/--text"],
+                      ["First app usage", ".modal-toggle-row in AddModal (Mark as reading)"],
+                    ].map(([prop, val]) => (
+                      <tr key={prop}>
+                        <td className="token-table-component">{prop}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Info box — bg + border bleutés, optional inline strong highlight</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Property</th><th>Value</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["Class", ".modal-info-box (+ .modal-info-box-strong for highlight)"],
+                      ["Background", "--primary-5"],
+                      ["Border", "1.5px solid --primary-20 (light) · --primary-30 (dark)"],
+                      ["Border-radius", "8px"],
+                      ["Padding", "12px 14px"],
+                      ["Body", "14/500/--text-2/lh 1.5"],
+                      ["Inline strong", "weight 700, color --text"],
+                      ["Icon", "16×16, color --primary-50/40, info circle SVG"],
+                      ["First app usage", "Mark-as-reading hint inside AddModal"],
+                    ].map(([prop, val]) => (
+                      <tr key={prop}>
+                        <td className="token-table-component">{prop}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </section>

@@ -359,7 +359,15 @@ export default function LibraryPage() {
         onConfirm={handleConfirmSelection}
       />
       <AddModal open={addModalOpen} onClose={() => setAddModal(false)}
-        onAdd={b => { const ok = addBook(b); if (ok) setToastMsg(t.toastAdded || 'Book added to your library'); }}
+        tab={tab}
+        readingCount={readingBooks.length}
+        maxReading={MAX_READING}
+        onAdd={(b, opts) => {
+          const id = addBook(b, opts);
+          if (id !== null) {
+            setToastMsg(t.toastAdded || 'Book added to your library');
+          }
+        }}
         onAddMany={b => { addMany(b); setToastMsg(t.toastImported?.(b.length) || `${b.length} book${b.length > 1 ? 's' : ''} imported`); }}
         t={t} />
       <DeleteModal target={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={handleDeleteConfirm} t={t} />
