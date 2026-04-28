@@ -2169,6 +2169,12 @@
   z-index: 310;
   background: rgba(30,38,120,0.12);
 }
+/* Mobile: panel takes full width, no "outside" to click. The overlay then
+   can intercept touch events on iOS Safari (body scroll-lock + nested
+   fixed children quirk) — causing scroll blocked + double-tap on Share. */
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+  .panel-overlay { display: none; }
+}
 
 /* ─── AUTOCOMPLETE ─── */
 .autocomplete-list {
