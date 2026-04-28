@@ -1,6 +1,6 @@
 "use client";
 import "./library.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLibrary, MAX_READING } from "@/lib/useLibrary";
 import Sidebar       from "@/components/Sidebar";
 import AppToolbar    from "@/components/library/AppToolbar";
@@ -36,6 +36,21 @@ export default function LibraryPage() {
   const [finishBook, setFinishBook] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
   const lib = useLibrary();
+
+  useEffect(() => {
+    if (!mobileSidebarOpen) return;
+    const scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    return () => {
+      const top = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, parseInt(top || '0') * -1);
+    };
+  }, [mobileSidebarOpen]);
 
   if (!lib.hydrated) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
