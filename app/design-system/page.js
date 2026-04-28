@@ -644,6 +644,7 @@ export default function DesignSystemPage() {
                       ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
                       ["Text / ghost link", "btn-ghost", [".footer-link", ".quote-see-more"]],
                       ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
+                      ["AI action", "btn-ai btn-md", [".panel-cast-action (Generate state)"]],
                     ].map(([role, canon, classes]) => (
                       <tr key={role}>
                         <td className="token-table-component">{role}</td>
@@ -755,6 +756,28 @@ export default function DesignSystemPage() {
                     {label}
                   </button>
                 ))}
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">AI action — gradient border + tinted fill</div>
+              <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+                {[["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"]].map(([sz, label]) => (
+                  <button key={sz} className={`btn btn-ai ${sz}`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                    <svg className="import-tab-ai-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id={`aiGradDS-${sz}`} x1="23" y1="1" x2="2.1" y2="23" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#F67BF8"/>
+                          <stop offset="0.62" stopColor="#4959E6"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M12 1.5C12.28 1.5 12.5 1.72 12.5 2C12.5 7.25 16.75 11.5 22 11.5C22.28 11.5 22.5 11.72 22.5 12C22.5 12.28 22.28 12.5 22 12.5C16.75 12.5 12.5 16.75 12.5 22C12.5 22.28 12.28 22.5 12 22.5C11.72 22.5 11.5 22.28 11.5 22C11.5 16.75 7.25 12.5 2 12.5C1.72 12.5 1.5 12.28 1.5 12C1.5 11.72 1.72 11.5 2 11.5C7.25 11.5 11.5 7.25 11.5 2C11.5 1.72 11.72 1.5 12 1.5Z" fill={`url(#aiGradDS-${sz})`}/>
+                    </svg>
+                    Generate {label}
+                  </button>
+                ))}
+              </div>
+              <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                Reserved for AI-generated actions. <strong>Border</strong>: <code>linear-gradient(to right, #F67BF8, #4959E6)</code> via <code>border-box</code>, 1.5px stroke. <strong>Background</strong>: same gradient stops at <code>0.05</code> opacity default, <code>0.1</code> on hover, via <code>padding-box</code> (over an opaque <code>var(--bg)</code> layer that masks the solid gradient inside the ring). <strong>Padding</strong>: <code>0 20px 0 12px</code> (asymmetric — mirrors <code>.panel-quotes-add</code>; 12px left for the leading sparkle icon). <strong>Icon</strong>: pair with <code>.import-tab-ai-icon</code> 16×16 sparkle SVG. <strong>Sizes</strong>: SM / MD (default) / LG. <strong>First app usage</strong>: <code>.panel-cast-action</code> in BookPanel (Now Reading) — the "Generate cast" / "Regenerate" call to the Gemini cast endpoint.
               </div>
             </div>
           </section>

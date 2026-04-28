@@ -37,6 +37,30 @@ const MODEL_CASCADE = [
   'models/gemini-2.5-flash-lite',
 ];
 
+function buildCastPrompt(title, author, lang) {
+  const langName = lang === 'fr' ? 'French' : 'English';
+  return `You are a literature assistant helping a reader keep track of characters while reading "${title}" by ${author || 'unknown author'}.
+
+Return ONLY a JSON object (no markdown, no commentary) with this exact structure:
+{
+  "characters": [
+    {
+      "name": "<character name as in the book>",
+      "role": "<one short sentence describing their role/identity>",
+      "relations": "<one short sentence on key relations — optional, omit if none>"
+    }
+  ]
+}
+
+Rules:
+- 5 to 10 characters maximum, prioritize the most prominent ones, ordered by importance.
+- Write the role and relations fields in ${langName}.
+- ANTI-SPOILER: Introduce each character only by their initial role, identity, or position at the start of the story. Do NOT reveal twists, fates, deaths, secret identities, or late-plot developments.
+- Keep each field to one short sentence.
+- If the book is unknown or no reliable character data exists, return exactly: {"error":"not_found"}
+- Return ONLY the JSON, no backticks, no preamble.`;
+}
+
 function buildDefinePrompt(word, lang) {
   const langName = lang === 'fr' ? 'French' : 'English';
   return `You are a dictionary assistant. Define the word "${word}" in ${langName}.
@@ -153,6 +177,40 @@ export default {
           return json({ error: 'not_found' }, 404);
         }
         return json({ word: clean, lang: lang === 'fr' ? 'fr' : 'en', definitions: parsed.definitions });
+      } catch (e) {
+        return json({ error: e.message || 'Internal error' }, 500);
+      }
+    }
+
+    // POST /cast — generate a character cast for a book via Gemini
+    if (url.pathname === '/cast') {
+      try {
+        const { title, author, lang } = await request.json();
+        if (!title || typeof title !== 'string') {
+          return json({ error: 'Missing title' }, 400);
+        }
+        const cleanTitle  = title.trim().slice(0, 200);
+        const cleanAuthor = (author || '').trim().slice(0, 200);
+        if (!cleanTitle) return json({ error: 'Empty title' }, 400);
+
+        const result = await callGemini(env.GEMINI_API_KEY, {
+          contents: [{ parts: [{ text: buildCastPrompt(cleanTitle, cleanAuthor, lang === 'fr' ? 'fr' : 'en') }] }],
+          generationConfig: { temperature: 0.3, maxOutputTokens: 2048, responseMimeType: 'application/json' }
+        });
+
+        if (!result.ok) {
+          return json({ error: result.data?.error?.message || `Gemini error ${result.status}` }, result.status);
+        }
+
+        const raw = result.data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { return json({ error: 'Bad model response' }, 502); }
+
+        if (parsed.error === 'not_found') return json({ error: 'not_found' }, 404);
+        if (!Array.isArray(parsed.characters) || parsed.characters.length === 0) {
+          return json({ error: 'not_found' }, 404);
+        }
+        return json({ title: cleanTitle, author: cleanAuthor, lang: lang === 'fr' ? 'fr' : 'en', characters: parsed.characters });
       } catch (e) {
         return json({ error: e.message || 'Internal error' }, 500);
       }

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import CharacterCast from "./CharacterCast";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -23,7 +24,7 @@ function StarsDisplay({ value }) {
   );
 }
 
-export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onEditFinished, onRemoveFinished, readingCount, maxReading, quotes, lang, t }) {
+export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onCancelReading, onEditFinished, onRemoveFinished, readingCount, maxReading, quotes, lang, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
   const [shared, setShared] = useState(false);
@@ -86,20 +87,6 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
       {book && (
         <div className="panel-inner">
 
-          {/* Share button */}
-          <button className="panel-share" onClick={handleShare} title={shared ? (t.shareCopied || 'Copied!') : 'Share'}>
-            {shared ? (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-              </svg>
-            )}
-          </button>
-
           {/* Close button */}
           <button className="panel-close" onClick={onClose}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -127,6 +114,41 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                     <span className="panel-meta-sep" aria-hidden="true">·</span>
                     <span>{book.year || 'NC'}</span>
                   </div>
+                </div>
+                <div className="panel-header-actions">
+                  {tab === 'owned' && !book.startedAt && (
+                    <button
+                      className="panel-move-btn"
+                      onClick={() => onStartReading?.(book)}
+                      disabled={readingCount >= maxReading}
+                      title={readingCount >= maxReading ? t.nowReadingLimit : undefined}>
+                      {t.btnStartReading}
+                    </button>
+                  )}
+                  {tab === 'owned' && book.startedAt && !book.finishedAt && (
+                    <>
+                      <button className="panel-move-btn" onClick={() => onFinishReading?.(book)}>
+                        {t.btnFinishReading}
+                      </button>
+                      <button className="btn btn-secondary btn-md" onClick={() => onCancelReading?.(book)}>
+                        {t.btnCancelReading}
+                      </button>
+                    </>
+                  )}
+                  <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare}>
+                    {shared ? (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
+                        <polyline points="16 6 12 2 8 6"/>
+                        <line x1="12" y1="2" x2="12" y2="15"/>
+                      </svg>
+                    )}
+                    {shared ? t.shareCopied : t.btnShare}
+                  </button>
                 </div>
               </div>
               {/* Finished section — framed by border-top + border-bottom for emphasis */}
@@ -158,40 +180,26 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   </div>
                 </div>
               )}
-              {/* About section */}
-              <div className="panel-section">
-                <span className="panel-section-eyebrow">About</span>
-                {synopsis
-                  ? <div className="panel-synopsis">{synopsis}</div>
-                  : <div className="panel-synopsis-placeholder">No synopsis available.</div>
-                }
-              </div>
-
-              <div className="panel-actions">
-                {tab === 'wishlist' && (
-                  <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
-                    {t.selConfirmOwned || 'Move to Library'}
-                  </button>
-                )}
-                {tab === 'owned' && book.startedAt && !book.finishedAt && (
-                  <button className="panel-move-btn" onClick={() => onFinishReading?.(book)}>
-                    {t.btnFinishReading}
-                  </button>
-                )}
-                {tab === 'owned' && !book.startedAt && (
-                  <button
-                    className="panel-move-btn"
-                    onClick={() => onStartReading?.(book)}
-                    disabled={readingCount >= maxReading}
-                    title={readingCount >= maxReading ? t.nowReadingLimit : undefined}>
-                    {t.btnStartReading}
-                  </button>
-                )}
-                <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
-                  {t.btnDelete || 'Delete'}
-                </button>
-              </div>
             </div>
+          </div>
+
+          <div className="panel-divider" />
+
+          {/* Character cast — Now reading only */}
+          {book.startedAt && !book.finishedAt && (
+            <>
+              <CharacterCast book={book} lang={lang} t={t} />
+              <div className="panel-divider" />
+            </>
+          )}
+
+          {/* About section */}
+          <div className="panel-section">
+            <span className="panel-section-eyebrow">About</span>
+            {synopsis
+              ? <div className="panel-synopsis">{synopsis}</div>
+              : <div className="panel-synopsis-placeholder">No synopsis available.</div>
+            }
           </div>
 
           <div className="panel-divider" />
@@ -215,6 +223,20 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
               </svg>
               Add a quote
+            </button>
+          </div>
+
+          <div className="panel-divider" />
+
+          {/* Footer actions — left-aligned, Delete last */}
+          <div className="panel-actions">
+            {tab === 'wishlist' && (
+              <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
+                {t.selConfirmOwned || 'Move to Library'}
+              </button>
+            )}
+            <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
+              {t.btnDelete || 'Delete'}
             </button>
           </div>
 
