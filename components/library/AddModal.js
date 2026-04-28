@@ -20,7 +20,7 @@ function PhotoDropzone({ onClick }) {
   );
 }
 
-export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
+export default function AddModal({ open, onClose, onAdd, onAddMany, tab, readingCount = 0, maxReading = 3, t }) {
   const [activeTab, setActiveTab] = useState('photo');
   const [suggestions, setSuggestions] = useState([]);
   const [sugFocused, setSugFocused] = useState(-1);
@@ -35,8 +35,15 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
   const [photoState, setPhotoState] = useState('idle');
   const [scanStep, setScanStep] = useState('prep');
   const [photoError, setPhotoError] = useState('');
+  const [markAsReading, setMarkAsReading] = useState(false);
   const fileInputRef  = useRef(null);
   const photoInputRef = useRef(null);
+
+  // Checkbox is offered only when adding a single book to the library
+  // (not wishlist, not bulk import). Disabled if reading limit is reached.
+  const readingLimitReached = readingCount >= maxReading;
+  const showMarkAsReadingManual = tab === 'owned';
+  const showMarkAsReadingPhoto = tab === 'owned' && previewBooks.length === 1;
 
   // Tab indicator
   const tabRefs = useRef([]);
@@ -56,6 +63,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
       setTitle(''); setAuthor(''); setYear(''); setGenre(''); setError('');
       setImportError(''); setSuggestions([]); setSugFocused(-1);
       setActiveTab('photo');
+      setMarkAsReading(false);
     }
   }, [open]);
 
@@ -83,7 +91,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
   }
 
   function pickSuggestion(s) {
-    onAdd({ title: s.title, author: s.author, year: s.year || null, genre: null });
+    onAdd({ title: s.title, author: s.author, year: s.year || null, genre: null }, { startReading: markAsReading });
     resetAndClose();
   }
 
@@ -98,12 +106,21 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (!title.trim() || !author.trim()) { setError('Title and author are required.'); return; }
-    onAdd({ title: title.trim(), author: author.trim(), year: year.trim() || null, genre: genre.trim() || null });
+    onAdd(
+      { title: title.trim(), author: author.trim(), year: year.trim() || null, genre: genre.trim() || null },
+      { startReading: markAsReading }
+    );
     resetAndClose();
   }
 
   function handleImportConfirm() {
-    onAddMany(previewBooks);
+    // Single book + Mark-as-reading checkbox: add via the single-book path
+    // so the page-level wrapper can call startReading on the new id.
+    if (previewBooks.length === 1 && markAsReading && tab === 'owned') {
+      onAdd(previewBooks[0], { startReading: true });
+    } else {
+      onAddMany(previewBooks);
+    }
     resetAndClose();
   }
 
@@ -112,6 +129,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
     setImportError(''); setPreviewBooks([]); setSuggestions([]); setSugFocused(-1);
     setPhotoState('idle'); setPhotoError('');
     setActiveTab('photo');
+    setMarkAsReading(false);
     onClose();
   }
 
@@ -262,7 +280,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
 
         {/* Photo tab */}
         {activeTab === 'photo' && (
-          <div>
+          <div className="import-tab-pane">
             <input ref={photoInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoChange} />
             {photoState === 'scanning' ? (
               <GradientDropzone>
@@ -312,12 +330,24 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
                 </div>
               </div>
             )}
+            {showMarkAsReadingPhoto && (
+              <MarkAsReadingToggle
+                checked={markAsReading}
+                onChange={setMarkAsReading}
+                disabled={readingLimitReached}
+                label={t.addMarkAsReading}
+                limitText={t.nowReadingLimit}
+                infoBefore={t.addMarkAsReadingInfoBefore}
+                infoHighlight={t.addMarkAsReadingInfoHighlight}
+                infoAfter={t.addMarkAsReadingInfoAfter}
+              />
+            )}
           </div>
         )}
 
         {/* File tab */}
         {activeTab === 'file' && (
-          <div>
+          <div className="import-tab-pane">
             {previewBooks.length === 0 ? (
               <div
                 className="import-dropzone"
@@ -411,6 +441,18 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
                 </div>
               ))}
             </div>
+            {showMarkAsReadingManual && (
+              <MarkAsReadingToggle
+                checked={markAsReading}
+                onChange={setMarkAsReading}
+                disabled={readingLimitReached}
+                label={t.addMarkAsReading}
+                limitText={t.nowReadingLimit}
+                infoBefore={t.addMarkAsReadingInfoBefore}
+                infoHighlight={t.addMarkAsReadingInfoHighlight}
+                infoAfter={t.addMarkAsReadingInfoAfter}
+              />
+            )}
             {error && <div className="modal-error">{error}</div>}
           </form>
         )}
@@ -435,6 +477,46 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, t }) {
         )}
 
       </div>
+    </div>
+  );
+}
+
+function MarkAsReadingToggle({ checked, onChange, disabled, label, limitText, infoBefore, infoHighlight, infoAfter }) {
+  return (
+    <div className="modal-toggle-group">
+      <label
+        className={`modal-toggle-row${disabled ? ' is-disabled' : ''}`}
+        title={disabled ? limitText : undefined}>
+        <input
+          type="checkbox"
+          className="modal-toggle-input"
+          checked={checked}
+          onChange={e => onChange(e.target.checked)}
+          disabled={disabled}
+        />
+        <span className="modal-toggle-check">
+          {checked && (
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="1.5,5 4,7.5 8.5,2.5"/>
+            </svg>
+          )}
+        </span>
+        <span className="modal-toggle-label">{label}</span>
+      </label>
+      {infoBefore && (
+        <div className="modal-info-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span>
+            {infoBefore}
+            <strong className="modal-info-box-strong">{infoHighlight}</strong>
+            {infoAfter}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

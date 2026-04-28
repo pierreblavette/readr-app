@@ -290,6 +290,13 @@
   gap: 12px;
   flex-shrink: 0;
 }
+/* Sub-group: secondary actions (Edit + Export) tighter than the parent gap
+   to read as one logical unit (manage items) vs the surrounding actions. */
+.counter-secondary-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
 /* ─── SEARCH BOX ─── */
 .search-box {
@@ -446,7 +453,6 @@
   gap: 8px;
   transition: border-color 0.15s;
   white-space: nowrap;
-  margin-left: -4px;
 }
 
 .export-btn:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
@@ -458,7 +464,7 @@
 [data-theme="dark"] .export-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-3); }
 
 /* ─── DROPDOWN MENU ─── */
-.dropdown-wrap { position: relative; }
+.dropdown-wrap { position: relative; display: inline-flex; }
 .dropdown-menu {
   position: absolute; top: calc(100% + 6px); right: 0;
   background: var(--bg); border: 1.5px solid var(--border-subtle);
@@ -2204,6 +2210,100 @@
   gap: 24px;
 }
 
+/* Inline checkbox row used inside modal flows (e.g. Add book → Mark as reading) */
+.modal-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  cursor: pointer;
+  user-select: none;
+}
+.modal-toggle-row.is-disabled { opacity: 0.5; cursor: not-allowed; }
+.modal-toggle-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+/* States mirror .btn-outline (border + bg). */
+.modal-toggle-check {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 5px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+[data-theme="dark"] .modal-toggle-check { border-color: var(--light-20); }
+.modal-toggle-row:hover:not(.is-disabled) .modal-toggle-check {
+  border-color: var(--primary-50);
+  background: var(--primary-5);
+}
+[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled) .modal-toggle-check {
+  border-color: var(--primary-40);
+  background: var(--primary-5);
+}
+/* Checked state mirrors .btn-primary (bg --primary-50/40, hover --primary-60/50). */
+.modal-toggle-input:checked ~ .modal-toggle-check {
+  background: var(--primary-50);
+  border-color: transparent;
+}
+.modal-toggle-row:hover:not(.is-disabled) .modal-toggle-input:checked ~ .modal-toggle-check {
+  background: var(--primary-60);
+  border-color: transparent;
+}
+[data-theme="dark"] .modal-toggle-input:checked ~ .modal-toggle-check {
+  background: var(--primary-40);
+  border-color: transparent;
+}
+[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled) .modal-toggle-input:checked ~ .modal-toggle-check {
+  background: var(--primary-50);
+  border-color: transparent;
+}
+.modal-toggle-check svg { width: 10px; height: 10px; color: #fff; }
+.modal-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+.modal-toggle-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.modal-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--primary-5);
+  border: 1.5px solid var(--primary-20);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+[data-theme="dark"] .modal-info-box { border-color: var(--primary-30); }
+.modal-info-box-strong {
+  font-weight: 700;
+  color: var(--text);
+}
+.modal-info-box svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--primary-50);
+  margin-top: 1px;
+}
+[data-theme="dark"] .modal-info-box svg { color: var(--primary-40); }
+
 .modal-title {
   font-size: 28px;
   font-weight: 800;
@@ -2631,7 +2731,8 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.import-preview { margin-top: 24px; }
+/* Photo / File tab content uses gap-driven spacing instead of stacked margins. */
+.import-tab-pane { display: flex; flex-direction: column; gap: 24px; }
 .import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .import-preview-title { font-size: 12px; font-weight: 500; color: var(--text-3); }
 .import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
