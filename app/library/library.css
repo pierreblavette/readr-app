@@ -179,9 +179,9 @@
 .lang-btn.active { color: var(--text); font-weight: 600; }
 .lang-btn:hover:not(.active) { color: var(--text-2); }
 
-/* Mobile: extend invisible hit area to ~44×44 without changing visible size.
+/* Mobile (portrait + landscape phones): extend invisible hit area to ~44×44.
    The 11px buttons in the footer were too small to tap reliably on touch. */
-@media (max-width: 768px) {
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   .lang-btn { position: relative; }
   .lang-btn::before {
     content: '';
@@ -2352,7 +2352,7 @@
 }
 
 /* ─── RESPONSIVE ─── */
-@media (max-width: 768px) {
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   .toolbar-inner, .main-wrap { padding-left: 20px; padding-right: 20px; }
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
   .books-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -3702,7 +3702,7 @@ button.quote-book-chip {
   font-style: italic;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   /* z-index above .book-panel (320) so the mobile drawer covers the panel */
   .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: var(--shadow-lg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; }
   .sidebar.mobile-open { transform: translateX(0); }
