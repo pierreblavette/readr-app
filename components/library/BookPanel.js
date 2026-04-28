@@ -135,7 +135,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       </button>
                     </>
                   )}
-                  <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare}>
+                  <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare} aria-label={t.btnShare}>
                     {shared ? (
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12"/>
@@ -147,7 +147,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                         <line x1="12" y1="2" x2="12" y2="15"/>
                       </svg>
                     )}
-                    {shared ? t.shareCopied : t.btnShare}
+                    <span className="panel-header-share-label">{shared ? t.shareCopied : t.btnShare}</span>
                   </button>
                 </div>
               </div>
