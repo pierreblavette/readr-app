@@ -53,9 +53,24 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
   useEffect(() => {
     const idx = TABS.indexOf(activeTab);
     const el  = tabRefs.current[idx];
-    if (el) {
+    if (!el) return;
+    // Defer to next frame so the layout has settled before we measure —
+    // especially relevant since .import-tabs is now overflow-x: auto and
+    // .import-tab is flex-shrink: 0, which can shift offsets after mount.
+    let raf = requestAnimationFrame(() => {
       setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
+    });
+    function handleResize() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
+      });
     }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [activeTab, open]);
 
   useEffect(() => {
