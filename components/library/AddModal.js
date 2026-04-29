@@ -62,6 +62,10 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
       const r  = el.getBoundingClientRect();
       const pr = parent.getBoundingClientRect();
       setIndicator({ left: r.left - pr.left + parent.scrollLeft, width: r.width });
+      // If the active tab is partially or fully clipped by the scroll wrapper,
+      // bring it into view (horizontal only — block: 'nearest' avoids any
+      // vertical page scroll if the modal is taller than the viewport).
+      el.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
     };
     let raf = requestAnimationFrame(update);
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => {
