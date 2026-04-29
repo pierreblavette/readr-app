@@ -32,7 +32,7 @@ async function lookupISBN(isbn) {
 export default function BarcodeScanner({ onBookFound, t }) {
   const [supportsNative, setSupportsNative] = useState(false);
   const [scanState, setScanState] = useState('idle'); // idle | scanning | looking-up | not-found | error
-  const [error, setError] = useState('');
+  const [errorMsg, setErrorMsg] = useState(null); // { title, desc? } | null
   const [manualISBN, setManualISBN] = useState('');
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -63,7 +63,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
   }
 
   async function handleStartCamera() {
-    setError('');
+    setErrorMsg(null);
     setScanState('scanning');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -77,7 +77,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
       }
       detectLoop();
     } catch (e) {
-      setError(t.scanCameraError || 'Camera permission denied or unavailable.');
+      setErrorMsg({ title: t.scanCameraError || 'Camera permission denied or unavailable.' });
       setScanState('error');
     }
   }
@@ -101,17 +101,24 @@ export default function BarcodeScanner({ onBookFound, t }) {
 
   async function runLookup(isbn) {
     setScanState('looking-up');
-    setError('');
+    setErrorMsg(null);
     try {
       const book = await lookupISBN(isbn);
       if (!book) {
+        setErrorMsg({
+          title: t.scanNotFoundTitle || 'No book found',
+          desc: t.scanNotFoundDescOverride || 'Try another or use the Manual tab.',
+        });
         setScanState('not-found');
         return;
       }
       onBookFound?.(book);
       setScanState('idle');
     } catch (e) {
-      setError(t.scanLookupError || 'Could not look up this ISBN.');
+      setErrorMsg({
+        title: t.scanLookupErrorTitle || 'Lookup failed',
+        desc: t.scanLookupErrorDesc || 'Try again.',
+      });
       setScanState('error');
     }
   }
@@ -120,7 +127,10 @@ export default function BarcodeScanner({ onBookFound, t }) {
     e.preventDefault();
     const isbn = normalizeISBN(manualISBN);
     if (!isbn) {
-      setError(t.scanInvalidISBN || 'Invalid ISBN. Enter 10 or 13 digits.');
+      setErrorMsg({
+        title: t.scanInvalidISBNTitle || 'Invalid number',
+        desc: t.scanInvalidISBNDesc || 'Enter 10 or 13 digits.',
+      });
       setScanState('error');
       return;
     }
@@ -129,17 +139,21 @@ export default function BarcodeScanner({ onBookFound, t }) {
 
   function handleRetry() {
     stopCamera();
-    setError('');
+    setErrorMsg(null);
     setScanState('idle');
     setManualISBN('');
   }
 
   return (
-    <div className="scan-panel">
-      {scanState === 'idle' && (
+    <>
+      {(scanState === 'idle' || (scanState === 'looking-up' && manualISBN.trim())) && (
         <>
           {supportsNative && (
-            <button type="button" className="btn btn-primary btn-md scan-start-btn" onClick={handleStartCamera}>
+            <button
+              type="button"
+              className="btn btn-primary btn-md scan-start-btn"
+              onClick={handleStartCamera}
+              disabled={scanState === 'looking-up'}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                 <circle cx="12" cy="13" r="4"/>
@@ -158,9 +172,19 @@ export default function BarcodeScanner({ onBookFound, t }) {
                 onChange={e => setManualISBN(e.target.value)}
                 inputMode="numeric"
                 autoComplete="off"
+                disabled={scanState === 'looking-up'}
               />
-              <button type="submit" className="btn btn-outline btn-md" disabled={!manualISBN.trim()}>
-                {t.scanLookupBtn || 'Look up'}
+              <button
+                type="submit"
+                className="btn btn-primary btn-md"
+                disabled={!manualISBN.trim() || scanState === 'looking-up'}>
+                {scanState === 'looking-up' && (
+                  <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
+                    <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
+                  </svg>
+                )}
+                {scanState === 'looking-up' ? (t.scanLookingUp || 'Looking up…') : (t.scanLookupBtn || 'Look up')}
               </button>
             </div>
           </form>
@@ -178,30 +202,24 @@ export default function BarcodeScanner({ onBookFound, t }) {
         </div>
       )}
 
-      {scanState === 'looking-up' && (
+      {scanState === 'looking-up' && !manualISBN.trim() && (
         <div className="scan-loading">
           <div className="panel-spinner" />
           <span>{t.scanLookingUp || 'Looking up…'}</span>
         </div>
       )}
 
-      {scanState === 'not-found' && (
+      {(scanState === 'error' || scanState === 'not-found') && errorMsg && (
         <div className="scan-error-state">
-          <p>{t.scanNotFound || 'No book found for this ISBN. Try another or use the Manual tab.'}</p>
+          <div className="scan-error-text">
+            <p className="scan-error-title">{errorMsg.title}</p>
+            {errorMsg.desc && <p className="scan-error-desc">{errorMsg.desc}</p>}
+          </div>
           <button type="button" className="btn btn-outline btn-md" onClick={handleRetry}>
             {t.scanRetry || 'Try again'}
           </button>
         </div>
       )}
-
-      {scanState === 'error' && (
-        <div className="scan-error-state">
-          <p>{error || t.scanGenericError || 'Something went wrong.'}</p>
-          <button type="button" className="btn btn-outline btn-md" onClick={handleRetry}>
-            {t.scanRetry || 'Try again'}
-          </button>
-        </div>
-      )}
-    </div>
+    </>
   );
 }

@@ -2294,6 +2294,17 @@
   font-weight: 700;
   color: var(--text);
 }
+/* Alert variant — used when the toggle is disabled (limit reached, etc.) */
+.modal-info-box.modal-info-box--alert {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+.modal-info-box.modal-info-box--alert svg { color: #B45309; }
+[data-theme="dark"] .modal-info-box.modal-info-box--alert {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.5);
+}
+[data-theme="dark"] .modal-info-box.modal-info-box--alert svg { color: #FBBF24; }
 .modal-info-box svg {
   width: 16px;
   height: 16px;
@@ -2734,7 +2745,6 @@
 .import-tab-pane { display: flex; flex-direction: column; gap: 24px; }
 
 /* ─── BARCODE SCANNER (ISBN) ─── */
-.scan-panel { display: flex; flex-direction: column; gap: 20px; }
 .scan-start-btn { align-self: flex-start; padding: 0 20px 0 12px; }
 .scan-manual { display: flex; flex-direction: column; gap: 8px; }
 .scan-manual-label {
@@ -2742,24 +2752,27 @@
   font-weight: 500;
   color: var(--text-2);
 }
-.scan-manual-row { display: flex; gap: 8px; }
+.scan-manual-row { display: flex; gap: 12px; }
+/* Mirrors .modal-field input */
 .scan-manual-input {
   flex: 1;
   height: 40px;
   padding: 0 14px;
   border-radius: 8px;
-  border: 1.5px solid var(--border-subtle);
-  background: var(--bg);
+  border: 1.5px solid transparent;
+  background: var(--bg3);
   color: var(--text);
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
-}
-.scan-manual-input:focus {
+  font-weight: 600;
   outline: none;
-  border-color: var(--primary-50);
+  transition: border-color 0.15s, background 0.15s;
 }
-[data-theme="dark"] .scan-manual-input { background: var(--bg2); border-color: var(--light-20); }
+.scan-manual-input::placeholder { font-weight: 500; color: var(--text-2); }
+.scan-manual-input:hover:not(:focus) { background: var(--primary-5); border: 1.5px solid var(--primary-50); }
+.scan-manual-input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
+[data-theme="dark"] .scan-manual-input:hover:not(:focus) { border: 1.5px solid var(--primary-40); background: var(--primary-3); }
+[data-theme="dark"] .scan-manual-input:focus { border-color: var(--primary-40); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
 
 .scan-camera {
   display: flex;
@@ -2803,18 +2816,30 @@
 }
 .scan-error-state {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+.scan-error-text {
+  display: flex;
   flex-direction: column;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 16px;
-  background: var(--bg3);
-  border-radius: 8px;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.scan-error-text p { margin: 0; }
+.scan-error-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.scan-error-desc {
   font-size: 14px;
+  font-weight: 500;
   color: var(--text-2);
 }
-.scan-error-state p { margin: 0; }
 
-/* Scan preview (post-lookup) */
+/* Scan preview (post-lookup) — chip-style container */
 .scan-preview {
   display: flex;
   flex-direction: column;
@@ -2823,10 +2848,13 @@
   background: var(--bg3);
   border-radius: 8px;
 }
+[data-theme="dark"] .scan-preview { background: var(--primary-5); }
 .scan-preview-row {
   display: flex;
+  align-items: center;
   gap: 16px;
-  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
 }
 .scan-preview-cover {
   width: 80px;
@@ -2863,26 +2891,11 @@
   font-weight: 500;
   color: var(--text-2);
 }
-.scan-preview-remove {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  border: none;
-  background: transparent;
-  color: var(--text-3);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.scan-preview-remove:hover { background: var(--primary-5); color: var(--text); }
-.scan-preview-remove svg { width: 14px; height: 14px; }
 .scan-preview-description {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
-  line-height: 1.6;
+  line-height: 1.8;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 4;
