@@ -311,9 +311,6 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
           </button>
         </div>
         </div>
-        {activeTab === 'scan' && (
-          <p className="import-tab-hint">{t.scanTabHint}</p>
-        )}
 
         {/* Photo tab */}
         {activeTab === 'photo' && (
