@@ -235,15 +235,23 @@ export default function BarcodeScanner({ onBookFound, t }) {
               />
               <button
                 type="submit"
-                className="btn btn-primary btn-md"
-                disabled={!manualISBN.trim() || scanState === 'looking-up'}>
-                {scanState === 'looking-up' && (
+                className="btn btn-primary btn-md scan-lookup-btn"
+                disabled={!manualISBN.trim() || scanState === 'looking-up'}
+                aria-label={t.scanLookupBtn || 'Look up'}>
+                {scanState === 'looking-up' ? (
                   <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
                     <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
                   </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
                 )}
-                {scanState === 'looking-up' ? (t.scanLookingUp || 'Looking up…') : (t.scanLookupBtn || 'Look up')}
+                <span className="scan-lookup-label">
+                  {scanState === 'looking-up' ? (t.scanLookingUp || 'Looking up…') : (t.scanLookupBtn || 'Look up')}
+                </span>
               </button>
             </div>
           </form>
