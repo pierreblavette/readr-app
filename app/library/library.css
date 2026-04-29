@@ -2359,6 +2359,14 @@
 }
 .import-tabs::-webkit-scrollbar { display: none; } /* WebKit */
 .import-tab { flex-shrink: 0; }
+.import-tab-hint {
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+}
 .modal-tabs-section {
   display: flex;
   flex-direction: column;

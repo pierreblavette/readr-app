@@ -54,22 +54,23 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
     const idx = TABS.indexOf(activeTab);
     const el  = tabRefs.current[idx];
     if (!el) return;
-    // Defer to next frame so the layout has settled before we measure —
-    // especially relevant since .import-tabs is now overflow-x: auto and
-    // .import-tab is flex-shrink: 0, which can shift offsets after mount.
-    let raf = requestAnimationFrame(() => {
+    // Layout can shift after mount (overflow-x: auto, flex-shrink: 0,
+    // late font loads, etc.). Combine rAF + ResizeObserver + window resize
+    // so the indicator stays accurate in every case.
+    const update = () => {
       setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
-    });
-    function handleResize() {
+    };
+    let raf = requestAnimationFrame(update);
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        if (el) setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
-      });
-    }
-    window.addEventListener('resize', handleResize);
+      raf = requestAnimationFrame(update);
+    }) : null;
+    if (ro) ro.observe(el);
+    window.addEventListener('resize', update);
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener('resize', handleResize);
+      if (ro) ro.disconnect();
+      window.removeEventListener('resize', update);
     };
   }, [activeTab, open]);
 
@@ -302,6 +303,12 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
             Manual
           </button>
         </div>
+        <p className="import-tab-hint">
+          {activeTab === 'photo'  && t.photoTabHint}
+          {activeTab === 'scan'   && t.scanTabHint}
+          {activeTab === 'file'   && t.fileTabHint}
+          {activeTab === 'manual' && t.manualTabHint}
+        </p>
 
         {/* Photo tab */}
         {activeTab === 'photo' && (
