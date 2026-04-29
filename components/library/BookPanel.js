@@ -116,6 +116,9 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                     <span>{book.year || 'NC'}</span>
                   </div>
                 </div>
+                {book.startedAt && !book.finishedAt && (
+                  <span className="now-reading-date">{t.nowReadingStartedOn(formatDate(book.startedAt, lang))}</span>
+                )}
                 <div className="panel-header-actions">
                   {tab === 'owned' && !book.startedAt && (
                     <button
@@ -209,7 +212,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
 
           {/* About section */}
           <div className="panel-section">
-            <span className="panel-section-eyebrow">About</span>
+            <span className="panel-section-eyebrow">{t.aboutSectionTitle}</span>
             {synopsis
               ? <div className="panel-synopsis">{synopsis}</div>
               : <div className="panel-synopsis-placeholder">No synopsis available.</div>

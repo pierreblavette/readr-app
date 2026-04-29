@@ -41,7 +41,10 @@ export default function CharacterCast({ book, lang, t }) {
 
   const showError = error && !loading;
   const showList  = cast && cast.length > 0 && !loading;
-  const showHint  = !cast && !error;
+  // Hint stays visible whenever the content slot is otherwise empty —
+  // including during regeneration of an existing cast (loading hides the
+  // list temporarily, but the hint should stay rather than leaving a void).
+  const showHint  = !showList && !showError;
 
   const buttonClass = showList
     ? 'btn btn-outline btn-md panel-cast-action'

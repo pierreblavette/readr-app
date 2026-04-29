@@ -1,18 +1,19 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import GradientDropzone from "./GradientDropzone";
+import BarcodeScanner from "./BarcodeScanner";
 import { prepareImage } from "../../lib/prepareImage";
 import { toTitleCase } from "../../lib/bookUtils";
 
-const TABS = ['photo', 'file', 'manual'];
+const TABS = ['photo', 'scan', 'file', 'manual'];
 
 function PhotoDropzone({ onClick }) {
   return (
     <GradientDropzone onClick={onClick} gradientId="photoGradBorder">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
       </svg>
       <div className="import-dropzone-title">Drop a photo or click to browse</div>
       <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
@@ -114,10 +115,12 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
   }
 
   function handleImportConfirm() {
-    // Single book + Mark-as-reading checkbox: add via the single-book path
-    // so the page-level wrapper can call startReading on the new id.
-    if (previewBooks.length === 1 && markAsReading && tab === 'owned') {
-      onAdd(previewBooks[0], { startReading: true });
+    // Single book (Scan tab, or Photo with one detection): always go through
+    // the single-book onAdd so the toast and the optional startReading flow
+    // stay clean. Multi-book imports still use onAddMany.
+    if (previewBooks.length === 1) {
+      const opts = (markAsReading && tab === 'owned') ? { startReading: true } : undefined;
+      onAdd(previewBooks[0], opts);
     } else {
       onAddMany(previewBooks);
     }
@@ -265,13 +268,20 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
 
           <button
             ref={el => tabRefs.current[1] = el}
+            className={`import-tab${activeTab === 'scan' ? ' active' : ''}`}
+            onClick={() => setActiveTab('scan')}>
+            Scan
+          </button>
+
+          <button
+            ref={el => tabRefs.current[2] = el}
             className={`import-tab${activeTab === 'file' ? ' active' : ''}`}
             onClick={() => setActiveTab('file')}>
             File
           </button>
 
           <button
-            ref={el => tabRefs.current[2] = el}
+            ref={el => tabRefs.current[3] = el}
             className={`import-tab${activeTab === 'manual' ? ' active' : ''}`}
             onClick={() => setActiveTab('manual')}>
             Manual
@@ -331,6 +341,36 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
               </div>
             )}
             {showMarkAsReadingPhoto && (
+              <MarkAsReadingToggle
+                checked={markAsReading}
+                onChange={setMarkAsReading}
+                disabled={readingLimitReached}
+                label={t.addMarkAsReading}
+                limitText={t.nowReadingLimit}
+                infoBefore={t.addMarkAsReadingInfoBefore}
+                infoHighlight={t.addMarkAsReadingInfoHighlight}
+                infoAfter={t.addMarkAsReadingInfoAfter}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Scan tab — barcode → ISBN → Google Books lookup */}
+        {activeTab === 'scan' && (
+          <div className="import-tab-pane">
+            {previewBooks.length === 0 ? (
+              <BarcodeScanner
+                onBookFound={(book) => setPreviewBooks([book])}
+                t={t}
+              />
+            ) : (
+              <ScanPreview
+                book={previewBooks[0]}
+                onRemove={() => setPreviewBooks([])}
+                t={t}
+              />
+            )}
+            {previewBooks.length === 1 && tab === 'owned' && (
               <MarkAsReadingToggle
                 checked={markAsReading}
                 onChange={setMarkAsReading}
@@ -459,13 +499,15 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
         </div>{/* end modal-tabs-section */}
 
         {/* Actions — direct child of .modal so they get the 32px gap (matches finish-modal pattern) */}
-        {(activeTab === 'photo' || activeTab === 'file') && (
+        {(activeTab === 'photo' || activeTab === 'file' || activeTab === 'scan') && (
           <div className="modal-actions">
             <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
             <button type="button" className="modal-submit"
               disabled={photoState === 'scanning' || previewBooks.length === 0}
               onClick={handleImportConfirm}>
-              Import {previewBooks.length > 0 ? `(${previewBooks.length})` : ''}
+              {activeTab === 'scan' && previewBooks.length === 1
+                ? (t.btnAddLibrary || 'Add to my library')
+                : `Import${previewBooks.length > 0 ? ` (${previewBooks.length})` : ''}`}
             </button>
           </div>
         )}
@@ -477,6 +519,39 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
         )}
 
       </div>
+    </div>
+  );
+}
+
+function ScanPreview({ book, onRemove, t }) {
+  return (
+    <div className="scan-preview">
+      <div className="scan-preview-row">
+        {book.cover ? (
+          <img src={book.cover} alt={book.title} className="scan-preview-cover" />
+        ) : (
+          <div className="scan-preview-cover scan-preview-cover-empty">
+            <span>{(book.title || '?').charAt(0).toUpperCase()}</span>
+          </div>
+        )}
+        <div className="scan-preview-info">
+          <div className="scan-preview-title">{book.title}</div>
+          <div className="scan-preview-author">{book.author || '—'}</div>
+          <div className="book-meta">
+            <span>{book.genre || 'NC'}</span>
+            <span className="book-meta-sep" aria-hidden="true">·</span>
+            <span>{book.year || 'NC'}</span>
+          </div>
+        </div>
+        <button type="button" className="scan-preview-remove" onClick={onRemove} aria-label={t.scanRemove || 'Remove'}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      {book.description && (
+        <p className="scan-preview-description">{book.description}</p>
+      )}
     </div>
   );
 }
