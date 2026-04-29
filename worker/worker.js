@@ -215,6 +215,52 @@ export default {
       }
     }
 
+    // POST /barcode — read an ISBN barcode from a photo via Gemini Vision
+    if (url.pathname === '/barcode') {
+      try {
+        const { image, mimeType } = await request.json();
+        if (!image || !mimeType) {
+          return json({ error: 'Missing image or mimeType' }, 400);
+        }
+
+        const prompt = `Look at this image and extract the ISBN barcode number printed under (or near) the barcode lines. The ISBN is a 10-digit or 13-digit number (the 13-digit form usually starts with 978 or 979). It may contain dashes — strip them in the output.
+
+Return ONLY a JSON object (no markdown, no commentary) with this exact structure:
+{"isbn":"9781234567890"}
+
+If no barcode/ISBN is visible or readable, return exactly: {"error":"not_found"}
+
+Do not invent digits. If you can only read part of the number, return not_found.`;
+
+        const result = await callGemini(env.GEMINI_API_KEY, {
+          contents: [{
+            parts: [
+              { text: prompt },
+              { inline_data: { mime_type: mimeType, data: image } }
+            ]
+          }],
+          generationConfig: { temperature: 0.1, maxOutputTokens: 128, responseMimeType: 'application/json' }
+        });
+
+        if (!result.ok) {
+          return json({ error: result.data?.error?.message || `Gemini error ${result.status}` }, result.status);
+        }
+
+        const raw = result.data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { return json({ error: 'Bad model response' }, 502); }
+
+        if (parsed.error === 'not_found' || !parsed.isbn) return json({ error: 'not_found' }, 404);
+        const cleanIsbn = String(parsed.isbn).replace(/[^0-9Xx]/g, '').toUpperCase();
+        if (cleanIsbn.length !== 10 && cleanIsbn.length !== 13) {
+          return json({ error: 'not_found' }, 404);
+        }
+        return json({ isbn: cleanIsbn });
+      } catch (e) {
+        return json({ error: e.message || 'Internal error' }, 500);
+      }
+    }
+
     // POST /quiz — generate a 10-question comprehension quiz via Gemini
     if (url.pathname === '/quiz') {
       try {

@@ -2352,7 +2352,13 @@
   gap: 4px;
   border-bottom: 1px solid var(--border-subtle);
   position: relative;
+  /* Allow horizontal scroll when tabs overflow (mobile, more tabs added). */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
 }
+.import-tabs::-webkit-scrollbar { display: none; } /* WebKit */
+.import-tab { flex-shrink: 0; }
 .modal-tabs-section {
   display: flex;
   flex-direction: column;
@@ -3034,6 +3040,10 @@
   /* Sort menu shares .export-btn but must keep its label visible —
      opt out of the icon-only collapse. */
   .sort-menu-btn { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
+  /* Manual ISBN lookup button collapses to icon-only on mobile because
+     the FR label "Rechercher" makes the row overflow. */
+  .scan-lookup-btn { padding: 0; width: 40px; justify-content: center; }
+  .scan-lookup-label { display: none; }
   /* Mobile: panel-header Share collapses to icon-only (40×40)
      and aligns left after wrap (no auto-margin push) — avoids the
      "lonely button on row 2" rendering when FR labels make the first

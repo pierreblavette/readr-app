@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { prepareImage } from "../../lib/prepareImage";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
@@ -31,16 +32,19 @@ async function lookupISBN(isbn) {
 
 export default function BarcodeScanner({ onBookFound, t }) {
   const [supportsNative, setSupportsNative] = useState(false);
-  const [scanState, setScanState] = useState('idle'); // idle | scanning | looking-up | not-found | error
+  const [isTouch, setIsTouch] = useState(false);
+  const [scanState, setScanState] = useState('idle'); // idle | scanning | reading-photo | looking-up | not-found | error
   const [errorMsg, setErrorMsg] = useState(null); // { title, desc? } | null
   const [manualISBN, setManualISBN] = useState('');
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const detectorRef = useRef(null);
   const rafRef = useRef(null);
+  const photoInputRef = useRef(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'BarcodeDetector' in window) {
+    if (typeof window === 'undefined') return;
+    if ('BarcodeDetector' in window) {
       try {
         detectorRef.current = new window.BarcodeDetector({
           formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e'],
@@ -48,6 +52,8 @@ export default function BarcodeScanner({ onBookFound, t }) {
         setSupportsNative(true);
       } catch {}
     }
+    // Touch detection for the photo-capture fallback (Safari iOS, etc.).
+    setIsTouch(window.matchMedia('(pointer: coarse)').matches);
     return () => stopCamera();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -123,6 +129,37 @@ export default function BarcodeScanner({ onBookFound, t }) {
     }
   }
 
+  async function handlePhotoChange(e) {
+    const file = e.target.files?.[0];
+    if (e.target) e.target.value = ''; // allow re-picking the same file later
+    if (!file) return;
+    setScanState('reading-photo');
+    setErrorMsg(null);
+    try {
+      const { base64, mimeType } = await prepareImage(file);
+      const res = await fetch('/api/vision/barcode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64, mimeType }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.isbn) {
+        setErrorMsg({
+          title: t.scanNotFoundTitle || 'No barcode detected',
+          desc: t.scanPhotoNotFoundDesc || 'Make sure the barcode is visible and well-lit, then try again.',
+        });
+        setScanState('error');
+        return;
+      }
+      await runLookup(data.isbn);
+    } catch (err) {
+      setErrorMsg({
+        title: t.scanGenericError || 'Something went wrong.',
+      });
+      setScanState('error');
+    }
+  }
+
   function handleManualLookup(e) {
     e.preventDefault();
     const isbn = normalizeISBN(manualISBN);
@@ -148,7 +185,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
     <>
       {(scanState === 'idle' || (scanState === 'looking-up' && manualISBN.trim())) && (
         <>
-          {supportsNative && (
+          {supportsNative ? (
             <button
               type="button"
               className="btn btn-primary btn-md scan-start-btn"
@@ -160,7 +197,29 @@ export default function BarcodeScanner({ onBookFound, t }) {
               </svg>
               {t.scanStartBtn || 'Scan with camera'}
             </button>
-          )}
+          ) : isTouch ? (
+            <>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                style={{ display: 'none' }}
+                onChange={handlePhotoChange}
+              />
+              <button
+                type="button"
+                className="btn btn-primary btn-md scan-start-btn"
+                onClick={() => photoInputRef.current?.click()}
+                disabled={scanState === 'looking-up'}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                {t.scanPhotoBtn || 'Take a photo of the barcode'}
+              </button>
+            </>
+          ) : null}
           <form onSubmit={handleManualLookup} className="scan-manual">
             <label className="scan-manual-label">{t.scanManualLabel || 'Or enter ISBN manually'}</label>
             <div className="scan-manual-row">
@@ -176,15 +235,23 @@ export default function BarcodeScanner({ onBookFound, t }) {
               />
               <button
                 type="submit"
-                className="btn btn-primary btn-md"
-                disabled={!manualISBN.trim() || scanState === 'looking-up'}>
-                {scanState === 'looking-up' && (
+                className="btn btn-primary btn-md scan-lookup-btn"
+                disabled={!manualISBN.trim() || scanState === 'looking-up'}
+                aria-label={t.scanLookupBtn || 'Look up'}>
+                {scanState === 'looking-up' ? (
                   <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
                     <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
                   </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
                 )}
-                {scanState === 'looking-up' ? (t.scanLookingUp || 'Looking up…') : (t.scanLookupBtn || 'Look up')}
+                <span className="scan-lookup-label">
+                  {scanState === 'looking-up' ? (t.scanLookingUp || 'Looking up…') : (t.scanLookupBtn || 'Look up')}
+                </span>
               </button>
             </div>
           </form>
@@ -199,6 +266,13 @@ export default function BarcodeScanner({ onBookFound, t }) {
           <button type="button" className="btn btn-outline btn-md" onClick={handleRetry}>
             {t.scanCancel || 'Cancel'}
           </button>
+        </div>
+      )}
+
+      {scanState === 'reading-photo' && (
+        <div className="scan-loading">
+          <div className="panel-spinner" />
+          <span>{t.scanReadingPhoto || 'Reading the barcode…'}</span>
         </div>
       )}
 
