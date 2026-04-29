@@ -3052,8 +3052,17 @@
   .sort-menu-btn { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
   /* Manual ISBN lookup button collapses to icon-only on mobile because
      the FR label "Rechercher" makes the row overflow. */
-  .scan-lookup-btn { padding: 0; width: 40px; justify-content: center; }
-  .scan-lookup-label { display: none; }
+  /* Stack the lookup button below the input on mobile (column layout has
+     room for the label, so we keep it visible — full-width CTA). */
+  .scan-manual-row { flex-direction: column; align-items: stretch; }
+  /* In a column flex parent, flex: 1 stretches on the main axis (= height),
+     so we have to neutralise it. */
+  .scan-manual-input { flex: 0 0 auto; }
+  .scan-lookup-btn { padding: 0 20px 0 12px; width: 100%; justify-content: center; }
+  /* Stack the retry button below the error text on mobile, centered.
+     Button takes the full row width (iso .scan-lookup-btn). */
+  .scan-error-state { flex-direction: column; align-items: stretch; text-align: center; }
+  .scan-error-state .btn { width: 100%; justify-content: center; }
   /* Mobile: panel-header Share collapses to icon-only (40×40)
      and aligns left after wrap (no auto-margin push) — avoids the
      "lonely button on row 2" rendering when FR labels make the first
