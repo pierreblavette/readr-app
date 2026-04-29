@@ -53,19 +53,25 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
   useEffect(() => {
     const idx = TABS.indexOf(activeTab);
     const el  = tabRefs.current[idx];
-    if (!el) return;
-    // Layout can shift after mount (overflow-x: auto, flex-shrink: 0,
-    // late font loads, etc.). Combine rAF + ResizeObserver + window resize
-    // so the indicator stays accurate in every case.
+    const parent = el?.parentElement;
+    if (!el || !parent) return;
+    // Use getBoundingClientRect — more robust than offsetLeft/offsetWidth
+    // when the parent is a scrollable flex container, and accounts for
+    // transforms / sub-pixel positioning.
     const update = () => {
-      setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
+      const r  = el.getBoundingClientRect();
+      const pr = parent.getBoundingClientRect();
+      setIndicator({ left: r.left - pr.left + parent.scrollLeft, width: r.width });
     };
     let raf = requestAnimationFrame(update);
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(update);
     }) : null;
-    if (ro) ro.observe(el);
+    if (ro) {
+      ro.observe(el);
+      ro.observe(parent);
+    }
     window.addEventListener('resize', update);
     return () => {
       cancelAnimationFrame(raf);
@@ -262,6 +268,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
 
         {/* Tabs + active tab content */}
         <div className="modal-tabs-section">
+        <div className="import-tabs-scroll">
         <div className="import-tabs">
           <div className={`import-tab-indicator${activeTab === 'photo' ? ' gradient' : ''}`} style={{ left: indicator.left, width: indicator.width }} />
           <button
@@ -303,12 +310,10 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
             Manual
           </button>
         </div>
-        <p className="import-tab-hint">
-          {activeTab === 'photo'  && t.photoTabHint}
-          {activeTab === 'scan'   && t.scanTabHint}
-          {activeTab === 'file'   && t.fileTabHint}
-          {activeTab === 'manual' && t.manualTabHint}
-        </p>
+        </div>
+        {activeTab === 'scan' && (
+          <p className="import-tab-hint">{t.scanTabHint}</p>
+        )}
 
         {/* Photo tab */}
         {activeTab === 'photo' && (

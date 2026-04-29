@@ -2299,6 +2299,7 @@
   background: rgba(245, 158, 11, 0.08);
   border-color: rgba(245, 158, 11, 0.4);
 }
+.modal-info-box.modal-info-box--alert span { white-space: pre-line; }
 .modal-info-box.modal-info-box--alert svg { color: #B45309; }
 [data-theme="dark"] .modal-info-box.modal-info-box--alert {
   background: rgba(245, 158, 11, 0.12);
@@ -2347,22 +2348,30 @@
 [data-theme="dark"] .modal-close:hover { background: var(--primary-5); color: var(--primary-40); }
 
 /* Import tabs */
+/* Outer wrapper handles horizontal scroll. The 4px bottom padding gives
+   room for the indicator that sits at bottom: -1.5px on the inner
+   .import-tabs (without it, overflow-x: auto's implicit overflow-y: auto
+   would clip / scroll the indicator vertically). */
+.import-tabs-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+.import-tabs-scroll::-webkit-scrollbar { display: none; } /* WebKit */
 .import-tabs {
   display: flex;
   gap: 4px;
   border-bottom: 1px solid var(--border-subtle);
   position: relative;
-  /* Allow horizontal scroll when tabs overflow (mobile, more tabs added). */
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
+  width: max-content;
+  min-width: 100%;
 }
-.import-tabs::-webkit-scrollbar { display: none; } /* WebKit */
 .import-tab { flex-shrink: 0; }
 .import-tab-hint {
-  font-size: 14px;
-  font-weight: 400;
-  font-style: italic;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-2);
   line-height: 1.5;
   margin: 0;
