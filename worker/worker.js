@@ -82,7 +82,7 @@ Return ONLY a JSON object (no markdown, no commentary) with this exact structure
 }
 
 Rules:
-- 5 to 10 characters maximum, prioritize the most prominent ones, ordered by importance.
+- Aim for 15 to 20 characters when the book supports it (cap at 20). For shorter or sparser narratives, list all named characters with a defined plot role (minimum 8). Order by importance: protagonists first, then named secondary characters with a real role. Skip background extras with no specific function.
 - Write the role and relations fields in ${langName}.
 - ANTI-SPOILER: Introduce each character only by their initial role, identity, or position at the start of the story. Do NOT reveal twists, fates, deaths, secret identities, or late-plot developments.
 - Keep each field to one short sentence.
@@ -154,7 +154,11 @@ export default {
         let query, fields;
         if (q) {
           query  = encodeURIComponent(q);
-          fields = 'items(volumeInfo(title,authors,publishedDate,categories))';
+          // ISBN lookups need the full volumeInfo for the post-scan preview
+          // (cover, synopsis, year). Free-text autocomplete keeps the slim set.
+          fields = q.startsWith('isbn:')
+            ? 'items(volumeInfo(title,authors,publishedDate,description,imageLinks,categories))'
+            : 'items(volumeInfo(title,authors,publishedDate,categories))';
         } else {
           query  = encodeURIComponent(`intitle:${title} inauthor:${author}`);
           fields = 'items(volumeInfo(imageLinks,publishedDate,description))';
