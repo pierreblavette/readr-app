@@ -194,11 +194,20 @@ export default function BarcodeScanner({ onBookFound, t }) {
               className="btn btn-primary btn-md scan-start-btn"
               onClick={handleStartCamera}
               disabled={scanState === 'looking-up' || scanState === 'reading-photo'}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
-              {t.scanStartBtn || 'Scan with camera'}
+              {scanState === 'reading-photo' ? (
+                <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
+                  <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              )}
+              {scanState === 'reading-photo'
+                ? (t.scanReadingPhoto || 'Reading the barcode…')
+                : (t.scanStartBtn || 'Scan with camera')}
             </button>
           ) : (
             <>
@@ -215,11 +224,20 @@ export default function BarcodeScanner({ onBookFound, t }) {
                 className="btn btn-primary btn-md scan-start-btn"
                 onClick={() => photoInputRef.current?.click()}
                 disabled={scanState === 'looking-up' || scanState === 'reading-photo'}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                  <circle cx="12" cy="13" r="4"/>
-                </svg>
-                {t.scanPhotoBtn || 'Take a photo of the barcode'}
+                {scanState === 'reading-photo' ? (
+                  <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
+                    <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                )}
+                {scanState === 'reading-photo'
+                  ? (t.scanReadingPhoto || 'Reading the barcode…')
+                  : (t.scanPhotoBtn || 'Take a photo of the barcode')}
               </button>
             </>
           )}
@@ -241,9 +259,9 @@ export default function BarcodeScanner({ onBookFound, t }) {
               <button
                 type="submit"
                 className="btn btn-primary btn-md scan-lookup-btn"
-                disabled={(!manualISBN.trim() && scanState !== 'reading-photo') || scanState === 'looking-up' || scanState === 'reading-photo'}
+                disabled={!manualISBN.trim() || scanState === 'looking-up' || scanState === 'reading-photo'}
                 aria-label={t.scanLookupBtn || 'Look up'}>
-                {(scanState === 'looking-up' || scanState === 'reading-photo') ? (
+                {scanState === 'looking-up' ? (
                   <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
                     <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
@@ -255,11 +273,9 @@ export default function BarcodeScanner({ onBookFound, t }) {
                   </svg>
                 )}
                 <span className="scan-lookup-label">
-                  {scanState === 'reading-photo'
-                    ? (t.scanReadingPhoto || 'Reading the barcode…')
-                    : scanState === 'looking-up'
-                      ? (t.scanLookingUp || 'Looking up…')
-                      : (t.scanLookupBtn || 'Look up')}
+                  {scanState === 'looking-up'
+                    ? (t.scanLookingUp || 'Looking up…')
+                    : (t.scanLookupBtn || 'Look up')}
                 </span>
               </button>
             </div>
