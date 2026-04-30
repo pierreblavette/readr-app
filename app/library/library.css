@@ -617,7 +617,7 @@
   text-overflow: ellipsis;
 }
 .now-reading-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -811,7 +811,7 @@
 }
 
 .book-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.35;
   color: var(--text);
@@ -821,7 +821,7 @@
 }
 
 .book-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -841,7 +841,7 @@
 .book-meta-sep { color: var(--text-3); }
 
 .book-year {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
@@ -1032,7 +1032,7 @@
 }
 
 .list-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   overflow: hidden;
@@ -1041,7 +1041,7 @@
 }
 
 .list-genre {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -1050,7 +1050,7 @@
 }
 
 .list-year {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -1446,7 +1446,7 @@
 }
 
 .panel-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
@@ -1489,13 +1489,13 @@
   color: var(--text-2);
 }
 .panel-synopsis {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
 }
 .panel-synopsis-placeholder {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-2);
   font-style: italic;
 }
@@ -1510,7 +1510,7 @@
   gap: 16px;
 }
 .panel-cast-hint {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1572,7 +1572,7 @@
   border-radius: 8px;
 }
 .panel-cast-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
 }
@@ -1589,13 +1589,13 @@
   color: var(--text-3);
 }
 .panel-cast-role {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
 }
 .panel-cast-relations {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1617,7 +1617,7 @@
   gap: 16px;
 }
 .panel-quiz-hint {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1771,7 +1771,7 @@
   letter-spacing: -0.02em;
 }
 .panel-quiz-score-msg {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1821,7 +1821,7 @@
 [data-theme="dark"] .panel-quiz-review-badge.is-correct { color: #4ade80; }
 [data-theme="dark"] .panel-quiz-review-badge.is-incorrect { color: #f87171; }
 .panel-quiz-review-q {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
   line-height: 1.4;
@@ -1842,7 +1842,7 @@
 }
 /* Mirrors .panel-cast-role */
 .panel-quiz-review-value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1861,7 +1861,7 @@
 
 /* Finished reading display */
 .panel-finished-date {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1891,7 +1891,7 @@
   color: var(--text-2);
 }
 .panel-finished-note {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -2377,7 +2377,7 @@
 }
 .import-tab { flex-shrink: 0; }
 .import-tab-hint {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
   line-height: 1.5;
@@ -2794,6 +2794,13 @@
   height: 1px;
   background: var(--border-subtle);
 }
+/* Hide the photo capture button + or-separator on desktop (no mobile camera).
+   Placed AFTER the .scan-or-separator definitions to override display: flex
+   without escalating specificity. */
+@media (min-width: 601px) {
+  .scan-start-btn,
+  .scan-or-separator { display: none; }
+}
 .scan-manual-label {
   font-size: 13px;
   font-weight: 500;
@@ -2876,12 +2883,12 @@
 }
 .scan-error-text p { margin: 0; }
 .scan-error-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
 }
 .scan-error-desc {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
@@ -2934,12 +2941,12 @@
   line-height: 1.3;
 }
 .scan-preview-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
 .scan-preview-description {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -4431,7 +4438,7 @@ button.quote-book-chip {
   color: var(--text-2);
 }
 .panel-quotes-empty {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
