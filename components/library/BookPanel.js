@@ -139,6 +139,11 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       </button>
                     </>
                   )}
+                  {tab === 'wishlist' && (
+                    <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
+                      {t.selConfirmOwned || 'Move to Library'}
+                    </button>
+                  )}
                   <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare} aria-label={t.btnShare}>
                     {shared ? (
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -219,39 +224,38 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
             }
           </div>
 
-          <div className="panel-divider" />
-
-          {/* Quotes section — eyebrow + list + add button (gap-driven) */}
-          <div className="panel-quotes">
-            <div className="panel-quotes-content">
-              <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
-              {quotes && quotes.length > 0 ? (
-                <div className="panel-quotes-list">
-                  {quotes.map(q => (
-                    <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
-                  ))}
+          {/* Quotes section — owned books only (no sense for wishlist) */}
+          {tab !== 'wishlist' && (
+            <>
+              <div className="panel-divider" />
+              <div className="panel-quotes">
+                <div className="panel-quotes-content">
+                  <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
+                  {quotes && quotes.length > 0 ? (
+                    <div className="panel-quotes-list">
+                      {quotes.map(q => (
+                        <PanelQuoteItem key={q.id} quote={q} onOpen={onOpenQuote} t={t} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
+                  )}
                 </div>
-              ) : (
-                <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
-              )}
-            </div>
-            <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              Add a quote
-            </button>
-          </div>
+                <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  Add a quote
+                </button>
+              </div>
+            </>
+          )}
 
           <div className="panel-divider" />
 
-          {/* Footer actions — left-aligned, Delete last */}
+          {/* Footer actions — Delete only (Move to Library now lives in
+              .panel-header-actions next to the other primary actions) */}
           <div className="panel-actions">
-            {tab === 'wishlist' && (
-              <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
-                {t.selConfirmOwned || 'Move to Library'}
-              </button>
-            )}
             <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
               {t.btnDelete || 'Delete'}
             </button>

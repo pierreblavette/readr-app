@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { prepareImage } from "../../lib/prepareImage";
+import { BrowserMultiFormatReader } from "@zxing/browser";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
@@ -135,15 +135,14 @@ export default function BarcodeScanner({ onBookFound, t }) {
     if (!file) return;
     setScanState('reading-photo');
     setErrorMsg(null);
+    const url = URL.createObjectURL(file);
     try {
-      const { base64, mimeType } = await prepareImage(file);
-      const res = await fetch('/api/vision/barcode', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64, mimeType }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.isbn) {
+      // Decode the barcode locally with ZXing (reliable on the actual
+      // barcode lines, not the printed digits). No network call required.
+      const reader = new BrowserMultiFormatReader();
+      const result = await reader.decodeFromImageUrl(url);
+      const isbn = normalizeISBN(result.getText());
+      if (!isbn) {
         setErrorMsg({
           title: t.scanNotFoundTitle || 'No barcode detected',
           desc: t.scanPhotoNotFoundDesc || 'Make sure the barcode is visible and well-lit, then try again.',
@@ -151,12 +150,16 @@ export default function BarcodeScanner({ onBookFound, t }) {
         setScanState('error');
         return;
       }
-      await runLookup(data.isbn);
+      await runLookup(isbn);
     } catch (err) {
+      // ZXing throws when no barcode is found in the image.
       setErrorMsg({
-        title: t.scanGenericError || 'Something went wrong.',
+        title: t.scanNotFoundTitle || 'No barcode detected',
+        desc: t.scanPhotoNotFoundDesc || 'Make sure the barcode is visible and well-lit, then try again.',
       });
       setScanState('error');
+    } finally {
+      URL.revokeObjectURL(url);
     }
   }
 
@@ -197,7 +200,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
               </svg>
               {t.scanStartBtn || 'Scan with camera'}
             </button>
-          ) : isTouch ? (
+          ) : (
             <>
               <input
                 ref={photoInputRef}
@@ -219,9 +222,11 @@ export default function BarcodeScanner({ onBookFound, t }) {
                 {t.scanPhotoBtn || 'Take a photo of the barcode'}
               </button>
             </>
-          ) : null}
+          )}
+          <div className="scan-or-separator"><span>{t.scanOr || 'or'}</span></div>
+          <p className="import-tab-hint">{t.scanTabHint || 'Look up a book by its barcode.'}</p>
           <form onSubmit={handleManualLookup} className="scan-manual">
-            <label className="scan-manual-label">{t.scanManualLabel || 'Or enter ISBN manually'}</label>
+            <label className="scan-manual-label">{t.scanManualLabelOnly || 'Barcode'}</label>
             <div className="scan-manual-row">
               <input
                 type="text"

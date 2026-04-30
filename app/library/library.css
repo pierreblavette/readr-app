@@ -2369,6 +2369,13 @@
   min-width: 100%;
 }
 .import-tab { flex-shrink: 0; }
+.import-tab-hint {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+}
 .modal-tabs-section {
   display: flex;
   flex-direction: column;
@@ -2761,8 +2768,25 @@
 .import-tab-pane { display: flex; flex-direction: column; gap: 24px; }
 
 /* ─── BARCODE SCANNER (ISBN) ─── */
-.scan-start-btn { align-self: flex-start; padding: 0 20px 0 12px; }
+.scan-start-btn { align-self: stretch; width: 100%; padding: 0 20px 0 12px; justify-content: center; }
 .scan-manual { display: flex; flex-direction: column; gap: 8px; }
+.scan-or-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.scan-or-separator::before,
+.scan-or-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
 .scan-manual-label {
   font-size: 13px;
   font-weight: 500;
