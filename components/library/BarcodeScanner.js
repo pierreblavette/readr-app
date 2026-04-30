@@ -186,7 +186,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
 
   return (
     <>
-      {(scanState === 'idle' || scanState === 'reading-photo' || (scanState === 'looking-up' && manualISBN.trim())) && (
+      {(scanState === 'idle' || scanState === 'reading-photo' || scanState === 'looking-up') && (
         <>
           {supportsNative ? (
             <button
@@ -194,7 +194,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
               className="btn btn-primary btn-md scan-start-btn"
               onClick={handleStartCamera}
               disabled={scanState === 'looking-up' || scanState === 'reading-photo'}>
-              {scanState === 'reading-photo' ? (
+              {(scanState === 'reading-photo' || (scanState === 'looking-up' && !manualISBN.trim())) ? (
                 <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                   <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
                   <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
@@ -207,7 +207,9 @@ export default function BarcodeScanner({ onBookFound, t }) {
               )}
               {scanState === 'reading-photo'
                 ? (t.scanReadingPhoto || 'Reading the barcode…')
-                : (t.scanStartBtn || 'Scan with camera')}
+                : (scanState === 'looking-up' && !manualISBN.trim())
+                  ? (t.scanLookingUp || 'Looking up…')
+                  : (t.scanStartBtn || 'Scan with camera')}
             </button>
           ) : (
             <>
@@ -224,7 +226,7 @@ export default function BarcodeScanner({ onBookFound, t }) {
                 className="btn btn-primary btn-md scan-start-btn"
                 onClick={() => photoInputRef.current?.click()}
                 disabled={scanState === 'looking-up' || scanState === 'reading-photo'}>
-                {scanState === 'reading-photo' ? (
+                {(scanState === 'reading-photo' || (scanState === 'looking-up' && !manualISBN.trim())) ? (
                   <svg className="panel-cast-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" strokeOpacity="0.3"/>
                     <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/>
@@ -237,7 +239,9 @@ export default function BarcodeScanner({ onBookFound, t }) {
                 )}
                 {scanState === 'reading-photo'
                   ? (t.scanReadingPhoto || 'Reading the barcode…')
-                  : (t.scanPhotoBtn || 'Take a photo of the barcode')}
+                  : (scanState === 'looking-up' && !manualISBN.trim())
+                    ? (t.scanLookingUp || 'Looking up…')
+                    : (t.scanPhotoBtn || 'Take a photo of the barcode')}
               </button>
             </>
           )}

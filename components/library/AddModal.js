@@ -375,6 +375,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
                 disabled={readingLimitReached}
                 label={t.addMarkAsReading}
                 limitText={t.nowReadingLimit}
+                limitInlineText={t.addMarkAsReadingLimitInline}
                 infoBefore={t.addMarkAsReadingInfoBefore}
                 infoHighlight={t.addMarkAsReadingInfoHighlight}
                 infoAfter={t.addMarkAsReadingInfoAfter}
@@ -414,6 +415,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
                 disabled={readingLimitReached}
                 label={t.addMarkAsReading}
                 limitText={t.nowReadingLimit}
+                limitInlineText={t.addMarkAsReadingLimitInline}
                 infoBefore={t.addMarkAsReadingInfoBefore}
                 infoHighlight={t.addMarkAsReadingInfoHighlight}
                 infoAfter={t.addMarkAsReadingInfoAfter}
@@ -526,6 +528,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
                 disabled={readingLimitReached}
                 label={t.addMarkAsReading}
                 limitText={t.nowReadingLimit}
+                limitInlineText={t.addMarkAsReadingLimitInline}
                 infoBefore={t.addMarkAsReadingInfoBefore}
                 infoHighlight={t.addMarkAsReadingInfoHighlight}
                 infoAfter={t.addMarkAsReadingInfoAfter}
@@ -590,7 +593,7 @@ function ScanPreview({ book }) {
   );
 }
 
-function MarkAsReadingToggle({ checked, onChange, disabled, label, limitText, infoBefore, infoHighlight, infoAfter, alertText }) {
+function MarkAsReadingToggle({ checked, onChange, disabled, label, limitText, limitInlineText, infoBefore, infoHighlight, infoAfter, alertText }) {
   return (
     <div className="modal-toggle-group">
       <label
@@ -610,7 +613,7 @@ function MarkAsReadingToggle({ checked, onChange, disabled, label, limitText, in
             </svg>
           )}
         </span>
-        <span className="modal-toggle-label">{label}</span>
+        <span className="modal-toggle-label">{label}{disabled && limitInlineText ? ` ${limitInlineText}` : ''}</span>
       </label>
       {disabled && alertText ? (
         <div className="modal-info-box modal-info-box--alert" role="alert">

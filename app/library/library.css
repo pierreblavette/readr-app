@@ -2377,9 +2377,9 @@
 }
 .import-tab { flex-shrink: 0; }
 .import-tab-hint {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  color: var(--text-2);
+  color: var(--text);
   line-height: 1.5;
   margin: 0;
 }
@@ -3090,6 +3090,8 @@
      so we have to neutralise it. */
   .scan-manual-input { flex: 0 0 auto; }
   .scan-lookup-btn { padding: 0 20px 0 12px; width: 100%; justify-content: center; }
+  /* Hide the barcode tab hint on mobile to reduce visual noise */
+  .import-tab-hint { display: none; }
   /* Stack the retry button below the error text on mobile, centered.
      Button takes the full row width (iso .scan-lookup-btn). */
   .scan-error-state { flex-direction: column; align-items: stretch; text-align: center; }
