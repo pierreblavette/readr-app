@@ -17,7 +17,7 @@
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 .btn-sm { height: 32px; padding: 0 16px; border-radius: 7px; font-size: 12px; gap: 6px; }
 .btn-sm svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
-.btn-md { height: 40px; padding: 0 20px; border-radius: 8px; font-size: 14px; gap: 8px; }
+.btn-md { height: 40px; padding: 0 20px; border-radius: 8px; font-size: 15px; gap: 8px; }
 .btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
@@ -89,53 +89,6 @@
 }
 
 [data-theme="dark"] .logo { color: #ffffff; }
-
-/* ─── TABS (iOS segmented control) ─── */
-.tabs {
-  display: inline-flex;
-  background: var(--bg3);
-  border-radius: 8px;
-  padding: 3px;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.tab {
-  height: 32px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--dark-80);
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-radius: 8px;
-  white-space: nowrap;
-  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
-  font-family: inherit;
-}
-
-.tab:hover { color: var(--primary-60); background: var(--primary-10); }
-
-
-.tab.active {
-  background: var(--bg);
-  color: var(--text);
-  font-weight: 500;
-  box-shadow: 0 1px 4px rgba(73,89,230,0.14), 0 1px 2px rgba(73,89,230,0.08);
-}
-
-[data-theme="dark"] .tab { color: var(--text-2); }
-[data-theme="dark"] .tab:hover { background: var(--primary-10); color: var(--text); }
-[data-theme="dark"] .tab.active {
-  background: var(--primary-40);
-  color: #FFFFFF;
-  box-shadow: none;
-  border: none;
-}
 
 .badge {
   display: inline-flex;
@@ -278,7 +231,7 @@
 }
 
 .result-line {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-2);
   min-height: 18px;
@@ -326,7 +279,7 @@
   border-radius: 32px;
   background: #FFFFFF;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -391,7 +344,7 @@
   background: var(--accent);
   color: #fff;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -421,7 +374,7 @@
   background: #FFFFFF;
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -445,7 +398,7 @@
   background: #FFFFFF;
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -481,7 +434,7 @@
   display: flex; align-items: center; gap: 8px;
   width: 100%; height: 40px; padding: 0 12px;
   border: none; background: transparent;
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  font-family: inherit; font-size: 15px; font-weight: 500;
   color: var(--text); border-radius: 7px;
   cursor: pointer; white-space: nowrap; text-align: left;
   transition: background 0.1s, color 0.1s;
@@ -603,7 +556,7 @@
 .now-reading-text {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
   flex: 1;
 }
@@ -617,7 +570,7 @@
   text-overflow: ellipsis;
 }
 .now-reading-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -629,10 +582,9 @@
   align-items: center;
   justify-content: center;
   width: fit-content;
-  height: 20px;
   min-width: 20px;
-  padding: 0 8px;
-  font-size: 11px;
+  padding: 2px 8px;
+  font-size: 12px;
   font-weight: 600;
   color: #fff;
   background: var(--primary-50);
@@ -811,7 +763,7 @@
 }
 
 .book-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   line-height: 1.35;
   color: var(--text);
@@ -821,7 +773,7 @@
 }
 
 .book-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -833,7 +785,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-3);
   margin-top: 0;
@@ -841,7 +793,7 @@
 .book-meta-sep { color: var(--text-3); }
 
 .book-year {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
@@ -1024,6 +976,7 @@
 }
 
 .list-title {
+  font-size: 15px;
   font-weight: 700;
   color: var(--text);
   overflow: hidden;
@@ -1032,7 +985,7 @@
 }
 
 .list-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   overflow: hidden;
@@ -1041,7 +994,7 @@
 }
 
 .list-genre {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -1050,7 +1003,7 @@
 }
 
 .list-year {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   white-space: nowrap;
@@ -1139,7 +1092,7 @@
   gap: 8px;
 }
 
-.empty-icon { width: 80px; height: 80px; display: block; }
+.empty-icon { width: 96px; height: 96px; display: block; }
 
 .empty-title {
   font-size: 18px;
@@ -1165,7 +1118,7 @@
   color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -1178,23 +1131,7 @@
 [data-theme="dark"] .empty-cta:hover { background: var(--primary-50); }
 
 /* ─── COLLECTIONS VIEW ─── */
-.col-empty-state {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 80px 24px; text-align: center; gap: 12px;
-}
-.col-empty-icon svg { width: 48px; height: 48px; color: var(--text-3); }
-.col-empty-title { font-size: 24px; font-weight: 500; font-family: var(--font-fraunces), serif; color: var(--text); }
-.col-empty-sub { font-size: 12px; color: var(--text-2); max-width: 320px; }
-.col-empty-cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  height: 32px; padding: 0 16px 0 12px; border-radius: 7px; border: none;
-  background: var(--primary-50); color: #fff; font-size: 12px; font-weight: 600;
-  cursor: pointer; transition: background 0.15s; margin-top: 8px;
-  font-family: var(--font-jakarta), sans-serif;
-}
-.col-empty-cta svg,
 .col-back-btn svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; flex-shrink: 0; }
-.col-empty-cta:hover { background: var(--primary-60); }
 
 .col-grid {
   display: grid;
@@ -1237,7 +1174,7 @@
 }
 .col-card-emoji { font-size: 1.3rem; flex-shrink: 0; }
 .col-card-info { min-width: 0; }
-.col-card-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.col-card-name { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-card-count { font-size: 11px; color: var(--text-2); margin-top: 2px; }
 
 .col-detail-wrap { width: 100%; }
@@ -1277,7 +1214,7 @@
   gap: 12px;
 }
 .add-to-col-item:last-child { border-bottom: none; }
-.add-to-col-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.add-to-col-title { font-size: 15px; font-weight: 500; color: var(--text); }
 .add-to-col-author { font-size: 11px; color: var(--text-2); margin-top: 2px; }
 
 /* ─── BOOK PANEL ─── */
@@ -1446,7 +1383,7 @@
 }
 
 .panel-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
@@ -1483,19 +1420,19 @@
 .panel-section-eyebrow {
   display: block;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-2);
 }
 .panel-synopsis {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
 }
 .panel-synopsis-placeholder {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-2);
   font-style: italic;
 }
@@ -1510,7 +1447,7 @@
   gap: 16px;
 }
 .panel-cast-hint {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1572,7 +1509,7 @@
   border-radius: 8px;
 }
 .panel-cast-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
 }
@@ -1589,13 +1526,13 @@
   color: var(--text-3);
 }
 .panel-cast-role {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
 }
 .panel-cast-relations {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1617,7 +1554,7 @@
   gap: 16px;
 }
 .panel-quiz-hint {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1674,7 +1611,7 @@
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .panel-quiz-question {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
   line-height: 1.5;
@@ -1696,7 +1633,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
   text-align: left;
@@ -1771,7 +1708,7 @@
   letter-spacing: -0.02em;
 }
 .panel-quiz-score-msg {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1821,7 +1758,7 @@
 [data-theme="dark"] .panel-quiz-review-badge.is-correct { color: #4ade80; }
 [data-theme="dark"] .panel-quiz-review-badge.is-incorrect { color: #f87171; }
 .panel-quiz-review-q {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
   line-height: 1.4;
@@ -1842,13 +1779,13 @@
 }
 /* Mirrors .panel-cast-role */
 .panel-quiz-review-value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
 }
 .panel-quiz-review-explanation {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   font-style: italic;
   color: var(--text-2);
@@ -1861,7 +1798,7 @@
 
 /* Finished reading display */
 .panel-finished-date {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1891,7 +1828,7 @@
   color: var(--text-2);
 }
 .panel-finished-note {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -1912,7 +1849,7 @@
   background: #FFFFFF;
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
@@ -1966,7 +1903,7 @@
   background: var(--primary-50);
   color: #fff;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -1987,7 +1924,7 @@
   background: #FFFFFF;
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s;
@@ -2066,7 +2003,6 @@
 
 /* Glyph 12 (SM icon+text, frame 16) */
 .btn-sm svg *,
-.col-empty-cta svg *,
 .col-back-btn svg * {
   stroke-width: 3;
 }
@@ -2136,7 +2072,7 @@
 .sel-actions { display: flex; align-items: center; gap: 8px; }
 
 .selection-count {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   opacity: 0.75;
 }
@@ -2148,7 +2084,7 @@
   border-radius: 8px;
   border: none;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -2274,7 +2210,7 @@
 }
 .modal-toggle-check svg { width: 10px; height: 10px; color: #fff; }
 .modal-toggle-label {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
 }
@@ -2291,7 +2227,7 @@
   background: var(--primary-5);
   border: 1.5px solid var(--primary-20);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.5;
@@ -2377,7 +2313,7 @@
 }
 .import-tab { flex-shrink: 0; }
 .import-tab-hint {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
   line-height: 1.5;
@@ -2395,7 +2331,7 @@
   border: none;
   background: transparent;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   cursor: pointer;
@@ -2450,7 +2386,7 @@
   background: var(--bg3);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   outline: none;
   transition: border-color 0.15s, background 0.15s;
@@ -2478,7 +2414,7 @@
   background: transparent;
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s;
@@ -2497,7 +2433,7 @@
   background: var(--primary-50);
   color: #fff;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -2512,7 +2448,7 @@
 [data-theme="dark"] .modal-submit:hover:not(:disabled) { background: var(--primary-50); }
 
 /* Modal error */
-.modal-error { color: #ef4444; font-size: 12px; margin-top: -8px; }
+.modal-error { color: #ef4444; font-size: 13px; margin-top: -8px; }
 
 /* ─── CONFIRM / DELETE MODAL ─── */
 .confirm-modal-overlay {
@@ -2601,7 +2537,7 @@
   background: #ef4444;
   color: #fff;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -2702,7 +2638,7 @@
 .autocomplete-item {
   padding: 10px 14px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
   border-radius: 6px;
@@ -2763,7 +2699,7 @@
   height: 100%;
 }
 .import-dropzone svg { width: 28px; height: 28px; margin-bottom: 12px; color: var(--primary-50); }
-.import-dropzone-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.import-dropzone-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
 .import-dropzone-sub { font-size: 13px; font-weight: 500; color: var(--text-3); }
 .scan-step-fade { animation: scanStepFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) both; }
 @keyframes scanStepFadeIn {
@@ -2794,6 +2730,13 @@
   height: 1px;
   background: var(--border-subtle);
 }
+/* Hide the photo capture button + or-separator on desktop (no mobile camera).
+   Placed AFTER the .scan-or-separator definitions to override display: flex
+   without escalating specificity. */
+@media (min-width: 601px) {
+  .scan-start-btn,
+  .scan-or-separator { display: none; }
+}
 .scan-manual-label {
   font-size: 13px;
   font-weight: 500;
@@ -2810,7 +2753,7 @@
   background: var(--bg3);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   outline: none;
   transition: border-color 0.15s, background 0.15s;
@@ -2881,7 +2824,7 @@
   color: var(--text);
 }
 .scan-error-desc {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
@@ -2934,12 +2877,12 @@
   line-height: 1.3;
 }
 .scan-preview-author {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
 }
 .scan-preview-description {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
@@ -2950,7 +2893,7 @@
   overflow: hidden;
 }
 .import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.import-preview-title { font-size: 12px; font-weight: 500; color: var(--text-3); }
+.import-preview-title { font-size: 13px; font-weight: 600; color: var(--text-3); }
 .import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
 .import-preview-item {
   display: flex;
@@ -2960,8 +2903,8 @@
   border-radius: 8px;
   background: var(--bg3);
 }
-.import-preview-book { font-size: 14px; font-weight: 600; color: var(--text); }
-.import-preview-author { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.import-preview-book { font-size: 15px; font-weight: 600; color: var(--text); }
+.import-preview-author { font-size: 13px; color: var(--text-2); margin-top: 4px; }
 .import-preview-remove {
   width: 32px; height: 32px; border: none; background: transparent;
   color: var(--text); cursor: pointer; display: flex; align-items: center;
@@ -2972,7 +2915,7 @@
 [data-theme="dark"] .import-preview-remove:hover { background: var(--primary-10); color: var(--primary-30); }
 .import-preview-remove svg { width: 14px; height: 14px; }
 
-.import-error { color: #ef4444; font-size: 12px; margin-top: 8px; }
+.import-error { color: #ef4444; font-size: 13px; margin-top: 8px; }
 
 .scan-alert {
   display: flex; align-items: flex-start; gap: 10px;
@@ -2992,7 +2935,7 @@
   border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF; color: var(--text);
-  font-family: inherit; font-size: 14px; font-weight: 600;
+  font-family: inherit; font-size: 15px; font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
@@ -3180,10 +3123,6 @@
   .panel-header-share { margin-left: 0; }
 }
 
-@media (max-width: 480px) {
-  .tabs .tab { font-size: 14px; padding: 0 14px; }
-}
-
 /* ─── ONBOARDING ─── */
 .ob-overlay {
   position: fixed; inset: 0;
@@ -3252,21 +3191,21 @@
 .ob-skip {
   height: 40px; padding: 0 20px; border-radius: 8px;
   background: transparent; border: none;
-  font-family: inherit; font-size: 14px; font-weight: 600;
+  font-family: inherit; font-size: 15px; font-weight: 600;
   color: var(--text-2); cursor: pointer; transition: all 0.15s;
 }
 .ob-skip:hover { background: var(--primary-5); color: var(--primary-60); }
 .ob-prev {
   height: 40px; padding: 0 20px; border-radius: 8px;
   background: var(--primary-5); color: var(--primary-60); border: none;
-  font-family: inherit; font-size: 14px; font-weight: 600;
+  font-family: inherit; font-size: 15px; font-weight: 600;
   cursor: pointer; transition: background 0.15s;
 }
 .ob-prev:hover { background: var(--primary-10); }
 .ob-next {
   height: 40px; padding: 0 20px; border-radius: 8px;
   background: var(--primary-50); color: #fff; border: none;
-  font-family: inherit; font-size: 14px; font-weight: 600;
+  font-family: inherit; font-size: 15px; font-weight: 600;
   cursor: pointer; transition: background 0.15s;
 }
 .ob-next:hover { background: var(--primary-60); }
@@ -3393,7 +3332,7 @@
   border: none;
   cursor: pointer;
   color: var(--text-2);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   text-align: left;
   transition: background 0.15s, color 0.15s;
@@ -3479,11 +3418,11 @@
 .sidebar-section-head.sidebar-section-head--no-action:hover .sidebar-section-label,
 .sidebar-section-head.sidebar-section-head--no-action:hover .sidebar-section-chevron { color: var(--text-3); }
 .sidebar-section-label {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text-3);
+  letter-spacing: 0.08em;
+  color: var(--text-2);
   flex: 1;
 }
 .sidebar-section-chevron {
@@ -3617,7 +3556,7 @@
   color: var(--text);
   padding: 0 12px;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   outline: none;
   transition: border-color 0.15s;
@@ -4000,7 +3939,7 @@
   background: transparent;
   border: none;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--primary-50);
   cursor: pointer;
@@ -4055,7 +3994,7 @@
   background: var(--bg3);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.6;
   resize: vertical;
@@ -4173,14 +4112,14 @@ button.quote-book-chip {
 }
 .quote-book-chip-title {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .quote-book-chip-author {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-2);
   overflow: hidden;
@@ -4260,7 +4199,7 @@ button.quote-book-chip {
   border-radius: 10px;
   color: var(--text);
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
@@ -4275,7 +4214,7 @@ button.quote-book-chip {
   line-height: 1.5;
 }
 .quote-photo-error {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--danger, #ef4444);
   text-align: center;
 }
@@ -4319,7 +4258,7 @@ button.quote-book-chip {
   background: var(--bg3);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   outline: none;
   transition: border-color 0.15s, background 0.15s;
@@ -4378,7 +4317,7 @@ button.quote-book-chip {
   border-radius: 8px;
   background: var(--primary-50); border: none;
   color: #fff; cursor: pointer;
-  font-family: inherit; font-size: 14px; font-weight: 600;
+  font-family: inherit; font-size: 15px; font-weight: 600;
   transition: background 0.15s;
 }
 .panel-quotes-add:hover { background: var(--primary-60); }
@@ -4410,7 +4349,7 @@ button.quote-book-chip {
 }
 .panel-quote-text {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.8;
   color: var(--text-2);
@@ -4431,7 +4370,7 @@ button.quote-book-chip {
   color: var(--text-2);
 }
 .panel-quotes-empty {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
   line-height: 1.8;
