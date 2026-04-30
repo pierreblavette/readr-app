@@ -1092,10 +1092,10 @@
   gap: 8px;
 }
 
-.empty-icon { width: 80px; height: 80px; display: block; }
+.empty-icon { width: 96px; height: 96px; display: block; }
 
 .empty-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   font-family: var(--font-jakarta), sans-serif;
   color: var(--text);
