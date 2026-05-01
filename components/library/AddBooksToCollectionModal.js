@@ -120,7 +120,6 @@ export default function AddBooksToCollectionModal({ open, collection, allBooks, 
               placeholder={t.searchPlaceholder}
               value={search}
               onChange={e => setSearch(e.target.value)}
-              autoFocus
             />
             <button
               className={`search-clear${search ? ' visible' : ''}`}
