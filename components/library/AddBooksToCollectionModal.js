@@ -1,8 +1,65 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "../../lib/bookUtils";
+import { MAX_BOOKS_PER_COLLECTION } from "../../lib/useLibrary";
+
+function AddBookRow({ book, isSelected, isDisabled, onToggle }) {
+  const [cover, setCover] = useState(null);
+  const [c1, c2] = coverColors(book.title);
+  const letter = coverLetter(book.title);
+
+  useEffect(() => {
+    const cache = loadGBCache();
+    const key = `${book.title}||${book.author}`;
+    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
+    fetchBookCover(book.title, book.author, cache).then(res => {
+      saveGBCache({ ...cache, [key]: res });
+      setCover(res?.thumb || null);
+    });
+  }, [book.title, book.author]);
+
+  return (
+    <div className={`quote-book-chip add-to-col-row${isSelected ? ' is-selected' : ''}${isDisabled && !isSelected ? ' is-disabled' : ''}`}>
+      <div
+        className={`quote-book-chip-cover${cover ? '' : ' quote-book-chip-cover-placeholder'}`}
+        style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
+      >
+        {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
+      </div>
+      <div className="quote-book-chip-body">
+        <div className="quote-book-chip-title">{book.title}</div>
+        {book.author && <div className="quote-book-chip-author">{book.author}</div>}
+      </div>
+      <button
+        type="button"
+        className="add-to-col-toggle"
+        onClick={() => onToggle(book.id)}
+        disabled={isDisabled && !isSelected}
+        aria-label={isSelected ? 'Remove' : 'Add'}>
+        {isSelected ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        )}
+      </button>
+    </div>
+  );
+}
 
 export default function AddBooksToCollectionModal({ open, collection, allBooks, onAdd, onClose, t }) {
   const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState(new Set());
+
+  useEffect(() => {
+    if (open) {
+      setSearch('');
+      setSelected(new Set());
+    }
+  }, [open]);
 
   if (!open || !collection) return null;
 
@@ -15,47 +72,108 @@ export default function AddBooksToCollectionModal({ open, collection, allBooks, 
       )
     : available;
 
-  function handleAdd(book) {
-    onAdd(collection.id, book.id);
+  const currentCount = existing.size;
+  const totalAfterAdd = currentCount + selected.size;
+  const remaining = MAX_BOOKS_PER_COLLECTION - totalAfterAdd;
+  const limitReached = remaining <= 0;
+
+  function toggleSelect(bookId) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(bookId)) {
+        next.delete(bookId);
+      } else {
+        if (existing.size + next.size >= MAX_BOOKS_PER_COLLECTION) return prev;
+        next.add(bookId);
+      }
+      return next;
+    });
   }
+
+  function handleConfirm() {
+    onAdd(collection.id, Array.from(selected));
+    onClose();
+  }
+
+  const emptyMessage = available.length === 0
+    ? t.colAllBooksAdded
+    : t.emptyNoMatch;
 
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal" style={{ maxWidth: 560 }}>
-        <button className="modal-close" onClick={onClose}>
+      <div className="modal add-to-col-modal">
+        <button className="modal-close" onClick={onClose} aria-label={t.btnCancel}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
-        <div className="modal-title">{t.colAddBooks}: {collection.emoji} {collection.name}</div>
-        <div className="modal-field" style={{ marginBottom: 12 }}>
-          <input
-            className="search-input"
-            style={{ width: '100%' }}
-            placeholder={t.searchPlaceholder}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            autoFocus
-          />
-        </div>
-        <div className="add-to-col-list">
-          {filtered.length === 0 && (
-            <div style={{ padding: '24px 0', textAlign: 'center', color: 'var(--text-3)', fontSize: '0.9rem' }}>
-              {available.length === 0 ? 'All books are already in this collection.' : t.emptyNoMatch}
+        <div className="modal-title">{t.colAddBooksTo(collection.name)}</div>
+
+        <div className="add-to-col-section">
+          <div className="search-box add-to-col-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              className="search-input"
+              type="text"
+              placeholder={t.searchPlaceholder}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              autoFocus
+            />
+            <button
+              className={`search-clear${search ? ' visible' : ''}`}
+              onClick={() => setSearch('')}
+              aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          {limitReached && (
+            <div className="modal-info-box modal-info-box--alert" role="alert">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <span>{t.colLimitReached(MAX_BOOKS_PER_COLLECTION)}</span>
             </div>
           )}
-          {filtered.map(book => (
-            <div key={book.id} className="add-to-col-item">
-              <div>
-                <div className="add-to-col-title">{book.title}</div>
-                <div className="add-to-col-author">{book.author}</div>
-              </div>
-              <button className="btn btn-sm btn-primary" onClick={() => handleAdd(book)}>Add</button>
+
+          <div className="add-to-col-list-wrap">
+            <div className="add-to-col-meta">
+              <span className="add-to-col-info">{t.colLimitInfo(MAX_BOOKS_PER_COLLECTION)}</span>
+              <span className="add-to-col-count">{t.colLimitCount(totalAfterAdd, MAX_BOOKS_PER_COLLECTION)}</span>
             </div>
-          ))}
+
+            <div className="add-to-col-list">
+            {filtered.length === 0 && (
+              <div className="add-to-col-empty">{emptyMessage}</div>
+            )}
+            {filtered.map(book => (
+              <AddBookRow
+                key={book.id}
+                book={book}
+                isSelected={selected.has(book.id)}
+                isDisabled={limitReached}
+                onToggle={toggleSelect}
+              />
+            ))}
+            </div>
+          </div>
         </div>
+
         <div className="modal-actions">
           <button className="modal-cancel" onClick={onClose}>{t.btnCancel}</button>
+          <button
+            className="modal-submit"
+            onClick={handleConfirm}
+            disabled={selected.size === 0}>
+            {t.btnConfirm || 'Confirm'}{selected.size > 0 ? ` (${selected.size})` : ''}
+          </button>
         </div>
       </div>
     </div>

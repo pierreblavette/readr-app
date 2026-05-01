@@ -56,7 +56,10 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
   const isWord = target.type === 'word';
   const isCancelReading = target.type === 'cancelReading';
   const isRemoveFinished = target.type === 'removeFinished';
-  const isSingleBook = !isBulk && !isQuote && !isWord && !isRemoveFinished; // single delete OR cancelReading
+  const isCollection = target.type === 'collection';
+  const isColRemove = target.type === 'colRemove';
+  const isColRemoveBulk = target.type === 'colRemoveBulk';
+  const isSingleBook = !isBulk && !isQuote && !isWord && !isRemoveFinished && !isCollection && !isColRemove && !isColRemoveBulk; // single delete OR cancelReading
 
   const title = isBulk
     ? t.deleteBulkTitle(target.count)
@@ -64,6 +67,9 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
     : isWord  ? t.wordDeleteTitle
     : isCancelReading ? t.cancelReadingTitle
     : isRemoveFinished ? t.removeFinishedTitle
+    : isCollection ? t.colDeleteTitle
+    : isColRemove ? t.colRemoveTitle
+    : isColRemoveBulk ? t.colRemoveBulkTitle(target.count)
     : t.deleteTitle;
   const msg = isBulk
     ? t.deleteBulkMsg(target.count)
@@ -71,10 +77,14 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
     : isWord  ? t.wordDeleteMsg(target.title)
     : isCancelReading ? t.cancelReadingMsg(target.title)
     : isRemoveFinished ? t.removeFinishedMsg
+    : isCollection ? t.colDeleteMsg
+    : isColRemove ? t.colRemoveMsg(target.colName)
+    : isColRemoveBulk ? t.colRemoveBulkMsg(target.count, target.colName)
     : t.deleteMsg(target.title);
   const confirmLabel = isCancelReading
     ? t.cancelReadingConfirm
     : isRemoveFinished ? t.removeFinishedConfirm
+    : (isColRemove || isColRemoveBulk) ? t.colRemoveConfirm
     : t.deleteBtnConfirm;
   const confirmClass = isCancelReading ? 'ob-next' : 'confirm-modal-delete';
 
@@ -90,9 +100,19 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
         <div className="confirm-modal-title">{title}</div>
         <div className="modal-fields">
           <div className="confirm-modal-sub">{msg}</div>
-          {isSingleBook && target.title && (
+          {(isSingleBook || isColRemove) && target.title && (
             <div className="confirm-modal-chip">
               <BookChip book={{ title: target.title, author: target.author || '' }} />
+            </div>
+          )}
+          {isCollection && target.title && (
+            <div className="confirm-modal-chip">
+              <div className="quote-book-chip">
+                <div className="quote-book-chip-body">
+                  <div className="quote-book-chip-title">{target.title}</div>
+                  <div className="quote-book-chip-author">{t.colBookCount(target.count || 0)}</div>
+                </div>
+              </div>
             </div>
           )}
           {isRemoveFinished && (

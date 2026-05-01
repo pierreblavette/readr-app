@@ -1,65 +1,59 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-const EMOJIS = ['📚', '🔖', '⭐', '🎯', '🌟', '💡', '🎨', '🌍', '🔬', '🏛️', '🎭', '✨'];
-
-export default function CreateCollectionModal({ open, onClose, onCreate, t }) {
+export default function CreateCollectionModal({ open, onClose, onCreate, editing, onRename, t }) {
   const [name, setName] = useState('');
-  const [emoji, setEmoji] = useState('📚');
-  const inputRef = useRef(null);
 
   useEffect(() => {
     if (open) {
-      setName('');
-      setEmoji('📚');
-      setTimeout(() => inputRef.current?.focus(), 50);
+      setName(editing?.name || '');
     }
-  }, [open]);
+  }, [open, editing]);
 
   if (!open) return null;
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!name.trim()) return;
-    onCreate(name.trim(), emoji);
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    if (editing) onRename(editing.id, trimmed);
+    else onCreate(trimmed);
     onClose();
   }
+
+  const title = editing
+    ? (t.colRenameTitle || 'Rename collection')
+    : (t.colModalTitle || 'New collection');
+  const submitLabel = editing
+    ? (t.btnConfirm || 'Confirm')
+    : (t.colCreate || 'Create');
 
   return (
     <div className="confirm-modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="confirm-modal create-col-modal">
-        <div className="confirm-modal-title">{t.colModalTitle || 'New collection'}</div>
+        <div className="confirm-modal-title">{title}</div>
 
-        {/* Emoji picker */}
-        <div className="col-emoji-row">
-          {EMOJIS.map(e => (
-            <button key={e}
-              className={`col-emoji-btn${emoji === e ? ' active' : ''}`}
-              onClick={() => setEmoji(e)}
-              type="button">
-              {e}
-            </button>
-          ))}
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <input
-            ref={inputRef}
-            className="col-name-input"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            placeholder={t.colNamePlaceholder || 'Collection name…'}
-            maxLength={40}
-          />
-          <div className="confirm-modal-actions">
-            <button type="button" className="modal-cancel" onClick={onClose}>
-              {t.btnCancel}
-            </button>
-            <button type="submit" className="ob-next" disabled={!name.trim()}>
-              {t.colCreate || 'Create'}
-            </button>
+        <form id="create-col-form" onSubmit={handleSubmit} className="modal-form">
+          <div className="modal-field">
+            <label htmlFor="collection-name">{t.colNameLabel || 'Name'}</label>
+            <input
+              id="collection-name"
+              className="col-name-input"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder={t.colNamePlaceholder || 'Collection name…'}
+              maxLength={40}
+            />
           </div>
         </form>
+        <div className="confirm-modal-actions">
+          <button type="button" className="modal-cancel" onClick={onClose}>
+            {t.btnCancel}
+          </button>
+          <button type="submit" form="create-col-form" className="modal-submit" disabled={!name.trim() || (editing && name.trim() === editing.name)}>
+            {submitLabel}
+          </button>
+        </div>
       </div>
     </div>
   );

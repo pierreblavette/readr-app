@@ -28,6 +28,7 @@ import Toast         from "@/components/library/Toast";
 export default function LibraryPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [createColOpen, setCreateColOpen] = useState(false);
+  const [editingCollection, setEditingCollection] = useState(null);
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
   const [addQuoteOpen, setAddQuoteOpen] = useState(false);
   const [quotePrefillBook, setQuotePrefillBook] = useState(null);
@@ -70,8 +71,8 @@ export default function LibraryPage() {
     books,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
-    collections, createCollection, deleteCollection,
-    addBookToCollection, removeBookFromCollection, getBooksForCollection,
+    collections, createCollection, deleteCollection, renameCollection,
+    addBookToCollection, addBooksToCollection, removeBookFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
     quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook, exportQuotesMD, exportQuotesPDF,
     words, saveWord, deleteWord, exportWordsMD, exportWordsPDF,
@@ -114,6 +115,12 @@ export default function LibraryPage() {
       cancelReading(payload.id);
     } else if (payload?.type === 'removeFinished') {
       updateFinished(payload.id, { rating: null, note: null });
+    } else if (payload?.type === 'collection') {
+      deleteCollection(payload.id);
+    } else if (payload?.type === 'colRemove') {
+      removeBookFromCollection(payload.colId, payload.id);
+    } else if (payload?.type === 'colRemoveBulk') {
+      removeBooksFromCollection(payload.colId, payload.ids);
     } else {
       deleteBook(payload.id);
     }
@@ -137,6 +144,7 @@ export default function LibraryPage() {
         collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebarCollapsed}
         onCreateCollection={() => setCreateColOpen(true)}
         onOpenCollection={col => { setActiveCollection(col.id); }}
+        onShowAllCollections={() => setActiveCollection(null)}
         activeCollection={activeCollection}
         t={t} lang={lang} setLang={setLang}
         mobileOpen={mobileSidebarOpen} onCloseMobile={() => setMobileSidebarOpen(false)}
@@ -251,7 +259,7 @@ export default function LibraryPage() {
                 </button>
                 <div className="view-btns">
                   <button onClick={() => switchView('grid')} className={`view-btn${view === 'grid' ? ' active' : ''}`} aria-label="Grid view">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
                   </button>
                   <button onClick={() => switchView('list')} className={`view-btn${view === 'list' ? ' active' : ''}`} aria-label="List view">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -265,7 +273,8 @@ export default function LibraryPage() {
               view={view}
               onOpen={col => setActiveCollection(col.id)}
               onCreate={() => setCreateColOpen(true)}
-              onDelete={col => deleteCollection(col.id)}
+              onDelete={col => setDeleteTarget({ type: 'collection', id: col.id, title: col.name, count: getBooksForCollection(col.id).length })}
+              onRename={col => setEditingCollection(col)}
               t={t}
             />
           </>
@@ -276,12 +285,34 @@ export default function LibraryPage() {
           <CollectionDetailView
             collection={currentCollection}
             books={getBooksForCollection(currentCollection.id)}
-            allBooks={[...data.owned, ...data.wishlist]}
-            view={view}
+            view={view} switchView={switchView}
             onBack={() => setActiveCollection(null)}
-            onDelete={col => { deleteCollection(col.id); setActiveCollection(null); }}
+            onDelete={col => setDeleteTarget({ type: 'collection', id: col.id, title: col.name, count: getBooksForCollection(col.id).length })}
+            onShare={async col => {
+              const cBooks = getBooksForCollection(col.id);
+              const text = `${col.name}\n\n${cBooks.map(b => `• ${b.title}${b.author ? ` — ${b.author}` : ''}`).join('\n')}`;
+              if (navigator.share) {
+                try { await navigator.share({ title: col.name, text }); return; } catch {}
+              }
+              try { await navigator.clipboard.writeText(text); setToastMsg(t.colShareCopied); } catch {}
+            }}
             onAddBooks={() => setAddBooksColOpen(true)}
-            onRemoveBook={removeBookFromCollection}
+            onRenameRequest={col => setEditingCollection(col)}
+            onRequestRemoveBook={(col, book) => setDeleteTarget({
+              type: 'colRemove',
+              colId: col.id,
+              colName: col.name,
+              id: book.id,
+              title: book.title,
+              author: book.author,
+            })}
+            onRequestRemoveMany={(col, ids) => setDeleteTarget({
+              type: 'colRemoveBulk',
+              colId: col.id,
+              colName: col.name,
+              ids: ids,
+              count: ids.length,
+            })}
             onOpenBook={b => setPanelBook(b)}
             t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
           />
@@ -351,13 +382,15 @@ export default function LibraryPage() {
       </div>{/* end page-main */}
 
       {/* Modals & bars */}
-      <SelectionBar
-        editMode={editMode}
-        selected={selected} books={books} tab={tab} t={t}
-        onCancel={() => { setEditMode(false); setSelected(new Set()); }}
-        onSelectAll={toggleSelectAll}
-        onConfirm={handleConfirmSelection}
-      />
+      {(tab === 'owned' || tab === 'wishlist') && (
+        <SelectionBar
+          editMode={editMode}
+          selected={selected} books={books} tab={tab} t={t}
+          onCancel={() => { setEditMode(false); setSelected(new Set()); }}
+          onSelectAll={toggleSelectAll}
+          onConfirm={handleConfirmSelection}
+        />
+      )}
       <AddModal open={addModalOpen} onClose={() => setAddModal(false)}
         tab={tab}
         readingCount={readingBooks.length}
@@ -372,6 +405,13 @@ export default function LibraryPage() {
         t={t} />
       <DeleteModal target={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={handleDeleteConfirm} t={t} />
       <CreateCollectionModal open={createColOpen} onClose={() => setCreateColOpen(false)} onCreate={createCollection} t={t} />
+      <CreateCollectionModal
+        open={!!editingCollection}
+        editing={editingCollection}
+        onClose={() => setEditingCollection(null)}
+        onRename={renameCollection}
+        t={t}
+      />
       <AddQuoteModal
         open={addQuoteOpen}
         onClose={() => { setAddQuoteOpen(false); setQuotePrefillBook(null); setEditingQuote(null); }}
@@ -393,7 +433,7 @@ export default function LibraryPage() {
         open={addBooksColOpen}
         collection={currentCollection}
         allBooks={[...data.owned, ...data.wishlist]}
-        onAdd={addBookToCollection}
+        onAdd={addBooksToCollection}
         onClose={() => setAddBooksColOpen(false)}
         t={t}
       />

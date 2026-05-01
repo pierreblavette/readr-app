@@ -2,10 +2,10 @@
 
 export default function BookList({ books, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onSelectAll, t, sortCol, sortDir, toggleSort }) {
   const cols = [
-    { key: 'title',  label: t.colTitle  },
-    { key: 'author', label: t.colAuthor },
-    { key: 'genre',  label: t.colGenre  },
-    { key: 'year',   label: t.colYear   },
+    { key: 'title',  label: t.colTitle,  cellClass: 'list-cell-title' },
+    { key: 'author', label: t.colAuthor, cellClass: 'list-cell-meta'  },
+    { key: 'genre',  label: t.colGenre,  cellClass: 'list-cell-tag'   },
+    { key: 'year',   label: t.colYear,   cellClass: 'list-cell-meta'  },
   ];
 
   const allSelected = selected.size === books.length && books.length > 0;
@@ -15,7 +15,7 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
       <table className="list-table">
         <thead>
           <tr>
-            <th>
+            <th className="list-cell-num">
               {editMode && (
                 <div className="th-checkbox-wrap" onClick={onSelectAll}>
                   <div className={`row-checkbox${allSelected ? ' all-selected' : ''}`}>
@@ -28,10 +28,10 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
                 </div>
               )}
             </th>
-            {cols.map(({ key, label }) => (
+            {cols.map(({ key, label, cellClass }) => (
               <th key={key}
                 onClick={() => toggleSort(key)}
-                className={sortCol === key ? 'sorted' : ''}>
+                className={`${cellClass}${sortCol === key ? ' sorted' : ''}`}>
                 <div className="th-inner">
                   {label}
                   {sortCol === key && (
@@ -45,7 +45,7 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
                 </div>
               </th>
             ))}
-            <th style={{ width: 60 }} />
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -55,8 +55,8 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
               className={`list-row${selected.has(book.id) ? ' selected' : ''}`}>
 
               {editMode ? (
-                <td style={{ padding: '0 8px 0 28px', width: 40, overflow: 'visible', whiteSpace: 'normal', textOverflow: 'clip', verticalAlign: 'middle' }}>
-                  <div className="row-checkbox" style={{ margin: '0 auto' }}>
+                <td className="list-cell-num">
+                  <div className="row-checkbox">
                     {selected.has(book.id) && (
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12"/>
@@ -65,15 +65,15 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
                   </div>
                 </td>
               ) : (
-                <td className="list-num">{i + 1}</td>
+                <td className="list-cell-num">{i + 1}</td>
               )}
 
-              <td><span className="list-title">{book.title}</span></td>
-              <td><span className="list-author">{book.author}</span></td>
-              <td><span className="list-genre">{book.genre || 'NC'}</span></td>
-              <td><span className="list-year">{book.year || 'NC'}</span></td>
+              <td className="list-cell-title"><span className="list-title">{book.title}</span></td>
+              <td className="list-cell-meta"><span className="list-author">{book.author}</span></td>
+              <td className="list-cell-tag"><span className="list-genre">{book.genre || 'NC'}</span></td>
+              <td className="list-cell-meta"><span className="list-year">{book.year || 'NC'}</span></td>
 
-              <td style={{ overflow: 'visible', maxWidth: 'none', padding: '0 8px' }}>
+              <td className="list-cell-action">
                 <button
                   className={`delete-row-btn${editMode ? ' disabled' : ''}`}
                   disabled={editMode}

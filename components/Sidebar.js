@@ -6,7 +6,7 @@ export default function Sidebar({
   tab, setTab, data, collections,
   quotes = [], words = [],
   collapsed, onToggleCollapse,
-  onCreateCollection, onOpenCollection, activeCollection,
+  onCreateCollection, onOpenCollection, onShowAllCollections, activeCollection,
   t,
   mobileOpen, onCloseMobile,
 }) {
@@ -46,82 +46,68 @@ export default function Sidebar({
 
         {/* Primary nav */}
         <nav className="sidebar-nav">
-          {!collapsed && (
-            <div className="sidebar-section-head sidebar-section-head--no-action">
-              <span className="sidebar-section-label">{t.sidebarShelves || 'Shelves'}</span>
-            </div>
-          )}
-          {[
-            { key: 'owned',    label: t.tabLibrary,  count: data.owned.length,    icon: <LibIcon /> },
-            { key: 'wishlist', label: t.tabWishlist, count: data.wishlist.length,  icon: <WishIcon /> },
-          ].map(({ key, label, count, icon }) => (
-            <button key={key}
-              className={`sidebar-item${tab === key ? ' active' : ''}${key === 'owned' ? ' sidebar-item--owned' : ''}`}
-              onClick={() => handleNav(key)}>
-              <span className="sidebar-icon">{icon}</span>
-              {!collapsed && (
-                <>
-                  <span className="sidebar-label">{label}</span>
-                  <span className="sidebar-badge">{count}</span>
-                </>
-              )}
-            </button>
-          ))}
-        </nav>
 
-        {/* Quotes */}
-        <div className="sidebar-section">
-          {!collapsed ? (
-            <div className="sidebar-section-head sidebar-section-head--no-action">
-              <span className="sidebar-section-label">{t.tabQuotes || 'Quotes'}</span>
-            </div>
-          ) : (
-            <button className={`sidebar-item${tab === 'quotes' ? ' active' : ''}`} onClick={() => handleNav('quotes')}>
-              <span className="sidebar-icon"><QuoteIcon /></span>
-            </button>
-          )}
-          {!collapsed && (
+          {/* Shelves */}
+          <div className="sidebar-section">
+            {!collapsed && (
+              <div className="sidebar-section-head sidebar-section-head--no-action">
+                <span className="sidebar-section-label">{t.sidebarShelves || 'Shelves'}</span>
+              </div>
+            )}
+            {[
+              { key: 'owned',    label: t.tabLibrary,  count: data.owned.length,    icon: <LibIcon /> },
+              { key: 'wishlist', label: t.tabWishlist, count: data.wishlist.length,  icon: <WishIcon /> },
+            ].map(({ key, label, count, icon }) => (
+              <button key={key}
+                className={`sidebar-item${tab === key ? ' active' : ''}`}
+                onClick={() => handleNav(key)}>
+                <span className="sidebar-icon">{icon}</span>
+                {!collapsed && (
+                  <>
+                    <span className="sidebar-label">{label}</span>
+                    <span className="sidebar-badge">{count}</span>
+                  </>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Tools (Quotes + Dictionary) */}
+          <div className="sidebar-section">
+            {!collapsed && (
+              <div className="sidebar-section-head sidebar-section-head--no-action">
+                <span className="sidebar-section-label">{t.sidebarNotes || 'Notes'}</span>
+              </div>
+            )}
             <button
               className={`sidebar-item${tab === 'quotes' ? ' active' : ''}`}
               onClick={() => handleNav('quotes')}>
               <span className="sidebar-icon"><QuoteIcon /></span>
-              <span className="sidebar-label">{t.tabQuotes || 'Quotes'}</span>
-              <span className="sidebar-badge">{quotes.length}</span>
+              {!collapsed && (
+                <>
+                  <span className="sidebar-label">{t.tabQuotes || 'Quotes'}</span>
+                  <span className="sidebar-badge">{quotes.length}</span>
+                </>
+              )}
             </button>
-          )}
-        </div>
-
-        {/* Dictionary */}
-        <div className="sidebar-section">
-          {!collapsed ? (
-            <div className="sidebar-section-head sidebar-section-head--no-action">
-              <span className="sidebar-section-label">{t.tabDictionary || 'Dictionary'}</span>
-            </div>
-          ) : (
-            <button className={`sidebar-item${tab === 'dictionary' ? ' active' : ''}`} onClick={() => handleNav('dictionary')}>
-              <span className="sidebar-icon"><DictIcon /></span>
-            </button>
-          )}
-          {!collapsed && (
             <button
               className={`sidebar-item${tab === 'dictionary' ? ' active' : ''}`}
               onClick={() => handleNav('dictionary')}>
               <span className="sidebar-icon"><DictIcon /></span>
-              <span className="sidebar-label">{t.tabDictionary || 'Dictionary'}</span>
-              <span className="sidebar-badge">{words.length}</span>
+              {!collapsed && (
+                <>
+                  <span className="sidebar-label">{t.tabDictionary || 'Dictionary'}</span>
+                  <span className="sidebar-badge">{words.length}</span>
+                </>
+              )}
             </button>
-          )}
-        </div>
+          </div>
 
-        {/* Collections — hidden temporarily */}
-        <div className="sidebar-section" style={{ display: 'none' }}>
+          {/* Collections */}
+          <div className="sidebar-section">
           {!collapsed ? (
             <div className="sidebar-section-head-row">
-              <div className="sidebar-section-head" onClick={() => { setCollectionsOpen(o => !o); setTab('collections'); onCloseMobile?.(); }}>
-                <svg className={`sidebar-section-chevron${collectionsOpen ? ' open' : ''}`}
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <polyline points="9 18 15 12 9 6"/>
-                </svg>
+              <div className="sidebar-section-head sidebar-section-head--no-action">
                 <span className="sidebar-section-label">Collections</span>
               </div>
               <button className="sidebar-section-add"
@@ -137,21 +123,44 @@ export default function Sidebar({
             </button>
           )}
 
+          {!collapsed && collections.length > 0 && (
+            <div
+              className={`sidebar-item sidebar-col-item sidebar-col-all${tab === 'collections' && !activeCollection ? ' active' : ''}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => { handleNav('collections'); onShowAllCollections?.(); }}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNav('collections'); onShowAllCollections?.(); } }}>
+              <button
+                type="button"
+                className="sidebar-col-toggle sidebar-col-toggle--sm"
+                onClick={e => { e.stopPropagation(); setCollectionsOpen(o => !o); }}
+                aria-label={collectionsOpen ? 'Collapse' : 'Expand'}>
+                <svg className={`sidebar-section-chevron${collectionsOpen ? ' open' : ''}`}
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+              <span className="sidebar-label">{t.colAll || 'All collections'}</span>
+              <span className="sidebar-badge">{collections.length}</span>
+            </div>
+          )}
+
           {!collapsed && collectionsOpen && collections.map(col => (
             <button key={col.id}
               className={`sidebar-item sidebar-col-item${tab === 'collections' && activeCollection === col.id ? ' active' : ''}`}
               onClick={() => { handleNav('collections'); onOpenCollection?.(col); }}>
-              <span className="sidebar-col-emoji">{col.emoji}</span>
               <span className="sidebar-label">{col.name}</span>
             </button>
           ))}
 
-          {!collapsed && collectionsOpen && collections.length === 0 && (
+          {!collapsed && collections.length === 0 && (
             <div className="sidebar-empty">
               {t.colEmpty || 'No collections yet'}
             </div>
           )}
-        </div>
+          </div>
+
+        </nav>
 
         {/* Bottom */}
         <div className="sidebar-bottom">

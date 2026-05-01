@@ -177,7 +177,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
         <span className="panel-section-eyebrow">{t.dictionarySavedTitle}</span>
 
         {sortedWords.length === 0 ? (
-          <div className="empty dictionary-saved-empty">
+          <div className="empty">
             <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
               <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
               <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
