@@ -137,7 +137,13 @@ export default function LibraryPage() {
           setTab(next);
           setPanelBook(null);
           setPanelQuote(null);
-          if (typeof window !== 'undefined') window.scrollTo(0, 0);
+          if (typeof window !== 'undefined') {
+            requestAnimationFrame(() => {
+              window.scrollTo(0, 0);
+              if (document.documentElement) document.documentElement.scrollTop = 0;
+              if (document.body) document.body.scrollTop = 0;
+            });
+          }
         }}
         data={data} collections={collections}
         quotes={quotes} words={words}
