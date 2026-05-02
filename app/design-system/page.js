@@ -8,13 +8,13 @@ import {
 } from "@/components/library/Onboarding";
 
 const NAV = {
-  Foundations: ["logo","colors","typography","highlight","spacing","shadows","strokes"],
+  Foundations: ["logo","colors","typography","spacing","shadows","strokes"],
   Components:  ["autocomplete","badges","book-chip","btn-states","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
   Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
-  "logo":"Logo","colors":"Colors","typography":"Typography","highlight":"Hand-drawn Highlight",
+  "logo":"Logo","colors":"Colors","typography":"Typography",
   "spacing":"Spacing","shadows":"Shadows & Radius","strokes":"Strokes & Borders",
   "buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
   "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges & Pills",
@@ -329,7 +329,7 @@ export default function DesignSystemPage() {
 
             <p className="palette-section-label">Neutrals — Dark (tinted primary)</p>
             <div className="palette-grid on-white">
-              {["5","10","20","30","40","50","60","70","80","90","100"].map(n => (
+              {["70","80","100"].map(n => (
                 <div key={n} className="palette-chip">
                   <div className="palette-chip-swatch" style={{ background: `var(--dark-${n})` }} />
                   <div className="palette-chip-meta">
@@ -339,35 +339,21 @@ export default function DesignSystemPage() {
                 </div>
               ))}
             </div>
-            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 28, marginTop: 2 }}>--dark-N · base #0D0F1A</div>
+            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 28, marginTop: 2 }}>--dark-N · base #0D0F1A · only the steps actually used in the codebase</div>
 
             <p className="palette-section-label">Neutrals — Light (tinted primary)</p>
             <div className="palette-grid on-dark-bg">
-              {["5","10","20","30","40","50","60","70","80","90","100"].map(n => (
+              {["20","90"].map(n => (
                 <div key={n} className="palette-chip">
                   <div className="palette-chip-swatch" style={{ background: `var(--light-${n})` }} />
                   <div className="palette-chip-meta">
                     <span className="palette-chip-step">{n}</span>
-                    <span className="palette-chip-hex">{n==="100"?"#F5F6FF":`${n}%`}</span>
+                    <span className="palette-chip-hex">{`${n}%`}</span>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 8, marginTop: 2 }}>--light-N · base #F5F6FF</div>
-
-            <p className="color-section-label" style={{ marginTop: 48 }}>Hand-drawn highlight — couleurs landing</p>
-            <p style={{ fontSize: "0.857rem", color: "var(--text-3)", marginBottom: 20, marginTop: -6 }}>Colors reserved for the SVG wave effect on headings. Primary use: landing page.</p>
-            <div className="color-grid">
-              {[["#4959E6","Primary"],["#9DCCFA","Sky"],["#FE7E4E","Coral"],["#FFCEE3","Pink"],["#FFE92D","Yellow"],["#9EEB97","Mint"]].map(([hex,name]) => (
-                <div key={hex} className="color-swatch">
-                  <div className="color-swatch-block" style={{ background: hex }} />
-                  <div className="color-swatch-info">
-                    <div className="color-swatch-title">{name}</div>
-                    <div className="ds-token-name" style={{ marginTop: 0, fontFamily: "monospace" }}>{hex}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 8, marginTop: 2 }}>--light-N · base #F5F6FF · only the steps actually used in the codebase</div>
           </section>
 
           {/* ── TYPOGRAPHY ── */}
@@ -413,37 +399,6 @@ export default function DesignSystemPage() {
                       <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{use}</div>
                     </div>
                     <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* ── HAND-DRAWN HIGHLIGHT ── */}
-          <section className="ds-section" id="highlight">
-            <SectionTitle title="Hand-drawn Highlight" sub="Animated SVG effect on headings. Stroke-width 2.8, draw-wave animation." />
-            <div className="ds-card">
-              <div className="ds-card-label">Variantes couleur</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
-                {[
-                  ["#4959E6","Primary","font-size:2rem;font-weight:800"],
-                  ["#9DCCFA","Sky","font-size:2rem;font-weight:800"],
-                  ["#FE7E4E","Coral","font-size:2rem;font-weight:800"],
-                  ["#FFCEE3","Pink","font-size:2rem;font-weight:800"],
-                  ["#FFE92D","Yellow","font-size:2rem;font-weight:800"],
-                  ["#9EEB97","Mint","font-size:2rem;font-weight:800"],
-                ].map(([color,name]) => (
-                  <div key={name} className="hl-demo-row">
-                    <span className="hl" style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-fraunces),serif" }}>
-                      highlight
-                      <svg className="wave" viewBox="0 0 100 10" preserveAspectRatio="none">
-                        <path d="M0 5 Q25 0 50 5 Q75 10 100 5" stroke={color} />
-                      </svg>
-                    </span>
-                    <span className="hl-chip">
-                      <span className="hl-chip-dot" style={{ background: color }} />
-                      {color}
-                    </span>
                   </div>
                 ))}
               </div>
@@ -626,6 +581,173 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── AUTOCOMPLETE ── */}
+          <section className="ds-section" id="autocomplete">
+            <SectionTitle title="Autocomplete" sub="Dropdown suggestions below the title field in the modal." />
+            <div className="ds-card">
+              <div className="ds-card-label">Dropdown</div>
+              <div className="ds-card-body">
+                <div className="autocomplete-preview">
+                  {[["1984","George Orwell"],["Nineteen Eighty-Four","George Orwell"],["1984 (annotated)","Various"]].map(([title, author], i) => (
+                    <div key={i} className={`ac-item${i===0?" focused":""}`}>
+                      {title}<span>{author}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── BADGES & PILLS ── */}
+          <section className="ds-section" id="badges">
+            <SectionTitle title="Badges & Pills" />
+            <div className="ds-card">
+              <div className="ds-card-label">Pills</div>
+              <div className="ds-card-body">
+                <span className="pill pill-owned">Library</span>
+                <span className="pill pill-wishlist">Wishlist</span>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Status badge</div>
+              <div className="ds-card-body">
+                <span className="status-badge">1984</span>
+                <span className="status-badge">Roman</span>
+              </div>
+            </div>
+          </section>
+
+          {/* ── BOOK CHIP ── */}
+          <section className="ds-section" id="book-chip">
+            <SectionTitle title="Book Chip" sub="Reusable book reference block — cover thumbnail + title + author. Three modes : display, interactive, with remove." />
+
+            <div className="ds-card">
+              <div className="ds-card-label">Modes</div>
+              <div className="ds-card-body" style={{ gap: 16, flexWrap: "wrap" }}>
+                {/* Display (no onClick, no onRemove) */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Display</div>
+                  <div className="quote-book-chip">
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">Tropique du Cancer</div>
+                      <div className="quote-book-chip-author">Henry Miller</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Interactive (with onClick → chevron) */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Interactive</div>
+                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #9EEB97, #4959E6)" }}><span>1</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">1984</div>
+                      <div className="quote-book-chip-author">George Orwell</div>
+                    </div>
+                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </button>
+                </div>
+
+                {/* With remove */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>With remove</div>
+                  <div className="quote-book-chip">
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #FE7E4E, #FFCEE3)" }}><span>B</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-title">A Brief History of Time</div>
+                      <div className="quote-book-chip-author">Stephen Hawking</div>
+                    </div>
+                    <button type="button" className="quote-book-chip-remove" aria-label="Remove">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Context overrides</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Context</th><th>Default bg</th><th>Hover bg (interactive)</th><th>Why</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component">Base<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>QuotePanel, AddQuoteModal</span></td>
+                      <td><span className="ds-token-chip">--bg3</span></td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Neutral backgrounds where the chip sits on its own.</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Inside <code>.quote-card</code></td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
+                      <td><span className="ds-token-chip">--primary-10</span></td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Card itself tints primary on hover — chip needs stronger saturation to stay visible.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Props</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>book</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ title, author, id? }"}</td><td style={{ fontSize: "0.82rem" }}>Required. Cover is auto-fetched from Google Books via title/author.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onClick</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(e) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>If provided: renders as <code>&lt;button&gt;</code> with chevron + hover. Use <code>e.stopPropagation()</code> inside parent-clickable contexts.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onRemove</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows an X button on the right. Mutually exclusive with <code>onClick</code>.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Label for the remove button.</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Source: <code>components/library/BookChip.js</code>. Cover 32×44, radius 4. Fallback: gradient from <code>coverColors(title)</code> + first letter.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── BUTTON STATES ── */}
+          <section className="ds-section" id="btn-states">
+            <SectionTitle title="Button States" sub="Default · Hover · Active · Focus · Disabled" />
+            <div className="states-grid">
+              {[
+                { name:"Primary", variant:"btn-primary" },
+                { name:"Secondary", variant:"btn-secondary" },
+                { name:"Ghost", variant:"btn-ghost" },
+                { name:"Outline", variant:"btn-outline" },
+                { name:"Critical", variant:"btn-critical" },
+              ].map(({ name, variant }) => (
+                <div key={name} className="states-variant-card">
+                  <div className="states-variant-header"><span className="states-variant-name">{name}</span></div>
+                  <div className="states-row">
+                    {[
+                      ["Default",""],
+                      ["Hover","is-hover"],
+                      ["Active","is-active"],
+                      ["Focus","is-focus"],
+                      ["Disabled",""],
+                    ].map(([state, mod]) => (
+                      <div key={state} className="states-cell">
+                        <button className={`btn ${variant} btn-md${mod ? " "+mod : ""}`} disabled={state==="Disabled"}>
+                          {name}
+                        </button>
+                        <span className="states-content-label">{state}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ── BUTTONS ── */}
           <section className="ds-section" id="buttons">
             <SectionTitle title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all." />
@@ -782,37 +904,78 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
-          {/* ── BUTTON STATES ── */}
-          <section className="ds-section" id="btn-states">
-            <SectionTitle title="Button States" sub="Default · Hover · Active · Focus · Disabled" />
-            <div className="states-grid">
-              {[
-                { name:"Primary", variant:"btn-primary" },
-                { name:"Secondary", variant:"btn-secondary" },
-                { name:"Ghost", variant:"btn-ghost" },
-                { name:"Outline", variant:"btn-outline" },
-                { name:"Critical", variant:"btn-critical" },
-              ].map(({ name, variant }) => (
-                <div key={name} className="states-variant-card">
-                  <div className="states-variant-header"><span className="states-variant-name">{name}</span></div>
-                  <div className="states-row">
-                    {[
-                      ["Default",""],
-                      ["Hover","is-hover"],
-                      ["Active","is-active"],
-                      ["Focus","is-focus"],
-                      ["Disabled",""],
-                    ].map(([state, mod]) => (
-                      <div key={state} className="states-cell">
-                        <button className={`btn ${variant} btn-md${mod ? " "+mod : ""}`} disabled={state==="Disabled"}>
-                          {name}
-                        </button>
-                        <span className="states-content-label">{state}</span>
-                      </div>
-                    ))}
-                  </div>
+          {/* ── CHECKBOX ── */}
+          <section className="ds-section" id="checkbox">
+            <SectionTitle title="Checkbox" sub="Canonical checkbox 18×18, used inside row contexts (modal toggle, list selection)." />
+            <div className="ds-card">
+              <div className="ds-card-label">États</div>
+              <div className="ds-card-body" style={{ gap: 24 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                  <div className="checkbox-demo" onClick={() => setChk1(v => !v)}>{chk1 && <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
+                  <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Unchecked</span>
                 </div>
-              ))}
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                  <div className={`checkbox-demo${chk2?" checked":""}`} onClick={() => setChk2(v => !v)}>{chk2 && <svg viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
+                  <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Checked</span>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Modal toggle row — canonical 40h container</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Property</th><th>Value</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["Container class", ".modal-toggle-row"],
+                      ["min-height", "40px (md, mirrors btn-md / input)"],
+                      ["gap", "10px"],
+                      ["check (18×18) default", "border --border-subtle, bg transparent (light) · border --light-20 (dark)"],
+                      ["check hover", "border --primary-50 + bg --primary-5 (light) · border --primary-40 + bg --primary-5 (dark)"],
+                      ["check checked", "bg --primary-50, border transparent (light) · bg --primary-40 (dark)"],
+                      ["check checked hover", "bg --primary-60 (light) · bg --primary-50 (dark) — mirrors .btn-primary"],
+                      ["label (.modal-toggle-label)", "15/500/--text (interactive tier — pairs with btn-md / inputs)"],
+                      ["First app usage", ".modal-toggle-row in AddModal (Mark as reading)"],
+                    ].map(([prop, val]) => (
+                      <tr key={prop}>
+                        <td className="token-table-component">{prop}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Info box — bg + border bleutés, optional inline strong highlight</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Property</th><th>Value</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["Class", ".modal-info-box (+ .modal-info-box-strong for highlight)"],
+                      ["Background", "--primary-5"],
+                      ["Border", "1.5px solid --primary-20 (light) · --primary-30 (dark)"],
+                      ["Border-radius", "8px"],
+                      ["Padding", "8px 16px"],
+                      ["Gap (icon ↔ text)", "16px"],
+                      ["Body", "14/500/--text/lh 1.5"],
+                      ["Inline strong", "weight 700, color --text"],
+                      ["Icon", "16×16, color --primary-50/40, info circle SVG"],
+                      ["First app usage", "Mark-as-reading hint inside AddModal"],
+                    ].map(([prop, val]) => (
+                      <tr key={prop}>
+                        <td className="token-table-component">{prop}</td>
+                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </section>
 
@@ -862,34 +1025,6 @@ export default function DesignSystemPage() {
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Source: <code>components/library/ExportMenu.js</code>. Trigger class: <code>.dropdown-btn</code>. Menu reuses the generic <code>.dropdown-menu</code>.
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── SORT MENU ── */}
-          <section className="ds-section" id="sort-menu">
-            <SectionTitle title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists." />
-            <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
-              <div className="ds-card-body">
-                <DropdownDemo label="Recent" items={["Recent", "A–Z"]} />
-              </div>
-            </div>
-            <div className="ds-card">
-              <div className="ds-card-label">Props</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
-                  <tbody>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>current</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Key of the active option. Trigger label reflects its label.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onChange</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(key) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Fires with the selected option key.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>options</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ key, label }[]"}</td><td style={{ fontSize: "0.82rem" }}>Options list. Selected one gets a checkmark icon.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Accessibility label for the trigger button.</td></tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.dropdown-btn.sort-menu-btn</code> (shares the outline button anatomy).
                 </div>
               </div>
             </div>
@@ -1005,6 +1140,24 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
+          {/* ── LANG SWITCHER ── */}
+          <section className="ds-section" id="lang-switcher">
+            <SectionTitle title="Language Switcher" />
+            <div className="ds-card">
+              <div className="ds-card-label">FR / EN</div>
+              <div className="ds-card-body">
+                <div className="lang-toggle-ds">
+                  {["FR","EN"].map((l, i) => (
+                    <span key={l} style={{ display: "contents" }}>
+                      {i > 0 && <span className="lang-sep-ds">/</span>}
+                      <button className={`lang-btn-ds${langActive===l?" active":""}`} onClick={() => setLangActive(l)}>{l}</button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* ── SEGMENTED CONTROL ── */}
           <section className="ds-section" id="segmented">
             <SectionTitle title="Segmented Control" sub="Container bg3, active state white bg + blue shadow. Inactive weight 500, active weight 600." />
@@ -1026,245 +1179,29 @@ export default function DesignSystemPage() {
             </div>
           </section>
 
-          {/* ── VIEW TOGGLE ── */}
-          <section className="ds-section" id="view-toggle">
-            <SectionTitle title="View Toggle" sub="Grid / List. Active: primary-50 bg, white icon." />
+          {/* ── SORT MENU ── */}
+          <section className="ds-section" id="sort-menu">
+            <SectionTitle title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists." />
             <div className="ds-card">
-              <div className="ds-card-label">Toggle</div>
+              <div className="ds-card-label">Preview</div>
               <div className="ds-card-body">
-                <div className="view-btns-ds">
-                  <button className={`view-btn-ds${viewActive==="grid"?" active":""}`} onClick={() => setViewActive("grid")}>
-                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-                  </button>
-                  <button className={`view-btn-ds${viewActive==="list"?" active":""}`} onClick={() => setViewActive("list")}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                  </button>
-                </div>
+                <DropdownDemo label="Recent" items={["Recent", "A–Z"]} />
               </div>
             </div>
-          </section>
-
-          {/* ── BADGES & PILLS ── */}
-          <section className="ds-section" id="badges">
-            <SectionTitle title="Badges & Pills" />
-            <div className="ds-card">
-              <div className="ds-card-label">Pills</div>
-              <div className="ds-card-body">
-                <span className="pill pill-owned">Library</span>
-                <span className="pill pill-wishlist">Wishlist</span>
-              </div>
-            </div>
-            <div className="ds-card">
-              <div className="ds-card-label">Status badge</div>
-              <div className="ds-card-body">
-                <span className="status-badge">1984</span>
-                <span className="status-badge">Roman</span>
-              </div>
-            </div>
-          </section>
-
-          {/* ── CHECKBOX ── */}
-          <section className="ds-section" id="checkbox">
-            <SectionTitle title="Checkbox" sub="Canonical checkbox 18×18, used inside row contexts (modal toggle, list selection)." />
-            <div className="ds-card">
-              <div className="ds-card-label">États</div>
-              <div className="ds-card-body" style={{ gap: 24 }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                  <div className="checkbox-demo" onClick={() => setChk1(v => !v)}>{chk1 && <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
-                  <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Unchecked</span>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                  <div className={`checkbox-demo${chk2?" checked":""}`} onClick={() => setChk2(v => !v)}>{chk2 && <svg viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
-                  <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Checked</span>
-                </div>
-              </div>
-            </div>
-            <div className="ds-card">
-              <div className="ds-card-label">Modal toggle row — canonical 40h container</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Property</th><th>Value</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Container class", ".modal-toggle-row"],
-                      ["min-height", "40px (md, mirrors btn-md / input)"],
-                      ["gap", "10px"],
-                      ["check (18×18) default", "border --border-subtle, bg transparent (light) · border --light-20 (dark)"],
-                      ["check hover", "border --primary-50 + bg --primary-5 (light) · border --primary-40 + bg --primary-5 (dark)"],
-                      ["check checked", "bg --primary-50, border transparent (light) · bg --primary-40 (dark)"],
-                      ["check checked hover", "bg --primary-60 (light) · bg --primary-50 (dark) — mirrors .btn-primary"],
-                      ["label (.modal-toggle-label)", "15/500/--text (interactive tier — pairs with btn-md / inputs)"],
-                      ["First app usage", ".modal-toggle-row in AddModal (Mark as reading)"],
-                    ].map(([prop, val]) => (
-                      <tr key={prop}>
-                        <td className="token-table-component">{prop}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="ds-card">
-              <div className="ds-card-label">Info box — bg + border bleutés, optional inline strong highlight</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Property</th><th>Value</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Class", ".modal-info-box (+ .modal-info-box-strong for highlight)"],
-                      ["Background", "--primary-5"],
-                      ["Border", "1.5px solid --primary-20 (light) · --primary-30 (dark)"],
-                      ["Border-radius", "8px"],
-                      ["Padding", "8px 16px"],
-                      ["Gap (icon ↔ text)", "16px"],
-                      ["Body", "14/500/--text/lh 1.5"],
-                      ["Inline strong", "weight 700, color --text"],
-                      ["Icon", "16×16, color --primary-50/40, info circle SVG"],
-                      ["First app usage", "Mark-as-reading hint inside AddModal"],
-                    ].map(([prop, val]) => (
-                      <tr key={prop}>
-                        <td className="token-table-component">{prop}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          {/* ── AUTOCOMPLETE ── */}
-          <section className="ds-section" id="autocomplete">
-            <SectionTitle title="Autocomplete" sub="Dropdown suggestions below the title field in the modal." />
-            <div className="ds-card">
-              <div className="ds-card-label">Dropdown</div>
-              <div className="ds-card-body">
-                <div className="autocomplete-preview">
-                  {[["1984","George Orwell"],["Nineteen Eighty-Four","George Orwell"],["1984 (annotated)","Various"]].map(([title, author], i) => (
-                    <div key={i} className={`ac-item${i===0?" focused":""}`}>
-                      {title}<span>{author}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── BOOK CHIP ── */}
-          <section className="ds-section" id="book-chip">
-            <SectionTitle title="Book Chip" sub="Reusable book reference block — cover thumbnail + title + author. Three modes : display, interactive, with remove." />
-
-            <div className="ds-card">
-              <div className="ds-card-label">Modes</div>
-              <div className="ds-card-body" style={{ gap: 16, flexWrap: "wrap" }}>
-                {/* Display (no onClick, no onRemove) */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Display</div>
-                  <div className="quote-book-chip">
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">Tropique du Cancer</div>
-                      <div className="quote-book-chip-author">Henry Miller</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Interactive (with onClick → chevron) */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Interactive</div>
-                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #9EEB97, #4959E6)" }}><span>1</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">1984</div>
-                      <div className="quote-book-chip-author">George Orwell</div>
-                    </div>
-                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                  </button>
-                </div>
-
-                {/* With remove */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>With remove</div>
-                  <div className="quote-book-chip">
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #FE7E4E, #FFCEE3)" }}><span>B</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">A Brief History of Time</div>
-                      <div className="quote-book-chip-author">Stephen Hawking</div>
-                    </div>
-                    <button type="button" className="quote-book-chip-remove" aria-label="Remove">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="ds-card">
-              <div className="ds-card-label">Context overrides</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Context</th><th>Default bg</th><th>Hover bg (interactive)</th><th>Why</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component">Base<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>QuotePanel, AddQuoteModal</span></td>
-                      <td><span className="ds-token-chip">--bg3</span></td>
-                      <td><span className="ds-token-chip">--primary-5</span></td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Neutral backgrounds where the chip sits on its own.</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Inside <code>.quote-card</code></td>
-                      <td><span className="ds-token-chip">--primary-5</span></td>
-                      <td><span className="ds-token-chip">--primary-10</span></td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Card itself tints primary on hover — chip needs stronger saturation to stay visible.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
             <div className="ds-card">
               <div className="ds-card-label">Props</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
                   <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>book</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ title, author, id? }"}</td><td style={{ fontSize: "0.82rem" }}>Required. Cover is auto-fetched from Google Books via title/author.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onClick</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(e) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>If provided: renders as <code>&lt;button&gt;</code> with chevron + hover. Use <code>e.stopPropagation()</code> inside parent-clickable contexts.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onRemove</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows an X button on the right. Mutually exclusive with <code>onClick</code>.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Label for the remove button.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>current</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Key of the active option. Trigger label reflects its label.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onChange</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(key) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Fires with the selected option key.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>options</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ key, label }[]"}</td><td style={{ fontSize: "0.82rem" }}>Options list. Selected one gets a checkmark icon.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Accessibility label for the trigger button.</td></tr>
                   </tbody>
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Source: <code>components/library/BookChip.js</code>. Cover 32×44, radius 4. Fallback: gradient from <code>coverColors(title)</code> + first letter.
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ── LANG SWITCHER ── */}
-          <section className="ds-section" id="lang-switcher">
-            <SectionTitle title="Language Switcher" />
-            <div className="ds-card">
-              <div className="ds-card-label">FR / EN</div>
-              <div className="ds-card-body">
-                <div className="lang-toggle-ds">
-                  {["FR","EN"].map((l, i) => (
-                    <span key={l} style={{ display: "contents" }}>
-                      {i > 0 && <span className="lang-sep-ds">/</span>}
-                      <button className={`lang-btn-ds${langActive===l?" active":""}`} onClick={() => setLangActive(l)}>{l}</button>
-                    </span>
-                  ))}
+                  Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.dropdown-btn.sort-menu-btn</code> (shares the outline button anatomy).
                 </div>
               </div>
             </div>
@@ -1281,6 +1218,24 @@ export default function DesignSystemPage() {
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                   </span>
                 </button>
+              </div>
+            </div>
+          </section>
+
+          {/* ── VIEW TOGGLE ── */}
+          <section className="ds-section" id="view-toggle">
+            <SectionTitle title="View Toggle" sub="Grid / List. Active: primary-50 bg, white icon." />
+            <div className="ds-card">
+              <div className="ds-card-label">Toggle</div>
+              <div className="ds-card-body">
+                <div className="view-btns-ds">
+                  <button className={`view-btn-ds${viewActive==="grid"?" active":""}`} onClick={() => setViewActive("grid")}>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                  </button>
+                  <button className={`view-btn-ds${viewActive==="list"?" active":""}`} onClick={() => setViewActive("list")}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                  </button>
+                </div>
               </div>
             </div>
           </section>
