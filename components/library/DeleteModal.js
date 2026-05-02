@@ -57,9 +57,10 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
   const isCancelReading = target.type === 'cancelReading';
   const isRemoveFinished = target.type === 'removeFinished';
   const isCollection = target.type === 'collection';
+  const isCollectionsBulk = target.type === 'collectionsBulk';
   const isColRemove = target.type === 'colRemove';
   const isColRemoveBulk = target.type === 'colRemoveBulk';
-  const isSingleBook = !isBulk && !isQuote && !isWord && !isRemoveFinished && !isCollection && !isColRemove && !isColRemoveBulk; // single delete OR cancelReading
+  const isSingleBook = !isBulk && !isQuote && !isWord && !isRemoveFinished && !isCollection && !isCollectionsBulk && !isColRemove && !isColRemoveBulk; // single delete OR cancelReading
 
   const title = isBulk
     ? t.deleteBulkTitle(target.count)
@@ -68,6 +69,7 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
     : isCancelReading ? t.cancelReadingTitle
     : isRemoveFinished ? t.removeFinishedTitle
     : isCollection ? t.colDeleteTitle
+    : isCollectionsBulk ? t.colDeleteBulkTitle(target.count)
     : isColRemove ? t.colRemoveTitle
     : isColRemoveBulk ? t.colRemoveBulkTitle(target.count)
     : t.deleteTitle;
@@ -78,6 +80,7 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
     : isCancelReading ? t.cancelReadingMsg(target.title)
     : isRemoveFinished ? t.removeFinishedMsg
     : isCollection ? t.colDeleteMsg
+    : isCollectionsBulk ? t.colDeleteBulkMsg(target.count)
     : isColRemove ? t.colRemoveMsg(target.colName)
     : isColRemoveBulk ? t.colRemoveBulkMsg(target.count, target.colName)
     : t.deleteMsg(target.title);

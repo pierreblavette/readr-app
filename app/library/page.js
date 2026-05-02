@@ -71,7 +71,7 @@ export default function LibraryPage() {
     books,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
-    collections, createCollection, deleteCollection, renameCollection,
+    collections, createCollection, deleteCollection, deleteCollections, renameCollection,
     addBookToCollection, addBooksToCollection, removeBookFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
     quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook, exportQuotesMD, exportQuotesPDF,
@@ -117,6 +117,8 @@ export default function LibraryPage() {
       updateFinished(payload.id, { rating: null, note: null });
     } else if (payload?.type === 'collection') {
       deleteCollection(payload.id);
+    } else if (payload?.type === 'collectionsBulk') {
+      deleteCollections(payload.ids);
     } else if (payload?.type === 'colRemove') {
       removeBookFromCollection(payload.colId, payload.id);
     } else if (payload?.type === 'colRemoveBulk') {
@@ -254,36 +256,17 @@ export default function LibraryPage() {
 
         {/* Collections view */}
         {isCollections && !currentCollection && (
-          <>
-            <h1 className="page-title">{t.pageCollections}</h1>
-            <div className="search-row">
-              <div />
-              <div className="counter-actions">
-                <button className="add-btn" onClick={() => setCreateColOpen(true)}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  {t.colNewCollection}
-                </button>
-                <div className="view-btns">
-                  <button onClick={() => switchView('grid')} className={`view-btn${view === 'grid' ? ' active' : ''}`} aria-label="Grid view">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
-                  </button>
-                  <button onClick={() => switchView('list')} className={`view-btn${view === 'list' ? ' active' : ''}`} aria-label="List view">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <CollectionsView
-              collections={collections}
-              data={data}
-              view={view}
-              onOpen={col => setActiveCollection(col.id)}
-              onCreate={() => setCreateColOpen(true)}
-              onDelete={col => setDeleteTarget({ type: 'collection', id: col.id, title: col.name, count: getBooksForCollection(col.id).length })}
-              onRename={col => setEditingCollection(col)}
-              t={t}
-            />
-          </>
+          <CollectionsView
+            collections={collections}
+            data={data}
+            view={view} switchView={switchView}
+            onOpen={col => setActiveCollection(col.id)}
+            onCreate={() => setCreateColOpen(true)}
+            onDelete={col => setDeleteTarget({ type: 'collection', id: col.id, title: col.name, count: getBooksForCollection(col.id).length })}
+            onRename={col => setEditingCollection(col)}
+            onRequestDeleteMany={ids => setDeleteTarget({ type: 'collectionsBulk', ids, count: ids.length })}
+            t={t}
+          />
         )}
 
         {/* Collection detail view */}

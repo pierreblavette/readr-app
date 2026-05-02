@@ -894,6 +894,7 @@
   overflow: hidden;
   background: #FFFFFF;
   animation: fadeUp 0.2s ease both;
+  position: relative;
 }
 
 .list-table {
@@ -929,9 +930,10 @@
 .list-table th .sort-arrow { display: flex; align-items: center; }
 
 .list-table th:last-child { width: 64px; padding: 0; }
-.list-table th.list-cell-num { width: 80px; }
-.list-table th.list-cell-title--col-name { width: 320px; }
-.list-table td.list-cell-num { overflow: visible; white-space: normal; text-overflow: clip; }
+.list-table th.list-cell-num { width: 64px; }
+.list-table td.list-cell-num { padding: 10px 0; }
+.list-table th.list-cell-title--col-name { width: 240px; }
+.list-table td.list-cell-num { overflow: visible; white-space: normal; text-overflow: clip; line-height: 1; }
 
 .list-row {
   border-bottom: 1px solid var(--border-subtle);
@@ -1048,6 +1050,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  vertical-align: middle;
   flex-shrink: 0;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -1170,9 +1173,10 @@
 .col-back-btn svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; flex-shrink: 0; }
 
 .col-grid {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: 18px;
 }
 .col-card {
   background: var(--card);
@@ -1193,6 +1197,18 @@
   box-shadow: 0 4px 16px rgba(73,89,230,0.12);
 }
 [data-theme="dark"] .col-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
+.col-card.selected {
+  border-color: var(--primary-50);
+  background: var(--primary-5);
+  box-shadow: 0 0 0 3px var(--primary-20);
+}
+[data-theme="dark"] .col-card.selected {
+  border-color: var(--primary-40);
+  background: var(--primary-3);
+  box-shadow: 0 0 0 3px rgba(73,89,230,0.20);
+}
+/* Portal dropdown — escapes table/card stacking contexts */
+.dropdown-menu--portal { z-index: 1000; }
 .col-card-cover-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1222,7 +1238,7 @@
 }
 .col-card-kebab {
   width: 40px; height: 40px;
-  border: none; background: transparent; cursor: pointer;
+  border: none; background: var(--primary-5); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
   color: var(--primary-60);
@@ -1230,16 +1246,12 @@
   flex-shrink: 0;
   font-family: inherit;
 }
-.col-card:hover .col-card-kebab,
-.col-card-kebab[aria-expanded="true"] { background: var(--primary-5); }
 .col-card-kebab svg { width: 18px; height: 18px; }
-.col-card:hover .col-card-kebab:hover,
-.col-card-kebab[aria-expanded="true"]:hover { background: var(--primary-10); }
-.col-card:hover .col-card-kebab:active,
-.col-card-kebab[aria-expanded="true"]:active { background: var(--primary-20); color: var(--primary-70); }
-[data-theme="dark"] .col-card-kebab { color: var(--primary-40); }
-[data-theme="dark"] .col-card:hover .col-card-kebab:hover,
-[data-theme="dark"] .col-card-kebab[aria-expanded="true"]:hover { background: var(--primary-10); color: var(--primary-30); }
+.col-card-kebab:hover { background: var(--primary-10); }
+.col-card-kebab:active,
+.col-card-kebab[aria-expanded="true"] { background: var(--primary-20); color: var(--primary-70); }
+[data-theme="dark"] .col-card-kebab { background: var(--primary-5); color: var(--primary-40); }
+[data-theme="dark"] .col-card-kebab:hover { background: var(--primary-10); color: var(--primary-30); }
 .col-card-kebab-wrap { position: relative; }
 .col-card-name { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-card-count { font-size: 15px; font-weight: 500; color: var(--text-2); }
@@ -2586,14 +2598,14 @@
 .confirm-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(30,35,80,0.30);
+  background: rgba(30,38,120,0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 900;
-  backdrop-filter: blur(4px);
   padding: 40px 24px;
   box-sizing: border-box;
+  animation: overlayIn 0.2s ease-out both;
 }
 
 .confirm-modal {
@@ -3121,7 +3133,8 @@
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   .toolbar-inner, .main-wrap { padding-left: 20px; padding-right: 20px; }
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
-  .books-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .books-grid,
+  .col-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
   .now-reading-list { gap: 14px; }
 
   /* Table list: hide secondary columns below 768px so Title gets
@@ -3137,6 +3150,9 @@
 
   /* Hide icons inside dropdown items on mobile (text-only menu) */
   .dropdown-item svg { display: none; }
+
+  /* Reduce title padding on mobile (title is the main visible col) */
+  .list-table td.list-cell-title { padding-left: 8px; padding-right: 8px; }
 }
 
 @media (min-width: 769px) {
@@ -3204,15 +3220,18 @@
     padding: 12px;
   }
   .selection-bar.visible { transform: translateY(0px); }
-  /* .sel-actions: horizontal row on mobile, equal-width buttons.
+  /* .sel-actions: vertical stack on mobile, full-width buttons.
      Order follows JSX: count → actions → cancel */
   .sel-actions {
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
     gap: 8px;
     width: 100%;
   }
-  .sel-actions .sel-btn { flex: 1; width: auto; justify-content: center; }
+  .sel-actions .sel-btn { width: 100%; justify-content: center; }
+
+  /* Hide selection bar when mobile sidebar is open (overlap fix) */
+  .app-root:has(.sidebar.mobile-open) .selection-bar { display: none; }
   .sel-cancel { width: 100%; justify-content: center; }
   .selection-count { text-align: center; margin: 8px 0; }
   .book-panel {
