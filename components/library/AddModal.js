@@ -259,7 +259,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
 
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) resetAndClose(); }}>
-      <div className="modal" style={{ maxWidth: 620 }}>
+      <div className="modal">
 
         {/* Close */}
         <button className="modal-close" onClick={resetAndClose}>
@@ -487,7 +487,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
           <form id="add-book-form" className="modal-form" onSubmit={handleSubmit}>
             <div className="modal-fields">
               {/* Title with autocomplete */}
-              <div className="modal-field" style={{ position: 'relative' }}>
+              <div className="modal-field">
                 <label>{t.labelTitle}</label>
                 <input
                   placeholder={t.placeholderTitle}

@@ -245,7 +245,7 @@ export default function CollectionsView({ collections, data, view, switchView, o
         </div>
       ) : view === 'list' ? (
         <div className="books-list">
-          <table className="list-table" style={{ width: '100%' }}>
+          <table className="list-table">
             <thead>
               <tr>
                 {editMode && (

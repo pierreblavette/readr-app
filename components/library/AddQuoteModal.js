@@ -266,7 +266,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
 
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="modal" style={{ maxWidth: 620 }}>
+      <div className="modal">
 
         <button className="modal-close" onClick={onClose}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -360,7 +360,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                 </div>
               </div>
 
-              <div className={`modal-field quote-link-section${linkDropOpen && !selectedBook ? ' is-open' : ''}`} style={{ position: 'relative' }}>
+              <div className={`modal-field quote-link-section${linkDropOpen && !selectedBook ? ' is-open' : ''}`}>
                 <label className="modal-field-label">{t.quoteLinkToBook}</label>
                 {selectedBook ? (
                   <BookChip
@@ -425,7 +425,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                 </div>
               ) : (
                 <>
-                  <div className="modal-field" style={{ position: 'relative' }}>
+                  <div className="modal-field">
                     <label className="modal-field-label">{t.quoteBookTitle}</label>
                     <input
                       className="modal-field-input"

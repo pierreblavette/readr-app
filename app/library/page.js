@@ -54,7 +54,7 @@ export default function LibraryPage() {
   }, [mobileSidebarOpen]);
 
   if (!lib.hydrated) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+    <div className="app-loading-wrap">
       <div className="panel-spinner" />
     </div>
   );
@@ -449,7 +449,7 @@ export default function LibraryPage() {
     <footer className="library-footer">
       <div className="library-footer-inner">
         {/* Gauche — produit */}
-        <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span className="footer-section">
           <span className="footer-group">
             <a className="footer-link" href="/">About readr</a>
             <span className="footer-sep">·</span>
@@ -463,13 +463,13 @@ export default function LibraryPage() {
           </div>
         </span>
         {/* Centre — app */}
-        <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span className="footer-section">
           <span>{t.footerDataInfo}</span>
           <span className="footer-sep">·</span>
           <span>v1.0</span>
         </span>
         {/* Droite — profil */}
-        <span className="footer-links-desktop" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span className="footer-links-desktop footer-section">
           <span>© 2026 Pierre Blavette</span>
           <span className="footer-sep">·</span>
           <span className="footer-group">
