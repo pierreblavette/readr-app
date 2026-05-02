@@ -208,7 +208,7 @@ export default function CollectionDetailView({
           </div>
 
           <div className="view-btns">
-            <button onClick={() => switchView('grid')} className={`view-btn${view === 'grid' ? ' active' : ''}`} title="Card view">
+            <button onClick={() => switchView('grid')} className={`view-btn${view === 'grid' ? ' active' : ''}`} aria-label="Card view">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <rect x="4" y="4" width="6" height="6" rx="1.5"/>
                 <rect x="14" y="4" width="6" height="6" rx="1.5"/>
@@ -216,7 +216,7 @@ export default function CollectionDetailView({
                 <rect x="14" y="14" width="6" height="6" rx="1.5"/>
               </svg>
             </button>
-            <button onClick={() => switchView('list')} className={`view-btn${view === 'list' ? ' active' : ''}`} title="List view">
+            <button onClick={() => switchView('list')} className={`view-btn${view === 'list' ? ' active' : ''}`} aria-label="List view">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <line x1="3" y1="12" x2="21" y2="12"/>

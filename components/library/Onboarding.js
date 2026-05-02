@@ -226,9 +226,17 @@ export default function Onboarding({ open, onClose, t }) {
               <h2 className="ob-title">{current.title}</h2>
               <p className="ob-desc">{current.desc}</p>
             </div>
-            <div className="ob-dots">
+            <div className="ob-dots" role="tablist">
               {SLIDES.map((_, i) => (
-                <div key={i} className={`ob-dot${i === slide ? ' active' : ''}`} onClick={() => setSlide(i)} />
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === slide}
+                  aria-label={`Slide ${i + 1} of ${SLIDES.length}`}
+                  className={`ob-dot${i === slide ? ' active' : ''}`}
+                  onClick={() => setSlide(i)}
+                />
               ))}
             </div>
           </div>

@@ -52,7 +52,7 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
       {quote && (
         <div className="panel-inner">
 
-          <button className="panel-share" onClick={handleShare} title={shared ? (t.shareCopied || 'Copied!') : 'Share'}>
+          <button className="panel-share" onClick={handleShare} aria-label={shared ? (t.shareCopied || 'Copied!') : t.btnShare}>
             {shared ? (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
@@ -65,8 +65,8 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
             )}
           </button>
 
-          <button className="panel-close" onClick={onClose}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <button className="panel-close" onClick={onClose} aria-label={t.btnClose}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18"/>
               <line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
