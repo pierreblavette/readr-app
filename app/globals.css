@@ -8,9 +8,6 @@
   --color-background:           var(--background);
   --color-foreground:           var(--foreground);
   --color-card:                 var(--card);
-  --color-card-foreground:      var(--card-foreground);
-  --color-popover:              var(--popover);
-  --color-popover-foreground:   var(--popover-foreground);
   --color-primary:              var(--primary);
   --color-primary-foreground:   var(--primary-foreground);
   --color-secondary:            var(--secondary);
@@ -18,7 +15,6 @@
   --color-muted:                var(--muted);
   --color-muted-foreground:     var(--muted-foreground);
   --color-accent:               var(--accent);
-  --color-accent-foreground:    var(--accent-foreground);
   --color-destructive:          var(--destructive);
   --color-border:               var(--border);
   --color-input:                var(--input);
@@ -37,9 +33,6 @@
   --background:            #FEFEFF;
   --foreground:            #222222;
   --card:                  #FFFFFF;
-  --card-foreground:       #222222;
-  --popover:               #FFFFFF;
-  --popover-foreground:    #222222;
   --primary:               #4959E6;
   --primary-foreground:    #FFFFFF;
   --secondary:             #F0F2FF;
@@ -47,7 +40,6 @@
   --muted:                 #F7F7F7;
   --muted-foreground:      #777777;
   --accent:                #4959E6;
-  --accent-foreground:     #FFFFFF;
   --destructive:           #E63946;
   --border:                #E0E0E0;
   --border-subtle:         #EFEFEF;
@@ -72,31 +64,12 @@
   --shadow-sm:             0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.06);
   --shadow-md:             0 2px 8px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.08);
   --shadow-lg:             0 4px 20px rgba(0,0,0,0.14), 0 1px 6px rgba(0,0,0,0.08);
-  /* Neutral palette — tinted primary */
-  --dark-0:      rgba(13,15,26,0);
-  --dark-5:      rgba(13,15,26,0.05);
-  --dark-10:     rgba(13,15,26,0.10);
-  --dark-20:     rgba(13,15,26,0.20);
-  --dark-30:     rgba(13,15,26,0.30);
-  --dark-40:     rgba(13,15,26,0.40);
-  --dark-50:     rgba(13,15,26,0.50);
-  --dark-60:     rgba(13,15,26,0.60);
+  /* Neutral palette — tinted primary (only the tints actually used) */
   --dark-70:     rgba(13,15,26,0.70);
   --dark-80:     rgba(13,15,26,0.80);
-  --dark-90:     rgba(13,15,26,0.90);
   --dark-100:    #0D0F1A;
-  --light-0:     rgba(245,246,255,0);
-  --light-5:     rgba(245,246,255,0.05);
-  --light-10:    rgba(245,246,255,0.10);
   --light-20:    rgba(245,246,255,0.20);
-  --light-30:    rgba(245,246,255,0.30);
-  --light-40:    rgba(245,246,255,0.40);
-  --light-50:    rgba(245,246,255,0.50);
-  --light-60:    rgba(245,246,255,0.60);
-  --light-70:    rgba(245,246,255,0.70);
-  --light-80:    rgba(245,246,255,0.80);
   --light-90:    rgba(245,246,255,0.90);
-  --light-100:   #F5F6FF;
   /* Primary scale — light tier (--primary-3/5/10 are overridden in dark theme below to keep the
      "card hover / button tinted" pattern as solid colors instead of rgba over varying baselines) */
   --primary-3:   #FAFAFF;
@@ -118,9 +91,6 @@
   --background:            #0F0F0F;
   --foreground:            #F0F0F0;
   --card:                  #1E1E1E;
-  --card-foreground:       #F0F0F0;
-  --popover:               #1E1E1E;
-  --popover-foreground:    #F0F0F0;
   --primary:               #7B89F8;
   --primary-foreground:    #0F0F0F;
   --secondary:             #1A1A2E;
@@ -128,7 +98,6 @@
   --muted:                 #1A1A1A;
   --muted-foreground:      #909090;
   --accent:                #7B89F8;
-  --accent-foreground:     #0F0F0F;
   --destructive:           #FF6B6B;
   --border:                #2E2E2E;
   --border-subtle:         #2E2E2E;
