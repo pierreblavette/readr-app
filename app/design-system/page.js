@@ -372,24 +372,23 @@ export default function DesignSystemPage() {
 
           {/* ── TYPOGRAPHY ── */}
           <section className="ds-section" id="typography">
-            <SectionTitle title="Typography" sub="Base : 14px — 1rem = 14px" />
+            <SectionTitle title="Typography" sub="Base : 14px — 1rem = 14px · 9-tier canonical scale (28/20/18/16/15/14/13/12/11/10)" />
             <div className="ds-card">
-              <div className="ds-card-label">Plus Jakarta Sans</div>
+              <div className="ds-card-label">Plus Jakarta Sans — 9-tier scale</div>
               <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
                 {[
-                  [48, "3.43rem", "800", "Page title"],
-                  [21, "1.5rem",  "800", "Section title"],
-                  [18, "1.29rem", "700", "Empty state title"],
-                  [15, "1.07rem", "600", "Buttons / inputs"],
-                  [14, "1rem",    "700", "Card titles"],
-                  [14, "1rem",    "600", "Active buttons, tab state"],
-                  [14, "1rem",    "500", "Body, author/year"],
-                  [12, "0.86rem", "700", "Uppercase labels, table headers"],
-                  [12, "0.86rem", "500", "Field labels, secondary text"],
-                  [11, "0.79rem", "700", "Micro-labels uppercase"],
-                  [10, "0.71rem", "700", "Token labels, small caps"],
+                  [20, "1.43rem", "800", "Hero onboarding — .ob-title (exception, marketing only)"],
+                  [18, "1.29rem", "700", "Empty state title — .empty-title (off-grid, pairs with icon 96)"],
+                  [16, "1.14rem", "500", "Content tier — synopsis, quotes, cast names, ob-desc"],
+                  [16, "1.14rem", "700", "Content tier featured — .now-reading-title"],
+                  [15, "1.07rem", "600", "Body / interactive — .btn-md, inputs, card titles, dropdown items"],
+                  [14, "1rem",    "500", "Metadata — .book-meta, panel-meta, see-more, autocomplete sub"],
+                  [13, "0.93rem", "500", "Hint / eyebrow / error — form labels, dropzone-sub, chip-author"],
+                  [12, "0.86rem", "500", "Compact secondary — .btn-sm, captions, now-reading book-meta"],
+                  [11, "0.79rem", "700", "Eyebrow uppercase 700 — .panel-section-eyebrow (tracking 0.08em)"],
+                  [10, "0.71rem", "700", "Tiny badge — .badge primary (notification dot)"],
                 ].map(([px, rem, weight, use]) => (
-                  <div key={use + px} className="type-sample">
+                  <div key={use + px + weight} className="type-sample">
                     <div className="type-sample-preview">
                       <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{use}</div>
                     </div>
@@ -399,11 +398,12 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Fraunces</div>
+              <div className="ds-card-label">Fraunces — display + serif</div>
               <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
                 {[
                   [48, "3.43rem", "500", "Heading display"],
                   [36, "2.57rem", "300", "Heading XL"],
+                  [28, "2rem",    "500", "Hero panel — .panel-title"],
                   [24, "1.71rem", "500", "Heading LG"],
                   [19, "1.36rem", "400", "Logo nav"],
                   [14, "1rem",    "400", "Logo footer / minimum"],
@@ -1095,7 +1095,7 @@ export default function DesignSystemPage() {
                       ["check hover", "border --primary-50 + bg --primary-5 (light) · border --primary-40 + bg --primary-5 (dark)"],
                       ["check checked", "bg --primary-50, border transparent (light) · bg --primary-40 (dark)"],
                       ["check checked hover", "bg --primary-60 (light) · bg --primary-50 (dark) — mirrors .btn-primary"],
-                      ["label", "14/500/--text"],
+                      ["label (.modal-toggle-label)", "15/500/--text (interactive tier — pairs with btn-md / inputs)"],
                       ["First app usage", ".modal-toggle-row in AddModal (Mark as reading)"],
                     ].map(([prop, val]) => (
                       <tr key={prop}>
@@ -1120,8 +1120,9 @@ export default function DesignSystemPage() {
                       ["Background", "--primary-5"],
                       ["Border", "1.5px solid --primary-20 (light) · --primary-30 (dark)"],
                       ["Border-radius", "8px"],
-                      ["Padding", "12px 14px"],
-                      ["Body", "14/500/--text-2/lh 1.5"],
+                      ["Padding", "8px 16px"],
+                      ["Gap (icon ↔ text)", "16px"],
+                      ["Body", "14/500/--text/lh 1.5"],
                       ["Inline strong", "weight 700, color --text"],
                       ["Icon", "16×16, color --primary-50/40, info circle SVG"],
                       ["First app usage", "Mark-as-reading hint inside AddModal"],
