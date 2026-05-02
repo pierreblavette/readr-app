@@ -918,6 +918,8 @@
 .list-table th.list-cell-num { width: 64px; }
 .list-table td.list-cell-num { padding: 10px 0; }
 .list-table th.list-cell-title--col-name { width: 240px; }
+.list-table th.list-cell-title--col-name,
+.list-table td.list-cell-title--col-name { padding-left: 20px; padding-right: 20px; }
 .list-table td.list-cell-num { overflow: visible; white-space: normal; text-overflow: clip; line-height: 1; }
 
 .list-row {
@@ -3120,6 +3122,9 @@
 
   /* Reduce title padding on mobile (title is the main visible col) */
   .list-table td.list-cell-title { padding-left: 8px; padding-right: 8px; }
+  /* Collections list keeps 20px padding on mobile (iso .quote-card) */
+  .list-table th.list-cell-title--col-name,
+  .list-table td.list-cell-title--col-name { padding-left: 20px; padding-right: 20px; }
 }
 
 @media (min-width: 769px) {

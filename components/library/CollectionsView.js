@@ -285,7 +285,7 @@ export default function CollectionsView({ collections, data, view, switchView, o
                         </div>
                       </td>
                     )}
-                    <td className="list-cell-title">{col.name}</td>
+                    <td className="list-cell-title list-cell-title--col-name">{col.name}</td>
                     <td className="list-cell-meta">{t.colBookCount(books.length)}</td>
                     <td className="list-cell-action">
                       {!editMode && <ColCardKebab col={col} onRename={onRename} onDelete={onDelete} t={t} />}
