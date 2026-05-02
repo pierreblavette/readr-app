@@ -3,12 +3,14 @@ import { useState, useEffect, useRef } from "react";
 import GradientDropzone from "./GradientDropzone";
 import BookChip from "./BookChip";
 import { prepareImage } from "../../lib/prepareImage";
+import { useModalA11y } from "../../lib/useModalA11y";
 
 const WORKER_URL = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
 
 const INPUT_TABS = ['photo', 'manual'];
 
 export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefillBook, editing, t }) {
+  const modalRef = useModalA11y(open, onClose);
   const [inputMode, setInputMode]     = useState('photo');
   const [photoState, setPhotoState]   = useState('idle'); // 'idle' | 'scanning' | 'done'
   const [scanStep, setScanStep]       = useState('prep'); // 'prep' | 'reading'
@@ -266,7 +268,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
 
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="modal">
+      <div className="modal" ref={modalRef} tabIndex={-1} role="dialog" aria-modal="true">
 
         <button className="modal-close" onClick={onClose}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">

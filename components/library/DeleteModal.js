@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import BookChip from "./BookChip";
+import { useModalA11y } from "@/lib/useModalA11y";
 
 function QuotePreview({ text, t }) {
   const [expanded, setExpanded] = useState(false);
@@ -50,6 +51,7 @@ function StarsDisplay({ value }) {
 }
 
 export default function DeleteModal({ target, onClose, onConfirm, t }) {
+  const modalRef = useModalA11y(!!target, onClose);
   if (!target) return null;
   const isBulk = target.bulk === true;
   const isQuote = target.type === 'quote';
@@ -99,7 +101,7 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
 
   return (
     <div className="confirm-modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="confirm-modal">
+      <div className="confirm-modal" ref={modalRef} tabIndex={-1} role="alertdialog" aria-modal="true">
         <div className="confirm-modal-title">{title}</div>
         <div className="modal-fields">
           <div className="confirm-modal-sub">{msg}</div>

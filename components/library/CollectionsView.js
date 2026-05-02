@@ -71,11 +71,16 @@ function ColCardKebab({ col, onRename, onDelete, t }) {
       setOpen(false);
     }
     function onScroll() { setOpen(false); }
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false);
+    }
     document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
     window.addEventListener('scroll', onScroll, true);
     window.addEventListener('resize', onScroll);
     return () => {
       document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
       window.removeEventListener('scroll', onScroll, true);
       window.removeEventListener('resize', onScroll);
     };

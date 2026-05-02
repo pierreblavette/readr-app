@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useModalA11y } from "@/lib/useModalA11y";
 
 export default function CreateCollectionModal({ open, onClose, onCreate, editing, onRename, t }) {
   const [name, setName] = useState('');
+  const modalRef = useModalA11y(open, onClose);
 
   useEffect(() => {
     if (open) {
@@ -30,7 +32,7 @@ export default function CreateCollectionModal({ open, onClose, onCreate, editing
 
   return (
     <div className="confirm-modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="confirm-modal create-col-modal">
+      <div className="confirm-modal create-col-modal" ref={modalRef} tabIndex={-1} role="dialog" aria-modal="true">
         <div className="confirm-modal-title">{title}</div>
 
         <form id="create-col-form" onSubmit={handleSubmit} className="modal-form">

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import BookChip from "./BookChip";
+import { useModalA11y } from "@/lib/useModalA11y";
 
 function StarRating({ value, onChange }) {
   const [hover, setHover] = useState(0);
@@ -29,6 +30,7 @@ function StarRating({ value, onChange }) {
 export default function FinishReadingModal({ open, book, onClose, onConfirm, t }) {
   const [rating, setRating] = useState(0);
   const [note, setNote] = useState('');
+  const modalRef = useModalA11y(open && !!book, onClose);
   const isEditing = !!book?.finishedAt;
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function FinishReadingModal({ open, book, onClose, onConfirm, t }
 
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal finish-modal">
+      <div className="modal finish-modal" ref={modalRef} tabIndex={-1} role="dialog" aria-modal="true">
         <button className="modal-close" onClick={onClose} aria-label={t.btnCancel}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>

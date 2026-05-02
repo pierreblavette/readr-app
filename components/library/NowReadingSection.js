@@ -18,8 +18,13 @@ function NowReadingMenu({ book, onFinish, onAddQuote, onCancel, t }) {
   useEffect(() => {
     if (!open) return;
     function close(e) { if (!ref.current?.contains(e.target)) setOpen(false); }
+    function onKey(e) { if (e.key === 'Escape') setOpen(false); }
     document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [open]);
 
   function handleClick(e, action) {

@@ -10,8 +10,15 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
     function close(e) {
       if (!ref.current?.contains(e.target)) setOpen(false);
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false);
+    }
     document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [open]);
 
   return (

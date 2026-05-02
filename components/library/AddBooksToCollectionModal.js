@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "../../lib/bookUtils";
 import { MAX_BOOKS_PER_COLLECTION } from "../../lib/useLibrary";
+import { useModalA11y } from "../../lib/useModalA11y";
 
 function AddBookRow({ book, isSelected, isDisabled, onToggle }) {
   const [cover, setCover] = useState(null);
@@ -51,6 +52,7 @@ function AddBookRow({ book, isSelected, isDisabled, onToggle }) {
 }
 
 export default function AddBooksToCollectionModal({ open, collection, allBooks, onAdd, onClose, t }) {
+  const modalRef = useModalA11y(open, onClose);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState(new Set());
 
@@ -101,7 +103,7 @@ export default function AddBooksToCollectionModal({ open, collection, allBooks, 
 
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal add-to-col-modal">
+      <div className="modal add-to-col-modal" ref={modalRef} tabIndex={-1} role="dialog" aria-modal="true">
         <button className="modal-close" onClick={onClose} aria-label={t.btnCancel}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import { useModalA11y } from "@/lib/useModalA11y";
 import CharacterCast from "./CharacterCast";
 import BookQuiz from "./BookQuiz";
 
@@ -29,6 +30,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
   const [shared, setShared] = useState(false);
+  const panelRef = useModalA11y(!!book, onClose);
 
   async function handleShare() {
     const text = t.shareText ? t.shareText(book.title, book.author) : `"${book.title}"\n${book.author}`;
@@ -84,7 +86,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   const letter   = book ? coverLetter(book.title) : '';
 
   return (
-    <div className={`book-panel${book ? ' open' : ''}`}>
+    <div className={`book-panel${book ? ' open' : ''}`} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true">
       {book && (
         <div className="panel-inner">
 

@@ -4,6 +4,7 @@ import GradientDropzone from "./GradientDropzone";
 import BarcodeScanner from "./BarcodeScanner";
 import { prepareImage } from "../../lib/prepareImage";
 import { toTitleCase } from "../../lib/bookUtils";
+import { useModalA11y } from "../../lib/useModalA11y";
 
 const TABS = ['photo', 'scan', 'file', 'manual'];
 
@@ -162,6 +163,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
     onClose();
   }
 
+  const modalRef = useModalA11y(open, resetAndClose);
+
   async function handlePhotoChange(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -259,7 +262,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
 
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) resetAndClose(); }}>
-      <div className="modal">
+      <div className="modal" ref={modalRef} tabIndex={-1} role="dialog" aria-modal="true">
 
         {/* Close */}
         <button className="modal-close" onClick={resetAndClose}>

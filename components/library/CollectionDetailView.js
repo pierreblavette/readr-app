@@ -44,8 +44,15 @@ export default function CollectionDetailView({
     function close(e) {
       if (!moreRef.current?.contains(e.target)) setMoreOpen(false);
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setMoreOpen(false);
+    }
     document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [moreOpen]);
 
   useEffect(() => {
@@ -53,8 +60,15 @@ export default function CollectionDetailView({
     function close(e) {
       if (!editMenuRef.current?.contains(e.target)) setEditMenuOpen(false);
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setEditMenuOpen(false);
+    }
     document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [editMenuOpen]);
 
   const filtered = search.trim()

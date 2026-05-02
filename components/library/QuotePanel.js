@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import BookChip from "./BookChip";
+import { useModalA11y } from "../../lib/useModalA11y";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -13,6 +14,7 @@ function formatDate(ts, lang) {
 
 export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onOpenBook, lang, t }) {
   const [shared, setShared] = useState(false);
+  const panelRef = useModalA11y(!!quote, onClose);
 
   async function handleShare() {
     if (!quote) return;
@@ -48,7 +50,7 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
   }, [quote]);
 
   return (
-    <div className={`book-panel${quote ? ' open' : ''}`}>
+    <div className={`book-panel${quote ? ' open' : ''}`} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true">
       {quote && (
         <div className="panel-inner">
 

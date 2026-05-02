@@ -10,8 +10,15 @@ export default function SortMenu({ current, onChange, options, ariaLabel }) {
     function close(e) {
       if (!ref.current?.contains(e.target)) setOpen(false);
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false);
+    }
     document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [open]);
 
   const currentOpt = options.find(o => o.key === current) || options[0];
