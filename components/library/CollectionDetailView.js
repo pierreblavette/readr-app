@@ -118,13 +118,13 @@ export default function CollectionDetailView({
             <div className="dropdown-wrap col-edit-dropdown" ref={editMenuRef}>
               <button
                 type="button"
-                className="export-btn"
+                className="dropdown-btn"
                 onClick={() => setEditMenuOpen(o => !o)}
                 aria-haspopup="menu"
                 aria-expanded={editMenuOpen}>
-                <span className="export-btn-label">{t.btnEdit}</span>
+                <span className="dropdown-btn-label">{t.btnEdit}</span>
                 <svg
-                  className="export-btn-chevron"
+                  className="dropdown-btn-chevron"
                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
                   style={{ transition: 'transform 0.15s', transform: editMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}

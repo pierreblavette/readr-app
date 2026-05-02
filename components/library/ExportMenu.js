@@ -17,7 +17,7 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
   return (
     <div className="dropdown-wrap" ref={ref}>
       <button
-        className="export-btn"
+        className="dropdown-btn"
         disabled={disabled}
         onClick={() => setOpen(o => !o)}
         aria-haspopup="listbox"
@@ -25,7 +25,7 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
         aria-label={t.btnExport}
       >
         <svg
-          className="export-btn-icon"
+          className="dropdown-btn-icon"
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           aria-hidden="true"
@@ -34,9 +34,9 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        <span className="export-btn-label">{t.btnExport}</span>
+        <span className="dropdown-btn-label">{t.btnExport}</span>
         <svg
-          className="export-btn-chevron"
+          className="dropdown-btn-chevron"
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
           style={{ transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}

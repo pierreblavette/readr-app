@@ -375,7 +375,7 @@
 [data-theme="dark"] .edit-btn { background: var(--bg3); }
 [data-theme="dark"] .edit-btn:hover { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-3); }
 
-.export-btn {
+.dropdown-btn {
   height: 40px;
   padding: 0 12px 0 20px;
   border-radius: 8px;
@@ -393,13 +393,13 @@
   white-space: nowrap;
 }
 
-.export-btn:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-.export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.export-btn-icon { width: 16px; height: 16px; flex-shrink: 0; }
-.export-btn-chevron { width: 14px; height: 14px; flex-shrink: 0; }
+.dropdown-btn:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
+.dropdown-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.dropdown-btn-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.dropdown-btn-chevron { width: 14px; height: 14px; flex-shrink: 0; }
 
-[data-theme="dark"] .export-btn { background: var(--bg3); }
-[data-theme="dark"] .export-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-3); }
+[data-theme="dark"] .dropdown-btn { background: var(--bg3); }
+[data-theme="dark"] .dropdown-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-3); }
 
 /* ─── DROPDOWN MENU ─── */
 .dropdown-wrap { position: relative; display: inline-flex; flex-shrink: 0; }
@@ -2074,7 +2074,7 @@
  * - Ghost variant: color text-3, hover color change (.lang-btn, XS fs 11)
  *
  * Exceptions (not subject to the above):
- *   - chevrons/dropdown markers (.export-btn caret 14px) — interaction markers
+ *   - chevrons/dropdown markers (.dropdown-btn caret 14px) — interaction markers
  *   - .card-delete-btn (30×30 SM contextual, inside BookCard)
  *   - .search-clear (18×18 round utility inside input)
  *   - .quote-photo-btn (vertical icon-on-top layout)
@@ -2112,10 +2112,10 @@
   stroke-width: 3;
 }
 
-/* Glyph 14 (SM icon-only + .export-btn chevron marker) */
+/* Glyph 14 (SM icon-only + .dropdown-btn chevron marker) */
 .card-delete-btn svg *,
 .import-preview-remove svg *,
-.export-btn svg * {
+.dropdown-btn svg * {
   stroke-width: 2.5;
 }
 
@@ -3147,10 +3147,10 @@
   .search-box { min-width: 0; flex: none; width: 100%; }
   .counter-actions { gap: 8px; }
   /* Mobile: collapse to icon-only (hide label + chevron, keep export icon) */
-  .export-btn { padding: 0; width: 40px; justify-content: center; }
-  .export-btn-label,
-  .export-btn-chevron { display: none; }
-  /* Sort menu shares .export-btn but must keep its label visible —
+  .dropdown-btn { padding: 0; width: 40px; justify-content: center; }
+  .dropdown-btn-label,
+  .dropdown-btn-chevron { display: none; }
+  /* Sort menu shares .dropdown-btn but must keep its label visible —
      opt out of the icon-only collapse. */
   .sort-menu-btn { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
   /* Manual ISBN lookup button collapses to icon-only on mobile because

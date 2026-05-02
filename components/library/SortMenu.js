@@ -20,7 +20,7 @@ export default function SortMenu({ current, onChange, options, ariaLabel }) {
     <div className="dropdown-wrap sort-menu" ref={ref}>
       <button
         type="button"
-        className="export-btn sort-menu-btn"
+        className="dropdown-btn sort-menu-btn"
         onClick={() => setOpen(o => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}

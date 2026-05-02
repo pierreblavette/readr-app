@@ -639,7 +639,7 @@ export default function DesignSystemPage() {
                   <tbody>
                     {[
                       ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
-                      ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".export-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".quote-photo-btn", ".col-delete-btn"]],
+                      ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".quote-photo-btn", ".col-delete-btn"]],
                       ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
                       ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
                       ["Text / ghost link", "btn-ghost", [".footer-link", ".quote-see-more"]],
@@ -861,7 +861,7 @@ export default function DesignSystemPage() {
                   </tbody>
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Source: <code>components/library/ExportMenu.js</code>. Trigger class: <code>.export-btn</code>. Menu reuses the generic <code>.dropdown-menu</code>.
+                  Source: <code>components/library/ExportMenu.js</code>. Trigger class: <code>.dropdown-btn</code>. Menu reuses the generic <code>.dropdown-menu</code>.
                 </div>
               </div>
             </div>
@@ -889,7 +889,7 @@ export default function DesignSystemPage() {
                   </tbody>
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.export-btn.sort-menu-btn</code> (shares the outline button anatomy).
+                  Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.dropdown-btn.sort-menu-btn</code> (shares the outline button anatomy).
                 </div>
               </div>
             </div>
@@ -2302,7 +2302,7 @@ function handleDeleteConfirm(payload) {
                   ["Primary CTA (.add-btn, .empty-cta, .panel-move-btn)", "default", ["bg --primary-50", "color #fff", "weight 600"]],
                   ["Primary CTA", "hover", ["bg --primary-60"]],
                   ["Primary CTA", "active", ["bg --primary-70"]],
-                  ["Outline (.edit-btn, .export-btn, .modal-cancel…)", "default", ["1.5px --border-subtle", "bg #FFFFFF (light)", "color --text"]],
+                  ["Outline (.edit-btn, .dropdown-btn, .modal-cancel…)", "default", ["1.5px --border-subtle", "bg #FFFFFF (light)", "color --text"]],
                   ["Outline", "hover", ["border --primary-50", "bg --primary-5", "color --primary-50"]],
                   ["Destructive icon (.delete-row-btn, .dictionary-delete-btn)", "default", ["bg --primary-5", "color --primary-60", "40×40"]],
                   ["Destructive icon", "hover", ["bg --primary-10"]],
