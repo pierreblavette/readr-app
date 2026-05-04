@@ -4547,7 +4547,7 @@ button.quote-book-chip {
 [data-theme="dark"] .overview-hero-card:focus-visible .overview-hero-chevron { color: var(--primary-30); }
 
 /* Reading goal */
-.overview-goal { gap: 24px; }
+.overview-goal { gap: 20px; }
 .overview-goal-meter {
   display: flex;
   flex-direction: column;
