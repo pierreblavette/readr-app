@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useStats } from "@/lib/useStats";
 import BookChip from "./BookChip";
 import ReadingGoalModal from "./ReadingGoalModal";
+import MostLovedPanel from "./MostLovedPanel";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
@@ -13,6 +14,7 @@ export default function OverviewView({
   const stats = useStats({ owned, quotes, words, readingGoal });
   const [shuffleKey, setShuffleKey] = useState(0);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
+  const [lovedPanelOpen, setLovedPanelOpen] = useState(false);
 
   const spotlightQuotes = useMemo(() => {
     if (quotes.length === 0) return [];
@@ -109,6 +111,15 @@ export default function OverviewView({
       <TopGenresCard genres={stats.topGenres} t={t} />
 
       <MostLovedCard
+        books={stats.mostLoved}
+        onOpenBook={onOpenBook}
+        onSeeMore={() => setLovedPanelOpen(true)}
+        t={t}
+      />
+
+      <MostLovedPanel
+        open={lovedPanelOpen}
+        onClose={() => setLovedPanelOpen(false)}
         books={stats.mostLoved}
         onOpenBook={onOpenBook}
         t={t}
@@ -234,7 +245,7 @@ function TopGenresCard({ genres, t }) {
   );
 }
 
-function MostLovedCard({ books, onOpenBook, t }) {
+function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
   if (books.length === 0) {
     return (
       <div className="overview-card overview-loved">
@@ -251,7 +262,7 @@ function MostLovedCard({ books, onOpenBook, t }) {
         <span className="panel-section-eyebrow">{t.overviewLovedTitle}</span>
       </div>
       <div className="overview-loved-list">
-        {books.map(b => (
+        {books.slice(0, 3).map(b => (
           <BookChip
             key={b.id}
             book={b}
@@ -261,6 +272,18 @@ function MostLovedCard({ books, onOpenBook, t }) {
           />
         ))}
       </div>
+      {books.length > 3 && (
+        <button
+          type="button"
+          className="cell-row cell-row--sm cell-row--between overview-loved-more"
+          onClick={onSeeMore}
+        >
+          <span>{t.overviewLovedSeeMore}</span>
+          <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

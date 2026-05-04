@@ -4683,16 +4683,44 @@ button.quote-book-chip {
   flex-shrink: 0;
 }
 
-/* Most loved — top 3 rated books */
+/* Most loved — top rated books */
 .overview-loved-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+.overview-loved-more {
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  padding: 8px 0 0;
+  margin-top: 4px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-50);
+  cursor: pointer;
+  text-align: left;
+}
+.overview-loved-more:hover { color: var(--primary-60); }
+[data-theme="dark"] .overview-loved-more { color: var(--primary-30); }
+[data-theme="dark"] .overview-loved-more:hover { color: var(--primary-40); }
+.overview-loved-more .sidebar-section-chevron { color: currentColor; }
+
+/* Stars + note inline meta inside BookChip body */
+.quote-book-chip-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.quote-book-chip-meta > * + * {
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+}
 .overview-stars {
   display: inline-flex;
   gap: 3px;
-  margin-top: 4px;
+  flex-shrink: 0;
 }
 .overview-stars svg {
   width: 14px;
@@ -4702,16 +4730,19 @@ button.quote-book-chip {
 .overview-stars svg.is-filled { color: var(--primary-50); }
 [data-theme="dark"] .overview-stars svg.is-filled { color: var(--primary-40); }
 .quote-book-chip-note {
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 500;
   font-style: italic;
   color: var(--text-2);
-  margin-top: 6px;
-  line-height: 1.5;
+  line-height: 1.8;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 /* When the chip has expanded content (stars / note), pin the cover to
  * the top instead of centering against a tall body. */
-.quote-book-chip:has(.overview-stars),
-.quote-book-chip:has(.quote-book-chip-note) {
+.quote-book-chip:has(.quote-book-chip-meta) {
   align-items: flex-start;
 }
 

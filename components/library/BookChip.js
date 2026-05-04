@@ -28,16 +28,20 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating, n
       <div className="quote-book-chip-body">
         <div className="quote-book-chip-title">{book.title}</div>
         {book.author && <div className="quote-book-chip-author">{book.author}</div>}
-        {rating > 0 && (
-          <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
-            {[1, 2, 3, 4, 5].map(n => (
-              <svg key={n} viewBox="0 0 24 24" fill="currentColor" className={rating >= n ? 'is-filled' : ''}>
-                <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
-              </svg>
-            ))}
+        {(rating > 0 || note) && (
+          <div className="quote-book-chip-meta">
+            {rating > 0 && (
+              <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <svg key={n} viewBox="0 0 24 24" fill="currentColor" className={rating >= n ? 'is-filled' : ''}>
+                    <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
+                  </svg>
+                ))}
+              </div>
+            )}
+            {note && <div className="quote-book-chip-note">{note}</div>}
           </div>
         )}
-        {note && <div className="quote-book-chip-note">{note}</div>}
       </div>
       {onRemove && (
         <button type="button" className="quote-book-chip-remove" onClick={onRemove} aria-label={ariaLabel}>
