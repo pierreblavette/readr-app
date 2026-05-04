@@ -4501,11 +4501,6 @@ button.quote-book-chip {
 }
 .overview-card-action:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 [data-theme="dark"] .overview-card-action:hover { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-5); }
-.overview-card-empty {
-  font-size: 14px;
-  color: var(--text-3);
-  line-height: 1.5;
-}
 
 /* Hero stats — 3 clickable cards */
 .overview-hero-row {

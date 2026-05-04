@@ -201,7 +201,7 @@ function StreakCard({ streak, t }) {
         <span className="panel-section-eyebrow">{t.overviewStreakTitle}</span>
       </div>
       {!hasAny ? (
-        <span className="overview-card-empty">{t.overviewStreakEmpty}</span>
+        <span className="panel-quotes-empty">{t.overviewStreakEmpty}</span>
       ) : (
         <div className="overview-streak-meter">
           <div className="overview-streak-body">
@@ -230,7 +230,7 @@ function TopGenresCard({ genres, t }) {
         <span className="panel-section-eyebrow">{t.overviewGenresTitle}</span>
       </div>
       {genres.length === 0 ? (
-        <span className="overview-card-empty">{t.overviewGenresEmpty}</span>
+        <span className="panel-quotes-empty">{t.overviewGenresEmpty}</span>
       ) : (
         <div className="overview-genres-cloud">
           {genres.map(g => (
@@ -252,7 +252,7 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
         <div className="overview-card-head">
           <span className="panel-section-eyebrow">{t.overviewLovedTitle}</span>
         </div>
-        <span className="overview-card-empty">{t.overviewLovedEmpty}</span>
+        <span className="panel-quotes-empty">{t.overviewLovedEmpty}</span>
       </div>
     );
   }
@@ -299,7 +299,7 @@ function QuotesSpotlightCard({ quotes, onOpen, onOpenBook, onShuffle, canShuffle
         )}
       </div>
       {quotes.length === 0 ? (
-        <span className="overview-card-empty">{t.overviewQuotesEmpty}</span>
+        <span className="panel-quotes-empty">{t.overviewQuotesEmpty}</span>
       ) : (
         <div className="overview-quotes-list">
           {quotes.map(q => (
