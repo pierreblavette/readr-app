@@ -4646,7 +4646,8 @@ button.quote-book-chip {
   width: 100%;
   height: auto;
 }
-.overview-heatmap-month {
+.overview-heatmap-month,
+.overview-heatmap-day {
   font-family: var(--font-jakarta), sans-serif;
   font-size: 9px;
   font-weight: 500;

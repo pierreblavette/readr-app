@@ -230,11 +230,28 @@ function HeatmapCard({ weeks, max, t, lang }) {
   const cellSize = 12;
   const cellGap = 3;
   const labelHeight = 16;
+  const dayLabelWidth = 22;
   const cols = weeks.length;
   const rows = 7;
   const gridW = cols * (cellSize + cellGap) - cellGap;
   const gridH = rows * (cellSize + cellGap) - cellGap;
+  const totalW = dayLabelWidth + gridW;
   const totalH = gridH + labelHeight;
+
+  // Day-of-week labels (Mon/Wed/Fri à la GitHub) — locale-aware.
+  // Week column rows 0..6 = Mon..Sun (computeHeatmap normalizes via
+  // dayOfWeek = (getDay() + 6) % 7, so row 0 is always Monday).
+  const monRef = new Date(2026, 0, 5); // Monday 2026-01-05
+  function dayLabelFor(rowOffset) {
+    const d = new Date(monRef);
+    d.setDate(monRef.getDate() + rowOffset);
+    return d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'short' });
+  }
+  const dayLabels = [
+    { row: 0, label: dayLabelFor(0) },
+    { row: 2, label: dayLabelFor(2) },
+    { row: 4, label: dayLabelFor(4) },
+  ];
 
   function level(count) {
     if (count == null) return -1;
@@ -273,7 +290,7 @@ function HeatmapCard({ weeks, max, t, lang }) {
       </div>
       <svg
         className="overview-heatmap-svg"
-        viewBox={`0 0 ${gridW} ${totalH}`}
+        viewBox={`0 0 ${totalW} ${totalH}`}
         preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label={t.overviewHeatmapTitle}
@@ -281,14 +298,25 @@ function HeatmapCard({ weeks, max, t, lang }) {
         {monthLabels.map(({ x, label }, i) => (
           <text
             key={`m-${i}`}
-            x={x}
+            x={dayLabelWidth + x}
             y={labelHeight - 5}
             className="overview-heatmap-month"
           >
             {label}
           </text>
         ))}
-        <g transform={`translate(0, ${labelHeight})`}>
+        {dayLabels.map(({ row, label }) => (
+          <text
+            key={`d-${row}`}
+            x={dayLabelWidth - 6}
+            y={labelHeight + row * (cellSize + cellGap) + cellSize - 2}
+            textAnchor="end"
+            className="overview-heatmap-day"
+          >
+            {label}
+          </text>
+        ))}
+        <g transform={`translate(${dayLabelWidth}, ${labelHeight})`}>
           {weeks.map((days, ci) => days.map((d, ri) => {
             const lvl = level(d.count);
             if (lvl < 0) return null;
