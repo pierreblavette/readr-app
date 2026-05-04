@@ -4749,14 +4749,11 @@ button.quote-book-chip {
 }
 [data-theme="dark"] .overview-quotes .quote-card { background: var(--primary-5); }
 [data-theme="dark"] .overview-quotes .quote-card:hover { background: var(--primary-10); }
-/* Dark theme: bump inner BookChip to --primary-10 so it stays
- * distinct from the now primary-tinted outer card. */
+/* Inner BookChip is non-interactive in the spotlight context — drop
+ * its bg so it doesn't read as a clickable affordance. */
+.overview-quotes .quote-card .quote-book-chip,
 [data-theme="dark"] .overview-quotes .quote-card .quote-book-chip {
-  background: var(--primary-10);
-}
-[data-theme="dark"] .overview-quotes .quote-card .quote-book-chip-interactive:hover,
-[data-theme="dark"] .overview-quotes .quote-card .quote-book-chip-interactive:active {
-  background: var(--primary-20);
+  background: transparent;
 }
 
 /* Empty state */
