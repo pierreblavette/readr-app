@@ -4740,7 +4740,6 @@ button.quote-book-chip {
   border-color: transparent;
   animation: none;
   transition: background 0.15s;
-  gap: 12px;
 }
 .overview-quotes .quote-card:hover {
   background: var(--primary-5);
