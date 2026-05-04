@@ -4730,7 +4730,10 @@ button.quote-book-chip {
 .quote-book-chip-body:has(.overview-stars) .overview-stars {
   width: 100%;
   padding-top: 8px;
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--primary-20);
+}
+[data-theme="dark"] .quote-book-chip-body:has(.overview-stars) .overview-stars {
+  border-top-color: var(--primary-10);
 }
 
 /* Quotes spotlight — reuses .quote-card */
