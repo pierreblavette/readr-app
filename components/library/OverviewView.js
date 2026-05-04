@@ -158,9 +158,11 @@ export default function OverviewView({
 
       <QuotesSpotlightCard
         quotes={spotlightQuotes}
+        totalQuotes={quotes.length}
         onOpen={onOpenQuote}
         onShuffle={() => setShuffleKey(k => k + 1)}
         canShuffle={quotes.length > 3}
+        onSeeAll={() => onNavigate?.('quotes')}
         resolveBook={resolveBook}
         t={t}
       />
@@ -322,7 +324,7 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
   );
 }
 
-function QuotesSpotlightCard({ quotes, onOpen, onShuffle, canShuffle, resolveBook, t }) {
+function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onShuffle, canShuffle, onSeeAll, resolveBook, t }) {
   return (
     <div className="overview-card overview-quotes">
       <div className="overview-card-head">
@@ -347,6 +349,18 @@ function QuotesSpotlightCard({ quotes, onOpen, onShuffle, canShuffle, resolveBoo
             />
           ))}
         </div>
+      )}
+      {totalQuotes > 3 && (
+        <button
+          type="button"
+          className="btn btn-outline btn-md overview-loved-more"
+          onClick={onSeeAll}
+        >
+          <span>{t.overviewLovedSeeMore}</span>
+          <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
       )}
     </div>
   );
