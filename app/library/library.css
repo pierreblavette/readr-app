@@ -4567,8 +4567,9 @@ button.quote-book-chip {
   color: var(--text);
 }
 .overview-goal-pct {
-  font-size: 13px;
-  color: var(--text-3);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
   font-variant-numeric: tabular-nums;
 }
 .overview-goal-bar {
