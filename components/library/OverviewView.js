@@ -209,7 +209,7 @@ function ReadingGoalCard({ goal, onSetGoal, t }) {
         </form>
       ) : (
         <>
-          <div className="overview-goal-progress-row">
+          <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
             <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
             <span className="overview-goal-pct">{Math.round(goal.ratio * 100)}%</span>
           </div>

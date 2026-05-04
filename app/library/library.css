@@ -3633,12 +3633,7 @@
   margin-top: auto;
 }
 /* Appearance row */
-.sidebar-appearance-row {
-  display: flex;
-  align-items: center;
-  padding: 6px 12px;
-  gap: 8px;
-}
+.sidebar-appearance-row { padding: 6px 12px; }
 .sidebar-appearance-label {
   flex: 1;
   font-size: 12px;
@@ -4561,12 +4556,9 @@ button.quote-book-chip {
   color: var(--text-3);
   line-height: 1.5;
 }
-.overview-goal-progress-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
+/* Overrides .cell-row align-items (center → baseline) for typography
+ * baseline alignment between large num (28px Fraunces) + small pct. */
+.overview-goal-progress-row { align-items: baseline; gap: 12px; }
 .overview-goal-num {
   font-family: var(--font-fraunces), serif;
   font-size: 28px;

@@ -542,6 +542,16 @@ export default function DesignSystemPage() {
                       <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg + --between</td>
                       <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Search bars across My Library / Wishlist / Quotes / Dictionary / Collections (5 callsites)</td>
                     </tr>
+                    <tr>
+                      <td className="token-table-component"><code>.sidebar-appearance-row</code></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Sidebar bottom → Appearance label + theme toggle</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>.overview-goal-progress-row</code></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--md + --between</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Overview → Reading goal card → "3 / 24 books · 13%" line (overrides align-items: baseline locally)</td>
+                    </tr>
                   </tbody>
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
@@ -551,14 +561,12 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Migration candidates</div>
+              <div className="ds-card-label">Not a cell-row candidate</div>
               <div className="ds-card-body col" style={{ padding: 16, gap: 8 }}>
-                <span style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Existing rows that should migrate progressively (when the surrounding code is touched):</span>
+                <span style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Classes named <code>*-row</code> that don't fit the primitive (kept as-is):</span>
                 <ul style={{ margin: 0, paddingLeft: 20, fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <li><code>.now-reading-row</code></li>
-                  <li><code>.add-to-col-row</code></li>
-                  <li><code>.sidebar-appearance-row</code></li>
-                  <li><code>.overview-goal-progress-row</code></li>
+                  <li><code>.now-reading-row</code> — height dictated by the 60×90 cover, not a fixed-height label row</li>
+                  <li><code>.add-to-col-row</code> — state modifier (background / selected / disabled) on top of <code>.quote-book-chip</code>, not a layout class</li>
                 </ul>
               </div>
             </div>

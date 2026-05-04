@@ -179,7 +179,7 @@ export default function Sidebar({
         <div className="sidebar-bottom">
 
           {!collapsed && (
-            <div className="sidebar-appearance-row">
+            <div className="cell-row cell-row--lg sidebar-appearance-row">
               <span className="sidebar-appearance-label">
                 {t.themeAppearance || 'Appearance'}
               </span>
