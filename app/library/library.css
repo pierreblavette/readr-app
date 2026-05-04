@@ -30,6 +30,29 @@
 [data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-5); }
 
 
+/* ─── CELL ROW (DS primitive) ───
+ * Reusable flex row for any "label + meta/icon" pattern with a fixed
+ * height. Pair with a size modifier (--xs/--sm/--md/--lg) and optionally
+ * --between for justify-content: space-between.
+ *
+ *   --xs : 20px  (parity with .sidebar-badge)
+ *   --sm : 24px  (compact rows, label + small icon)
+ *   --md : 32px  (parity with .btn-sm — touch-friendly desktop)
+ *   --lg : 40px  (parity with .btn-md / .modal-cancel — full touch target)
+ */
+.cell-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.cell-row--xs { min-height: 20px; }
+.cell-row--sm { min-height: 24px; }
+.cell-row--md { min-height: 32px; }
+.cell-row--lg { min-height: 40px; }
+.cell-row--between { justify-content: space-between; }
+
+
 /* ─── TOOLBAR ─── */
 .toolbar {
   position: sticky;
@@ -2264,10 +2287,7 @@
 
 /* Inline checkbox row used inside modal flows (e.g. Add book → Mark as reading) */
 .modal-toggle-row {
-  display: flex;
-  align-items: center;
   gap: 10px;
-  min-height: 40px;
   cursor: pointer;
   user-select: none;
 }
@@ -4518,11 +4538,7 @@ button.quote-book-chip {
   color: var(--text);
 }
 .overview-hero-label-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   width: 100%;
-  justify-content: space-between;
   color: var(--text-2);
 }
 .overview-hero-label {

@@ -600,7 +600,7 @@ function MarkAsReadingToggle({ checked, onChange, disabled, label, limitText, li
   return (
     <div className="modal-toggle-group">
       <label
-        className={`modal-toggle-row${disabled ? ' is-disabled' : ''}`}
+        className={`cell-row cell-row--lg modal-toggle-row${disabled ? ' is-disabled' : ''}`}
         title={disabled ? limitText : undefined}>
         <input
           type="checkbox"

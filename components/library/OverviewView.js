@@ -122,7 +122,7 @@ function HeroCard({ num, label, onClick }) {
   return (
     <button type="button" className="overview-hero-card" onClick={onClick}>
       <span className="overview-hero-num">{num}</span>
-      <span className="overview-hero-label-row">
+      <span className="cell-row cell-row--sm cell-row--between overview-hero-label-row">
         <span className="overview-hero-label">{label}</span>
         <svg className="sidebar-section-chevron overview-hero-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
