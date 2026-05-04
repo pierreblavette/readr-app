@@ -268,7 +268,6 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
             book={b}
             onClick={onOpenBook ? () => onOpenBook(b) : undefined}
             rating={b.rating}
-            note={b.note}
           />
         ))}
       </div>

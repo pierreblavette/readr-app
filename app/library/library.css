@@ -4225,6 +4225,8 @@ button.quote-book-chip {
   height: 16px;
   color: var(--text-3);
   margin-left: 4px;
+  stroke-width: 2.5;
+  align-self: center;
 }
 
 .quote-book-chip-cover {
@@ -4707,16 +4709,7 @@ button.quote-book-chip {
 [data-theme="dark"] .overview-loved-more:hover { color: var(--primary-40); }
 .overview-loved-more .sidebar-section-chevron { color: currentColor; }
 
-/* Stars + note inline meta inside BookChip body */
-.quote-book-chip-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.quote-book-chip-meta > * + * {
-  padding-left: 8px;
-  border-left: 1px solid var(--border);
-}
+/* Stars inline inside BookChip body (Most loved usage) */
 .overview-stars {
   display: inline-flex;
   gap: 3px;
@@ -4729,20 +4722,9 @@ button.quote-book-chip {
 }
 .overview-stars svg.is-filled { color: var(--primary-50); }
 [data-theme="dark"] .overview-stars svg.is-filled { color: var(--primary-40); }
-.quote-book-chip-note {
-  font-size: 15px;
-  font-weight: 500;
-  font-style: italic;
-  color: var(--text-2);
-  line-height: 1.8;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/* When the chip has expanded content (stars / note), pin the cover to
- * the top instead of centering against a tall body. */
-.quote-book-chip:has(.quote-book-chip-meta) {
+/* When the chip has stars, pin the cover to the top. Chevron stays
+ * centered via align-self (rule above on .quote-book-chip-chevron). */
+.quote-book-chip:has(.overview-stars) {
   align-items: flex-start;
 }
 

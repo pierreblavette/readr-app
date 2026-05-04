@@ -27,7 +27,6 @@ export default function MostLovedPanel({ open, onClose, books, onOpenBook, t }) 
                     book={b}
                     onClick={onOpenBook ? () => { onOpenBook(b); onClose(); } : undefined}
                     rating={b.rating}
-                    note={b.note}
                   />
                 ))}
               </div>
