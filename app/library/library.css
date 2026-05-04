@@ -4732,6 +4732,32 @@ button.quote-book-chip {
   flex-direction: column;
   gap: 12px;
 }
+/* In the Quotes spotlight context only, the .quote-card mirrors the
+ * .quote-book-chip-interactive UI: neutral bg + primary-tint on hover,
+ * no transform / no shadow / no border / no entry animation. */
+.overview-quotes .quote-card {
+  background: var(--bg3);
+  border-color: transparent;
+  animation: none;
+  transition: background 0.15s;
+}
+.overview-quotes .quote-card:hover {
+  background: var(--primary-5);
+  border-color: transparent;
+  transform: none;
+  box-shadow: none;
+}
+[data-theme="dark"] .overview-quotes .quote-card { background: var(--primary-5); }
+[data-theme="dark"] .overview-quotes .quote-card:hover { background: var(--primary-10); }
+/* Dark theme: bump inner BookChip to --primary-10 so it stays
+ * distinct from the now primary-tinted outer card. */
+[data-theme="dark"] .overview-quotes .quote-card .quote-book-chip {
+  background: var(--primary-10);
+}
+[data-theme="dark"] .overview-quotes .quote-card .quote-book-chip-interactive:hover,
+[data-theme="dark"] .overview-quotes .quote-card .quote-book-chip-interactive:active {
+  background: var(--primary-20);
+}
 
 /* Empty state */
 .overview-empty {
