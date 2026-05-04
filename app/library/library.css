@@ -4549,7 +4549,7 @@ button.quote-book-chip {
 /* Reading goal */
 .overview-goal--empty .add-btn {
   align-self: flex-start;
-  margin-top: 4px;
+  margin-top: auto;
 }
 .overview-goal-hint {
   font-size: 14px;
