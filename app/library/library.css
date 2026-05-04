@@ -4593,6 +4593,18 @@ button.quote-book-chip {
   background: rgba(230,57,70,0.08);
 }
 
+/* When the modal has a destructive secondary action (Remove) alongside
+ * Cancel + Save, group Cancel+Remove on the left with gap 12, push Save
+ * to the right. Auto-detected via :has() — 2-button modals stay on
+ * justify-content: space-between (.confirm-modal-actions default). */
+.confirm-modal-actions:has(.overview-goal-remove) {
+  justify-content: flex-start;
+  gap: 12px;
+}
+.confirm-modal-actions:has(.overview-goal-remove) .modal-submit {
+  margin-left: auto;
+}
+
 /* Streak */
 .overview-streak-body {
   display: flex;
