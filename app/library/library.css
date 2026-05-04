@@ -4585,21 +4585,13 @@ button.quote-book-chip {
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 [data-theme="dark"] .overview-goal-bar-fill { background: var(--primary-40); }
-.overview-goal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.overview-goal-form-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.overview-goal-save { height: 40px; padding: 0 20px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+/* Destructive variant for .modal-cancel — used in ReadingGoalModal */
 .overview-goal-remove { color: var(--destructive); }
-.overview-goal-remove:hover { background: rgba(230,57,70,0.08); }
+.overview-goal-remove:hover {
+  color: var(--destructive);
+  border-color: var(--destructive);
+  background: rgba(230,57,70,0.08);
+}
 
 /* Streak */
 .overview-streak-body {

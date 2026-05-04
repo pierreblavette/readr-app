@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { useStats } from "@/lib/useStats";
 import BookChip from "./BookChip";
+import ReadingGoalModal from "./ReadingGoalModal";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
@@ -11,6 +12,7 @@ export default function OverviewView({
 }) {
   const stats = useStats({ owned, quotes, words, readingGoal });
   const [shuffleKey, setShuffleKey] = useState(0);
+  const [goalModalOpen, setGoalModalOpen] = useState(false);
 
   const spotlightQuotes = useMemo(() => {
     if (quotes.length === 0) return [];
@@ -89,11 +91,20 @@ export default function OverviewView({
       <div className="overview-row-2">
         <ReadingGoalCard
           goal={stats.goal}
-          onSetGoal={setReadingGoal}
+          onEdit={() => setGoalModalOpen(true)}
           t={t}
         />
         <StreakCard streak={stats.streak} t={t} />
       </div>
+
+      <ReadingGoalModal
+        open={goalModalOpen}
+        onClose={() => setGoalModalOpen(false)}
+        onSetGoal={setReadingGoal}
+        year={stats.goal.year}
+        currentCount={stats.goal.target}
+        t={t}
+      />
 
       <HeatmapCard
         weeks={stats.heatmap}
@@ -132,34 +143,13 @@ function HeroCard({ num, label, onClick }) {
   );
 }
 
-function ReadingGoalCard({ goal, onSetGoal, t }) {
-  const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(goal.target ? String(goal.target) : '');
-
-  function startEdit() {
-    setDraft(goal.target ? String(goal.target) : '');
-    setEditing(true);
-  }
-
-  function save() {
-    const n = parseInt(draft, 10);
-    if (Number.isFinite(n) && n > 0) {
-      onSetGoal(goal.year, n);
-      setEditing(false);
-    }
-  }
-
-  function remove() {
-    onSetGoal(goal.year, 0);
-    setEditing(false);
-  }
-
-  if (!goal.isSet && !editing) {
+function ReadingGoalCard({ goal, onEdit, t }) {
+  if (!goal.isSet) {
     return (
       <div className="overview-card overview-goal overview-goal--empty">
         <span className="panel-section-eyebrow">{t.overviewGoalTitle}</span>
         <span className="panel-quotes-empty">{t.overviewGoalEmptyHint}</span>
-        <button type="button" className="add-btn" onClick={startEdit}>
+        <button type="button" className="add-btn" onClick={onEdit}>
           {t.overviewGoalEmpty}
         </button>
       </div>
@@ -170,53 +160,17 @@ function ReadingGoalCard({ goal, onSetGoal, t }) {
     <div className="overview-card overview-goal">
       <div className="overview-card-head">
         <span className="panel-section-eyebrow">{t.overviewGoalTitle}</span>
-        {!editing && (
-          <button type="button" className="overview-card-action" onClick={startEdit}>
-            {t.overviewGoalEdit}
-          </button>
-        )}
+        <button type="button" className="overview-card-action" onClick={onEdit}>
+          {t.overviewGoalEdit}
+        </button>
       </div>
-
-      {editing ? (
-        <form
-          className="overview-goal-form"
-          onSubmit={e => { e.preventDefault(); save(); }}
-          onKeyDown={e => { if (e.key === 'Escape') { e.preventDefault(); setEditing(false); } }}
-        >
-          <div className="modal-field">
-            <input
-              type="number"
-              min="1"
-              inputMode="numeric"
-              value={draft}
-              onChange={e => setDraft(e.target.value)}
-              placeholder={t.overviewGoalPlaceholder}
-              autoFocus
-            />
-          </div>
-          <div className="overview-goal-form-actions">
-            <button type="button" className="modal-cancel" onClick={() => setEditing(false)}>
-              {t.btnCancel}
-            </button>
-            {goal.isSet && (
-              <button type="button" className="modal-cancel overview-goal-remove" onClick={remove}>
-                {t.overviewGoalRemove}
-              </button>
-            )}
-            <button type="submit" className="btn-primary overview-goal-save">{t.overviewGoalSave}</button>
-          </div>
-        </form>
-      ) : (
-        <>
-          <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
-            <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
-            <span className="overview-goal-pct">{Math.round(goal.ratio * 100)}%</span>
-          </div>
-          <div className="overview-goal-bar" aria-hidden="true">
-            <div className="overview-goal-bar-fill" style={{ width: `${goal.ratio * 100}%` }} />
-          </div>
-        </>
-      )}
+      <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
+        <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
+        <span className="overview-goal-pct">{Math.round(goal.ratio * 100)}%</span>
+      </div>
+      <div className="overview-goal-bar" aria-hidden="true">
+        <div className="overview-goal-bar-fill" style={{ width: `${goal.ratio * 100}%` }} />
+      </div>
     </div>
   );
 }

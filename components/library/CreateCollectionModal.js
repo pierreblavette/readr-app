@@ -4,7 +4,7 @@ import { useModalA11y } from "@/lib/useModalA11y";
 
 export default function CreateCollectionModal({ open, onClose, onCreate, editing, onRename, t }) {
   const [name, setName] = useState('');
-  const modalRef = useModalA11y(open, onClose);
+  const modalRef = useModalA11y(open, onClose, { autoFocus: false });
 
   useEffect(() => {
     if (open) {
