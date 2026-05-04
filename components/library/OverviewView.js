@@ -159,7 +159,6 @@ export default function OverviewView({
       <QuotesSpotlightCard
         quotes={spotlightQuotes}
         onOpen={onOpenQuote}
-        onOpenBook={onOpenBook}
         onShuffle={() => setShuffleKey(k => k + 1)}
         canShuffle={quotes.length > 3}
         resolveBook={resolveBook}
@@ -323,7 +322,7 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
   );
 }
 
-function QuotesSpotlightCard({ quotes, onOpen, onOpenBook, onShuffle, canShuffle, resolveBook, t }) {
+function QuotesSpotlightCard({ quotes, onOpen, onShuffle, canShuffle, resolveBook, t }) {
   return (
     <div className="overview-card overview-quotes">
       <div className="overview-card-head">
@@ -344,7 +343,6 @@ function QuotesSpotlightCard({ quotes, onOpen, onOpenBook, onShuffle, canShuffle
               quote={q}
               book={resolveBook(q)}
               onOpen={onOpen}
-              onOpenBook={onOpenBook}
               t={t}
             />
           ))}
@@ -354,15 +352,12 @@ function QuotesSpotlightCard({ quotes, onOpen, onOpenBook, onShuffle, canShuffle
   );
 }
 
-function SpotlightQuote({ quote, book, onOpen, onOpenBook, t }) {
+function SpotlightQuote({ quote, book, onOpen, t }) {
   function activate() { onOpen?.(quote); }
   function onKeyDown(e) {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
   }
   const chipBook = book || { title: quote.bookTitle || '', author: quote.bookAuthor || '' };
-  const handleChipClick = book && onOpenBook
-    ? (e) => { e.stopPropagation(); onOpenBook(book); }
-    : undefined;
   return (
     <div
       className="quote-card overview-quote-card"
@@ -382,10 +377,7 @@ function SpotlightQuote({ quote, book, onOpen, onOpenBook, t }) {
         </div>
       </div>
       {(book || quote.bookTitle) && (
-        <>
-          <div className="quote-card-divider" />
-          <BookChip book={chipBook} onClick={handleChipClick} />
-        </>
+        <BookChip book={chipBook} />
       )}
     </div>
   );
