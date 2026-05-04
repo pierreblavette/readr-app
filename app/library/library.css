@@ -4724,6 +4724,14 @@ button.quote-book-chip {
 .quote-book-chip:has(.overview-stars) {
   align-items: flex-start;
 }
+/* Divider between name (title+author) and stars — clearer hierarchy
+ * "book identity / rating". Same idiom as .quote-card-divider. */
+.quote-book-chip-body:has(.overview-stars) { gap: 8px; }
+.quote-book-chip-body:has(.overview-stars) .overview-stars {
+  width: 100%;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
 
 /* Quotes spotlight — reuses .quote-card */
 .overview-quotes-list {
