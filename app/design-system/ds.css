@@ -382,10 +382,7 @@
 .lang-btn-ds.active { color: var(--text); font-weight: 600; }
 .lang-btn-ds:hover:not(.active) { color: var(--text-2); }
 
-/* ─── BADGES & PILLS ─── */
-.pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 32px; font-size: 0.8rem; font-weight: 700; }
-.pill-owned    { background: var(--accent-bg); color: var(--accent); }
-.pill-wishlist { background: var(--teal-bg); color: var(--teal); }
+/* ─── BADGES ─── */
 .status-badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: var(--bg3); color: var(--text-3); white-space: nowrap; }
 
 /* ─── DROPDOWN MENU ─── */

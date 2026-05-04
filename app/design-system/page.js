@@ -17,7 +17,7 @@ const NAV_LABELS = {
   "logo":"Logo","colors":"Colors","typography":"Typography",
   "spacing":"Spacing","cell-row":"Cell Row","shadows":"Shadows & Radius","strokes":"Strokes & Borders",
   "buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
-  "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges & Pills",
+  "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
   "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
@@ -707,14 +707,7 @@ export default function DesignSystemPage() {
 
           {/* ── BADGES & PILLS ── */}
           <section className="ds-section" id="badges">
-            <SectionTitle title="Badges & Pills" />
-            <div className="ds-card">
-              <div className="ds-card-label">Pills</div>
-              <div className="ds-card-body">
-                <span className="pill pill-owned">Library</span>
-                <span className="pill pill-wishlist">Wishlist</span>
-              </div>
-            </div>
+            <SectionTitle title="Badges" />
             <div className="ds-card">
               <div className="ds-card-label">Status badge</div>
               <div className="ds-card-body">
