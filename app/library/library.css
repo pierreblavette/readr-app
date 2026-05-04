@@ -4705,19 +4705,12 @@ button.quote-book-chip {
 .overview-loved-more { align-self: flex-start; }
 .overview-loved-more .sidebar-section-chevron { color: currentColor; width: 16px; height: 16px; }
 
-/* Stars badge inside BookChip body (Most loved usage) */
+/* Stars inline inside BookChip body (Most loved usage) */
 .overview-stars {
   display: inline-flex;
-  align-items: center;
   gap: 3px;
   flex-shrink: 0;
-  width: fit-content;
-  padding: 4px 8px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 999px;
 }
-[data-theme="dark"] .overview-stars { border-color: var(--primary-10); }
 .overview-stars svg {
   width: 14px;
   height: 14px;
