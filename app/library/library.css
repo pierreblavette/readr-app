@@ -4582,9 +4582,14 @@ button.quote-book-chip {
   height: 100%;
   background: var(--primary-50);
   border-radius: 999px;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
 }
 [data-theme="dark"] .overview-goal-bar-fill { background: var(--primary-40); }
+.overview-goal--achieved .overview-goal-bar-fill { background: var(--teal); }
+.overview-goal--achieved .overview-goal-pct {
+  color: var(--teal);
+  font-weight: 600;
+}
 /* Destructive variant for .modal-cancel — used in ReadingGoalModal */
 .overview-goal-remove { color: var(--destructive); }
 .overview-goal-remove:hover {
@@ -4629,6 +4634,13 @@ button.quote-book-chip {
   display: block;
   width: 100%;
   height: auto;
+}
+.overview-heatmap-month {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  fill: var(--text-3);
+  text-transform: capitalize;
 }
 .overview-heatmap-cell { fill: var(--border-subtle); }
 .overview-heatmap-cell--0 { fill: var(--border-subtle); }

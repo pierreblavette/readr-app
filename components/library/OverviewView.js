@@ -156,8 +156,9 @@ function ReadingGoalCard({ goal, onEdit, t }) {
     );
   }
 
+  const achieved = goal.progress >= goal.target;
   return (
-    <div className="overview-card overview-goal">
+    <div className={`overview-card overview-goal${achieved ? ' overview-goal--achieved' : ''}`}>
       <div className="overview-card-head">
         <span className="panel-section-eyebrow">{t.overviewGoalTitle}</span>
         <button type="button" className="overview-card-action" onClick={onEdit}>
@@ -166,7 +167,9 @@ function ReadingGoalCard({ goal, onEdit, t }) {
       </div>
       <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
         <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
-        <span className="overview-goal-pct">{Math.round(goal.ratio * 100)}%</span>
+        <span className="overview-goal-pct">
+          {achieved ? t.overviewGoalReached : `${Math.round(goal.ratio * 100)}%`}
+        </span>
       </div>
       <div className="overview-goal-bar" aria-hidden="true">
         <div className="overview-goal-bar-fill" style={{ width: `${goal.ratio * 100}%` }} />
@@ -177,6 +180,9 @@ function ReadingGoalCard({ goal, onEdit, t }) {
 
 function StreakCard({ streak, t }) {
   const hasAny = streak.current > 0 || streak.best > 0;
+  // When no active streak but a best exists, surface the best as the
+  // primary metric — losing it visually would erase past progress.
+  const showBestAsPrimary = streak.current === 0 && streak.best > 0;
   return (
     <div className="overview-card overview-streak">
       <div className="overview-card-head">
@@ -187,9 +193,15 @@ function StreakCard({ streak, t }) {
       ) : (
         <>
           <div className="overview-streak-body">
-            <span className="overview-streak-current">{t.overviewStreakDays(streak.current)}</span>
-            {streak.best > 0 && streak.best !== streak.current && (
-              <span className="overview-streak-best">{t.overviewStreakBest(streak.best)}</span>
+            {showBestAsPrimary ? (
+              <span className="overview-streak-current">{t.overviewStreakBest(streak.best)}</span>
+            ) : (
+              <>
+                <span className="overview-streak-current">{t.overviewStreakDays(streak.current)}</span>
+                {streak.best > 0 && streak.best !== streak.current && (
+                  <span className="overview-streak-best">{t.overviewStreakBest(streak.best)}</span>
+                )}
+              </>
             )}
           </div>
           <span className="panel-synopsis-placeholder">{t.overviewStreakHint}</span>
@@ -215,10 +227,12 @@ function HeatmapCard({ weeks, max, t, lang }) {
 
   const cellSize = 12;
   const cellGap = 3;
+  const labelHeight = 16;
   const cols = weeks.length;
   const rows = 7;
-  const w = cols * (cellSize + cellGap) - cellGap;
-  const h = rows * (cellSize + cellGap) - cellGap;
+  const gridW = cols * (cellSize + cellGap) - cellGap;
+  const gridH = rows * (cellSize + cellGap) - cellGap;
+  const totalH = gridH + labelHeight;
 
   function level(count) {
     if (count == null) return -1;
@@ -235,6 +249,21 @@ function HeatmapCard({ weeks, max, t, lang }) {
     return d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
+  // Detect month boundaries — place a label at the column where each new month starts.
+  const monthLabels = [];
+  let lastMonth = -1;
+  weeks.forEach((days, ci) => {
+    const firstDay = new Date(days[0].ts);
+    const month = firstDay.getMonth();
+    if (month !== lastMonth) {
+      monthLabels.push({
+        x: ci * (cellSize + cellGap),
+        label: firstDay.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' }),
+      });
+      lastMonth = month;
+    }
+  });
+
   return (
     <div className="overview-card overview-heatmap">
       <div className="overview-card-head">
@@ -242,29 +271,41 @@ function HeatmapCard({ weeks, max, t, lang }) {
       </div>
       <svg
         className="overview-heatmap-svg"
-        viewBox={`0 0 ${w} ${h}`}
+        viewBox={`0 0 ${gridW} ${totalH}`}
         preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label={t.overviewHeatmapTitle}
       >
-        {weeks.map((days, ci) => days.map((d, ri) => {
-          const lvl = level(d.count);
-          if (lvl < 0) return null;
-          return (
-            <rect
-              key={`${ci}-${ri}`}
-              x={ci * (cellSize + cellGap)}
-              y={ri * (cellSize + cellGap)}
-              width={cellSize}
-              height={cellSize}
-              rx={2}
-              ry={2}
-              className={`overview-heatmap-cell overview-heatmap-cell--${lvl}`}
-            >
-              <title>{`${fmtDate(d.ts)}: ${d.count} ${d.count === 1 ? 'event' : 'events'}`}</title>
-            </rect>
-          );
-        }))}
+        {monthLabels.map(({ x, label }, i) => (
+          <text
+            key={`m-${i}`}
+            x={x}
+            y={labelHeight - 5}
+            className="overview-heatmap-month"
+          >
+            {label}
+          </text>
+        ))}
+        <g transform={`translate(0, ${labelHeight})`}>
+          {weeks.map((days, ci) => days.map((d, ri) => {
+            const lvl = level(d.count);
+            if (lvl < 0) return null;
+            return (
+              <rect
+                key={`${ci}-${ri}`}
+                x={ci * (cellSize + cellGap)}
+                y={ri * (cellSize + cellGap)}
+                width={cellSize}
+                height={cellSize}
+                rx={2}
+                ry={2}
+                className={`overview-heatmap-cell overview-heatmap-cell--${lvl}`}
+              >
+                <title>{`${fmtDate(d.ts)}: ${d.count} ${d.count === 1 ? 'event' : 'events'}`}</title>
+              </rect>
+            );
+          }))}
+        </g>
       </svg>
       <div className="overview-heatmap-legend">
         <span className="overview-heatmap-legend-label">{t.overviewHeatmapLegendLess}</span>
