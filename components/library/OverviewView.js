@@ -252,27 +252,15 @@ function MostLovedCard({ books, onOpenBook, t }) {
       </div>
       <div className="overview-loved-list">
         {books.map(b => (
-          <div key={b.id} className="overview-loved-item">
-            <BookChip
-              book={b}
-              onClick={onOpenBook ? () => onOpenBook(b) : undefined}
-            />
-            <SmallStars value={b.rating} />
-          </div>
+          <BookChip
+            key={b.id}
+            book={b}
+            onClick={onOpenBook ? () => onOpenBook(b) : undefined}
+            rating={b.rating}
+            note={b.note}
+          />
         ))}
       </div>
-    </div>
-  );
-}
-
-function SmallStars({ value }) {
-  return (
-    <div className="overview-stars" aria-label={`Rating ${value}/5`}>
-      {[1, 2, 3, 4, 5].map(n => (
-        <svg key={n} viewBox="0 0 24 24" fill="currentColor" className={value >= n ? 'is-filled' : ''}>
-          <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
-        </svg>
-      ))}
     </div>
   );
 }

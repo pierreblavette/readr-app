@@ -4689,15 +4689,10 @@ button.quote-book-chip {
   flex-direction: column;
   gap: 12px;
 }
-.overview-loved-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 .overview-stars {
   display: inline-flex;
   gap: 3px;
-  padding-left: 4px;
+  margin-top: 4px;
 }
 .overview-stars svg {
   width: 14px;
@@ -4706,6 +4701,19 @@ button.quote-book-chip {
 }
 .overview-stars svg.is-filled { color: var(--primary-50); }
 [data-theme="dark"] .overview-stars svg.is-filled { color: var(--primary-40); }
+.quote-book-chip-note {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-2);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+/* When the chip has expanded content (stars / note), pin the cover to
+ * the top instead of centering against a tall body. */
+.quote-book-chip:has(.overview-stars),
+.quote-book-chip:has(.quote-book-chip-note) {
+  align-items: flex-start;
+}
 
 /* Quotes spotlight — reuses .quote-card */
 .overview-quotes-list {
