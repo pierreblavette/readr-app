@@ -4597,11 +4597,6 @@ button.quote-book-chip {
   gap: 12px;
   flex-wrap: wrap;
 }
-.overview-goal-form-actions-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 .overview-goal-input {
   width: 100%;
   min-width: 0;

@@ -194,16 +194,14 @@ function ReadingGoalCard({ goal, onSetGoal, t }) {
             autoFocus
           />
           <div className="overview-goal-form-actions">
-            <div className="overview-goal-form-actions-left">
-              <button type="button" className="modal-cancel" onClick={() => setEditing(false)}>
-                {t.btnCancel}
+            <button type="button" className="modal-cancel" onClick={() => setEditing(false)}>
+              {t.btnCancel}
+            </button>
+            {goal.isSet && (
+              <button type="button" className="modal-cancel overview-goal-remove" onClick={remove}>
+                {t.overviewGoalRemove}
               </button>
-              {goal.isSet && (
-                <button type="button" className="modal-cancel overview-goal-remove" onClick={remove}>
-                  {t.overviewGoalRemove}
-                </button>
-              )}
-            </div>
+            )}
             <button type="submit" className="btn-primary overview-goal-save">{t.overviewGoalSave}</button>
           </div>
         </form>
