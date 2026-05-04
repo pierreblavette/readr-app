@@ -4255,6 +4255,11 @@ button.quote-book-chip {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 4px;
+}
+.quote-book-chip-name {
+  display: flex;
+  flex-direction: column;
   gap: 2px;
 }
 .quote-book-chip-title {

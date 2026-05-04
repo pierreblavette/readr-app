@@ -808,6 +808,30 @@ export default function DesignSystemPage() {
                     </button>
                   </div>
                 </div>
+
+                {/* With rating (interactive) */}
+                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
+                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>With rating</div>
+                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #4959E6, #00A699)" }}><span>D</span></div>
+                    <div className="quote-book-chip-body">
+                      <div className="quote-book-chip-name">
+                        <div className="quote-book-chip-title">Dune</div>
+                        <div className="quote-book-chip-author">Frank Herbert</div>
+                      </div>
+                      <div className="overview-stars" aria-label="Rating 5/5">
+                        {[1,2,3,4,5].map(n => (
+                          <svg key={n} viewBox="0 0 24 24" fill="currentColor" className="is-filled">
+                            <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -846,6 +870,7 @@ export default function DesignSystemPage() {
                     <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onClick</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(e) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>If provided: renders as <code>&lt;button&gt;</code> with chevron + hover. Use <code>e.stopPropagation()</code> inside parent-clickable contexts.</td></tr>
                     <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onRemove</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows an X button on the right. Mutually exclusive with <code>onClick</code>.</td></tr>
                     <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Label for the remove button.</td></tr>
+                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>rating</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>number (1–5)</td><td style={{ fontSize: "0.82rem" }}>Renders 5 stars below title/author when {'>'} 0. Title/author auto-wrapped in <code>.quote-book-chip-name</code> (gap 2). Body gap goes to 4.</td></tr>
                   </tbody>
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>

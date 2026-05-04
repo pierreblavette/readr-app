@@ -26,8 +26,10 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
         {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
       </div>
       <div className="quote-book-chip-body">
-        <div className="quote-book-chip-title">{book.title}</div>
-        {book.author && <div className="quote-book-chip-author">{book.author}</div>}
+        <div className="quote-book-chip-name">
+          <div className="quote-book-chip-title">{book.title}</div>
+          {book.author && <div className="quote-book-chip-author">{book.author}</div>}
+        </div>
         {rating > 0 && (
           <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
             {[1, 2, 3, 4, 5].map(n => (
