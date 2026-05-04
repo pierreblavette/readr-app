@@ -1047,6 +1047,33 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
+              <div className="ds-card-label">Asymmetric padding (icon + text)</div>
+              <div className="ds-card-body col" style={{ gap: 16 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                  <button className="btn btn-outline btn-md">Text only</button>
+                  <button className="btn btn-outline btn-md">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Icon left
+                  </button>
+                  <button className="btn btn-outline btn-md">
+                    Icon right
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                </div>
+                <table className="token-table">
+                  <thead><tr><th>Layout</th><th>Padding (h)</th><th>Why</th></tr></thead>
+                  <tbody>
+                    <tr><td className="token-table-component">Text only</td><td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>0 20 (md) / 0 16 (sm)</td><td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Symmetrical baseline.</td></tr>
+                    <tr><td className="token-table-component">Icon left + text</td><td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>0 20 0 12 (md) / 0 16 0 12 (sm)</td><td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Icon eats visual space — drop padding-left to balance.</td></tr>
+                    <tr><td className="token-table-component">Text + icon right</td><td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>0 12 0 20 (md) / 0 12 0 16 (sm)</td><td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Same logic, mirrored.</td></tr>
+                  </tbody>
+                </table>
+                <div style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>
+                  Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> — no extra class needed. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding via <code>.btn-icon</code> / <code>.btn-solid</code>).
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
               <div className="ds-card-label">AI action — gradient border + tinted fill</div>
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 {[["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"]].map(([sz, label]) => (
