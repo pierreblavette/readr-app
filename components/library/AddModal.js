@@ -95,6 +95,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
     }
   }, [open]);
 
+  const modalRef = useModalA11y(open, resetAndClose);
+
   if (!open) return null;
 
   function handleTitleInput(val) {
@@ -162,8 +164,6 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
     setMarkAsReading(false);
     onClose();
   }
-
-  const modalRef = useModalA11y(open, resetAndClose);
 
   async function handlePhotoChange(e) {
     const file = e.target.files?.[0];

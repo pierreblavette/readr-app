@@ -47,6 +47,18 @@ export default function Sidebar({
         {/* Primary nav */}
         <nav className="sidebar-nav">
 
+          {/* Overview (top) */}
+          <div className="sidebar-section sidebar-section--lone">
+            <button
+              className={`sidebar-item${tab === 'overview' ? ' active' : ''}`}
+              onClick={() => handleNav('overview')}>
+              <span className="sidebar-icon"><OverviewIcon /></span>
+              {!collapsed && (
+                <span className="sidebar-label">{t.tabOverview || 'Overview'}</span>
+              )}
+            </button>
+          </div>
+
           {/* Shelves */}
           <div className="sidebar-section">
             {!collapsed && (
@@ -225,6 +237,16 @@ function DictIcon() {
       <path d="M4 4v14a2 2 0 0 0 2 2h13"/>
       <line x1="8" y1="9" x2="14" y2="9"/>
       <line x1="8" y1="13" x2="12" y2="13"/>
+    </svg>
+  );
+}
+
+function OverviewIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="6" y1="20" x2="6" y2="14"/>
+      <line x1="12" y1="20" x2="12" y2="9"/>
+      <line x1="18" y1="20" x2="18" y2="4"/>
     </svg>
   );
 }

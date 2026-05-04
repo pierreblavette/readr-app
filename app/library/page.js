@@ -21,6 +21,7 @@ import CollectionDetailView from "@/components/library/CollectionDetailView";
 import AddBooksToCollectionModal from "@/components/library/AddBooksToCollectionModal";
 import QuotesView    from "@/components/library/QuotesView";
 import DictionaryView from "@/components/library/DictionaryView";
+import OverviewView  from "@/components/library/OverviewView";
 import AddQuoteModal from "@/components/library/AddQuoteModal";
 import Onboarding    from "@/components/library/Onboarding";
 import Toast         from "@/components/library/Toast";
@@ -76,15 +77,17 @@ export default function LibraryPage() {
     activeCollection, setActiveCollection,
     quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook, exportQuotesMD, exportQuotesPDF,
     words, saveWord, deleteWord, exportWordsMD, exportWordsPDF,
+    readingGoal, setReadingGoal,
     sidebarCollapsed, toggleSidebarCollapsed,
   } = lib;
 
+  const isOverview = tab === 'overview';
   const isCollections = tab === 'collections';
   const isQuotes = tab === 'quotes';
   const isDictionary = tab === 'dictionary';
   const currentCollection = activeCollection ? collections.find(c => c.id === activeCollection) : null;
-  const pageTitle = tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : tab === 'collections' ? t.pageCollections : tab === 'dictionary' ? t.pageDictionary : t.pageQuotes;
-  const resultInfo = !isCollections && !isQuotes && !isDictionary && data[tab]
+  const pageTitle = tab === 'overview' ? t.pageOverview : tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : tab === 'collections' ? t.pageCollections : tab === 'dictionary' ? t.pageDictionary : t.pageQuotes;
+  const resultInfo = !isOverview && !isCollections && !isQuotes && !isDictionary && data[tab]
     ? search.trim()
       ? t.resultQuery(books.length, data[tab].length)
       : t.resultTotal(data[tab].length)
@@ -219,6 +222,27 @@ export default function LibraryPage() {
       {/* Main */}
       <div className="main-wrap">
 
+        {/* Overview view */}
+        {isOverview && (
+          <>
+            <h1 className="page-title">{t.pageOverview}</h1>
+            <OverviewView
+              owned={data.owned}
+              wishlist={data.wishlist}
+              quotes={quotes}
+              words={words}
+              readingGoal={readingGoal}
+              setReadingGoal={setReadingGoal}
+              onOpenBook={b => setPanelBook(b)}
+              onOpenQuote={q => setPanelQuote(q)}
+              onAddBook={() => setAddModal(true)}
+              onNavigate={next => setTab(next)}
+              t={t}
+              lang={lang}
+            />
+          </>
+        )}
+
         {/* Dictionary view */}
         {isDictionary && (
           <>
@@ -308,7 +332,7 @@ export default function LibraryPage() {
         )}
 
         {/* Library / Wishlist view */}
-        {!isCollections && !isQuotes && !isDictionary && (
+        {!isOverview && !isCollections && !isQuotes && !isDictionary && (
           <>
             <h1 className="page-title">{pageTitle}</h1>
 
