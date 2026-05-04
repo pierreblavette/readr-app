@@ -4696,23 +4696,8 @@ button.quote-book-chip {
   flex-direction: column;
   gap: 12px;
 }
-.overview-loved-more {
-  background: transparent;
-  border: none;
-  border-top: 1px solid var(--border-subtle);
-  padding: 8px 0 0;
-  margin-top: 4px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary-50);
-  cursor: pointer;
-  text-align: left;
-}
-.overview-loved-more:hover { color: var(--primary-60); }
-[data-theme="dark"] .overview-loved-more { color: var(--primary-30); }
-[data-theme="dark"] .overview-loved-more:hover { color: var(--primary-40); }
-.overview-loved-more .sidebar-section-chevron { color: currentColor; }
+.overview-loved-more { align-self: flex-start; }
+.overview-loved-more .sidebar-section-chevron { color: currentColor; width: 16px; height: 16px; }
 
 /* Stars badge inside BookChip body (Most loved usage) */
 .overview-stars {

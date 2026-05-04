@@ -274,7 +274,7 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
       {books.length > 3 && (
         <button
           type="button"
-          className="cell-row cell-row--sm cell-row--between overview-loved-more"
+          className="btn btn-outline btn-md overview-loved-more"
           onClick={onSeeMore}
         >
           <span>{t.overviewLovedSeeMore}</span>
