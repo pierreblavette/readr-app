@@ -16,6 +16,7 @@ export default function OverviewView({
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [lovedPanelOpen, setLovedPanelOpen] = useState(false);
   const [finishedPanelOpen, setFinishedPanelOpen] = useState(false);
+  const [activeGenre, setActiveGenre] = useState(null);
 
   const spotlightQuotes = useMemo(() => {
     if (quotes.length === 0) return [];
@@ -48,6 +49,15 @@ export default function OverviewView({
     else if (finishedBooks.length === 1) onOpenBook?.(finishedBooks[0]);
     else setFinishedPanelOpen(true);
   }
+
+  function handleGenreSelect(genre) {
+    const matches = stats.finishedBooks.filter(b => (b.genre || '').trim() === genre.name);
+    if (matches.length === 1) onOpenBook?.(matches[0]);
+    else if (matches.length > 1) setActiveGenre(genre.name);
+  }
+  const activeGenreBooks = activeGenre
+    ? stats.finishedBooks.filter(b => (b.genre || '').trim() === activeGenre)
+    : [];
   function handleHeroQuotes() {
     if (quotes.length === 1) onOpenQuote?.(quotes[0]);
     else onNavigate?.('quotes');
@@ -110,7 +120,7 @@ export default function OverviewView({
         t={t}
       />
 
-      <TopGenresCard genres={stats.topGenres} t={t} />
+      <TopGenresCard genres={stats.topGenres} onSelect={handleGenreSelect} t={t} />
 
       <MostLovedCard
         books={stats.mostLoved}
@@ -133,6 +143,15 @@ export default function OverviewView({
         onClose={() => setFinishedPanelOpen(false)}
         title={t.overviewFinishedListTitle}
         books={stats.finishedBooks}
+        onOpenBook={onOpenBook}
+        t={t}
+      />
+
+      <BookListPanel
+        open={!!activeGenre}
+        onClose={() => setActiveGenre(null)}
+        title={activeGenre || ''}
+        books={activeGenreBooks}
         onOpenBook={onOpenBook}
         t={t}
       />
@@ -235,7 +254,7 @@ function StreakCard({ streak, t }) {
   );
 }
 
-function TopGenresCard({ genres, t }) {
+function TopGenresCard({ genres, onSelect, t }) {
   return (
     <div className="overview-card overview-genres">
       <div className="overview-card-head">
@@ -246,10 +265,15 @@ function TopGenresCard({ genres, t }) {
       ) : (
         <div className="overview-genres-cloud">
           {genres.map(g => (
-            <span key={g.name} className="overview-genre-chip">
+            <button
+              key={g.name}
+              type="button"
+              className="overview-genre-chip"
+              onClick={() => onSelect?.(g)}
+            >
               <span className="overview-genre-chip-name">{g.name}</span>
               <span className="overview-genre-chip-count">{g.count}</span>
-            </span>
+            </button>
           ))}
         </div>
       )}

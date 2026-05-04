@@ -4669,11 +4669,17 @@ button.quote-book-chip {
   padding: 0 8px 0 16px;
   background: var(--primary-5);
   color: var(--primary-60);
+  border: none;
   border-radius: 999px;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+.overview-genre-chip:hover { background: var(--primary-10); }
 [data-theme="dark"] .overview-genre-chip { background: var(--primary-5); color: var(--primary-30); }
+[data-theme="dark"] .overview-genre-chip:hover { background: var(--primary-10); }
 .overview-genre-chip-name { line-height: 1; }
 .overview-genre-chip-count {
   display: inline-flex;
