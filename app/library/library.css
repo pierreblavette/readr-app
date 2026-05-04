@@ -1567,7 +1567,7 @@
   line-height: 1.8;
 }
 .panel-synopsis-placeholder {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--text-2);
   font-style: italic;
 }
