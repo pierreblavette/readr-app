@@ -1024,11 +1024,11 @@ export default function DesignSystemPage() {
                   ["btn-outline",  "Filter"],
                   ["btn-critical", "Delete"],
                 ].map(([variant, label]) => (
-                  <button key={variant} className={`btn ${variant} btn-md`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <button key={variant} className={`btn ${variant} btn-md`}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" width="15" height="15">
                       <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
-                    {label}
+                    <span>{label}</span>
                   </button>
                 ))}
               </div>
@@ -1037,11 +1037,11 @@ export default function DesignSystemPage() {
               <div className="ds-card-label">Icon + Text — tailles, variante Primary</div>
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 {[["btn-xs","XS"],["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"],["btn-xl","XL"]].map(([sz, label]) => (
-                  <button key={sz} className={`btn btn-primary ${sz}`} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <button key={sz} className={`btn btn-primary ${sz}`}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" width="14" height="14">
                       <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
-                    {label}
+                    <span>{label}</span>
                   </button>
                 ))}
               </div>
@@ -1050,13 +1050,13 @@ export default function DesignSystemPage() {
               <div className="ds-card-label">Asymmetric padding (icon + text)</div>
               <div className="ds-card-body col" style={{ gap: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                  <button className="btn btn-outline btn-md">Text only</button>
+                  <button className="btn btn-outline btn-md"><span>Text only</span></button>
                   <button className="btn btn-outline btn-md">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Icon left
+                    <span>Icon left</span>
                   </button>
                   <button className="btn btn-outline btn-md">
-                    Icon right
+                    <span>Icon right</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                   </button>
                 </div>
@@ -1070,6 +1070,8 @@ export default function DesignSystemPage() {
                 </table>
                 <div style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>
                   Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> — no extra class needed. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding via <code>.btn-icon</code> / <code>.btn-solid</code>).
+                  <br /><br />
+                  <strong>Convention:</strong> always wrap label text in a <code>&lt;span&gt;</code>. CSS <code>:first-child</code> / <code>:last-child</code> only count element children — a bare text node next to an SVG would make the SVG both first AND last child, breaking the detection.
                 </div>
               </div>
             </div>
