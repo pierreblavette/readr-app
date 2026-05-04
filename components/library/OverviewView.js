@@ -193,7 +193,7 @@ function StreakCard({ streak, t }) {
       {!hasAny ? (
         <span className="overview-card-empty">{t.overviewStreakEmpty}</span>
       ) : (
-        <>
+        <div className="overview-streak-meter">
           <div className="overview-streak-body">
             {showBestAsPrimary ? (
               <span className="overview-streak-current">{t.overviewStreakBest(streak.best)}</span>
@@ -207,7 +207,7 @@ function StreakCard({ streak, t }) {
             )}
           </div>
           <span className="panel-synopsis-placeholder">{t.overviewStreakHint}</span>
-        </>
+        </div>
       )}
     </div>
   );
