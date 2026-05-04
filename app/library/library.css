@@ -4714,11 +4714,16 @@ button.quote-book-chip {
 [data-theme="dark"] .overview-loved-more:hover { color: var(--primary-40); }
 .overview-loved-more .sidebar-section-chevron { color: currentColor; }
 
-/* Stars inline inside BookChip body (Most loved usage) */
+/* Stars badge inside BookChip body (Most loved usage) */
 .overview-stars {
   display: inline-flex;
+  align-items: center;
   gap: 3px;
   flex-shrink: 0;
+  width: fit-content;
+  padding: 4px 8px;
+  background: var(--primary-5);
+  border-radius: 999px;
 }
 .overview-stars svg {
   width: 14px;
