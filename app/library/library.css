@@ -4711,6 +4711,7 @@ button.quote-book-chip {
   display: inline-flex;
   gap: 3px;
   flex-shrink: 0;
+  padding: 4px 0;
 }
 .overview-stars svg {
   width: 14px;
