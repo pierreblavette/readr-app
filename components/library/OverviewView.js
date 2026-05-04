@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { useStats } from "@/lib/useStats";
 import BookChip from "./BookChip";
 import ReadingGoalModal from "./ReadingGoalModal";
-import MostLovedPanel from "./MostLovedPanel";
+import BookListPanel from "./BookListPanel";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
@@ -15,6 +15,7 @@ export default function OverviewView({
   const [shuffleKey, setShuffleKey] = useState(0);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [lovedPanelOpen, setLovedPanelOpen] = useState(false);
+  const [finishedPanelOpen, setFinishedPanelOpen] = useState(false);
 
   const spotlightQuotes = useMemo(() => {
     if (quotes.length === 0) return [];
@@ -43,8 +44,9 @@ export default function OverviewView({
   }
 
   function handleHeroBooks() {
-    if (finishedBooks.length === 1) onOpenBook?.(finishedBooks[0]);
-    else onNavigate?.('owned');
+    if (finishedBooks.length === 0) onNavigate?.('owned');
+    else if (finishedBooks.length === 1) onOpenBook?.(finishedBooks[0]);
+    else setFinishedPanelOpen(true);
   }
   function handleHeroQuotes() {
     if (quotes.length === 1) onOpenQuote?.(quotes[0]);
@@ -117,10 +119,20 @@ export default function OverviewView({
         t={t}
       />
 
-      <MostLovedPanel
+      <BookListPanel
         open={lovedPanelOpen}
         onClose={() => setLovedPanelOpen(false)}
+        title={t.overviewLovedTitle}
         books={stats.mostLoved}
+        onOpenBook={onOpenBook}
+        t={t}
+      />
+
+      <BookListPanel
+        open={finishedPanelOpen}
+        onClose={() => setFinishedPanelOpen(false)}
+        title={t.overviewFinishedListTitle}
+        books={stats.finishedBooks}
         onOpenBook={onOpenBook}
         t={t}
       />

@@ -2,7 +2,7 @@
 import { useModalA11y } from "@/lib/useModalA11y";
 import BookChip from "./BookChip";
 
-export default function MostLovedPanel({ open, onClose, books, onOpenBook, t }) {
+export default function BookListPanel({ open, onClose, title, books, onOpenBook, t }) {
   const panelRef = useModalA11y(open, onClose, { autoFocus: false });
 
   return (
@@ -19,7 +19,7 @@ export default function MostLovedPanel({ open, onClose, books, onOpenBook, t }) 
             </button>
 
             <div className="panel-section">
-              <span className="panel-section-eyebrow">{t.overviewLovedTitle}</span>
+              <span className="panel-section-eyebrow">{title}</span>
               <div className="overview-loved-list">
                 {books.map(b => (
                   <BookChip
