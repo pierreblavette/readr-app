@@ -722,6 +722,47 @@ export default function DesignSystemPage() {
                 <span className="status-badge">Roman</span>
               </div>
             </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Date badge — sizes</div>
+              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+                {[
+                  ["xs", 16, "10/600 · padding 0 6 · inline meta dense"],
+                  ["sm", 20, "12/600 · padding 0 8 · default — Started on, etc."],
+                  ["md", 24, "13/600 · padding 0 10 · prominent callout"],
+                ].map(([mod, h, use]) => (
+                  <div key={mod} className="spacing-row">
+                    <span className={`now-reading-date now-reading-date--${mod}`}>Started Apr 28</span>
+                    <span className="spacing-label" style={{ minWidth: 56 }}>--{mod}</span>
+                    <span className="spacing-use">{h}px · {use}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-label">Date badge — modifiers</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Class</th><th>Effect</th><th>Use</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component"><code>.now-reading-date</code></td>
+                      <td style={{ fontSize: "0.82rem" }}>Solid primary fill (--primary-50 / --primary-40 dark) · white text · pill · weight 600</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Default size = sm. Pair with a modifier for other scales.</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>--xs / --sm / --md</code></td>
+                      <td style={{ fontSize: "0.82rem" }}>height: 16 / 20 / 24 · font-size: 10 / 12 / 13 · padding: 0 6 / 0 8 / 0 10</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>min-width matches height for square baseline.</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Currently used in <code>NowReadingSection</code> (started date) and <code>BookPanel</code> (started date in Now-Reading state). Default size (sm) works for inline meta — bump to <code>--md</code> for prominence.
+                </div>
+              </div>
+            </div>
           </section>
 
           {/* ── BOOK CHIP ── */}
