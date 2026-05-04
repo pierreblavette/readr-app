@@ -72,7 +72,7 @@ export default function LibraryPage() {
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
     collections, createCollection, deleteCollection, deleteCollections, renameCollection,
-    addBookToCollection, addBooksToCollection, removeBookFromCollection, getBooksForCollection,
+    addBookToCollection, addBooksToCollection, removeBookFromCollection, removeBooksFromCollection, getBooksForCollection,
     activeCollection, setActiveCollection,
     quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook, exportQuotesMD, exportQuotesPDF,
     words, saveWord, deleteWord, exportWordsMD, exportWordsPDF,

@@ -35,7 +35,6 @@ export default function CollectionDetailView({
   function handleConfirmSelection(action) {
     if (action === 'delete' && selected.size > 0) {
       onRequestRemoveMany(collection, Array.from(selected));
-      exitEditMode();
     }
   }
 

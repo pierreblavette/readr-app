@@ -163,7 +163,6 @@ export default function CollectionsView({ collections, data, view, switchView, o
   function handleConfirmSelection(action) {
     if (action === 'delete' && selected.size > 0) {
       onRequestDeleteMany(Array.from(selected));
-      exitEditMode();
     }
   }
 
@@ -314,6 +313,15 @@ export default function CollectionsView({ collections, data, view, switchView, o
                 tabIndex={0}
                 onClick={() => handleCardClick(col)}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(col); } }}>
+                {editMode && (
+                  <div className="card-checkbox" aria-hidden="true">
+                    {isSelected && (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    )}
+                  </div>
+                )}
                 <CollectionCoverGrid books={books} />
                 <div className="col-card-body">
                   <div className="col-card-info">
