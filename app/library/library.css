@@ -3376,7 +3376,7 @@
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
-.sidebar.collapsed { width: 60px; padding: 0; }
+.sidebar.collapsed { width: 60px; }
 
 .sidebar-overlay {
   position: fixed;
