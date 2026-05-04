@@ -4620,7 +4620,7 @@ button.quote-book-chip {
 .overview-streak-meter {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 .overview-streak-body {
   display: flex;
