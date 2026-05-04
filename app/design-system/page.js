@@ -537,6 +537,11 @@ export default function DesignSystemPage() {
                       <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg</td>
                       <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>AddModal → Manual / Photo tab → "Mark as reading" checkbox</td>
                     </tr>
+                    <tr>
+                      <td className="token-table-component"><code>.search-row</code></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg + --between</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Search bars across My Library / Wishlist / Quotes / Dictionary / Collections (5 callsites)</td>
+                    </tr>
                   </tbody>
                 </table>
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
@@ -552,7 +557,6 @@ export default function DesignSystemPage() {
                 <ul style={{ margin: 0, paddingLeft: 20, fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
                   <li><code>.now-reading-row</code></li>
                   <li><code>.add-to-col-row</code></li>
-                  <li><code>.dictionary-saved-search-row</code></li>
                   <li><code>.sidebar-appearance-row</code></li>
                   <li><code>.overview-goal-progress-row</code></li>
                 </ul>

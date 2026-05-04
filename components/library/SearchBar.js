@@ -3,7 +3,7 @@ import ExportMenu from "@/components/library/ExportMenu";
 
 export default function SearchBar({ search, setSearch, t, editMode, setEditMode, setSelected, tab, data, exportData, exportPDF, setAddModal, view, switchView }) {
   return (
-    <div className="search-row">
+    <div className="cell-row cell-row--lg cell-row--between search-row">
       {/* Search box */}
       <div className="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

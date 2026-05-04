@@ -204,7 +204,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
           </div>
         ) : (
           <>
-            <div className="search-row dictionary-saved-search-row">
+            <div className="cell-row cell-row--lg cell-row--between search-row">
               <div className="search-box dictionary-saved-search">
                 <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>

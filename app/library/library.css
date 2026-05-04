@@ -223,13 +223,9 @@
   font-family: var(--font-fraunces), serif;
 }
 
-.search-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 40px;
-}
+/* Layout from .cell-row.cell-row--lg.cell-row--between primitive
+ * — local class only tunes gap (16 instead of primitive default 8). */
+.search-row { gap: 16px; }
 
 .books-section,
 .quotes-section {
@@ -3875,7 +3871,6 @@
   flex-direction: column;
   gap: 16px;
 }
-.dictionary-saved-search-row { min-height: 40px; }
 @media (max-width: 600px) {
   .ob-title { white-space: pre-line; }
 }
