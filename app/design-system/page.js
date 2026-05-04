@@ -8,14 +8,14 @@ import {
 } from "@/components/library/Onboarding";
 
 const NAV = {
-  Foundations: ["logo","colors","typography","spacing","shadows","strokes"],
+  Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
   Components:  ["autocomplete","badges","book-chip","btn-states","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
   Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
   "logo":"Logo","colors":"Colors","typography":"Typography",
-  "spacing":"Spacing","shadows":"Shadows & Radius","strokes":"Strokes & Borders",
+  "spacing":"Spacing","cell-row":"Cell Row","shadows":"Shadows & Radius","strokes":"Strokes & Borders",
   "buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
   "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges & Pills",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
@@ -461,6 +461,101 @@ export default function DesignSystemPage() {
                 <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Two-tier rhythm: <strong>48px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── CELL ROW ── */}
+          <section className="ds-section" id="cell-row">
+            <SectionTitle
+              title="Cell Row"
+              sub="Reusable flex row primitive for any 'label + meta/icon' pattern with a fixed-min height. Pair with a size modifier and optionally --between for justify-content: space-between."
+            />
+            <div className="ds-card">
+              <div className="ds-card-label">Sizes</div>
+              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+                {[
+                  ["xs", 20, "Parity with .sidebar-badge — inline meta"],
+                  ["sm", 24, "Compact rows — label + small icon"],
+                  ["md", 32, "Parity with .btn-sm — touch-friendly desktop"],
+                  ["lg", 40, "Parity with .btn-md / .modal-cancel — full touch target"],
+                ].map(([mod, h, use]) => (
+                  <div key={mod} className={`spacing-row`} style={{ alignItems: "stretch" }}>
+                    <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ flex: 1, paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>cell-row--{mod}</span>
+                      <span style={{ fontSize: 12, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{h}px</span>
+                    </div>
+                    <span className="spacing-use" style={{ marginLeft: 16 }}>{use}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Modifiers</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Class</th><th>Effect</th><th>Use</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component"><code>.cell-row</code></td>
+                      <td style={{ fontSize: "0.82rem" }}>display: flex · align-items: center · gap: 8 · min-width: 0</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Always pair with a size modifier.</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>--xs / --sm / --md / --lg</code></td>
+                      <td style={{ fontSize: "0.82rem" }}>min-height: 20 / 24 / 32 / 40</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Use <code>min-height</code> (not fixed) so multi-line content can grow.</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>--between</code></td>
+                      <td style={{ fontSize: "0.82rem" }}>justify-content: space-between</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>For label-left / meta-right rows.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Applied — current usage</div>
+              <div className="ds-card-body col" style={{ padding: 0 }}>
+                <table className="token-table">
+                  <thead>
+                    <tr><th>Component</th><th>Variant</th><th>Where to see it</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="token-table-component"><code>.overview-hero-label-row</code></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--sm + --between</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Overview tab → 3 hero cards (Books finished / Quotes / Words saved)</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component"><code>.modal-toggle-row</code></td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg</td>
+                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>AddModal → Manual / Photo tab → "Mark as reading" checkbox</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Local overrides (e.g. <code>.modal-toggle-row</code> keeps <code>gap: 10</code> for checkbox breathing room) are fine — primitive sets the stable axes (height, align, display), local class tunes nuances.
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-label">Migration candidates</div>
+              <div className="ds-card-body col" style={{ padding: 16, gap: 8 }}>
+                <span style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Existing rows that should migrate progressively (when the surrounding code is touched):</span>
+                <ul style={{ margin: 0, paddingLeft: 20, fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                  <li><code>.now-reading-row</code></li>
+                  <li><code>.add-to-col-row</code></li>
+                  <li><code>.dictionary-saved-search-row</code></li>
+                  <li><code>.sidebar-appearance-row</code></li>
+                  <li><code>.overview-goal-progress-row</code></li>
+                </ul>
               </div>
             </div>
           </section>
