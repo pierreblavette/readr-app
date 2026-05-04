@@ -165,14 +165,16 @@ function ReadingGoalCard({ goal, onEdit, t }) {
           {t.overviewGoalEdit}
         </button>
       </div>
-      <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
-        <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
-        <span className="overview-goal-pct">
-          {achieved ? t.overviewGoalReached : `${Math.round(goal.ratio * 100)}%`}
-        </span>
-      </div>
-      <div className="overview-goal-bar" aria-hidden="true">
-        <div className="overview-goal-bar-fill" style={{ width: `${goal.ratio * 100}%` }} />
+      <div className="overview-goal-meter">
+        <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
+          <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
+          <span className="overview-goal-pct">
+            {achieved ? t.overviewGoalReached : `${Math.round(goal.ratio * 100)}%`}
+          </span>
+        </div>
+        <div className="overview-goal-bar" aria-hidden="true">
+          <div className="overview-goal-bar-fill" style={{ width: `${goal.ratio * 100}%` }} />
+        </div>
       </div>
     </div>
   );
