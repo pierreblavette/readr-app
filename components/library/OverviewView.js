@@ -183,16 +183,17 @@ function ReadingGoalCard({ goal, onSetGoal, t }) {
           onSubmit={e => { e.preventDefault(); save(); }}
           onKeyDown={e => { if (e.key === 'Escape') { e.preventDefault(); setEditing(false); } }}
         >
-          <input
-            type="number"
-            min="1"
-            inputMode="numeric"
-            className="overview-goal-input"
-            value={draft}
-            onChange={e => setDraft(e.target.value)}
-            placeholder={t.overviewGoalPlaceholder}
-            autoFocus
-          />
+          <div className="modal-field">
+            <input
+              type="number"
+              min="1"
+              inputMode="numeric"
+              value={draft}
+              onChange={e => setDraft(e.target.value)}
+              placeholder={t.overviewGoalPlaceholder}
+              autoFocus
+            />
+          </div>
           <div className="overview-goal-form-actions">
             <button type="button" className="modal-cancel" onClick={() => setEditing(false)}>
               {t.btnCancel}
