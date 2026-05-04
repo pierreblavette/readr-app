@@ -8,7 +8,7 @@ export default function OverviewView({
   owned, quotes, words, wishlist = [],
   readingGoal, setReadingGoal,
   onOpenBook, onOpenQuote, onAddBook, onNavigate,
-  t, lang,
+  t,
 }) {
   const stats = useStats({ owned, quotes, words, readingGoal });
   const [shuffleKey, setShuffleKey] = useState(0);
@@ -104,13 +104,6 @@ export default function OverviewView({
         year={stats.goal.year}
         currentCount={stats.goal.target}
         t={t}
-      />
-
-      <HeatmapCard
-        weeks={stats.heatmap}
-        max={stats.heatmapMax}
-        t={t}
-        lang={lang}
       />
 
       <TopGenresCard genres={stats.topGenres} t={t} />
@@ -209,143 +202,6 @@ function StreakCard({ streak, t }) {
           <span className="panel-synopsis-placeholder">{t.overviewStreakHint}</span>
         </div>
       )}
-    </div>
-  );
-}
-
-function HeatmapCard({ weeks, max, t, lang }) {
-  const isEmpty = max === 0;
-
-  if (isEmpty) {
-    return (
-      <div className="overview-card overview-heatmap">
-        <div className="overview-card-head">
-          <span className="panel-section-eyebrow">{t.overviewHeatmapTitle}</span>
-        </div>
-        <span className="overview-card-empty">{t.overviewHeatmapEmpty}</span>
-      </div>
-    );
-  }
-
-  const cellSize = 12;
-  const cellGap = 3;
-  const labelHeight = 16;
-  const dayLabelWidth = 22;
-  const cols = weeks.length;
-  const rows = 7;
-  const gridW = cols * (cellSize + cellGap) - cellGap;
-  const gridH = rows * (cellSize + cellGap) - cellGap;
-  const totalW = dayLabelWidth + gridW;
-  const totalH = gridH + labelHeight;
-
-  // Day-of-week labels (Mon/Wed/Fri à la GitHub) — locale-aware.
-  // Week column rows 0..6 = Mon..Sun (computeHeatmap normalizes via
-  // dayOfWeek = (getDay() + 6) % 7, so row 0 is always Monday).
-  const monRef = new Date(2026, 0, 5); // Monday 2026-01-05
-  function dayLabelFor(rowOffset) {
-    const d = new Date(monRef);
-    d.setDate(monRef.getDate() + rowOffset);
-    return d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'short' });
-  }
-  const dayLabels = [
-    { row: 0, label: dayLabelFor(0) },
-    { row: 2, label: dayLabelFor(2) },
-    { row: 4, label: dayLabelFor(4) },
-  ];
-
-  function level(count) {
-    if (count == null) return -1;
-    if (count === 0) return 0;
-    const ratio = count / max;
-    if (ratio <= 0.25) return 1;
-    if (ratio <= 0.5) return 2;
-    if (ratio <= 0.75) return 3;
-    return 4;
-  }
-
-  function fmtDate(ts) {
-    const d = new Date(ts);
-    return d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
-  // Detect month boundaries — place a label at the column where each new month starts.
-  const monthLabels = [];
-  let lastMonth = -1;
-  weeks.forEach((days, ci) => {
-    const firstDay = new Date(days[0].ts);
-    const month = firstDay.getMonth();
-    if (month !== lastMonth) {
-      monthLabels.push({
-        x: ci * (cellSize + cellGap),
-        label: firstDay.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' }),
-      });
-      lastMonth = month;
-    }
-  });
-
-  return (
-    <div className="overview-card overview-heatmap">
-      <div className="overview-card-head">
-        <span className="panel-section-eyebrow">{t.overviewHeatmapTitle}</span>
-      </div>
-      <svg
-        className="overview-heatmap-svg"
-        viewBox={`0 0 ${totalW} ${totalH}`}
-        preserveAspectRatio="xMidYMid meet"
-        role="img"
-        aria-label={t.overviewHeatmapTitle}
-      >
-        {monthLabels.map(({ x, label }, i) => (
-          <text
-            key={`m-${i}`}
-            x={dayLabelWidth + x}
-            y={labelHeight - 5}
-            className="overview-heatmap-month"
-          >
-            {label}
-          </text>
-        ))}
-        {dayLabels.map(({ row, label }) => (
-          <text
-            key={`d-${row}`}
-            x={dayLabelWidth - 6}
-            y={labelHeight + row * (cellSize + cellGap) + cellSize - 2}
-            textAnchor="end"
-            className="overview-heatmap-day"
-          >
-            {label}
-          </text>
-        ))}
-        <g transform={`translate(${dayLabelWidth}, ${labelHeight})`}>
-          {weeks.map((days, ci) => days.map((d, ri) => {
-            const lvl = level(d.count);
-            if (lvl < 0) return null;
-            return (
-              <rect
-                key={`${ci}-${ri}`}
-                x={ci * (cellSize + cellGap)}
-                y={ri * (cellSize + cellGap)}
-                width={cellSize}
-                height={cellSize}
-                rx={2}
-                ry={2}
-                className={`overview-heatmap-cell overview-heatmap-cell--${lvl}`}
-              >
-                <title>{`${fmtDate(d.ts)}: ${d.count} ${d.count === 1 ? 'event' : 'events'}`}</title>
-              </rect>
-            );
-          }))}
-        </g>
-      </svg>
-      <div className="overview-heatmap-legend">
-        <span className="overview-heatmap-legend-label">{t.overviewHeatmapLegendLess}</span>
-        <span className="overview-heatmap-cell-static overview-heatmap-cell--0" />
-        <span className="overview-heatmap-cell-static overview-heatmap-cell--1" />
-        <span className="overview-heatmap-cell-static overview-heatmap-cell--2" />
-        <span className="overview-heatmap-cell-static overview-heatmap-cell--3" />
-        <span className="overview-heatmap-cell-static overview-heatmap-cell--4" />
-        <span className="overview-heatmap-legend-label">{t.overviewHeatmapLegendMore}</span>
-      </div>
     </div>
   );
 }

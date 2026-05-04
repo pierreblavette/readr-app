@@ -238,7 +238,6 @@ export default function LibraryPage() {
               onAddBook={() => setAddModal(true)}
               onNavigate={next => setTab(next)}
               t={t}
-              lang={lang}
             />
           </>
         )}
