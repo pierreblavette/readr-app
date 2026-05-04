@@ -240,7 +240,7 @@
 .type-meta { font-size: 0.68rem; font-family: 'SF Mono','Fira Code',monospace; color: var(--text-3); margin-top: 4px; }
 
 /* ─── SPACING ─── */
-.spacing-row { display: flex; align-items: center; gap: 16px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.spacing-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; width: 100%; border-bottom: 1px solid var(--border); }
 .spacing-row:last-child { border-bottom: none; }
 .spacing-block { background: var(--accent-bg); flex-shrink: 0; height: 20px; }
 .spacing-label { font-size: 0.857rem; font-weight: 600; color: var(--text); min-width: 40px; }
