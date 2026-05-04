@@ -19,6 +19,12 @@
 .btn-sm svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
 .btn-md { height: 40px; padding: 0 20px; border-radius: 8px; font-size: 15px; gap: 8px; }
 .btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
+/* Asymmetric padding when an icon sits beside text — reduce padding
+ * on the icon side so the visual weight matches the text side. */
+.btn-sm:has(svg:first-child:not(:last-child)) { padding-left: 12px; }
+.btn-sm:has(svg:last-child:not(:first-child)) { padding-right: 12px; }
+.btn-md:has(svg:first-child:not(:last-child)) { padding-left: 12px; }
+.btn-md:has(svg:last-child:not(:first-child)) { padding-right: 12px; }
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
 .btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
