@@ -4497,7 +4497,7 @@ button.quote-book-chip {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 12px;
   padding: 20px;
   background: var(--card);
   border: 1.5px solid var(--border-subtle);
