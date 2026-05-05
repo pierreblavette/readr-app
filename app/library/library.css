@@ -3049,9 +3049,19 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.import-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.import-preview-header { display: flex; justify-content: space-between; align-items: center; }
 .import-preview-title { font-size: 13px; font-weight: 600; color: var(--text-3); }
-.import-preview-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+.import-preview-list {
+  width: 100%;
+  height: clamp(240px, 45dvh, 400px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 8px;
+}
 .import-preview-item {
   display: flex;
   align-items: center;
