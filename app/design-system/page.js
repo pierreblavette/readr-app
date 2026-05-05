@@ -1154,7 +1154,7 @@ export default function DesignSystemPage() {
                     {[
                       ["Class", ".modal-info-box (+ .modal-info-box-strong for highlight)"],
                       ["Background", "--primary-5"],
-                      ["Border", "1.5px solid --primary-20 (light) · --primary-30 (dark)"],
+                      ["Border", "1.5px solid rgba(73,89,230,0.2) — uniform light/dark"],
                       ["Border-radius", "8px"],
                       ["Padding", "8px 16px"],
                       ["Gap (icon ↔ text)", "16px"],
