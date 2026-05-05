@@ -3215,7 +3215,11 @@
      and aligns left after wrap (no auto-margin push) — avoids the
      "lonely button on row 2" rendering when FR labels make the first
      row wrap. */
-  .panel-header-share { padding: 0; width: 40px; justify-content: center; margin-left: 0; }
+  /* !important needed: the generic .btn-md:has(svg:first-child:not(:last-child))
+   * asymmetric padding rule has higher specificity (0,0,3,1) and would set
+   * padding-left: 12 here, off-centering the icon when the label is hidden
+   * via display: none (label is still in DOM, so :has() can't detect it). */
+  .panel-header-share { padding: 0 !important; width: 40px; justify-content: center; margin-left: 0; }
   .panel-header-share-label { display: none; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
