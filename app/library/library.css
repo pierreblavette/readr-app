@@ -3049,6 +3049,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.import-preview { display: flex; flex-direction: column; gap: 12px; }
 .import-preview-header { display: flex; justify-content: space-between; align-items: center; }
 .import-preview-title { font-size: 13px; font-weight: 600; color: var(--text-3); }
 .import-preview-list {
