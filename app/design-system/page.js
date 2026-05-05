@@ -118,7 +118,7 @@ export default function DesignSystemPage() {
     return (
       <div className="dropdown-wrap" ref={ref}>
         <button className="btn btn-outline btn-md" onClick={() => setOpen(o => !o)} style={{ gap: 8 }}>
-          {label}
+          <span>{label}</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ width: 13, height: 13, transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}><path d="M6 9l6 6 6-6"/></svg>
         </button>
         {open && (
