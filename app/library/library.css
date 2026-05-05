@@ -2391,6 +2391,19 @@
 [data-theme="dark"] .modal-info-box.modal-info-box--alert {
   background: rgba(245, 158, 11, 0.12);
 }
+
+/* Success variant — green palette */
+.modal-info-box.modal-info-box--success {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.2);
+  align-items: center;
+}
+.modal-info-box.modal-info-box--success span { white-space: pre-line; }
+.modal-info-box.modal-info-box--success svg { color: #16A34A; }
+[data-theme="dark"] .modal-info-box.modal-info-box--success {
+  background: rgba(34, 197, 94, 0.12);
+}
+[data-theme="dark"] .modal-info-box.modal-info-box--success svg { color: #4ADE80; }
 [data-theme="dark"] .modal-info-box.modal-info-box--alert svg { color: #FBBF24; }
 .modal-info-box svg {
   width: 16px;

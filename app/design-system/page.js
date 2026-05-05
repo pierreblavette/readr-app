@@ -1144,7 +1144,7 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Message box — 3 variants (info / alert / critical)</div>
+              <div className="ds-card-label">Message box — 4 variants (info / alert / success / critical)</div>
               <div className="ds-card-body col" style={{ gap: 16 }}>
                 <div className="modal-info-box">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1157,6 +1157,12 @@ export default function DesignSystemPage() {
                     <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
                   </svg>
                   <span><strong>Alert</strong> — warning, soft amber. Limit reached, action paused, etc.</span>
+                </div>
+                <div className="modal-info-box modal-info-box--success" role="status">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  <span><strong>Success</strong> — confirmation, soft green. Saved, completed, action OK.</span>
                 </div>
                 <div className="scan-alert" role="alert">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1184,6 +1190,13 @@ export default function DesignSystemPage() {
                       <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(245,158,11, 0.08/0.12)</td>
                       <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(245,158,11, 0.2)</td>
                       <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#B45309 / #FBBF24</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Success</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.modal-info-box.modal-info-box--success</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(34,197,94, 0.08/0.12)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(34,197,94, 0.2)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#16A34A / #4ADE80</td>
                     </tr>
                     <tr>
                       <td className="token-table-component">Critical</td>
