@@ -2404,6 +2404,9 @@
   letter-spacing: -0.02em;
   color: var(--text);
   font-family: inherit;
+  /* Reserve space for the absolute .modal-close (40px + 16px right offset
+   * minus 24px modal padding-right = 32px minimum, +16 breathing). */
+  padding-right: 48px;
 }
 
 .modal-close {
