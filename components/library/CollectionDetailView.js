@@ -71,12 +71,40 @@ export default function CollectionDetailView({
     };
   }, [editMenuOpen]);
 
-  const filtered = search.trim()
-    ? books.filter(b =>
-        b.title.toLowerCase().includes(search.toLowerCase()) ||
-        b.author.toLowerCase().includes(search.toLowerCase())
-      )
-    : books;
+  function normalize(str) {
+    return (str || '').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/^(l'|le |la |les |un |une |des |the )/i, '');
+  }
+  const filtered = (() => {
+    let list = [...books];
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter(b =>
+        b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
+      );
+    }
+    list.sort((a, b) => {
+      let cmp;
+      if (sortCol === 'dateAdded') {
+        cmp = (a.id || 0) - (b.id || 0);
+      } else if (sortCol === 'year') {
+        const ya = a.year ? parseInt(a.year) : 9999;
+        const yb = b.year ? parseInt(b.year) : 9999;
+        cmp = ya !== yb ? ya - yb : normalize(a.title).localeCompare(normalize(b.title), 'fr');
+      } else if (sortCol === 'author') {
+        const la = a.author.split(' ').pop() || a.author;
+        const lb = b.author.split(' ').pop() || b.author;
+        cmp = normalize(la).localeCompare(normalize(lb), 'fr');
+      } else if (sortCol === 'genre') {
+        cmp = (a.genre || '').localeCompare(b.genre || '', 'fr');
+      } else {
+        cmp = normalize(a.title).localeCompare(normalize(b.title), 'fr');
+      }
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+    return list;
+  })();
 
   const resultInfo = search.trim()
     ? t.resultQuery(filtered.length, books.length)
