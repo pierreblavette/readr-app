@@ -2085,14 +2085,14 @@ function handleDeleteConfirm(payload) {
             ].map(({ key, label }) => (
               <div className="ds-card" key={key}>
                 <div className="ds-card-label">Photo / AI — {label}</div>
-                <div className="ds-card-body col" style={{ gap: 0 }}>
+                <div className="ds-card-body col" style={{ gap: 16 }}>
                   <UploadBoxDemo state={key} variant="photo" />
                   {key === "error" && (
-                    <div className="scan-alert" style={{ width: "40%" }}>
+                    <div className="scan-alert" role="alert" style={{ width: "40%" }}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                       </svg>
-                      No books detected. Try a clearer photo with visible titles.
+                      <span>No books detected. Try a clearer photo with visible titles.</span>
                     </div>
                   )}
                 </div>
