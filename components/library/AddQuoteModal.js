@@ -310,7 +310,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
 
           {/* ── Photo tab ── */}
           {inputMode === 'photo' && photoState === 'idle' && (
-            <>
+            <div className="modal-photo-block">
               <input ref={fileRef} type="file" accept="image/*"
                 style={{ display: 'none' }} onChange={handlePhotoChange} />
               <GradientDropzone onClick={() => fileRef.current?.click()} gradientId="quoteGradBorder">
@@ -323,14 +323,14 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                 <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
               </GradientDropzone>
               {scanError && (
-                <div className="scan-alert">
+                <div className="scan-alert" role="alert">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
-                  {scanError}
+                  <span>{scanError}</span>
                 </div>
               )}
-            </>
+            </div>
           )}
 
           {inputMode === 'photo' && photoState === 'scanning' && (

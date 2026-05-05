@@ -3090,16 +3090,29 @@
 
 .import-error { color: #ef4444; font-size: 13px; margin-top: 8px; }
 
+/* Mirrors .modal-info-box.--alert visual treatment but in destructive
+ * (red) palette — same paddings, border, radius, typography. */
 .scan-alert {
   display: flex; align-items: center; gap: 16px;
-  padding: 8px 16px; border-radius: 10px;
-  background: rgba(239,68,68,0.08); border: none;
-  color: var(--text); font-size: 14px; line-height: 1.4;
-  margin-top: 16px;
+  padding: 8px 16px;
+  background: rgba(239,68,68,0.08);
+  border: 1.5px solid rgba(239,68,68,0.4);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px; font-weight: 500; line-height: 1.5;
 }
-[data-theme="dark"] .scan-alert { background: rgba(239,68,68,0.12); }
+.scan-alert span { white-space: pre-line; }
+[data-theme="dark"] .scan-alert {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.5);
+}
 .scan-alert svg { flex-shrink: 0; width: 16px; height: 16px; color: #dc2626; }
 [data-theme="dark"] .scan-alert svg { color: #f87171; }
+
+/* Wrapper for dropzone + scan-alert in photo capture flows
+ * (e.g. AddQuoteModal). Tighter internal grouping (16) vs the
+ * modal-fields default (24). */
+.modal-photo-block { display: flex; flex-direction: column; gap: 16px; }
 
 /* Change file button (post-import) */
 .import-change-file {
