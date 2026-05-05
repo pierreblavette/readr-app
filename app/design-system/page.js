@@ -9,14 +9,14 @@ import {
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
-  Components:  ["autocomplete","badges","book-chip","btn-states","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
+  Components:  ["autocomplete","badges","book-chip","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented","sort-menu","theme-toggle","view-toggle"],
   Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
   "logo":"Logo","colors":"Colors","typography":"Typography",
   "spacing":"Spacing","cell-row":"Cell Row","shadows":"Shadows & Radius","strokes":"Strokes & Borders",
-  "buttons":"Buttons","btn-states":"Button States","dropdown":"Dropdown Menu",
+  "buttons":"Buttons","dropdown":"Dropdown Menu",
   "inputs":"Inputs","segmented":"Segmented Control","view-toggle":"View Toggle","badges":"Badges",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
   "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu",
@@ -39,15 +39,35 @@ export default function DesignSystemPage() {
   }, [theme]);
 
   useEffect(() => {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
-    }, { threshold: 0.3 });
-    Object.values(NAV).flat().forEach(id => {
-      const el = document.getElementById(id);
-      if (el) obs.observe(el);
-    });
-    return () => obs.disconnect();
+    const ids = Object.values(NAV).flat();
+
+    function onScroll() {
+      const scrollY = window.scrollY + 120;
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) current = id;
+        else break;
+      }
+      setActive(current);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const item = document.querySelector('.sidebar-item.active');
+    const nav = item?.closest('.sidebar-nav');
+    if (!item || !nav) return;
+    const itemRect = item.getBoundingClientRect();
+    const navRect = nav.getBoundingClientRect();
+    if (itemRect.top < navRect.top || itemRect.bottom > navRect.bottom) {
+      const offset = itemRect.top - navRect.top;
+      nav.scrollTop += offset - navRect.height / 2 + itemRect.height / 2;
+    }
+  }, [active]);
 
   const [tabActive, setTabActive]           = useState("Library");
   const [viewActive, setViewActive]         = useState("grid");
@@ -134,20 +154,22 @@ export default function DesignSystemPage() {
     );
   }
 
-  function SectionTitle({ title, sub }) {
+  function DSSection({ id, title, sub, children }) {
     return (
-      <>
-        <h2 className="ds-section-title">{title}</h2>
-        {sub && <p className="ds-section-sub">{sub}</p>}
-        <div className="ds-divider" />
-      </>
+      <section className="ds-section" id={id}>
+        <div className="ds-section-header">
+          <h2 className="ds-section-title">{title}</h2>
+          {sub && <p className="ds-section-sub">{sub}</p>}
+        </div>
+        <div className="ds-section-body">{children}</div>
+      </section>
     );
   }
 
   function DSCard({ label, children, tokens }) {
     return (
       <div className="ds-card">
-        {label && <div className="ds-card-label">{label}</div>}
+        {label && <div className="ds-card-head">{label}</div>}
         <div className="ds-card-body">{children}</div>
         {tokens && (
           <div className="ds-tokens">
@@ -159,76 +181,84 @@ export default function DesignSystemPage() {
     );
   }
 
-  function ColorSwatch({ bg, title, token, light, dark }) {
+  function Swatch({ bg, title, token, light, dark, size = "md", anchor = false }) {
+    const value = theme === "dark" ? (dark || light) : (light || dark);
     return (
-      <div className="color-swatch">
-        <div className="color-swatch-block" style={{ background: bg, borderBottom: "1px solid var(--border)" }} />
-        <div className="color-swatch-info">
-          <div className="color-swatch-title">{title}</div>
-          <div className="ds-token-name">{token}</div>
-          {light && <div className="ds-token-val">{light}</div>}
-          {dark  && <div className="ds-token-val">{dark}</div>}
+      <div className={`ds-swatch${size === "sm" ? " ds-swatch--sm" : ""}`}>
+        <div className={`ds-swatch-block${anchor ? " is-anchor" : ""}`} style={{ background: bg, borderBottom: "1px solid var(--border-subtle)" }} />
+        <div className="ds-swatch-info">
+          {title && <div className="ds-swatch-title">{title}</div>}
+          {(token || value) && (
+            <div className="ds-swatch-tokens">
+              {token && <div className="ds-token-name">{token}</div>}
+              {value && <div className="ds-token-val">{value}</div>}
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ background: "var(--bg)", minHeight: "100vh" }}>
-      {/* HEADER */}
-      <header className="ds-header">
-        <div className="ds-header-inner">
-          <Link href="/" className="ds-logo">
-            readr<span className="ds-logo-sep">/</span>
-            <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 400, fontSize: "0.857rem", color: "var(--text-3)" }}>Design System</span>
-          </Link>
-          <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
-            <span className="toggle-thumb-ds">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            </span>
-          </button>
-        </div>
-      </header>
-
-      <div className="ds-wrap">
+    <div className="app-root">
+      <div className="page-shell">
         {/* SIDEBAR */}
-        <nav className="ds-nav">
-          {Object.entries(NAV).map(([section, ids]) => (
-            <div key={section}>
-              <div className="ds-nav-section">{section}</div>
-              {ids.map(id => (
-                <button key={id} className={`ds-nav-link${active === id ? " active" : ""}`} onClick={() => scrollTo(id)}>
-                  {NAV_LABELS[id]}
-                </button>
-              ))}
+        <aside className="sidebar">
+          <div className="sidebar-logo">
+            <Link href="/" className="logo">readr</Link>
+          </div>
+          <nav className="sidebar-nav">
+            {Object.entries(NAV).map(([section, ids]) => (
+              <div key={section} className="sidebar-section">
+                <div className="sidebar-section-head sidebar-section-head--no-action">
+                  <span className="sidebar-section-label">{section}</span>
+                </div>
+                {ids.map(id => (
+                  <button key={id} className={`sidebar-item${active === id ? " active" : ""}`} onClick={() => scrollTo(id)}>
+                    <span className="sidebar-label">{NAV_LABELS[id]}</span>
+                  </button>
+                ))}
+              </div>
+            ))}
+          </nav>
+          <div className="sidebar-bottom">
+            <div className="sidebar-appearance-row cell-row cell-row--lg cell-row--between">
+              <span className="sidebar-appearance-label">Appearance</span>
+              <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
+                <span className="toggle-thumb-ds">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </span>
+              </button>
             </div>
-          ))}
-        </nav>
+          </div>
+        </aside>
 
-        {/* CONTENT */}
-        <main className="ds-content">
+        <main className="page-main">
+          <div className="main-wrap">
+
+            {/* CONTENT */}
+            <div className="ds-content">
 
           {/* INTRO */}
-          <div style={{ marginBottom: 64 }}>
-            <p style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 12 }}>Design System v1</p>
-            <h1 style={{ fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 16, fontFamily: "var(--font-jakarta)" }}>Design System</h1>
-            <p style={{ fontSize: "1rem", color: "var(--text-2)", maxWidth: 480, lineHeight: 1.65 }}>
-              Complete reference for tokens, components and patterns. Native light/dark themes via <code style={{ fontSize: "0.857rem", background: "var(--bg3)", padding: "2px 6px", borderRadius: 4 }}>data-theme</code>.
+          <div className="ds-intro">
+            <h1 className="page-title">Design System</h1>
+            <p className="page-sub">
+              Complete reference for tokens, components and patterns. Native light/dark themes via <code style={{ fontSize: 12, background: "var(--bg3)", padding: "2px 6px", borderRadius: 4 }}>data-theme</code>.
             </p>
           </div>
 
           {/* ── LOGO ── */}
-          <section className="ds-section" id="logo">
-            <SectionTitle title="Logo" sub="Wordmark only — Fraunces Regular. No icon, no bold version, no font substitution." />
+          <DSSection id="logo" title="Logo" sub="Wordmark only — Fraunces Regular. No icon, no bold version, no font substitution.">
             <div className="ds-card">
-              <div className="ds-card-label">Contextes d'utilisation</div>
-              <div className="ds-card-body col">
+              <div className="ds-card-head">Contextes d'utilisation</div>
+              <div className="ds-card-body col padded">
                 <div className="logo-bg-row">
-                  {[["logo-bg-page","#1B1B1B"],["logo-bg-white","#1B1B1B"],["logo-bg-dark","#ffffff"],["logo-bg-accent","#ffffff"]].map(([cls,col],i) => (
+                  {[["logo-bg-page","#1B1B1B"],["logo-bg-dark","#ffffff"],["logo-bg-accent","#ffffff"]].map(([cls,col],i) => (
                     <div key={i} className={`logo-bg ${cls}`}>
-                      <span className="logo-wordmark" style={{ fontSize: 24, color: col }}>readr</span>
+                      <span className="logo-wordmark" style={{ color: col }}>readr</span>
                     </div>
                   ))}
+                  <div className="logo-bg-fill" aria-hidden="true" />
                 </div>
                 <div className="logo-spec-row">
                   {[["Font","Fraunces"],["Weight","400"],["Letter-spacing","-0.02em"],["Default color","#1B1B1B"],["On dark","#FFFFFF"]].map(([l,v]) => (
@@ -241,8 +271,8 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Sizes</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+              <div className="ds-card-head">Sizes</div>
+              <div className="ds-card-body col">
                 {[[40,"display / splash screen"],[28,"page header"],[24,"nav (reference size)"],[14,"footer / minimum size"]].map(([sz, use]) => (
                   <div key={sz} className="type-sample">
                     <span className="logo-wordmark" style={{ fontSize: sz, color: "var(--text)" }}>readr</span>
@@ -252,131 +282,164 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Usage rules</div>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+              <div className="ds-card-head">Usage rules</div>
+              <div className="ds-card-body col padded" style={{ gap: 8 }}>
+                <p>
                   Always lowercase — <strong>readr</strong>, never <em>Readr</em> or <em>READR</em>. Do not modify the font, weight or letter-spacing. Minimum size: 14px. On colored backgrounds, use white only (#FFFFFF).
                 </p>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── COLORS ── */}
-          <section className="ds-section" id="colors">
-            <SectionTitle title="Colors" sub="CSS tokens defined on :root and [data-theme='dark']" />
+          <DSSection id="colors" title="Colors" sub="CSS tokens defined on :root and [data-theme='dark']">
 
-            <p className="color-section-label">Surfaces</p>
-            <div className="color-grid">
-              <ColorSwatch bg="var(--bg)" title="Page" token="--bg" light="#FEFEFF" dark="#0F0F0F" />
-              <ColorSwatch bg="var(--bg3)" title="Subtle" token="--bg3" light="#F7F7F7" dark="#1A1A1A" />
-              <ColorSwatch bg="var(--card)" title="Card" token="--card" light="#FFFFFF" dark="#1E1E1E" />
-            </div>
-
-            <p className="color-section-label">Strokes</p>
-            <div className="color-grid">
-              <ColorSwatch bg="var(--border-subtle)" title="Subtle" token="--border-subtle" light="#EFEFEF" dark="#2E2E2E" />
-              <ColorSwatch bg="var(--border)" title="Strong" token="--border" light="#E0E0E0" dark="#2E2E2E" />
-            </div>
-            <div className="ds-card" style={{ marginBottom: 24 }}>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <strong>--border-subtle</strong> — default stroke for all components (buttons, inputs, cards, containers) and most dividers (row separators, section separators). 1.5px on components, 1px on dividers.
-                </p>
-                <p style={{ fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <strong>--border</strong> — reserved for stronger visual affordances where a subtle stroke isn't enough : <code>.panel-spinner</code> ring (2px), <code>.import-dropzone</code> dashed border (2px), <code>.ob-dot</code> background. Do not use for regular component strokes.
-                </p>
-                <p style={{ fontSize: "0.82rem", color: "var(--text-3)", lineHeight: 1.7 }}>
-                  In dark mode both tokens resolve to <code>#2E2E2E</code> — divergence exists only in light mode.
-                </p>
+            <div className="ds-card">
+              <div className="ds-card-head">Surfaces</div>
+              <div className="ds-card-body">
+                <div className="ds-swatch-grid">
+                  <Swatch bg="var(--bg)" title="Page" token="--bg" light="#FEFEFF" dark="#0F0F0F" />
+                  <Swatch bg="var(--bg3)" title="Subtle" token="--bg3" light="#F7F7F7" dark="#1A1A1A" />
+                  <Swatch bg="var(--card)" title="Card" token="--card" light="#FFFFFF" dark="#1E1E1E" />
+                </div>
               </div>
             </div>
 
-            <p className="color-section-label">Accent</p>
-            <div className="color-grid">
-              <ColorSwatch bg="var(--accent)" title="Primary" token="--accent / --primary-50" light="#4959E6" dark="#7B89F8" />
-              <ColorSwatch bg="var(--accent-bg)" title="Primary Subtle" token="--accent-bg" light="rgba(73,89,230,.08)" />
-              <ColorSwatch bg="linear-gradient(135deg,var(--ai-from),var(--ai-to))" title="AI Gradient" token="--ai-from / --ai-to" light="#F67BF8 → #4959E6" dark="→ #7B89F8" />
-              <ColorSwatch bg="var(--teal)" title="Secondary" token="--teal" light="#00A699" dark="#00C9BE" />
-              <ColorSwatch bg="var(--teal-bg)" title="Secondary Subtle" token="--teal-bg" light="rgba(0,166,153,.08)" />
-            </div>
-
-            <p className="color-section-label">Text</p>
-            <div className="color-grid">
-              <ColorSwatch bg="var(--text)" title="Default" token="--text" light="#222" dark="#F0F0F0" />
-              <ColorSwatch bg="var(--text-2)" title="Secondary" token="--text-2" light="#555" dark="#909090" />
-              <ColorSwatch bg="var(--text-3)" title="Muted" token="--text-3" light="#777" dark="#555" />
-            </div>
-
-            <p className="palette-section-label">Primary scale</p>
-            <div className="palette-grid">
-              {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
-                <div key={step} className="palette-chip">
-                  <div className={`palette-chip-swatch${step==="50★"?" anchor":""}`} style={{ background: `var(--primary-${step.replace("★","")})` }} />
-                  <div className="palette-chip-meta">
-                    <span className="palette-chip-step">{step}</span>
-                    <span className="palette-chip-hex">{hex}</span>
-                  </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Strokes</div>
+              <div className="ds-card-body col padded">
+                <div className="ds-swatch-grid">
+                  <Swatch bg="var(--border-subtle)" title="Subtle" token="--border-subtle" light="#EFEFEF" dark="#2E2E2E" />
+                  <Swatch bg="var(--border)" title="Strong" token="--border" light="#E0E0E0" dark="#2E2E2E" />
                 </div>
-              ))}
-            </div>
-            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 6, marginTop: 2 }}>--primary-N · ★ anchor = --accent (#4959E6)</div>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-2)", lineHeight: 1.6, marginBottom: 8 }}>
-              <strong>--primary-3</strong> (#FAFAFF) — ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below --primary-5 so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at --primary-5) stay visible without blending into the hovered card.
-            </div>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-2)", lineHeight: 1.6, marginBottom: 28 }}>
-              <strong>Dark mode override</strong> — --primary-3, --primary-5 and --primary-10 resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <code>var(--card)</code> #1E1E1E to preserve visual rendering: <code>--primary-3</code>=#222432 (card hover), <code>--primary-5</code>=#232536 (button bg), <code>--primary-10</code>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <code>.list-row</code> hover (parent <code>.books-list</code> on --card) looked different from <code>.now-reading-card</code> hover (no parent bg, mixed with --bg).
+                <div className="ds-token-block">
+                  <div className="ds-token-name">--border-subtle</div>
+                  <p>default stroke for all components (buttons, inputs, cards, containers) and most dividers (row separators, section separators). 1.5px on components, 1px on dividers.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">--border</div>
+                  <p>reserved for stronger visual affordances where a subtle stroke isn't enough : <code>.panel-spinner</code> ring (2px), <code>.import-dropzone</code> dashed border (2px), <code>.ob-dot</code> background. Do not use for regular component strokes.</p>
+                </div>
+                <div className="ds-token-block">
+                  <p>In dark mode both tokens resolve to <code>#2E2E2E</code> — divergence exists only in light mode.</p>
+                </div>
+              </div>
             </div>
 
-            <p className="palette-section-label">Neutrals — Dark (tinted primary)</p>
-            <div className="palette-grid on-white">
-              {["70","80","100"].map(n => (
-                <div key={n} className="palette-chip">
-                  <div className="palette-chip-swatch" style={{ background: `var(--dark-${n})` }} />
-                  <div className="palette-chip-meta">
-                    <span className="palette-chip-step">{n}</span>
-                    <span className="palette-chip-hex">{n==="100"?"#0D0F1A":`${n}%`}</span>
-                  </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Accent</div>
+              <div className="ds-card-body">
+                <div className="ds-swatch-grid">
+                  <Swatch bg="var(--accent)" title="Primary" token="--accent / --primary-50" light="#4959E6" dark="#7B89F8" />
+                  <Swatch bg="var(--accent-bg)" title="Primary Subtle" token="--accent-bg" light="rgba(73,89,230,.08)" />
+                  <Swatch bg="linear-gradient(135deg,var(--ai-from),var(--ai-to))" title="AI Gradient" token="--ai-from / --ai-to" light="#F67BF8 → #4959E6" dark="→ #7B89F8" />
+                  <Swatch bg="var(--teal)" title="Secondary" token="--teal" light="#00A699" dark="#00C9BE" />
+                  <Swatch bg="var(--teal-bg)" title="Secondary Subtle" token="--teal-bg" light="rgba(0,166,153,.08)" />
                 </div>
-              ))}
+              </div>
             </div>
-            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 28, marginTop: 2 }}>--dark-N · base #0D0F1A · only the steps actually used in the codebase</div>
 
-            <p className="palette-section-label">Neutrals — Light (tinted primary)</p>
-            <div className="palette-grid on-dark-bg">
-              {["20","90"].map(n => (
-                <div key={n} className="palette-chip">
-                  <div className="palette-chip-swatch" style={{ background: `var(--light-${n})` }} />
-                  <div className="palette-chip-meta">
-                    <span className="palette-chip-step">{n}</span>
-                    <span className="palette-chip-hex">{`${n}%`}</span>
-                  </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Text</div>
+              <div className="ds-card-body">
+                <div className="ds-swatch-grid">
+                  <Swatch bg="var(--text)" title="Default" token="--text" light="#222" dark="#F0F0F0" />
+                  <Swatch bg="var(--text-2)" title="Secondary" token="--text-2" light="#555" dark="#909090" />
+                  <Swatch bg="var(--text-3)" title="Muted" token="--text-3" light="#777" dark="#555" />
                 </div>
-              ))}
+              </div>
             </div>
-            <div style={{ fontSize: "0.65rem", color: "var(--text-3)", fontFamily: "monospace", marginBottom: 8, marginTop: 2 }}>--light-N · base #F5F6FF · only the steps actually used in the codebase</div>
-          </section>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Primary scale</div>
+              <div className="ds-card-body col padded">
+                <div className="palette-grid">
+                {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
+                  <Swatch
+                    key={step}
+                    size="sm"
+                    anchor={step === "50★"}
+                    bg={`var(--primary-${step.replace("★","")})`}
+                    title={step}
+                    token={`--primary-${step.replace("★","")}`}
+                    light={hex}
+                  />
+                ))}
+                </div>
+                <div className="ds-token-block">
+                  <p>--primary-N · ★ anchor = --accent (#4959E6)</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">--primary-3 (#FAFAFF)</div>
+                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below --primary-5 so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at --primary-5) stay visible without blending into the hovered card.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Dark mode override</div>
+                  <p>--primary-3, --primary-5 and --primary-10 resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <code>var(--card)</code> #1E1E1E to preserve visual rendering: <code>--primary-3</code>=#222432 (card hover), <code>--primary-5</code>=#232536 (button bg), <code>--primary-10</code>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <code>.list-row</code> hover (parent <code>.books-list</code> on --card) looked different from <code>.now-reading-card</code> hover (no parent bg, mixed with --bg).</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Neutrals — Dark (tinted primary)</div>
+              <div className="ds-card-body col padded">
+                <div className="palette-grid on-white">
+                {["70","80","100"].map(n => (
+                  <Swatch
+                    key={n}
+                    size="sm"
+                    bg={`var(--dark-${n})`}
+                    title={n}
+                    token={`--dark-${n}`}
+                    light={n==="100"?"#0D0F1A":`${n}%`}
+                  />
+                ))}
+                </div>
+                <p>--dark-N · base #0D0F1A · only the steps actually used in the codebase</p>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Neutrals — Light (tinted primary)</div>
+              <div className="ds-card-body col padded">
+                <div className="palette-grid on-dark-bg">
+                {["20","90"].map(n => (
+                  <Swatch
+                    key={n}
+                    size="sm"
+                    bg={`var(--light-${n})`}
+                    title={n}
+                    token={`--light-${n}`}
+                    light={`${n}%`}
+                  />
+                ))}
+                </div>
+                <p>--light-N · base #F5F6FF · only the steps actually used in the codebase</p>
+              </div>
+            </div>
+          </DSSection>
 
           {/* ── TYPOGRAPHY ── */}
-          <section className="ds-section" id="typography">
-            <SectionTitle title="Typography" sub="Base : 14px — 1rem = 14px · 9-tier canonical scale (28/20/18/16/15/14/13/12/11/10)" />
+          <DSSection id="typography" title="Typography" sub="Base : 14px — 1rem = 14px · 9-tier canonical scale (28/20/18/16/15/14/13/12/11/10)">
             <div className="ds-card">
-              <div className="ds-card-label">Plus Jakarta Sans — 9-tier scale</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+              <div className="ds-card-head">Plus Jakarta Sans — 9-tier scale</div>
+              <div className="ds-card-body col">
                 {[
-                  [20, "1.43rem", "800", "Hero onboarding — .ob-title (exception, marketing only)"],
-                  [18, "1.29rem", "700", "Empty state title — .empty-title (off-grid, pairs with icon 96)"],
-                  [16, "1.14rem", "500", "Content tier — synopsis, quotes, cast names, ob-desc"],
-                  [16, "1.14rem", "700", "Content tier featured — .now-reading-title"],
-                  [15, "1.07rem", "600", "Body / interactive — .btn-md, inputs, card titles, dropdown items"],
-                  [14, "1rem",    "500", "Metadata — .book-meta, panel-meta, see-more, autocomplete sub"],
-                  [13, "0.93rem", "500", "Hint / eyebrow / error — form labels, dropzone-sub, chip-author"],
-                  [12, "0.86rem", "500", "Compact secondary — .btn-sm, captions, now-reading book-meta"],
-                  [11, "0.79rem", "700", "Eyebrow uppercase 700 — .panel-section-eyebrow (tracking 0.08em)"],
-                  [10, "0.71rem", "700", "Tiny badge — .badge primary (notification dot)"],
-                ].map(([px, rem, weight, use]) => (
-                  <div key={use + px + weight} className="type-sample">
+                  [20, "1.43rem", "800", "Hero onboarding", ".ob-title (exception, marketing only)"],
+                  [18, "1.29rem", "700", "Empty state title", ".empty-title (off-grid, pairs with icon 96)"],
+                  [16, "1.14rem", "500", "Content tier", "synopsis, quotes, cast names, ob-desc"],
+                  [16, "1.14rem", "700", "Content tier featured", ".now-reading-title"],
+                  [15, "1.07rem", "600", "Body / interactive", ".btn-md, inputs, card titles, dropdown items"],
+                  [14, "1rem",    "500", "Metadata", ".book-meta, panel-meta, see-more, autocomplete sub"],
+                  [13, "0.93rem", "500", "Hint / eyebrow / error", "form labels, dropzone-sub, chip-author"],
+                  [12, "0.86rem", "500", "Compact secondary", ".btn-sm, captions, now-reading book-meta"],
+                  [11, "0.79rem", "700", "Eyebrow uppercase 700", ".panel-section-eyebrow (tracking 0.08em)"],
+                  [10, "0.71rem", "700", "Tiny badge", ".badge primary (notification dot)"],
+                ].map(([px, rem, weight, label, detail]) => (
+                  <div key={label + px + weight} className="type-sample">
                     <div className="type-sample-preview">
-                      <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{use}</div>
+                      <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{label}</div>
+                      {detail && <div className="ds-token-name">{detail}</div>}
                     </div>
                     <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
@@ -384,33 +447,33 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Fraunces — display + serif</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+              <div className="ds-card-head">Fraunces — display + serif</div>
+              <div className="ds-card-body col">
                 {[
-                  [48, "3.43rem", "500", "Heading display"],
-                  [36, "2.57rem", "300", "Heading XL"],
-                  [28, "2rem",    "500", "Hero panel — .panel-title"],
-                  [24, "1.71rem", "500", "Heading LG"],
-                  [19, "1.36rem", "400", "Logo nav"],
-                  [14, "1rem",    "400", "Logo footer / minimum"],
-                ].map(([px, rem, weight, use]) => (
-                  <div key={use} className="type-sample">
+                  [48, "3.43rem", "500", "Heading display", ".h-display (reserved — landing hero)"],
+                  [36, "2.57rem", "300", "Heading XL", ".h-xl (reserved — landing)"],
+                  [28, "2rem",    "500", "Hero panel", ".panel-title"],
+                  [24, "1.71rem", "500", "Heading LG", ".h-lg (reserved — landing)"],
+                  [19, "1.36rem", "400", "Logo nav", ".logo-nav (reserved)"],
+                  [14, "1rem",    "400", "Logo footer", ".logo-min (reserved — minimum size)"],
+                ].map(([px, rem, weight, label, detail]) => (
+                  <div key={label} className="type-sample">
                     <div className="type-sample-preview">
-                      <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{use}</div>
+                      <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{label}</div>
+                      {detail && <div className="ds-token-name">{detail}</div>}
                     </div>
                     <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
                 ))}
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── SPACING ── */}
-          <section className="ds-section" id="spacing">
-            <SectionTitle title="Spacing" sub="4px base scale. Main values used across the interface." />
+          <DSSection id="spacing" title="Spacing" sub="4px base scale. Main values used across the interface.">
             <div className="ds-card">
-              <div className="ds-card-label">Scale</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+              <div className="ds-card-head">Scale</div>
+              <div className="ds-card-body col">
                 {[
                   [2,"0.125rem","Micro gap (badge)"],
                   [4,"0.286rem","Tight gap"],
@@ -434,46 +497,32 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Page rhythm — applied scale</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Container</th><th>Gap</th><th>Separates</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component"><code>.main-wrap</code></td>
-                      <td style={{ fontFamily: "monospace" }}>48px</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Top-level page blocks — page-title, search-row, content section</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>.dictionary-wrap</code></td>
-                      <td style={{ fontFamily: "monospace" }}>48px</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Mirrors <code>.main-wrap</code> — between lookup form and saved section</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>.books-section</code><br /><code>.quotes-section</code><br /><code>.dictionary-saved-section</code></td>
-                      <td style={{ fontFamily: "monospace" }}>16px</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Internal sub-header (eyebrow / result-line) → content list</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Two-tier rhythm: <strong>48px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.
+              <div className="ds-card-head">Page rhythm — applied scale</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.main-wrap · 48px</div>
+                  <p>Top-level page blocks — separates page-title, search-row, content section.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.dictionary-wrap · 48px</div>
+                  <p>Mirrors <code>.main-wrap</code> — between lookup form and saved section.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.books-section / .quotes-section / .dictionary-saved-section · 16px</div>
+                  <p>Internal sub-header (eyebrow / result-line) → content list.</p>
+                </div>
+                <div className="ds-token-block">
+                  <p>Two-tier rhythm : <strong>48px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.</p>
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── CELL ROW ── */}
-          <section className="ds-section" id="cell-row">
-            <SectionTitle
-              title="Cell Row"
-              sub="Reusable flex row primitive for any 'label + meta/icon' pattern with a fixed-min height. Pair with a size modifier and optionally --between for justify-content: space-between."
-            />
+          <DSSection id="cell-row" title="Cell Row" sub="Reusable flex row primitive for any 'label + meta/icon' pattern with a fixed-min height. Pair with a size modifier and optionally --between for justify-content: space-between.">
             <div className="ds-card">
-              <div className="ds-card-label">Sizes</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+              <div className="ds-card-head">Sizes</div>
+              <div className="ds-card-body col">
                 {[
                   ["xs", 20, "Parity with .sidebar-badge — inline meta"],
                   ["sm", 24, "Compact rows — label + small icon"],
@@ -481,218 +530,183 @@ export default function DesignSystemPage() {
                   ["lg", 40, "Parity with .btn-md / .modal-cancel — full touch target"],
                 ].map(([mod, h, use]) => (
                   <div key={mod} className={`spacing-row`} style={{ alignItems: "stretch" }}>
-                    <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ flex: 1, paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
+                    <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ width: 320, flexShrink: 0, paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
                       <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>cell-row--{mod}</span>
-                      <span style={{ fontSize: 12, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{h}px</span>
+                      <span style={{ fontSize: 12, color: "var(--text-2)", fontVariantNumeric: "tabular-nums" }}>{h}px</span>
                     </div>
-                    <span className="spacing-use" style={{ marginLeft: 16 }}>{use}</span>
+                    <span className="type-sample-meta" style={{ alignSelf: "center" }}>{use}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Modifiers</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Class</th><th>Effect</th><th>Use</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component"><code>.cell-row</code></td>
-                      <td style={{ fontSize: "0.82rem" }}>display: flex · align-items: center · gap: 8 · min-width: 0</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Always pair with a size modifier.</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>--xs / --sm / --md / --lg</code></td>
-                      <td style={{ fontSize: "0.82rem" }}>min-height: 20 / 24 / 32 / 40</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Use <code>min-height</code> (not fixed) so multi-line content can grow.</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>--between</code></td>
-                      <td style={{ fontSize: "0.82rem" }}>justify-content: space-between</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>For label-left / meta-right rows.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="ds-card">
-              <div className="ds-card-label">Applied — current usage</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Component</th><th>Variant</th><th>Where to see it</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component"><code>.overview-hero-label-row</code></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--sm + --between</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Overview tab → 3 hero cards (Books finished / Quotes / Words saved)</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>.modal-toggle-row</code></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>AddModal → Manual / Photo tab → "Mark as reading" checkbox</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>.search-row</code></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg + --between</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Search bars across My Library / Wishlist / Quotes / Dictionary / Collections (5 callsites)</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>.sidebar-appearance-row</code></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--lg</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Sidebar bottom → Appearance label + theme toggle</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>.overview-goal-progress-row</code></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>--md + --between</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Overview → Reading goal card → "3 / 24 books · 13%" line (overrides align-items: baseline locally)</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Local overrides (e.g. <code>.modal-toggle-row</code> keeps <code>gap: 10</code> for checkbox breathing room) are fine — primitive sets the stable axes (height, align, display), local class tunes nuances.
+              <div className="ds-card-head">Modifiers</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.cell-row · display: flex · align-items: center · gap: 8 · min-width: 0</div>
+                  <p>Always pair with a size modifier.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">--xs / --sm / --md / --lg · min-height: 20 / 24 / 32 / 40</div>
+                  <p>Use <code>min-height</code> (not fixed) so multi-line content can grow.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">--between · justify-content: space-between</div>
+                  <p>For label-left / meta-right rows.</p>
                 </div>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Not a cell-row candidate</div>
-              <div className="ds-card-body col" style={{ padding: 16, gap: 8 }}>
-                <span style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Classes named <code>*-row</code> that don't fit the primitive (kept as-is):</span>
-                <ul style={{ margin: 0, paddingLeft: 20, fontSize: "0.82rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <li><code>.now-reading-row</code> — height dictated by the 60×90 cover, not a fixed-height label row</li>
-                  <li><code>.add-to-col-row</code> — state modifier (background / selected / disabled) on top of <code>.quote-book-chip</code>, not a layout class</li>
-                </ul>
+              <div className="ds-card-head">Applied — current usage</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.overview-hero-label-row · --sm + --between</div>
+                  <p>Overview tab → 3 hero cards (Books finished / Quotes / Words saved).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.modal-toggle-row · --lg</div>
+                  <p>AddModal → Manual / Photo tab → "Mark as reading" checkbox.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.search-row · --lg + --between</div>
+                  <p>Search bars across My Library / Wishlist / Quotes / Dictionary / Collections (5 callsites).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.sidebar-appearance-row · --lg</div>
+                  <p>Sidebar bottom → Appearance label + theme toggle.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.overview-goal-progress-row · --md + --between</div>
+                  <p>Overview → Reading goal card → "3 / 24 books · 13%" line (overrides align-items: baseline locally).</p>
+                </div>
+                <div className="ds-token-block">
+                  <p>Local overrides (e.g. <code>.modal-toggle-row</code> keeps <code>gap: 10</code> for checkbox breathing room) are fine — primitive sets the stable axes (height, align, display), local class tunes nuances.</p>
+                </div>
               </div>
             </div>
-          </section>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Not a cell-row candidate</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <p>Classes named <code>*-row</code> that don't fit the primitive (kept as-is) :</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.now-reading-row</div>
+                  <p>Height dictated by the 60×90 cover, not a fixed-height label row.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.add-to-col-row</div>
+                  <p>State modifier (background / selected / disabled) on top of <code>.quote-book-chip</code>, not a layout class.</p>
+                </div>
+              </div>
+            </div>
+          </DSSection>
 
           {/* ── SHADOWS & RADIUS ── */}
-          <section className="ds-section" id="shadows">
-            <SectionTitle title="Shadows & Radius" />
+          <DSSection id="shadows" title="Shadows & Radius">
             <div className="ds-card">
-              <div className="ds-card-label">Shadows</div>
-              <div className="ds-card-body" style={{ gap: 24 }}>
+              <div className="ds-card-head">Shadows</div>
+              <div className="ds-card-body col">
                 {[
-                  ["shadow-sm","Cartes au repos","var(--shadow-sm)"],
-                  ["shadow-md","Dropdowns, tooltips","var(--shadow-md)"],
-                  ["shadow-lg","Modales, panels","var(--shadow-lg)"],
-                ].map(([token, use, val]) => (
-                  <div key={token} style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                    <div style={{ width: 120, height: 64, borderRadius: 8, background: "var(--card)", boxShadow: val === "var(--shadow-sm)" ? "var(--shadow-sm)" : val === "var(--shadow-md)" ? "var(--shadow-md)" : "var(--shadow-lg)" }} />
-                    <div className="ds-token-name" style={{ textAlign: "center" }}>--{token}</div>
-                    <div className="ds-token-val" style={{ textAlign: "center" }}>{use}</div>
+                  ["--shadow-md", "Cartes hover (drop primary-tinted)"],
+                  ["--shadow-lg", "Modales, autocomplete, mobile sidebar"],
+                ].map(([token, use]) => (
+                  <div key={token} className="spacing-row" style={{ alignItems: "stretch" }}>
+                    <div style={{ width: 120, height: 40, background: "var(--card)", borderRadius: 6, boxShadow: `var(${token})`, flexShrink: 0, alignSelf: "center" }} />
+                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{token} · {use}</span>
                   </div>
                 ))}
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Border Radius</div>
-              <div className="ds-card-body" style={{ gap: 24, flexWrap: "wrap" }}>
-                {[[6,"6px","Buttons SM"],[8,"8px (--radius)","Default"],[10,"10px","Dropzone"],[12,"12px","Card states"],[16,"16px","Large modals"],[32,"32px","Pills, search"]].map(([r, label, use]) => (
-                  <div key={r} style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                    <div style={{ width: 64, height: 64, borderRadius: r, background: "var(--primary-5)", border: "1.5px solid var(--primary-20)" }} />
-                    <div className="ds-token-name" style={{ textAlign: "center" }}>{label}</div>
-                    <div className="ds-token-val" style={{ textAlign: "center" }}>{use}</div>
+              <div className="ds-card-head">Border Radius</div>
+              <div className="ds-card-body col">
+                {[
+                  [6, "Buttons SM"],
+                  [8, "Default — var(--radius)"],
+                  [10, "Dropdown, dropzone"],
+                  [12, "Camera scan viewfinder"],
+                  [16, "Onboarding modal"],
+                  [32, "Pill (search input)"],
+                ].map(([r, use]) => (
+                  <div key={r} className="spacing-row" style={{ alignItems: "stretch" }}>
+                    <div className="spacing-block" style={{ width: 64, height: 40, borderRadius: r }} />
+                    <span className="spacing-label" style={{ alignSelf: "center" }}>{r}px</span>
+                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{use}</span>
                   </div>
                 ))}
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── STROKES & BORDERS ── */}
-          <section className="ds-section" id="strokes">
-            <SectionTitle title="Strokes & Borders" sub="Canonical rules for borders across components, cards, inputs and dividers." />
+          <DSSection id="strokes" title="Strokes & Borders" sub="Canonical rules for borders across components, cards, inputs and dividers.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Weight × Token</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Context</th><th>Weight</th><th>Color token</th><th>Applied via</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component">Component strokes<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>buttons, inputs, cards, containers</span></td>
-                      <td style={{ fontFamily: "monospace" }}>1.5px</td>
-                      <td><span className="ds-token-chip">--border-subtle</span></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>border: 1.5px solid var(--border-subtle)</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Dividers<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>row separators, section lines</span></td>
-                      <td style={{ fontFamily: "monospace" }}>1px</td>
-                      <td><span className="ds-token-chip">--border-subtle</span></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>border-top/bottom: 1px solid var(--border-subtle)</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Strong affordances<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>spinner, dropzone</span></td>
-                      <td style={{ fontFamily: "monospace" }}>2px</td>
-                      <td><span className="ds-token-chip">--border</span></td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>border: 2px {`{solid|dashed}`} var(--border)</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="ds-card">
-              <div className="ds-card-label">Visual samples</div>
-              <div className="ds-card-body" style={{ gap: 24, flexWrap: "wrap" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                  <div style={{ width: 96, height: 64, borderRadius: 8, background: "var(--card)", border: "1.5px solid var(--border-subtle)" }} />
-                  <div className="ds-token-name" style={{ textAlign: "center" }}>Component 1.5px</div>
-                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border-subtle</div>
+              <div className="ds-card-head">Application rules</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Component strokes · 1.5px solid var(--border-subtle)</div>
+                  <p>Buttons, inputs, cards, containers — default frame stroke across the app.</p>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                  <div style={{ width: 96, height: 64, borderRadius: 0, borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)", background: "transparent" }} />
-                  <div className="ds-token-name" style={{ textAlign: "center" }}>Divider 1px</div>
-                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border-subtle</div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Dividers · 1px solid var(--border-subtle)</div>
+                  <p>Row separators, section lines — thinner than component strokes.</p>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                  <div style={{ width: 96, height: 64, borderRadius: 8, background: "var(--card)", border: "2px solid var(--border)" }} />
-                  <div className="ds-token-name" style={{ textAlign: "center" }}>Strong 2px</div>
-                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border</div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Spinner ring · 2px solid var(--border)</div>
+                  <p>Single usage — <code>.panel-spinner</code> loading ring needs stronger contrast.</p>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                  <div style={{ width: 96, height: 64, borderRadius: 8, background: "var(--card)", border: "2px dashed var(--border)" }} />
-                  <div className="ds-token-name" style={{ textAlign: "center" }}>Dropzone 2px</div>
-                  <div className="ds-token-val" style={{ textAlign: "center" }}>--border dashed</div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Dropzone · 2px dashed var(--border)</div>
+                  <p>Single usage — <code>.import-dropzone</code> dashed border for import file/photo zones.</p>
                 </div>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Stroke position — inside</div>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  All strokes are rendered <strong>inside</strong> the declared size (equivalent to Figma's "Inside" stroke). This is enforced globally by Tailwind's <code>box-sizing: border-box</code> reset — the stroke eats into the content area without enlarging the element.
-                </p>
+              <div className="ds-card-head">Visual samples</div>
+              <div className="ds-card-body col">
+                {[
+                  { sample: { borderRadius: 6, background: "var(--card)", border: "1.5px solid var(--border-subtle)" }, label: "Component · 1.5px var(--border-subtle)" },
+                  { sample: { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)", background: "transparent" }, label: "Divider · 1px var(--border-subtle)" },
+                  { sample: { borderRadius: 6, background: "var(--card)", border: "2px solid var(--border)" }, label: "Spinner ring · 2px solid var(--border)" },
+                  { sample: { borderRadius: 6, background: "var(--card)", border: "2px dashed var(--border)" }, label: "Dropzone · 2px dashed var(--border)" },
+                ].map(({ sample, label }, i) => (
+                  <div key={i} className="spacing-row" style={{ alignItems: "stretch" }}>
+                    <div style={{ width: 120, height: 40, flexShrink: 0, alignSelf: "center", ...sample }} />
+                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{label}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Why two tokens ?</div>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <strong>Light mode</strong> : <code>--border-subtle</code> (#EFEFEF) keeps the component frames airy without feeling heavy on large surfaces like cards. <code>--border</code> (#E0E0E0) is reserved for affordances that need stronger contrast (dashed dropzones, spinner rings) where a subtle stroke would disappear.
-                </p>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
-                  <strong>Dark mode</strong> : both tokens collapse to <code>#2E2E2E</code>. The light/dark distinction is intentional — dark backgrounds don't need two stroke strengths.
-                </p>
+              <div className="ds-card-head">Notes</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Stroke position — inside</div>
+                  <p>All strokes are rendered <strong>inside</strong> the declared size (equivalent to Figma's "Inside" stroke). Enforced globally by Tailwind's <code>box-sizing: border-box</code> reset — the stroke eats into the content area without enlarging the element.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Light mode — why two tokens ?</div>
+                  <p><code>--border-subtle</code> (#EFEFEF) keeps the component frames airy without feeling heavy on large surfaces like cards. <code>--border</code> (#E0E0E0) is reserved for affordances that need stronger contrast (dashed dropzones, spinner rings) where a subtle stroke would disappear.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Dark mode</div>
+                  <p>Both tokens collapse to <code>#2E2E2E</code>. The light/dark distinction is intentional — dark backgrounds don't need two stroke strengths.</p>
+                </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── AUTOCOMPLETE ── */}
-          <section className="ds-section" id="autocomplete">
-            <SectionTitle title="Autocomplete" sub="Dropdown suggestions below the title field in the modal." />
+          <DSSection id="autocomplete" title="Autocomplete" sub="Dropdown suggestions below the title field in the AddModal.">
             <div className="ds-card">
-              <div className="ds-card-label">Dropdown</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
                 <div className="autocomplete-preview">
                   {[["1984","George Orwell"],["Nineteen Eighty-Four","George Orwell"],["1984 (annotated)","Various"]].map(([title, author], i) => (
@@ -703,71 +717,91 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
-          </section>
 
-          {/* ── BADGES & PILLS ── */}
-          <section className="ds-section" id="badges">
-            <SectionTitle title="Badges" />
             <div className="ds-card">
-              <div className="ds-card-label">Status badge</div>
-              <div className="ds-card-body">
-                <span className="status-badge">1984</span>
-                <span className="status-badge">Roman</span>
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.autocomplete-preview · container</div>
+                  <p>Width 280, border-radius var(--radius), border 1.5px var(--border-subtle), bg var(--card).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.ac-item · suggestion row</div>
+                  <p>Padding 10/14, font 14/600/var(--text), border-bottom 1px var(--border) (none on last).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.ac-item:hover, .ac-item.focused · state</div>
+                  <p>bg var(--primary-5), color var(--primary-60). Same treatment for hover and keyboard focus.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.ac-item span · sub-label (author)</div>
+                  <p>Secondary info displayed inline — font 14/400/var(--text-2), margin-left 8.</p>
+                </div>
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Date badge — sizes</div>
-              <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
+              <div className="ds-card-head">Usage</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <p>Appears below the title field in <code>AddModal</code> when the user types — search-suggestions API returns matching books. Click selects the suggestion and pre-fills title + author.</p>
+                </div>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── BADGES & PILLS ── */}
+          <DSSection id="badges" title="Badges">
+            <div className="ds-card">
+              <div className="ds-card-head">Date badge · sizes</div>
+              <div className="ds-card-body col">
                 {[
                   ["xs", 20, "10/600 · padding 0 10 · inline meta dense"],
                   ["sm", 24, "12/600 · padding 0 12 · default — Started on, etc."],
                   ["md", 28, "13/600 · padding 0 14 · prominent callout"],
                 ].map(([mod, h, use]) => (
-                  <div key={mod} className="spacing-row">
-                    <span className={`now-reading-date now-reading-date--${mod}`}>Started Apr 28</span>
-                    <span className="spacing-label" style={{ minWidth: 56 }}>--{mod}</span>
-                    <span className="spacing-use">{h}px · {use}</span>
+                  <div key={mod} className="spacing-row" style={{ alignItems: "stretch" }}>
+                    <span className={`now-reading-date now-reading-date--${mod}`} style={{ alignSelf: "center" }}>Started Apr 28</span>
+                    <span className="spacing-label" style={{ alignSelf: "center" }}>--{mod}</span>
+                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{h}px · {use}</span>
                   </div>
                 ))}
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Date badge — modifiers</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Class</th><th>Effect</th><th>Use</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component"><code>.now-reading-date</code></td>
-                      <td style={{ fontSize: "0.82rem" }}>Solid primary fill (--primary-50 / --primary-40 dark) · white text · pill · weight 600</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Default size = sm. Pair with a modifier for other scales.</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component"><code>--xs / --sm / --md</code></td>
-                      <td style={{ fontSize: "0.82rem" }}>height: 20 / 24 / 28 · font-size: 10 / 12 / 13 · padding: 0 10 / 0 12 / 0 14</td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>min-width matches height for square baseline.</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Currently used in <code>NowReadingSection</code> (started date) and <code>BookPanel</code> (started date in Now-Reading state). Default size (sm) works for inline meta — bump to <code>--md</code> for prominence.
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.now-reading-date · primary pill (base)</div>
+                  <p>Solid primary fill (--primary-50 light · --primary-40 dark) · white text · pill · weight 600. Default size = sm.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">--xs / --sm / --md · size modifiers</div>
+                  <p>height 20 / 24 / 28 · font-size 10 / 12 / 13 · padding 0 10 / 0 12 / 0 14. min-width matches height for square baseline.</p>
                 </div>
               </div>
             </div>
-          </section>
-
-          {/* ── BOOK CHIP ── */}
-          <section className="ds-section" id="book-chip">
-            <SectionTitle title="Book Chip" sub="Reusable book reference block — cover thumbnail + title + author. Three modes : display, interactive, with remove." />
 
             <div className="ds-card">
-              <div className="ds-card-label">Modes</div>
-              <div className="ds-card-body" style={{ gap: 16, flexWrap: "wrap" }}>
+              <div className="ds-card-head">Usage</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <p>Currently used in <code>NowReadingSection</code> (started date) and <code>BookPanel</code> (started date in Now-Reading state). Default size (sm) works for inline meta — bump to <code>--md</code> for prominence.</p>
+                </div>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── BOOK CHIP ── */}
+          <DSSection id="book-chip" title="Book Chip" sub="Reusable book reference block — cover thumbnail + title + author. Four modes : display, interactive, with remove, with rating.">
+
+            <div className="ds-card">
+              <div className="ds-card-head">Modes</div>
+              <div className="ds-card-body">
                 {/* Display (no onClick, no onRemove) */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Display</div>
+                <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span className="panel-section-eyebrow">Display</span>
                   <div className="quote-book-chip">
                     <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
                     <div className="quote-book-chip-body">
@@ -778,8 +812,8 @@ export default function DesignSystemPage() {
                 </div>
 
                 {/* Interactive (with onClick → chevron) */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Interactive</div>
+                <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span className="panel-section-eyebrow">Interactive</span>
                   <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
                     <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #9EEB97, #4959E6)" }}><span>1</span></div>
                     <div className="quote-book-chip-body">
@@ -793,8 +827,8 @@ export default function DesignSystemPage() {
                 </div>
 
                 {/* With remove */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>With remove</div>
+                <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span className="panel-section-eyebrow">With remove</span>
                   <div className="quote-book-chip">
                     <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #FE7E4E, #FFCEE3)" }}><span>B</span></div>
                     <div className="quote-book-chip-body">
@@ -810,8 +844,8 @@ export default function DesignSystemPage() {
                 </div>
 
                 {/* With rating (interactive) */}
-                <div style={{ flex: "1 1 260px", minWidth: 240 }}>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>With rating</div>
+                <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span className="panel-section-eyebrow">With rating</span>
                   <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
                     <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #4959E6, #00A699)" }}><span>D</span></div>
                     <div className="quote-book-chip-body">
@@ -836,116 +870,106 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Context overrides</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Context</th><th>Default bg</th><th>Hover bg (interactive)</th><th>Why</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component">Base<br /><span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>QuotePanel, AddQuoteModal</span></td>
-                      <td><span className="ds-token-chip">--bg3</span></td>
-                      <td><span className="ds-token-chip">--primary-5</span></td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Neutral backgrounds where the chip sits on its own.</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Inside <code>.quote-card</code></td>
-                      <td><span className="ds-token-chip">--primary-5</span></td>
-                      <td><span className="ds-token-chip">--primary-10</span></td>
-                      <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Card itself tints primary on hover — chip needs stronger saturation to stay visible.</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="ds-card-head">Context overrides</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Base · QuotePanel, AddQuoteModal</div>
+                  <p>Default bg <code>--bg3</code>, hover bg <code>--primary-5</code>. Neutral backgrounds where the chip sits on its own.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Inside .quote-card</div>
+                  <p>Default bg <code>--primary-5</code>, hover bg <code>--primary-10</code>. Card itself tints primary on hover — chip needs stronger saturation to stay visible.</p>
+                </div>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Props</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
-                  <tbody>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>book</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ title, author, id? }"}</td><td style={{ fontSize: "0.82rem" }}>Required. Cover is auto-fetched from Google Books via title/author.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onClick</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(e) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>If provided: renders as <code>&lt;button&gt;</code> with chevron + hover. Use <code>e.stopPropagation()</code> inside parent-clickable contexts.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onRemove</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows an X button on the right. Mutually exclusive with <code>onClick</code>.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Label for the remove button.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>rating</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>number (1–5)</td><td style={{ fontSize: "0.82rem" }}>Renders 5 stars (<code>.overview-stars</code>, padding 4 0) below title/author when {'>'} 0. Title/author auto-wrapped in <code>.quote-book-chip-name</code> (gap 2). Body gap 4. Stars: 14×14, filled <code>--primary-50</code> / empty <code>--border</code>.</td></tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Source: <code>components/library/BookChip.js</code>. Cover 32×44, radius 4. Fallback: gradient from <code>coverColors(title)</code> + first letter.
+              <div className="ds-card-head">Props</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">book · {"{ title, author, id? }"}</div>
+                  <p>Required. Cover is auto-fetched from Google Books via title/author.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">onClick · (e) =&gt; void</div>
+                  <p>If provided: renders as <code>&lt;button&gt;</code> with chevron + hover. Use <code>e.stopPropagation()</code> inside parent-clickable contexts.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">onRemove · () =&gt; void</div>
+                  <p>Shows an X button on the right. Mutually exclusive with <code>onClick</code>.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">ariaLabel · string</div>
+                  <p>Label for the remove button.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">rating · number (1–5)</div>
+                  <p>Renders 5 stars (<code>.overview-stars</code>, padding 4 0) below title/author when {'>'} 0. Title/author auto-wrapped in <code>.quote-book-chip-name</code> (gap 2). Body gap 4. Stars: 14×14, filled <code>--primary-50</code> / empty <code>--border</code>.</p>
                 </div>
               </div>
             </div>
-          </section>
 
-          {/* ── BUTTON STATES ── */}
-          <section className="ds-section" id="btn-states">
-            <SectionTitle title="Button States" sub="Default · Hover · Active · Focus · Disabled" />
-            <div className="states-grid">
-              {[
-                { name:"Primary", variant:"btn-primary" },
-                { name:"Secondary", variant:"btn-secondary" },
-                { name:"Ghost", variant:"btn-ghost" },
-                { name:"Outline", variant:"btn-outline" },
-                { name:"Critical", variant:"btn-critical" },
-              ].map(({ name, variant }) => (
-                <div key={name} className="states-variant-card">
-                  <div className="states-variant-header"><span className="states-variant-name">{name}</span></div>
-                  <div className="states-row">
-                    {[
-                      ["Default",""],
-                      ["Hover","is-hover"],
-                      ["Active","is-active"],
-                      ["Focus","is-focus"],
-                      ["Disabled",""],
-                    ].map(([state, mod]) => (
-                      <div key={state} className="states-cell">
-                        <button className={`btn ${variant} btn-md${mod ? " "+mod : ""}`} disabled={state==="Disabled"}>
-                          {name}
-                        </button>
-                        <span className="states-content-label">{state}</span>
-                      </div>
-                    ))}
-                  </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Source</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <p>Component : <code>components/library/BookChip.js</code>. Cover 32×44, radius 4. Fallback : gradient from <code>coverColors(title)</code> + first letter.</p>
                 </div>
-              ))}
+              </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── BUTTONS ── */}
-          <section className="ds-section" id="buttons">
-            <SectionTitle title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all." />
+          <DSSection id="buttons" title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all.">
+            {/* States — 5 variants × 5 states */}
+            {[
+              { name:"Primary", variant:"btn-primary" },
+              { name:"Secondary", variant:"btn-secondary" },
+              { name:"Ghost", variant:"btn-ghost" },
+              { name:"Outline", variant:"btn-outline" },
+              { name:"Critical", variant:"btn-critical" },
+            ].map(({ name, variant }) => (
+              <div key={name} className="ds-card">
+                <div className="ds-card-head">{name} · states</div>
+                <div className="ds-card-body" style={{ gap: 32, alignItems: "center", flexWrap: "wrap" }}>
+                  {[
+                    ["Default",""],
+                    ["Hover","is-hover"],
+                    ["Active","is-active"],
+                    ["Focus","is-focus"],
+                    ["Disabled",""],
+                  ].map(([state, mod]) => (
+                    <div key={state} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+                      <button className={`btn ${variant} btn-md${mod ? " "+mod : ""}`} disabled={state==="Disabled"}>
+                        {name}
+                      </button>
+                      <span className="panel-section-eyebrow">{state}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
             <div className="ds-card">
-              <div className="ds-card-label">Canonical → Named class mapping</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Role</th><th>Canonical</th><th>Named classes used in app</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
-                      ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".quote-photo-btn", ".col-delete-btn"]],
-                      ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
-                      ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
-                      ["Text / ghost link", "btn-ghost", [".footer-link", ".quote-see-more"]],
-                      ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
-                      ["AI action", "btn-ai btn-md", [".panel-cast-action (Generate state)"]],
-                    ].map(([role, canon, classes]) => (
-                      <tr key={role}>
-                        <td className="token-table-component">{role}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{canon}</td>
-                        <td>{classes.map(c => <span key={c} className="ds-token-chip" style={{ fontFamily: "monospace" }}>{c}</span>)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="ds-card-head">Canonical → Named class mapping</div>
+              <div className="ds-card-body col">
+                {[
+                  ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
+                  ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".quote-photo-btn", ".col-delete-btn"]],
+                  ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
+                  ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
+                  ["Text / ghost link", "btn-ghost", [".footer-link", ".quote-see-more"]],
+                  ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
+                  ["AI action", "btn-ai btn-md", [".panel-cast-action (Generate state)"]],
+                ].map(([role, canon, classes]) => (
+                  <div key={role} className="ds-token-block">
+                    <div className="ds-token-name">{role} · {canon}</div>
+                    <p>{classes.map((c, i) => <span key={c}>{i > 0 ? " · " : ""}<code>{c}</code></span>)}</p>
+                  </div>
+                ))}
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Variantes — taille MD</div>
+              <div className="ds-card-head">Variantes — taille MD</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap" }}>
                 {[
                   ["btn-primary btn-md","Primary"],
@@ -960,7 +984,7 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Tailles — variante Primary</div>
+              <div className="ds-card-head">Tailles — variante Primary</div>
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap" }}>
                 {[["btn-xs","XS"],["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"],["btn-xl","XL"]].map(([sz,label]) => (
                   <button key={sz} className={`btn btn-primary ${sz}`}>{label}</button>
@@ -968,39 +992,27 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="btn-scale-table">
-                  <thead>
-                    <tr><th>Size</th><th>Height</th><th>Padding (h)</th><th>Radius</th><th>Font</th><th>Gap</th><th>Icon-only</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["XS", "24", "8", "6", "11", "4", "24×24 · svg 12"],
-                      ["SM", "32", "16", "7", "12", "6", "32×32 · svg 14"],
-                      ["MD ★", "40", "20", "8", "14", "8", "40×40 · svg 18"],
-                      ["LG", "48", "24", "8", "14", "8", "48×48 · svg 20"],
-                      ["XL", "56", "28", "8", "15", "10", "—"],
-                    ].map(([sz, h, p, r, f, g, io]) => (
-                      <tr key={sz}>
-                        <td className="btn-scale-size">{sz}</td>
-                        <td>{h}px</td>
-                        <td>0 {p}px</td>
-                        <td>{r}px</td>
-                        <td>{f}px</td>
-                        <td>{g}px</td>
-                        <td style={{ color: "var(--text-3)", fontSize: "0.75rem" }}>{io}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  ★ Default size used across the app. Outline buttons: stroke <code>1.5px</code> inside (box-sizing: border-box). Icon destructive (.delete-row-btn) uses fill <code>--primary-5</code> default, <code>--primary-10</code> hover.
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                {[
+                  ["XS", "24", "8", "6", "11", "4", "24×24 · svg 12"],
+                  ["SM", "32", "16", "7", "12", "6", "32×32 · svg 14"],
+                  ["MD ★", "40", "20", "8", "14", "8", "40×40 · svg 18"],
+                  ["LG", "48", "24", "8", "14", "8", "48×48 · svg 20"],
+                  ["XL", "56", "28", "8", "15", "10", "—"],
+                ].map(([sz, h, p, r, f, g, io]) => (
+                  <div key={sz} className="ds-token-block">
+                    <div className="ds-token-name">{sz} · {h}px</div>
+                    <p>padding 0 {p}px · radius {r}px · font {f}px · gap {g}px · icon-only {io}</p>
+                  </div>
+                ))}
+                <div className="ds-token-block">
+                  <p>★ Default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box). Icon destructive (<code>.delete-row-btn</code>) uses fill <code>--primary-5</code> default, <code>--primary-10</code> hover.</p>
                 </div>
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Icon buttons — Solid & Icon</div>
+              <div className="ds-card-head">Icon buttons — Solid & Icon</div>
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 {[["btn-solid","btn-xs"],["btn-solid","btn-sm"],["btn-solid","btn-md"],["btn-solid","btn-lg"]].map(([v,sz]) => (
                   <button key={v+sz} className={`btn ${v} ${sz}`}>
@@ -1015,7 +1027,7 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Icon + Text — toutes variantes, taille MD</div>
+              <div className="ds-card-head">Icon + Text — toutes variantes, taille MD</div>
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 {[
                   ["btn-primary",  "Add"],
@@ -1025,7 +1037,7 @@ export default function DesignSystemPage() {
                   ["btn-critical", "Delete"],
                 ].map(([variant, label]) => (
                   <button key={variant} className={`btn ${variant} btn-md`}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" width="15" height="15">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                       <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                     <span>{label}</span>
@@ -1034,11 +1046,11 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Icon + Text — tailles, variante Primary</div>
+              <div className="ds-card-head">Icon + Text — tailles, variante Primary</div>
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 {[["btn-xs","XS"],["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"],["btn-xl","XL"]].map(([sz, label]) => (
                   <button key={sz} className={`btn btn-primary ${sz}`}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" width="14" height="14">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                       <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                     <span>{label}</span>
@@ -1047,37 +1059,43 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Asymmetric padding (icon + text)</div>
-              <div className="ds-card-body col" style={{ gap: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                  <button className="btn btn-outline btn-md"><span>Text only</span></button>
-                  <button className="btn btn-outline btn-md">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    <span>Icon left</span>
-                  </button>
-                  <button className="btn btn-outline btn-md">
-                    <span>Icon right</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                  </button>
+              <div className="ds-card-head">Asymmetric padding (icon + text)</div>
+              <div className="ds-card-body" style={{ alignItems: "center", gap: 12 }}>
+                <button className="btn btn-outline btn-md"><span>Text only</span></button>
+                <button className="btn btn-outline btn-md">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>Icon left</span>
+                </button>
+                <button className="btn btn-outline btn-md">
+                  <span>Icon right</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Text only · 0 20 (md) / 0 16 (sm)</div>
+                  <p>Symmetrical baseline.</p>
                 </div>
-                <table className="token-table">
-                  <thead><tr><th>Layout</th><th>Padding (h)</th><th>Why</th></tr></thead>
-                  <tbody>
-                    <tr><td className="token-table-component">Text only</td><td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>0 20 (md) / 0 16 (sm)</td><td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Symmetrical baseline.</td></tr>
-                    <tr><td className="token-table-component">Icon left + text</td><td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>0 20 0 12 (md) / 0 16 0 12 (sm)</td><td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Icon eats visual space — drop padding-left to balance.</td></tr>
-                    <tr><td className="token-table-component">Text + icon right</td><td style={{ fontFamily: "monospace", fontSize: "0.78rem" }}>0 12 0 20 (md) / 0 12 0 16 (sm)</td><td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>Same logic, mirrored.</td></tr>
-                  </tbody>
-                </table>
-                <div style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>
-                  Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> — no extra class needed. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding via <code>.btn-icon</code> / <code>.btn-solid</code>).
-                  <br /><br />
-                  <strong>Convention:</strong> always wrap label text in a <code>&lt;span&gt;</code>. CSS <code>:first-child</code> / <code>:last-child</code> only count element children — a bare text node next to an SVG would make the SVG both first AND last child, breaking the detection.
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Icon left + text · 0 20 0 12 (md) / 0 16 0 12 (sm)</div>
+                  <p>Icon eats visual space — drop padding-left to balance.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Text + icon right · 0 12 0 20 (md) / 0 12 0 16 (sm)</div>
+                  <p>Same logic, mirrored.</p>
+                </div>
+                <div className="ds-token-block">
+                  <p>Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> — no extra class needed. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding via <code>.btn-icon</code> / <code>.btn-solid</code>).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Convention</div>
+                  <p>Always wrap label text in a <code>&lt;span&gt;</code>. CSS <code>:first-child</code> / <code>:last-child</code> only count element children — a bare text node next to an SVG would make the SVG both first AND last child, breaking the detection.</p>
                 </div>
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">AI action — gradient border + tinted fill</div>
-              <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+              <div className="ds-card-head">AI action — gradient border + tinted fill</div>
+              <div className="ds-card-body" style={{ alignItems: "center", gap: 12 }}>
                 {[["btn-sm","SM"],["btn-md","MD"],["btn-lg","LG"]].map(([sz, label]) => (
                   <button key={sz} className={`btn btn-ai ${sz}`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
                     <svg className="import-tab-ai-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1093,59 +1111,68 @@ export default function DesignSystemPage() {
                   </button>
                 ))}
               </div>
-              <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                Reserved for AI-generated actions. <strong>Border</strong>: <code>linear-gradient(to right, #F67BF8, #4959E6)</code> via <code>border-box</code>, 1.5px stroke. <strong>Background</strong>: same gradient stops at <code>0.05</code> opacity default, <code>0.1</code> on hover, via <code>padding-box</code> (over an opaque <code>var(--bg)</code> layer that masks the solid gradient inside the ring). <strong>Padding</strong>: <code>0 20px 0 12px</code> (asymmetric — mirrors <code>.panel-quotes-add</code>; 12px left for the leading sparkle icon). <strong>Icon</strong>: pair with <code>.import-tab-ai-icon</code> 16×16 sparkle SVG. <strong>Sizes</strong>: SM / MD (default) / LG. <strong>First app usage</strong>: <code>.panel-cast-action</code> in BookPanel (Now Reading) — the "Generate cast" / "Regenerate" call to the Gemini cast endpoint.
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Border</div>
+                  <p><code>linear-gradient(to right, #F67BF8, #4959E6)</code> via <code>border-box</code>, 1.5px stroke.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Background</div>
+                  <p>Same gradient stops at <code>0.05</code> opacity default, <code>0.1</code> on hover, via <code>padding-box</code> (over an opaque <code>var(--bg)</code> layer that masks the solid gradient inside the ring).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Padding</div>
+                  <p><code>0 20px 0 12px</code> (asymmetric — mirrors <code>.panel-quotes-add</code> ; 12px left for the leading sparkle icon).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Icon · sizes · usage</div>
+                  <p>Pair with <code>.import-tab-ai-icon</code> 16×16 sparkle SVG. Sizes : SM / MD (default) / LG. Reserved for AI-generated actions. First app usage : <code>.panel-cast-action</code> in BookPanel (Now Reading) — the "Generate cast" / "Regenerate" call to the Gemini cast endpoint.</p>
+                </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── CHECKBOX ── */}
-          <section className="ds-section" id="checkbox">
-            <SectionTitle title="Checkbox" sub="Canonical checkbox 18×18, used inside row contexts (modal toggle, list selection)." />
+          <DSSection id="checkbox" title="Checkbox" sub="Canonical checkbox 18×18, used inside row contexts (modal toggle, list selection).">
             <div className="ds-card">
-              <div className="ds-card-label">États</div>
-              <div className="ds-card-body" style={{ gap: 24 }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+              <div className="ds-card-head">States</div>
+              <div className="ds-card-body" style={{ gap: 32, alignItems: "center" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
                   <div className="checkbox-demo" onClick={() => setChk1(v => !v)}>{chk1 && <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
-                  <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Unchecked</span>
+                  <span className="panel-section-eyebrow">Unchecked</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
                   <div className={`checkbox-demo${chk2?" checked":""}`} onClick={() => setChk2(v => !v)}>{chk2 && <svg viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>}</div>
-                  <span style={{ fontSize: "0.68rem", color: "var(--text-3)" }}>Checked</span>
+                  <span className="panel-section-eyebrow">Checked</span>
                 </div>
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Modal toggle row — canonical 40h container</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Property</th><th>Value</th></tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["Container class", ".modal-toggle-row"],
-                      ["min-height", "40px (md, mirrors btn-md / input)"],
-                      ["gap", "10px"],
-                      ["check (18×18) default", "border --border-subtle, bg transparent (light) · border --light-20 (dark)"],
-                      ["check hover", "border --primary-50 + bg --primary-5 (light) · border --primary-40 + bg --primary-5 (dark)"],
-                      ["check checked", "bg --primary-50, border transparent (light) · bg --primary-40 (dark)"],
-                      ["check checked hover", "bg --primary-60 (light) · bg --primary-50 (dark) — mirrors .btn-primary"],
-                      ["label (.modal-toggle-label)", "15/500/--text (interactive tier — pairs with btn-md / inputs)"],
-                      ["First app usage", ".modal-toggle-row in AddModal (Mark as reading)"],
-                    ].map(([prop, val]) => (
-                      <tr key={prop}>
-                        <td className="token-table-component">{prop}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="ds-card-head">Modal toggle row — canonical 40h container</div>
+              <div className="ds-card-body col">
+                {[
+                  ["Container class", ".modal-toggle-row"],
+                  ["min-height", "40px (md, mirrors btn-md / input)"],
+                  ["gap", "10px"],
+                  ["check (18×18) default", "border --border-subtle, bg transparent (light) · border --light-20 (dark)"],
+                  ["check hover", "border --primary-50 + bg --primary-5 (light) · border --primary-40 + bg --primary-5 (dark)"],
+                  ["check checked", "bg --primary-50, border transparent (light) · bg --primary-40 (dark)"],
+                  ["check checked hover", "bg --primary-60 (light) · bg --primary-50 (dark) — mirrors .btn-primary"],
+                  ["label (.modal-toggle-label)", "15/500/--text (interactive tier — pairs with btn-md / inputs)"],
+                  ["First app usage", ".modal-toggle-row in AddModal (Mark as reading)"],
+                ].map(([prop, val]) => (
+                  <div key={prop} className="ds-token-block">
+                    <div className="ds-token-name">{prop}</div>
+                    <p>{val}</p>
+                  </div>
+                ))}
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Message box — 4 variants (info / alert / success / critical)</div>
-              <div className="ds-card-body col" style={{ gap: 16 }}>
+              <div className="ds-card-head">Message box — 4 variants (info / alert / success / critical)</div>
+              <div className="ds-card-body col padded" style={{ gap: 16 }}>
                 <div className="modal-info-box">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
@@ -1171,109 +1198,113 @@ export default function DesignSystemPage() {
                   <span><strong>Critical</strong> — destructive error, red. Scan failure, irrecoverable issue.</span>
                 </div>
               </div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead>
-                    <tr><th>Variant</th><th>Class</th><th>Background</th><th>Border</th><th>Icon color</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="token-table-component">Info</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.modal-info-box</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>--primary-5</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(73,89,230, 0.2)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>--primary-50 / 40</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Alert</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.modal-info-box.modal-info-box--alert</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(245,158,11, 0.08/0.12)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(245,158,11, 0.2)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#B45309 / #FBBF24</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Success</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.modal-info-box.modal-info-box--success</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(34,197,94, 0.08/0.12)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(34,197,94, 0.2)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#16A34A / #4ADE80</td>
-                    </tr>
-                    <tr>
-                      <td className="token-table-component">Critical</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.scan-alert</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(239,68,68, 0.08/0.12)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(239,68,68, 0.2)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#dc2626 / #f87171</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Structure commune : <code>display: flex; align-items: flex-start (info) / center (alert/critical); gap: 16; padding: 8 16; border-radius: 8; font 14/500/--text/lh 1.5</code>. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> pour multi-lignes (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) when grouping a dropzone + a critical message.
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Info · .modal-info-box</div>
+                  <p>bg <code>--primary-5</code> · border <code>rgba(73,89,230, 0.2)</code> · icon <code>--primary-50 / 40</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Alert · .modal-info-box.modal-info-box--alert</div>
+                  <p>bg <code>rgba(245,158,11, 0.08/0.12)</code> · border <code>rgba(245,158,11, 0.2)</code> · icon <code>#B45309 / #FBBF24</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Success · .modal-info-box.modal-info-box--success</div>
+                  <p>bg <code>rgba(34,197,94, 0.08/0.12)</code> · border <code>rgba(34,197,94, 0.2)</code> · icon <code>#16A34A / #4ADE80</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Critical · .scan-alert</div>
+                  <p>bg <code>rgba(239,68,68, 0.08/0.12)</code> · border <code>rgba(239,68,68, 0.2)</code> · icon <code>#dc2626 / #f87171</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Common structure</div>
+                  <p><code>display: flex</code> · <code>align-items: flex-start</code> (info) / <code>center</code> (alert/critical) · gap 16 · padding 8/16 · border-radius 8 · font 14/500/--text/lh 1.5. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> for multi-line (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) to group a dropzone + a critical message.</p>
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── DROPDOWN ── */}
-          <section className="ds-section" id="dropdown">
-            <SectionTitle title="Dropdown Menu" sub="Bouton outline + chevron rotatif · Menu animé spring · Dark mode complet" />
+          <DSSection id="dropdown" title="Dropdown Menu" sub="Outline trigger + rotating chevron · Spring-animated menu · Full dark mode">
             <div className="ds-card">
-              <div className="ds-card-label">Exemples</div>
-              <div className="ds-card-body" style={{ alignItems: "flex-start", gap: 32, flexWrap: "wrap" }}>
+              <div className="ds-card-head">Examples</div>
+              <div className="ds-card-body" style={{ alignItems: "flex-start", gap: 32 }}>
                 <DropdownDemo label="Export" items={["json", "pdf"]} />
                 <DropdownDemo label="Options" items={["renommer", "dupliquer", "supprimer"]} />
                 <DropdownDemo label="Trier par" items={["titre", "auteur", "année"]} />
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Anatomie</div>
-              <div className="ds-card-body" style={{ flexDirection: "column", gap: 8, fontSize: "0.82rem", color: "var(--text-2)", fontFamily: "var(--font-mono)" }}>
-                <span><strong>.dropdown-wrap</strong> — position: relative, conteneur</span>
-                <span><strong>button.btn.btn-outline</strong> — trigger, avec chevron SVG rotatif sur open</span>
-                <span><strong>.dropdown-menu</strong> — absolute, top: 100%+6px, right: 0, animation dropdownIn</span>
-                <span><strong>.dropdown-item</strong> — flex row, gap 8, padding 8/12, border-radius 7px</span>
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.dropdown-wrap · container</div>
+                  <p><code>position: relative</code>. Wraps the trigger button + the absolute menu.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">button.btn.btn-outline · trigger</div>
+                  <p>Standard outline button with chevron SVG rotating on open.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.dropdown-menu · panel</div>
+                  <p><code>position: absolute</code> · top: 100% + 6 · right: 0 · animation <code>dropdownIn</code> (spring).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.dropdown-item · row</div>
+                  <p>flex row · gap 8 · padding 8/12 · border-radius 7px.</p>
+                </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── EXPORT MENU ── */}
-          <section className="ds-section" id="export-menu">
-            <SectionTitle title="Export Menu" sub="Dropdown specialized for exports — PDF, Markdown, JSON. Used in Library, Quotes, Dictionary." />
+          <DSSection id="export-menu" title="Export Menu" sub="Dropdown specialized for exports — PDF, Markdown, JSON. Used in Library, Quotes, Dictionary.">
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
                 <DropdownDemo label="Export" items={["pdf", "md", "json"]} />
               </div>
             </div>
+
             <div className="ds-card">
-              <div className="ds-card-label">Props</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
-                <table className="token-table">
-                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
-                  <tbody>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>exportPDF</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows <code>pdf</code> item. Omit to hide.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>exportMD</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows <code>md</code> item. Omit to hide.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>exportData</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>() =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Shows <code>json</code> item (raw data). Omit to hide.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>disabled</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>boolean</td><td style={{ fontSize: "0.82rem" }}>Disables the trigger button (list empty cases).</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>t</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>i18n object</td><td style={{ fontSize: "0.82rem" }}>Reads <code>t.btnExport</code> for the trigger label.</td></tr>
-                  </tbody>
-                </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Source: <code>components/library/ExportMenu.js</code>. Trigger class: <code>.dropdown-btn</code>. Menu reuses the generic <code>.dropdown-menu</code>.
+              <div className="ds-card-head">Props</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">exportPDF · () =&gt; void</div>
+                  <p>Shows <code>pdf</code> item. Omit to hide.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">exportMD · () =&gt; void</div>
+                  <p>Shows <code>md</code> item. Omit to hide.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">exportData · () =&gt; void</div>
+                  <p>Shows <code>json</code> item (raw data). Omit to hide.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">disabled · boolean</div>
+                  <p>Disables the trigger button (list empty cases).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">t · i18n object</div>
+                  <p>Reads <code>t.btnExport</code> for the trigger label.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Source</div>
+                  <p>Component : <code>components/library/ExportMenu.js</code>. Trigger class : <code>.dropdown-btn</code>. Menu reuses the generic <code>.dropdown-menu</code>.</p>
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── INPUTS ── */}
-          <section className="ds-section" id="inputs">
-            <SectionTitle title="Inputs" sub="5 variants — all 40px height, font-size 14px, weight 600. Hover/focus share the same primary tint + ring." />
+          <DSSection id="inputs" title="Inputs" sub="5 variants — all 40px height, font-size 14px, weight 600. Hover/focus share the same primary tint + ring.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Variants overview</div>
+              <div className="ds-card-head">Variants overview</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead>
+                  <thead className="table-head">
                     <tr><th>Class</th><th>Used in</th><th>Padding</th><th>Radius</th><th>Default bg</th><th>Default border</th></tr>
                   </thead>
                   <tbody>
@@ -1285,12 +1316,12 @@ export default function DesignSystemPage() {
                       [".col-name-input", "Create collection modal", "0 12", "8", "--bg", "1.5px --border-subtle"],
                     ].map(([cls, where, pad, r, bg, bd]) => (
                       <tr key={cls}>
-                        <td className="token-table-component" style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{cls}</td>
-                        <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>{where}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{pad}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{r}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{bg}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{bd}</td>
+                        <td className="token-table-component" style={{ fontFamily: "monospace", fontSize: 12 }}>{cls}</td>
+                        <td className="meta">{where}</td>
+                        <td className="mono">{pad}</td>
+                        <td className="mono">{r}</td>
+                        <td className="mono">{bg}</td>
+                        <td className="mono">{bd}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -1299,17 +1330,17 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Search input — pill radius, visible default border</div>
+              <div className="ds-card-head">Search input — pill radius, visible default border</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap", gap: 24 }}>
                 <div>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Default</div>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Default</div>
                   <div className="search-box-demo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     <input placeholder="Title, author…" readOnly />
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Focus</div>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Focus</div>
                   <div className="search-box-demo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     <input placeholder="Title, author…" style={{ borderColor: "var(--primary-50)", boxShadow: "0 0 0 3px var(--primary-20)" }} readOnly />
@@ -1323,7 +1354,7 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Text field — bg3 variant, transparent border default</div>
+              <div className="ds-card-head">Text field — bg3 variant, transparent border default</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap", gap: 24 }}>
                 <div className="field-demo">
                   <label>Title · Default</label>
@@ -1341,45 +1372,44 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Common state rules</div>
+              <div className="ds-card-head">Common state rules</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead>
+                  <thead className="table-head">
                     <tr><th>State</th><th>Border</th><th>Background</th><th>Ring</th></tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td className="token-table-component">Default</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1.5px --border-subtle (or transparent for bg3 variants)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>--bg3 / #FFFFFF / --bg</td>
+                      <td className="mono">1.5px --border-subtle (or transparent for bg3 variants)</td>
+                      <td className="mono">--bg3 / #FFFFFF / --bg</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                     </tr>
                     <tr>
                       <td className="token-table-component">Hover</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1.5px --primary-50</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>--primary-5</td>
+                      <td className="mono">1.5px --primary-50</td>
+                      <td className="mono">--primary-5</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                     </tr>
                     <tr>
                       <td className="token-table-component">Focus</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1.5px --primary-50</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>--primary-5</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>0 0 0 3px --primary-20</td>
+                      <td className="mono">1.5px --primary-50</td>
+                      <td className="mono">--primary-5</td>
+                      <td className="mono">0 0 0 3px --primary-20</td>
                     </tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Dark mode: swap <code>--primary-50</code> → <code>--primary-40</code>, <code>--primary-5</code> → <code>rgba(73,89,230,0.10)</code>, ring → <code>rgba(73,89,230,0.2)</code>.
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── LANG SWITCHER ── */}
-          <section className="ds-section" id="lang-switcher">
-            <SectionTitle title="Language Switcher" />
+          <DSSection id="lang-switcher" title="Language Switcher">
             <div className="ds-card">
-              <div className="ds-card-label">FR / EN</div>
+              <div className="ds-card-head">FR / EN</div>
               <div className="ds-card-body">
                 <div className="lang-toggle-ds">
                   {["FR","EN"].map((l, i) => (
@@ -1391,13 +1421,12 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── SEGMENTED CONTROL ── */}
-          <section className="ds-section" id="segmented">
-            <SectionTitle title="Segmented Control" sub="Container bg3, active state white bg + blue shadow. Inactive weight 500, active weight 600." />
+          <DSSection id="segmented" title="Segmented Control" sub="Container bg3, active state white bg + blue shadow. Inactive weight 500, active weight 600.">
             <div className="ds-card">
-              <div className="ds-card-label">Library tabs</div>
+              <div className="ds-card-head">Library tabs</div>
               <div className="ds-card-body">
                 <div className="tabs-ds">
                   {["Library","Wishlist"].map(t => (
@@ -1412,41 +1441,39 @@ export default function DesignSystemPage() {
                 {["--bg3","--bg","font-weight:500/600"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── SORT MENU ── */}
-          <section className="ds-section" id="sort-menu">
-            <SectionTitle title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists." />
+          <DSSection id="sort-menu" title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists.">
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
                 <DropdownDemo label="Recent" items={["Recent", "A–Z"]} />
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Props</div>
+              <div className="ds-card-head">Props</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
+                  <thead className="table-head"><tr><th>Prop</th><th>Type</th><th>Effect</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>current</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Key of the active option. Trigger label reflects its label.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>onChange</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(key) =&gt; void</td><td style={{ fontSize: "0.82rem" }}>Fires with the selected option key.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>options</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ key, label }[]"}</td><td style={{ fontSize: "0.82rem" }}>Options list. Selected one gets a checkmark icon.</td></tr>
-                    <tr><td className="token-table-component" style={{ fontFamily: "monospace" }}>ariaLabel</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>string</td><td style={{ fontSize: "0.82rem" }}>Accessibility label for the trigger button.</td></tr>
+                    <tr><td className="token-table-component mono">current</td><td className="mono">string</td><td className="meta">Key of the active option. Trigger label reflects its label.</td></tr>
+                    <tr><td className="token-table-component mono">onChange</td><td className="mono">(key) =&gt; void</td><td className="meta">Fires with the selected option key.</td></tr>
+                    <tr><td className="token-table-component mono">options</td><td className="mono">{"{ key, label }[]"}</td><td className="meta">Options list. Selected one gets a checkmark icon.</td></tr>
+                    <tr><td className="token-table-component mono">ariaLabel</td><td className="mono">string</td><td className="meta">Accessibility label for the trigger button.</td></tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.dropdown-btn.sort-menu-btn</code> (shares the outline button anatomy).
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── THEME TOGGLE ── */}
-          <section className="ds-section" id="theme-toggle">
-            <SectionTitle title="Theme Toggle" sub="Light/dark toggle. Same button as in this page's header." />
+          <DSSection id="theme-toggle" title="Theme Toggle" sub="Light/dark toggle. Same button as in this page's header.">
             <div className="ds-card">
-              <div className="ds-card-label">Toggle</div>
+              <div className="ds-card-head">Toggle</div>
               <div className="ds-card-body">
                 <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
                   <span className="toggle-thumb-ds">
@@ -1455,13 +1482,12 @@ export default function DesignSystemPage() {
                 </button>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── VIEW TOGGLE ── */}
-          <section className="ds-section" id="view-toggle">
-            <SectionTitle title="View Toggle" sub="Grid / List. Active: primary-50 bg, white icon." />
+          <DSSection id="view-toggle" title="View Toggle" sub="Grid / List. Active: primary-50 bg, white icon.">
             <div className="ds-card">
-              <div className="ds-card-label">Toggle</div>
+              <div className="ds-card-head">Toggle</div>
               <div className="ds-card-body">
                 <div className="view-btns-ds">
                   <button className={`view-btn-ds${viewActive==="grid"?" active":""}`} onClick={() => setViewActive("grid")}>
@@ -1473,13 +1499,12 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── BOOK CARD ── */}
-          <section className="ds-section" id="card">
-            <SectionTitle title="Book Card" sub="--card bg, 1.5px --border-subtle. Hover: border primary-50, bg --primary-3, transform translateY -2 + shadow. Placeholder cover: gradient (coverColors hash) + Jakarta letter (white-85, 3.5rem/800) — same pattern across BookCard, BookPanel, NowReadingCard, BookChip." />
+          <DSSection id="card" title="Book Card" sub="--card bg, 1.5px --border-subtle. Hover: border primary-50, bg --primary-3, transform translateY -2 + shadow. Placeholder cover: gradient (coverColors hash) + Jakarta letter (white-85, 3.5rem/800) — same pattern across BookCard, BookPanel, NowReadingCard, BookChip.">
             <div className="ds-card">
-              <div className="ds-card-label">Grid view</div>
+              <div className="ds-card-head">Grid view</div>
               <div className="ds-card-body" style={{ flexWrap: "wrap" }}>
                 <div className="book-card-ds">
                   <div className="book-cover-ds" style={{ background: "var(--primary-5)" }} />
@@ -1503,14 +1528,13 @@ export default function DesignSystemPage() {
                 {["--card","--primary-5","--primary-30","font-weight:700/500"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── QUOTE CARD ── */}
-          <section className="ds-section" id="quote-card">
-            <SectionTitle title="Quote Card" sub="Card for a single quote. Padding 20px. Body in flex-row (text + delete), divider, BookChip below. Whole card is role='button' → opens QuotePanel; BookChip is nested button → opens BookPanel (stopPropagation)." />
+          <DSSection id="quote-card" title="Quote Card" sub="Card for a single quote. Padding 20px. Body in flex-row (text + delete), divider, BookChip below. Whole card is role='button' → opens QuotePanel; BookChip is nested button → opens BookPanel (stopPropagation).">
 
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
                 <div className="quote-card" style={{ maxWidth: 520, cursor: "default" }}>
                   <div className="quote-card-body">
@@ -1544,31 +1568,30 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Role</th><th>Key styles</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Key styles</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.quote-card</code></td><td style={{ fontSize: "0.82rem" }}>Outer clickable container</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 20, gap 20, role=button, hover: lift + border-primary-50 + shadow</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-card-body</code></td><td style={{ fontSize: "0.82rem" }}>Text + delete row</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex-row, gap 20, align-items: flex-start</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-card-text-wrap</code></td><td style={{ fontSize: "0.82rem" }}>Text column</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex: 1, min-width: 0, flex-col, gap 12</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-card-text</code></td><td style={{ fontSize: "0.82rem" }}>The quote</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-see-more</code></td><td style={{ fontSize: "0.82rem" }}>Expand toggle (conditional)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-card-delete</code></td><td style={{ fontSize: "0.82rem" }}>Destructive icon</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>40×40, flex-shrink: 0, --primary-5/--primary-10</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-card-divider</code></td><td style={{ fontSize: "0.82rem" }}>Separator</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>1px, --border-subtle</td></tr>
-                    <tr><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td style={{ fontSize: "0.82rem" }}>Book reference</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Override bg --primary-5 / --primary-10 when inside .quote-card</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card</code></td><td className="meta">Outer clickable container</td><td className="mono">padding 20, gap 20, role=button, hover: lift + border-primary-50 + shadow</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-body</code></td><td className="meta">Text + delete row</td><td className="mono">flex-row, gap 20, align-items: flex-start</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-text-wrap</code></td><td className="meta">Text column</td><td className="mono">flex: 1, min-width: 0, flex-col, gap 12</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-text</code></td><td className="meta">The quote</td><td className="mono">font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-see-more</code></td><td className="meta">Expand toggle (conditional)</td><td className="mono">Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-delete</code></td><td className="meta">Destructive icon</td><td className="mono">40×40, flex-shrink: 0, --primary-5/--primary-10</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-card-divider</code></td><td className="meta">Separator</td><td className="mono">1px, --border-subtle</td></tr>
+                    <tr><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td className="meta">Book reference</td><td className="mono">Override bg --primary-5 / --primary-10 when inside .quote-card</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── DICTIONARY CARD ── */}
-          <section className="ds-section" id="dictionary-card">
-            <SectionTitle title="Dictionary Card" sub="Saved word — collapsible. Head is the only clickable surface (hover bg primary-5). Body expanded shows definitions on neutral bg (readable). Card-level lift + border on any hover." />
+          <DSSection id="dictionary-card" title="Dictionary Card" sub="Saved word — collapsible. Head is the only clickable surface (hover bg primary-5). Body expanded shows definitions on neutral bg (readable). Card-level lift + border on any hover.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Collapsed</div>
+              <div className="ds-card-head">Collapsed</div>
               <div className="ds-card-body">
                 <div className="dictionary-saved-card" style={{ maxWidth: 520, width: "100%" }}>
                   <div className="dictionary-saved-head" role="button" tabIndex={0}>
@@ -1590,7 +1613,7 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Expanded — body has neutral bg so hover on head doesn't bleed into reading zone</div>
+              <div className="ds-card-head">Expanded — body has neutral bg so hover on head doesn't bleed into reading zone</div>
               <div className="ds-card-body">
                 <div className="dictionary-saved-card expanded" style={{ maxWidth: 520, width: "100%" }}>
                   <div className="dictionary-saved-head" role="button" tabIndex={0} aria-expanded="true">
@@ -1622,7 +1645,7 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Dictionary Result — lookup output (primary-tinted card)</div>
+              <div className="ds-card-head">Dictionary Result — lookup output (primary-tinted card)</div>
               <div className="ds-card-body">
                 <div className="dictionary-result" style={{ maxWidth: 520, width: "100%" }}>
                   <div className="dictionary-result-head">
@@ -1645,47 +1668,46 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Hover rules</div>
+              <div className="ds-card-head">Hover rules</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Hover target</th><th>Card effect</th><th>Head bg</th><th>Body bg</th></tr></thead>
+                  <thead className="table-head"><tr><th>Hover target</th><th>Card effect</th><th>Head bg</th><th>Body bg</th></tr></thead>
                   <tbody>
                     <tr>
                       <td className="token-table-component">Card (any zone)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>lift -2px · border --primary-50 · shadow</td>
+                      <td className="mono">lift -2px · border --primary-50 · shadow</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                     </tr>
                     <tr>
                       <td className="token-table-component">Head specifically</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(inherited from card hover)</td>
+                      <td className="mono">(inherited from card hover)</td>
                       <td><span className="ds-token-chip">--primary-5</span></td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                     </tr>
                     <tr>
                       <td className="token-table-component">Body (expanded)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>(inherited from card hover)</td>
+                      <td className="mono">(inherited from card hover)</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                       <td style={{ color: "var(--text-3)" }}>— (stays on --bg2)</td>
                     </tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Why body stays neutral : blue tint on content-rich zones hurts readability. The head — the only clickable affordance — carries the explicit hover bg.
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── LIST VIEW ── */}
-          <section className="ds-section" id="list">
-            <SectionTitle title="List View" />
+          <DSSection id="list" title="List View">
             <div className="ds-card">
-              <div className="ds-card-label">Tableau</div>
+              <div className="ds-card-head">Tableau</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <div className="list-demo">
                   <table>
-                    <thead>
+                    <thead className="table-head">
                       <tr>
                         {["Title","Author","Year","Genre"].map(h => <th key={h}>{h}</th>)}
                       </tr>
@@ -1704,13 +1726,12 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── SIDEBAR ── */}
-          <section className="ds-section" id="sidebar">
-            <SectionTitle title="Sidebar" sub="Navigation latérale fixe. Expanded 260px · Collapsed 60px. Persisté en localStorage." />
+          <DSSection id="sidebar" title="Sidebar" sub="Navigation latérale fixe. Expanded 260px · Collapsed 60px. Persisté en localStorage.">
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body" style={{ gap: 24, alignItems: 'flex-start' }}>
                 {/* Expanded */}
                 <div style={{ width: 200, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 420 }}>
@@ -1788,7 +1809,7 @@ export default function DesignSystemPage() {
             </div>
             <DSCard label="Nav items — états" tokens={["--primary-10","--primary-50","--primary-5","--primary"]}>
               <table className="btn-scale-table">
-                <thead><tr><th>État</th><th>Background</th><th>Couleur</th><th>Badge bg</th><th>Badge color</th></tr></thead>
+                <thead className="table-head"><tr><th>État</th><th>Background</th><th>Couleur</th><th>Badge bg</th><th>Badge color</th></tr></thead>
                 <tbody>
                   <tr><td>Default</td><td>transparent</td><td>--text-2</td><td>--primary-10</td><td>--primary-50</td></tr>
                   <tr><td>Hover</td><td>--primary-5</td><td>--text</td><td>—</td><td>—</td></tr>
@@ -1798,7 +1819,7 @@ export default function DesignSystemPage() {
             </DSCard>
             <DSCard label="Tokens & comportement" tokens={["--bg","--border","--primary-10","--primary-50"]}>
               <table className="btn-scale-table">
-                <thead><tr><th>Propriété</th><th>Valeur</th></tr></thead>
+                <thead className="table-head"><tr><th>Propriété</th><th>Valeur</th></tr></thead>
                 <tbody>
                   <tr><td>Expanded width</td><td>260px</td></tr>
                   <tr><td>Collapsed width</td><td>60px</td></tr>
@@ -1810,13 +1831,12 @@ export default function DesignSystemPage() {
                 </tbody>
               </table>
             </DSCard>
-          </section>
+          </DSSection>
 
           {/* ── PANEL ── */}
-          <section className="ds-section" id="panel">
-            <SectionTitle title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info meta↔actions / 24 .panel-info-header title+byline / 16 .panel-section eyebrow→content / 40 .panel-quotes content↔add. Finished section uses .panel-section.is-finished modifier (border-top + border-bottom + padding 24) for visual emphasis. Edit/Remove buttons use .panel-finished-btn (small ghost, 32 height, 13/600, --bg3 dark)." />
+          <DSSection id="panel" title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info meta↔actions / 24 .panel-info-header title+byline / 16 .panel-section eyebrow→content / 40 .panel-quotes content↔add. Finished section uses .panel-section.is-finished modifier (border-top + border-bottom + padding 24) for visual emphasis. Edit/Remove buttons use .panel-finished-btn (small ghost, 32 height, 13/600, --bg3 dark).">
             <div className="ds-card">
-              <div className="ds-card-label">Layout</div>
+              <div className="ds-card-head">Layout</div>
               <div className="ds-card-body" style={{ padding: 0 }}>
                 <div className="panel-ds-viewport">
                   <div className="panel-ds-content">
@@ -1869,32 +1889,31 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy (BookPanel)</div>
+              <div className="ds-card-head">Anatomy (BookPanel)</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Wrapper</th><th>Role</th><th>Gap</th></tr></thead>
+                  <thead className="table-head"><tr><th>Wrapper</th><th>Role</th><th>Gap</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.panel-inner</code></td><td style={{ fontSize: "0.82rem" }}>Outer container. Padding 96 / 32 / 32. Hosts share + close absolute</td><td style={{ fontFamily: "monospace" }}>24px</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-main</code></td><td style={{ fontSize: "0.82rem" }}>Cover + info block</td><td style={{ fontFamily: "monospace" }}>24px</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-cover-wrap</code></td><td style={{ fontSize: "0.82rem" }}>Cover. align-self: center + margin-bottom 36px (= 60px total to info)</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-info</code></td><td style={{ fontSize: "0.82rem" }}>Title / byline / About / actions</td><td style={{ fontFamily: "monospace" }}>24px</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-byline</code></td><td style={{ fontSize: "0.82rem" }}>Author + meta (tight cluster)</td><td style={{ fontFamily: "monospace" }}>8px</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-section</code></td><td style={{ fontSize: "0.82rem" }}>Semantic wrapper : eyebrow + content. Width 100%</td><td style={{ color: "var(--text-3)" }}>eyebrow margin-bottom 12</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-actions</code></td><td style={{ fontSize: "0.82rem" }}>Flex row, justify-between. Move + Delete buttons</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-divider</code></td><td style={{ fontSize: "0.82rem" }}>Canonical 1px separator. Used between panel-main and panel-quotes</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-quotes</code></td><td style={{ fontSize: "0.82rem" }}>Eyebrow + list + add button. Width 100%</td><td style={{ fontFamily: "monospace" }}>16px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Outer container. Padding 96 / 32 / 32. Hosts share + close absolute</td><td className="mono">24px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-main</code></td><td className="meta">Cover + info block</td><td className="mono">24px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-cover-wrap</code></td><td className="meta">Cover. align-self: center + margin-bottom 36px (= 60px total to info)</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Title / byline / About / actions</td><td className="mono">24px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-byline</code></td><td className="meta">Author + meta (tight cluster)</td><td className="mono">8px</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-section</code></td><td className="meta">Semantic wrapper : eyebrow + content. Width 100%</td><td style={{ color: "var(--text-3)" }}>eyebrow margin-bottom 12</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Flex row, justify-between. Move + Delete buttons</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px separator. Used between panel-main and panel-quotes</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-quotes</code></td><td className="meta">Eyebrow + list + add button. Width 100%</td><td className="mono">16px</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── QUOTE PANEL ── */}
-          <section className="ds-section" id="quote-panel">
-            <SectionTitle title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Same drawer mechanics as Book Panel, with quote-specific content : text, book chip (clickable → BookPanel), edit/delete." />
+          <DSSection id="quote-panel" title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Same drawer mechanics as Book Panel, with quote-specific content : text, book chip (clickable → BookPanel), edit/delete.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Content layout</div>
+              <div className="ds-card-head">Content layout</div>
               <div className="ds-card-body">
                 <div style={{ maxWidth: 420, width: "100%", border: "1.5px solid var(--border-subtle)", borderRadius: 8, padding: 24, background: "var(--bg)", display: "flex", flexDirection: "column", gap: 24 }}>
                   {/* Header row: share + close (absolute in real panel, inline here) */}
@@ -1944,54 +1963,53 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy — shares primitives with BookPanel</div>
+              <div className="ds-card-head">Anatomy — shares primitives with BookPanel</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Wrapper / element</th><th>Role</th></tr></thead>
+                  <thead className="table-head"><tr><th>Wrapper / element</th><th>Role</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.panel-inner</code></td><td style={{ fontSize: "0.82rem" }}>Same as BookPanel — padding 96/32/32, gap 24, hosts share + close absolute</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-main</code></td><td style={{ fontSize: "0.82rem" }}>Quote section + date + actions. Gap 24px, width 100%</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td style={{ fontSize: "0.82rem" }}>Eyebrow "Quote" + <code>.quote-panel-text</code></td></tr>
-                    <tr><td className="token-table-component"><code>.quote-panel-text</code></td><td style={{ fontSize: "0.82rem" }}>Font 16 / line-height 1.7 — matches <code>.quote-card-text</code> for continuity</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-panel-date</code></td><td style={{ fontSize: "0.82rem" }}>Subtitle (12px, text-3). Conditional on <code>createdAt</code></td></tr>
-                    <tr><td className="token-table-component"><code>.panel-actions</code></td><td style={{ fontSize: "0.82rem" }}>Edit (move-btn) + Delete. Delete triggers <code>DeleteModal</code> with <code>type: 'quote'</code></td></tr>
-                    <tr><td className="token-table-component"><code>.panel-divider</code></td><td style={{ fontSize: "0.82rem" }}>Canonical 1px separator (conditional — only if book exists)</td></tr>
-                    <tr><td className="token-table-component"><code>.panel-section</code> (Book)</td><td style={{ fontSize: "0.82rem" }}>Eyebrow "Book" + <code>&lt;BookChip&gt;</code> (base palette, <code>--bg3</code> default)</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Same as BookPanel — padding 96/32/32, gap 24, hosts share + close absolute</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-main</code></td><td className="meta">Quote section + date + actions. Gap 24px, width 100%</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td className="meta">Eyebrow "Quote" + <code>.quote-panel-text</code></td></tr>
+                    <tr><td className="token-table-component"><code>.quote-panel-text</code></td><td className="meta">Font 16 / line-height 1.7 — matches <code>.quote-card-text</code> for continuity</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-panel-date</code></td><td className="meta">Subtitle (12px, text-3). Conditional on <code>createdAt</code></td></tr>
+                    <tr><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Edit (move-btn) + Delete. Delete triggers <code>DeleteModal</code> with <code>type: 'quote'</code></td></tr>
+                    <tr><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px separator (conditional — only if book exists)</td></tr>
+                    <tr><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + <code>&lt;BookChip&gt;</code> (base palette, <code>--bg3</code> default)</td></tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Drawer mechanics (position, width, slide-in transition) identical to Book Panel. <code>.quote-panel-divider</code> was replaced by the canonical <code>.panel-divider</code>.
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── MODAL ── */}
-          <section className="ds-section" id="modal">
-            <SectionTitle title="Modal" sub="Centered form modal — max-width 630px, gap-driven layout (display: flex column, gap 32). Used by Add a book, Add a quote, Mark as finished. Submit button outside the <form>, linked via form='id' attr (preserves Enter-to-submit)." />
+          <DSSection id="modal" title="Modal" sub="Centered form modal — max-width 630px, gap-driven layout (display: flex column, gap 32). Used by Add a book, Add a quote, Mark as finished. Submit button outside the <form>, linked via form='id' attr (preserves Enter-to-submit).">
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy (gap-driven, no margins)</div>
+              <div className="ds-card-head">Anatomy (gap-driven, no margins)</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.modal-overlay</code></td><td style={{ fontSize: "0.82rem" }}>Backdrop</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>fixed, padding 40 24, light overlay</td></tr>
-                    <tr><td className="token-table-component"><code>.modal</code></td><td style={{ fontSize: "0.82rem" }}>Modal shell</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>max-width 630, padding 32 24 0, flex col gap 32</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-close</code></td><td style={{ fontSize: "0.82rem" }}>X button (absolute)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>top:16 right:16, 40×40, svg 24×24</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-title</code></td><td style={{ fontSize: "0.82rem" }}>Heading</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>28/800/-0.02em (no margin — parent gap)</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-tabs-section</code></td><td style={{ fontSize: "0.82rem" }}>Tabs + active content (only if tabs)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 20</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-form</code></td><td style={{ fontSize: "0.82rem" }}>{'<form>'} wrapping inputs only</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>id="..." — referenced by submit button outside</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-fields</code></td><td style={{ fontSize: "0.82rem" }}>Body content stack</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 24</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-field</code></td><td style={{ fontSize: "0.82rem" }}>Label + input pair</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 8 — label 13/500/--text-2</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-actions</code></td><td style={{ fontSize: "0.82rem" }}>Footer button row (sibling of form)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-overlay</code></td><td className="meta">Backdrop</td><td className="mono">fixed, padding 40 24, light overlay</td></tr>
+                    <tr><td className="token-table-component"><code>.modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 630, padding 32 24 0, flex col gap 32</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-close</code></td><td className="meta">X button (absolute)</td><td className="mono">top:16 right:16, 40×40, svg 24×24</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-title</code></td><td className="meta">Heading</td><td className="mono">28/800/-0.02em (no margin — parent gap)</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-tabs-section</code></td><td className="meta">Tabs + active content (only if tabs)</td><td className="mono">flex col gap 20</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="..." — referenced by submit button outside</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-field</code></td><td className="meta">Label + input pair</td><td className="mono">flex col gap 8 — label 13/500/--text-2</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-actions</code></td><td className="meta">Footer button row (sibling of form)</td><td className="mono">flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Add a book — preview</div>
+              <div className="ds-card-head">Add a book — preview</div>
               <div className="ds-card-body">
                 <div className="modal-preview">
                   <div className="modal-preview-title">Add a book</div>
@@ -2023,14 +2041,13 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── DELETE MODAL ── */}
-          <section className="ds-section" id="delete-modal">
-            <SectionTitle title="Delete Modal" sub="Type-routed confirmation modal — same component handles books, quotes, words, bulk, cancelReading and removeFinished. Uses .confirm-modal pattern (aligned with .modal: max-width 630, gap 32). Single-book/cancelReading variants show a BookChip preview ; quote variant shows the quote text in a .panel-quote-item-style box with line-clamp + see more ; removeFinished shows the rating + comment to be deleted." />
+          <DSSection id="delete-modal" title="Delete Modal" sub="Type-routed confirmation modal — same component handles books, quotes, words, bulk, cancelReading and removeFinished. Uses .confirm-modal pattern (aligned with .modal: max-width 630, gap 32). Single-book/cancelReading variants show a BookChip preview ; quote variant shows the quote text in a .panel-quote-item-style box with line-clamp + see more ; removeFinished shows the rating + comment to be deleted.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
                 <div style={{ maxWidth: 380, margin: "0 auto", background: "var(--card)", border: "1.5px solid var(--border-subtle)", borderRadius: 12, padding: 24, boxShadow: "var(--shadow-lg)" }}>
                   <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>Remove this quote?</div>
@@ -2044,36 +2061,36 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Target routing — <code>target.type</code> dispatches the i18n</div>
+              <div className="ds-card-head">Target routing — <code>target.type</code> dispatches the i18n</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead>
+                  <thead className="table-head">
                     <tr><th>target shape</th><th>Title i18n</th><th>Message i18n</th><th>onConfirm handler</th></tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ bulk: true, ids, count }"}</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteBulkTitle(count)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteBulkMsg(count)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteMany(ids)</td>
+                      <td className="mono">{"{ bulk: true, ids, count }"}</td>
+                      <td className="mono">t.deleteBulkTitle(count)</td>
+                      <td className="mono">t.deleteBulkMsg(count)</td>
+                      <td className="mono">deleteMany(ids)</td>
                     </tr>
                     <tr>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ type: 'quote', id }"}</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.quoteDeleteTitle</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.quoteDeleteMsg</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteQuote(id)</td>
+                      <td className="mono">{"{ type: 'quote', id }"}</td>
+                      <td className="mono">t.quoteDeleteTitle</td>
+                      <td className="mono">t.quoteDeleteMsg</td>
+                      <td className="mono">deleteQuote(id)</td>
                     </tr>
                     <tr>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ type: 'word', id, title }"}</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.wordDeleteTitle</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.wordDeleteMsg(title)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteWord(id)</td>
+                      <td className="mono">{"{ type: 'word', id, title }"}</td>
+                      <td className="mono">t.wordDeleteTitle</td>
+                      <td className="mono">t.wordDeleteMsg(title)</td>
+                      <td className="mono">deleteWord(id)</td>
                     </tr>
                     <tr>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>{"{ id, title, ... }"} (book, no type)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteTitle</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>t.deleteMsg(title)</td>
-                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>deleteBook(id)</td>
+                      <td className="mono">{"{ id, title, ... }"} (book, no type)</td>
+                      <td className="mono">t.deleteTitle</td>
+                      <td className="mono">t.deleteMsg(title)</td>
+                      <td className="mono">deleteBook(id)</td>
                     </tr>
                   </tbody>
                 </table>
@@ -2081,12 +2098,12 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Usage</div>
+              <div className="ds-card-head">Usage</div>
               <div className="ds-card-body col" style={{ gap: 12 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>
+                <p>
                   Trigger the modal by setting <code>deleteTarget</code> state. The <code>onConfirm</code> callback receives the full target — dispatch in the parent based on <code>target.type</code>.
                 </p>
-                <pre style={{ fontFamily: "monospace", fontSize: "0.75rem", background: "var(--bg3)", padding: "12px 14px", borderRadius: 6, color: "var(--text)", lineHeight: 1.6, margin: 0, overflow: "auto" }}>
+                <pre style={{ fontFamily: "monospace", fontSize: 12, background: "var(--bg3)", padding: "12px 14px", borderRadius: 6, color: "var(--text)", lineHeight: 1.6, margin: 0, overflow: "auto" }}>
 {`// Open
 <button onClick={() => setDeleteTarget({ type: 'quote', id: q.id })}>…</button>
 
@@ -2106,16 +2123,15 @@ function handleDeleteConfirm(payload) {
   return deleteBook(payload.id);
 }`}
                 </pre>
-                <div style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>
+                <div style={{ fontSize: 12, color: "var(--text-3)" }}>
                   Source: <code>components/library/DeleteModal.js</code>. The Cancel button is <code>.modal-cancel</code> (outline). The confirm is <code>.confirm-modal-delete</code> (red fill).
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── UPLOAD BOX ── */}
-          <section className="ds-section" id="upload-box">
-            <SectionTitle title="Upload Box" sub="Dropzone with gradient dashed border (Photo/AI) or standard border (File). Three states: idle, scanning, error." />
+          <DSSection id="upload-box" title="Upload Box" sub="Dropzone with gradient dashed border (Photo/AI) or standard border (File). Three states: idle, scanning, error.">
 
             {/* Photo / AI dropzone — all states */}
             {[
@@ -2124,7 +2140,7 @@ function handleDeleteConfirm(payload) {
               { key: "error", label: "Error" },
             ].map(({ key, label }) => (
               <div className="ds-card" key={key}>
-                <div className="ds-card-label">Photo / AI — {label}</div>
+                <div className="ds-card-head">Photo / AI — {label}</div>
                 <div className="ds-card-body col" style={{ gap: 16 }}>
                   <UploadBoxDemo state={key} variant="photo" />
                   {key === "error" && (
@@ -2141,7 +2157,7 @@ function handleDeleteConfirm(payload) {
 
             {/* File dropzone */}
             <div className="ds-card">
-              <div className="ds-card-label">File — standard border</div>
+              <div className="ds-card-head">File — standard border</div>
               <div className="ds-card-body">
                 <div className="import-dropzone" style={{ cursor: "default", width: "40%" }}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -2155,13 +2171,12 @@ function handleDeleteConfirm(payload) {
               </div>
             </div>
 
-          </section>
+          </DSSection>
 
           {/* ── SELECTION BAR ── */}
-          <section className="ds-section" id="selection-bar">
-            <SectionTitle title="Selection Bar" sub="Floating bar fixed bottom-center in Edit mode. Background --primary-60 (light & dark). Slides up from below via translateY(120 → 0)." />
+          <DSSection id="selection-bar" title="Selection Bar" sub="Floating bar fixed bottom-center in Edit mode. Background --primary-60 (light & dark). Slides up from below via translateY(120 → 0).">
             <div className="ds-card">
-              <div className="ds-card-label">Preview — Wishlist edit mode (3 buttons in .sel-actions)</div>
+              <div className="ds-card-head">Preview — Wishlist edit mode (3 buttons in .sel-actions)</div>
               <div className="ds-card-body" style={{ justifyContent: "center" }}>
                 <div className="selection-bar visible" style={{ position: "static", transform: "none" }}>
                   <span className="selection-count">3 selected</span>
@@ -2175,10 +2190,10 @@ function handleDeleteConfirm(payload) {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Background</th><th>Border / color</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Background</th><th>Border / color</th></tr></thead>
                   <tbody>
                     <tr><td className="token-table-component"><code>.selection-bar</code></td><td><span className="ds-token-chip">--primary-60</span></td><td>color #fff · gap 16</td></tr>
                     <tr><td className="token-table-component"><code>.sel-actions</code></td><td style={{ color: "var(--text-3)" }}>—</td><td>flex row, gap 8 (desktop) / column on mobile</td></tr>
@@ -2188,36 +2203,35 @@ function handleDeleteConfirm(payload) {
                     <tr><td className="token-table-component"><code>.sel-cancel</code></td><td>rgba(255,255,255,0.15)</td><td>color #fff</td></tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
                   Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── EMPTY STATE ── */}
-          <section className="ds-section" id="empty">
-            <SectionTitle title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Icons 80×80 illustrative SVGs, custom per page (Library, Wishlist, Quotes, Dictionary)." />
+          <DSSection id="empty" title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Icons 80×80 illustrative SVGs, custom per page (Library, Wishlist, Quotes, Dictionary).">
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.empty</code></td><td style={{ fontSize: "0.82rem" }}>Outer container</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align center, gap 20, padding 80/20</td></tr>
-                    <tr><td className="token-table-component"><code>.empty-icon</code></td><td style={{ fontSize: "0.82rem" }}>Illustration SVG</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>80×80, viewBox 60</td></tr>
-                    <tr><td className="token-table-component"><code>.empty-text</code></td><td style={{ fontSize: "0.82rem" }}>Title + sub wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, gap 8</td></tr>
-                    <tr><td className="token-table-component"><code>.empty-title</code></td><td style={{ fontSize: "0.82rem" }}>Headline</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Jakarta 18 / 700</td></tr>
-                    <tr><td className="token-table-component"><code>.empty-sub</code></td><td style={{ fontSize: "0.82rem" }}>Helper text</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>14 / --text-2 / max-width 280</td></tr>
-                    <tr><td className="token-table-component"><code>.empty-cta</code></td><td style={{ fontSize: "0.82rem" }}>Primary action (optional)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Same anatomy as .add-btn (h 40, --primary-50)</td></tr>
+                    <tr><td className="token-table-component"><code>.empty</code></td><td className="meta">Outer container</td><td className="mono">flex col, align center, gap 20, padding 80/20</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-icon</code></td><td className="meta">Illustration SVG</td><td className="mono">80×80, viewBox 60</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-text</code></td><td className="meta">Title + sub wrapper</td><td className="mono">flex col, gap 8</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-title</code></td><td className="meta">Headline</td><td className="mono">Jakarta 18 / 700</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-sub</code></td><td className="meta">Helper text</td><td className="mono">14 / --text-2 / max-width 280</td></tr>
+                    <tr><td className="token-table-component"><code>.empty-cta</code></td><td className="meta">Primary action (optional)</td><td className="mono">Same anatomy as .add-btn (h 40, --primary-50)</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Icon set — 4 illustrative SVGs (80×80, viewBox 60)</div>
+              <div className="ds-card-head">Icon set — 4 illustrative SVGs (80×80, viewBox 60)</div>
               <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
@@ -2293,7 +2307,7 @@ function handleDeleteConfirm(payload) {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Live preview — Library empty</div>
+              <div className="ds-card-head">Live preview — Library empty</div>
               <div className="ds-card-body">
                 <div className="empty" style={{ padding: "40px 20px" }}>
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
@@ -2314,38 +2328,37 @@ function handleDeleteConfirm(payload) {
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── NOW READING ── */}
-          <section className="ds-section" id="now-reading">
-            <SectionTitle title="Now Reading" sub="Section pinned at the top of the Library tab. Max 3 books simultaneously (MAX_READING). Visual differentiator from the BookCard grid below — same card family tokens but distinct vertical layout with a primary badge + kebab quick-actions." />
+          <DSSection id="now-reading" title="Now Reading" sub="Section pinned at the top of the Library tab. Max 3 books simultaneously (MAX_READING). Visual differentiator from the BookCard grid below — same card family tokens but distinct vertical layout with a primary badge + kebab quick-actions.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.now-reading-section</code></td><td style={{ fontSize: "0.82rem" }}>Section root</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-list</code></td><td style={{ fontSize: "0.82rem" }}>Cards grid</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-card</code></td><td style={{ fontSize: "0.82rem" }}>Card root (role=button)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 14 56 14 16 (right reserves kebab), --card bg, 1.5px --border-subtle, --radius, fadeUp animation</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-body</code></td><td style={{ fontSize: "0.82rem" }}>Vertical content stack</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align-items flex-start, gap 16</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-date</code></td><td style={{ fontSize: "0.82rem" }}>"Started on" badge</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>solid primary fill (--primary-50 / --primary-40 dark) · white text · h 20 · 11/600</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-row</code></td><td style={{ fontSize: "0.82rem" }}>Cover + text horizontal block</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex row, gap 16, align-items center</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-cover</code></td><td style={{ fontSize: "0.82rem" }}>Cover thumbnail</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>60×90 (ratio 2:3), radius 4 · gradient + Jakarta letter (white-85) when no image</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-text</code></td><td style={{ fontSize: "0.82rem" }}>Title + meta wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, gap 8, flex 1, min-width 0</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-title</code></td><td style={{ fontSize: "0.82rem" }}>Book title</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>16/700/lh 1.35 (one tier above .book-title for differentiation)</td></tr>
-                    <tr><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td style={{ fontSize: "0.82rem" }}>Kebab "more actions"</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-section</code></td><td className="meta">Section root</td><td className="mono">flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-list</code></td><td className="meta">Cards grid</td><td className="mono">grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-card</code></td><td className="meta">Card root (role=button)</td><td className="mono">padding 14 56 14 16 (right reserves kebab), --card bg, 1.5px --border-subtle, --radius, fadeUp animation</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-body</code></td><td className="meta">Vertical content stack</td><td className="mono">flex col, align-items flex-start, gap 16</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge</td><td className="mono">solid primary fill (--primary-50 / --primary-40 dark) · white text · h 20 · 11/600</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-row</code></td><td className="meta">Cover + text horizontal block</td><td className="mono">flex row, gap 16, align-items center</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-cover</code></td><td className="meta">Cover thumbnail</td><td className="mono">60×90 (ratio 2:3), radius 4 · gradient + Jakarta letter (white-85) when no image</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-text</code></td><td className="meta">Title + meta wrapper</td><td className="mono">flex col, gap 8, flex 1, min-width 0</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-title</code></td><td className="meta">Book title</td><td className="mono">16/700/lh 1.35 (one tier above .book-title for differentiation)</td></tr>
+                    <tr><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td className="meta">Kebab "more actions"</td><td className="mono">40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Quick actions (kebab dropdown)</div>
+              <div className="ds-card-head">Quick actions (kebab dropdown)</div>
               <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>3 actions, all <code>stopPropagation</code> on the card click :</p>
-                <ul style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
+                <p>3 actions, all <code>stopPropagation</code> on the card click :</p>
+                <ul style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
                   <li><strong>Mark as finished</strong> — opens FinishReadingModal</li>
                   <li><strong>Add a quote</strong> — opens AddQuoteModal pre-filled with the book context (BookChip in both Photo + Manual tabs, no inputs to edit)</li>
                   <li><strong>Cancel reading</strong> — opens DeleteModal (type=cancelReading) explaining the book stays in library, only removed from Now Reading. Confirm style is <code>.ob-next</code> (non-destructive)</li>
@@ -2354,79 +2367,77 @@ function handleDeleteConfirm(payload) {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Card hierarchy</div>
+              <div className="ds-card-head">Card hierarchy</div>
               <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>The Now Reading card belongs to the same visual family as <code>.book-card</code> (same radius, border, hover transition, fadeUp animation) but adopts a different layout to differentiate without competing visually with the Library grid below. The badge in primary fill anchors the "active reading" status.</p>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>Order rule : <code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first).</p>
+                <p>The Now Reading card belongs to the same visual family as <code>.book-card</code> (same radius, border, hover transition, fadeUp animation) but adopts a different layout to differentiate without competing visually with the Library grid below. The badge in primary fill anchors the "active reading" status.</p>
+                <p>Order rule : <code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first).</p>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── FINISH READING MODAL ── */}
-          <section className="ds-section" id="finish-reading">
-            <SectionTitle title="Finish Reading Modal" sub="Form modal opened from BookPanel 'Mark as finished' or NowReading kebab. Saves rating (1-5 stars) + optional comment. Reopens pre-filled when the user edits an already-finished book." />
+          <DSSection id="finish-reading" title="Finish Reading Modal" sub="Form modal opened from BookPanel 'Mark as finished' or NowReading kebab. Saves rating (1-5 stars) + optional comment. Reopens pre-filled when the user edits an already-finished book.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.modal.finish-modal</code></td><td style={{ fontSize: "0.82rem" }}>Modal shell (.modal pattern)</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>max-width 630, padding 32 24 0, flex col gap 32</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-form</code></td><td style={{ fontSize: "0.82rem" }}>{'<form>'} wrapping inputs only</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>id="finish-reading-form" — submit button outside form via form="" attr (Enter-to-submit preserved)</td></tr>
-                    <tr><td className="token-table-component"><code>.modal-fields</code></td><td style={{ fontSize: "0.82rem" }}>Body content stack</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col gap 24, contains chip + 2 .modal-field</td></tr>
-                    <tr><td className="token-table-component"><code>.finish-modal-chip</code></td><td style={{ fontSize: "0.82rem" }}>BookChip wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>just for spacing — gap-driven by parent .modal-fields</td></tr>
-                    <tr><td className="token-table-component"><code>.finish-stars</code></td><td style={{ fontSize: "0.82rem" }}>5 star rating buttons</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex row gap 4, svg 28×28, --border default → --primary-50 filled</td></tr>
-                    <tr><td className="token-table-component"><code>.quote-textarea</code></td><td style={{ fontSize: "0.82rem" }}>Comment textarea</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>same shared input style as AddQuoteModal — bg --bg3, focus primary glow</td></tr>
+                    <tr><td className="token-table-component"><code>.modal.finish-modal</code></td><td className="meta">Modal shell (.modal pattern)</td><td className="mono">max-width 630, padding 32 24 0, flex col gap 32</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="finish-reading-form" — submit button outside form via form="" attr (Enter-to-submit preserved)</td></tr>
+                    <tr><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24, contains chip + 2 .modal-field</td></tr>
+                    <tr><td className="token-table-component"><code>.finish-modal-chip</code></td><td className="meta">BookChip wrapper</td><td className="mono">just for spacing — gap-driven by parent .modal-fields</td></tr>
+                    <tr><td className="token-table-component"><code>.finish-stars</code></td><td className="meta">5 star rating buttons</td><td className="mono">flex row gap 4, svg 28×28, --border default → --primary-50 filled</td></tr>
+                    <tr><td className="token-table-component"><code>.quote-textarea</code></td><td className="meta">Comment textarea</td><td className="mono">same shared input style as AddQuoteModal — bg --bg3, focus primary glow</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Display in BookPanel (after save)</div>
+              <div className="ds-card-head">Display in BookPanel (after save)</div>
               <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>Once saved, the finished metadata appears as a dedicated section in <code>.panel-info</code> :</p>
-                <ul style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
+                <p>Once saved, the finished metadata appears as a dedicated section in <code>.panel-info</code> :</p>
+                <ul style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
                   <li><code>.panel-section.is-finished</code> — framed by border-top + border-bottom + padding 24, visually emphasized vs other sections</li>
                   <li><code>.panel-finished-date</code> — "Finished on Apr 27" (15/500/lh 1.8, matches .panel-synopsis)</li>
                   <li><code>.panel-rating-stars</code> — read-only stars in primary fill, displayed in a tinted box (--bg3)</li>
                   <li><code>.panel-finished-note</code> — italic comment in tinted box (--bg3, 15/500/lh 1.8)</li>
                   <li><code>.panel-finished-actions</code> — Edit + Remove buttons (Edit becomes "Add rating" if no rating/note set yet)</li>
                 </ul>
-                <p style={{ fontSize: "0.857rem", color: "var(--text-2)", lineHeight: 1.7 }}>Remove triggers DeleteModal type=removeFinished — preserves book.finishedAt, only clears rating + note. Modal previews the removed content (rating + note) before confirm.</p>
+                <p>Remove triggers DeleteModal type=removeFinished — preserves book.finishedAt, only clears rating + note. Modal previews the removed content (rating + note) before confirm.</p>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── ONBOARDING ── */}
-          <section className="ds-section" id="onboarding">
-            <SectionTitle title="Onboarding" sub="6-slide modal shown on first visit (persisted via readr-onboarding-seen) and reopenable from the footer. Each slide pairs an illustrative SVG (120×120) with a verb-led title and a single-sentence desc. Mobile titles use \\n + white-space: pre-line for controlled line breaks." />
+          <DSSection id="onboarding" title="Onboarding" sub="6-slide modal shown on first visit (persisted via readr-onboarding-seen) and reopenable from the footer. Each slide pairs an illustrative SVG (120×120) with a verb-led title and a single-sentence desc. Mobile titles use \\n + white-space: pre-line for controlled line breaks.">
 
             <div className="ds-card">
-              <div className="ds-card-label">Anatomy</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
-                  <thead><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody>
-                    <tr><td className="token-table-component"><code>.ob-overlay</code></td><td style={{ fontSize: "0.82rem" }}>Backdrop, click outside to close</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>fixed, z-index 400, blur 20</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-modal</code></td><td style={{ fontSize: "0.82rem" }}>Modal shell</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>max-width ~520, --bg2, --shadow-lg</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-body</code></td><td style={{ fontSize: "0.82rem" }}>Inner padding</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 48 32 32</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-slides</code></td><td style={{ fontSize: "0.82rem" }}>Vertical stack: icon → text → dots</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align center, gap 40</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-icon</code></td><td style={{ fontSize: "0.82rem" }}>SVG slot</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>120×120, viewBox 60</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td style={{ fontSize: "0.82rem" }}>Fallback when no icon</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>120×120, --primary-5, radius 16</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-text</code></td><td style={{ fontSize: "0.82rem" }}>Title + desc wrapper</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex col, align center, gap 20</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-title</code></td><td style={{ fontSize: "0.82rem" }}>Slide title</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>Jakarta 20 / 800, line-height 1.3</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-desc</code></td><td style={{ fontSize: "0.82rem" }}>Slide description</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>16 / 500, line-height 1.7, max-width 464</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-dots</code></td><td style={{ fontSize: "0.82rem" }}>Pagination indicator</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>flex row, gap 6, dot 6×6 → 20×6 active</td></tr>
-                    <tr><td className="token-table-component"><code>.ob-footer</code></td><td style={{ fontSize: "0.82rem" }}>Skip + Previous + Next/Get started</td><td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>padding 18, flex col, gap 24</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-overlay</code></td><td className="meta">Backdrop, click outside to close</td><td className="mono">fixed, z-index 400, blur 20</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width ~520, --bg2, --shadow-lg</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-body</code></td><td className="meta">Inner padding</td><td className="mono">padding 48 32 32</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-slides</code></td><td className="meta">Vertical stack: icon → text → dots</td><td className="mono">flex col, align center, gap 40</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-icon</code></td><td className="meta">SVG slot</td><td className="mono">120×120, viewBox 60</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon</td><td className="mono">120×120, --primary-5, radius 16</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-text</code></td><td className="meta">Title + desc wrapper</td><td className="mono">flex col, align center, gap 20</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-title</code></td><td className="meta">Slide title</td><td className="mono">Jakarta 20 / 800, line-height 1.3</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500, line-height 1.7, max-width 464</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-dots</code></td><td className="meta">Pagination indicator</td><td className="mono">flex row, gap 6, dot 6×6 → 20×6 active</td></tr>
+                    <tr><td className="token-table-component"><code>.ob-footer</code></td><td className="meta">Skip + Previous + Next/Get started</td><td className="mono">padding 18, flex col, gap 24</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-label">Icon set — 6 illustrative SVGs (120×120, viewBox 60)</div>
+              <div className="ds-card-head">Icon set — 6 illustrative SVGs (120×120, viewBox 60)</div>
               <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
                   <ReadrIcon />
@@ -2454,24 +2465,22 @@ function handleDeleteConfirm(payload) {
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── FOOTER ── */}
-          <section className="ds-section" id="footer">
-            <SectionTitle title="Footer" />
+          <DSSection id="footer" title="Footer">
             <div className="ds-card">
-              <div className="ds-card-label">Preview</div>
+              <div className="ds-card-head">Preview</div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <div className="footer-preview">
                   © 2026 Pierre Blavette · How it works · v1.0 · About readr · pierreblavette.com
                 </div>
               </div>
             </div>
-          </section>
+          </DSSection>
 
           {/* ── TOKEN USAGE ── */}
-          <section className="ds-section" id="token-usage">
-            <SectionTitle title="Token Usage" sub="Authoritative mapping component → tokens. Reflects the current lib state (post border-subtle migration)." />
+          <DSSection id="token-usage" title="Token Usage" sub="Authoritative mapping component → tokens. Reflects the current lib state (post border-subtle migration).">
 
             {[
               {
@@ -2554,17 +2563,17 @@ function handleDeleteConfirm(payload) {
               },
             ].map(({ label, rows }) => (
               <div className="ds-card" key={label}>
-                <div className="ds-card-label">{label}</div>
+                <div className="ds-card-head">{label}</div>
                 <div className="ds-card-body col" style={{ padding: 0 }}>
                   <table className="token-table">
-                    <thead>
+                    <thead className="table-head">
                       <tr><th>Component</th><th>State</th><th>Tokens / specs</th></tr>
                     </thead>
                     <tbody>
                       {rows.map(([comp, state, tokens], i) => (
                         <tr key={comp + state + i}>
                           <td className="token-table-component">{comp}</td>
-                          <td style={{ color: "var(--text-3)", fontSize: "0.857rem" }}>{state}</td>
+                          <td style={{ color: "var(--text-3)", fontSize: 12 }}>{state}</td>
                           <td>{tokens.map((t, j) => <span key={t + j} className="ds-token-chip">{t}</span>)}</td>
                         </tr>
                       ))}
@@ -2573,8 +2582,10 @@ function handleDeleteConfirm(payload) {
                 </div>
               </div>
             ))}
-          </section>
+          </DSSection>
 
+            </div>
+          </div>
         </main>
       </div>
     </div>

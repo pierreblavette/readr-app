@@ -13,7 +13,7 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
   return (
     <div className="books-list">
       <table className="list-table">
-        <thead>
+        <thead className="table-head">
           <tr>
             <th className="list-cell-num">
               {editMode && (

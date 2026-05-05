@@ -250,7 +250,7 @@ export default function CollectionsView({ collections, data, view, switchView, o
       ) : view === 'list' ? (
         <div className="books-list">
           <table className="list-table">
-            <thead>
+            <thead className="table-head">
               <tr>
                 {editMode && (
                   <th className="list-cell-num">
