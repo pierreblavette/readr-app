@@ -48,22 +48,17 @@ export default function ReadingGoalModal({ open, onClose, onSetGoal, year, curre
               placeholder={t.overviewGoalPlaceholder}
             />
           </div>
+          {isSet && (
+            <button type="button" className="quote-see-more quote-see-more--critical" onClick={handleRemove}>
+              {t.overviewGoalRemove}
+            </button>
+          )}
         </form>
 
         <div className="confirm-modal-actions">
           <button type="button" className="modal-cancel" onClick={onClose}>
             {t.btnCancel}
           </button>
-          {isSet && (
-            <button type="button" className="modal-cancel overview-goal-remove" onClick={handleRemove} aria-label={t.overviewGoalRemove}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M10 3h4"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
-              </svg>
-              <span>{t.overviewGoalRemove}</span>
-            </button>
-          )}
           <button type="submit" form="reading-goal-form" className="modal-submit" disabled={!canSubmit}>
             {t.overviewGoalSave}
           </button>
