@@ -1144,32 +1144,59 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-label">Info box — bg + border bleutés, optional inline strong highlight</div>
+              <div className="ds-card-label">Message box — 3 variants (info / alert / critical)</div>
+              <div className="ds-card-body col" style={{ gap: 16 }}>
+                <div className="modal-info-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span><span className="modal-info-box-strong">Info</span> — neutral hint or contextual note. Default variant.</span>
+                </div>
+                <div className="modal-info-box modal-info-box--alert" role="alert">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  <span><strong>Alert</strong> — warning, soft amber. Limit reached, action paused, etc.</span>
+                </div>
+                <div className="scan-alert" role="alert">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span><strong>Critical</strong> — destructive error, red. Scan failure, irrecoverable issue.</span>
+                </div>
+              </div>
               <div className="ds-card-body col" style={{ padding: 0 }}>
                 <table className="token-table">
                   <thead>
-                    <tr><th>Property</th><th>Value</th></tr>
+                    <tr><th>Variant</th><th>Class</th><th>Background</th><th>Border</th><th>Icon color</th></tr>
                   </thead>
                   <tbody>
-                    {[
-                      ["Class", ".modal-info-box (+ .modal-info-box-strong for highlight)"],
-                      ["Background", "--primary-5"],
-                      ["Border", "1.5px solid rgba(73,89,230,0.2) — uniform light/dark"],
-                      ["Border-radius", "8px"],
-                      ["Padding", "8px 16px"],
-                      ["Gap (icon ↔ text)", "16px"],
-                      ["Body", "14/500/--text/lh 1.5"],
-                      ["Inline strong", "weight 700, color --text"],
-                      ["Icon", "16×16, color --primary-50/40, info circle SVG"],
-                      ["First app usage", "Mark-as-reading hint inside AddModal"],
-                    ].map(([prop, val]) => (
-                      <tr key={prop}>
-                        <td className="token-table-component">{prop}</td>
-                        <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>{val}</td>
-                      </tr>
-                    ))}
+                    <tr>
+                      <td className="token-table-component">Info</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.modal-info-box</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>--primary-5</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(73,89,230, 0.2)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>--primary-50 / 40</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Alert</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.modal-info-box.modal-info-box--alert</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(245,158,11, 0.08/0.12)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(245,158,11, 0.2)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#B45309 / #FBBF24</td>
+                    </tr>
+                    <tr>
+                      <td className="token-table-component">Critical</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>.scan-alert</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(239,68,68, 0.08/0.12)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>rgba(239,68,68, 0.2)</td>
+                      <td style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "var(--text-2)" }}>#dc2626 / #f87171</td>
+                    </tr>
                   </tbody>
                 </table>
+                <div style={{ padding: "12px 16px", fontSize: "0.75rem", color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
+                  Structure commune : <code>display: flex; align-items: flex-start (info) / center (alert/critical); gap: 16; padding: 8 16; border-radius: 8; font 14/500/--text/lh 1.5</code>. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> pour multi-lignes (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) when grouping a dropzone + a critical message.
+                </div>
               </div>
             </div>
           </section>
