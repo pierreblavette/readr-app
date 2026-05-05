@@ -1505,7 +1505,12 @@
 }
 /* Asymmetric padding for icon-left button (mirrors .panel-quotes-add, .btn-ai)
    + push to the right edge of .panel-header-actions when siblings exist. */
-.panel-header-share { padding: 0 20px 0 12px; margin-left: auto; }
+.panel-header-share {
+  padding: 0;
+  width: 40px;
+  justify-content: center;
+  margin-left: auto;
+}
 /* Finished books: Share is the only button in the row — align to the left
    instead of floating alone on the right. */
 .panel-header-share:only-child { margin-left: 0; }
@@ -3233,12 +3238,7 @@
      and aligns left after wrap (no auto-margin push) — avoids the
      "lonely button on row 2" rendering when FR labels make the first
      row wrap. */
-  /* !important needed: the generic .btn-md:has(svg:first-child:not(:last-child))
-   * asymmetric padding rule has higher specificity (0,0,3,1) and would set
-   * padding-left: 12 here, off-centering the icon when the label is hidden
-   * via display: none (label is still in DOM, so :has() can't detect it). */
-  .panel-header-share { padding: 0 !important; width: 40px; justify-content: center; margin-left: 0; }
-  .panel-header-share-label { display: none; }
+  .panel-header-share { margin-left: 0; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
   .view-btns { margin-left: auto; }
