@@ -47,12 +47,12 @@ export default function ReadingGoalModal({ open, onClose, onSetGoal, year, curre
               onChange={e => setDraft(e.target.value)}
               placeholder={t.overviewGoalPlaceholder}
             />
-            {isSet && (
-              <button type="button" className="btn-link btn-link--critical" onClick={handleRemove}>
-                {t.overviewGoalRemove}
-              </button>
-            )}
           </div>
+          {isSet && (
+            <button type="button" className="btn-link btn-link--critical" onClick={handleRemove}>
+              {t.overviewGoalRemove}
+            </button>
+          )}
         </form>
 
         <div className="confirm-modal-actions">
