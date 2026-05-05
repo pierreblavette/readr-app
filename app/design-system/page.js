@@ -719,9 +719,9 @@ export default function DesignSystemPage() {
               <div className="ds-card-label">Date badge — sizes</div>
               <div className="ds-card-body col" style={{ padding: "0 24px", gap: 0 }}>
                 {[
-                  ["xs", 16, "10/600 · padding 0 10 · inline meta dense"],
-                  ["sm", 20, "12/600 · padding 0 12 · default — Started on, etc."],
-                  ["md", 24, "13/600 · padding 0 14 · prominent callout"],
+                  ["xs", 20, "10/600 · padding 0 10 · inline meta dense"],
+                  ["sm", 24, "12/600 · padding 0 12 · default — Started on, etc."],
+                  ["md", 28, "13/600 · padding 0 14 · prominent callout"],
                 ].map(([mod, h, use]) => (
                   <div key={mod} className="spacing-row">
                     <span className={`now-reading-date now-reading-date--${mod}`}>Started Apr 28</span>
@@ -746,7 +746,7 @@ export default function DesignSystemPage() {
                     </tr>
                     <tr>
                       <td className="token-table-component"><code>--xs / --sm / --md</code></td>
-                      <td style={{ fontSize: "0.82rem" }}>height: 16 / 20 / 24 · font-size: 10 / 12 / 13 · padding: 0 10 / 0 12 / 0 14</td>
+                      <td style={{ fontSize: "0.82rem" }}>height: 20 / 24 / 28 · font-size: 10 / 12 / 13 · padding: 0 10 / 0 12 / 0 14</td>
                       <td style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>min-width matches height for square baseline.</td>
                     </tr>
                   </tbody>
