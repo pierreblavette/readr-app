@@ -4642,13 +4642,34 @@ button.quote-book-chip {
   color: var(--teal);
   font-weight: 600;
 }
-/* Critical variant of the .quote-see-more text link — destructive
- * inline action (e.g. "Remove goal" under the input in ReadingGoalModal). */
-.quote-see-more--critical { color: var(--destructive); }
-.quote-see-more--critical:hover { color: var(--destructive); text-decoration: underline; }
-[data-theme="dark"] .quote-see-more--critical { color: var(--destructive); }
-[data-theme="dark"] .quote-see-more--critical:hover { color: var(--destructive); }
-.quote-see-more--critical:focus-visible { box-shadow: 0 0 0 2px var(--destructive); }
+/* Generic text-link button primitive — reusable across modals/forms
+ * where a low-key inline action is needed (e.g. "Remove goal").
+ * Mirrors the .quote-see-more typography but generic naming. */
+.btn-link {
+  align-self: flex-start;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-50);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.btn-link:hover { color: var(--primary-60); text-decoration: underline; }
+[data-theme="dark"] .btn-link { color: var(--primary-40); }
+[data-theme="dark"] .btn-link:hover { color: var(--primary-30); }
+.btn-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-50);
+  border-radius: 4px;
+}
+.btn-link--critical { color: var(--destructive); }
+.btn-link--critical:hover { color: var(--destructive); }
+[data-theme="dark"] .btn-link--critical { color: var(--destructive); }
+[data-theme="dark"] .btn-link--critical:hover { color: var(--destructive); }
+.btn-link--critical:focus-visible { box-shadow: 0 0 0 2px var(--destructive); }
 
 /* Streak */
 .overview-streak-meter {
