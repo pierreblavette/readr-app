@@ -3096,7 +3096,7 @@
   display: flex; align-items: center; gap: 16px;
   padding: 8px 16px;
   background: rgba(239,68,68,0.08);
-  border: 1.5px solid rgba(239,68,68,0.4);
+  border: 1.5px solid rgba(239,68,68,0.2);
   border-radius: 8px;
   color: var(--text);
   font-size: 14px; font-weight: 500; line-height: 1.5;
@@ -3104,7 +3104,7 @@
 .scan-alert span { white-space: pre-line; }
 [data-theme="dark"] .scan-alert {
   background: rgba(239,68,68,0.12);
-  border-color: rgba(239,68,68,0.5);
+  border-color: rgba(239,68,68,0.2);
 }
 .scan-alert svg { flex-shrink: 0; width: 16px; height: 16px; color: #dc2626; }
 [data-theme="dark"] .scan-alert svg { color: #f87171; }
