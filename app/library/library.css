@@ -4665,10 +4665,10 @@ button.quote-book-chip {
   box-shadow: 0 0 0 2px var(--primary-50);
   border-radius: 4px;
 }
-/* Compress the .modal-form gap (24) to 12 specifically between a
- * .modal-field and the btn-link that follows it. Keeps .modal-field's
- * own internal gap (label↔input = 8) untouched. */
-.modal-form .modal-field + .btn-link { margin-top: -12px; }
+/* When a .modal-form contains a btn-link helper, tighten its gap
+ * (24 → 12) so the text link sits closer to the field. Auto-scoped
+ * via :has() — currently only ReadingGoalModal triggers this. */
+.modal-form:has(.btn-link) { gap: 12px; }
 .btn-link--critical { color: var(--destructive); }
 .btn-link--critical:hover { color: var(--destructive); }
 [data-theme="dark"] .btn-link--critical { color: var(--destructive); }
