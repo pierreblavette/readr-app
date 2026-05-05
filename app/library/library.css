@@ -2547,6 +2547,13 @@
   justify-content: space-between;
   margin: 0 -24px;
   padding: 18px 24px;
+  /* Sticky to bottom of the scrollable .modal so actions stay visible
+   * when content (alert + list, etc.) makes the modal scroll. */
+  position: sticky;
+  bottom: 0;
+  background: inherit;
+  border-top: 1px solid var(--border-subtle);
+  z-index: 1;
 }
 
 .modal-cancel {
