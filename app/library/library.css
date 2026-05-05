@@ -4665,6 +4665,10 @@ button.quote-book-chip {
   box-shadow: 0 0 0 2px var(--primary-50);
   border-radius: 4px;
 }
+/* When sitting inside a .modal-field, the btn-link gets a touch more
+ * breathing from the input above (8 gap + 4 margin = 12 effective)
+ * while preserving the tighter 8 between label and input. */
+.modal-field .btn-link { margin-top: 4px; }
 .btn-link--critical { color: var(--destructive); }
 .btn-link--critical:hover { color: var(--destructive); }
 [data-theme="dark"] .btn-link--critical { color: var(--destructive); }
