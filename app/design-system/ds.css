@@ -55,6 +55,18 @@
 /* Self-contained preview viewports own their layout — collapse the body's padding */
 .ds-card-body:has(> .footer-preview) { padding: 0; }
 .ds-card-body + .ds-card-body { border-top: 1px solid var(--border-subtle); }
+
+/* Context switch — small segmented control inside .ds-card-head to flip a sample
+   between contextual variants (e.g. From Library / From Wishlist). */
+.ds-context-switch { display: flex; gap: 2px; padding: 2px; background: var(--bg3); border-radius: 6px; }
+.ds-context-btn {
+  height: 22px; padding: 0 10px; border: none; background: transparent;
+  font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0;
+  text-transform: none; color: var(--text-2); cursor: pointer; border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+.ds-context-btn:hover:not(.is-active) { color: var(--text); }
+.ds-context-btn.is-active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
 .ds-card-body.center { align-items: center; }
 .ds-card-foot {
   padding: 12px 20px;
@@ -383,32 +395,6 @@
 [data-theme="dark"] .panel-ds-content { background: var(--bg2); }
 
 
-/* ─── MODAL PREVIEW ─── */
-.modal-preview { background: var(--card); border-radius: 8px; padding: 28px 24px; position: relative; width: 100%; max-width: 480px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 24px; }
-.modal-preview-title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); font-family: var(--font-jakarta), sans-serif; }
-.modal-preview-fields { display: flex; flex-direction: column; gap: 12px; }
-.modal-preview-field { display: flex; flex-direction: column; gap: 8px; }
-.modal-preview-field label { font-size: 12px; font-weight: 500; color: var(--text-3); }
-.modal-preview-field input { height: 38px; padding: 0 12px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg3); color: var(--text); font-family: inherit; font-size: 14px; font-weight: 600; outline: none; }
-.modal-preview-actions { display: flex; justify-content: space-between; }
-
-/* ─── IMPORT TABS ─── */
-.import-tabs-preview { display: flex; gap: 4px; border-bottom: 1.5px solid var(--border); margin-bottom: 0; position: relative; }
-.import-tab-ds-comp {
-  height: 36px; padding: 0 16px; border: none; background: transparent;
-  font-family: inherit; font-size: 14px; font-weight: 500; color: var(--text-2);
-  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1.5px;
-  transition: color 0.15s, border-color 0.15s;
-}
-.import-tab-ds-comp:hover:not(.active) { color: var(--primary-50); }
-.import-tab-ds-comp.active { color: var(--primary-50); font-weight: 600; border-bottom-color: var(--primary-50); }
-.import-tab-ds-comp.active-ai { border-bottom: none; }
-.import-tab-ai-label { display: inline-flex; align-items: center; gap: 5px; }
-.import-tab-ai-label svg { width: 13px; height: 13px; }
-.import-tab-ai-label span {
-  background: linear-gradient(135deg, #F67BF8 0%, #4959E6 62%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
 
 /* ─── SELECTION BAR ─── */
 /* ─── EMPTY STATE ─── */

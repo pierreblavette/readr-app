@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
   ReadrIcon, TrackingIcon, ScanIcon, QuoteIcon, WordsIcon, DataControlIcon
 } from "@/components/library/Onboarding";
+import GradientDropzone from "@/components/library/GradientDropzone";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
@@ -72,6 +73,18 @@ export default function DesignSystemPage() {
   const [viewActive, setViewActive]         = useState("grid");
   const [langActive, setLangActive]         = useState("EN");
   const [importTab, setImportTab]           = useState("photo");
+  const [addModalSource, setAddModalSource] = useState("owned");
+  const [importTabIndicator, setImportTabIndicator] = useState({ left: 0, width: 0 });
+  const importTabRefs = useRef([]);
+  useEffect(() => {
+    const idx = ["photo","scan","file","manual"].indexOf(importTab);
+    const el = importTabRefs.current[idx];
+    const parent = el?.parentElement;
+    if (!el || !parent) return;
+    const r = el.getBoundingClientRect();
+    const pr = parent.getBoundingClientRect();
+    setImportTabIndicator({ left: r.left - pr.left + parent.scrollLeft, width: r.width });
+  }, [importTab]);
   const [chk1, setChk1]                     = useState(false);
   const [chk2, setChk2]                     = useState(true);
 
@@ -2037,36 +2050,153 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-head">Add a book — preview</div>
+              <div className="ds-card-head">
+                Add a book — preview
+                <div className="ds-context-switch" style={{ marginLeft: "auto" }}>
+                  <button className={`ds-context-btn${addModalSource === "owned" ? " is-active" : ""}`} onClick={() => setAddModalSource("owned")}>From Library</button>
+                  <button className={`ds-context-btn${addModalSource === "wishlist" ? " is-active" : ""}`} onClick={() => setAddModalSource("wishlist")}>From Wishlist</button>
+                </div>
+              </div>
               <div className="ds-card-body">
-                <div className="modal-preview">
-                  <div className="modal-preview-title">Add a book</div>
-                  <div className="import-tabs-preview">
-                    {[["photo","Photo",true],["file","File",false],["manual","Manual",false]].map(([id,label,isAI]) => (
-                      <button key={id} className={`import-tab-ds-comp${importTab===id?" active":""}${isAI&&importTab===id?" active-ai":""}`} onClick={() => setImportTab(id)}>
-                        {isAI ? (
-                          <span className="import-tab-ai-label">
-                            <svg viewBox="0 0 24 24" fill="none" width="13" height="13">
-                              <defs><linearGradient id="aiG" x1="23" y1="1" x2="2" y2="23" gradientUnits="userSpaceOnUse"><stop stopColor="#F67BF8"/><stop offset=".62" stopColor="#4959E6"/></linearGradient></defs>
-                              <path d="M12 1.5C12.28 1.5 12.5 1.72 12.5 2C12.5 7.25 16.75 11.5 22 11.5C22.28 11.5 22.5 11.72 22.5 12C22.5 12.28 22.28 12.5 22 12.5C16.75 12.5 12.5 16.75 12.5 22C12.5 22.28 12.28 22.5 12 22.5C11.72 22.5 11.5 22.28 11.5 22C11.5 16.75 7.25 12.5 2 12.5C1.72 12.5 1.5 12.28 1.5 12C1.5 11.72 1.72 11.5 2 11.5C7.25 11.5 11.5 7.25 11.5 2C11.5 1.72 11.72 1.5 12 1.5Z" fill="url(#aiG)"/>
+                <div className="modal" style={{ animation: "none", margin: "0 auto", maxHeight: "none" }}>
+                  <button className="modal-close" aria-label="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                  <div className="modal-title">Add a book</div>
+                  <div className="modal-tabs-section">
+                    <div className="import-tabs-scroll">
+                      <div className="import-tabs">
+                        <div className={`import-tab-indicator${importTab === "photo" ? " gradient" : ""}`} style={{ left: importTabIndicator.left, width: importTabIndicator.width }} />
+                        <button
+                          ref={el => importTabRefs.current[0] = el}
+                          className={`import-tab${importTab === "photo" ? " active" : ""}`}
+                          onClick={() => setImportTab("photo")}>
+                          <span className="import-tab-ai">
+                            <svg className="import-tab-ai-icon" viewBox="0 0 24 24" fill="none">
+                              <defs>
+                                <linearGradient id="aiTabGradDS" x1="23" y1="1" x2="2.1" y2="23" gradientUnits="userSpaceOnUse">
+                                  <stop stopColor="#F67BF8"/>
+                                  <stop offset="0.62" stopColor="#4959E6"/>
+                                </linearGradient>
+                              </defs>
+                              <path d="M12 1.5C12.28 1.5 12.5 1.72 12.5 2C12.5 7.25 16.75 11.5 22 11.5C22.28 11.5 22.5 11.72 22.5 12C22.5 12.28 22.28 12.5 22 12.5C16.75 12.5 12.5 16.75 12.5 22C12.5 22.28 12.28 22.5 12 22.5C11.72 22.5 11.5 22.28 11.5 22C11.5 16.75 7.25 12.5 2 12.5C1.72 12.5 1.5 12.28 1.5 12C1.5 11.72 1.72 11.5 2 11.5C7.25 11.5 11.5 7.25 11.5 2C11.5 1.72 11.72 1.5 12 1.5Z" fill="url(#aiTabGradDS)"/>
                             </svg>
-                            <span>Photo</span>
+                            <span className="import-tab-ai-text">Photo</span>
                           </span>
-                        ) : label}
-                      </button>
-                    ))}
-                  </div>
-                  {importTab === "manual" && (
-                    <div className="modal-preview-fields">
-                      <div className="modal-preview-field"><label>Title</label><input placeholder="e.g. 1984" readOnly /></div>
-                      <div className="modal-preview-field"><label>Author</label><input placeholder="e.g. George Orwell" readOnly /></div>
+                        </button>
+                        <button
+                          ref={el => importTabRefs.current[1] = el}
+                          className={`import-tab${importTab === "scan" ? " active" : ""}`}
+                          onClick={() => setImportTab("scan")}>
+                          Barcode
+                        </button>
+                        <button
+                          ref={el => importTabRefs.current[2] = el}
+                          className={`import-tab${importTab === "file" ? " active" : ""}`}
+                          onClick={() => setImportTab("file")}>
+                          File
+                        </button>
+                        <button
+                          ref={el => importTabRefs.current[3] = el}
+                          className={`import-tab${importTab === "manual" ? " active" : ""}`}
+                          onClick={() => setImportTab("manual")}>
+                          Manual
+                        </button>
+                      </div>
                     </div>
-                  )}
-                  <div className="modal-preview-actions">
-                    <button className="btn btn-ghost btn-md">Cancel</button>
-                    <button className="btn btn-primary btn-md">Add to Library</button>
+
+                    {importTab === "photo" && (
+                      <div className="import-tab-pane">
+                        <GradientDropzone gradientId="dsPhotoGrad">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                          </svg>
+                          <div className="import-dropzone-title">Drop a photo or click to browse</div>
+                          <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
+                        </GradientDropzone>
+                      </div>
+                    )}
+                    {importTab === "scan" && (
+                      <div className="import-tab-pane">
+                        <button type="button" className="btn btn-primary btn-md scan-start-btn">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                          </svg>
+                          Scan with camera
+                        </button>
+                        <div className="scan-or-separator"><span>or</span></div>
+                        <p className="import-tab-hint">Look up a book by its barcode.</p>
+                        <form className="scan-manual" onSubmit={e => e.preventDefault()}>
+                          <label className="scan-manual-label">Barcode</label>
+                          <div className="scan-manual-row">
+                            <input type="text" className="scan-manual-input" placeholder="978-…" inputMode="numeric" autoComplete="off" />
+                            <button type="submit" className="btn btn-primary btn-md scan-lookup-btn" aria-label="Look up">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                              </svg>
+                              <span className="scan-lookup-label">Look up</span>
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    )}
+                    {importTab === "file" && (
+                      <div className="import-tab-pane">
+                        <div className="import-dropzone">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                          </svg>
+                          <div className="import-dropzone-title">Drop a file or click to browse</div>
+                          <div className="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
+                        </div>
+                      </div>
+                    )}
+                    {importTab === "manual" && (
+                      <form className="modal-form" onSubmit={e => e.preventDefault()}>
+                        <div className="modal-fields">
+                          <div className="modal-field"><label>Title</label><input placeholder="e.g. 1984" readOnly /></div>
+                          <div className="modal-field"><label>Author</label><input placeholder="e.g. George Orwell" readOnly /></div>
+                          <div className="modal-field"><label>Year</label><input placeholder="e.g. 1949" readOnly /></div>
+                          <div className="modal-field"><label>Genre</label><input placeholder="e.g. Fiction" readOnly /></div>
+                        </div>
+                        {addModalSource === "owned" && (
+                          <div className="modal-toggle-group">
+                            <label className="cell-row cell-row--lg modal-toggle-row">
+                              <input type="checkbox" className="modal-toggle-input" readOnly />
+                              <span className="modal-toggle-check" />
+                              <span className="modal-toggle-label">Mark as reading</span>
+                            </label>
+                            <div className="modal-info-box">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                              </svg>
+                              <span>
+                                You're currently reading <strong className="modal-info-box-strong">2 of 3 books</strong>.
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </form>
+                    )}
+                  </div>
+                  <div className="modal-actions">
+                    <button type="button" className="modal-cancel">Cancel</button>
+                    <button type="button" className="modal-submit">{addModalSource === "wishlist" ? "Add to wishlist" : "Add to library"}</button>
                   </div>
                 </div>
+              </div>
+              <div className="ds-card-foot">
+                <strong>Library</strong> shows the <code>.modal-toggle-group</code> (Mark as reading checkbox + <code>.modal-info-box</code> with current reading count) — visible in <em>Manual</em> tab and in <em>Photo</em> tab when exactly 1 book is detected. <strong>Wishlist</strong> hides this group entirely. Submit label adapts (Add to library / Add to wishlist).
               </div>
             </div>
           </DSSection>
