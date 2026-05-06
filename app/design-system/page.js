@@ -2777,21 +2777,30 @@ function handleDeleteConfirm(payload) {
 
             <div className="ds-card">
               <div className="ds-card-head">Quick actions (kebab dropdown)</div>
-              <div className="ds-card-body col padded">
-                <p>3 actions, all <code>stopPropagation</code> on the card click :</p>
-                <ul className="ds-doc-list">
-                  <li><strong>Mark as finished</strong> — opens FinishReadingModal</li>
-                  <li><strong>Add a quote</strong> — opens AddQuoteModal pre-filled with the book context (BookChip in both Photo + Manual tabs, no inputs to edit)</li>
-                  <li><strong>Cancel reading</strong> — opens DeleteModal (type=cancelReading) explaining the book stays in library, only removed from Now Reading. Confirm style is <code>.ob-next</code> (non-destructive)</li>
-                </ul>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Action</th><th>Comportement</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component">Mark as finished</td><td className="meta">Opens FinishReadingModal</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Add a quote</td><td className="meta">Opens AddQuoteModal pre-filled with the book context (BookChip in Photo + Manual tabs, no inputs to edit)</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Cancel reading</td><td className="meta">Opens DeleteModal (type=cancelReading) — book stays in library, only removed from Now Reading. Confirm style: <code>.ob-next</code> (non-destructive)</td></tr>
+                  </tbody>
+                </table>
               </div>
+              <div className="ds-card-foot">All 3 actions use <code>stopPropagation</code> on the card click.</div>
             </div>
 
             <div className="ds-card">
               <div className="ds-card-head">Card hierarchy</div>
-              <div className="ds-card-body col padded">
-                <p>The Now Reading card belongs to the same visual family as <code>.book-card</code> (same radius, border, hover transition, fadeUp animation) but adopts a different layout to differentiate without competing visually with the Library grid below. The badge in primary fill anchors the "active reading" status.</p>
-                <p>Order rule : <code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first).</p>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Aspect</th><th>Note</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component">Visual family</td><td className="meta">Same as <code>.book-card</code> (radius, border, hover transition, fadeUp animation) — different layout to differentiate without competing with the Library grid below</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Status badge</td><td className="meta">Primary fill anchors the "active reading" status</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Order rule</td><td className="meta"><code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first)</td></tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </DSSection>
@@ -2818,17 +2827,19 @@ function handleDeleteConfirm(payload) {
 
             <div className="ds-card">
               <div className="ds-card-head">Display in BookPanel (after save)</div>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
-                <p>Once saved, the finished metadata appears as a dedicated section in <code>.panel-info</code> :</p>
-                <ul className="ds-doc-list">
-                  <li><code>.panel-section.is-finished</code> — framed by border-top + border-bottom + padding 24, visually emphasized vs other sections</li>
-                  <li><code>.panel-finished-date</code> — "Finished on Apr 27" (15/500/lh 1.8, matches .panel-synopsis)</li>
-                  <li><code>.panel-rating-stars</code> — read-only stars in primary fill, displayed in a tinted box (--bg3)</li>
-                  <li><code>.panel-finished-note</code> — italic comment in tinted box (--bg3, 15/500/lh 1.8)</li>
-                  <li><code>.panel-finished-actions</code> — Edit + Remove buttons (Edit becomes "Add rating" if no rating/note set yet)</li>
-                </ul>
-                <p>Remove triggers DeleteModal type=removeFinished — preserves book.finishedAt, only clears rating + note. Modal previews the removed content (rating + note) before confirm.</p>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section.is-finished</code></td><td className="meta">Framed by border-top + border-bottom + padding 24, visually emphasized vs other sections</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-date</code></td><td className="meta">"Finished on Apr 27" — 15 / 500 / lh 1.8 (matches <code>.panel-synopsis</code>)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-rating-stars</code></td><td className="meta">Read-only stars in primary fill, displayed in a tinted box (<code>--bg3</code>)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-note</code></td><td className="meta">Italic comment in tinted box (<code>--bg3</code>, 15 / 500 / lh 1.8)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-actions</code></td><td className="meta">Edit + Remove buttons (Edit becomes "Add rating" if no rating/note set yet)</td></tr>
+                  </tbody>
+                </table>
               </div>
+              <div className="ds-card-foot">Once saved, the finished metadata appears as a dedicated section in <code>.panel-info</code>. Remove triggers DeleteModal <code>type=removeFinished</code> — preserves <code>book.finishedAt</code>, only clears rating + note. Modal previews the removed content before confirm.</div>
             </div>
           </DSSection>
 
