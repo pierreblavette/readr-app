@@ -1,6 +1,9 @@
 
 /* ─── CONTENT ─── */
-.ds-content { min-width: 0; display: flex; flex-direction: column; gap: 96px; }
+/* overflow-x: clip prevents fixed-width samples (search-box-demo 280, cell-row 320,
+ * panel-ds-panel 420, etc.) from forcing a horizontal scroll on the whole page in mobile.
+ * On desktop nothing exceeds container width — no visual effect. */
+.ds-content { min-width: 0; overflow-x: clip; display: flex; flex-direction: column; gap: 96px; }
 .ds-intro { display: flex; flex-direction: column; gap: 24px; }
 .ds-section { display: flex; flex-direction: column; gap: 40px; scroll-margin-top: 84px; }
 .ds-section-header { display: flex; flex-direction: column; gap: 8px; }
