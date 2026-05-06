@@ -52,8 +52,6 @@
 .ds-card-body.col.padded { padding: 20px; gap: 20px; }
 /* Tables and token blocks own their horizontal padding — collapse the body's */
 .ds-card-body.col:has(> :is(table, .ds-token-block)) { padding: 0; }
-/* Self-contained preview viewports own their layout — collapse the body's padding */
-.ds-card-body:has(> .footer-preview) { padding: 0; }
 .ds-card-body + .ds-card-body { border-top: 1px solid var(--border-subtle); }
 .ds-card-body.center { align-items: center; }
 .ds-card-foot {
@@ -390,9 +388,6 @@
 .empty-emoji { font-size: 42px; margin-bottom: 12px; }
 .empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 .empty-sub { font-size: 14px; color: var(--text-2); }
-
-/* ─── FOOTER PREVIEW ─── */
-.footer-preview { border-top: 1px solid var(--border); padding: 16px 20px; font-size: 11px; font-weight: 500; color: var(--text-3); width: 100%; }
 
 /* ─── SPINNER ─── */
 .spinner-ds { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin-ds 0.7s linear infinite; }

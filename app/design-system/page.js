@@ -2814,11 +2814,12 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.modal.finish-modal</code></td><td className="meta">Modal shell (.modal pattern)</td><td className="mono">max-width 630, padding 32 24 0, flex col gap 32</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal.finish-modal</code></td><td className="meta">Modal shell — inherits <code>.modal</code> base</td><td className="mono">.finish-modal adds no own rules — all sizing (max-width 630 / padding 32 24 0 / flex col gap 32) inherited from <code>.modal</code></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="finish-reading-form" — submit button outside form via form="" attr (Enter-to-submit preserved)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24, contains chip + 2 .modal-field</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.finish-modal-chip</code></td><td className="meta">BookChip wrapper</td><td className="mono">just for spacing — gap-driven by parent .modal-fields</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.finish-stars</code></td><td className="meta">5 star rating buttons</td><td className="mono">flex row gap 4, svg 28×28, --border default → --primary-50 filled</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.finish-stars</code></td><td className="meta">Wrapper — 5 <code>.finish-star</code> buttons</td><td className="mono">flex row, gap 4 — role="radiogroup", aria-label="Rating"</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.finish-star</code></td><td className="meta">Individual rating button</td><td className="mono">svg 28×28, color <code>--border</code> default → <code>--primary-50</code> when <code>.filled</code> (or hover index ≤ value)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-textarea</code></td><td className="meta">Comment textarea</td><td className="mono">same shared input style as AddQuoteModal — bg --bg3, focus primary glow</td></tr>
                   </tbody>
                 </table>
@@ -2831,11 +2832,15 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section.is-finished</code></td><td className="meta">Framed by border-top + border-bottom + padding 24, visually emphasized vs other sections</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-date</code></td><td className="meta">"Finished on Apr 27" — 15 / 500 / lh 1.8 (matches <code>.panel-synopsis</code>)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-rating-stars</code></td><td className="meta">Read-only stars in primary fill, displayed in a tinted box (<code>--bg3</code>)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-note</code></td><td className="meta">Italic comment in tinted box (<code>--bg3</code>, 15 / 500 / lh 1.8)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-actions</code></td><td className="meta">Edit + Remove buttons (Edit becomes "Add rating" if no rating/note set yet)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section.is-finished</code></td><td className="meta">Outer rhythm — <code>gap: 24</code> between content and trailing actions. No own border : visual separation from siblings handled by <code>.panel-divider</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-content</code></td><td className="meta">Inner stack — flex col, gap 16. Holds eyebrow + date + optional rating field + optional note field</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-date</code></td><td className="meta">"Finished on Apr 27" — 15 / 500 / lh 1.8 / <code>--text-2</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-field</code></td><td className="meta">Label + value pair (rating row, note row) — flex col, gap 8</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-label</code></td><td className="meta">Field label — 13 / 500 / <code>--text-2</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-rating-stars</code></td><td className="meta">Read-only stars in primary fill, displayed in a tinted box (<code>--bg3</code>, padding 12 14, radius 8, svg 20×20)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-note</code></td><td className="meta">Italic comment in tinted box (<code>--bg3</code>, 15 / 500 / lh 1.8 / <code>--text-2</code>, padding 12 14, radius 8)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-actions</code></td><td className="meta">Action row — flex row, gap 8. Always shows Edit (label = "Add rating" if neither rating nor note set). Remove only shows when at least one of rating/note is set</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-btn</code></td><td className="meta">Ghost outline button — 40h, 15 / 600, 1.5px <code>--border-subtle</code>, hover primary-50</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2852,17 +2857,22 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-overlay</code></td><td className="meta">Backdrop, click outside to close</td><td className="mono">fixed, z-index 400, blur 20</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width ~520, --bg2, --shadow-lg</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-body</code></td><td className="meta">Inner padding</td><td className="mono">padding 48 32 32</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-slides</code></td><td className="meta">Vertical stack: icon → text → dots</td><td className="mono">flex col, align center, gap 40</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon</code></td><td className="meta">SVG slot</td><td className="mono">120×120, viewBox 60</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon</td><td className="mono">120×120, --primary-5, radius 16</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-overlay</code></td><td className="meta">Backdrop — click outside to close</td><td className="mono">fixed inset 0, z-index 1000, bg rgba(30,35,80,0.30) (light) / rgba(0,0,0,0.55) (dark), opacity-fade 0.2s</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 640, mx 24, bg <code>--card</code>, radius 16, shadow-lg, flex col</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-body</code></td><td className="meta">Inner content (above footer)</td><td className="mono">padding 48 32 32, flex col align center, text-align center</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-slides</code></td><td className="meta">Vertical stack — icon → text → dots</td><td className="mono">flex col, align center, gap 40, min-height 260</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon</code></td><td className="meta">SVG slot (flex container)</td><td className="mono">SVG inside is 120×120, viewBox 0 0 60 60</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon defined</td><td className="mono">120×120, <code>--primary-5</code> (light) / <code>--primary-3</code> (dark), radius 16</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-text</code></td><td className="meta">Title + desc wrapper</td><td className="mono">flex col, align center, gap 20</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-title</code></td><td className="meta">Slide title</td><td className="mono">Jakarta 20 / 800, line-height 1.3</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500, line-height 1.7, max-width 464</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-dots</code></td><td className="meta">Pagination indicator</td><td className="mono">flex row, gap 6, dot 6×6 → 20×6 active</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer</code></td><td className="meta">Skip + Previous + Next/Get started</td><td className="mono">padding 18, flex col, gap 24</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-title</code></td><td className="meta">Slide title (h2)</td><td className="mono">Jakarta 20 / 800, letter-spacing -0.02em, lh 1.3 — <code>white-space: pre-line</code> on mobile (≤600px) only, so \\n in i18n breaks lines on phones, collapses on desktop</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500 / <code>--text-2</code>, lh 1.7, max-width 464, <code>white-space: pre-line</code> (always)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-dots</code></td><td className="meta">Pagination wrapper</td><td className="mono">flex row, gap 6 — role="tablist"</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-dot</code></td><td className="meta">Individual dot — clickable jump</td><td className="mono">6×6, bg <code>--border</code> → 20×6 + bg <code>--primary-50</code> when <code>.active</code>, transition all 0.25s</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer</code></td><td className="meta">Bottom region (sibling of .ob-body)</td><td className="mono">padding 18, flex col, gap 24, full width</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer-nav</code></td><td className="meta">Skip-left vs Prev/Next-right row</td><td className="mono">flex justify-between, full width — left: <code>.ob-footer-left</code> · right: <code>.ob-footer-right</code> (gap 8)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-skip</code></td><td className="meta">Skip CTA — hidden on last slide</td><td className="mono">40h · 15 / 600 · transparent / <code>--text-2</code> · hover bg <code>--primary-5</code> + color <code>--primary-60</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-prev</code></td><td className="meta">Previous — visibility hidden on slide 0</td><td className="mono">40h · 15 / 600 · bg <code>--primary-5</code> / <code>--primary-60</code> · hover bg <code>--primary-10</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-next</code></td><td className="meta">Next / Get started (last slide)</td><td className="mono">Primary CTA — 40h · 15 / 600 · bg <code>--primary-50</code> · hover <code>--primary-60</code></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2900,14 +2910,73 @@ function handleDeleteConfirm(payload) {
           </DSSection>
 
           {/* ── FOOTER ── */}
-          <DSSection id="footer" title="Footer">
+          <DSSection id="footer" title="Footer" sub="Bottom-of-page footer below the scrollable content. Three sections — left (product links + lang), center (data info + version), right (copyright + portfolio + linkedin). Responsive: ≤780px collapses into 3 stacked rows, portfolio link swaps text → globe icon.">
+
             <div className="ds-card">
-              <div className="ds-card-head">Preview</div>
+              <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col">
-                <div className="footer-preview">
-                  © 2026 Pierre Blavette · How it works · v1.0 · About readr · pierreblavette.com
-                </div>
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.library-footer</code></td><td className="meta">Footer wrapper (full width)</td><td className="mono">border-top 1px <code>--border-subtle</code>, padding 20 0, bg <code>--bg</code>, 11 / 500 / <code>--text-3</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.library-footer-inner</code></td><td className="meta">Content row</td><td className="mono">padding 0 40, flex justify-between align-center, gap 12, flex-wrap. ≤780px → flex col stretch, gap clamp(16, 4vw, 24)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-section</code></td><td className="meta">Each of the 3 sections (left / center / right)</td><td className="mono">flex row align-center, gap 12. ≤780px → width 100%, justify-between</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-group</code></td><td className="meta">Tight subgroup inside a section</td><td className="mono">inline-flex align-center, gap 12 (8 on mobile for icons row)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-link</code></td><td className="meta">Anchor or button link</td><td className="mono">11 / 500 / <code>--text-2</code> (13 on mobile), hover color <code>--primary-60</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-sep</code></td><td className="meta">Bullet separator (·)</td><td className="mono">color <code>--border-subtle</code> — top-level seps hidden on mobile, group-internal seps preserved</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-link-text</code> / <code>.footer-link-icon</code></td><td className="meta">Portfolio link — text desktop, globe icon mobile</td><td className="mono">≤780px swaps display (text → none, icon → inline-block)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-links-desktop</code></td><td className="meta">Right section wrapper (portfolio + LinkedIn)</td><td className="mono">Marker class — overrides <code>.footer-group</code> gap to 8 on mobile (icons closer)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.lang-toggle</code></td><td className="meta">EN · FR switcher (inside left section)</td><td className="mono">flex row, gap 12 — uses shared <code>.lang-btn</code> + <code>.lang-sep</code> from Language Switcher</td></tr>
+                  </tbody>
+                </table>
               </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview (desktop)</div>
+              <div className="ds-card-body" style={{ padding: 0 }}>
+                <footer className="library-footer" style={{ borderTop: 0, width: "100%" }}>
+                  <div className="library-footer-inner">
+                    <span className="footer-section">
+                      <span className="footer-group">
+                        <a className="footer-link" href="#" onClick={e => e.preventDefault()}>About readr</a>
+                        <span className="footer-sep">·</span>
+                        <button type="button" className="footer-link" onClick={e => e.preventDefault()}>How it works</button>
+                      </span>
+                      <span className="footer-sep">·</span>
+                      <div className="lang-toggle">
+                        <button type="button" className="lang-btn active">EN</button>
+                        <span className="lang-sep">·</span>
+                        <button type="button" className="lang-btn">FR</button>
+                      </div>
+                    </span>
+                    <span className="footer-section">
+                      <span>Your data stays on this device</span>
+                      <span className="footer-sep">·</span>
+                      <span>v1.0</span>
+                    </span>
+                    <span className="footer-links-desktop footer-section">
+                      <span>© 2026 Pierre Blavette</span>
+                      <span className="footer-sep">·</span>
+                      <span className="footer-group">
+                        <a className="footer-link" href="#" onClick={e => e.preventDefault()} aria-label="pierreblavette.com">
+                          <span className="footer-link-text">pierreblavette.com</span>
+                          <svg className="footer-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                          </svg>
+                        </a>
+                        <span className="footer-sep">·</span>
+                        <a className="footer-link" href="#" onClick={e => e.preventDefault()} aria-label="LinkedIn">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                      </span>
+                    </span>
+                  </div>
+                </footer>
+              </div>
+              <div className="ds-card-foot">Real <code>.library-footer</code> markup. Border-top neutralized here so the preview doesn't double-stroke against the card border. On the live page the border is the visual separator between page content and footer.</div>
             </div>
           </DSSection>
 
