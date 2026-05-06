@@ -1682,9 +1682,9 @@ export default function DesignSystemPage() {
                     </tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Why body stays neutral : blue tint on content-rich zones hurts readability. The head — the only clickable affordance — carries the explicit hover bg.
-                </div>
+              </div>
+              <div className="ds-card-foot">
+                Why body stays neutral : blue tint on content-rich zones hurts readability. The head — the only clickable affordance — carries the explicit hover bg.
               </div>
             </div>
           </DSSection>
@@ -1693,7 +1693,7 @@ export default function DesignSystemPage() {
           <DSSection id="list" title="List View">
             <div className="ds-card">
               <div className="ds-card-head">Tableau</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
+              <div className="ds-card-body col">
                 <div className="list-demo">
                   <table>
                     <thead className="table-head">
@@ -1826,7 +1826,7 @@ export default function DesignSystemPage() {
           <DSSection id="panel" title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info meta↔actions / 24 .panel-info-header title+byline / 16 .panel-section eyebrow→content / 40 .panel-quotes content↔add. Finished section uses .panel-section.is-finished modifier (border-top + border-bottom + padding 24) for visual emphasis. Edit/Remove buttons use .panel-finished-btn (small ghost, 32 height, 13/600, --bg3 dark).">
             <div className="ds-card">
               <div className="ds-card-head">Layout</div>
-              <div className="ds-card-body" style={{ padding: 0 }}>
+              <div className="ds-card-body">
                 <div className="panel-ds-viewport">
                   <div className="panel-ds-content">
                     <div className="panel-ds-placeholder-row" />
@@ -1917,15 +1917,17 @@ export default function DesignSystemPage() {
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                   </div>
-                  {/* .panel-main — quote section + date + actions */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-                    <div>
-                      <span className="panel-section-eyebrow">Quote</span>
-                      <p className="quote-panel-text" style={{ margin: 0 }}>
-                        "Qui suis-je ? Qu'est-ce que je fais là ? Il y a quelque chose qui ressemble à la vérité."
-                      </p>
+                  {/* .panel-info — meta wrapper + actions (mirrors real QuotePanel.js) */}
+                  <div className="panel-info">
+                    <div className="panel-info-meta">
+                      <div className="panel-section">
+                        <span className="panel-section-eyebrow">Quote</span>
+                        <p className="quote-panel-text" style={{ margin: 0 }}>
+                          "Qui suis-je ? Qu'est-ce que je fais là ? Il y a quelque chose qui ressemble à la vérité."
+                        </p>
+                      </div>
+                      <div className="quote-panel-date">Added Mar 14, 2026</div>
                     </div>
-                    <div className="quote-panel-date">Added Mar 14, 2026</div>
                     <div className="panel-actions">
                       <button className="panel-move-btn">Edit</button>
                       <button className="panel-delete-btn">Delete</button>
@@ -1934,9 +1936,9 @@ export default function DesignSystemPage() {
                   {/* divider */}
                   <div className="panel-divider" />
                   {/* book section */}
-                  <div>
+                  <div className="panel-section">
                     <span className="panel-section-eyebrow">Book</span>
-                    <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ marginTop: 12 }}>
+                    <button type="button" className="quote-book-chip quote-book-chip-interactive">
                       <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
                       <div className="quote-book-chip-body">
                         <div className="quote-book-chip-title">Tropique du Cancer</div>
@@ -1958,18 +1960,19 @@ export default function DesignSystemPage() {
                   <thead className="table-head"><tr><th>Wrapper / element</th><th>Role</th></tr></thead>
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Same as BookPanel — padding 96/32/32, gap 24, hosts share + close absolute</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-main</code></td><td className="meta">Quote section + date + actions. Gap 24px, width 100%</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td className="meta">Eyebrow "Quote" + <code>.quote-panel-text</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Meta wrapper + actions. Flex col, gap 40, width 100%</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-info-meta</code></td><td className="meta">Stacks Quote section + date (semantic wrapper)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td className="meta">Eyebrow "Quote" + <code>.quote-panel-text</code>. Flex col, gap 16</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-panel-text</code></td><td className="meta">Font 16 / line-height 1.7 — matches <code>.quote-card-text</code> for continuity</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-panel-date</code></td><td className="meta">Subtitle (12px, text-3). Conditional on <code>createdAt</code></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Edit (move-btn) + Delete. Delete triggers <code>DeleteModal</code> with <code>type: 'quote'</code></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px separator (conditional — only if book exists)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + <code>&lt;BookChip&gt;</code> (base palette, <code>--bg3</code> default)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + <code>&lt;BookChip&gt;</code> (base palette, <code>--bg3</code> default). Flex col, gap 16</td></tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Drawer mechanics (position, width, slide-in transition) identical to Book Panel. <code>.quote-panel-divider</code> was replaced by the canonical <code>.panel-divider</code>.
-                </div>
+              </div>
+              <div className="ds-card-foot">
+                Drawer mechanics (position, width, slide-in transition) identical to Book Panel. <code>.quote-panel-divider</code> was replaced by the canonical <code>.panel-divider</code>.
               </div>
             </div>
           </DSSection>
@@ -2018,12 +2021,12 @@ export default function DesignSystemPage() {
                     ))}
                   </div>
                   {importTab === "manual" && (
-                    <div className="modal-preview-fields" style={{ marginTop: 20 }}>
+                    <div className="modal-preview-fields">
                       <div className="modal-preview-field"><label>Title</label><input placeholder="e.g. 1984" readOnly /></div>
                       <div className="modal-preview-field"><label>Author</label><input placeholder="e.g. George Orwell" readOnly /></div>
                     </div>
                   )}
-                  <div className="modal-preview-actions" style={{ marginTop: 20 }}>
+                  <div className="modal-preview-actions">
                     <button className="btn btn-ghost btn-md">Cancel</button>
                     <button className="btn btn-primary btn-md">Add to Library</button>
                   </div>
@@ -2038,12 +2041,12 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
-                <div style={{ maxWidth: 380, margin: "0 auto", background: "var(--card)", border: "1.5px solid var(--border-subtle)", borderRadius: 12, padding: 24, boxShadow: "var(--shadow-lg)" }}>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>Remove this quote?</div>
-                  <div style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6, marginBottom: 20 }}>This quote will be permanently removed.</div>
+                <div style={{ maxWidth: 380, margin: "0 auto", background: "var(--card)", border: "1.5px solid var(--border-subtle)", borderRadius: 12, padding: 24, boxShadow: "var(--shadow-lg)", display: "flex", flexDirection: "column", gap: 16 }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)" }}>Remove this quote?</div>
+                  <div style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6 }}>This quote will be permanently removed.</div>
                   <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
                     <button className="btn btn-outline btn-md">Cancel</button>
-                    <button className="btn btn-primary btn-md" style={{ background: "#EF4444" }}>Remove</button>
+                    <button className="btn btn-primary btn-md" style={{ background: "var(--destructive)" }}>Remove</button>
                   </div>
                 </div>
               </div>
@@ -2088,7 +2091,7 @@ export default function DesignSystemPage() {
 
             <div className="ds-card">
               <div className="ds-card-head">Usage</div>
-              <div className="ds-card-body col" style={{ gap: 12 }}>
+              <div className="ds-card-body col" style={{ gap: 16 }}>
                 <p>
                   Trigger the modal by setting <code>deleteTarget</code> state. The <code>onConfirm</code> callback receives the full target — dispatch in the parent based on <code>target.type</code>.
                 </p>
@@ -2112,9 +2115,9 @@ function handleDeleteConfirm(payload) {
   return deleteBook(payload.id);
 }`}
                 </pre>
-                <div style={{ fontSize: 12, color: "var(--text-3)" }}>
-                  Source: <code>components/library/DeleteModal.js</code>. The Cancel button is <code>.modal-cancel</code> (outline). The confirm is <code>.confirm-modal-delete</code> (red fill).
-                </div>
+              </div>
+              <div className="ds-card-foot">
+                Source: <code>components/library/DeleteModal.js</code>. The Cancel button is <code>.modal-cancel</code> (outline). The confirm is <code>.confirm-modal-delete</code> (red fill).
               </div>
             </div>
           </DSSection>
@@ -2192,9 +2195,9 @@ function handleDeleteConfirm(payload) {
                     <tr className="table-row"><td className="token-table-component"><code>.sel-cancel</code></td><td>rgba(255,255,255,0.15)</td><td>color #fff</td></tr>
                   </tbody>
                 </table>
-                <div style={{ padding: "12px 16px", fontSize: 12, color: "var(--text-3)", borderTop: "1px solid var(--border-subtle)" }}>
-                  Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
-                </div>
+              </div>
+              <div className="ds-card-foot">
+                Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
               </div>
             </div>
           </DSSection>
@@ -2222,7 +2225,7 @@ function handleDeleteConfirm(payload) {
             <div className="ds-card">
               <div className="ds-card-head">Icon set — 4 illustrative SVGs (80×80, viewBox 60)</div>
               <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                     <path d="M14 8H51C47 11 47 17 51 20H14C10.6863 20 8 17.3137 8 14C8 10.6863 10.6863 8 14 8Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M24.5 7C20.3579 7 17 10.3579 17 14.5C17 18.6421 20.3579 22 24.5 22H14.5C10.3579 22 7 18.6421 7 14.5C7 10.3579 10.3579 7 14.5 7H24.5Z" fill="#C1C7FB"/>
@@ -2240,7 +2243,7 @@ function handleDeleteConfirm(payload) {
                   <span className="ds-token-name">Library</span>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                     <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M24.5 39C20.3579 39 17 42.3579 17 46.5C17 50.6421 20.3579 54 24.5 54H14.5C10.3579 54 7 50.6421 7 46.5C7 42.3579 10.3579 39 14.5 39H24.5Z" fill="#C1C7FB"/>
@@ -2257,7 +2260,7 @@ function handleDeleteConfirm(payload) {
                   <span className="ds-token-name">Wishlist</span>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                     <path d="M6 14C6 10.2288 6 8.34315 7.17157 7.17157C8.34315 6 10.2288 6 14 6H46C49.7712 6 51.6569 6 52.8284 7.17157C54 8.34315 54 10.2288 54 14V36C54 39.7712 54 41.6569 52.8284 42.8284C51.6569 44 49.7712 44 46 44H40L36.5099 48.8862C33.5423 53.0408 32.0585 55.1181 30 55.1181C27.9415 55.1181 26.4577 53.0408 23.4901 48.8862L20 44H14C10.2288 44 8.34315 44 7.17157 42.8284C6 41.6569 6 39.7712 6 36V14Z" fill="#E8EAFD"/>
                     <path d="M26 44L29.4902 48.8857C30.9309 50.9026 32.0232 52.429 33 53.4668C31.9647 54.5668 31.0592 55.1182 30 55.1182C27.9415 55.1182 26.4578 53.0404 23.4902 48.8857L20 44H26ZM20 6C16.2288 6 14.3434 6.0003 13.1719 7.17188C12.0003 8.34345 12 10.2288 12 14V36C12 39.7712 12.0003 41.6566 13.1719 42.8281C14.3434 43.9997 16.2288 44 20 44H14C10.2288 44 8.34345 43.9997 7.17188 42.8281C6.0003 41.6566 6 39.7712 6 36V14C6 10.2288 6.0003 8.34345 7.17188 7.17188C8.34345 6.0003 10.2288 6 14 6H20Z" fill="#C1C7FB"/>
@@ -2270,7 +2273,7 @@ function handleDeleteConfirm(payload) {
                   <span className="ds-token-name">Quotes</span>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                     <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
                     <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
@@ -2347,7 +2350,7 @@ function handleDeleteConfirm(payload) {
               <div className="ds-card-head">Quick actions (kebab dropdown)</div>
               <div className="ds-card-body col" style={{ gap: 8 }}>
                 <p>3 actions, all <code>stopPropagation</code> on the card click :</p>
-                <ul style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
+                <ul className="ds-doc-list">
                   <li><strong>Mark as finished</strong> — opens FinishReadingModal</li>
                   <li><strong>Add a quote</strong> — opens AddQuoteModal pre-filled with the book context (BookChip in both Photo + Manual tabs, no inputs to edit)</li>
                   <li><strong>Cancel reading</strong> — opens DeleteModal (type=cancelReading) explaining the book stays in library, only removed from Now Reading. Confirm style is <code>.ob-next</code> (non-destructive)</li>
@@ -2388,7 +2391,7 @@ function handleDeleteConfirm(payload) {
               <div className="ds-card-head">Display in BookPanel (after save)</div>
               <div className="ds-card-body col" style={{ gap: 8 }}>
                 <p>Once saved, the finished metadata appears as a dedicated section in <code>.panel-info</code> :</p>
-                <ul style={{ fontSize: 12, color: "var(--text-2)", lineHeight: 1.7, paddingLeft: 20 }}>
+                <ul className="ds-doc-list">
                   <li><code>.panel-section.is-finished</code> — framed by border-top + border-bottom + padding 24, visually emphasized vs other sections</li>
                   <li><code>.panel-finished-date</code> — "Finished on Apr 27" (15/500/lh 1.8, matches .panel-synopsis)</li>
                   <li><code>.panel-rating-stars</code> — read-only stars in primary fill, displayed in a tinted box (--bg3)</li>
@@ -2428,27 +2431,27 @@ function handleDeleteConfirm(payload) {
             <div className="ds-card">
               <div className="ds-card-head">Icon set — 6 illustrative SVGs (120×120, viewBox 60)</div>
               <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <ReadrIcon />
                   <span className="ds-token-name">Readr (slide 1)</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <TrackingIcon />
                   <span className="ds-token-name">Tracking (slide 2)</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <ScanIcon />
                   <span className="ds-token-name">Scan (slide 3)</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <QuoteIcon />
                   <span className="ds-token-name">Quote (slide 4)</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <WordsIcon />
                   <span className="ds-token-name">Words (slide 5)</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div className="ds-icon-tile">
                   <DataControlIcon />
                   <span className="ds-token-name">Data control (slide 6)</span>
                 </div>
@@ -2460,7 +2463,7 @@ function handleDeleteConfirm(payload) {
           <DSSection id="footer" title="Footer">
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
-              <div className="ds-card-body col" style={{ padding: 0 }}>
+              <div className="ds-card-body col">
                 <div className="footer-preview">
                   © 2026 Pierre Blavette · How it works · v1.0 · About readr · pierreblavette.com
                 </div>
