@@ -49,19 +49,6 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
       {quote && (
         <div className="panel-inner">
 
-          <button className="panel-share" onClick={handleShare} aria-label={shared ? (t.shareCopied || 'Copied!') : t.btnShare}>
-            {shared ? (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-              </svg>
-            )}
-          </button>
-
           <button className="panel-close" onClick={onClose} aria-label={t.btnClose}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18"/>
@@ -91,6 +78,19 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
               </button>
               <button className="panel-delete-btn" onClick={() => { onDelete(quote); onClose(); }}>
                 {t.btnDelete || 'Delete'}
+              </button>
+              <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare} aria-label={shared ? (t.shareCopied || 'Copied!') : t.btnShare} title={shared ? (t.shareCopied || 'Copied!') : t.btnShare}>
+                {shared ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
+                    <polyline points="16 6 12 2 8 6"/>
+                    <line x1="12" y1="2" x2="12" y2="15"/>
+                  </svg>
+                )}
               </button>
             </div>
           </div>

@@ -1928,80 +1928,87 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── QUOTE PANEL ── */}
-          <DSSection id="quote-panel" title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Same drawer mechanics as Book Panel, with quote-specific content : text, book chip (clickable → BookPanel), edit/delete.">
+          <DSSection id="quote-panel" title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Same drawer mechanics + .panel-inner padding/gap as BookPanel. Close is the only absolute button (top 16 right 16). Share lives inside .panel-actions next to Edit + Delete (mirror of BookPanel where share lives in .panel-header-actions). Content : Quote section + date + actions, then optional divider + Book section (BookChip clickable → BookPanel).">
 
             <div className="ds-card">
-              <div className="ds-card-head">Content layout</div>
+              <div className="ds-card-head">Layout</div>
               <div className="ds-card-body">
-                <div style={{ maxWidth: 420, width: "100%", border: "1.5px solid var(--border-subtle)", borderRadius: 8, padding: 24, background: "var(--bg)", display: "flex", flexDirection: "column", gap: 24 }}>
-                  {/* Header row: share + close (absolute in real panel, inline here) */}
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <button className="panel-share" style={{ position: "static" }} aria-label="Share">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                      </svg>
-                    </button>
-                    <button className="panel-close" style={{ position: "static" }} aria-label="Close">
+                <div className="panel-ds-viewport">
+                  <div className="panel-ds-content">
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                    <div className="panel-ds-placeholder-row" />
+                  </div>
+                  <div className="panel-ds-panel" style={{ padding: "32px 20px", display: "flex", flexDirection: "column", gap: 32, position: "relative" }}>
+                    <button className="panel-close" style={{ top: 12, right: 12 }} aria-label="Close">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
-                  </div>
-                  {/* .panel-info — meta wrapper + actions (mirrors real QuotePanel.js) */}
-                  <div className="panel-info">
-                    <div className="panel-info-meta">
-                      <div className="panel-section">
-                        <span className="panel-section-eyebrow">Quote</span>
-                        <p className="quote-panel-text" style={{ margin: 0 }}>
-                          "Qui suis-je ? Qu'est-ce que je fais là ? Il y a quelque chose qui ressemble à la vérité."
-                        </p>
+                    <div className="panel-info">
+                      <div className="panel-info-meta">
+                        <div className="panel-section">
+                          <span className="panel-section-eyebrow">Quote</span>
+                          <div className="quote-panel-text">
+                            <span className="quote-mark">"</span>
+                            Qui suis-je ? Qu'est-ce que je fais là ? Il y a quelque chose qui ressemble à la vérité.
+                            <span className="quote-mark">"</span>
+                          </div>
+                        </div>
+                        <div className="quote-panel-date">Added Mar 14, 2026</div>
                       </div>
-                      <div className="quote-panel-date">Added Mar 14, 2026</div>
-                    </div>
-                    <div className="panel-actions">
-                      <button className="panel-move-btn">Edit</button>
-                      <button className="panel-delete-btn">Delete</button>
-                    </div>
-                  </div>
-                  {/* divider */}
-                  <div className="panel-divider" />
-                  {/* book section */}
-                  <div className="panel-section">
-                    <span className="panel-section-eyebrow">Book</span>
-                    <button type="button" className="quote-book-chip quote-book-chip-interactive">
-                      <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
-                      <div className="quote-book-chip-body">
-                        <div className="quote-book-chip-title">Tropique du Cancer</div>
-                        <div className="quote-book-chip-author">Henry Miller</div>
+                      <div className="panel-actions">
+                        <button className="panel-move-btn">Edit</button>
+                        <button className="panel-delete-btn">Delete</button>
+                        <button className="btn btn-outline btn-md panel-header-share" aria-label="Share">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
+                            <polyline points="16 6 12 2 8 6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                          </svg>
+                        </button>
                       </div>
-                      <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <polyline points="9 18 15 12 9 6"/>
-                      </svg>
-                    </button>
+                    </div>
+                    <div className="panel-divider" />
+                    <div className="panel-section">
+                      <span className="panel-section-eyebrow">Book</span>
+                      <button type="button" className="quote-book-chip quote-book-chip-interactive">
+                        <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                        <div className="quote-book-chip-body">
+                          <div className="quote-book-chip-name">
+                            <div className="quote-book-chip-title">Tropique du Cancer</div>
+                            <div className="quote-book-chip-author">Henry Miller</div>
+                          </div>
+                        </div>
+                        <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-head">Anatomy — shares primitives with BookPanel</div>
+              <div className="ds-card-head">Anatomy (QuotePanel) — shares primitives with BookPanel</div>
               <div className="ds-card-body col">
                 <table className="token-table">
-                  <thead className="table-head"><tr><th>Wrapper / element</th><th>Role</th></tr></thead>
+                  <thead className="table-head"><tr><th>Wrapper / element</th><th>Role</th><th>Gap</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Same as BookPanel — padding 96/32/32, gap 24, hosts share + close absolute</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Meta wrapper + actions. Flex col, gap 40, width 100%</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-info-meta</code></td><td className="meta">Stacks Quote section + date (semantic wrapper)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td className="meta">Eyebrow "Quote" + <code>.quote-panel-text</code>. Flex col, gap 16</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-panel-text</code></td><td className="meta">Font 16 / line-height 1.7 — matches <code>.quote-card-text</code> for continuity</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-panel-date</code></td><td className="meta">Subtitle (12px, text-3). Conditional on <code>createdAt</code></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Edit (move-btn) + Delete. Delete triggers <code>DeleteModal</code> with <code>type: 'quote'</code></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px separator (conditional — only if book exists)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + <code>&lt;BookChip&gt;</code> (base palette, <code>--bg3</code> default). Flex col, gap 16</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Same as BookPanel — padding 96/32/72. Hosts close (absolute)</td><td className="mono">40px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-close</code></td><td className="meta">Close button absolute top 16 right 16. 44×44, svg 24×24, ghost-hover bg</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Meta wrapper + actions. Width 100%</td><td className="mono">40px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-info-meta</code></td><td className="meta">Stacks Quote section + date. Semantic wrapper — no CSS, default block flow</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td className="meta">Eyebrow "Quote" + .quote-panel-text</td><td className="mono">16px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-panel-text</code></td><td className="meta">Jakarta 16/500/1.7, --text-2. Wraps content with .quote-mark spans for accent guillemets</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-mark</code></td><td className="meta">Spans around guillemets. 1.4em / --accent color, vertical-align -0.25em</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-panel-date</code></td><td className="meta">12/500/text-3. Conditional on createdAt</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Edit (panel-move-btn) + Delete (panel-delete-btn) + Share (.btn.btn-outline.btn-md.panel-header-share, margin-left auto → right edge)</td><td className="mono">12px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px border-subtle separator. Conditional — only if book exists</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + &lt;BookChip&gt; (base palette, --bg3 default)</td><td className="mono">16px</td></tr>
                   </tbody>
                 </table>
-              </div>
-              <div className="ds-card-foot">
-                Drawer mechanics (position, width, slide-in transition) identical to Book Panel. <code>.quote-panel-divider</code> was replaced by the canonical <code>.panel-divider</code>.
               </div>
             </div>
           </DSSection>
