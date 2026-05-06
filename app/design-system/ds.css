@@ -383,6 +383,42 @@
 .panel-ds-panel {
   width: 420px; flex-shrink: 0; background: rgba(255,255,255,0.95); border-left: 1px solid var(--border); overflow-y: auto;
 }
+/* On mobile, drop the app shell preview (placeholder) and let the panel take
+ * the full card width — same intent as the real Library where the panel
+ * covers the screen on small viewports. */
+@media (max-width: 600px) {
+  .panel-ds-viewport { flex-direction: column; }
+  .panel-ds-content { display: none; }
+  .panel-ds-panel { width: 100%; border-left: none; }
+}
+
+/* DS preview override — the real .sidebar in mobile (≤768px) uses
+ * position: fixed + transform: translateX(-100%) for the drawer pattern.
+ * Inline samples in the DS need to stay statically positioned and visible. */
+.ds-card-body .sidebar:not(.mobile-open) {
+  position: static;
+  transform: none;
+  pointer-events: auto;
+  box-shadow: none;
+  width: 260px;
+}
+.ds-card-body .sidebar.collapsed { width: 60px; }
+
+/* Stack sample rows on mobile — .type-sample-meta has white-space: nowrap
+ * + flex-shrink: 0, so long mono strings (eg. "1.43rem · 20px · 800") would
+ * overflow horizontally. Stacking preview + meta is cleaner than wrapping. */
+@media (max-width: 600px) {
+  .type-sample,
+  .spacing-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .type-sample-meta {
+    margin-left: 0;
+    white-space: normal;
+  }
+}
 [data-theme="dark"] .panel-ds-panel { background: var(--bg); }
 [data-theme="dark"] .panel-ds-content { background: var(--bg2); }
 
@@ -406,7 +442,7 @@
 .logo-bg-page    { background: #FEFEFF; border: 1px solid var(--border-subtle); }
 .logo-bg-dark    { background: #1B1B1B; }
 .logo-bg-accent  { background: #4959E6; }
-.logo-bg-row     { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; }
+.logo-bg-row     { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; width: 100%; }
 .logo-bg-fill    { pointer-events: none; }
 .logo-spec-row   { display: flex; gap: 24px; flex-wrap: wrap; width: 100%; border-top: 1px solid var(--border-subtle); padding-top: 24px; }
 .logo-spec-item  { display: flex; flex-direction: column; gap: 4px; }
@@ -429,6 +465,16 @@
   color: var(--text);
   line-height: 1.7;
   margin: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+/* Long inline code spans must wrap on narrow viewports instead of forcing
+ * the parent to overflow (eg. `setDeleteTarget({ type: 'quote', ... })`). */
+.ds-card-body code { overflow-wrap: anywhere; }
+/* Code blocks scroll horizontally instead of expanding their parent. */
+.ds-card-body pre {
+  max-width: 100%;
+  overflow-x: auto;
 }
 .ds-token-block { display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; width: 100%; }
 .ds-token-block .ds-token-name { font-weight: 600; }
