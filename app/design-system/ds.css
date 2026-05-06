@@ -52,6 +52,9 @@
 .ds-card-body.col.padded { padding: 20px; gap: 20px; }
 /* Tables and token blocks own their horizontal padding — collapse the body's */
 .ds-card-body.col:has(> :is(table, .ds-token-block)) { padding: 0; }
+/* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
+ * — narrow tables won't scroll because their content fits, so this is safe globally. */
+.ds-card-body.col:has(> table) { overflow-x: auto; }
 .ds-card-body + .ds-card-body { border-top: 1px solid var(--border-subtle); }
 .ds-card-body.center { align-items: center; }
 .ds-card-foot {

@@ -824,12 +824,6 @@
 }
 .book-meta-sep { color: var(--text-3); }
 
-.book-year {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-2);
-}
-
 /* Delete button on card hover */
 .card-delete-btn {
   position: absolute;
@@ -4384,25 +4378,6 @@ button.quote-book-chip {
 }
 .quote-book-chip-remove svg { width: 14px; height: 14px; }
 
-.quote-photo-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  background: var(--bg);
-  border: 1.5px solid var(--border-subtle);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: var(--font-jakarta), sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-.quote-photo-btn:hover { border-color: var(--primary-50); background: var(--primary-5); color: var(--primary-60); }
-.quote-photo-btn svg { width: 28px; height: 28px; }
-
 .quote-scanning {
   display: flex;
   flex-direction: column;
@@ -4648,11 +4623,6 @@ button.quote-book-chip {
 .overview-goal--empty .add-btn {
   align-self: flex-start;
   margin-top: auto;
-}
-.overview-goal-hint {
-  font-size: 14px;
-  color: var(--text-3);
-  line-height: 1.5;
 }
 /* Overrides .cell-row align-items (center → baseline) for typography
  * baseline alignment between large num (28px Fraunces) + small pct. */

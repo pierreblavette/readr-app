@@ -34,6 +34,7 @@ function scrollTo(id) {
 export default function DesignSystemPage() {
   const [active, setActive] = useState("logo");
   const [theme, setTheme] = useState("light");
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -184,8 +185,11 @@ export default function DesignSystemPage() {
   return (
     <div className="app-root">
       <div className="page-shell">
+        {mobileSidebarOpen && (
+          <div className="sidebar-overlay" onClick={() => setMobileSidebarOpen(false)} />
+        )}
         {/* SIDEBAR */}
-        <aside className="sidebar">
+        <aside className={`sidebar${mobileSidebarOpen ? ' mobile-open' : ''}`}>
           <div className="sidebar-logo">
             <Link href="/" className="logo">readr</Link>
           </div>
@@ -196,7 +200,7 @@ export default function DesignSystemPage() {
                   <span className="sidebar-section-label">{section}</span>
                 </div>
                 {ids.map(id => (
-                  <button key={id} className={`sidebar-item${active === id ? " active" : ""}`} onClick={() => scrollTo(id)}>
+                  <button key={id} className={`sidebar-item${active === id ? " active" : ""}`} onClick={() => { scrollTo(id); setMobileSidebarOpen(false); }}>
                     <span className="sidebar-label">{NAV_LABELS[id]}</span>
                   </button>
                 ))}
@@ -216,6 +220,32 @@ export default function DesignSystemPage() {
         </aside>
 
         <main className="page-main">
+          <div className="toolbar toolbar-mobile-only">
+            <div className="toolbar-inner">
+              <button
+                className={`toolbar-hamburger${mobileSidebarOpen ? ' open' : ''}`}
+                onClick={() => setMobileSidebarOpen(o => !o)}
+                aria-label={mobileSidebarOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileSidebarOpen}
+              >
+                <span className="hamburger-line hamburger-line-top" />
+                <span className="hamburger-line hamburger-line-mid" />
+                <span className="hamburger-line hamburger-line-bot" />
+              </button>
+              <div className="logo">readr</div>
+              <div className="toolbar-right">
+                <button onClick={() => setTheme(t => t === "light" ? "dark" : "light")}
+                  className="theme-btn" aria-label="Toggle theme">
+                  <span className="toggle-thumb">
+                    {theme === 'dark'
+                      ? <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                      : <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                    }
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
           <div className="main-wrap">
 
             {/* CONTENT */}
@@ -289,11 +319,13 @@ export default function DesignSystemPage() {
 
             <div className="ds-card">
               <div className="ds-card-head">Strokes</div>
-              <div className="ds-card-body col padded">
+              <div className="ds-card-body">
                 <div className="ds-swatch-grid">
                   <Swatch bg="var(--border-subtle)" title="Subtle" token="--border-subtle" light="#EFEFEF" dark="#2E2E2E" />
                   <Swatch bg="var(--border)" title="Strong" token="--border" light="#E0E0E0" dark="#2E2E2E" />
                 </div>
+              </div>
+              <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">--border-subtle</div>
                   <p>default stroke for all components (buttons, inputs, cards, containers) and most dividers (row separators, section separators). 1.5px on components, 1px on dividers.</p>
@@ -334,7 +366,7 @@ export default function DesignSystemPage() {
 
             <div className="ds-card">
               <div className="ds-card-head">Primary scale</div>
-              <div className="ds-card-body col padded">
+              <div className="ds-card-body">
                 <div className="palette-grid">
                 {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
                   <Swatch
@@ -348,6 +380,8 @@ export default function DesignSystemPage() {
                   />
                 ))}
                 </div>
+              </div>
+              <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <p>--primary-N · ★ anchor = --accent (#4959E6)</p>
                 </div>
@@ -936,10 +970,10 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 {[
                   ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
-                  ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".quote-photo-btn", ".col-delete-btn"]],
+                  ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".col-delete-btn"]],
                   ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
                   ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
-                  ["Text / ghost link", "btn-ghost", [".footer-link", ".quote-see-more"]],
+                  ["Text link (inline, not dimensional)", "(no canonical)", [".footer-link · 11/500 · hover --primary-60", ".quote-see-more · 14/600 · hover --primary-60 + underline"]],
                   ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
                   ["AI action", "btn-ai btn-md", [".panel-cast-action (Generate state)"]],
                 ].map(([role, canon, classes]) => (
@@ -1551,7 +1585,7 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text-wrap</code></td><td className="meta">Text column</td><td className="mono">flex: 1, min-width: 0, flex-col, gap 12</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text</code></td><td className="meta">The quote</td><td className="mono">font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-see-more</code></td><td className="meta">Expand toggle (conditional)</td><td className="mono">Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-delete</code></td><td className="meta">Destructive icon</td><td className="mono">40×40, flex-shrink: 0, --primary-5/--primary-10</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-delete</code></td><td className="meta">Wrapper around .delete-row-btn</td><td className="mono">flex-shrink: 0 — colors / 40×40 sizing inherited from .delete-row-btn child</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-divider</code></td><td className="meta">Separator</td><td className="mono">1px, --border-subtle</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td className="meta">Book reference</td><td className="mono">Override bg --primary-5 / --primary-10 when inside .quote-card</td></tr>
                   </tbody>
@@ -2466,7 +2500,7 @@ function handleDeleteConfirm(payload) {
                     <tr className="table-row"><td className="token-table-component"><code>.sel-actions</code></td><td className="meta">Actions group</td><td className="mono">flex row, gap 8 (desktop) / column on mobile</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-btn</code></td><td className="meta">Base button</td><td className="mono">h 40, padding 0 20, radius 8, 15 / 600</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-select-all</code></td><td className="meta">Select / Deselect all</td><td className="mono">transparent · border 1.5 rgba(255,255,255,0.5) · #fff</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm</code></td><td className="meta">Mark as owned (Wishlist)</td><td className="mono">--primary-50 · #fff</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm</code></td><td className="meta">Mark as owned (Wishlist)</td><td className="mono">--primary-50 · #fff · hover --primary-40</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-confirm.danger</code></td><td className="meta">Remove</td><td className="mono">rgba(255,255,255,0.15) · #fff</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-cancel</code></td><td className="meta">Cancel edit mode</td><td className="mono">rgba(255,255,255,0.15) · color inherit</td></tr>
                   </tbody>
