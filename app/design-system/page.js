@@ -74,6 +74,7 @@ export default function DesignSystemPage() {
   const [langActive, setLangActive]         = useState("EN");
   const [importTab, setImportTab]           = useState("photo");
   const [addModalSource, setAddModalSource] = useState("owned");
+  const [deleteVariant, setDeleteVariant]   = useState("book");
   const [importTabIndicator, setImportTabIndicator] = useState({ left: 0, width: 0 });
   const importTabRefs = useRef([]);
   useEffect(() => {
@@ -2052,9 +2053,9 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">
                 Add a book — preview
-                <div className="ds-context-switch" style={{ marginLeft: "auto" }}>
-                  <button className={`ds-context-btn${addModalSource === "owned" ? " is-active" : ""}`} onClick={() => setAddModalSource("owned")}>From Library</button>
-                  <button className={`ds-context-btn${addModalSource === "wishlist" ? " is-active" : ""}`} onClick={() => setAddModalSource("wishlist")}>From Wishlist</button>
+                <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+                  <button className={`btn btn-xs ${addModalSource === "owned" ? "btn-primary" : "btn-secondary"}`} onClick={() => setAddModalSource("owned")}>From Library</button>
+                  <button className={`btn btn-xs ${addModalSource === "wishlist" ? "btn-primary" : "btn-secondary"}`} onClick={() => setAddModalSource("wishlist")}>From Wishlist</button>
                 </div>
               </div>
               <div className="ds-card-body">
@@ -2202,53 +2203,155 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── DELETE MODAL ── */}
-          <DSSection id="delete-modal" title="Delete Modal" sub="Type-routed confirmation modal — same component handles books, quotes, words, bulk, cancelReading and removeFinished. Uses .confirm-modal pattern (aligned with .modal: max-width 630, gap 32). Single-book/cancelReading variants show a BookChip preview ; quote variant shows the quote text in a .panel-quote-item-style box with line-clamp + see more ; removeFinished shows the rating + comment to be deleted.">
+          <DSSection id="delete-modal" title="Delete Modal" sub="Type-routed confirmation modal — single component handles 10 variants: book, quote, word, bulk, cancelReading, removeFinished, collection, collectionsBulk, colRemove, colRemoveBulk. Uses .confirm-modal shell (max-width 630, padding 32/24/0, gap 32) — distinct from .modal but visually aligned. Title/message resolved via target.type. Body adapts: BookChip preview (single book / colRemove), .confirm-modal-quote-wrap with line-clamp 3 + see more (quote), .panel-finished-field rating + note (removeFinished), bare title-only chip (collection). Cancel = .modal-cancel ; confirm = .confirm-modal-delete (red #ef4444) — except cancelReading which uses .ob-next.">
 
             <div className="ds-card">
-              <div className="ds-card-head">Preview</div>
+              <div className="ds-card-head">
+                Preview
+                <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+                  <button className={`btn btn-xs ${deleteVariant === "book" ? "btn-primary" : "btn-secondary"}`} onClick={() => setDeleteVariant("book")}>Book</button>
+                  <button className={`btn btn-xs ${deleteVariant === "quote" ? "btn-primary" : "btn-secondary"}`} onClick={() => setDeleteVariant("quote")}>Quote</button>
+                  <button className={`btn btn-xs ${deleteVariant === "bulk" ? "btn-primary" : "btn-secondary"}`} onClick={() => setDeleteVariant("bulk")}>Bulk</button>
+                  <button className={`btn btn-xs ${deleteVariant === "finished" ? "btn-primary" : "btn-secondary"}`} onClick={() => setDeleteVariant("finished")}>Finished</button>
+                </div>
+              </div>
               <div className="ds-card-body">
-                <div style={{ maxWidth: 380, margin: "0 auto", background: "var(--card)", border: "1.5px solid var(--border-subtle)", borderRadius: 12, padding: 24, boxShadow: "var(--shadow-lg)", display: "flex", flexDirection: "column", gap: 16 }}>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)" }}>Remove this quote?</div>
-                  <div style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.6 }}>This quote will be permanently removed.</div>
-                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
-                    <button className="btn btn-outline btn-md">Cancel</button>
-                    <button className="btn btn-primary btn-md" style={{ background: "var(--destructive)" }}>Remove</button>
+                <div className="confirm-modal" style={{ animation: "none", margin: "0 auto", boxShadow: "var(--shadow-lg)" }}>
+                  <div className="confirm-modal-title">
+                    {deleteVariant === "book" && "Remove this book?"}
+                    {deleteVariant === "quote" && "Remove this quote?"}
+                    {deleteVariant === "bulk" && "Remove 3 books?"}
+                    {deleteVariant === "finished" && "Remove rating and note?"}
+                  </div>
+                  <div className="modal-fields">
+                    <div className="confirm-modal-sub">
+                      {deleteVariant === "book" && '"A Brief History of Time" will be permanently removed from your library.'}
+                      {deleteVariant === "quote" && "This quote will be permanently removed."}
+                      {deleteVariant === "bulk" && "These 3 books will be permanently removed from your library."}
+                      {deleteVariant === "finished" && "The rating and note attached to this finished book will be removed. The finished status stays."}
+                    </div>
+                    {deleteVariant === "book" && (
+                      <div className="confirm-modal-chip">
+                        <div className="quote-book-chip">
+                          <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>A</span></div>
+                          <div className="quote-book-chip-body">
+                            <div className="quote-book-chip-name">
+                              <div className="quote-book-chip-title">A Brief History of Time</div>
+                              <div className="quote-book-chip-author">Stephen Hawking</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {deleteVariant === "quote" && (
+                      <div className="confirm-modal-quote-wrap">
+                        <p className="confirm-modal-quote">"We are just an advanced breed of monkeys on a minor planet of a very average star. But we can understand the Universe. That makes us something very special."</p>
+                      </div>
+                    )}
+                    {deleteVariant === "finished" && (
+                      <>
+                        <div className="panel-finished-field">
+                          <span className="panel-finished-label">Rating</span>
+                          <div className="panel-rating-stars" aria-label="Rating 4 out of 5">
+                            {[1,2,3,4,5].map(n => (
+                              <svg key={n} viewBox="0 0 24 24" fill="currentColor" className={4 >= n ? "is-filled" : ""}>
+                                <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
+                              </svg>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="panel-finished-field">
+                          <span className="panel-finished-label">Note</span>
+                          <div className="panel-finished-note">A landmark in popular science. Hawking makes cosmology accessible without dumbing it down.</div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="confirm-modal-actions">
+                    <button type="button" className="modal-cancel">Cancel</button>
+                    <button type="button" className="confirm-modal-delete">Remove</button>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-head">Target routing — <code>target.type</code> dispatches the i18n</div>
+              <div className="ds-card-head">Target routing — <code>target.type</code> dispatches title / message / body / confirm</div>
               <div className="ds-card-body col">
                 <table className="token-table">
                   <thead className="table-head">
-                    <tr><th>target shape</th><th>Title i18n</th><th>Message i18n</th><th>onConfirm handler</th></tr>
+                    <tr><th>target shape</th><th>Title i18n</th><th>Message i18n</th><th>Body addon</th><th>Confirm</th></tr>
                   </thead>
                   <tbody className="table-body">
+                    <tr className="table-row">
+                      <td className="mono">{"{ id, title, author, ... }"} (book — no type)</td>
+                      <td className="mono">t.deleteTitle</td>
+                      <td className="mono">t.deleteMsg(title)</td>
+                      <td className="mono">.confirm-modal-chip + BookChip</td>
+                      <td className="mono">.confirm-modal-delete → deleteBook(id)</td>
+                    </tr>
                     <tr className="table-row">
                       <td className="mono">{"{ bulk: true, ids, count }"}</td>
                       <td className="mono">t.deleteBulkTitle(count)</td>
                       <td className="mono">t.deleteBulkMsg(count)</td>
-                      <td className="mono">deleteMany(ids)</td>
+                      <td className="is-empty">—</td>
+                      <td className="mono">.confirm-modal-delete → deleteMany(ids)</td>
                     </tr>
                     <tr className="table-row">
-                      <td className="mono">{"{ type: 'quote', id }"}</td>
+                      <td className="mono">{"{ type: 'quote', id, text }"}</td>
                       <td className="mono">t.quoteDeleteTitle</td>
                       <td className="mono">t.quoteDeleteMsg</td>
-                      <td className="mono">deleteQuote(id)</td>
+                      <td className="mono">.confirm-modal-quote-wrap (line-clamp 3 + see more)</td>
+                      <td className="mono">.confirm-modal-delete → deleteQuote(id)</td>
                     </tr>
                     <tr className="table-row">
                       <td className="mono">{"{ type: 'word', id, title }"}</td>
                       <td className="mono">t.wordDeleteTitle</td>
                       <td className="mono">t.wordDeleteMsg(title)</td>
-                      <td className="mono">deleteWord(id)</td>
+                      <td className="is-empty">—</td>
+                      <td className="mono">.confirm-modal-delete → deleteWord(id)</td>
                     </tr>
                     <tr className="table-row">
-                      <td className="mono">{"{ id, title, ... }"} (book, no type)</td>
-                      <td className="mono">t.deleteTitle</td>
-                      <td className="mono">t.deleteMsg(title)</td>
-                      <td className="mono">deleteBook(id)</td>
+                      <td className="mono">{"{ type: 'cancelReading', title }"}</td>
+                      <td className="mono">t.cancelReadingTitle</td>
+                      <td className="mono">t.cancelReadingMsg(title)</td>
+                      <td className="is-empty">—</td>
+                      <td className="mono">.ob-next (not red) → cancelReading</td>
+                    </tr>
+                    <tr className="table-row">
+                      <td className="mono">{"{ type: 'removeFinished', rating, note }"}</td>
+                      <td className="mono">t.removeFinishedTitle</td>
+                      <td className="mono">t.removeFinishedMsg</td>
+                      <td className="mono">.panel-finished-field × 2 (stars + note)</td>
+                      <td className="mono">.confirm-modal-delete → removeFinished</td>
+                    </tr>
+                    <tr className="table-row">
+                      <td className="mono">{"{ type: 'collection', id, title, count }"}</td>
+                      <td className="mono">t.colDeleteTitle</td>
+                      <td className="mono">t.colDeleteMsg</td>
+                      <td className="mono">.confirm-modal-chip + .quote-book-chip (no cover, count as author)</td>
+                      <td className="mono">.confirm-modal-delete → deleteCollection</td>
+                    </tr>
+                    <tr className="table-row">
+                      <td className="mono">{"{ type: 'collectionsBulk', ids, count }"}</td>
+                      <td className="mono">t.colDeleteBulkTitle(count)</td>
+                      <td className="mono">t.colDeleteBulkMsg(count)</td>
+                      <td className="is-empty">—</td>
+                      <td className="mono">.confirm-modal-delete → deleteCollectionsMany</td>
+                    </tr>
+                    <tr className="table-row">
+                      <td className="mono">{"{ type: 'colRemove', title, author, colName }"}</td>
+                      <td className="mono">t.colRemoveTitle</td>
+                      <td className="mono">t.colRemoveMsg(colName)</td>
+                      <td className="mono">.confirm-modal-chip + BookChip</td>
+                      <td className="mono">.confirm-modal-delete (label = colRemoveConfirm)</td>
+                    </tr>
+                    <tr className="table-row">
+                      <td className="mono">{"{ type: 'colRemoveBulk', count, colName }"}</td>
+                      <td className="mono">t.colRemoveBulkTitle(count)</td>
+                      <td className="mono">t.colRemoveBulkMsg(count, colName)</td>
+                      <td className="is-empty">—</td>
+                      <td className="mono">.confirm-modal-delete (label = colRemoveConfirm)</td>
                     </tr>
                   </tbody>
                 </table>
@@ -2257,13 +2360,13 @@ export default function DesignSystemPage() {
 
             <div className="ds-card">
               <div className="ds-card-head">Usage</div>
-              <div className="ds-card-body col" style={{ gap: 16 }}>
+              <div className="ds-card-body col padded">
                 <p>
-                  Trigger the modal by setting <code>deleteTarget</code> state. The <code>onConfirm</code> callback receives the full target — dispatch in the parent based on <code>target.type</code>.
+                  Trigger the modal by setting <code>deleteTarget</code> state. The <code>onConfirm</code> callback receives the full target (or a Set of ids for bulk) — dispatch in the parent based on <code>target.type</code>.
                 </p>
                 <pre style={{ fontFamily: "monospace", fontSize: 12, background: "var(--bg3)", padding: "12px 14px", borderRadius: 6, color: "var(--text)", lineHeight: 1.6, margin: 0, overflow: "auto" }}>
 {`// Open
-<button onClick={() => setDeleteTarget({ type: 'quote', id: q.id })}>…</button>
+<button onClick={() => setDeleteTarget({ type: 'quote', id: q.id, text: q.text })}>…</button>
 
 // Render
 <DeleteModal
@@ -2273,17 +2376,28 @@ export default function DesignSystemPage() {
   t={t}
 />
 
-// Dispatch
+// Dispatch — handles all 10 variants
 function handleDeleteConfirm(payload) {
+  // Bulk: payload is a Set of ids
   if (payload instanceof Set) return deleteMany(payload);
-  if (payload?.type === 'quote') return deleteQuote(payload.id);
-  if (payload?.type === 'word')  return deleteWord(payload.id);
+  // Type-routed
+  switch (payload?.type) {
+    case 'quote':           return deleteQuote(payload.id);
+    case 'word':            return deleteWord(payload.id);
+    case 'cancelReading':   return cancelReading(payload);
+    case 'removeFinished':  return removeFinished(payload);
+    case 'collection':      return deleteCollection(payload.id);
+    case 'collectionsBulk': return deleteCollectionsMany(payload.ids);
+    case 'colRemove':       return removeFromCollection(payload);
+    case 'colRemoveBulk':   return removeManyFromCollection(payload);
+  }
+  // Default: single-book delete (target has no .type)
   return deleteBook(payload.id);
 }`}
                 </pre>
               </div>
               <div className="ds-card-foot">
-                Source: <code>components/library/DeleteModal.js</code>. The Cancel button is <code>.modal-cancel</code> (outline). The confirm is <code>.confirm-modal-delete</code> (red fill).
+                Source: <code>components/library/DeleteModal.js</code>. Cancel button is <code>.modal-cancel</code> (outline). Confirm is <code>.confirm-modal-delete</code> (red #ef4444) for all variants except <code>cancelReading</code>, which uses <code>.ob-next</code> (primary blue) since the action isn't destructive.
               </div>
             </div>
           </DSSection>
