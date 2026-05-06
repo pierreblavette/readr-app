@@ -938,6 +938,9 @@
   border-bottom: 1px solid var(--border-subtle);
 }
 .table-head tr { height: var(--height-head); }
+.table-body {}
+.table-row { border-bottom: 1px solid var(--border-subtle); }
+.table-row:last-child { border-bottom: none; }
 
 .list-table th {
   padding: 11px 24px;

@@ -50,52 +50,59 @@
 }
 .ds-card-body.col { flex-direction: column; padding: 0 20px; gap: 0; }
 .ds-card-body.col.padded { padding: 20px; gap: 20px; }
+/* Tables and token blocks own their horizontal padding — collapse the body's */
+.ds-card-body.col:has(> :is(table, .ds-token-block)) { padding: 0; }
 .ds-card-body + .ds-card-body { border-top: 1px solid var(--border-subtle); }
 .ds-card-body.center { align-items: center; }
+.ds-card-foot {
+  padding: 12px 20px;
+  font-size: 14px;
+  color: var(--text-3);
+  border-top: 1px solid var(--border-subtle);
+}
+/* Sample with an eyebrow label above (Default / Focus / Active / etc.) */
+.ds-state-sample {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 /* ─── TOKENS ─── */
 .ds-token-name {
   font-size: 13px;
   font-family: 'SF Mono', 'Fira Code', monospace;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text);
 }
 .ds-token-val {
   font-size: 13px;
   font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 600;
   color: var(--text);
   opacity: 0.7;
 }
 .ds-token-chip {
   display: inline-flex;
   align-items: center;
-  padding: 3px 8px;
-  border-radius: 5px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  font-size: 12px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-5);
+  color: var(--primary-60);
+  border: none;
+  font-size: 13px;
   font-family: 'SF Mono', 'Fira Code', monospace;
   font-weight: 600;
-  color: var(--accent);
   white-space: nowrap;
 }
+[data-theme="dark"] .ds-token-chip { background: var(--primary-90); color: var(--primary-30); }
 .ds-tokens {
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--bg3);
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
-}
-.ds-tokens-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-3);
-  margin-right: 4px;
-  flex-shrink: 0;
 }
 
 /* ─── COLORS ─── */
@@ -226,29 +233,6 @@
 /* States table */
 
 /* ─── SEGMENTED CONTROL ─── */
-.tabs-ds {
-  display: inline-flex; background: var(--bg3); border-radius: 8px;
-  padding: 3px; gap: 2px; flex-shrink: 0;
-}
-.tab-ds {
-  height: 32px; padding: 0 16px; display: flex; align-items: center; gap: 7px;
-  font-weight: 500; font-size: 14px; color: var(--dark-80); border: none;
-  background: none; cursor: pointer; border-radius: 8px; white-space: nowrap;
-  transition: color 0.2s, background 0.2s, box-shadow 0.2s; font-family: inherit;
-}
-.tab-ds:hover { color: var(--primary-60); background: var(--primary-5); }
-.tab-ds.active {
-  background: var(--bg); color: var(--text); font-weight: 600;
-  box-shadow: 0 1px 4px rgba(73,89,230,0.14), 0 1px 2px rgba(73,89,230,0.08);
-}
-.badge-ds {
-  display: inline-flex; align-items: center; justify-content: center;
-  height: 18px; padding: 0 6px; border-radius: 8px;
-  font-size: 10px; font-weight: 700;
-  background: var(--border); color: var(--text-2); transition: all 0.2s;
-}
-.tab-ds.active .badge-ds { background: var(--primary-10); color: var(--primary-60); }
-
 /* ─── VIEW TOGGLE ─── */
 .view-btns-ds { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
 .view-btn-ds { width: 38px; height: 38px; border: none; background: var(--bg3); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; font-family: inherit; }
@@ -303,7 +287,7 @@
 .search-box-demo input {
   height: 40px; width: 100%; padding: 0 34px 0 38px;
   border: 1.5px solid var(--border-subtle); border-radius: 32px;
-  background: #FFFFFF; font-family: inherit; font-size: 14px;
+  background: #FFFFFF; font-family: inherit; font-size: 15px;
   font-weight: 600; color: var(--text); outline: none; transition: all 0.2s;
 }
 .search-box-demo input::placeholder { color: var(--text-2); }
@@ -315,7 +299,7 @@
 .field-demo input {
   height: 40px; padding: 0 14px; border-radius: 8px;
   border: 1.5px solid transparent; background: var(--bg3);
-  color: var(--text); font-family: inherit; font-size: 14px;
+  color: var(--text); font-family: inherit; font-size: 15px;
   font-weight: 600; outline: none; transition: border-color 0.15s, background 0.15s;
 }
 .field-demo input::placeholder { font-weight: 500; color: var(--text-2); }
@@ -324,20 +308,22 @@
 
 /* ─── BOOK CARD ─── */
 .book-card-ds {
-  background: #fff; border-radius: var(--radius); overflow: hidden;
-  border: 1px solid var(--border); transition: transform 0.22s ease, border-color 0.22s, background 0.22s, box-shadow 0.22s;
-  cursor: pointer; width: 180px;
+  background: var(--card); border-radius: var(--radius); overflow: hidden;
+  border: 1.5px solid var(--border-subtle); transition: transform 0.22s ease, border-color 0.22s, background 0.22s, box-shadow 0.22s;
+  cursor: pointer; width: 195px;
 }
-.book-card-ds:hover { transform: translateY(-2px); border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 4px 16px rgba(73,89,230,0.12); }
+.book-card-ds:not(.book-card-ds--static):hover { transform: translateY(-2px); border-color: var(--primary-50); background: var(--primary-3); box-shadow: var(--shadow-md); }
+[data-theme="dark"] .book-card-ds:not(.book-card-ds--static):hover { border-color: var(--primary-40); background: var(--primary-3); }
+.book-card-ds--static { cursor: default; }
 .book-cover-ds {
   height: 148px; display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
 }
 .book-cover-ds img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-.book-body-ds { padding: 14px 16px; display: flex; flex-direction: column; }
-.book-title-ds { font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.book-author-ds { font-size: 14px; font-weight: 500; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px; }
-.book-meta-ds { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--text-3); margin-top: 0; }
+.book-body-ds { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.book-title-ds { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-author-ds { font-size: 15px; font-weight: 500; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-meta-ds { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--text-3); }
 .book-meta-sep-ds { color: var(--text-3); }
 
 /* ─── LIST VIEW ─── */
@@ -462,13 +448,11 @@
 
 /* ─── TOKEN TABLE ─── */
 .token-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.token-table th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
-.token-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
-.token-table tbody tr:last-child { border-bottom: none; }
-.token-table tbody tr:hover { background: var(--bg3); }
-.token-table td { padding: 12px 16px; vertical-align: middle; }
-.token-table-component { font-weight: 600; color: var(--text); white-space: nowrap; width: 200px; }
-.token-table td:last-child { display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 16px; }
+.token-table th { padding: 12px 20px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+/* Row borders + hover removed — handled by .table-row primitive (library.css) */
+.token-table td { padding: 16px 20px; vertical-align: middle; }
+.token-table-component { font-weight: 600; color: var(--text); white-space: nowrap; }
+.token-table td:last-child:has(.ds-token-chip) { display: flex; flex-wrap: wrap; gap: 5px; padding: 16px 20px; }
 
 /* ─── DS CAPTION (paragraphs in .ds-card-body.col) ─── */
 .ds-card-body.col p,
@@ -478,20 +462,17 @@
   line-height: 1.7;
   margin: 0;
 }
-.ds-token-block { display: flex; flex-direction: column; gap: 4px; padding: 16px 0; width: 100%; }
+.ds-token-block { display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; width: 100%; }
 .ds-token-block .ds-token-name { font-weight: 600; }
 .ds-token-block:has(+ .ds-token-block) { border-bottom: 1px solid var(--border-subtle); }
 
 /* ─── TOKEN TABLE — cell modifiers ─── */
 .token-table td.mono {
   font-family: 'SF Mono','Fira Code',monospace;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
 }
-.token-table td.mono:not(.token-table-component) { color: var(--text-2); }
-.token-table td.meta {
-  font-size: 12px;
-  color: var(--text-2);
-}
+.token-table td.meta { font-size: 14px; }
 .token-table td.empty { color: var(--text-3); }
 
 /* ─── SCROLLBAR ─── */
