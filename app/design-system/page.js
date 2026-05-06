@@ -165,20 +165,6 @@ export default function DesignSystemPage() {
     );
   }
 
-  function DSCard({ label, children, tokens }) {
-    return (
-      <div className="ds-card">
-        {label && <div className="ds-card-head">{label}</div>}
-        <div className="ds-card-body">{children}</div>
-        {tokens && (
-          <div className="ds-tokens">
-            {tokens.map(t => <span key={t} className="ds-token-chip">{t}</span>)}
-          </div>
-        )}
-      </div>
-    );
-  }
-
   function Swatch({ bg, title, token, light, dark, size = "md", anchor = false }) {
     const value = theme === "dark" ? (dark || light) : (light || dark);
     return (
@@ -1379,13 +1365,13 @@ export default function DesignSystemPage() {
                       <td className="token-table-component">Default</td>
                       <td className="mono">1.5px --border-subtle (or transparent for bg3 variants)</td>
                       <td className="mono">--bg3 / #FFFFFF / --bg</td>
-                      <td className="empty">—</td>
+                      <td className="is-empty">—</td>
                     </tr>
                     <tr className="table-row">
                       <td className="token-table-component">Hover</td>
                       <td className="mono">1.5px --primary-50</td>
                       <td className="mono">--primary-5</td>
-                      <td className="empty">—</td>
+                      <td className="is-empty">—</td>
                     </tr>
                     <tr className="table-row">
                       <td className="token-table-component">Focus</td>
@@ -1693,7 +1679,7 @@ export default function DesignSystemPage() {
           <DSSection id="list" title="List View">
             <div className="ds-card">
               <div className="ds-card-head">Tableau</div>
-              <div className="ds-card-body col">
+              <div className="ds-card-body">
                 <div className="list-demo">
                   <table>
                     <thead className="table-head">
@@ -1720,106 +1706,128 @@ export default function DesignSystemPage() {
           {/* ── SIDEBAR ── */}
           <DSSection id="sidebar" title="Sidebar" sub="Navigation latérale fixe. Expanded 260px · Collapsed 60px. Persisté en localStorage.">
             <div className="ds-card">
-              <div className="ds-card-head">Preview</div>
+              <div className="ds-card-head">Preview — Expanded 260 · Collapsed 60 (height capped to 500 for the sample)</div>
               <div className="ds-card-body" style={{ gap: 24, alignItems: 'flex-start' }}>
-                {/* Expanded */}
-                <div style={{ width: 200, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 420 }}>
-                  {/* Logo row */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-                    <span style={{ fontFamily: 'var(--font-fraunces)', fontSize: 16, letterSpacing: '-0.02em' }}>readr</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                {/* Expanded — uses real .sidebar classes, with position/height overridden for the preview */}
+                <aside className="sidebar" style={{ position: 'static', height: 500 }}>
+                  <div className="sidebar-logo">
+                    <span className="logo">readr</span>
+                    <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" aria-label="Collapse">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
                   </div>
-                  {/* Shelves */}
-                  <div style={{ padding: '12px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '0 8px 6px' }}>Shelves</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, background: 'var(--primary-10)', color: 'var(--primary)' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                      <span style={{ fontSize: '0.857rem', fontWeight: 600, flex: 1 }}>My Library</span>
-                      <span style={{ fontSize: '0.75rem', background: 'var(--primary)', color: '#fff', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>20</span>
+                  <nav className="sidebar-nav">
+                    <div className="sidebar-section sidebar-section--lone">
+                      <button className="sidebar-item active">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg></span>
+                        <span className="sidebar-label">Overview</span>
+                      </button>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, color: 'var(--text-2)' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                      <span style={{ fontSize: '0.857rem', flex: 1 }}>Wishlist</span>
-                      <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>1</span>
-                    </div>
-                  </div>
-                  {/* Quotes section */}
-                  <div style={{ padding: '4px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '12px 8px 6px' }}>Quotes</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, color: 'var(--text-2)' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
-                      <span style={{ fontSize: '0.857rem', flex: 1 }}>Quotes</span>
-                      <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>4</span>
-                    </div>
-                  </div>
-                  {/* Dictionary section */}
-                  <div style={{ padding: '4px 8px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '12px 8px 6px' }}>Dictionary</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, color: 'var(--text-2)' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h11a4 4 0 0 1 4 4v12"/><path d="M4 4v14a2 2 0 0 0 2 2h13"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg>
-                      <span style={{ fontSize: '0.857rem', flex: 1 }}>Dictionary</span>
-                      <span style={{ fontSize: '0.75rem', background: 'var(--primary-10)', color: 'var(--primary-50)', borderRadius: 10, padding: '1px 7px', fontWeight: 600 }}>12</span>
-                    </div>
-                  </div>
-                  {/* Bottom */}
-                  <div style={{ marginTop: 'auto', padding: '12px 16px', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <div style={{ display: 'flex', gap: 6, fontSize: '0.8rem', color: 'var(--text-2)' }}>
-                      <span style={{ fontWeight: 600, color: 'var(--text)' }}>EN</span>
-                      <span>·</span>
-                      <span>FR</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--text-2)' }}>Appearance</span>
-                      <div style={{ width: 36, height: 20, borderRadius: 10, background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px' }}>
-                        <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff' }} />
+                    <div className="sidebar-section">
+                      <div className="sidebar-section-head sidebar-section-head--no-action">
+                        <span className="sidebar-section-label">Shelves</span>
                       </div>
+                      <button className="sidebar-item">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+                        <span className="sidebar-label">Library</span>
+                        <span className="sidebar-badge">20</span>
+                      </button>
+                      <button className="sidebar-item">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                        <span className="sidebar-label">Wishlist</span>
+                        <span className="sidebar-badge">1</span>
+                      </button>
+                    </div>
+                    <div className="sidebar-section">
+                      <div className="sidebar-section-head sidebar-section-head--no-action">
+                        <span className="sidebar-section-label">Notes</span>
+                      </div>
+                      <button className="sidebar-item">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></span>
+                        <span className="sidebar-label">Quotes</span>
+                        <span className="sidebar-badge">4</span>
+                      </button>
+                      <button className="sidebar-item">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h11a4 4 0 0 1 4 4v12"/><path d="M4 4v14a2 2 0 0 0 2 2h13"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg></span>
+                        <span className="sidebar-label">Dictionary</span>
+                        <span className="sidebar-badge">12</span>
+                      </button>
+                    </div>
+                  </nav>
+                  <div className="sidebar-bottom">
+                    <div className="cell-row cell-row--lg sidebar-appearance-row">
+                      <span className="sidebar-appearance-label">Appearance</span>
+                      <button type="button" className="theme-btn" aria-label="Toggle theme">
+                        <span className="toggle-thumb">
+                          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                        </span>
+                      </button>
                     </div>
                   </div>
-                </div>
-                {/* Collapsed */}
-                <div style={{ width: 52, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: 280, gap: 4, padding: '10px 0' }}>
-                  <div style={{ fontFamily: 'var(--font-fraunces)', fontSize: 15, letterSpacing: '-0.02em', padding: '8px 0 12px', borderBottom: '1px solid var(--border)', width: '100%', textAlign: 'center' }}>r</div>
-                  <div style={{ padding: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: '100%' }}>
-                    <div style={{ padding: '8px', borderRadius: 8, background: 'var(--primary-10)', color: 'var(--primary)', display: 'flex' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    </div>
-                    <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </div>
-                    <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
-                    </div>
-                    <div style={{ padding: '8px', borderRadius: 8, color: 'var(--text-2)', display: 'flex' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h11a4 4 0 0 1 4 4v12"/><path d="M4 4v14a2 2 0 0 0 2 2h13"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg>
-                    </div>
+                </aside>
+                {/* Collapsed — same .sidebar with .collapsed modifier */}
+                <aside className="sidebar collapsed" style={{ position: 'static', height: 500 }}>
+                  <div className="sidebar-logo">
+                    <button className="sidebar-logo-collapse" aria-label="Expand">
+                      <span className="sidebar-logo-mark">r</span>
+                    </button>
                   </div>
-                </div>
+                  <nav className="sidebar-nav">
+                    <div className="sidebar-section sidebar-section--lone">
+                      <button className="sidebar-item active" aria-label="Overview">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg></span>
+                      </button>
+                    </div>
+                    <div className="sidebar-section">
+                      <button className="sidebar-item" aria-label="Library">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+                      </button>
+                      <button className="sidebar-item" aria-label="Wishlist">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      </button>
+                    </div>
+                    <div className="sidebar-section">
+                      <button className="sidebar-item" aria-label="Quotes">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></span>
+                      </button>
+                      <button className="sidebar-item" aria-label="Dictionary">
+                        <span className="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h11a4 4 0 0 1 4 4v12"/><path d="M4 4v14a2 2 0 0 0 2 2h13"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg></span>
+                      </button>
+                    </div>
+                  </nav>
+                </aside>
               </div>
             </div>
-            <DSCard label="Nav items — états" tokens={["--primary-10","--primary-50","--primary-5","--primary"]}>
-              <table className="btn-scale-table">
-                <thead className="table-head"><tr><th>État</th><th>Background</th><th>Couleur</th><th>Badge bg</th><th>Badge color</th></tr></thead>
-                <tbody className="table-body">
-                  <tr className="table-row"><td>Default</td><td>transparent</td><td>--text-2</td><td>--primary-10</td><td>--primary-50</td></tr>
-                  <tr className="table-row"><td>Hover</td><td>--primary-5</td><td>--text</td><td>—</td><td>—</td></tr>
-                  <tr className="table-row"><td>Active</td><td>--primary-10</td><td>--primary</td><td>--primary-50</td><td>#fff</td></tr>
-                </tbody>
-              </table>
-            </DSCard>
-            <DSCard label="Tokens & comportement" tokens={["--bg","--border","--primary-10","--primary-50"]}>
-              <table className="btn-scale-table">
-                <thead className="table-head"><tr><th>Propriété</th><th>Valeur</th></tr></thead>
-                <tbody className="table-body">
-                  <tr className="table-row"><td>Expanded width</td><td>260px</td></tr>
-                  <tr className="table-row"><td>Collapsed width</td><td>60px</td></tr>
-                  <tr className="table-row"><td>Page shell padding</td><td>260px → 60px (collapsed)</td></tr>
-                  <tr className="table-row"><td>Persistance</td><td><code>readr-sidebar-collapsed</code> (localStorage)</td></tr>
-                  <tr className="table-row"><td>Mobile</td><td>Overlay fixe, ouverture via hamburger</td></tr>
-                  <tr className="table-row"><td>Sections</td><td>Shelves · Quotes · Dictionary <span style={{ color: 'var(--text-3)' }}>(Collections : hidden via <code>display: none</code>, pending redesign)</span></td></tr>
-                  <tr className="table-row"><td>Badge canon</td><td><code>.sidebar-badge</code> — bg <code>--primary-10</code>, color <code>--primary-50</code>. Active item: bg <code>--primary</code>, color <code>#fff</code>.</td></tr>
-                </tbody>
-              </table>
-            </DSCard>
+            <div className="ds-card">
+              <div className="ds-card-head">Nav items — états</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>État</th><th>Background</th><th>Couleur</th><th>Badge bg</th><th>Badge color</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component">Default</td><td className="mono">transparent</td><td className="mono">--text-2</td><td className="mono">--primary-10</td><td className="mono">--primary-50</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Hover</td><td className="mono">--primary-5</td><td className="mono">--text</td><td className="is-empty">—</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Active</td><td className="mono">--primary-10</td><td className="mono">--primary</td><td className="mono">--primary-50</td><td className="mono">#fff</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Tokens & comportement</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Propriété</th><th>Valeur</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component">Expanded width</td><td className="mono">260px</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Collapsed width</td><td className="mono">60px</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Page shell padding</td><td className="meta">260px → 60px (collapsed)</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Persistance</td><td className="meta"><code>readr-sidebar-collapsed</code> (localStorage)</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Mobile</td><td className="meta">Overlay fixe, ouverture via hamburger</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Sections</td><td className="meta">Overview · Shelves (Library + Wishlist) · Notes (Quotes + Dictionary) · Collections</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Badge canon</td><td className="meta"><code>.sidebar-badge</code> — bg <code>--primary-10</code>, color <code>--primary-50</code>. Active item: bg <code>--primary-50</code>, color <code>#fff</code>.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </DSSection>
 
           {/* ── PANEL ── */}
