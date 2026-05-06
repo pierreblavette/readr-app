@@ -1831,7 +1831,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── PANEL ── */}
-          <DSSection id="panel" title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info meta↔actions / 24 .panel-info-header title+byline / 16 .panel-section eyebrow→content / 40 .panel-quotes content↔add. Finished section uses .panel-section.is-finished modifier (border-top + border-bottom + padding 24) for visual emphasis. Edit/Remove buttons use .panel-finished-btn (small ghost, 32 height, 13/600, --bg3 dark).">
+          <DSSection id="panel" title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info header↔finished / 24 .panel-info-header title+byline+actions / 12 .panel-header-actions / 8 .panel-byline / 40 .panel-quotes content↔add / 16 .panel-quotes-content / 16 .panel-section / 12 .panel-actions. Close button is absolute (top 16, right 16). Share lives inside .panel-header-actions next to the primary CTA. Finished section uses .panel-section.is-finished (gap 24 between content and actions) — visual separation handled by sibling .panel-divider, not by borders. Edit/Remove use .panel-finished-btn (40 height, 15/600, ghost outline).">
             <div className="ds-card">
               <div className="ds-card-head">Layout</div>
               <div className="ds-card-body">
@@ -1843,43 +1843,58 @@ export default function DesignSystemPage() {
                     <div className="panel-ds-placeholder-row" />
                     <div className="panel-ds-placeholder-row" />
                   </div>
-                  <div className="panel-ds-panel" style={{ padding: "24px 20px", display: "flex", flexDirection: "column", gap: 24 }}>
-                    <div className="panel-preview-header">
-                      <button className="panel-share" style={{ position: "static" }} aria-label="Share">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                        </svg>
-                      </button>
-                      <button className="panel-close" style={{ position: "static" }} aria-label="Close">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                      </button>
-                    </div>
+                  <div className="panel-ds-panel" style={{ padding: "32px 20px", display: "flex", flexDirection: "column", gap: 32, position: "relative" }}>
+                    <button className="panel-close" style={{ top: 12, right: 12 }} aria-label="Close">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
                     <div className="panel-main">
-                      <div className="panel-preview-cover panel-cover-wrap" />
+                      <div className="panel-cover-wrap panel-cover-empty" />
                       <div className="panel-info">
-                        <div className="panel-preview-title">A Brief History of Time</div>
-                        <div className="panel-byline">
-                          <div className="panel-preview-author">Stephen Hawking</div>
-                          <div className="panel-preview-meta">Science · 1988</div>
-                        </div>
-                        <div className="panel-section">
-                          <span className="panel-section-eyebrow">About</span>
-                          <div className="panel-preview-synopsis">A landmark volume in science writing by one of the great minds of our time...</div>
-                        </div>
-                        <div className="panel-actions">
-                          <button className="panel-delete-btn">Delete</button>
+                        <div className="panel-info-header">
+                          <div className="panel-title">A Brief History of Time</div>
+                          <div className="panel-byline">
+                            <div className="panel-author">Stephen Hawking</div>
+                            <div className="panel-meta">
+                              <span>Science</span>
+                              <span className="panel-meta-sep" aria-hidden="true">·</span>
+                              <span>1988</span>
+                            </div>
+                          </div>
+                          <div className="panel-header-actions">
+                            <button className="panel-move-btn">Start reading</button>
+                            <button className="btn btn-outline btn-md panel-header-share" aria-label="Share">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
+                                <polyline points="16 6 12 2 8 6"/>
+                                <line x1="12" y1="2" x2="12" y2="15"/>
+                              </svg>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                     <div className="panel-divider" />
+                    <div className="panel-section">
+                      <span className="panel-section-eyebrow">About</span>
+                      <div className="panel-synopsis">A landmark volume in science writing by one of the great minds of our time...</div>
+                    </div>
+                    <div className="panel-divider" />
                     <div className="panel-quotes">
-                      <span className="panel-section-eyebrow">Quotes</span>
-                      <div className="panel-preview-quote">"We are just an advanced breed of monkeys on a minor planet of a very average star."</div>
-                      <button className="panel-quotes-add" style={{ alignSelf: "flex-start" }}>
+                      <div className="panel-quotes-content">
+                        <span className="panel-section-eyebrow">Quotes</span>
+                        <button type="button" className="panel-quote-item">
+                          <p className="panel-quote-text">"We are just an advanced breed of monkeys on a minor planet of a very average star."</p>
+                          <span className="panel-quote-page">p. 42</span>
+                        </button>
+                      </div>
+                      <button className="panel-quotes-add">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         Add a quote
                       </button>
+                    </div>
+                    <div className="panel-divider" />
+                    <div className="panel-actions">
+                      <button className="panel-delete-btn">Delete</button>
                     </div>
                   </div>
                 </div>
@@ -1891,15 +1906,21 @@ export default function DesignSystemPage() {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Wrapper</th><th>Role</th><th>Gap</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Outer container. Padding 96 / 32 / 32. Hosts share + close absolute</td><td className="mono">24px</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-main</code></td><td className="meta">Cover + info block</td><td className="mono">24px</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-cover-wrap</code></td><td className="meta">Cover. align-self: center + margin-bottom 36px (= 60px total to info)</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Title / byline / About / actions</td><td className="mono">24px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-inner</code></td><td className="meta">Outer container. Padding 96 / 32 / 72. Hosts close (absolute top 16 right 16)</td><td className="mono">40px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-main</code></td><td className="meta">Cover + info block</td><td className="mono">60px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-cover-wrap</code></td><td className="meta">Cover (50% width, ratio 2/3, border-radius 8 + overflow hidden). align-self: center</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Header + finished section (when book is finished)</td><td className="mono">40px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-info-header</code></td><td className="meta">Title + byline + now-reading-date + header-actions</td><td className="mono">24px</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-byline</code></td><td className="meta">Author + meta (tight cluster)</td><td className="mono">8px</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code></td><td className="meta">Semantic wrapper : eyebrow + content. Width 100%</td><td style={{ color: "var(--text-3)" }}>eyebrow margin-bottom 12</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Flex row, justify-between. Move + Delete buttons</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px separator. Used between panel-main and panel-quotes</td><td style={{ color: "var(--text-3)" }}>—</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-quotes</code></td><td className="meta">Eyebrow + list + add button. Width 100%</td><td className="mono">16px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-header-actions</code></td><td className="meta">Primary CTA(s) + Share. align-self: stretch, flex-wrap. Share is pushed right via margin-left auto</td><td className="mono">12px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code></td><td className="meta">Semantic wrapper : eyebrow + content. Width 100%</td><td className="mono">16px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section.is-finished</code></td><td className="meta">Finished modifier : .panel-finished-content + .panel-finished-actions</td><td className="mono">24px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-content</code></td><td className="meta">Date + rating + note fields</td><td className="mono">16px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-actions</code></td><td className="meta">Edit + Remove (panel-finished-btn 40 height, 15/600)</td><td className="mono">8px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-quotes</code></td><td className="meta">Content wrapper + add button. Width 100%</td><td className="mono">40px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-quotes-content</code></td><td className="meta">Eyebrow + list / empty state</td><td className="mono">16px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px border-subtle separator. Used between every top-level section</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Footer row (Delete). justify-content: flex-start</td><td className="mono">12px</td></tr>
                   </tbody>
                 </table>
               </div>
