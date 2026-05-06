@@ -89,27 +89,9 @@ export default function DesignSystemPage() {
   const [chk1, setChk1]                     = useState(false);
   const [chk2, setChk2]                     = useState(true);
 
-  function UploadBoxDemo({ state, variant }) {
-    const ref = useRef(null);
-    const [dims, setDims] = useState({ w: 0, h: 0 });
-    useEffect(() => {
-      if (!ref.current) return;
-      setDims({ w: ref.current.offsetWidth, h: ref.current.offsetHeight });
-    }, [state]);
+  function UploadBoxDemo({ state }) {
     return (
-      <div ref={ref} className="import-dropzone import-dropzone-photo" style={{ cursor: "default", width: "40%" }}>
-        {dims.w > 0 && (
-          <svg className="photo-dropzone-border" width={dims.w} height={dims.h} aria-hidden="true">
-            <defs>
-              <linearGradient id="dsGradBorder" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-                <stop offset="0%" stopColor="#F67BF8"/>
-                <stop offset="62%" stopColor="#4959E6"/>
-              </linearGradient>
-            </defs>
-            <rect x="1" y="1" width={dims.w - 2} height={dims.h - 2} rx="9" fill="none"
-              stroke="url(#dsGradBorder)" strokeWidth="2" strokeDasharray="6 4"/>
-          </svg>
-        )}
+      <GradientDropzone gradientId={`dsUpload-${state}`}>
         {state === "idle" && (
           <>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -135,7 +117,7 @@ export default function DesignSystemPage() {
             <div className="import-dropzone-sub">JPG · PNG · HEIC — photo of a bookshelf or a handwritten list</div>
           </>
         )}
-      </div>
+      </GradientDropzone>
     );
   }
 
@@ -2413,10 +2395,12 @@ function handleDeleteConfirm(payload) {
             ].map(({ key, label }) => (
               <div className="ds-card" key={key}>
                 <div className="ds-card-head">Photo / AI — {label}</div>
-                <div className="ds-card-body col" style={{ gap: 16 }}>
-                  <UploadBoxDemo state={key} variant="photo" />
+                <div className="ds-card-body col padded">
+                  <div style={{ maxWidth: 580, width: "100%" }}>
+                    <UploadBoxDemo state={key} />
+                  </div>
                   {key === "error" && (
-                    <div className="scan-alert" role="alert" style={{ width: "40%" }}>
+                    <div className="scan-alert" role="alert" style={{ maxWidth: 580, width: "100%" }}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                       </svg>
@@ -2430,8 +2414,8 @@ function handleDeleteConfirm(payload) {
             {/* File dropzone */}
             <div className="ds-card">
               <div className="ds-card-head">File — standard border</div>
-              <div className="ds-card-body">
-                <div className="import-dropzone" style={{ cursor: "default", width: "40%" }}>
+              <div className="ds-card-body col padded">
+                <div className="import-dropzone" style={{ cursor: "default", maxWidth: 580, width: "100%" }}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="17 8 12 3 7 8"/>
