@@ -278,15 +278,18 @@ export default function CollectionDetailView({
         {books.length === 0 && (
           <div className="empty">
             <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-              <rect x="12" y="14" width="9" height="34" rx="2" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="14" y1="20" x2="19" y2="20" stroke="#131860" strokeLinecap="round"/>
-              <rect x="22" y="20" width="9" height="28" rx="2" fill="#C1C7FB" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="24" y1="26" x2="29" y2="26" stroke="#131860" strokeLinecap="round"/>
-              <rect x="32" y="16" width="9" height="32" rx="2" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="34" y1="22" x2="39" y2="22" stroke="#131860" strokeLinecap="round"/>
-              <rect x="42" y="22" width="9" height="26" rx="2" fill="#3646D4" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <line x1="44" y1="28" x2="49" y2="28" stroke="#FFFFFF" strokeLinecap="round"/>
-              <line x1="8" y1="50" x2="52" y2="50" stroke="#131860" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M14 8H51C47 11 47 17 51 20H14C10.6863 20 8 17.3137 8 14C8 10.6863 10.6863 8 14 8Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M24.5 7C20.3579 7 17 10.3579 17 14.5C17 18.6421 20.3579 22 24.5 22H14.5C10.3579 22 7 18.6421 7 14.5C7 10.3579 10.3579 7 14.5 7H24.5Z" fill="#C1C7FB"/>
+              <path d="M14 10H52C53.1046 10 54 9.10457 54 8C54 6.89543 53.1046 6 52 6H14C9.58172 6 6 9.58172 6 14C6 18.4183 9.58172 22 14 22H52C53.1046 22 54 21.1046 54 20C54 18.8954 53.1046 18 52 18H14C11.7909 18 10 16.2091 10 14C10 11.7909 11.7909 10 14 10Z" fill="#6F7CF2"/>
+              <path d="M37 6H14C9.58172 6 6 9.58172 6 14C6 18.4183 9.58172 22 14 22H52C53.1046 22 54 21.1046 54 20C54 18.8954 53.1046 18 52 18H14C11.7909 18 10 16.2091 10 14C10 11.7909 11.7909 10 14 10H52C53.1046 10 54 9.10457 54 8C54 6.89543 53.1046 6 52 6H43" stroke="#131860" strokeLinecap="round"/>
+              <path d="M46 24H9C13 27 13 33 9 36H46C49.3137 36 52 33.3137 52 30C52 26.6863 49.3137 24 46 24Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M35.5 23C39.6421 23 43 26.3579 43 30.5C43 34.6421 39.6421 38 35.5 38H45.5C49.6421 38 53 34.6421 53 30.5C53 26.3579 49.6421 23 45.5 23H35.5Z" fill="#C1C7FB"/>
+              <path d="M46 26H8C6.89543 26 6 25.1046 6 24C6 22.8954 6.89543 22 8 22H46C50.4183 22 54 25.5817 54 30C54 34.4183 50.4183 38 46 38H8C6.89543 38 6 37.1046 6 36C6 34.8954 6.89543 34 8 34H46C48.2091 34 50 32.2091 50 30C50 27.7909 48.2091 26 46 26Z" fill="#C1C7FB"/>
+              <path d="M22 26H46C48.2091 26 50 27.7909 50 30C50 32.2091 48.2091 34 46 34H8C6.89543 34 6 34.8954 6 36C6 37.1046 6.89543 38 8 38H46C50.4183 38 54 34.4183 54 30C54 25.5817 50.4183 22 46 22H8C6.89543 22 6 22.8954 6 24C6 25.1046 6.89543 26 8 26H16" stroke="#131860" strokeLinecap="round"/>
+              <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M24.5 39C20.3579 39 17 42.3579 17 46.5C17 50.6421 20.3579 54 24.5 54H14.5C10.3579 54 7 50.6421 7 46.5C7 42.3579 10.3579 39 14.5 39H24.5Z" fill="#C1C7FB"/>
+              <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#4959E6"/>
+              <path d="M33 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H39" stroke="#131860" strokeLinecap="round"/>
             </svg>
             <div className="empty-text">
               <p className="empty-title">{t.colDetailEmpty}</p>

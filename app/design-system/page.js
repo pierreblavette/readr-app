@@ -2398,11 +2398,11 @@ function handleDeleteConfirm(payload) {
               <div className="ds-card" key={key}>
                 <div className="ds-card-head">Photo / AI — {label}</div>
                 <div className="ds-card-body col padded">
-                  <div style={{ maxWidth: 580, width: "100%" }}>
+                  <div style={{ maxWidth: 480, width: "100%" }}>
                     <UploadBoxDemo state={key} />
                   </div>
                   {key === "error" && (
-                    <div className="scan-alert" role="alert" style={{ maxWidth: 580, width: "100%" }}>
+                    <div className="scan-alert" role="alert" style={{ maxWidth: 480, width: "100%" }}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                       </svg>
@@ -2417,7 +2417,7 @@ function handleDeleteConfirm(payload) {
             <div className="ds-card">
               <div className="ds-card-head">File — standard border</div>
               <div className="ds-card-body col padded">
-                <div className="import-dropzone" style={{ cursor: "default", maxWidth: 580, width: "100%" }}>
+                <div className="import-dropzone" style={{ cursor: "default", maxWidth: 480, width: "100%" }}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="17 8 12 3 7 8"/>
@@ -2514,7 +2514,7 @@ function handleDeleteConfirm(payload) {
                     <path d="M22 26H46C48.2091 26 50 27.7909 50 30C50 32.2091 48.2091 34 46 34H8C6.89543 34 6 34.8954 6 36C6 37.1046 6.89543 38 8 38H46C50.4183 38 54 34.4183 54 30C54 25.5817 50.4183 22 46 22H8C6.89543 22 6 22.8954 6 24C6 25.1046 6.89543 26 8 26H16" stroke="#131860" strokeLinecap="round"/>
                     <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M24.5 39C20.3579 39 17 42.3579 17 46.5C17 50.6421 20.3579 54 24.5 54H14.5C10.3579 54 7 50.6421 7 46.5C7 42.3579 10.3579 39 14.5 39H24.5Z" fill="#C1C7FB"/>
-                    <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#3646D4"/>
+                    <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#4959E6"/>
                     <path d="M33 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H39" stroke="#131860" strokeLinecap="round"/>
                   </svg>
                   <span className="panel-section-eyebrow">Library</span>
@@ -2552,38 +2552,39 @@ function handleDeleteConfirm(payload) {
 
                 <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-                    <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
-                    <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
-                    <rect x="23" y="36" width="12" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
-                    <path d="M10 10C10 7.79086 11.7909 6 14 6H18V54H14C11.7909 54 10 52.2091 10 50L10 10Z" fill="#C1C7FB" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#C1C7FB"/>
                     <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="#F4F5FF"/>
+                    <path d="M21 46C18.7909 46 17 47.7909 17 50C17 52.2091 18.7909 54 21 54H14C11.7909 54 10 52.2091 10 50C10 47.7909 11.7909 46 14 46H21Z" fill="#C1C7FB"/>
                     <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="#131860" strokeLinecap="round"/>
-                    <rect x="22" y="13" width="24" height="16" rx="2" fill="white"/>
-                    <path d="M32 13H44C45.1046 13 46 13.8954 46 15V27C46 28.1046 45.1046 29 44 29H24C22.8954 29 22 28.1046 22 27V15C22 13.8954 22.8954 13 24 13H28" stroke="#131860" strokeLinecap="round"/>
-                    <path d="M26 24L29 18L32 24" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M27.5 21H30.5" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M26 24L29 18L32 24" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M27.5 21H30.5" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M42 24H38L42 18H38" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M42 24H38L42 18H38" stroke="#6F7CF2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M34 21H36" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M19 50H27V55.5858C27 56.4767 25.9229 56.9229 25.2929 56.2929L23.1768 54.1768C23.0791 54.0791 22.9209 54.0791 22.8232 54.1768L20.7071 56.2929C20.0771 56.9229 19 56.4767 19 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M17 50H29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M14 20C14 18.8954 14.8954 18 16 18H26C27.1046 18 28 18.8954 28 20V32C28 33.1046 27.1046 34 26 34H16C14.8954 34 14 33.1046 14 32V20Z" fill="#F4F5FF"/>
+                    <path d="M28 26V20C28 18.8954 27.1046 18 26 18H16C14.8954 18 14 18.8954 14 20V32C14 33.1046 14.8954 34 16 34H26C27.1046 34 28 33.1046 28 32V30" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M18 29L21 23L24 29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M19.5 26H22.5" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M32 20C32 18.8954 32.8954 18 34 18H44C45.1046 18 46 18.8954 46 20V32C46 33.1046 45.1046 34 44 34H34C32.8954 34 32 33.1046 32 32V20Z" fill="#6F7CF2"/>
+                    <path d="M46 26V20C46 18.8954 45.1046 18 44 18H34C32.8954 18 32 18.8954 32 20V32C32 33.1046 32.8954 34 34 34H44C45.1046 34 46 33.1046 46 32V30" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M41 29H37L41 23H37" stroke="#F4F5FF" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M36 50H44V55.5858C44 56.4767 42.9229 56.9229 42.2929 56.2929L40.1768 54.1768C40.0791 54.0791 39.9209 54.0791 39.8232 54.1768L37.7071 56.2929C37.0771 56.9229 36 56.4767 36 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M34 50H46" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <span className="panel-section-eyebrow">Dictionary</span>
                 </div>
 
                 <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-                    <rect x="12" y="14" width="9" height="34" rx="2" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="14" y1="20" x2="19" y2="20" stroke="#131860" strokeLinecap="round"/>
-                    <rect x="22" y="20" width="9" height="28" rx="2" fill="#C1C7FB" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="24" y1="26" x2="29" y2="26" stroke="#131860" strokeLinecap="round"/>
-                    <rect x="32" y="16" width="9" height="32" rx="2" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="34" y1="22" x2="39" y2="22" stroke="#131860" strokeLinecap="round"/>
-                    <rect x="42" y="22" width="9" height="26" rx="2" fill="#3646D4" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="44" y1="28" x2="49" y2="28" stroke="#FFFFFF" strokeLinecap="round"/>
-                    <line x1="8" y1="50" x2="52" y2="50" stroke="#131860" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M7 52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H9C7.89543 6 7 6.89543 7 8V52Z" fill="#E8EAFD"/>
+                    <path d="M40 6H9C7.89543 6 7 6.89543 7 8V52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H44" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M9 9C9 8.44771 9.44772 8 10 8H16C16.5523 8 17 8.44772 17 9V51C17 51.5523 16.5523 52 16 52H10C9.44772 52 9 51.5523 9 51V9Z" fill="#E8EAFD"/>
+                    <path d="M17 36V9C17 8.44772 16.5523 8 16 8H10C9.44772 8 9 8.44771 9 9V51C9 51.5523 9.44772 52 10 52H16C16.5523 52 17 51.5523 17 51V40" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M19 15C19 14.4477 19.4477 14 20 14H27C27.5523 14 28 14.4477 28 15V51C28 51.5523 27.5523 52 27 52H20C19.4477 52 19 51.5523 19 51L19 15Z" fill="#9BA5F8"/>
+                    <path d="M28 28V51C28 51.5523 27.5523 52 27 52H20C19.4477 52 19 51.5523 19 51L19 15C19 14.4477 19.4477 14 20 14H27C27.5523 14 28 14.4477 28 15V24" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M30 13C30 12.4477 30.4477 12 31 12H40C40.5523 12 41 12.4477 41 13V51C41 51.5523 40.5523 52 40 52H31C30.4477 52 30 51.5523 30 51V13Z" fill="#6F7CF2"/>
+                    <path d="M41 44V13C41 12.4477 40.5523 12 40 12H31C30.4477 12 30 12.4477 30 13V51C30 51.5523 30.4477 52 31 52H40C40.5523 52 41 51.5523 41 51V48" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M43 17C43 16.4477 43.4477 16 44 16H50C50.5523 16 51 16.4477 51 17V51C51 51.5523 50.5523 52 50 52H44C43.4477 52 43 51.5523 43 51V17Z" fill="#4959E6"/>
+                    <path d="M51 24V51C51 51.5523 50.5523 52 50 52H44C43.4477 52 43 51.5523 43 51V17C43 16.4477 43.4477 16 44 16H50C50.5523 16 51 16.4477 51 17V20" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M11 14H15" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M21 22H26" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M32 18H39" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M45 24H49" stroke="#F4F5FF" strokeLinecap="round"/>
                   </svg>
                   <span className="panel-section-eyebrow">Collections</span>
                 </div>
@@ -2619,7 +2620,7 @@ function handleDeleteConfirm(payload) {
                       <path d="M22 26H46C48.2091 26 50 27.7909 50 30C50 32.2091 48.2091 34 46 34H8C6.89543 34 6 34.8954 6 36C6 37.1046 6.89543 38 8 38H46C50.4183 38 54 34.4183 54 30C54 25.5817 50.4183 22 46 22H8C6.89543 22 6 22.8954 6 24C6 25.1046 6.89543 26 8 26H16" stroke="#131860" strokeLinecap="round"/>
                       <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M24.5 39C20.3579 39 17 42.3579 17 46.5C17 50.6421 20.3579 54 24.5 54H14.5C10.3579 54 7 50.6421 7 46.5C7 42.3579 10.3579 39 14.5 39H24.5Z" fill="#C1C7FB"/>
-                      <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#3646D4"/>
+                      <path d="M14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42Z" fill="#4959E6"/>
                       <path d="M33 50H14C11.7909 50 10 48.2091 10 46C10 43.7909 11.7909 42 14 42H52C53.1046 42 54 41.1046 54 40C54 38.8954 53.1046 38 52 38H14C9.58172 38 6 41.5817 6 46C6 50.4183 9.58172 54 14 54H52C53.1046 54 54 53.1046 54 52C54 50.8954 53.1046 50 52 50H39" stroke="#131860" strokeLinecap="round"/>
                     </svg>
                   )}
@@ -2649,36 +2650,37 @@ function handleDeleteConfirm(payload) {
                   )}
                   {emptyTab === "dictionary" && (
                     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-                      <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#E8EAFD"/>
-                      <rect x="23" y="40" width="8" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
-                      <rect x="23" y="36" width="12" height="2" rx="1" fill="white" stroke="#131860" strokeLinecap="round"/>
-                      <path d="M10 10C10 7.79086 11.7909 6 14 6H18V54H14C11.7909 54 10 52.2091 10 50L10 10Z" fill="#C1C7FB" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#C1C7FB"/>
                       <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="#F4F5FF"/>
+                      <path d="M21 46C18.7909 46 17 47.7909 17 50C17 52.2091 18.7909 54 21 54H14C11.7909 54 10 52.2091 10 50C10 47.7909 11.7909 46 14 46H21Z" fill="#C1C7FB"/>
                       <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="#131860" strokeLinecap="round"/>
-                      <rect x="22" y="13" width="24" height="16" rx="2" fill="white"/>
-                      <path d="M32 13H44C45.1046 13 46 13.8954 46 15V27C46 28.1046 45.1046 29 44 29H24C22.8954 29 22 28.1046 22 27V15C22 13.8954 22.8954 13 24 13H28" stroke="#131860" strokeLinecap="round"/>
-                      <path d="M26 24L29 18L32 24" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M27.5 21H30.5" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M26 24L29 18L32 24" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M27.5 21H30.5" stroke="#9BA5F8" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M42 24H38L42 18H38" stroke="#131860" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M42 24H38L42 18H38" stroke="#6F7CF2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M34 21H36" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M19 50H27V55.5858C27 56.4767 25.9229 56.9229 25.2929 56.2929L23.1768 54.1768C23.0791 54.0791 22.9209 54.0791 22.8232 54.1768L20.7071 56.2929C20.0771 56.9229 19 56.4767 19 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M17 50H29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M14 20C14 18.8954 14.8954 18 16 18H26C27.1046 18 28 18.8954 28 20V32C28 33.1046 27.1046 34 26 34H16C14.8954 34 14 33.1046 14 32V20Z" fill="#F4F5FF"/>
+                      <path d="M28 26V20C28 18.8954 27.1046 18 26 18H16C14.8954 18 14 18.8954 14 20V32C14 33.1046 14.8954 34 16 34H26C27.1046 34 28 33.1046 28 32V30" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M18 29L21 23L24 29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M19.5 26H22.5" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M32 20C32 18.8954 32.8954 18 34 18H44C45.1046 18 46 18.8954 46 20V32C46 33.1046 45.1046 34 44 34H34C32.8954 34 32 33.1046 32 32V20Z" fill="#6F7CF2"/>
+                      <path d="M46 26V20C46 18.8954 45.1046 18 44 18H34C32.8954 18 32 18.8954 32 20V32C32 33.1046 32.8954 34 34 34H44C45.1046 34 46 33.1046 46 32V30" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M41 29H37L41 23H37" stroke="#F4F5FF" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M36 50H44V55.5858C44 56.4767 42.9229 56.9229 42.2929 56.2929L40.1768 54.1768C40.0791 54.0791 39.9209 54.0791 39.8232 54.1768L37.7071 56.2929C37.0771 56.9229 36 56.4767 36 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M34 50H46" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   )}
                   {emptyTab === "collections" && (
                     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-                      <rect x="12" y="14" width="9" height="34" rx="2" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="14" y1="20" x2="19" y2="20" stroke="#131860" strokeLinecap="round"/>
-                      <rect x="22" y="20" width="9" height="28" rx="2" fill="#C1C7FB" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="24" y1="26" x2="29" y2="26" stroke="#131860" strokeLinecap="round"/>
-                      <rect x="32" y="16" width="9" height="32" rx="2" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="34" y1="22" x2="39" y2="22" stroke="#131860" strokeLinecap="round"/>
-                      <rect x="42" y="22" width="9" height="26" rx="2" fill="#3646D4" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="44" y1="28" x2="49" y2="28" stroke="#FFFFFF" strokeLinecap="round"/>
-                      <line x1="8" y1="50" x2="52" y2="50" stroke="#131860" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M7 52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H9C7.89543 6 7 6.89543 7 8V52Z" fill="#E8EAFD"/>
+                      <path d="M40 6H9C7.89543 6 7 6.89543 7 8V52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H44" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M9 9C9 8.44771 9.44772 8 10 8H16C16.5523 8 17 8.44772 17 9V51C17 51.5523 16.5523 52 16 52H10C9.44772 52 9 51.5523 9 51V9Z" fill="#E8EAFD"/>
+                      <path d="M17 36V9C17 8.44772 16.5523 8 16 8H10C9.44772 8 9 8.44771 9 9V51C9 51.5523 9.44772 52 10 52H16C16.5523 52 17 51.5523 17 51V40" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M19 15C19 14.4477 19.4477 14 20 14H27C27.5523 14 28 14.4477 28 15V51C28 51.5523 27.5523 52 27 52H20C19.4477 52 19 51.5523 19 51L19 15Z" fill="#9BA5F8"/>
+                      <path d="M28 28V51C28 51.5523 27.5523 52 27 52H20C19.4477 52 19 51.5523 19 51L19 15C19 14.4477 19.4477 14 20 14H27C27.5523 14 28 14.4477 28 15V24" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M30 13C30 12.4477 30.4477 12 31 12H40C40.5523 12 41 12.4477 41 13V51C41 51.5523 40.5523 52 40 52H31C30.4477 52 30 51.5523 30 51V13Z" fill="#6F7CF2"/>
+                      <path d="M41 44V13C41 12.4477 40.5523 12 40 12H31C30.4477 12 30 12.4477 30 13V51C30 51.5523 30.4477 52 31 52H40C40.5523 52 41 51.5523 41 51V48" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M43 17C43 16.4477 43.4477 16 44 16H50C50.5523 16 51 16.4477 51 17V51C51 51.5523 50.5523 52 50 52H44C43.4477 52 43 51.5523 43 51V17Z" fill="#4959E6"/>
+                      <path d="M51 24V51C51 51.5523 50.5523 52 50 52H44C43.4477 52 43 51.5523 43 51V17C43 16.4477 43.4477 16 44 16H50C50.5523 16 51 16.4477 51 17V20" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M11 14H15" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M21 22H26" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M32 18H39" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M45 24H49" stroke="#F4F5FF" strokeLinecap="round"/>
                     </svg>
                   )}
                   <div className="empty-text">
@@ -2715,19 +2717,22 @@ function handleDeleteConfirm(payload) {
 
             <div className="ds-card">
               <div className="ds-card-head">Anatomy</div>
-              <div className="ds-card-body col">
+              <div className="ds-card-body col padded">
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-section</code></td><td className="meta">Section root</td><td className="mono">flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-list</code></td><td className="meta">Cards grid</td><td className="mono">grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-card</code></td><td className="meta">Card root (role=button)</td><td className="mono">padding 14 56 14 16 (right reserves kebab), --card bg, 1.5px --border-subtle, --radius, fadeUp animation</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-body</code></td><td className="meta">Vertical content stack</td><td className="mono">flex col, align-items flex-start, gap 16</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge</td><td className="mono">solid primary fill (--primary-50 / --primary-40 dark) · white text · h 20 · 11/600</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-row</code></td><td className="meta">Cover + text horizontal block</td><td className="mono">flex row, gap 16, align-items center</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover</code></td><td className="meta">Cover thumbnail</td><td className="mono">60×90 (ratio 2:3), radius 4 · gradient + Jakarta letter (white-85) when no image</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-text</code></td><td className="meta">Title + meta wrapper</td><td className="mono">flex col, gap 8, flex 1, min-width 0</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-title</code></td><td className="meta">Book title</td><td className="mono">16/700/lh 1.35 (one tier above .book-title for differentiation)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card:hover</code></td><td className="meta">Hover state</td><td className="mono">border --primary-50, bg --primary-3, --shadow-md (transition 0.22s)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-body</code></td><td className="meta">Vertical content stack</td><td className="mono">flex col, align-items flex-start, gap 16, min-width 0</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge (default = sm)</td><td className="mono">solid primary fill (--primary-50 / --primary-40 dark) · #fff · h 24 · 12/600 · radius 999 · padding 0 12. Modifiers --xs/--sm/--md (heights 20/24/28)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-row</code></td><td className="meta">Cover + text horizontal block</td><td className="mono">flex row, gap 16, align-items center, min-width 0</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover</code></td><td className="meta">Cover thumbnail</td><td className="mono">60×90 (ratio 2:3), radius 4, flex-shrink 0 · gradient fallback + letter when no image</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover-letter</code></td><td className="meta">Letter fallback</td><td className="mono">18 / 800 / rgba(255,255,255,0.85), inherits Jakarta family</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-text</code></td><td className="meta">Title + meta wrapper</td><td className="mono">flex col, gap 6, flex 1, min-width 0</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-title</code></td><td className="meta">Book title</td><td className="mono">16/700/lh 1.35 (one tier above .book-title for differentiation), ellipsis</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-author</code></td><td className="meta">Author</td><td className="mono">15 / 500 / --text-2, ellipsis</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td className="meta">Kebab "more actions"</td><td className="mono">40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
                   </tbody>
                 </table>
@@ -2735,8 +2740,44 @@ function handleDeleteConfirm(payload) {
             </div>
 
             <div className="ds-card">
+              <div className="ds-card-head">Live preview</div>
+              <div className="ds-card-body col padded">
+                <section className="now-reading-section" style={{ position: "static" }}>
+                  <div className="now-reading-list">
+                    <div className="now-reading-card" role="button" tabIndex={-1}>
+                      <div className="now-reading-body">
+                        <span className="now-reading-date">Started Apr 28</span>
+                        <div className="now-reading-row">
+                          <div className="now-reading-cover now-reading-cover-empty" style={{ background: "linear-gradient(135deg, #6F7CF2, #3646D4)" }}>
+                            <span className="now-reading-cover-letter">A</span>
+                          </div>
+                          <div className="now-reading-text">
+                            <div className="now-reading-title">A Brief History of Time</div>
+                            <div className="now-reading-author">Stephen Hawking</div>
+                            <div className="book-meta">
+                              <span>Science</span>
+                              <span className="book-meta-sep" aria-hidden="true">·</span>
+                              <span>1988</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="now-reading-menu">
+                        <button type="button" className="now-reading-menu-btn" aria-label="More actions">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div className="ds-card">
               <div className="ds-card-head">Quick actions (kebab dropdown)</div>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
+              <div className="ds-card-body col padded">
                 <p>3 actions, all <code>stopPropagation</code> on the card click :</p>
                 <ul className="ds-doc-list">
                   <li><strong>Mark as finished</strong> — opens FinishReadingModal</li>
@@ -2748,7 +2789,7 @@ function handleDeleteConfirm(payload) {
 
             <div className="ds-card">
               <div className="ds-card-head">Card hierarchy</div>
-              <div className="ds-card-body col" style={{ gap: 8 }}>
+              <div className="ds-card-body col padded">
                 <p>The Now Reading card belongs to the same visual family as <code>.book-card</code> (same radius, border, hover transition, fadeUp animation) but adopts a different layout to differentiate without competing visually with the Library grid below. The badge in primary fill anchors the "active reading" status.</p>
                 <p>Order rule : <code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first).</p>
               </div>

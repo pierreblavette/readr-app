@@ -35,15 +35,20 @@ function CoverCell({ book }) {
 function CollectionsIcon() {
   return (
     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-      <rect x="12" y="14" width="9" height="34" rx="2" fill="#E8EAFD" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="14" y1="20" x2="19" y2="20" stroke="#131860" strokeLinecap="round"/>
-      <rect x="22" y="20" width="9" height="28" rx="2" fill="#C1C7FB" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="24" y1="26" x2="29" y2="26" stroke="#131860" strokeLinecap="round"/>
-      <rect x="32" y="16" width="9" height="32" rx="2" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="34" y1="22" x2="39" y2="22" stroke="#131860" strokeLinecap="round"/>
-      <rect x="42" y="22" width="9" height="26" rx="2" fill="#3646D4" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="44" y1="28" x2="49" y2="28" stroke="#FFFFFF" strokeLinecap="round"/>
-      <line x1="8" y1="50" x2="52" y2="50" stroke="#131860" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M7 52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H9C7.89543 6 7 6.89543 7 8V52Z" fill="#E8EAFD"/>
+      <path d="M40 6H9C7.89543 6 7 6.89543 7 8V52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H44" stroke="#131860" strokeLinecap="round"/>
+      <path d="M9 9C9 8.44771 9.44772 8 10 8H16C16.5523 8 17 8.44772 17 9V51C17 51.5523 16.5523 52 16 52H10C9.44772 52 9 51.5523 9 51V9Z" fill="#E8EAFD"/>
+      <path d="M17 36V9C17 8.44772 16.5523 8 16 8H10C9.44772 8 9 8.44771 9 9V51C9 51.5523 9.44772 52 10 52H16C16.5523 52 17 51.5523 17 51V40" stroke="#131860" strokeLinecap="round"/>
+      <path d="M19 15C19 14.4477 19.4477 14 20 14H27C27.5523 14 28 14.4477 28 15V51C28 51.5523 27.5523 52 27 52H20C19.4477 52 19 51.5523 19 51L19 15Z" fill="#9BA5F8"/>
+      <path d="M28 28V51C28 51.5523 27.5523 52 27 52H20C19.4477 52 19 51.5523 19 51L19 15C19 14.4477 19.4477 14 20 14H27C27.5523 14 28 14.4477 28 15V24" stroke="#131860" strokeLinecap="round"/>
+      <path d="M30 13C30 12.4477 30.4477 12 31 12H40C40.5523 12 41 12.4477 41 13V51C41 51.5523 40.5523 52 40 52H31C30.4477 52 30 51.5523 30 51V13Z" fill="#6F7CF2"/>
+      <path d="M41 44V13C41 12.4477 40.5523 12 40 12H31C30.4477 12 30 12.4477 30 13V51C30 51.5523 30.4477 52 31 52H40C40.5523 52 41 51.5523 41 51V48" stroke="#131860" strokeLinecap="round"/>
+      <path d="M43 17C43 16.4477 43.4477 16 44 16H50C50.5523 16 51 16.4477 51 17V51C51 51.5523 50.5523 52 50 52H44C43.4477 52 43 51.5523 43 51V17Z" fill="#4959E6"/>
+      <path d="M51 24V51C51 51.5523 50.5523 52 50 52H44C43.4477 52 43 51.5523 43 51V17C43 16.4477 43.4477 16 44 16H50C50.5523 16 51 16.4477 51 17V20" stroke="#131860" strokeLinecap="round"/>
+      <path d="M11 14H15" stroke="#131860" strokeLinecap="round"/>
+      <path d="M21 22H26" stroke="#131860" strokeLinecap="round"/>
+      <path d="M32 18H39" stroke="#131860" strokeLinecap="round"/>
+      <path d="M45 24H49" stroke="#F4F5FF" strokeLinecap="round"/>
     </svg>
   );
 }
