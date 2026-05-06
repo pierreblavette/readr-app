@@ -2226,6 +2226,9 @@
   pointer-events: auto;
 }
 
+/* Wishlist: 3 actions (Select all + Mark as owned + Remove) — extra breathing room */
+.selection-bar:has(.sel-confirm:not(.danger)) { gap: 24px; }
+
 .sel-actions { display: flex; align-items: center; gap: 8px; }
 
 .selection-count {

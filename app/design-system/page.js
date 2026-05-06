@@ -75,6 +75,7 @@ export default function DesignSystemPage() {
   const [importTab, setImportTab]           = useState("photo");
   const [addModalSource, setAddModalSource] = useState("owned");
   const [deleteVariant, setDeleteVariant]   = useState("book");
+  const [selBarTab, setSelBarTab]           = useState("library");
   const [importTabIndicator, setImportTabIndicator] = useState({ left: 0, width: 0 });
   const importTabRefs = useRef([]);
   useEffect(() => {
@@ -1464,8 +1465,7 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Grid view</div>
               <div className="ds-card-body">
-                <div className="ds-state-sample">
-                  <span className="panel-section-eyebrow">Default</span>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
                   <div className="book-card-ds book-card-ds--static">
                     <div className="book-cover-ds" style={{ background: "var(--primary-5)" }} />
                     <div className="book-body-ds">
@@ -1478,9 +1478,9 @@ export default function DesignSystemPage() {
                       </div>
                     </div>
                   </div>
+                  <span className="panel-section-eyebrow">Default</span>
                 </div>
-                <div className="ds-state-sample">
-                  <span className="panel-section-eyebrow">Hover</span>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
                   <div className="book-card-ds book-card-ds--static" style={{ borderColor: "var(--primary-50)", background: "var(--primary-3)", boxShadow: "var(--shadow-md)" }}>
                     <div className="book-cover-ds" style={{ background: "var(--primary-5)" }} />
                     <div className="book-body-ds">
@@ -1493,6 +1493,7 @@ export default function DesignSystemPage() {
                       </div>
                     </div>
                   </div>
+                  <span className="panel-section-eyebrow">Hover</span>
                 </div>
               </div>
               <div className="ds-tokens">
@@ -2432,36 +2433,46 @@ function handleDeleteConfirm(payload) {
           {/* ── SELECTION BAR ── */}
           <DSSection id="selection-bar" title="Selection Bar" sub="Floating bar fixed bottom-center in Edit mode. Background --primary-60 (light & dark). Slides up from below via translateY(120 → 0).">
             <div className="ds-card">
-              <div className="ds-card-head">Preview — Wishlist edit mode (3 buttons in .sel-actions)</div>
-              <div className="ds-card-body" style={{ justifyContent: "center" }}>
-                <div className="selection-bar visible" style={{ position: "static", transform: "none" }}>
+              <div className="ds-card-head">
+                Preview — Edit mode
+                <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+                  <button className={`btn btn-xs ${selBarTab === "library" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelBarTab("library")}>Library</button>
+                  <button className={`btn btn-xs ${selBarTab === "wishlist" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelBarTab("wishlist")}>Wishlist</button>
+                </div>
+              </div>
+              <div className="ds-card-body col padded">
+                <div className="selection-bar visible" style={{ position: "static", transform: "none", width: "fit-content", margin: "0 auto", gap: 24 }}>
                   <span className="selection-count">3 selected</span>
                   <div className="sel-actions">
                     <button className="sel-btn sel-select-all">Select all</button>
-                    <button className="sel-btn sel-confirm">Mark as owned</button>
+                    {selBarTab === "wishlist" && (
+                      <button className="sel-btn sel-confirm">Mark as owned</button>
+                    )}
                     <button className="sel-btn sel-confirm danger">Remove</button>
                   </div>
-                  <button className="sel-btn sel-cancel">Cancel</button>
+                  <button className="sel-btn sel-cancel"><span>Cancel</span></button>
                 </div>
               </div>
             </div>
             <div className="ds-card">
               <div className="ds-card-head">Anatomy</div>
-              <div className="ds-card-body col">
+              <div className="ds-card-body col padded">
                 <table className="token-table">
-                  <thead className="table-head"><tr><th>Element</th><th>Background</th><th>Border / color</th></tr></thead>
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.selection-bar</code></td><td><span className="ds-token-chip">--primary-60</span></td><td>color #fff · gap 16</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-actions</code></td><td style={{ color: "var(--text-3)" }}>—</td><td>flex row, gap 8 (desktop) / column on mobile</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-select-all</code></td><td>transparent</td><td>border 1.5px rgba(255,255,255,0.5), color #fff</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm</code> (Mark as owned)</td><td><span className="ds-token-chip">--primary-50</span></td><td>color #fff</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm.danger</code> (Remove)</td><td>rgba(255,255,255,0.15)</td><td>color #fff</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-cancel</code></td><td>rgba(255,255,255,0.15)</td><td>color #fff</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.selection-bar</code></td><td className="meta">Floating container</td><td className="mono">fixed bottom 28, padding 12 12 12 24, radius 8, gap 16, min-width 605, shadow 0 8 32 rgba(0,0,0,0.25)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.selection-count</code></td><td className="meta">Count label</td><td className="mono">15 / 600 / opacity 0.75</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-actions</code></td><td className="meta">Actions group</td><td className="mono">flex row, gap 8 (desktop) / column on mobile</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-btn</code></td><td className="meta">Base button</td><td className="mono">h 40, padding 0 20, radius 8, 15 / 600</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-select-all</code></td><td className="meta">Select / Deselect all</td><td className="mono">transparent · border 1.5 rgba(255,255,255,0.5) · #fff</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm</code></td><td className="meta">Mark as owned (Wishlist)</td><td className="mono">--primary-50 · #fff</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm.danger</code></td><td className="meta">Remove</td><td className="mono">rgba(255,255,255,0.15) · #fff</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-cancel</code></td><td className="meta">Cancel edit mode</td><td className="mono">rgba(255,255,255,0.15) · color inherit</td></tr>
                   </tbody>
                 </table>
               </div>
               <div className="ds-card-foot">
-                Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
+                Background <span className="ds-token-chip">--primary-60</span> light & dark. Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
               </div>
             </div>
           </DSSection>
