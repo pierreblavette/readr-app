@@ -4738,6 +4738,231 @@ button.quote-book-chip {
   color: var(--text-3);
 }
 
+/* Weekly activity — bar chart with metric switcher + week navigation */
+.overview-activity-head {
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.overview-activity-pills {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  background: var(--bg3);
+  border-radius: 999px;
+}
+.overview-activity-pill {
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.overview-activity-pill:hover:not(.is-active) { color: var(--primary-50); background: var(--primary-5); }
+[data-theme="dark"] .overview-activity-pill:hover:not(.is-active) { color: var(--primary-40); }
+.overview-activity-pill.is-active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
+
+.overview-activity-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.overview-activity-nav-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--primary-5);
+  color: var(--primary-60);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-10); }
+.overview-activity-nav-btn:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
+.overview-activity-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.overview-activity-nav-btn svg { width: 16px; height: 16px; }
+[data-theme="dark"] .overview-activity-nav-btn { background: var(--primary-90); color: var(--primary-30); }
+[data-theme="dark"] .overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-80); }
+.overview-activity-week-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  min-width: 110px;
+  text-align: center;
+}
+
+.overview-activity-bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  align-items: end;
+}
+.overview-activity-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.overview-activity-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-60);
+  font-variant-numeric: tabular-nums;
+  height: 14px;
+  line-height: 14px;
+}
+[data-theme="dark"] .overview-activity-count { color: var(--primary-30); }
+.overview-activity-count.is-empty { color: transparent; }
+
+.overview-activity-counts.is-stacked {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  padding: 0 4px;
+  width: 100%;
+  height: 14px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.overview-activity-counts.is-stacked > .overview-activity-count {
+  flex: 1 1 0;
+  text-align: center;
+}
+
+.overview-activity-track {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--primary-5);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.overview-activity-fill {
+  width: 100%;
+  background: var(--primary);
+  border-radius: 5px 5px 0 0;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.overview-activity-fill.is-books { background: var(--primary); }
+.overview-activity-fill.is-quotes { background: var(--primary-40); }
+.overview-activity-fill.is-words { background: var(--primary-20); }
+[data-theme="dark"] .overview-activity-fill.is-quotes { background: var(--primary-30); }
+[data-theme="dark"] .overview-activity-fill.is-words { background: var(--primary-20); }
+.overview-activity-fill.is-stacked {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+.overview-activity-seg {
+  flex: 1 1 0;
+  min-height: 2px;
+  border-radius: 4px;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.overview-activity-seg .overview-activity-count {
+  height: auto;
+  line-height: 1;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary-foreground);
+}
+.overview-activity-seg--words .overview-activity-count { color: var(--primary-70); }
+[data-theme="dark"] .overview-activity-seg--words .overview-activity-count { color: var(--primary-90); }
+.overview-activity-seg.is-empty {
+  min-height: 0;
+  height: 0;
+  background: transparent;
+}
+.overview-activity-seg--books { background: var(--primary); }
+.overview-activity-seg--quotes { background: var(--primary-40); }
+.overview-activity-seg--words { background: var(--primary-20); }
+[data-theme="dark"] .overview-activity-seg--quotes { background: var(--primary-30); }
+[data-theme="dark"] .overview-activity-seg--words { background: var(--primary-20); }
+.overview-activity-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-3);
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+.overview-activity-day {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.overview-activity-divider {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.overview-activity-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.overview-activity-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.overview-activity-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.overview-activity-legend-dot.is-books { background: var(--primary); }
+.overview-activity-legend-dot.is-quotes { background: var(--primary-40); }
+.overview-activity-legend-dot.is-words { background: var(--primary-20); }
+[data-theme="dark"] .overview-activity-legend-dot.is-quotes { background: var(--primary-30); }
+[data-theme="dark"] .overview-activity-legend-dot.is-words { background: var(--primary-20); }
+
+/* Mobile: tighten gaps */
+@media (max-width: 600px) {
+  .overview-activity-head { gap: 12px; }
+  .overview-activity-week-label { min-width: 90px; font-size: 12px; }
+  .overview-activity-bars { gap: 6px; }
+  .overview-activity-track { height: 70px; }
+}
+
 /* Top genres */
 .overview-genres-cloud {
   display: flex;

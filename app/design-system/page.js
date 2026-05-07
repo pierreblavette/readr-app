@@ -10,8 +10,8 @@ import GradientDropzone from "@/components/library/GradientDropzone";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
-  Components:  ["autocomplete","badges","book-chip","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","sort-menu","theme-toggle","view-toggle"],
-  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","finish-reading","onboarding","footer"],
+  Components:  ["autocomplete","badges","book-chip","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","theme-toggle","view-toggle"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -20,10 +20,10 @@ const NAV_LABELS = {
   "buttons":"Buttons","dropdown":"Dropdown Menu",
   "inputs":"Inputs","view-toggle":"View Toggle","badges":"Badges",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
-  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu",
+  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
-  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","now-reading":"Now Reading","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
+  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -1429,6 +1429,60 @@ export default function DesignSystemPage() {
             </div>
           </DSSection>
 
+          {/* ── SEGMENTED PILLS ── */}
+          <DSSection id="segmented-pills" title="Segmented Pills" sub="Pill-style segmented switcher — inline tabs on a track bg that toggle a single active state.">
+
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-activity-pills" role="tablist" style={{ alignSelf: 'flex-start' }}>
+                  <button type="button" className="overview-activity-pill is-active">All</button>
+                  <button type="button" className="overview-activity-pill">Books</button>
+                  <button type="button" className="overview-activity-pill">Quotes</button>
+                  <button type="button" className="overview-activity-pill">Words</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pills</code></td><td className="meta">Wrapper / track</td><td className="mono">Inline-flex, gap 4, padding 3, bg <span className="ds-token-chip">--bg3</span>, radius 999. Acts as the "rail" the active pill floats on</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill</code></td><td className="meta">Single tab</td><td className="mono">28h, padding 0/12, radius 999, font 13/500. Color <span className="ds-token-chip">--text-2</span> default</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill:hover:not(.is-active)</code></td><td className="meta">Hover (inactive)</td><td className="mono">Bg <span className="ds-token-chip">--primary-5</span>, color <span className="ds-token-chip">--primary-50</span> (light) · <span className="ds-token-chip">--primary-40</span> (dark) — iso <code>.edit-btn</code> hover</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill.is-active</code></td><td className="meta">Active (selected)</td><td className="mono">Bg <span className="ds-token-chip">--primary</span>, color <span className="ds-token-chip">--primary-foreground</span>, weight 600. Hover state suppressed (no bg/color shift while selected)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Behavior</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">One active at a time</div>
+                  <p>Controlled by parent state, not internal. Exclusivity is the caller's responsibility.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Bg fill on active</div>
+                  <p>The active pill is filled with <span className="ds-token-chip">--primary</span>, distinct from <code>.import-tab</code> (text-only with bottom indicator). Use this pattern when the switcher is a peer control (next to other UI), not a primary navigation.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Wrapper bg</div>
+                  <p><span className="ds-token-chip">--bg3</span> provides the visible "track" that the active pill rides on. On <span className="ds-token-chip">--card</span> backgrounds, the wrapper still reads thanks to the 1-tier delta.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">ARIA</div>
+                  <p>Wrapper <code>role="tablist"</code>, each pill <code>role="tab"</code> + <code>aria-selected</code>. Caller wires the actual <code>role="tabpanel"</code> regions.</p>
+                </div>
+              </div>
+            </div>
+
+          </DSSection>
+
           {/* ── SORT MENU ── */}
           <DSSection id="sort-menu" title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists.">
             <div className="ds-card">
@@ -1488,7 +1542,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── BOOK CARD ── */}
-          <DSSection id="card" title="Book Card" sub="--card bg, 1.5px --border-subtle. Hover: border primary-50, bg --primary-3, transform translateY -2 + shadow. Placeholder cover: gradient (coverColors hash) + Jakarta letter (white-85, 3.5rem/800) — same pattern across BookCard, BookPanel, NowReadingCard, BookChip.">
+          <DSSection id="card" title="Book Card" sub="Visual primitive for a single book — cover + title + author + meta. Same surface + hover family as BookPanel, NowReadingCard, BookChip.">
             <div className="ds-card">
               <div className="ds-card-head">Grid view</div>
               <div className="ds-card-body">
@@ -1527,10 +1581,32 @@ export default function DesignSystemPage() {
                 {["--card","--primary-3","--primary-50","--shadow-md"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Surface</div>
+                  <p><span className="ds-token-chip">--card</span> bg, 1.5px <span className="ds-token-chip">--border-subtle</span></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Hover</div>
+                  <p>Border <span className="ds-token-chip">--primary-50</span>, bg <span className="ds-token-chip">--primary-3</span>, <code>translateY(-2)</code> + <span className="ds-token-chip">--shadow-md</span></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Placeholder cover</div>
+                  <p>Gradient generated from <code>coverColors</code> hash + Jakarta letter (white 85%, 3.5rem / 800)</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Shared family</div>
+                  <p>Same surface + hover treatment across <code>BookCard</code>, <code>BookPanel</code>, <code>NowReadingCard</code>, <code>BookChip</code></p>
+                </div>
+              </div>
+            </div>
           </DSSection>
 
           {/* ── QUOTE CARD ── */}
-          <DSSection id="quote-card" title="Quote Card" sub="Card for a single quote. Padding 20px. Body in flex-row (text + delete), divider, BookChip below. Whole card is role='button' → opens QuotePanel; BookChip is nested button → opens BookPanel (stopPropagation).">
+          <DSSection id="quote-card" title="Quote Card" sub="Card for a single quote — text + (optional) book attribution. Used in the Quotes list and the Overview spotlight.">
 
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
@@ -1587,7 +1663,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── DICTIONARY CARD ── */}
-          <DSSection id="dictionary-card" title="Dictionary Card" sub="Saved word — collapsible. Head is the only clickable surface (hover bg primary-5). Body expanded shows definitions on neutral bg (readable). Card-level lift + border on any hover.">
+          <DSSection id="dictionary-card" title="Dictionary Card" sub="Saved word — collapsible card showing the term and (when expanded) its definitions.">
 
             <div className="ds-card">
               <div className="ds-card-head">Collapsed</div>
@@ -1855,7 +1931,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── PANEL ── */}
-          <DSSection id="panel" title="Side Panel" sub="Full-height drawer fixed right, width 540px. Gap-driven rhythm (no margins): 40 .panel-inner / 60 .panel-main cover↔info / 40 .panel-info header↔finished / 24 .panel-info-header title+byline+actions / 12 .panel-header-actions / 8 .panel-byline / 40 .panel-quotes content↔add / 16 .panel-quotes-content / 16 .panel-section / 12 .panel-actions. Close button is absolute (top 16, right 16). Share lives inside .panel-header-actions next to the primary CTA. Finished section uses .panel-section.is-finished (gap 24 between content and actions) — visual separation handled by sibling .panel-divider, not by borders. Edit/Remove use .panel-finished-btn (40 height, 15/600, ghost outline).">
+          <DSSection id="panel" title="Side Panel" sub="Full-height drawer fixed right (width 540px). Slides in to show full book details — cover, title, author, finished state, quotes. Layout is fully gap-driven, no margins.">
             <div className="ds-card">
               <div className="ds-card-head">Layout</div>
               <div className="ds-card-body">
@@ -1952,7 +2028,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── QUOTE PANEL ── */}
-          <DSSection id="quote-panel" title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Same drawer mechanics + .panel-inner padding/gap as BookPanel. Close is the only absolute button (top 16 right 16). Share lives inside .panel-actions next to Edit + Delete (mirror of BookPanel where share lives in .panel-header-actions). Content : Quote section + date + actions, then optional divider + Book section (BookChip clickable → BookPanel).">
+          <DSSection id="quote-panel" title="Quote Panel" sub="Right-side drawer variant of Side Panel — opened by clicking a quote card. Shows the full quote, its date, and (optionally) the book it came from.">
 
             <div className="ds-card">
               <div className="ds-card-head">Layout</div>
@@ -2038,27 +2114,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── MODAL ── */}
-          <DSSection id="modal" title="Modal" sub="Centered form modal — max-width 630px, gap-driven layout (display: flex column, gap 32). Used by Add a book, Add a quote, Mark as finished. Submit button outside the <form>, linked via form='id' attr (preserves Enter-to-submit).">
-
-            <div className="ds-card">
-              <div className="ds-card-head">Anatomy (gap-driven, no margins)</div>
-              <div className="ds-card-body col">
-                <table className="token-table">
-                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
-                  <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-overlay</code></td><td className="meta">Backdrop</td><td className="mono">fixed, padding 40 24, light overlay</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 630, padding 32 24 0, flex col gap 32</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-close</code></td><td className="meta">X button (absolute)</td><td className="mono">top:16 right:16, 40×40, svg 24×24</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-title</code></td><td className="meta">Heading</td><td className="mono">28/800/-0.02em (no margin — parent gap)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-tabs-section</code></td><td className="meta">Tabs + active content (only if tabs)</td><td className="mono">flex col gap 20</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="..." — referenced by submit button outside</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-field</code></td><td className="meta">Label + input pair</td><td className="mono">flex col gap 8 — label 13/500/<span className="ds-token-chip">--text-2</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-actions</code></td><td className="meta">Footer button row (sibling of form)</td><td className="mono">flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <DSSection id="modal" title="Modal" sub="Centered form modal — used by Add a book, Add a quote, and Mark as finished. Sibling shell to Delete Modal but for input rather than confirmation.">
 
             <div className="ds-card">
               <div className="ds-card-head">
@@ -2210,10 +2266,30 @@ export default function DesignSystemPage() {
                 <strong>Library</strong> shows the <code>.modal-toggle-group</code> (Mark as reading checkbox + <code>.modal-info-box</code> with current reading count) — visible in <em>Manual</em> tab and in <em>Photo</em> tab when exactly 1 book is detected. <strong>Wishlist</strong> hides this group entirely. Submit label adapts (Add to library / Add to wishlist).
               </div>
             </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy (gap-driven, no margins)</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-overlay</code></td><td className="meta">Backdrop</td><td className="mono">fixed, padding 40 24, light overlay</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 630, padding 32 24 0, flex col gap 32</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-close</code></td><td className="meta">X button (absolute)</td><td className="mono">top:16 right:16, 40×40, svg 24×24</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-title</code></td><td className="meta">Heading</td><td className="mono">28/800/-0.02em (no margin — parent gap)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-tabs-section</code></td><td className="meta">Tabs + active content (only if tabs)</td><td className="mono">flex col gap 20</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="..." — referenced by submit button outside</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-field</code></td><td className="meta">Label + input pair</td><td className="mono">flex col gap 8 — label 13/500/<span className="ds-token-chip">--text-2</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-actions</code></td><td className="meta">Footer button row (sibling of form)</td><td className="mono">flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </DSSection>
 
           {/* ── DELETE MODAL ── */}
-          <DSSection id="delete-modal" title="Delete Modal" sub="Type-routed confirmation modal — single component handles 10 variants: book, quote, word, bulk, cancelReading, removeFinished, collection, collectionsBulk, colRemove, colRemoveBulk. Uses .confirm-modal shell (max-width 630, padding 32/24/0, gap 32) — distinct from .modal but visually aligned. Title/message resolved via target.type. Body adapts: BookChip preview (single book / colRemove), .confirm-modal-quote-wrap with line-clamp 3 + see more (quote), .panel-finished-field rating + note (removeFinished), bare title-only chip (collection). Cancel = .modal-cancel ; confirm = .confirm-modal-delete (red #ef4444) — except cancelReading which uses .ob-next.">
+          <DSSection id="delete-modal" title="Delete Modal" sub="Type-routed confirmation modal — single component dispatches to 10 variants based on target.type. Sibling shell to the standard Modal, dedicated to destructive confirmations.">
 
             <div className="ds-card">
               <div className="ds-card-head">
@@ -2281,6 +2357,28 @@ export default function DesignSystemPage() {
                     <button type="button" className="modal-cancel">Cancel</button>
                     <button type="button" className="confirm-modal-delete">Remove</button>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Shell</div>
+                  <p>Uses <code>.confirm-modal</code> — max-width 630, padding 32/24/0, gap 32. Distinct from <code>.modal</code> (form modal) but visually aligned.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Dispatch</div>
+                  <p>Title and message are resolved via <code>target.type</code>. Body adapts per variant — see the full mapping in the next card.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Body variants</div>
+                  <p>BookChip preview (single book / <code>colRemove</code>) · <code>.confirm-modal-quote-wrap</code> with line-clamp 3 + see-more (quote) · <code>.panel-finished-field</code> rating + note (<code>removeFinished</code>) · bare title-only chip (collection).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Actions</div>
+                  <p>Cancel = <code>.modal-cancel</code>. Confirm = <code>.confirm-modal-delete</code> (red <code>#ef4444</code>) — except <code>cancelReading</code> which uses <code>.ob-next</code> (primary blue) since the action isn't destructive.</p>
                 </div>
               </div>
             </div>
@@ -2506,24 +2604,6 @@ function handleDeleteConfirm(payload) {
           <DSSection id="empty" title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Illustration SVGs displayed at 96×96, custom per page (Library, Wishlist, Quotes, Dictionary, Collections).">
 
             <div className="ds-card">
-              <div className="ds-card-head">Anatomy</div>
-              <div className="ds-card-body col padded">
-                <table className="token-table">
-                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
-                  <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.empty</code></td><td className="meta">Outer container</td><td className="mono">flex col, align center, gap 20, padding 80 / 20, text-align center</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-icon</code></td><td className="meta">Illustration SVG</td><td className="mono">96 × 96 displayed (viewBox 60)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-text</code></td><td className="meta">Title + sub wrapper</td><td className="mono">flex col, align center, gap 8</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-title</code></td><td className="meta">Headline</td><td className="mono">Jakarta 18 / 700 / <span className="ds-token-chip">--text</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-sub</code></td><td className="meta">Helper text</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span> / max-width 480</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-info</code></td><td className="meta">Tertiary note (optional, ex. collection limit)</td><td className="mono">13 / 500 / <span className="ds-token-chip">--text-3</span> / margin-top 4</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-cta</code></td><td className="meta">Primary action (optional)</td><td className="mono">h 40, padding 0 20, gap 8, radius 8, 15 / 600 / #fff, bg <span className="ds-token-chip">--accent</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="ds-card">
               <div className="ds-card-head">Icon set — 4 illustrative SVGs (80×80, viewBox 60)</div>
               <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
                 <div className="ds-icon-tile">
@@ -2732,34 +2812,28 @@ function handleDeleteConfirm(payload) {
               </div>
             </div>
 
-          </DSSection>
-
-          {/* ── NOW READING ── */}
-          <DSSection id="now-reading" title="Now Reading" sub="Section pinned at the top of the Library tab. Max 3 books simultaneously (MAX_READING). Visual differentiator from the BookCard grid below — same card family tokens but distinct vertical layout with a primary badge + kebab quick-actions.">
-
             <div className="ds-card">
               <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col padded">
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-section</code></td><td className="meta">Section root</td><td className="mono">flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-list</code></td><td className="meta">Cards grid</td><td className="mono">grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card</code></td><td className="meta">Card root (role=button)</td><td className="mono">padding 14 56 14 16 (right reserves kebab), <span className="ds-token-chip">--card</span> bg, 1.5px <span className="ds-token-chip">--border-subtle</span>, <span className="ds-token-chip">--radius</span>, fadeUp animation</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card:hover</code></td><td className="meta">Hover state</td><td className="mono">border <span className="ds-token-chip">--primary-50</span>, bg <span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--shadow-md</span> (transition 0.22s)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-body</code></td><td className="meta">Vertical content stack</td><td className="mono">flex col, align-items flex-start, gap 16, min-width 0</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge (default = sm)</td><td className="mono">solid primary fill (<span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-40</span> dark) · #fff · h 24 · 12/600 · radius 999 · padding 0 12. Modifiers --xs/--sm/--md (heights 20/24/28)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-row</code></td><td className="meta">Cover + text horizontal block</td><td className="mono">flex row, gap 16, align-items center, min-width 0</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover</code></td><td className="meta">Cover thumbnail</td><td className="mono">60×90 (ratio 2:3), radius 4, flex-shrink 0 · gradient fallback + letter when no image</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover-letter</code></td><td className="meta">Letter fallback</td><td className="mono">18 / 800 / rgba(255,255,255,0.85), inherits Jakarta family</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-text</code></td><td className="meta">Title + meta wrapper</td><td className="mono">flex col, gap 6, flex 1, min-width 0</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-title</code></td><td className="meta">Book title</td><td className="mono">16/700/lh 1.35 (one tier above .book-title for differentiation), ellipsis</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-author</code></td><td className="meta">Author</td><td className="mono">15 / 500 / <span className="ds-token-chip">--text-2</span>, ellipsis</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td className="meta">Kebab "more actions"</td><td className="mono">40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty</code></td><td className="meta">Outer container</td><td className="mono">flex col, align center, gap 20, padding 80 / 20, text-align center</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-icon</code></td><td className="meta">Illustration SVG</td><td className="mono">96 × 96 displayed (viewBox 60)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-text</code></td><td className="meta">Title + sub wrapper</td><td className="mono">flex col, align center, gap 8</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-title</code></td><td className="meta">Headline</td><td className="mono">Jakarta 18 / 700 / <span className="ds-token-chip">--text</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-sub</code></td><td className="meta">Helper text</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span> / max-width 480</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-info</code></td><td className="meta">Tertiary note (optional, ex. collection limit)</td><td className="mono">13 / 500 / <span className="ds-token-chip">--text-3</span> / margin-top 4</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-cta</code></td><td className="meta">Primary action (optional)</td><td className="mono">h 40, padding 0 20, gap 8, radius 8, 15 / 600 / #fff, bg <span className="ds-token-chip">--accent</span></td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
+
+          </DSSection>
+
+          {/* ── NOW READING ── */}
+          <DSSection id="now-reading" title="Now Reading" sub="Section pinned at the top of the Library tab. Visually differentiates the books currently being read from the rest of the grid.">
 
             <div className="ds-card">
               <div className="ds-card-head">Live preview</div>
@@ -2798,6 +2872,30 @@ function handleDeleteConfirm(payload) {
             </div>
 
             <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col padded">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-section</code></td><td className="meta">Section root</td><td className="mono">flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-list</code></td><td className="meta">Cards grid</td><td className="mono">grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card</code></td><td className="meta">Card root (role=button)</td><td className="mono">padding 14 56 14 16 (right reserves kebab), <span className="ds-token-chip">--card</span> bg, 1.5px <span className="ds-token-chip">--border-subtle</span>, <span className="ds-token-chip">--radius</span>, fadeUp animation</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card:hover</code></td><td className="meta">Hover state</td><td className="mono">border <span className="ds-token-chip">--primary-50</span>, bg <span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--shadow-md</span> (transition 0.22s)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-body</code></td><td className="meta">Vertical content stack</td><td className="mono">flex col, align-items flex-start, gap 16, min-width 0</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge (default = sm)</td><td className="mono">solid primary fill (<span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-40</span> dark) · #fff · h 24 · 12/600 · radius 999 · padding 0 12. Modifiers --xs/--sm/--md (heights 20/24/28)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-row</code></td><td className="meta">Cover + text horizontal block</td><td className="mono">flex row, gap 16, align-items center, min-width 0</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover</code></td><td className="meta">Cover thumbnail</td><td className="mono">60×90 (ratio 2:3), radius 4, flex-shrink 0 · gradient fallback + letter when no image</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover-letter</code></td><td className="meta">Letter fallback</td><td className="mono">18 / 800 / rgba(255,255,255,0.85), inherits Jakarta family</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-text</code></td><td className="meta">Title + meta wrapper</td><td className="mono">flex col, gap 6, flex 1, min-width 0</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-title</code></td><td className="meta">Book title</td><td className="mono">16/700/lh 1.35 (one tier above .book-title for differentiation), ellipsis</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-author</code></td><td className="meta">Author</td><td className="mono">15 / 500 / <span className="ds-token-chip">--text-2</span>, ellipsis</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td className="meta">Kebab "more actions"</td><td className="mono">40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
               <div className="ds-card-head">Quick actions (kebab dropdown)</div>
               <div className="ds-card-body col">
                 <table className="token-table">
@@ -2818,6 +2916,7 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Aspect</th><th>Note</th></tr></thead>
                   <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component">Capacity</td><td className="meta">Max 3 books simultaneously (<code>MAX_READING</code>) — section is hidden when none is being read</td></tr>
                     <tr className="table-row"><td className="token-table-component">Visual family</td><td className="meta">Same as <code>.book-card</code> (radius, border, hover transition, fadeUp animation) — different layout to differentiate without competing with the Library grid below</td></tr>
                     <tr className="table-row"><td className="token-table-component">Status badge</td><td className="meta">Primary fill anchors the "active reading" status</td></tr>
                     <tr className="table-row"><td className="token-table-component">Order rule</td><td className="meta"><code>readingBooks</code> sorted by <code>startedAt</code> desc (most recently started first)</td></tr>
@@ -2825,6 +2924,209 @@ function handleDeleteConfirm(payload) {
                 </table>
               </div>
             </div>
+          </DSSection>
+
+          {/* ── WEEKLY ACTIVITY ── */}
+          <DSSection id="weekly-activity" title="Weekly Activity" sub="Bar chart card pinned in the Overview tab — shows daily counts of books, quotes and words across a single week with a metric switcher and prev/next navigation.">
+
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview · All mode</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-card overview-activity" style={{ alignSelf: 'stretch' }}>
+                  <div className="overview-card-head overview-activity-head">
+                    <div className="overview-activity-pills" role="tablist">
+                      <button type="button" className="overview-activity-pill is-active">All</button>
+                      <button type="button" className="overview-activity-pill">Books</button>
+                      <button type="button" className="overview-activity-pill">Quotes</button>
+                      <button type="button" className="overview-activity-pill">Words</button>
+                    </div>
+                    <div className="overview-activity-nav">
+                      <button type="button" className="overview-activity-nav-btn" aria-label="Previous week">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                      </button>
+                      <span className="overview-activity-week-label">May 4 – 10</span>
+                      <button type="button" className="overview-activity-nav-btn" disabled aria-label="Next week">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="overview-activity-divider" aria-hidden="true"/>
+                  <div className="overview-activity-bars">
+                    {[
+                      { books: 0, quotes: 2, words: 1 },
+                      { books: 1, quotes: 3, words: 2 },
+                      { books: 0, quotes: 0, words: 0 },
+                      { books: 0, quotes: 1, words: 4 },
+                      { books: 2, quotes: 0, words: 2 },
+                      { books: 0, quotes: 4, words: 3 },
+                      { books: 1, quotes: 2, words: 1 },
+                    ].map((d, i) => {
+                      const initials = ['M','T','W','T','F','S','S'];
+                      const total = d.books + d.quotes + d.words;
+                      const segMax = 4;
+                      return (
+                        <div key={i} className="overview-activity-col">
+                          <div className="overview-activity-track" aria-hidden="true">
+                            {total === 0 ? (
+                              <div className="overview-activity-dot"/>
+                            ) : (
+                              <div className="overview-activity-fill is-stacked">
+                                <div className={`overview-activity-seg overview-activity-seg--books${d.books > 0 ? '' : ' is-empty'}`}
+                                     style={d.books > 0 ? { height: `${Math.max(8, (d.books / segMax) * 100)}%` } : undefined}>
+                                  {d.books > 0 && <span className="overview-activity-count">{d.books}</span>}
+                                </div>
+                                <div className={`overview-activity-seg overview-activity-seg--quotes${d.quotes > 0 ? '' : ' is-empty'}`}
+                                     style={d.quotes > 0 ? { height: `${Math.max(8, (d.quotes / segMax) * 100)}%` } : undefined}>
+                                  {d.quotes > 0 && <span className="overview-activity-count">{d.quotes}</span>}
+                                </div>
+                                <div className={`overview-activity-seg overview-activity-seg--words${d.words > 0 ? '' : ' is-empty'}`}
+                                     style={d.words > 0 ? { height: `${Math.max(8, (d.words / segMax) * 100)}%` } : undefined}>
+                                  {d.words > 0 && <span className="overview-activity-count">{d.words}</span>}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          <span className="overview-activity-day">{initials[i]}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="overview-activity-divider" aria-hidden="true"/>
+                  <div className="overview-activity-legend">
+                    <span className="overview-activity-legend-item">
+                      <span className="overview-activity-legend-dot is-books" aria-hidden="true"/>
+                      <span>Books</span>
+                    </span>
+                    <span className="overview-activity-legend-item">
+                      <span className="overview-activity-legend-dot is-quotes" aria-hidden="true"/>
+                      <span>Quotes</span>
+                    </span>
+                    <span className="overview-activity-legend-item">
+                      <span className="overview-activity-legend-dot is-words" aria-hidden="true"/>
+                      <span>Words</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview · Single metric (Books)</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-card overview-activity" style={{ alignSelf: 'stretch' }}>
+                  <div className="overview-card-head overview-activity-head">
+                    <div className="overview-activity-pills" role="tablist">
+                      <button type="button" className="overview-activity-pill">All</button>
+                      <button type="button" className="overview-activity-pill is-active">Books</button>
+                      <button type="button" className="overview-activity-pill">Quotes</button>
+                      <button type="button" className="overview-activity-pill">Words</button>
+                    </div>
+                    <div className="overview-activity-nav">
+                      <button type="button" className="overview-activity-nav-btn" aria-label="Previous week">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                      </button>
+                      <span className="overview-activity-week-label">May 4 – 10</span>
+                      <button type="button" className="overview-activity-nav-btn" disabled aria-label="Next week">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="overview-activity-divider" aria-hidden="true"/>
+                  <div className="overview-activity-bars">
+                    {[0, 1, 0, 0, 2, 0, 1].map((count, i) => {
+                      const initials = ['M','T','W','T','F','S','S'];
+                      const max = 2;
+                      const ratio = max > 0 ? count / max : 0;
+                      return (
+                        <div key={i} className="overview-activity-col">
+                          <span className={`overview-activity-count${count > 0 ? '' : ' is-empty'}`}>
+                            {count > 0 ? count : ''}
+                          </span>
+                          <div className="overview-activity-track" aria-hidden="true">
+                            {count === 0 ? (
+                              <div className="overview-activity-dot"/>
+                            ) : (
+                              <div className="overview-activity-fill is-books" style={{ height: `${Math.max(8, ratio * 100)}%` }}/>
+                            )}
+                          </div>
+                          <span className="overview-activity-day">{initials[i]}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="overview-activity-divider" aria-hidden="true"/>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-card.overview-activity</code></td><td className="meta">Outer card</td><td className="mono">Inherits <span className="ds-token-chip">.overview-card</span> · gap 16, padding 20, two <span className="ds-token-chip">.overview-activity-divider</span> isolating the chart vertically</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pills</code></td><td className="meta">Metric switcher (segmented)</td><td className="mono">Wrapper <span className="ds-token-chip">--bg3</span> bg, padding 3, gap 4, radius 999. 4 pills (All / Books / Quotes / Words) — active filled <span className="ds-token-chip">--primary</span> + foreground white, weight 600</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill</code></td><td className="meta">Single tab pill</td><td className="mono">28h, padding 0/12, font 13/500 inactive · 13/600 active. Hover (inactive) <span className="ds-token-chip">--primary-5</span> bg + <span className="ds-token-chip">--primary-50</span> text — iso <code>.edit-btn</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-nav-btn</code></td><td className="meta">Prev / next week</td><td className="mono">28×28, radius 7, icon 16. Inherits <code>.btn-secondary</code> visual (bg <span className="ds-token-chip">--primary-5</span>, hover <span className="ds-token-chip">--primary-10</span>). Disabled at week boundaries (earliest activity / current week)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-week-label</code></td><td className="meta">Week range label</td><td className="mono">Font 13/600, tabular-nums. Format locale-aware: <code>May 4 – 10</code> (en) · <code>4 – 10 mai</code> (fr) · cross-month/year fallbacks</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-bars</code></td><td className="meta">Chart grid</td><td className="mono">7 columns 1fr (M T W T F S S), gap 8 (6 mobile)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-track</code></td><td className="meta">Per-day box</td><td className="mono">100% × 80h (70h mobile), bg <span className="ds-token-chip">--primary-5</span>, radius 6, items align-end</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-fill</code></td><td className="meta">Single-metric bar</td><td className="mono">Height = <code>(value / weekMax) × 100%</code>, min 8%. Color follows metric: <code>.is-books</code> <span className="ds-token-chip">--primary</span> · <code>.is-quotes</code> <span className="ds-token-chip">--primary-40</span> · <code>.is-words</code> <span className="ds-token-chip">--primary-20</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-fill.is-stacked</code></td><td className="meta">Grouped bars (All)</td><td className="mono">Flex row, padding 4, gap 3. 3 segments side-by-side (Books → Quotes → Words), each <code>flex: 1 1 0</code>. Empty segments stay slot-reserved (height 0, transparent) so columns align even when 1 or 2 metrics are missing</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-seg</code></td><td className="meta">Single segment</td><td className="mono">Radius 4 uniform, color = bg. Count nested inside (centered, font 10/700, color <span className="ds-token-chip">--primary-foreground</span>; Words override to <span className="ds-token-chip">--primary-70</span> for contrast on light bg)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-dot</code></td><td className="meta">Empty-day marker</td><td className="mono">4×4 circle, <span className="ds-token-chip">--text-3</span> at 50% opacity, anchored to track baseline. Replaces fill when <code>day.count === 0</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-count</code></td><td className="meta">Numeric value</td><td className="mono">Above bar (single mode): font 12/600, color <span className="ds-token-chip">--primary-60</span>, height 14, tabular-nums. <code>.is-empty</code> renders transparent to reserve space</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-day</code></td><td className="meta">Day initial label</td><td className="mono">Font 11/700 uppercase, letter-spacing 0.08em — DS canonical eyebrow tier</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-legend</code></td><td className="meta">Color legend (All only)</td><td className="mono">Flex row, gap 16, font 12/500, left-aligned. Dots 8×8 radius 2 — color modifiers <code>.is-books / .is-quotes / .is-words</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-divider</code></td><td className="meta">Visual separator</td><td className="mono">1px <span className="ds-token-chip">--border-subtle</span>. Two instances frame the chart vertically (head ↔ bars and bars ↔ legend)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Behavior</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Default tab = All</div>
+                  <p>Stacks 3 grouped vertical bars per day (Books / Quotes / Words side-by-side), each scaled to <code>segMax</code> = max single-segment value across the visible week.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Single-metric tabs</div>
+                  <p>One bar per day, scaled to <code>weekMax</code> for that metric. Bar color stays consistent with the legend mapping (e.g. Quotes always renders in <span className="ds-token-chip">--primary-40</span>).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Empty days</div>
+                  <p>Render a small dot at the track baseline instead of a bar — preserves the 7-column rhythm even on quiet weeks.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Navigation bounds</div>
+                  <p><strong>Prev</strong> stops at the week of the user's earliest activity (no infinite empty weeks). <strong>Next</strong> stops at the current week (no future).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Data sources</div>
+                  <p>Books = <code>finishedAt</code> (consistent with hero "Finished") · Quotes = <code>createdAt</code> · Words = <code>createdAt</code>.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Counts</div>
+                  <p>Single mode: above the bar (<span className="ds-token-chip">--primary-60</span>). All mode: <em>inside</em> each segment, centered — white on Books/Quotes, <span className="ds-token-chip">--primary-70</span> on Words for contrast on the light <span className="ds-token-chip">--primary-20</span> bg.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">i18n</div>
+                  <p>Day initials swap per locale (M T W T F S S vs L M M J V S D). Week range uses <code>Intl.DateTimeFormat</code> with cross-month and cross-year fallbacks.</p>
+                </div>
+              </div>
+            </div>
+
           </DSSection>
 
           {/* ── FINISH READING MODAL ── */}
@@ -2871,34 +3173,7 @@ function handleDeleteConfirm(payload) {
           </DSSection>
 
           {/* ── ONBOARDING ── */}
-          <DSSection id="onboarding" title="Onboarding" sub="6-slide modal shown on first visit (persisted via readr-onboarding-seen) and reopenable from the footer. Each slide pairs an illustrative SVG (120×120) with a verb-led title and a single-sentence desc. Mobile titles use \\n + white-space: pre-line for controlled line breaks.">
-
-            <div className="ds-card">
-              <div className="ds-card-head">Anatomy</div>
-              <div className="ds-card-body col">
-                <table className="token-table">
-                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
-                  <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-overlay</code></td><td className="meta">Backdrop — click outside to close</td><td className="mono">fixed inset 0, z-index 1000, bg rgba(30,35,80,0.30) (light) / rgba(0,0,0,0.55) (dark), opacity-fade 0.2s</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 640, mx 24, bg <span className="ds-token-chip">--card</span>, radius 16, shadow-lg, flex col</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-body</code></td><td className="meta">Inner content (above footer)</td><td className="mono">padding 48 32 32, flex col align center, text-align center</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-slides</code></td><td className="meta">Vertical stack — icon → text → dots</td><td className="mono">flex col, align center, gap 40, min-height 260</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon</code></td><td className="meta">SVG slot (flex container)</td><td className="mono">SVG inside is 120×120, viewBox 0 0 60 60</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon defined</td><td className="mono">120×120, <span className="ds-token-chip">--primary-5</span> (light) / <span className="ds-token-chip">--primary-3</span> (dark), radius 16</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-text</code></td><td className="meta">Title + desc wrapper</td><td className="mono">flex col, align center, gap 20</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-title</code></td><td className="meta">Slide title (h2)</td><td className="mono">Jakarta 20 / 800, letter-spacing -0.02em, lh 1.3 — <code>white-space: pre-line</code> on mobile (≤600px) only, so \\n in i18n breaks lines on phones, collapses on desktop</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span>, lh 1.7, max-width 464, <code>white-space: pre-line</code> (always)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-dots</code></td><td className="meta">Pagination wrapper</td><td className="mono">flex row, gap 6 — role="tablist"</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-dot</code></td><td className="meta">Individual dot — clickable jump</td><td className="mono">6×6, bg <span className="ds-token-chip">--border</span> → 20×6 + bg <span className="ds-token-chip">--primary-50</span> when <code>.active</code>, transition all 0.25s</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer</code></td><td className="meta">Bottom region (sibling of .ob-body)</td><td className="mono">padding 18, flex col, gap 24, full width</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer-nav</code></td><td className="meta">Skip-left vs Prev/Next-right row</td><td className="mono">flex justify-between, full width — left: <code>.ob-footer-left</code> · right: <code>.ob-footer-right</code> (gap 8)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-skip</code></td><td className="meta">Skip CTA — hidden on last slide</td><td className="mono">40h · 15 / 600 · transparent / <span className="ds-token-chip">--text-2</span> · hover bg <span className="ds-token-chip">--primary-5</span> + color <span className="ds-token-chip">--primary-60</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-prev</code></td><td className="meta">Previous — visibility hidden on slide 0</td><td className="mono">40h · 15 / 600 · bg <span className="ds-token-chip">--primary-5</span> / <span className="ds-token-chip">--primary-60</span> · hover bg <span className="ds-token-chip">--primary-10</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-next</code></td><td className="meta">Next / Get started (last slide)</td><td className="mono">Primary CTA — 40h · 15 / 600 · bg <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <DSSection id="onboarding" title="Onboarding" sub="6-slide modal shown on first visit and reopenable from the footer. Each slide pairs an illustrative SVG with a verb-led title and a single-sentence description.">
 
             <div className="ds-card">
               <div className="ds-card-head">Icon set — 6 illustrative SVGs (120×120, viewBox 60)</div>
@@ -2929,10 +3204,6 @@ function handleDeleteConfirm(payload) {
                 </div>
               </div>
             </div>
-          </DSSection>
-
-          {/* ── FOOTER ── */}
-          <DSSection id="footer" title="Footer" sub="Bottom-of-page footer below the scrollable content. Three sections — left (product links + lang), center (data info + version), right (copyright + portfolio + linkedin). Responsive: ≤780px collapses into 3 stacked rows, portfolio link swaps text → globe icon.">
 
             <div className="ds-card">
               <div className="ds-card-head">Anatomy</div>
@@ -2940,19 +3211,31 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.library-footer</code></td><td className="meta">Footer wrapper (full width)</td><td className="mono">border-top 1px <span className="ds-token-chip">--border-subtle</span>, padding 20 0, bg <span className="ds-token-chip">--bg</span>, 11 / 500 / <span className="ds-token-chip">--text-3</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.library-footer-inner</code></td><td className="meta">Content row</td><td className="mono">padding 0 40, flex justify-between align-center, gap 12, flex-wrap. ≤780px → flex col stretch, gap clamp(16, 4vw, 24)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-section</code></td><td className="meta">Each of the 3 sections (left / center / right)</td><td className="mono">flex row align-center, gap 12. ≤780px → width 100%, justify-between</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-group</code></td><td className="meta">Tight subgroup inside a section</td><td className="mono">inline-flex align-center, gap 12 (8 on mobile for icons row)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-link</code></td><td className="meta">Anchor or button link</td><td className="mono">11 / 500 / <span className="ds-token-chip">--text-2</span> (13 on mobile), hover color <span className="ds-token-chip">--primary-60</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-sep</code></td><td className="meta">Bullet separator (·)</td><td className="mono">color <span className="ds-token-chip">--border-subtle</span> — top-level seps hidden on mobile, group-internal seps preserved</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-link-text</code> / <code>.footer-link-icon</code></td><td className="meta">Portfolio link — text desktop, globe icon mobile</td><td className="mono">≤780px swaps display (text → none, icon → inline-block)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-links-desktop</code></td><td className="meta">Right section wrapper (portfolio + LinkedIn)</td><td className="mono">Marker class — overrides <code>.footer-group</code> gap to 8 on mobile (icons closer)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.lang-toggle</code></td><td className="meta">EN · FR switcher (inside left section)</td><td className="mono">flex row, gap 12 — uses shared <code>.lang-btn</code> + <code>.lang-sep</code> from Language Switcher</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-overlay</code></td><td className="meta">Backdrop — click outside to close</td><td className="mono">fixed inset 0, z-index 1000, bg rgba(30,35,80,0.30) (light) / rgba(0,0,0,0.55) (dark), opacity-fade 0.2s</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 640, mx 24, bg <span className="ds-token-chip">--card</span>, radius 16, shadow-lg, flex col</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-body</code></td><td className="meta">Inner content (above footer)</td><td className="mono">padding 48 32 32, flex col align center, text-align center</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-slides</code></td><td className="meta">Vertical stack — icon → text → dots</td><td className="mono">flex col, align center, gap 40, min-height 260</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon</code></td><td className="meta">SVG slot (flex container)</td><td className="mono">SVG inside is 120×120, viewBox 0 0 60 60</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon defined</td><td className="mono">120×120, <span className="ds-token-chip">--primary-5</span> (light) / <span className="ds-token-chip">--primary-3</span> (dark), radius 16</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-text</code></td><td className="meta">Title + desc wrapper</td><td className="mono">flex col, align center, gap 20</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-title</code></td><td className="meta">Slide title (h2)</td><td className="mono">Jakarta 20 / 800, letter-spacing -0.02em, lh 1.3 — <code>white-space: pre-line</code> on mobile (≤600px) only, so \\n in i18n breaks lines on phones, collapses on desktop</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span>, lh 1.7, max-width 464, <code>white-space: pre-line</code> (always)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-dots</code></td><td className="meta">Pagination wrapper</td><td className="mono">flex row, gap 6 — role="tablist"</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-dot</code></td><td className="meta">Individual dot — clickable jump</td><td className="mono">6×6, bg <span className="ds-token-chip">--border</span> → 20×6 + bg <span className="ds-token-chip">--primary-50</span> when <code>.active</code>, transition all 0.25s</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer</code></td><td className="meta">Bottom region (sibling of .ob-body)</td><td className="mono">padding 18, flex col, gap 24, full width</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-footer-nav</code></td><td className="meta">Skip-left vs Prev/Next-right row</td><td className="mono">flex justify-between, full width — left: <code>.ob-footer-left</code> · right: <code>.ob-footer-right</code> (gap 8)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-skip</code></td><td className="meta">Skip CTA — hidden on last slide</td><td className="mono">40h · 15 / 600 · transparent / <span className="ds-token-chip">--text-2</span> · hover bg <span className="ds-token-chip">--primary-5</span> + color <span className="ds-token-chip">--primary-60</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-prev</code></td><td className="meta">Previous — visibility hidden on slide 0</td><td className="mono">40h · 15 / 600 · bg <span className="ds-token-chip">--primary-5</span> / <span className="ds-token-chip">--primary-60</span> · hover bg <span className="ds-token-chip">--primary-10</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-next</code></td><td className="meta">Next / Get started (last slide)</td><td className="mono">Primary CTA — 40h · 15 / 600 · bg <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span></td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
+
+          </DSSection>
+
+          {/* ── FOOTER ── */}
+          <DSSection id="footer" title="Footer" sub="Bottom-of-page footer below the scrollable content — product links, data info, and external links. Collapses to a stacked layout on narrow viewports.">
 
             <div className="ds-card">
               <div className="ds-card-head">Live preview (desktop)</div>
@@ -2999,6 +3282,26 @@ function handleDeleteConfirm(payload) {
                 </footer>
               </div>
               <div className="ds-card-foot">Real <code>.library-footer</code> markup. Border-top neutralized here so the preview doesn't double-stroke against the card border. On the live page the border is the visual separator between page content and footer.</div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.library-footer</code></td><td className="meta">Footer wrapper (full width)</td><td className="mono">border-top 1px <span className="ds-token-chip">--border-subtle</span>, padding 20 0, bg <span className="ds-token-chip">--bg</span>, 11 / 500 / <span className="ds-token-chip">--text-3</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.library-footer-inner</code></td><td className="meta">Content row</td><td className="mono">padding 0 40, flex justify-between align-center, gap 12, flex-wrap. ≤780px → flex col stretch, gap clamp(16, 4vw, 24)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-section</code></td><td className="meta">Each of the 3 sections (left / center / right)</td><td className="mono">flex row align-center, gap 12. ≤780px → width 100%, justify-between</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-group</code></td><td className="meta">Tight subgroup inside a section</td><td className="mono">inline-flex align-center, gap 12 (8 on mobile for icons row)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-link</code></td><td className="meta">Anchor or button link</td><td className="mono">11 / 500 / <span className="ds-token-chip">--text-2</span> (13 on mobile), hover color <span className="ds-token-chip">--primary-60</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-sep</code></td><td className="meta">Bullet separator (·)</td><td className="mono">color <span className="ds-token-chip">--border-subtle</span> — top-level seps hidden on mobile, group-internal seps preserved</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-link-text</code> / <code>.footer-link-icon</code></td><td className="meta">Portfolio link — text desktop, globe icon mobile</td><td className="mono">≤780px swaps display (text → none, icon → inline-block)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-links-desktop</code></td><td className="meta">Right section wrapper (portfolio + LinkedIn)</td><td className="mono">Marker class — overrides <code>.footer-group</code> gap to 8 on mobile (icons closer)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.lang-toggle</code></td><td className="meta">EN · FR switcher (inside left section)</td><td className="mono">flex row, gap 12 — uses shared <code>.lang-btn</code> + <code>.lang-sep</code> from Language Switcher</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </DSSection>
 

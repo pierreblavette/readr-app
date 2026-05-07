@@ -237,6 +237,7 @@ export default function LibraryPage() {
               onOpenQuote={q => setPanelQuote(q)}
               onAddBook={() => setAddModal(true)}
               onNavigate={next => setTab(next)}
+              lang={lang}
               t={t}
             />
           </>

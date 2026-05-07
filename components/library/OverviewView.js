@@ -4,12 +4,13 @@ import { useStats } from "@/lib/useStats";
 import BookChip from "./BookChip";
 import ReadingGoalModal from "./ReadingGoalModal";
 import BookListPanel from "./BookListPanel";
+import WeeklyActivityCard from "./WeeklyActivityCard";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
   readingGoal, setReadingGoal,
   onOpenBook, onOpenQuote, onAddBook, onNavigate,
-  t,
+  lang, t,
 }) {
   const stats = useStats({ owned, quotes, words, readingGoal });
   const [shuffleKey, setShuffleKey] = useState(0);
@@ -145,6 +146,8 @@ export default function OverviewView({
         currentCount={stats.goal.target}
         t={t}
       />
+
+      <WeeklyActivityCard owned={owned} quotes={quotes} words={words} lang={lang} t={t} />
 
       <TopGenresCard genres={stats.topGenres} onSelect={handleGenreSelect} t={t} />
 
