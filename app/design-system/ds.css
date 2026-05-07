@@ -30,8 +30,11 @@
 }
 .ds-card-head {
   box-sizing: border-box;
-  padding: 0 16px;
-  height: var(--height-head, 40px);
+  /* Padding vertical 8 pour breathing room quand le titre wrap sur 2 lignes
+   * (mobile) — sur 1 ligne le padding rentre dans la marge du min-height 40
+   * vs contenu ~14px, pas d'effet visuel. height retiré (était fixe et
+   * tronquait le texte sur 2 lignes). */
+  padding: 8px 16px;
   min-height: var(--height-head, 40px);
   display: flex;
   align-items: center;
@@ -53,11 +56,20 @@
 }
 .ds-card-body.col { flex-direction: column; padding: 0 20px; gap: 0; }
 .ds-card-body.col.padded { padding: 20px; gap: 20px; }
+@media (max-width: 600px) {
+  .ds-card-body.col.padded { gap: 24px; }
+}
 /* Tables and token blocks own their horizontal padding — collapse the body's */
 .ds-card-body.col:has(> :is(table, .ds-token-block)) { padding: 0; }
 /* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
  * — narrow tables won't scroll because their content fits, so this is safe globally. */
-.ds-card-body.col:has(> table) { overflow-x: auto; }
+.ds-card-body.col:has(> table) {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.ds-card-body.col:has(> table)::-webkit-scrollbar { height: 6px; }
+.ds-card-body.col:has(> table)::-webkit-scrollbar-track { background: transparent; }
+.ds-card-body.col:has(> table)::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 .ds-card-body + .ds-card-body { border-top: 1px solid var(--border-subtle); }
 .ds-card-body.center { align-items: center; }
 .ds-card-foot {
@@ -116,9 +128,9 @@
   white-space: nowrap;
 }
 [data-theme="dark"] .ds-token-chip { background: var(--primary-90); color: var(--primary-30); }
-.ds-tokens {
-  padding: 12px 20px;
-  border-top: 1px solid var(--border-subtle);
+/* Token chips footer — variante de .ds-card-foot.
+ * Hérite border-top + padding ; ajoute flex layout pour les chips. */
+.ds-card-foot.ds-card-foot--tokens {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -136,6 +148,12 @@
 .palette-grid.on-dark-bg { background: #0F0F0F; padding: 16px; border-radius: var(--radius); }
 
 .ds-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; width: 100%; }
+/* Mobile: 2 colonnes garanties pour toutes les grilles colors
+ * (le min 160 forcerait 1 col sur ~311 disponibles). */
+@media (max-width: 600px) {
+  .ds-swatch-grid,
+  .palette-grid { grid-template-columns: repeat(2, 1fr); }
+}
 .ds-swatch { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; }
 .ds-swatch-block { height: 120px; }
 .ds-swatch-block.is-anchor { box-shadow: inset 0 0 0 2px var(--primary-50); }
@@ -149,12 +167,12 @@
 .ds-swatch-title { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ─── TYPOGRAPHY ─── */
-.type-sample { display: flex; align-items: center; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--border-subtle); width: 100%; }
+.type-sample { display: flex; align-items: center; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--border-subtle); width: 100%; }
 .type-sample:last-child { border-bottom: none; }
 .type-sample-meta { flex-shrink: 0; font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); white-space: nowrap; margin-left: auto; }
 .type-sample-preview { flex: 1; display: flex; flex-direction: column; gap: 8px; }
 .type-sample-label { font-size: 10px; font-weight: 500; color: var(--text-3); font-family: var(--font-jakarta), sans-serif; }
-.type-meta { font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); margin-left: auto; }
+.type-meta { font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); }
 
 /* ─── SPACING ─── */
 .spacing-row { display: flex; align-items: center; gap: 16px; padding: 20px 0; width: 100%; border-bottom: 1px solid var(--border-subtle); }
@@ -190,6 +208,19 @@
 .btn-icon { background: transparent; color: var(--dark-70); border: 1px solid var(--border); aspect-ratio: 1; }
 .btn-icon:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-50); background: var(--primary-5); }
 .btn-icon svg { pointer-events: none; }
+
+/* Icon-only buttons (btn-solid / btn-icon): SVG sizes 12/14/16/18 selon size.
+ * Les règles canoniques de library.css (.btn-sm svg* → 3, .btn-md svg* → 2.25)
+ * ciblent les icon+text (glyphs 12/16). Pour les icon-only, on override pour
+ * matcher chaque glyph avec la formule 36/glyph_size pour ~1.5px visual stroke. */
+.btn-solid.btn-xs svg *,
+.btn-icon.btn-xs svg *  { stroke-width: 3; }     /* glyph 12 → 1.5 */
+.btn-solid.btn-sm svg *,
+.btn-icon.btn-sm svg *  { stroke-width: 2.5; }   /* glyph 14 → 1.46 */
+.btn-solid.btn-md svg *,
+.btn-icon.btn-md svg *  { stroke-width: 2.25; }  /* glyph 16 → 1.5 */
+.btn-solid.btn-lg svg *,
+.btn-icon.btn-lg svg *  { stroke-width: 2; }     /* glyph 18 → 1.5 */
 .btn-critical { background: #EF4444; color: #fff; border: none; }
 .btn-critical:hover:not(:disabled) { background: #DC2626; }
 
@@ -385,11 +416,12 @@
 }
 /* On mobile, drop the app shell preview (placeholder) and let the panel take
  * the full card width — same intent as the real Library where the panel
- * covers the screen on small viewports. */
+ * covers the screen on small viewports. Height: auto pour afficher tout le
+ * contenu sans scroll interne (iso .sidebar mobile preview). */
 @media (max-width: 600px) {
-  .panel-ds-viewport { flex-direction: column; }
+  .panel-ds-viewport { flex-direction: column; height: auto; overflow: visible; }
   .panel-ds-content { display: none; }
-  .panel-ds-panel { width: 100%; border-left: none; }
+  .panel-ds-panel { width: 100%; border-left: none; overflow-y: visible; }
 }
 
 /* DS preview override — the real .sidebar in mobile (≤768px) uses
@@ -403,20 +435,38 @@
   width: 260px;
 }
 .ds-card-body .sidebar.collapsed { width: 60px; }
+/* Mobile: hide la version Collapsed (peu représentative + économise le scroll)
+ * et height auto pour que la preview Expanded affiche tout le contenu sans
+ * scroll interne (override la height: 500 inline du sample). */
+@media (max-width: 600px) {
+  .ds-card-body > .sidebar.collapsed { display: none; }
+  .ds-card-body > .sidebar:not(.collapsed) { height: auto !important; }
+}
 
 /* Stack sample rows on mobile — .type-sample-meta has white-space: nowrap
  * + flex-shrink: 0, so long mono strings (eg. "1.43rem · 20px · 800") would
  * overflow horizontally. Stacking preview + meta is cleaner than wrapping. */
 @media (max-width: 600px) {
+  /* Buttons states cards (5 variants × 5 states) — 2 cols mobile so each
+   * state block stays readable instead of compressing to 5-in-a-row. */
+  .ds-states-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
   .type-sample,
   .spacing-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 12px;
   }
+  /* Inline align-self: center (desktop vertical centering) becomes horizontal
+   * centering in column direction — force left-align in mobile via !important
+   * (the inline style otherwise wins by specificity). */
   .type-sample-meta {
     margin-left: 0;
     white-space: normal;
+    align-self: flex-start !important;
   }
 }
 [data-theme="dark"] .panel-ds-panel { background: var(--bg); }
@@ -437,7 +487,7 @@
 
 /* ─── LOGO ─── */
 .logo-wordmark { font-family: var(--font-fraunces), serif; font-weight: 400; letter-spacing: -0.02em; line-height: 1; }
-.logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; flex: 1; min-width: 160px; container-type: inline-size; }
+.logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; flex: 1; min-width: 0; container-type: inline-size; }
 .logo-bg .logo-wordmark { font-size: clamp(20px, 14cqw, 48px); }
 .logo-bg-page    { background: #FEFEFF; border: 1px solid var(--border-subtle); }
 .logo-bg-dark    { background: #1B1B1B; }
@@ -447,6 +497,11 @@
 .logo-spec-row   { display: flex; gap: 24px; flex-wrap: wrap; width: 100%; border-top: 1px solid var(--border-subtle); padding-top: 24px; }
 .logo-spec-item  { display: flex; flex-direction: column; gap: 4px; }
 .logo-spec-item:not(:first-child) { border-left: 1px solid var(--border-subtle); padding-left: 24px; }
+/* Mobile: dividers (top + between items) deviennent confus avec le wrap — drop. */
+@media (max-width: 600px) {
+  .logo-spec-row { border-top: none; padding-top: 0; gap: 20px; }
+  .logo-spec-item:not(:first-child) { border-left: none; padding-left: 0; }
+}
 .logo-spec-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
 .logo-spec-val   { font-size: 13px; font-weight: 500; color: var(--text); font-family: 'SF Mono','Fira Code',monospace; }
 
@@ -475,8 +530,12 @@
 .ds-card-body pre {
   max-width: 100%;
   overflow-x: auto;
+  scrollbar-width: thin;
 }
-.ds-token-block { display: flex; flex-direction: column; gap: 4px; padding: 16px 20px; width: 100%; }
+.ds-card-body pre::-webkit-scrollbar { height: 4px; }
+.ds-card-body pre::-webkit-scrollbar-track { background: transparent; }
+.ds-card-body pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.ds-token-block { display: flex; flex-direction: column; gap: 8px; padding: 16px 20px; width: 100%; }
 .ds-token-block .ds-token-name { font-weight: 600; }
 .ds-token-block:has(+ .ds-token-block) { border-bottom: 1px solid var(--border-subtle); }
 

@@ -453,10 +453,8 @@ export default function DesignSystemPage() {
                   [10, "0.71rem", "700", "Tiny badge", ".badge primary (notification dot)"],
                 ].map(([px, rem, weight, label, detail]) => (
                   <div key={label + px + weight} className="type-sample">
-                    <div className="type-sample-preview">
-                      <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{label}</div>
-                      {detail && <div className="ds-token-name">{detail}</div>}
-                    </div>
+                    <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{label}</div>
+                    {detail && <div className="ds-token-name">{detail}</div>}
                     <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
                 ))}
@@ -474,10 +472,8 @@ export default function DesignSystemPage() {
                   [14, "1rem",    "400", "Logo footer", ".logo-min (reserved — minimum size)"],
                 ].map(([px, rem, weight, label, detail]) => (
                   <div key={label} className="type-sample">
-                    <div className="type-sample-preview">
-                      <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{label}</div>
-                      {detail && <div className="ds-token-name">{detail}</div>}
-                    </div>
+                    <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{label}</div>
+                    {detail && <div className="ds-token-name">{detail}</div>}
                     <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
                 ))}
@@ -550,7 +546,7 @@ export default function DesignSystemPage() {
                       <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>cell-row--{mod}</span>
                       <span style={{ fontSize: 12, color: "var(--text-2)", fontVariantNumeric: "tabular-nums" }}>{h}px</span>
                     </div>
-                    <span className="type-sample-meta" style={{ alignSelf: "center" }}>{use}</span>
+                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{use}</span>
                   </div>
                 ))}
               </div>
@@ -631,7 +627,7 @@ export default function DesignSystemPage() {
                   ["--shadow-lg", "Modales, autocomplete, mobile sidebar"],
                 ].map(([token, use]) => (
                   <div key={token} className="spacing-row" style={{ alignItems: "stretch" }}>
-                    <div style={{ width: 120, height: 40, background: "var(--card)", borderRadius: 6, boxShadow: `var(${token})`, flexShrink: 0, alignSelf: "center" }} />
+                    <div style={{ width: 240, height: 100, background: "var(--card)", borderRadius: 8, boxShadow: `var(${token})`, flexShrink: 0, alignSelf: "flex-start" }} />
                     <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{token} · {use}</span>
                   </div>
                 ))}
@@ -650,8 +646,8 @@ export default function DesignSystemPage() {
                 ].map(([r, use]) => (
                   <div key={r} className="spacing-row" style={{ alignItems: "stretch" }}>
                     <div className="spacing-block" style={{ width: 64, height: 40, borderRadius: r }} />
-                    <span className="spacing-label" style={{ alignSelf: "center" }}>{r}px</span>
-                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{use}</span>
+                    <span className="spacing-label" style={{ alignSelf: "flex-start" }}>{r}px</span>
+                    <span className="type-sample-meta" style={{ alignSelf: "flex-start", marginLeft: 0 }}>{use}</span>
                   </div>
                 ))}
               </div>
@@ -693,8 +689,8 @@ export default function DesignSystemPage() {
                   { sample: { borderRadius: 6, background: "var(--card)", border: "2px dashed var(--border)" }, label: "Dropzone · 2px dashed var(--border)" },
                 ].map(({ sample, label }, i) => (
                   <div key={i} className="spacing-row" style={{ alignItems: "stretch" }}>
-                    <div style={{ width: 120, height: 40, flexShrink: 0, alignSelf: "center", ...sample }} />
-                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{label}</span>
+                    <div style={{ width: 120, height: 40, flexShrink: 0, alignSelf: "flex-start", ...sample }} />
+                    <span className="type-sample-meta" style={{ alignSelf: "flex-start", marginLeft: 0 }}>{label}</span>
                   </div>
                 ))}
               </div>
@@ -777,9 +773,9 @@ export default function DesignSystemPage() {
                   ["md", 28, "13/600 · padding 0 14 · prominent callout"],
                 ].map(([mod, h, use]) => (
                   <div key={mod} className="spacing-row" style={{ alignItems: "stretch" }}>
-                    <span className={`now-reading-date now-reading-date--${mod}`} style={{ alignSelf: "center" }}>Started Apr 28</span>
-                    <span className="spacing-label" style={{ alignSelf: "center" }}>--{mod}</span>
-                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{h}px · {use}</span>
+                    <span className={`now-reading-date now-reading-date--${mod}`} style={{ alignSelf: "flex-start" }}>Started Apr 28</span>
+                    <span className="spacing-label" style={{ alignSelf: "flex-start" }}>--{mod}</span>
+                    <span className="type-sample-meta" style={{ alignSelf: "flex-start", marginLeft: 0 }}>{h}px · {use}</span>
                   </div>
                 ))}
               </div>
@@ -814,7 +810,7 @@ export default function DesignSystemPage() {
 
             <div className="ds-card">
               <div className="ds-card-head">Modes</div>
-              <div className="ds-card-body">
+              <div className="ds-card-body" style={{ gap: 20 }}>
                 {/* Display (no onClick, no onRemove) */}
                 <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
                   <span className="panel-section-eyebrow">Display</span>
@@ -947,7 +943,7 @@ export default function DesignSystemPage() {
             ].map(({ name, variant }) => (
               <div key={name} className="ds-card">
                 <div className="ds-card-head">{name} · states</div>
-                <div className="ds-card-body" style={{ gap: 32, alignItems: "center", flexWrap: "wrap" }}>
+                <div className="ds-card-body ds-states-grid" style={{ gap: 32, alignItems: "center", flexWrap: "wrap" }}>
                   {[
                     ["Default",""],
                     ["Hover","is-hover"],
@@ -1032,12 +1028,12 @@ export default function DesignSystemPage() {
               <div className="ds-card-body" style={{ alignItems: "center", flexWrap: "wrap", gap: 12 }}>
                 {[["btn-solid","btn-xs"],["btn-solid","btn-sm"],["btn-solid","btn-md"],["btn-solid","btn-lg"]].map(([v,sz]) => (
                   <button key={v+sz} className={`btn ${v} ${sz}`}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   </button>
                 ))}
                 {[["btn-icon","btn-xs"],["btn-icon","btn-sm"],["btn-icon","btn-md"],["btn-icon","btn-lg"]].map(([v,sz]) => (
                   <button key={v+sz} className={`btn ${v} ${sz}`}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                   </button>
                 ))}
               </div>
@@ -1243,7 +1239,7 @@ export default function DesignSystemPage() {
           <DSSection id="dropdown" title="Dropdown Menu" sub="Outline trigger + rotating chevron · Spring-animated menu · Full dark mode">
             <div className="ds-card">
               <div className="ds-card-head">Examples</div>
-              <div className="ds-card-body" style={{ alignItems: "flex-start", gap: 32 }}>
+              <div className="ds-card-body" style={{ alignItems: "flex-start", gap: 16 }}>
                 <DropdownDemo label="Export" items={["json", "pdf"]} />
                 <DropdownDemo label="Options" items={["renommer", "dupliquer", "supprimer"]} />
                 <DropdownDemo label="Trier par" items={["titre", "auteur", "année"]} />
@@ -1363,7 +1359,7 @@ export default function DesignSystemPage() {
                   </div>
                 </div>
               </div>
-              <div className="ds-tokens">
+              <div className="ds-card-foot ds-card-foot--tokens">
                 {["--border-subtle","--primary-50","--primary-20","--primary-5"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
@@ -1380,7 +1376,7 @@ export default function DesignSystemPage() {
                   <input placeholder="e.g. George Orwell" style={{ borderColor: "var(--primary-50)", boxShadow: "0 0 0 3px var(--primary-20)" }} readOnly />
                 </div>
               </div>
-              <div className="ds-tokens">
+              <div className="ds-card-foot ds-card-foot--tokens">
                 {["--bg3","--primary-50","--primary-5","--primary-20"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
@@ -1531,7 +1527,7 @@ export default function DesignSystemPage() {
                   <span className="panel-section-eyebrow">Hover</span>
                 </div>
               </div>
-              <div className="ds-tokens">
+              <div className="ds-card-foot ds-card-foot--tokens">
                 {["--card","--primary-3","--primary-50","--shadow-md"].map(t => <span key={t} className="ds-token-chip">{t}</span>)}
               </div>
             </div>
@@ -2294,7 +2290,7 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-head">Target routing — <code>target.type</code> dispatches title / message / body / confirm</div>
+              <div className="ds-card-head"><span>Target routing — <code>target.type</code> dispatches title / message / body / confirm</span></div>
               <div className="ds-card-body col">
                 <table className="token-table">
                   <thead className="table-head">
@@ -2468,15 +2464,13 @@ function handleDeleteConfirm(payload) {
           {/* ── SELECTION BAR ── */}
           <DSSection id="selection-bar" title="Selection Bar" sub="Floating bar fixed bottom-center in Edit mode. Background --primary-60 (light & dark). Slides up from below via translateY(120 → 0).">
             <div className="ds-card">
-              <div className="ds-card-head">
-                Preview — Edit mode
-                <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
-                  <button className={`btn btn-xs ${selBarTab === "library" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelBarTab("library")}>Library</button>
-                  <button className={`btn btn-xs ${selBarTab === "wishlist" ? "btn-primary" : "btn-secondary"}`} onClick={() => setSelBarTab("wishlist")}>Wishlist</button>
-                </div>
-              </div>
+              <div className="ds-card-head">Preview — Edit mode</div>
               <div className="ds-card-body col padded">
-                <div className="selection-bar visible" style={{ position: "static", transform: "none", width: "fit-content", margin: "0 auto", gap: 24 }}>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <button type="button" className={`btn btn-xs ${selBarTab === "library" ? "btn-primary" : "btn-secondary"}`} onClick={(e) => { e.stopPropagation(); setSelBarTab("library"); }}>Library</button>
+                  <button type="button" className={`btn btn-xs ${selBarTab === "wishlist" ? "btn-primary" : "btn-secondary"}`} onClick={(e) => { e.stopPropagation(); setSelBarTab("wishlist"); }}>Wishlist</button>
+                </div>
+                <div className="selection-bar visible" style={{ position: "static", transform: "none", width: "100%", minWidth: 0, margin: "0 auto", gap: 24 }}>
                   <span className="selection-count">3 selected</span>
                   <div className="sel-actions">
                     <button className="sel-btn sel-select-all">Select all</button>
@@ -2626,9 +2620,9 @@ function handleDeleteConfirm(payload) {
             </div>
 
             <div className="ds-card">
-              <div className="ds-card-head">
-                Live preview — Empty
-                <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+              <div className="ds-card-head">Live preview — Empty</div>
+              <div className="ds-card-body" style={{ flexDirection: "column", alignItems: "stretch" }}>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {[
                     ["library", "Library"],
                     ["wishlist", "Wishlist"],
@@ -2636,11 +2630,9 @@ function handleDeleteConfirm(payload) {
                     ["dictionary", "Dictionary"],
                     ["collections", "Collections"],
                   ].map(([key, label]) => (
-                    <button key={key} className={`btn btn-xs ${emptyTab === key ? "btn-primary" : "btn-secondary"}`} onClick={() => setEmptyTab(key)}>{label}</button>
+                    <button key={key} type="button" className={`btn btn-xs ${emptyTab === key ? "btn-primary" : "btn-secondary"}`} onClick={(e) => { e.stopPropagation(); setEmptyTab(key); }}>{label}</button>
                   ))}
                 </div>
-              </div>
-              <div className="ds-card-body">
                 <div className="empty" style={{ padding: "40px 20px" }}>
                   {emptyTab === "library" && (
                     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
