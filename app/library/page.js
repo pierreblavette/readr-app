@@ -474,8 +474,6 @@ export default function LibraryPage() {
         {/* Gauche — produit */}
         <span className="footer-section">
           <span className="footer-group">
-            <a className="footer-link" href="/">About readr</a>
-            <span className="footer-sep">·</span>
             <button className="footer-link" onClick={openOb}>{t.footerHowItWorks}</button>
           </span>
           <span className="footer-sep">·</span>

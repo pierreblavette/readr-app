@@ -88,16 +88,42 @@ export default function OverviewView({
         <HeroCard
           num={stats.heroStats.finished}
           label={t.overviewHeroFinished(stats.heroStats.finished)}
+          icon={
+            <span className="overview-hero-icon-chip">
+              <svg className="overview-hero-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="9 12 11 14 15 10"/>
+              </svg>
+            </span>
+          }
           onClick={handleHeroBooks}
         />
         <HeroCard
           num={stats.heroStats.quotesCount}
           label={t.overviewHeroQuotes(stats.heroStats.quotesCount)}
+          icon={
+            <span className="overview-hero-icon-chip">
+              <svg className="overview-hero-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M3 21c3 0 7-1 7-8V5H3v8h4"/>
+                <path d="M14 21c3 0 7-1 7-8V5h-7v8h4"/>
+              </svg>
+            </span>
+          }
           onClick={handleHeroQuotes}
         />
         <HeroCard
           num={stats.heroStats.wordsCount}
           label={t.overviewHeroWords(stats.heroStats.wordsCount)}
+          icon={
+            <span className="overview-hero-icon-chip">
+              <svg className="overview-hero-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="17" y1="10" x2="3" y2="10"/>
+                <line x1="21" y1="6" x2="3" y2="6"/>
+                <line x1="21" y1="14" x2="3" y2="14"/>
+                <line x1="17" y1="18" x2="3" y2="18"/>
+              </svg>
+            </span>
+          }
           onClick={handleHeroWords}
         />
       </div>
@@ -171,12 +197,15 @@ export default function OverviewView({
   );
 }
 
-function HeroCard({ num, label, onClick }) {
+function HeroCard({ num, label, icon, onClick }) {
   return (
     <button type="button" className="overview-hero-card" onClick={onClick}>
       <span className="overview-hero-num">{num}</span>
       <span className="cell-row cell-row--sm cell-row--between overview-hero-label-row">
-        <span className="overview-hero-label">{label}</span>
+        <span className="cell-row cell-row--sm">
+          {icon}
+          <span className="overview-hero-label">{label}</span>
+        </span>
         <svg className="sidebar-section-chevron overview-hero-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
@@ -391,7 +420,10 @@ function SpotlightQuote({ quote, book, onOpen, t }) {
         </div>
       </div>
       {(book || quote.bookTitle) && (
-        <BookChip book={chipBook} />
+        <>
+          <div className="quote-card-divider" />
+          <BookChip book={chipBook} />
+        </>
       )}
     </div>
   );

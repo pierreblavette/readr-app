@@ -4110,6 +4110,7 @@
 .quote-card-divider {
   height: 1px;
   background: var(--border-subtle);
+  transition: background 0.15s;
 }
 .quote-card:hover {
   transform: translateY(-2px);
@@ -4117,7 +4118,9 @@
   background: var(--primary-3);
   box-shadow: var(--shadow-md);
 }
+.quote-card:hover .quote-card-divider { background: var(--primary-10); }
 [data-theme="dark"] .quote-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
+[data-theme="dark"] .quote-card:hover .quote-card-divider { background: var(--primary-20); }
 
 .quote-card-text {
   font-family: var(--font-jakarta), sans-serif;
@@ -4599,10 +4602,29 @@ button.quote-book-chip {
   width: 100%;
   color: var(--text-2);
 }
+.overview-hero-label-row > .cell-row { gap: 12px; }
 .overview-hero-label {
   font-size: 15px;
   font-weight: 500;
   color: inherit;
+}
+.overview-hero-icon-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--primary-5);
+  color: var(--primary-60);
+  flex-shrink: 0;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+[data-theme="dark"] .overview-hero-icon-chip { color: var(--primary-30); }
+.overview-hero-card:hover .overview-hero-icon-chip,
+.overview-hero-card:focus-visible .overview-hero-icon-chip {
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .overview-hero-chevron {
   transition: color 0.18s ease;
