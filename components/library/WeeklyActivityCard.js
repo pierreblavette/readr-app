@@ -171,22 +171,24 @@ export default function WeeklyActivityCard({ owned = [], quotes = [], words = []
           );
         })}
       </div>
-      <div className="overview-activity-divider" aria-hidden="true"/>
       {metric === 'all' && (
-        <div className="overview-activity-legend">
-          <span className="overview-activity-legend-item">
-            <span className="overview-activity-legend-dot is-books" aria-hidden="true"/>
-            <span>{t.overviewActivityBooks}</span>
-          </span>
-          <span className="overview-activity-legend-item">
-            <span className="overview-activity-legend-dot is-quotes" aria-hidden="true"/>
-            <span>{t.overviewActivityQuotes}</span>
-          </span>
-          <span className="overview-activity-legend-item">
-            <span className="overview-activity-legend-dot is-words" aria-hidden="true"/>
-            <span>{t.overviewActivityWords}</span>
-          </span>
-        </div>
+        <>
+          <div className="overview-activity-divider" aria-hidden="true"/>
+          <div className="overview-activity-legend">
+            <span className="overview-activity-legend-item">
+              <span className="overview-activity-legend-dot is-books" aria-hidden="true"/>
+              <span>{t.overviewActivityBooks}</span>
+            </span>
+            <span className="overview-activity-legend-item">
+              <span className="overview-activity-legend-dot is-quotes" aria-hidden="true"/>
+              <span>{t.overviewActivityQuotes}</span>
+            </span>
+            <span className="overview-activity-legend-item">
+              <span className="overview-activity-legend-dot is-words" aria-hidden="true"/>
+              <span>{t.overviewActivityWords}</span>
+            </span>
+          </div>
+        </>
       )}
     </div>
   );

@@ -5,11 +5,14 @@ import BookChip from "./BookChip";
 import ReadingGoalModal from "./ReadingGoalModal";
 import BookListPanel from "./BookListPanel";
 import WeeklyActivityCard from "./WeeklyActivityCard";
+import NowReadingSection from "./NowReadingSection";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
   readingGoal, setReadingGoal,
+  readingBooks = [],
   onOpenBook, onOpenQuote, onAddBook, onNavigate,
+  onFinishReading, onAddQuoteFromBook, onCancelReading,
   lang, t,
 }) {
   const stats = useStats({ owned, quotes, words, readingGoal });
@@ -18,12 +21,13 @@ export default function OverviewView({
   const [lovedPanelOpen, setLovedPanelOpen] = useState(false);
   const [finishedPanelOpen, setFinishedPanelOpen] = useState(false);
   const [activeGenre, setActiveGenre] = useState(null);
+  const [activeAuthor, setActiveAuthor] = useState(null);
 
   const spotlightQuotes = useMemo(() => {
     if (quotes.length === 0) return [];
     const pool = [...quotes];
     const out = [];
-    const n = Math.min(3, pool.length);
+    const n = Math.min(2, pool.length);
     while (out.length < n && pool.length) {
       const i = Math.floor(Math.random() * pool.length);
       out.push(pool.splice(i, 1)[0]);
@@ -58,6 +62,15 @@ export default function OverviewView({
   }
   const activeGenreBooks = activeGenre
     ? stats.finishedBooks.filter(b => (b.genre || '').trim() === activeGenre)
+    : [];
+
+  function handleAuthorSelect(author) {
+    const matches = stats.finishedBooks.filter(b => (b.author || '').trim() === author.name);
+    if (matches.length === 1) onOpenBook?.(matches[0]);
+    else if (matches.length > 1) setActiveAuthor(author.name);
+  }
+  const activeAuthorBooks = activeAuthor
+    ? stats.finishedBooks.filter(b => (b.author || '').trim() === activeAuthor)
     : [];
   function handleHeroQuotes() {
     if (quotes.length === 1) onOpenQuote?.(quotes[0]);
@@ -129,6 +142,24 @@ export default function OverviewView({
         />
       </div>
 
+      {readingBooks.length > 0 && (
+        <div className="overview-card overview-now-reading">
+          <div className="overview-card-head">
+            <span className="panel-section-eyebrow">{t.nowReadingTitle}</span>
+          </div>
+          <NowReadingSection
+            bare
+            books={readingBooks}
+            onOpenBook={onOpenBook}
+            onFinish={onFinishReading}
+            onAddQuote={onAddQuoteFromBook}
+            onCancel={onCancelReading}
+            lang={lang}
+            t={t}
+          />
+        </div>
+      )}
+
       <div className="overview-row-2">
         <ReadingGoalCard
           goal={stats.goal}
@@ -149,7 +180,9 @@ export default function OverviewView({
 
       <WeeklyActivityCard owned={owned} quotes={quotes} words={words} lang={lang} t={t} />
 
-      <TopGenresCard genres={stats.topGenres} onSelect={handleGenreSelect} t={t} />
+      <TopGenresCard genres={stats.topGenres.slice(0, 5)} onSelect={handleGenreSelect} t={t} />
+
+      <TopAuthorsCard authors={stats.topAuthors.slice(0, 5)} onSelect={handleAuthorSelect} t={t} />
 
       <MostLovedCard
         books={stats.mostLoved}
@@ -185,12 +218,21 @@ export default function OverviewView({
         t={t}
       />
 
+      <BookListPanel
+        open={!!activeAuthor}
+        onClose={() => setActiveAuthor(null)}
+        title={activeAuthor || ''}
+        books={activeAuthorBooks}
+        onOpenBook={onOpenBook}
+        t={t}
+      />
+
       <QuotesSpotlightCard
         quotes={spotlightQuotes}
         totalQuotes={quotes.length}
         onOpen={onOpenQuote}
         onShuffle={() => setShuffleKey(k => k + 1)}
-        canShuffle={quotes.length > 3}
+        canShuffle={quotes.length > 2}
         onSeeAll={() => onNavigate?.('quotes')}
         resolveBook={resolveBook}
         t={t}
@@ -249,6 +291,13 @@ function ReadingGoalCard({ goal, onEdit, t }) {
         <div className="overview-goal-bar" aria-hidden="true">
           <div className="overview-goal-bar-fill" style={{ width: `${goal.ratio * 100}%` }} />
         </div>
+        {!achieved && goal.pace && (
+          <div className={`overview-goal-pace${goal.pace.delta >= 0 ? ' overview-goal-pace--ahead' : ' overview-goal-pace--behind'}`}>
+            <span className="overview-goal-pace-projected">{t.overviewPaceProjected(goal.pace.projected, goal.target)}</span>
+            <span className="overview-goal-pace-sep" aria-hidden="true">·</span>
+            <span className="overview-goal-pace-delta">{t.overviewPaceDelta(goal.pace.delta)}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -296,16 +345,43 @@ function TopGenresCard({ genres, onSelect, t }) {
       {genres.length === 0 ? (
         <span className="panel-quotes-empty">{t.overviewGenresEmpty}</span>
       ) : (
-        <div className="overview-genres-cloud">
+        <div className="overview-cloud">
           {genres.map(g => (
             <button
               key={g.name}
               type="button"
-              className="overview-genre-chip"
+              className="overview-cloud-chip"
               onClick={() => onSelect?.(g)}
             >
-              <span className="overview-genre-chip-name">{g.name}</span>
-              <span className="overview-genre-chip-count">{g.count}</span>
+              <span className="overview-cloud-chip-name">{g.name}</span>
+              <span className="overview-cloud-chip-count">{g.count}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TopAuthorsCard({ authors, onSelect, t }) {
+  return (
+    <div className="overview-card overview-authors">
+      <div className="overview-card-head">
+        <span className="panel-section-eyebrow">{t.overviewAuthorsTitle}</span>
+      </div>
+      {authors.length === 0 ? (
+        <span className="panel-quotes-empty">{t.overviewAuthorsEmpty}</span>
+      ) : (
+        <div className="overview-cloud">
+          {authors.map(a => (
+            <button
+              key={a.name}
+              type="button"
+              className="overview-cloud-chip"
+              onClick={() => onSelect?.(a)}
+            >
+              <span className="overview-cloud-chip-name">{a.name}</span>
+              <span className="overview-cloud-chip-count">{a.count}</span>
             </button>
           ))}
         </div>
@@ -363,6 +439,13 @@ function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onShuffle, canShuffl
         <span className="panel-section-eyebrow">{t.overviewQuotesTitle}</span>
         {canShuffle && (
           <button type="button" className="overview-card-action" onClick={onShuffle}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M16 3h5v5" />
+              <path d="M4 20L21 3" />
+              <path d="M21 16v5h-5" />
+              <path d="M15 15l6 6" />
+              <path d="M4 4l5 5" />
+            </svg>
             {t.overviewQuotesShuffle}
           </button>
         )}

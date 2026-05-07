@@ -544,6 +544,25 @@
 }
 [data-theme="dark"] .now-reading-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
 .now-reading-card:has(.dropdown-menu) { z-index: 10; }
+
+/* Overview context — UI state iso .quote-book-chip-interactive
+ * (bg3 light / primary-5 dark resting, primary-5 / primary-10 hover,
+ * no border, no transform, no shadow). */
+.overview-card .now-reading-card {
+  background: var(--bg3);
+  border: none;
+  box-shadow: none;
+  transition: background 0.15s;
+}
+.overview-card .now-reading-card:hover {
+  transform: none;
+  border-color: transparent;
+  background: var(--primary-5);
+  box-shadow: none;
+}
+[data-theme="dark"] .overview-card .now-reading-card { background: #262626; }
+[data-theme="dark"] .overview-card .now-reading-card:hover { background: var(--primary-10); }
+
 .now-reading-body {
   display: flex;
   flex-direction: column;
@@ -4122,6 +4141,7 @@
 [data-theme="dark"] .quote-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
 [data-theme="dark"] .quote-card:hover .quote-card-divider { background: var(--primary-20); }
 
+
 .quote-card-text {
   font-family: var(--font-jakarta), sans-serif;
   font-size: 16px;
@@ -4284,7 +4304,7 @@ button.quote-book-chip {
 }
 .quote-book-chip-interactive:hover,
 .quote-book-chip-interactive:active { background: var(--primary-5); }
-[data-theme="dark"] .quote-book-chip-interactive { background: var(--primary-5); }
+[data-theme="dark"] .quote-book-chip-interactive { background: #262626; }
 [data-theme="dark"] .quote-book-chip-interactive:hover,
 [data-theme="dark"] .quote-book-chip-interactive:active { background: var(--primary-10); }
 
@@ -4296,6 +4316,7 @@ button.quote-book-chip {
 .quote-card .quote-book-chip-interactive:active { background: var(--primary-10); }
 [data-theme="dark"] .quote-card .quote-book-chip-interactive:hover,
 [data-theme="dark"] .quote-card .quote-book-chip-interactive:active { background: var(--primary-10); }
+
 .quote-book-chip-interactive:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
@@ -4542,6 +4563,9 @@ button.quote-book-chip {
   gap: 12px;
 }
 .overview-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: transparent;
   border: 1.5px solid var(--border-subtle);
   height: 32px;
@@ -4555,6 +4579,10 @@ button.quote-book-chip {
   white-space: nowrap;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
+.overview-card-action svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; flex-shrink: 0; }
+.overview-card-action svg * { stroke-width: 3; }
+.overview-card-action:has(svg:first-child:not(:last-child)) { padding-left: 10px; }
+.overview-card-action:has(svg:last-child:not(:first-child)) { padding-right: 10px; }
 .overview-card-action:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 [data-theme="dark"] .overview-card-action:hover { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-5); }
 
@@ -4681,6 +4709,23 @@ button.quote-book-chip {
   color: var(--teal);
   font-weight: 600;
 }
+
+/* Pace projection — sub-text under progress bar.
+ * Mirrors .modal-info-box semantic palette (success green / destructive red). */
+.overview-goal-pace {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.overview-goal-pace-sep { opacity: 0.5; }
+.overview-goal-pace-delta { font-weight: 600; }
+.overview-goal-pace--ahead .overview-goal-pace-delta { color: #16A34A; }
+.overview-goal-pace--behind .overview-goal-pace-delta { color: #ef4444; }
+[data-theme="dark"] .overview-goal-pace--ahead .overview-goal-pace-delta { color: #4ADE80; }
+[data-theme="dark"] .overview-goal-pace--behind .overview-goal-pace-delta { color: #ef4444; }
 /* Generic text-link button primitive — reusable across modals/forms
  * where a low-key inline action is needed (e.g. "Remove goal").
  * Mirrors the .quote-see-more typography but generic naming. */
@@ -4963,13 +5008,13 @@ button.quote-book-chip {
   .overview-activity-track { height: 70px; }
 }
 
-/* Top genres */
-.overview-genres-cloud {
+/* Cloud chip primitive — used by Top Genres + Top Authors (Overview) */
+.overview-cloud {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-.overview-genre-chip {
+.overview-cloud-chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -4985,11 +5030,11 @@ button.quote-book-chip {
   cursor: pointer;
   transition: background 0.15s;
 }
-.overview-genre-chip:hover { background: var(--primary-10); }
-[data-theme="dark"] .overview-genre-chip { background: var(--primary-5); color: var(--primary-30); }
-[data-theme="dark"] .overview-genre-chip:hover { background: var(--primary-10); }
-.overview-genre-chip-name { line-height: 1; }
-.overview-genre-chip-count {
+.overview-cloud-chip:hover { background: var(--primary-10); }
+[data-theme="dark"] .overview-cloud-chip { background: var(--primary-5); color: var(--primary-30); }
+[data-theme="dark"] .overview-cloud-chip:hover { background: var(--primary-10); }
+.overview-cloud-chip-name { line-height: 1; }
+.overview-cloud-chip-count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -5055,8 +5100,9 @@ button.quote-book-chip {
   transform: none;
   box-shadow: none;
 }
-[data-theme="dark"] .overview-quotes .quote-card { background: var(--primary-5); }
+[data-theme="dark"] .overview-quotes .quote-card { background: #262626; }
 [data-theme="dark"] .overview-quotes .quote-card:hover { background: var(--primary-10); }
+.overview-quotes .quote-card .quote-card-divider { display: none; }
 /* Inner BookChip is non-interactive in the spotlight context — drop
  * its bg so it doesn't read as a clickable affordance. */
 .overview-quotes .quote-card .quote-book-chip,

@@ -122,26 +122,32 @@ function NowReadingCard({ book, onOpen, onFinish, onAddQuote, onCancel, lang, t 
   );
 }
 
-export default function NowReadingSection({ books, onOpenBook, onFinish, onAddQuote, onCancel, lang, t }) {
+export default function NowReadingSection({ books, onOpenBook, onFinish, onAddQuote, onCancel, lang, t, bare = false }) {
   if (!books || books.length === 0) return null;
+
+  const list = (
+    <div className="now-reading-list">
+      {books.map(b => (
+        <NowReadingCard
+          key={b.id}
+          book={b}
+          onOpen={onOpenBook}
+          onFinish={onFinish}
+          onAddQuote={onAddQuote}
+          onCancel={onCancel}
+          lang={lang}
+          t={t}
+        />
+      ))}
+    </div>
+  );
+
+  if (bare) return list;
 
   return (
     <section className="now-reading-section">
       <span className="panel-section-eyebrow">{t.nowReadingTitle}</span>
-      <div className="now-reading-list">
-        {books.map(b => (
-          <NowReadingCard
-            key={b.id}
-            book={b}
-            onOpen={onOpenBook}
-            onFinish={onFinish}
-            onAddQuote={onAddQuote}
-            onCancel={onCancel}
-            lang={lang}
-            t={t}
-          />
-        ))}
-      </div>
+      {list}
     </section>
   );
 }

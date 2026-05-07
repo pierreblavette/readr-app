@@ -233,10 +233,14 @@ export default function LibraryPage() {
               words={words}
               readingGoal={readingGoal}
               setReadingGoal={setReadingGoal}
+              readingBooks={readingBooks}
               onOpenBook={b => setPanelBook(b)}
               onOpenQuote={q => setPanelQuote(q)}
               onAddBook={() => setAddModal(true)}
               onNavigate={next => setTab(next)}
+              onFinishReading={b => setFinishBook(b)}
+              onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+              onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
               lang={lang}
               t={t}
             />
