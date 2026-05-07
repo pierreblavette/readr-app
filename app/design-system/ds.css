@@ -116,6 +116,8 @@
 .ds-token-chip {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
+  width: fit-content;
   height: 24px;
   padding: 0 8px;
   border-radius: var(--radius-sm);
@@ -158,12 +160,10 @@
 .ds-swatch-block { height: 120px; }
 .ds-swatch-block.is-anchor { box-shadow: inset 0 0 0 2px var(--primary-50); }
 .ds-swatch-info { flex: 1; padding: 16px; background: var(--card); display: flex; flex-direction: column; gap: 8px; }
-.ds-swatch-tokens { display: flex; flex-direction: column; gap: 4px; }
 /* Compact variant — used in palette grids (12+ swatches) */
 .ds-swatch--sm .ds-swatch-block { height: 80px; }
 /* Exception (not referenced): subtle border on dark contrast bg */
 .palette-grid.on-dark-bg .ds-swatch--sm { border-color: color-mix(in srgb, var(--border-subtle) 30%, transparent); }
-.ds-swatch-info .ds-token-name { margin-top: 0; }
 .ds-swatch-title { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ─── TYPOGRAPHY ─── */

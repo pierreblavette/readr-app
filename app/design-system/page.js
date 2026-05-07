@@ -171,12 +171,8 @@ export default function DesignSystemPage() {
         <div className={`ds-swatch-block${anchor ? " is-anchor" : ""}`} style={{ background: bg, borderBottom: "1px solid var(--border-subtle)" }} />
         <div className="ds-swatch-info">
           {title && <div className="ds-swatch-title">{title}</div>}
-          {(token || value) && (
-            <div className="ds-swatch-tokens">
-              {token && <div className="ds-token-name">{token}</div>}
-              {value && <div className="ds-token-val">{value}</div>}
-            </div>
-          )}
+          {token && <span className="ds-token-chip">{token}</span>}
+          {value && <div className="ds-token-val">{value}</div>}
         </div>
       </div>
     );
@@ -327,11 +323,11 @@ export default function DesignSystemPage() {
               </div>
               <div className="ds-card-body col">
                 <div className="ds-token-block">
-                  <div className="ds-token-name">--border-subtle</div>
+                  <div className="ds-token-name"><span className="ds-token-chip">--border-subtle</span></div>
                   <p>default stroke for all components (buttons, inputs, cards, containers) and most dividers (row separators, section separators). 1.5px on components, 1px on dividers.</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">--border</div>
+                  <div className="ds-token-name"><span className="ds-token-chip">--border</span></div>
                   <p>reserved for stronger visual affordances where a subtle stroke isn't enough : <code>.panel-spinner</code> ring (2px), <code>.import-dropzone</code> dashed border (2px), <code>.ob-dot</code> background. Do not use for regular component strokes.</p>
                 </div>
                 <div className="ds-token-block">
@@ -383,15 +379,15 @@ export default function DesignSystemPage() {
               </div>
               <div className="ds-card-body col">
                 <div className="ds-token-block">
-                  <p>--primary-N · ★ anchor = --accent (#4959E6)</p>
+                  <p><span className="ds-token-chip">--primary-N</span> · ★ anchor = <span className="ds-token-chip">--accent</span> (#4959E6)</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">--primary-3 (#FAFAFF)</div>
-                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below --primary-5 so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at --primary-5) stay visible without blending into the hovered card.</p>
+                  <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (#FAFAFF)</div>
+                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Dark mode override</div>
-                  <p>--primary-3, --primary-5 and --primary-10 resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <code>var(--card)</code> #1E1E1E to preserve visual rendering: <code>--primary-3</code>=#222432 (card hover), <code>--primary-5</code>=#232536 (button bg), <code>--primary-10</code>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <code>.list-row</code> hover (parent <code>.books-list</code> on --card) looked different from <code>.now-reading-card</code> hover (no parent bg, mixed with --bg).</p>
+                  <p><span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--primary-5</span> and <span className="ds-token-chip">--primary-10</span> resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <span className="ds-token-chip">--card</span> #1E1E1E to preserve visual rendering: <span className="ds-token-chip">--primary-3</span>=#222432 (card hover), <span className="ds-token-chip">--primary-5</span>=#232536 (button bg), <span className="ds-token-chip">--primary-10</span>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <code>.list-row</code> hover (parent <code>.books-list</code> on <span className="ds-token-chip">--card</span>) looked different from <code>.now-reading-card</code> hover (no parent bg, mixed with <span className="ds-token-chip">--bg</span>).</p>
                 </div>
               </div>
             </div>
@@ -411,7 +407,7 @@ export default function DesignSystemPage() {
                   />
                 ))}
                 </div>
-                <p>--dark-N · base #0D0F1A · only the steps actually used in the codebase</p>
+                <p><span className="ds-token-chip">--dark-N</span> · base #0D0F1A · only the steps actually used in the codebase</p>
               </div>
             </div>
 
@@ -430,7 +426,7 @@ export default function DesignSystemPage() {
                   />
                 ))}
                 </div>
-                <p>--light-N · base #F5F6FF · only the steps actually used in the codebase</p>
+                <p><span className="ds-token-chip">--light-N</span> · base #F5F6FF · only the steps actually used in the codebase</p>
               </div>
             </div>
           </DSSection>
@@ -541,12 +537,12 @@ export default function DesignSystemPage() {
                   ["md", 32, "Parity with .btn-sm — touch-friendly desktop"],
                   ["lg", 40, "Parity with .btn-md / .modal-cancel — full touch target"],
                 ].map(([mod, h, use]) => (
-                  <div key={mod} className={`spacing-row`} style={{ alignItems: "stretch" }}>
+                  <div key={mod} className="spacing-row">
                     <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ width: 320, flexShrink: 0, paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
                       <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>cell-row--{mod}</span>
                       <span style={{ fontSize: 12, color: "var(--text-2)", fontVariantNumeric: "tabular-nums" }}>{h}px</span>
                     </div>
-                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{use}</span>
+                    <span className="type-sample-meta" style={{ marginLeft: 0 }}>{use}</span>
                   </div>
                 ))}
               </div>
@@ -626,9 +622,9 @@ export default function DesignSystemPage() {
                   ["--shadow-md", "Cartes hover (drop primary-tinted)"],
                   ["--shadow-lg", "Modales, autocomplete, mobile sidebar"],
                 ].map(([token, use]) => (
-                  <div key={token} className="spacing-row" style={{ alignItems: "stretch" }}>
-                    <div style={{ width: 240, height: 100, background: "var(--card)", borderRadius: 8, boxShadow: `var(${token})`, flexShrink: 0, alignSelf: "flex-start" }} />
-                    <span className="type-sample-meta" style={{ alignSelf: "center", marginLeft: 0 }}>{token} · {use}</span>
+                  <div key={token} className="spacing-row">
+                    <div style={{ width: 240, height: 100, background: "var(--card)", borderRadius: 8, boxShadow: `var(${token})`, flexShrink: 0 }} />
+                    <span className="type-sample-meta" style={{ marginLeft: 0 }}><span className="ds-token-chip">{token}</span> · {use}</span>
                   </div>
                 ))}
               </div>
@@ -638,16 +634,16 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 {[
                   [6, "Buttons SM"],
-                  [8, "Default — var(--radius)"],
+                  [8, <>Default — <span className="ds-token-chip">--radius</span></>],
                   [10, "Dropdown, dropzone"],
                   [12, "Camera scan viewfinder"],
                   [16, "Onboarding modal"],
                   [32, "Pill (search input)"],
                 ].map(([r, use]) => (
-                  <div key={r} className="spacing-row" style={{ alignItems: "stretch" }}>
+                  <div key={r} className="spacing-row">
                     <div className="spacing-block" style={{ width: 64, height: 40, borderRadius: r }} />
-                    <span className="spacing-label" style={{ alignSelf: "flex-start" }}>{r}px</span>
-                    <span className="type-sample-meta" style={{ alignSelf: "flex-start", marginLeft: 0 }}>{use}</span>
+                    <span className="spacing-label">{r}px</span>
+                    <span className="type-sample-meta" style={{ marginLeft: 0 }}>{use}</span>
                   </div>
                 ))}
               </div>
@@ -688,9 +684,9 @@ export default function DesignSystemPage() {
                   { sample: { borderRadius: 6, background: "var(--card)", border: "2px solid var(--border)" }, label: "Spinner ring · 2px solid var(--border)" },
                   { sample: { borderRadius: 6, background: "var(--card)", border: "2px dashed var(--border)" }, label: "Dropzone · 2px dashed var(--border)" },
                 ].map(({ sample, label }, i) => (
-                  <div key={i} className="spacing-row" style={{ alignItems: "stretch" }}>
-                    <div style={{ width: 120, height: 40, flexShrink: 0, alignSelf: "flex-start", ...sample }} />
-                    <span className="type-sample-meta" style={{ alignSelf: "flex-start", marginLeft: 0 }}>{label}</span>
+                  <div key={i} className="spacing-row">
+                    <div style={{ width: 120, height: 40, flexShrink: 0, ...sample }} />
+                    <span className="type-sample-meta" style={{ marginLeft: 0 }}>{label}</span>
                   </div>
                 ))}
               </div>
@@ -705,7 +701,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Light mode — why two tokens ?</div>
-                  <p><code>--border-subtle</code> (#EFEFEF) keeps the component frames airy without feeling heavy on large surfaces like cards. <code>--border</code> (#E0E0E0) is reserved for affordances that need stronger contrast (dashed dropzones, spinner rings) where a subtle stroke would disappear.</p>
+                  <p><span className="ds-token-chip">--border-subtle</span> (#EFEFEF) keeps the component frames airy without feeling heavy on large surfaces like cards. <span className="ds-token-chip">--border</span> (#E0E0E0) is reserved for affordances that need stronger contrast (dashed dropzones, spinner rings) where a subtle stroke would disappear.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Dark mode</div>
@@ -735,19 +731,19 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">.autocomplete-preview · container</div>
-                  <p>Width 280, border-radius var(--radius), border 1.5px var(--border-subtle), bg var(--card).</p>
+                  <p>Width 280, border-radius <span className="ds-token-chip">--radius</span>, border 1.5px <span className="ds-token-chip">--border-subtle</span>, bg <span className="ds-token-chip">--card</span>.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">.ac-item · suggestion row</div>
-                  <p>Padding 10/14, font 14/600/var(--text), border-bottom 1px var(--border) (none on last).</p>
+                  <p>Padding 10/14, font 14/600/<span className="ds-token-chip">--text</span>, border-bottom 1px <span className="ds-token-chip">--border</span> (none on last).</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">.ac-item:hover, .ac-item.focused · state</div>
-                  <p>bg var(--primary-5), color var(--primary-60). Same treatment for hover and keyboard focus.</p>
+                  <p>bg <span className="ds-token-chip">--primary-5</span>, color <span className="ds-token-chip">--primary-60</span>. Same treatment for hover and keyboard focus.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">.ac-item span · sub-label (author)</div>
-                  <p>Secondary info displayed inline — font 14/400/var(--text-2), margin-left 8.</p>
+                  <p>Secondary info displayed inline — font 14/400/<span className="ds-token-chip">--text-2</span>, margin-left 8.</p>
                 </div>
               </div>
             </div>
@@ -772,10 +768,10 @@ export default function DesignSystemPage() {
                   ["sm", 24, "12/600 · padding 0 12 · default — Started on, etc."],
                   ["md", 28, "13/600 · padding 0 14 · prominent callout"],
                 ].map(([mod, h, use]) => (
-                  <div key={mod} className="spacing-row" style={{ alignItems: "stretch" }}>
-                    <span className={`now-reading-date now-reading-date--${mod}`} style={{ alignSelf: "flex-start" }}>Started Apr 28</span>
-                    <span className="spacing-label" style={{ alignSelf: "flex-start" }}>--{mod}</span>
-                    <span className="type-sample-meta" style={{ alignSelf: "flex-start", marginLeft: 0 }}>{h}px · {use}</span>
+                  <div key={mod} className="spacing-row">
+                    <span className={`now-reading-date now-reading-date--${mod}`}>Started Apr 28</span>
+                    <span className="spacing-label">--{mod}</span>
+                    <span className="type-sample-meta" style={{ marginLeft: 0 }}>{h}px · {use}</span>
                   </div>
                 ))}
               </div>
@@ -786,7 +782,7 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">.now-reading-date · primary pill (base)</div>
-                  <p>Solid primary fill (--primary-50 light · --primary-40 dark) · white text · pill · weight 600. Default size = sm.</p>
+                  <p>Solid primary fill (<span className="ds-token-chip">--primary-50</span> light · <span className="ds-token-chip">--primary-40</span> dark) · white text · pill · weight 600. Default size = sm.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">--xs / --sm / --md · size modifiers</div>
@@ -886,11 +882,11 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">Base · QuotePanel, AddQuoteModal</div>
-                  <p>Default bg <code>--bg3</code>, hover bg <code>--primary-5</code>. Neutral backgrounds where the chip sits on its own.</p>
+                  <p>Default bg <span className="ds-token-chip">--bg3</span>, hover bg <span className="ds-token-chip">--primary-5</span>. Neutral backgrounds where the chip sits on its own.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Inside .quote-card</div>
-                  <p>Default bg <code>--primary-5</code>, hover bg <code>--primary-10</code>. Card itself tints primary on hover — chip needs stronger saturation to stay visible.</p>
+                  <p>Default bg <span className="ds-token-chip">--primary-5</span>, hover bg <span className="ds-token-chip">--primary-10</span>. Card itself tints primary on hover — chip needs stronger saturation to stay visible.</p>
                 </div>
               </div>
             </div>
@@ -916,7 +912,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">rating · number (1–5)</div>
-                  <p>Renders 5 stars (<code>.overview-stars</code>, padding 4 0) below title/author when {'>'} 0. Title/author auto-wrapped in <code>.quote-book-chip-name</code> (gap 2). Body gap 4. Stars: 14×14, filled <code>--primary-50</code> / empty <code>--border</code>.</p>
+                  <p>Renders 5 stars (<code>.overview-stars</code>, padding 4 0) below title/author when {'>'} 0. Title/author auto-wrapped in <code>.quote-book-chip-name</code> (gap 2). Body gap 4. Stars: 14×14, filled <span className="ds-token-chip">--primary-50</span> / empty <span className="ds-token-chip">--border</span>.</p>
                 </div>
               </div>
             </div>
@@ -1019,7 +1015,7 @@ export default function DesignSystemPage() {
                   </div>
                 ))}
                 <div className="ds-token-block">
-                  <p>★ Default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box). Icon destructive (<code>.delete-row-btn</code>) uses fill <code>--primary-5</code> default, <code>--primary-10</code> hover.</p>
+                  <p>★ Default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box). Icon destructive (<code>.delete-row-btn</code>) uses fill <span className="ds-token-chip">--primary-5</span> default, <span className="ds-token-chip">--primary-10</span> hover.</p>
                 </div>
               </div>
             </div>
@@ -1130,7 +1126,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Background</div>
-                  <p>Same gradient stops at <code>0.05</code> opacity default, <code>0.1</code> on hover, via <code>padding-box</code> (over an opaque <code>var(--bg)</code> layer that masks the solid gradient inside the ring).</p>
+                  <p>Same gradient stops at <code>0.05</code> opacity default, <code>0.1</code> on hover, via <code>padding-box</code> (over an opaque <span className="ds-token-chip">--bg</span> layer that masks the solid gradient inside the ring).</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Padding</div>
@@ -1213,7 +1209,7 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">Info · .modal-info-box</div>
-                  <p>bg <code>--primary-5</code> · border <code>rgba(73,89,230, 0.2)</code> · icon <code>--primary-50 / 40</code></p>
+                  <p>bg <span className="ds-token-chip">--primary-5</span> · border <code>rgba(73,89,230, 0.2)</code> · icon <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-40</span></p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Alert · .modal-info-box.modal-info-box--alert</div>
@@ -1229,7 +1225,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Common structure</div>
-                  <p><code>display: flex</code> · <code>align-items: flex-start</code> (info) / <code>center</code> (alert/critical) · gap 16 · padding 8/16 · border-radius 8 · font 14/500/--text/lh 1.5. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> for multi-line (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) to group a dropzone + a critical message.</p>
+                  <p><code>display: flex</code> · <code>align-items: flex-start</code> (info) / <code>center</code> (alert/critical) · gap 16 · padding 8/16 · border-radius 8 · font 14/500/<span className="ds-token-chip">--text</span>/lh 1.5. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> for multi-line (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) to group a dropzone + a critical message.</p>
                 </div>
               </div>
             </div>
@@ -1391,27 +1387,27 @@ export default function DesignSystemPage() {
                   <tbody className="table-body">
                     <tr className="table-row">
                       <td className="token-table-component">Default</td>
-                      <td className="mono">1.5px --border-subtle (or transparent for bg3 variants)</td>
-                      <td className="mono">--bg3 / #FFFFFF / --bg</td>
+                      <td className="mono">1.5px <span className="ds-token-chip">--border-subtle</span> (or transparent for bg3 variants)</td>
+                      <td className="mono"><span className="ds-token-chip">--bg3</span> / #FFFFFF / <span className="ds-token-chip">--bg</span></td>
                       <td className="is-empty">—</td>
                     </tr>
                     <tr className="table-row">
                       <td className="token-table-component">Hover</td>
-                      <td className="mono">1.5px --primary-50</td>
-                      <td className="mono">--primary-5</td>
+                      <td className="mono">1.5px <span className="ds-token-chip">--primary-50</span></td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
                       <td className="is-empty">—</td>
                     </tr>
                     <tr className="table-row">
                       <td className="token-table-component">Focus</td>
-                      <td className="mono">1.5px --primary-50</td>
-                      <td className="mono">--primary-5</td>
-                      <td className="mono">0 0 0 3px --primary-20</td>
+                      <td className="mono">1.5px <span className="ds-token-chip">--primary-50</span></td>
+                      <td><span className="ds-token-chip">--primary-5</span></td>
+                      <td className="mono">0 0 0 3px <span className="ds-token-chip">--primary-20</span></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div className="ds-card-foot">
-                Dark mode: swap <code>--primary-50</code> → <code>--primary-40</code>, <code>--primary-5</code> → <code>rgba(73,89,230,0.10)</code>, ring → <code>rgba(73,89,230,0.2)</code>.
+                Dark mode: swap <span className="ds-token-chip">--primary-50</span> → <span className="ds-token-chip">--primary-40</span>, <span className="ds-token-chip">--primary-5</span> → <code>rgba(73,89,230,0.10)</code>, ring → <code>rgba(73,89,230,0.2)</code>.
               </div>
             </div>
           </DSSection>
@@ -1582,8 +1578,8 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text</code></td><td className="meta">The quote</td><td className="mono">font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-see-more</code></td><td className="meta">Expand toggle (conditional)</td><td className="mono">Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-delete</code></td><td className="meta">Wrapper around .delete-row-btn</td><td className="mono">flex-shrink: 0 — colors / 40×40 sizing inherited from .delete-row-btn child</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-divider</code></td><td className="meta">Separator</td><td className="mono">1px, --border-subtle</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td className="meta">Book reference</td><td className="mono">Override bg --primary-5 / --primary-10 when inside .quote-card</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-divider</code></td><td className="meta">Separator</td><td className="mono">1px, <span className="ds-token-chip">--border-subtle</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td className="meta">Book reference</td><td className="mono">Override bg <span className="ds-token-chip">--primary-5</span> / <span className="ds-token-chip">--primary-10</span> when inside .quote-card</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1678,7 +1674,7 @@ export default function DesignSystemPage() {
                   <tbody className="table-body">
                     <tr className="table-row">
                       <td className="token-table-component">Card (any zone)</td>
-                      <td className="mono">lift -2px · border --primary-50 · shadow</td>
+                      <td className="mono">lift -2px · border <span className="ds-token-chip">--primary-50</span> · shadow</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
                     </tr>
@@ -1692,7 +1688,7 @@ export default function DesignSystemPage() {
                       <td className="token-table-component">Body (expanded)</td>
                       <td className="mono">(inherited from card hover)</td>
                       <td style={{ color: "var(--text-3)" }}>—</td>
-                      <td style={{ color: "var(--text-3)" }}>— (stays on --bg2)</td>
+                      <td style={{ color: "var(--text-3)" }}>— (stays on <span className="ds-token-chip">--bg2</span>)</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1832,9 +1828,9 @@ export default function DesignSystemPage() {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>État</th><th>Background</th><th>Couleur</th><th>Badge bg</th><th>Badge color</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component">Default</td><td className="mono">transparent</td><td className="mono">--text-2</td><td className="mono">--primary-10</td><td className="mono">--primary-50</td></tr>
-                    <tr className="table-row"><td className="token-table-component">Hover</td><td className="mono">--primary-5</td><td className="mono">--text</td><td className="is-empty">—</td><td className="is-empty">—</td></tr>
-                    <tr className="table-row"><td className="token-table-component">Active</td><td className="mono">--primary-10</td><td className="mono">--primary</td><td className="mono">--primary-50</td><td className="mono">#fff</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Default</td><td className="mono">transparent</td><td><span className="ds-token-chip">--text-2</span></td><td><span className="ds-token-chip">--primary-10</span></td><td><span className="ds-token-chip">--primary-50</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component">Hover</td><td><span className="ds-token-chip">--primary-5</span></td><td><span className="ds-token-chip">--text</span></td><td className="is-empty">—</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Active</td><td><span className="ds-token-chip">--primary-10</span></td><td><span className="ds-token-chip">--primary</span></td><td><span className="ds-token-chip">--primary-50</span></td><td className="mono">#fff</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1851,7 +1847,7 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component">Persistance</td><td className="meta"><code>readr-sidebar-collapsed</code> (localStorage)</td></tr>
                     <tr className="table-row"><td className="token-table-component">Mobile</td><td className="meta">Overlay fixe, ouverture via hamburger</td></tr>
                     <tr className="table-row"><td className="token-table-component">Sections</td><td className="meta">Overview · Shelves (Library + Wishlist) · Notes (Quotes + Dictionary) · Collections</td></tr>
-                    <tr className="table-row"><td className="token-table-component">Badge canon</td><td className="meta"><code>.sidebar-badge</code> — bg <code>--primary-10</code>, color <code>--primary-50</code>. Active item: bg <code>--primary-50</code>, color <code>#fff</code>.</td></tr>
+                    <tr className="table-row"><td className="token-table-component">Badge canon</td><td className="meta"><code>.sidebar-badge</code> — bg <span className="ds-token-chip">--primary-10</span>, color <span className="ds-token-chip">--primary-50</span>. Active item: bg <span className="ds-token-chip">--primary-50</span>, color <code>#fff</code>.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2029,12 +2025,12 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.panel-info</code></td><td className="meta">Meta wrapper + actions. Width 100%</td><td className="mono">40px</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-info-meta</code></td><td className="meta">Stacks Quote section + date. Semantic wrapper — no CSS, default block flow</td><td className="is-empty">—</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Quote)</td><td className="meta">Eyebrow "Quote" + .quote-panel-text</td><td className="mono">16px</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-panel-text</code></td><td className="meta">Jakarta 16/500/1.7, --text-2. Wraps content with .quote-mark spans for accent guillemets</td><td className="is-empty">—</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-mark</code></td><td className="meta">Spans around guillemets. 1.4em / --accent color, vertical-align -0.25em</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-panel-text</code></td><td className="meta">Jakarta 16/500/1.7, <span className="ds-token-chip">--text-2</span>. Wraps content with .quote-mark spans for accent guillemets</td><td className="is-empty">—</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-mark</code></td><td className="meta">Spans around guillemets. 1.4em / <span className="ds-token-chip">--accent</span> color, vertical-align -0.25em</td><td className="is-empty">—</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-panel-date</code></td><td className="meta">12/500/text-3. Conditional on createdAt</td><td className="is-empty">—</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-actions</code></td><td className="meta">Edit (panel-move-btn) + Delete (panel-delete-btn) + Share (.btn.btn-outline.btn-md.panel-header-share, margin-left auto → right edge)</td><td className="mono">12px</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-divider</code></td><td className="meta">Canonical 1px border-subtle separator. Conditional — only if book exists</td><td className="is-empty">—</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + &lt;BookChip&gt; (base palette, --bg3 default)</td><td className="mono">16px</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + &lt;BookChip&gt; (base palette, <span className="ds-token-chip">--bg3</span> default)</td><td className="mono">16px</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2057,7 +2053,7 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.modal-tabs-section</code></td><td className="meta">Tabs + active content (only if tabs)</td><td className="mono">flex col gap 20</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="..." — referenced by submit button outside</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-field</code></td><td className="meta">Label + input pair</td><td className="mono">flex col gap 8 — label 13/500/--text-2</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-field</code></td><td className="meta">Label + input pair</td><td className="mono">flex col gap 8 — label 13/500/<span className="ds-token-chip">--text-2</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-actions</code></td><td className="meta">Footer button row (sibling of form)</td><td className="mono">flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
                   </tbody>
                 </table>
@@ -2494,7 +2490,7 @@ function handleDeleteConfirm(payload) {
                     <tr className="table-row"><td className="token-table-component"><code>.sel-actions</code></td><td className="meta">Actions group</td><td className="mono">flex row, gap 8 (desktop) / column on mobile</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-btn</code></td><td className="meta">Base button</td><td className="mono">h 40, padding 0 20, radius 8, 15 / 600</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-select-all</code></td><td className="meta">Select / Deselect all</td><td className="mono">transparent · border 1.5 rgba(255,255,255,0.5) · #fff</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm</code></td><td className="meta">Mark as owned (Wishlist)</td><td className="mono">--primary-50 · #fff · hover --primary-40</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.sel-confirm</code></td><td className="meta">Mark as owned (Wishlist)</td><td className="mono"><span className="ds-token-chip">--primary-50</span> · #fff · hover <span className="ds-token-chip">--primary-40</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-confirm.danger</code></td><td className="meta">Remove</td><td className="mono">rgba(255,255,255,0.15) · #fff</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.sel-cancel</code></td><td className="meta">Cancel edit mode</td><td className="mono">rgba(255,255,255,0.15) · color inherit</td></tr>
                   </tbody>
@@ -2518,10 +2514,10 @@ function handleDeleteConfirm(payload) {
                     <tr className="table-row"><td className="token-table-component"><code>.empty</code></td><td className="meta">Outer container</td><td className="mono">flex col, align center, gap 20, padding 80 / 20, text-align center</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.empty-icon</code></td><td className="meta">Illustration SVG</td><td className="mono">96 × 96 displayed (viewBox 60)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.empty-text</code></td><td className="meta">Title + sub wrapper</td><td className="mono">flex col, align center, gap 8</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-title</code></td><td className="meta">Headline</td><td className="mono">Jakarta 18 / 700 / --text</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-sub</code></td><td className="meta">Helper text</td><td className="mono">16 / 500 / --text-2 / max-width 480</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-info</code></td><td className="meta">Tertiary note (optional, ex. collection limit)</td><td className="mono">13 / 500 / --text-3 / margin-top 4</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-cta</code></td><td className="meta">Primary action (optional)</td><td className="mono">h 40, padding 0 20, gap 8, radius 8, 15 / 600 / #fff, bg --accent</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-title</code></td><td className="meta">Headline</td><td className="mono">Jakarta 18 / 700 / <span className="ds-token-chip">--text</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-sub</code></td><td className="meta">Helper text</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span> / max-width 480</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-info</code></td><td className="meta">Tertiary note (optional, ex. collection limit)</td><td className="mono">13 / 500 / <span className="ds-token-chip">--text-3</span> / margin-top 4</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-cta</code></td><td className="meta">Primary action (optional)</td><td className="mono">h 40, padding 0 20, gap 8, radius 8, 15 / 600 / #fff, bg <span className="ds-token-chip">--accent</span></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2749,16 +2745,16 @@ function handleDeleteConfirm(payload) {
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-section</code></td><td className="meta">Section root</td><td className="mono">flex col, gap 16, position: relative + z-index: 10 (so the kebab dropdown floats above the SearchBar)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-list</code></td><td className="meta">Cards grid</td><td className="mono">grid auto-fill minmax(320px, 1fr), gap 18 (14 tablet, 12 mobile, 1 col)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card</code></td><td className="meta">Card root (role=button)</td><td className="mono">padding 14 56 14 16 (right reserves kebab), --card bg, 1.5px --border-subtle, --radius, fadeUp animation</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card:hover</code></td><td className="meta">Hover state</td><td className="mono">border --primary-50, bg --primary-3, --shadow-md (transition 0.22s)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card</code></td><td className="meta">Card root (role=button)</td><td className="mono">padding 14 56 14 16 (right reserves kebab), <span className="ds-token-chip">--card</span> bg, 1.5px <span className="ds-token-chip">--border-subtle</span>, <span className="ds-token-chip">--radius</span>, fadeUp animation</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-card:hover</code></td><td className="meta">Hover state</td><td className="mono">border <span className="ds-token-chip">--primary-50</span>, bg <span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--shadow-md</span> (transition 0.22s)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-body</code></td><td className="meta">Vertical content stack</td><td className="mono">flex col, align-items flex-start, gap 16, min-width 0</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge (default = sm)</td><td className="mono">solid primary fill (--primary-50 / --primary-40 dark) · #fff · h 24 · 12/600 · radius 999 · padding 0 12. Modifiers --xs/--sm/--md (heights 20/24/28)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-date</code></td><td className="meta">"Started on" badge (default = sm)</td><td className="mono">solid primary fill (<span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-40</span> dark) · #fff · h 24 · 12/600 · radius 999 · padding 0 12. Modifiers --xs/--sm/--md (heights 20/24/28)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-row</code></td><td className="meta">Cover + text horizontal block</td><td className="mono">flex row, gap 16, align-items center, min-width 0</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover</code></td><td className="meta">Cover thumbnail</td><td className="mono">60×90 (ratio 2:3), radius 4, flex-shrink 0 · gradient fallback + letter when no image</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-cover-letter</code></td><td className="meta">Letter fallback</td><td className="mono">18 / 800 / rgba(255,255,255,0.85), inherits Jakarta family</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-text</code></td><td className="meta">Title + meta wrapper</td><td className="mono">flex col, gap 6, flex 1, min-width 0</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-title</code></td><td className="meta">Book title</td><td className="mono">16/700/lh 1.35 (one tier above .book-title for differentiation), ellipsis</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-author</code></td><td className="meta">Author</td><td className="mono">15 / 500 / --text-2, ellipsis</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.now-reading-author</code></td><td className="meta">Author</td><td className="mono">15 / 500 / <span className="ds-token-chip">--text-2</span>, ellipsis</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.now-reading-menu-btn</code></td><td className="meta">Kebab "more actions"</td><td className="mono">40×40, absolute top:8 right:8, ghost neutral with primary-tint hover</td></tr>
                   </tbody>
                 </table>
@@ -2845,8 +2841,8 @@ function handleDeleteConfirm(payload) {
                     <tr className="table-row"><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24, contains chip + 2 .modal-field</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.finish-modal-chip</code></td><td className="meta">BookChip wrapper</td><td className="mono">just for spacing — gap-driven by parent .modal-fields</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.finish-stars</code></td><td className="meta">Wrapper — 5 <code>.finish-star</code> buttons</td><td className="mono">flex row, gap 4 — role="radiogroup", aria-label="Rating"</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.finish-star</code></td><td className="meta">Individual rating button</td><td className="mono">svg 28×28, color <code>--border</code> default → <code>--primary-50</code> when <code>.filled</code> (or hover index ≤ value)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-textarea</code></td><td className="meta">Comment textarea</td><td className="mono">same shared input style as AddQuoteModal — bg --bg3, focus primary glow</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.finish-star</code></td><td className="meta">Individual rating button</td><td className="mono">svg 28×28, color <span className="ds-token-chip">--border</span> default → <span className="ds-token-chip">--primary-50</span> when <code>.filled</code> (or hover index ≤ value)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-textarea</code></td><td className="meta">Comment textarea</td><td className="mono">same shared input style as AddQuoteModal — bg <span className="ds-token-chip">--bg3</span>, focus primary glow</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2860,13 +2856,13 @@ function handleDeleteConfirm(payload) {
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component"><code>.panel-section.is-finished</code></td><td className="meta">Outer rhythm — <code>gap: 24</code> between content and trailing actions. No own border : visual separation from siblings handled by <code>.panel-divider</code></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-finished-content</code></td><td className="meta">Inner stack — flex col, gap 16. Holds eyebrow + date + optional rating field + optional note field</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-date</code></td><td className="meta">"Finished on Apr 27" — 15 / 500 / lh 1.8 / <code>--text-2</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-date</code></td><td className="meta">"Finished on Apr 27" — 15 / 500 / lh 1.8 / <span className="ds-token-chip">--text-2</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-finished-field</code></td><td className="meta">Label + value pair (rating row, note row) — flex col, gap 8</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-label</code></td><td className="meta">Field label — 13 / 500 / <code>--text-2</code></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-rating-stars</code></td><td className="meta">Read-only stars in primary fill, displayed in a tinted box (<code>--bg3</code>, padding 12 14, radius 8, svg 20×20)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-note</code></td><td className="meta">Italic comment in tinted box (<code>--bg3</code>, 15 / 500 / lh 1.8 / <code>--text-2</code>, padding 12 14, radius 8)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-label</code></td><td className="meta">Field label — 13 / 500 / <span className="ds-token-chip">--text-2</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-rating-stars</code></td><td className="meta">Read-only stars in primary fill, displayed in a tinted box (<span className="ds-token-chip">--bg3</span>, padding 12 14, radius 8, svg 20×20)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-note</code></td><td className="meta">Italic comment in tinted box (<span className="ds-token-chip">--bg3</span>, 15 / 500 / lh 1.8 / <span className="ds-token-chip">--text-2</span>, padding 12 14, radius 8)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.panel-finished-actions</code></td><td className="meta">Action row — flex row, gap 8. Always shows Edit (label = "Add rating" if neither rating nor note set). Remove only shows when at least one of rating/note is set</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-btn</code></td><td className="meta">Ghost outline button — 40h, 15 / 600, 1.5px <code>--border-subtle</code>, hover primary-50</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.panel-finished-btn</code></td><td className="meta">Ghost outline button — 40h, 15 / 600, 1.5px <span className="ds-token-chip">--border-subtle</span>, hover primary-50</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2884,21 +2880,21 @@ function handleDeleteConfirm(payload) {
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component"><code>.ob-overlay</code></td><td className="meta">Backdrop — click outside to close</td><td className="mono">fixed inset 0, z-index 1000, bg rgba(30,35,80,0.30) (light) / rgba(0,0,0,0.55) (dark), opacity-fade 0.2s</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 640, mx 24, bg <code>--card</code>, radius 16, shadow-lg, flex col</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-modal</code></td><td className="meta">Modal shell</td><td className="mono">max-width 640, mx 24, bg <span className="ds-token-chip">--card</span>, radius 16, shadow-lg, flex col</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-body</code></td><td className="meta">Inner content (above footer)</td><td className="mono">padding 48 32 32, flex col align center, text-align center</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-slides</code></td><td className="meta">Vertical stack — icon → text → dots</td><td className="mono">flex col, align center, gap 40, min-height 260</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-icon</code></td><td className="meta">SVG slot (flex container)</td><td className="mono">SVG inside is 120×120, viewBox 0 0 60 60</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon defined</td><td className="mono">120×120, <code>--primary-5</code> (light) / <code>--primary-3</code> (dark), radius 16</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-icon-placeholder</code></td><td className="meta">Fallback when no icon defined</td><td className="mono">120×120, <span className="ds-token-chip">--primary-5</span> (light) / <span className="ds-token-chip">--primary-3</span> (dark), radius 16</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-text</code></td><td className="meta">Title + desc wrapper</td><td className="mono">flex col, align center, gap 20</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-title</code></td><td className="meta">Slide title (h2)</td><td className="mono">Jakarta 20 / 800, letter-spacing -0.02em, lh 1.3 — <code>white-space: pre-line</code> on mobile (≤600px) only, so \\n in i18n breaks lines on phones, collapses on desktop</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500 / <code>--text-2</code>, lh 1.7, max-width 464, <code>white-space: pre-line</code> (always)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-desc</code></td><td className="meta">Slide description</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span>, lh 1.7, max-width 464, <code>white-space: pre-line</code> (always)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-dots</code></td><td className="meta">Pagination wrapper</td><td className="mono">flex row, gap 6 — role="tablist"</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-dot</code></td><td className="meta">Individual dot — clickable jump</td><td className="mono">6×6, bg <code>--border</code> → 20×6 + bg <code>--primary-50</code> when <code>.active</code>, transition all 0.25s</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-dot</code></td><td className="meta">Individual dot — clickable jump</td><td className="mono">6×6, bg <span className="ds-token-chip">--border</span> → 20×6 + bg <span className="ds-token-chip">--primary-50</span> when <code>.active</code>, transition all 0.25s</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-footer</code></td><td className="meta">Bottom region (sibling of .ob-body)</td><td className="mono">padding 18, flex col, gap 24, full width</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.ob-footer-nav</code></td><td className="meta">Skip-left vs Prev/Next-right row</td><td className="mono">flex justify-between, full width — left: <code>.ob-footer-left</code> · right: <code>.ob-footer-right</code> (gap 8)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-skip</code></td><td className="meta">Skip CTA — hidden on last slide</td><td className="mono">40h · 15 / 600 · transparent / <code>--text-2</code> · hover bg <code>--primary-5</code> + color <code>--primary-60</code></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-prev</code></td><td className="meta">Previous — visibility hidden on slide 0</td><td className="mono">40h · 15 / 600 · bg <code>--primary-5</code> / <code>--primary-60</code> · hover bg <code>--primary-10</code></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.ob-next</code></td><td className="meta">Next / Get started (last slide)</td><td className="mono">Primary CTA — 40h · 15 / 600 · bg <code>--primary-50</code> · hover <code>--primary-60</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-skip</code></td><td className="meta">Skip CTA — hidden on last slide</td><td className="mono">40h · 15 / 600 · transparent / <span className="ds-token-chip">--text-2</span> · hover bg <span className="ds-token-chip">--primary-5</span> + color <span className="ds-token-chip">--primary-60</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-prev</code></td><td className="meta">Previous — visibility hidden on slide 0</td><td className="mono">40h · 15 / 600 · bg <span className="ds-token-chip">--primary-5</span> / <span className="ds-token-chip">--primary-60</span> · hover bg <span className="ds-token-chip">--primary-10</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.ob-next</code></td><td className="meta">Next / Get started (last slide)</td><td className="mono">Primary CTA — 40h · 15 / 600 · bg <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2944,12 +2940,12 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.library-footer</code></td><td className="meta">Footer wrapper (full width)</td><td className="mono">border-top 1px <code>--border-subtle</code>, padding 20 0, bg <code>--bg</code>, 11 / 500 / <code>--text-3</code></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.library-footer</code></td><td className="meta">Footer wrapper (full width)</td><td className="mono">border-top 1px <span className="ds-token-chip">--border-subtle</span>, padding 20 0, bg <span className="ds-token-chip">--bg</span>, 11 / 500 / <span className="ds-token-chip">--text-3</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.library-footer-inner</code></td><td className="meta">Content row</td><td className="mono">padding 0 40, flex justify-between align-center, gap 12, flex-wrap. ≤780px → flex col stretch, gap clamp(16, 4vw, 24)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.footer-section</code></td><td className="meta">Each of the 3 sections (left / center / right)</td><td className="mono">flex row align-center, gap 12. ≤780px → width 100%, justify-between</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.footer-group</code></td><td className="meta">Tight subgroup inside a section</td><td className="mono">inline-flex align-center, gap 12 (8 on mobile for icons row)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-link</code></td><td className="meta">Anchor or button link</td><td className="mono">11 / 500 / <code>--text-2</code> (13 on mobile), hover color <code>--primary-60</code></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.footer-sep</code></td><td className="meta">Bullet separator (·)</td><td className="mono">color <code>--border-subtle</code> — top-level seps hidden on mobile, group-internal seps preserved</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-link</code></td><td className="meta">Anchor or button link</td><td className="mono">11 / 500 / <span className="ds-token-chip">--text-2</span> (13 on mobile), hover color <span className="ds-token-chip">--primary-60</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.footer-sep</code></td><td className="meta">Bullet separator (·)</td><td className="mono">color <span className="ds-token-chip">--border-subtle</span> — top-level seps hidden on mobile, group-internal seps preserved</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.footer-link-text</code> / <code>.footer-link-icon</code></td><td className="meta">Portfolio link — text desktop, globe icon mobile</td><td className="mono">≤780px swaps display (text → none, icon → inline-block)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.footer-links-desktop</code></td><td className="meta">Right section wrapper (portfolio + LinkedIn)</td><td className="mono">Marker class — overrides <code>.footer-group</code> gap to 8 on mobile (icons closer)</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.lang-toggle</code></td><td className="meta">EN · FR switcher (inside left section)</td><td className="mono">flex row, gap 12 — uses shared <code>.lang-btn</code> + <code>.lang-sep</code> from Language Switcher</td></tr>
