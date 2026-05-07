@@ -3293,7 +3293,7 @@
   .panel-inner { padding-left: 16px; padding-right: 16px; }
   .view-btns { margin-left: auto; }
   .books-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .now-reading-list { grid-template-columns: 1fr; gap: 12px; }
+  .now-reading-list { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .books-list { overflow-x: hidden; }
   .selection-bar {
     min-width: 0;
@@ -5003,6 +5003,9 @@ button.quote-book-chip {
 /* Mobile: tighten gaps */
 @media (max-width: 600px) {
   .overview-activity-head { gap: 12px; }
+  .overview-activity-pills { display: flex; width: 100%; }
+  .overview-activity-pills .overview-activity-pill { flex: 1; }
+  .overview-activity-nav { display: flex; width: 100%; justify-content: space-between; }
   .overview-activity-week-label { min-width: 90px; font-size: 12px; }
   .overview-activity-bars { gap: 6px; }
   .overview-activity-track { height: 70px; }
