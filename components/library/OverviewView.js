@@ -272,7 +272,7 @@ export default function OverviewView({
 
 function HeroCard({ num, label, icon, onClick }) {
   return (
-    <button type="button" className="overview-hero-card" onClick={onClick}>
+    <button type="button" className="overview-hero-card" onClick={onClick} disabled={num === 0}>
       <span className="overview-hero-num">{num}</span>
       <span className="cell-row cell-row--sm cell-row--between overview-hero-label-row">
         <span className="cell-row cell-row--sm">

@@ -507,7 +507,7 @@
 .books-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 18px;
 }
 
@@ -521,7 +521,7 @@
 }
 .now-reading-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 18px;
 }
 .now-reading-card {
@@ -1127,13 +1127,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 .empty-text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .empty-icon { width: 96px; height: 96px; display: block; }
@@ -1187,7 +1187,7 @@
 .col-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 18px;
 }
 .col-card {
@@ -2361,7 +2361,7 @@
 }
 .modal-info-box {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   padding: 8px 16px;
   background: var(--primary-5);
@@ -2380,7 +2380,6 @@
 .modal-info-box.modal-info-box--alert {
   background: rgba(245, 158, 11, 0.08);
   border-color: rgba(245, 158, 11, 0.2);
-  align-items: center;
 }
 .modal-info-box.modal-info-box--alert span { white-space: pre-line; }
 .modal-info-box.modal-info-box--alert svg { color: #B45309; }
@@ -2392,7 +2391,6 @@
 .modal-info-box.modal-info-box--success {
   background: rgba(34, 197, 94, 0.08);
   border-color: rgba(34, 197, 94, 0.2);
-  align-items: center;
 }
 .modal-info-box.modal-info-box--success span { white-space: pre-line; }
 .modal-info-box.modal-info-box--success svg { color: #16A34A; }
@@ -2406,7 +2404,6 @@
   height: 16px;
   flex-shrink: 0;
   color: var(--primary-50);
-  margin-top: 1px;
 }
 [data-theme="dark"] .modal-info-box svg { color: var(--primary-40); }
 
@@ -4570,12 +4567,13 @@ button.quote-book-chip {
   cursor: pointer;
   transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
 }
-.overview-hero-card:hover {
+.overview-hero-card:disabled { opacity: 0.4; cursor: not-allowed; }
+.overview-hero-card:hover:not(:disabled) {
   border-color: var(--primary-50);
   background: var(--primary-3);
   box-shadow: var(--shadow-md);
 }
-[data-theme="dark"] .overview-hero-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
+[data-theme="dark"] .overview-hero-card:hover:not(:disabled) { border-color: var(--primary-40); background: var(--primary-3); }
 .overview-hero-card:focus-visible {
   outline: none;
   border-color: var(--primary-50);
@@ -4612,8 +4610,8 @@ button.quote-book-chip {
   transition: background 0.18s ease, color 0.18s ease;
 }
 [data-theme="dark"] .overview-hero-icon-chip { color: var(--primary-30); }
-.overview-hero-card:hover .overview-hero-icon-chip,
-.overview-hero-card:focus-visible .overview-hero-icon-chip {
+.overview-hero-card:hover:not(:disabled) .overview-hero-icon-chip,
+.overview-hero-card:focus-visible:not(:disabled) .overview-hero-icon-chip {
   background: var(--primary);
   color: var(--primary-foreground);
 }

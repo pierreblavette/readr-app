@@ -11,7 +11,7 @@ import GradientDropzone from "@/components/library/GradientDropzone";
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
   Components:  ["autocomplete","badges","book-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","theme-toggle","view-toggle"],
-  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","message-box","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -23,7 +23,7 @@ const NAV_LABELS = {
   "theme-toggle":"Theme Toggle","book-chip":"Book Chip","book-card-kebab":"Book Card Kebab","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
-  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","toast":"Toast","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
+  "modal":"Modal","delete-modal":"Delete Modal","message-box":"Message Box","upload-box":"Upload Box","selection-bar":"Selection Bar","toast":"Toast","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -1265,57 +1265,6 @@ export default function DesignSystemPage() {
               </div>
             </div>
 
-            <div className="ds-card">
-              <div className="ds-card-head">Message box — 4 variants (info / alert / success / critical)</div>
-              <div className="ds-card-body col padded" style={{ gap: 16 }}>
-                <div className="modal-info-box">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-                  </svg>
-                  <span><span className="modal-info-box-strong">Info</span> — neutral hint or contextual note. Default variant.</span>
-                </div>
-                <div className="modal-info-box modal-info-box--alert" role="alert">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                  </svg>
-                  <span><strong>Alert</strong> — warning, soft amber. Limit reached, action paused, etc.</span>
-                </div>
-                <div className="modal-info-box modal-info-box--success" role="status">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-                  </svg>
-                  <span><strong>Success</strong> — confirmation, soft green. Saved, completed, action OK.</span>
-                </div>
-                <div className="scan-alert" role="alert">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                  </svg>
-                  <span><strong>Critical</strong> — destructive error, red. Scan failure, irrecoverable issue.</span>
-                </div>
-              </div>
-              <div className="ds-card-body col">
-                <div className="ds-token-block">
-                  <div className="ds-token-name">Info · .modal-info-box</div>
-                  <p>bg <span className="ds-token-chip">--primary-5</span> · border <code>rgba(73,89,230, 0.2)</code> · icon <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-40</span></p>
-                </div>
-                <div className="ds-token-block">
-                  <div className="ds-token-name">Alert · .modal-info-box.modal-info-box--alert</div>
-                  <p>bg <code>rgba(245,158,11, 0.08/0.12)</code> · border <code>rgba(245,158,11, 0.2)</code> · icon <code>#B45309 / #FBBF24</code></p>
-                </div>
-                <div className="ds-token-block">
-                  <div className="ds-token-name">Success · .modal-info-box.modal-info-box--success</div>
-                  <p>bg <code>rgba(34,197,94, 0.08/0.12)</code> · border <code>rgba(34,197,94, 0.2)</code> · icon <code>#16A34A / #4ADE80</code></p>
-                </div>
-                <div className="ds-token-block">
-                  <div className="ds-token-name">Critical · .scan-alert</div>
-                  <p>bg <code>rgba(239,68,68, 0.08/0.12)</code> · border <code>rgba(239,68,68, 0.2)</code> · icon <code>#dc2626 / #f87171</code></p>
-                </div>
-                <div className="ds-token-block">
-                  <div className="ds-token-name">Common structure</div>
-                  <p><code>display: flex</code> · <code>align-items: flex-start</code> (info) / <code>center</code> (alert/critical) · gap 16 · padding 8/16 · border-radius 8 · font 14/500/<span className="ds-token-chip">--text</span>/lh 1.5. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> for multi-line (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) to group a dropzone + a critical message.</p>
-                </div>
-              </div>
-            </div>
           </DSSection>
 
           {/* ── DROPDOWN ── */}
@@ -2619,6 +2568,61 @@ function handleDeleteConfirm(payload) {
             </div>
           </DSSection>
 
+          {/* ── MESSAGE BOX ── */}
+          <DSSection id="message-box" title="Message Box" sub="4 variants — info / alert / success / critical. Used inside modals (limit reached, scan errors), photo blocks and any contextual feedback within a flow.">
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview — 4 variants (info / alert / success / critical)</div>
+              <div className="ds-card-body col padded" style={{ gap: 16 }}>
+                <div className="modal-info-box">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <span><span className="modal-info-box-strong">Info</span> — neutral hint or contextual note. Default variant.</span>
+                </div>
+                <div className="modal-info-box modal-info-box--alert" role="alert">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  <span><strong>Alert</strong> — warning, soft amber. Limit reached, action paused, etc.</span>
+                </div>
+                <div className="modal-info-box modal-info-box--success" role="status">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  <span><strong>Success</strong> — confirmation, soft green. Saved, completed, action OK.</span>
+                </div>
+                <div className="scan-alert" role="alert">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span><strong>Critical</strong> — destructive error, red. Scan failure, irrecoverable issue.</span>
+                </div>
+              </div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Info · .modal-info-box</div>
+                  <p>bg <span className="ds-token-chip">--primary-5</span> · border <code>rgba(73,89,230, 0.2)</code> · icon <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-40</span></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Alert · .modal-info-box.modal-info-box--alert</div>
+                  <p>bg <code>rgba(245,158,11, 0.08/0.12)</code> · border <code>rgba(245,158,11, 0.2)</code> · icon <code>#B45309 / #FBBF24</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Success · .modal-info-box.modal-info-box--success</div>
+                  <p>bg <code>rgba(34,197,94, 0.08/0.12)</code> · border <code>rgba(34,197,94, 0.2)</code> · icon <code>#16A34A / #4ADE80</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Critical · .scan-alert</div>
+                  <p>bg <code>rgba(239,68,68, 0.08/0.12)</code> · border <code>rgba(239,68,68, 0.2)</code> · icon <code>#dc2626 / #f87171</code></p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Common structure</div>
+                  <p><code>display: flex</code> · <code>align-items: center</code> · gap 16 · padding 8/16 · border-radius 8 · font 14/500/<span className="ds-token-chip">--text</span>/lh 1.5. Icon SVG 16×16, <code>flex-shrink: 0</code>. Wrap text in <code>&lt;span&gt;</code> ; <code>\n</code> + <code>white-space: pre-line</code> for multi-line (alert/critical). Use <code>.modal-photo-block</code> wrapper (gap 16) to group a dropzone + a critical message.</p>
+                </div>
+              </div>
+            </div>
+          </DSSection>
+
           {/* ── UPLOAD BOX ── */}
           <DSSection id="upload-box" title="Upload Box" sub="Dropzone with gradient dashed border (Photo/AI) or standard border (File). Three states: idle, scanning, error.">
 
@@ -2767,7 +2771,7 @@ function handleDeleteConfirm(payload) {
           </DSSection>
 
           {/* ── EMPTY STATE ── */}
-          <DSSection id="empty" title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Illustration SVGs displayed at 96×96, custom per page (Library, Wishlist, Quotes, Dictionary, Collections, Overview).">
+          <DSSection id="empty" title="Empty State" sub="Gap-driven layout (24px between blocks, 4px inside .empty-text). Illustration SVGs displayed at 96×96, custom per page (Library, Wishlist, Quotes, Dictionary, Collections, Overview).">
 
             <div className="ds-card">
               <div className="ds-card-head">Icon set — 6 illustrative SVGs (96×96, viewBox 60)</div>
@@ -3028,9 +3032,9 @@ function handleDeleteConfirm(payload) {
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody className="table-body">
-                    <tr className="table-row"><td className="token-table-component"><code>.empty</code></td><td className="meta">Outer container</td><td className="mono">flex col, align center, gap 20, padding 80 / 20, text-align center</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty</code></td><td className="meta">Outer container</td><td className="mono">flex col, align center, gap 24, padding 80 / 20, text-align center</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.empty-icon</code></td><td className="meta">Illustration SVG</td><td className="mono">96 × 96 displayed (viewBox 60)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.empty-text</code></td><td className="meta">Title + sub wrapper</td><td className="mono">flex col, align center, gap 8</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.empty-text</code></td><td className="meta">Title + sub wrapper</td><td className="mono">flex col, align center, gap 4</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.empty-title</code></td><td className="meta">Headline</td><td className="mono">Jakarta 18 / 700 / <span className="ds-token-chip">--text</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.empty-sub</code></td><td className="meta">Helper text</td><td className="mono">16 / 500 / <span className="ds-token-chip">--text-2</span> / max-width 480</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.empty-info</code></td><td className="meta">Tertiary note (optional, ex. collection limit)</td><td className="mono">13 / 500 / <span className="ds-token-chip">--text-3</span> / margin-top 4</td></tr>

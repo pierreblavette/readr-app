@@ -476,12 +476,6 @@
 
 
 /* ─── SELECTION BAR ─── */
-/* ─── EMPTY STATE ─── */
-.empty-preview { text-align: center; padding: 40px 20px; }
-.empty-emoji { font-size: 42px; margin-bottom: 12px; }
-.empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-.empty-sub { font-size: 14px; color: var(--text-2); }
-
 /* ─── SPINNER ─── */
 .spinner-ds { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin-ds 0.7s linear infinite; }
 @keyframes spin-ds { to { transform: rotate(360deg); } }
