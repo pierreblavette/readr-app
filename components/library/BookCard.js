@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
 import BookCardKebab from "./BookCardKebab";
 
-function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, readingCount, maxReading, t }) {
+function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onShared, readingCount, maxReading, t }) {
   const [cover, setCover] = useState(null);
   const isSelected = selected.has(book.id);
   const [c1, c2] = coverColors(book.title);
@@ -99,6 +99,7 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
             onEditFinished={onEditFinished}
             onMoveToLibrary={onMoveToLibrary}
             onDelete={onDelete}
+            onShared={onShared}
             t={t}
           />
         )}

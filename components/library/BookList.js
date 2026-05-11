@@ -1,7 +1,7 @@
 "use client";
 import BookCardKebab from "./BookCardKebab";
 
-export default function BookList({ books, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onSelectAll, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, readingCount, maxReading, t, sortCol, sortDir, toggleSort }) {
+export default function BookList({ books, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onSelectAll, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onShared, readingCount, maxReading, t, sortCol, sortDir, toggleSort }) {
   const cols = [
     { key: 'title',  label: t.colTitle,  cellClass: 'list-cell-title' },
     { key: 'author', label: t.colAuthor, cellClass: 'list-cell-meta'  },
@@ -88,6 +88,7 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
                     onEditFinished={onEditFinished}
                     onMoveToLibrary={onMoveToLibrary}
                     onDelete={onDelete}
+                    onShared={onShared}
                     t={t}
                   />
                 )}

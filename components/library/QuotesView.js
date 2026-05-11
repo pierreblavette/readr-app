@@ -5,7 +5,7 @@ import ExportMenu from "@/components/library/ExportMenu";
 import SortMenu from "@/components/library/SortMenu";
 import BookChip from "@/components/library/BookChip";
 
-export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDelete, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
+export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDelete, onShared, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
 
@@ -111,7 +111,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
                 : null;
               const book = byId || byMeta || null;
               return (
-                <QuoteCard key={q.id} quote={q} book={book} onEdit={onEdit} onDelete={onDelete} onOpen={onOpen} onOpenBook={onOpenBook} t={t} />
+                <QuoteCard key={q.id} quote={q} book={book} onEdit={onEdit} onDelete={onDelete} onShared={onShared} onOpen={onOpen} onOpenBook={onOpenBook} t={t} />
               );
             })}
           </div>
@@ -121,10 +121,9 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
   );
 }
 
-function QuoteCardKebab({ quote, onEdit, onDelete, t }) {
+function QuoteCardKebab({ quote, onEdit, onDelete, onShared, t }) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(null);
-  const [shared, setShared] = useState(false);
   const btnRef = useRef(null);
   const menuRef = useRef(null);
 
@@ -158,15 +157,13 @@ function QuoteCardKebab({ quote, onEdit, onDelete, t }) {
   }
 
   async function handleShare() {
+    setOpen(false);
     const source = quote.bookTitle ? `\n${quote.bookTitle}${quote.bookAuthor ? ', ' + quote.bookAuthor : ''}` : '';
     const text = `"${quote.text}"${source}`;
     if (navigator.share) {
       try { await navigator.share({ text }); } catch {}
-      setOpen(false);
     } else {
-      await navigator.clipboard.writeText(text);
-      setShared(true);
-      setTimeout(() => { setShared(false); setOpen(false); }, 1200);
+      try { await navigator.clipboard.writeText(text); onShared?.(); } catch {}
     }
   }
 
@@ -197,7 +194,7 @@ function QuoteCardKebab({ quote, onEdit, onDelete, t }) {
             {t.quoteEdit}
           </button>
           <button type="button" className="dropdown-item" onClick={handleShare}>
-            {shared ? t.shareCopied : t.btnShare}
+            {t.btnShare}
           </button>
           <div className="dropdown-divider" role="separator" />
           <button type="button" className="dropdown-item is-destructive" onClick={() => { setOpen(false); onDelete(quote); }}>
@@ -210,7 +207,7 @@ function QuoteCardKebab({ quote, onEdit, onDelete, t }) {
   );
 }
 
-function QuoteCard({ quote, book, onEdit, onDelete, onOpen, onOpenBook, t }) {
+function QuoteCard({ quote, book, onEdit, onDelete, onShared, onOpen, onOpenBook, t }) {
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const textRef = useRef(null);
@@ -276,7 +273,7 @@ function QuoteCard({ quote, book, onEdit, onDelete, onOpen, onOpenBook, t }) {
             </button>
           )}
         </div>
-        <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} t={t} />
+        <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} onShared={onShared} t={t} />
       </div>
       <div className="quote-card-divider" />
       <BookChip

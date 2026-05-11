@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import BookChip from "./BookChip";
 import { useModalA11y } from "../../lib/useModalA11y";
 
@@ -12,8 +12,7 @@ function formatDate(ts, lang) {
   } catch { return ''; }
 }
 
-export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onOpenBook, lang, t }) {
-  const [shared, setShared] = useState(false);
+export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onShared, onOpenBook, lang, t }) {
   const panelRef = useModalA11y(!!quote, onClose);
 
   async function handleShare() {
@@ -23,9 +22,7 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
     if (navigator.share) {
       try { await navigator.share({ text }); } catch {}
     } else {
-      await navigator.clipboard.writeText(text);
-      setShared(true);
-      setTimeout(() => setShared(false), 2000);
+      try { await navigator.clipboard.writeText(text); onShared?.(); } catch {}
     }
   }
 
@@ -79,18 +76,12 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onO
               <button className="panel-delete-btn" onClick={() => { onDelete(quote); onClose(); }}>
                 {t.btnDelete || 'Delete'}
               </button>
-              <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare} aria-label={shared ? (t.shareCopied || 'Copied!') : t.btnShare} title={shared ? (t.shareCopied || 'Copied!') : t.btnShare}>
-                {shared ? (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
-                    <polyline points="16 6 12 2 8 6"/>
-                    <line x1="12" y1="2" x2="12" y2="15"/>
-                  </svg>
-                )}
+              <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare} aria-label={t.btnShare} title={t.btnShare}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
+                  <polyline points="16 6 12 2 8 6"/>
+                  <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
               </button>
             </div>
           </div>

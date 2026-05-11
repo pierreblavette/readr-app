@@ -2,10 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-export default function BookCardKebab({ book, tab, readingCount, maxReading, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onDelete, t }) {
+export default function BookCardKebab({ book, tab, readingCount, maxReading, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onDelete, onShared, t }) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(null);
-  const [shared, setShared] = useState(false);
   const btnRef = useRef(null);
   const menuRef = useRef(null);
 
@@ -45,14 +44,12 @@ export default function BookCardKebab({ book, tab, readingCount, maxReading, onS
   }
 
   async function handleShare() {
+    setOpen(false);
     const text = t.shareText ? t.shareText(book.title, book.author) : `"${book.title}"\n${book.author}`;
     if (navigator.share) {
       try { await navigator.share({ text }); } catch {}
-      setOpen(false);
     } else {
-      await navigator.clipboard.writeText(text);
-      setShared(true);
-      setTimeout(() => { setShared(false); setOpen(false); }, 1200);
+      try { await navigator.clipboard.writeText(text); onShared?.(); } catch {}
     }
   }
 
@@ -115,7 +112,7 @@ export default function BookCardKebab({ book, tab, readingCount, maxReading, onS
             </button>
           )}
           <button type="button" className="dropdown-item" onClick={handleShare}>
-            {shared ? t.shareCopied : t.btnShare}
+            {t.btnShare}
           </button>
           <div className="dropdown-divider" role="separator" />
           <button type="button" className="dropdown-item is-destructive" onClick={() => { setOpen(false); onDelete(book); }}>

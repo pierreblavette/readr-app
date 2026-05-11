@@ -98,36 +98,50 @@ export default function LibraryPage() {
       setDeleteTarget({ bulk: true, ids: new Set(selected), count: selected.size });
       return;
     }
-    if (action === 'move') moveToLibrary(selected);
+    if (action === 'move') {
+      moveToLibrary(selected);
+      setToastMsg(t.toastMoved);
+    }
     setSelected(new Set());
     setEditMode(false);
   }
 
   function handleDeleteConfirm(payload) {
     if (payload instanceof Set) {
+      const n = payload.size;
       deleteMany(payload);
       setSelected(new Set());
       setEditMode(false);
+      setToastMsg(t.toastBooksRemoved(n));
       return;
     }
     if (payload?.type === 'quote') {
       deleteQuote(payload.id);
+      setToastMsg(t.toastQuoteRemoved);
     } else if (payload?.type === 'word') {
       deleteWord(payload.id);
+      setToastMsg(t.toastWordRemoved);
     } else if (payload?.type === 'cancelReading') {
       cancelReading(payload.id);
+      setToastMsg(t.toastReadingCanceled);
     } else if (payload?.type === 'removeFinished') {
       updateFinished(payload.id, { rating: null, note: null });
+      setToastMsg(t.toastReviewRemoved);
     } else if (payload?.type === 'collection') {
       deleteCollection(payload.id);
+      setToastMsg(t.toastCollectionDeleted);
     } else if (payload?.type === 'collectionsBulk') {
       deleteCollections(payload.ids);
+      setToastMsg(t.toastCollectionsDeleted(payload.count));
     } else if (payload?.type === 'colRemove') {
       removeBookFromCollection(payload.colId, payload.id);
+      setToastMsg(t.toastRemovedFromCollection);
     } else if (payload?.type === 'colRemoveBulk') {
       removeBooksFromCollection(payload.colId, payload.ids);
+      setToastMsg(t.toastBooksRemovedFromCollection(payload.count));
     } else {
       deleteBook(payload.id);
+      setToastMsg(t.toastBookRemoved);
     }
   }
 
@@ -182,14 +196,15 @@ export default function LibraryPage() {
         tab={tab}
         onClose={() => setPanelBook(null)}
         onDelete={b => { setPanelBook(null); setDeleteTarget(b); }}
-        onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); }}
+        onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); setToastMsg(t.toastMoved); }}
         onAddQuote={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
         onOpenQuote={q => { setPanelBook(null); setPanelQuote(q); }}
-        onStartReading={b => { startReading(b.id); }}
+        onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
         onFinishReading={b => { setFinishBook(b); }}
         onCancelReading={b => { setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author }); setPanelBook(null); }}
         onEditFinished={b => { setFinishBook(b); }}
         onRemoveFinished={b => { setDeleteTarget({ type: 'removeFinished', id: b.id, rating: b.rating, note: b.note }); }}
+        onShared={() => setToastMsg(t.shareCopied)}
         readingCount={readingBooks.length}
         maxReading={MAX_READING}
         quotes={panelBook ? getQuotesForBook(panelBook) : []}
@@ -214,6 +229,7 @@ export default function LibraryPage() {
         onClose={() => setPanelQuote(null)}
         onDelete={q => { setPanelQuote(null); setDeleteTarget({ type: 'quote', id: q.id, text: q.text }); }}
         onEdit={q => { setPanelQuote(null); setEditingQuote(q); setAddQuoteOpen(true); }}
+        onShared={() => setToastMsg(t.shareCopied)}
         onOpenBook={b => { setPanelQuote(null); setPanelBook(b); }}
         lang={lang}
         t={t}
@@ -273,6 +289,7 @@ export default function LibraryPage() {
               onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
               onEdit={q => { setEditingQuote(q); setAddQuoteOpen(true); }}
               onDelete={q => setDeleteTarget({ type: 'quote', id: q.id, text: q.text })}
+              onShared={() => setToastMsg(t.shareCopied)}
               onOpen={q => setPanelQuote(q)}
               onOpenBook={b => setPanelBook(b)}
               exportMD={exportQuotesMD}
@@ -375,12 +392,13 @@ export default function LibraryPage() {
                           onToggleSelect={toggleSelected}
                           onOpen={b => setPanelBook(b)}
                           onDelete={b => setDeleteTarget(b)}
-                          onStartReading={b => startReading(b.id)}
+                          onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
                           onFinishReading={b => setFinishBook(b)}
                           onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
                           onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
                           onEditFinished={b => setFinishBook(b)}
-                          onMoveToLibrary={b => moveToLibrary(new Set([b.id]))}
+                          onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setToastMsg(t.toastMoved); }}
+                          onShared={() => setToastMsg(t.shareCopied)}
                           readingCount={readingBooks.length}
                           maxReading={MAX_READING}
                           t={t}
@@ -397,12 +415,13 @@ export default function LibraryPage() {
                   onSelectAll={toggleSelectAll}
                   onOpen={b => setPanelBook(b)}
                   onDelete={b => setDeleteTarget(b)}
-                  onStartReading={b => startReading(b.id)}
+                  onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
                   onFinishReading={b => setFinishBook(b)}
                   onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
                   onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
                   onEditFinished={b => setFinishBook(b)}
-                  onMoveToLibrary={b => moveToLibrary(new Set([b.id]))}
+                  onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setToastMsg(t.toastMoved); }}
+                  onShared={() => setToastMsg(t.shareCopied)}
                   readingCount={readingBooks.length}
                   maxReading={MAX_READING}
                   t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
@@ -432,10 +451,10 @@ export default function LibraryPage() {
         onAdd={(b, opts) => {
           const id = addBook(b, opts);
           if (id !== null) {
-            setToastMsg(t.toastAdded || 'Book added to your library');
+            setToastMsg(t.toastAdded);
           }
         }}
-        onAddMany={b => { addMany(b); setToastMsg(t.toastImported?.(b.length) || `${b.length} book${b.length > 1 ? 's' : ''} imported`); }}
+        onAddMany={b => { addMany(b); setToastMsg(t.toastImported(b.length)); }}
         t={t} />
       <DeleteModal target={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={handleDeleteConfirm} t={t} />
       <CreateCollectionModal open={createColOpen} onClose={() => setCreateColOpen(false)} onCreate={createCollection} t={t} />
@@ -452,10 +471,10 @@ export default function LibraryPage() {
         onSave={q => {
           if (editingQuote) {
             updateQuote(editingQuote.id, q);
-            setToastMsg(t.quoteUpdated);
+            setToastMsg(t.toastQuoteUpdated);
           } else {
             addQuote(q);
-            setToastMsg(t.quoteAdd);
+            setToastMsg(t.toastQuoteAdded);
           }
         }}
         allBooks={[...data.owned, ...data.wishlist]}
@@ -479,9 +498,11 @@ export default function LibraryPage() {
           if (finishBook?.finishedAt) {
             // Editing an already-finished book
             updateFinished(finishBook.id, { rating, note });
+            setToastMsg(t.toastReviewSaved);
           } else {
             // Marking as finished for the first time
             finishReading(finishBook.id, { finishedAt: Date.now(), rating, note });
+            setToastMsg(t.toastReadingFinished);
           }
         }}
         t={t}
