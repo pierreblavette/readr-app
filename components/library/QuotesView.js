@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import ExportMenu from "@/components/library/ExportMenu";
 import SortMenu from "@/components/library/SortMenu";
 import BookChip from "@/components/library/BookChip";
 
-export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
+export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDelete, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
 
@@ -110,7 +111,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, onO
                 : null;
               const book = byId || byMeta || null;
               return (
-                <QuoteCard key={q.id} quote={q} book={book} onDelete={onDelete} onOpen={onOpen} onOpenBook={onOpenBook} t={t} />
+                <QuoteCard key={q.id} quote={q} book={book} onEdit={onEdit} onDelete={onDelete} onOpen={onOpen} onOpenBook={onOpenBook} t={t} />
               );
             })}
           </div>
@@ -120,7 +121,96 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onDelete, onO
   );
 }
 
-function QuoteCard({ quote, book, onDelete, onOpen, onOpenBook, t }) {
+function QuoteCardKebab({ quote, onEdit, onDelete, t }) {
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState(null);
+  const [shared, setShared] = useState(false);
+  const btnRef = useRef(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function close(e) {
+      if (btnRef.current?.contains(e.target)) return;
+      if (menuRef.current?.contains(e.target)) return;
+      setOpen(false);
+    }
+    function onScroll() { setOpen(false); }
+    function onKey(e) { if (e.key === 'Escape') setOpen(false); }
+    document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onScroll, true);
+    window.addEventListener('resize', onScroll);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('scroll', onScroll, true);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [open]);
+
+  function handleToggle() {
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, right: window.innerWidth - r.right });
+    }
+    setOpen(o => !o);
+  }
+
+  async function handleShare() {
+    const source = quote.bookTitle ? `\n${quote.bookTitle}${quote.bookAuthor ? ', ' + quote.bookAuthor : ''}` : '';
+    const text = `"${quote.text}"${source}`;
+    if (navigator.share) {
+      try { await navigator.share({ text }); } catch {}
+      setOpen(false);
+    } else {
+      await navigator.clipboard.writeText(text);
+      setShared(true);
+      setTimeout(() => { setShared(false); setOpen(false); }, 1200);
+    }
+  }
+
+  return (
+    <>
+      <button
+        ref={btnRef}
+        type="button"
+        className="col-card-kebab"
+        onClick={e => { e.stopPropagation(); handleToggle(); }}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={t.moreActions}>
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="6" r="2"/>
+          <circle cx="12" cy="12" r="2"/>
+          <circle cx="12" cy="18" r="2"/>
+        </svg>
+      </button>
+      {open && pos && typeof document !== 'undefined' && createPortal(
+        <div
+          ref={menuRef}
+          className="dropdown-menu dropdown-menu--portal"
+          role="menu"
+          style={{ position: 'fixed', top: pos.top, right: pos.right }}
+          onClick={e => e.stopPropagation()}>
+          <button type="button" className="dropdown-item" onClick={() => { setOpen(false); onEdit?.(quote); }}>
+            {t.quoteEdit}
+          </button>
+          <button type="button" className="dropdown-item" onClick={handleShare}>
+            {shared ? t.shareCopied : t.btnShare}
+          </button>
+          <div className="dropdown-divider" role="separator" />
+          <button type="button" className="dropdown-item is-destructive" onClick={() => { setOpen(false); onDelete(quote); }}>
+            {t.btnDelete}
+          </button>
+        </div>,
+        document.body
+      )}
+    </>
+  );
+}
+
+function QuoteCard({ quote, book, onEdit, onDelete, onOpen, onOpenBook, t }) {
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const textRef = useRef(null);
@@ -186,17 +276,7 @@ function QuoteCard({ quote, book, onDelete, onOpen, onOpenBook, t }) {
             </button>
           )}
         </div>
-        <button
-          type="button"
-          className="delete-row-btn quote-card-delete"
-          onClick={e => { e.stopPropagation(); onDelete(quote); }}
-          aria-label={t.quoteDelete}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10 3h4"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
-          </svg>
-        </button>
+        <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} t={t} />
       </div>
       <div className="quote-card-divider" />
       <BookChip

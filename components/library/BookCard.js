@@ -1,8 +1,9 @@
 "use client";
 import { memo, useCallback, useEffect, useState } from "react";
 import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import BookCardKebab from "./BookCardKebab";
 
-function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, t }) {
+function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, readingCount, maxReading, t }) {
   const [cover, setCover] = useState(null);
   const isSelected = selected.has(book.id);
   const [c1, c2] = coverColors(book.title);
@@ -72,34 +73,35 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
             )}
           </div>
         )}
-
-        {/* Delete button (non-edit mode) */}
-        {!editMode && (
-          <button
-            type="button"
-            className="card-delete-btn"
-            aria-label={t.deleteBookLabel || `Supprimer ${book.title}`}
-            onClick={e => { e.stopPropagation(); onDelete(book); }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="3 6 5 6 21 6"/>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
-              <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
-              <line x1="10" y1="11" x2="10" y2="17"/>
-              <line x1="14" y1="11" x2="14" y2="17"/>
-            </svg>
-          </button>
-        )}
       </div>
 
       {/* Body */}
       <div className="book-body">
-        <div className="book-title">{book.title}</div>
-        <div className="book-author">{book.author}</div>
-        <div className="book-meta">
-          <span>{book.genre || 'NC'}</span>
-          <span className="book-meta-sep" aria-hidden="true">·</span>
-          <span>{book.year || 'NC'}</span>
+        <div className="book-body-info">
+          <div className="book-title">{book.title}</div>
+          <div className="book-author">{book.author}</div>
+          <div className="book-meta">
+            <span>{book.genre || 'NC'}</span>
+            <span className="book-meta-sep" aria-hidden="true">·</span>
+            <span>{book.year || 'NC'}</span>
+          </div>
         </div>
+        {!editMode && (
+          <BookCardKebab
+            book={book}
+            tab={tab}
+            readingCount={readingCount}
+            maxReading={maxReading}
+            onStartReading={onStartReading}
+            onFinishReading={onFinishReading}
+            onCancelReading={onCancelReading}
+            onAddQuoteFromBook={onAddQuoteFromBook}
+            onEditFinished={onEditFinished}
+            onMoveToLibrary={onMoveToLibrary}
+            onDelete={onDelete}
+            t={t}
+          />
+        )}
       </div>
     </div>
   );

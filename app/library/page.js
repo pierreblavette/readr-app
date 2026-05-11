@@ -271,6 +271,7 @@ export default function LibraryPage() {
               quotes={quotes}
               allBooks={[...data.owned, ...data.wishlist]}
               onAdd={() => { setQuotePrefillBook(null); setAddQuoteOpen(true); }}
+              onEdit={q => { setEditingQuote(q); setAddQuoteOpen(true); }}
               onDelete={q => setDeleteTarget({ type: 'quote', id: q.id, text: q.text })}
               onOpen={q => setPanelQuote(q)}
               onOpenBook={b => setPanelBook(b)}
@@ -374,6 +375,14 @@ export default function LibraryPage() {
                           onToggleSelect={toggleSelected}
                           onOpen={b => setPanelBook(b)}
                           onDelete={b => setDeleteTarget(b)}
+                          onStartReading={b => startReading(b.id)}
+                          onFinishReading={b => setFinishBook(b)}
+                          onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
+                          onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+                          onEditFinished={b => setFinishBook(b)}
+                          onMoveToLibrary={b => moveToLibrary(new Set([b.id]))}
+                          readingCount={readingBooks.length}
+                          maxReading={MAX_READING}
                           t={t}
                         />
                       ))
@@ -388,6 +397,14 @@ export default function LibraryPage() {
                   onSelectAll={toggleSelectAll}
                   onOpen={b => setPanelBook(b)}
                   onDelete={b => setDeleteTarget(b)}
+                  onStartReading={b => startReading(b.id)}
+                  onFinishReading={b => setFinishBook(b)}
+                  onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
+                  onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+                  onEditFinished={b => setFinishBook(b)}
+                  onMoveToLibrary={b => moveToLibrary(new Set([b.id]))}
+                  readingCount={readingBooks.length}
+                  maxReading={MAX_READING}
                   t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
                 />
               )}

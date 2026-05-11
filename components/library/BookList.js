@@ -1,6 +1,7 @@
 "use client";
+import BookCardKebab from "./BookCardKebab";
 
-export default function BookList({ books, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onSelectAll, t, sortCol, sortDir, toggleSort }) {
+export default function BookList({ books, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onSelectAll, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, readingCount, maxReading, t, sortCol, sortDir, toggleSort }) {
   const cols = [
     { key: 'title',  label: t.colTitle,  cellClass: 'list-cell-title' },
     { key: 'author', label: t.colAuthor, cellClass: 'list-cell-meta'  },
@@ -73,17 +74,23 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
               <td className="list-cell-tag"><span className="list-genre">{book.genre || 'NC'}</span></td>
               <td className="list-cell-meta"><span className="list-year">{book.year || 'NC'}</span></td>
 
-              <td className="list-cell-action">
-                <button
-                  className={`delete-row-btn${editMode ? ' disabled' : ''}`}
-                  disabled={editMode}
-                  onClick={e => { e.stopPropagation(); onDelete(book); }}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 3h4"/>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
-                  </svg>
-                </button>
+              <td className="list-cell-action" onClick={e => e.stopPropagation()}>
+                {!editMode && (
+                  <BookCardKebab
+                    book={book}
+                    tab={tab}
+                    readingCount={readingCount}
+                    maxReading={maxReading}
+                    onStartReading={onStartReading}
+                    onFinishReading={onFinishReading}
+                    onCancelReading={onCancelReading}
+                    onAddQuoteFromBook={onAddQuoteFromBook}
+                    onEditFinished={onEditFinished}
+                    onMoveToLibrary={onMoveToLibrary}
+                    onDelete={onDelete}
+                    t={t}
+                  />
+                )}
               </td>
             </tr>
           ))}

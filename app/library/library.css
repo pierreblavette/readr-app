@@ -459,8 +459,9 @@
   cursor: pointer; white-space: nowrap; text-align: left;
   transition: background 0.1s, color 0.1s;
 }
-.dropdown-item:hover { background: var(--primary-5); color: var(--primary-60); }
-.dropdown-item:active { background: var(--primary-10); }
+.dropdown-item:hover:not(:disabled) { background: var(--primary-5); color: var(--primary-60); }
+.dropdown-item:active:not(:disabled) { background: var(--primary-10); }
+.dropdown-item:disabled { opacity: 0.4; cursor: not-allowed; }
 .dropdown-item svg { width: 16px; height: 16px; flex-shrink: 0; }
 .dropdown-divider { height: 1px; background: var(--border-subtle); margin: 4px 8px; }
 [data-theme="dark"] .dropdown-menu {
@@ -506,7 +507,7 @@
 .books-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 18px;
 }
 
@@ -719,7 +720,7 @@
 [data-theme="dark"] .book-cover-placeholder { background: var(--primary-3); }
 
 .book-cover {
-  height: 148px;
+  height: 192px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -809,9 +810,18 @@
 .book-body {
   padding: 14px 16px;
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+.book-body-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
   flex-direction: column;
   gap: 4px;
 }
+.book-card .col-card-kebab { flex-shrink: 0; }
 
 .book-title {
   font-size: 15px;
@@ -843,31 +853,6 @@
 }
 .book-meta-sep { color: var(--text-3); }
 
-/* Delete button on card hover */
-.card-delete-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--accent);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  opacity: 0;
-  transition: opacity 0.15s, background 0.15s;
-}
-
-.book-card:hover .card-delete-btn { opacity: 1; }
-.card-delete-btn:hover { background: var(--primary-60); }
-[data-theme="dark"] .card-delete-btn { background: var(--primary-40); }
-[data-theme="dark"] .card-delete-btn:hover { background: var(--primary-50); }
-.card-delete-btn svg { width: 14px; height: 14px; pointer-events: none; }
-
 /* ─── BOOK CARD — Craft additions (a11y + touch + reduced motion) ─── */
 
 /* Suppress hover flash on touch devices (invisible on desktop) */
@@ -894,19 +879,7 @@
   border-color: var(--primary-40);
   box-shadow: 0 0 0 3px rgba(73,89,230,0.25);
 }
-.card-delete-btn:focus-visible {
-  outline: 2px solid var(--primary-50);
-  outline-offset: 2px;
-  opacity: 1;
-}
-
 /* Extended touch targets (visuellement invisible, zone tappable augmentée) */
-.card-delete-btn::before {
-  content: "";
-  position: absolute;
-  inset: -7px;
-  pointer-events: auto;
-}
 .card-checkbox::before {
   content: "";
   position: absolute;
@@ -917,7 +890,6 @@
 /* Reduced motion — respecte la préférence système */
 @media (prefers-reduced-motion: reduce) {
   .book-card,
-  .card-delete-btn,
   .card-checkbox,
   .panel-cover-img {
     animation: none !important;
@@ -2140,7 +2112,6 @@
  *
  * Exceptions (not subject to the above):
  *   - chevrons/dropdown markers (.dropdown-btn caret 14px) — interaction markers
- *   - .card-delete-btn (30×30 SM contextual, inside BookCard)
  *   - .search-clear (18×18 round utility inside input)
  *   - .quote-photo-btn (vertical icon-on-top layout)
  *   - .theme-btn (slider toggle)
@@ -2178,7 +2149,6 @@
 }
 
 /* Glyph 14 (SM icon-only + .dropdown-btn chevron marker) */
-.card-delete-btn svg *,
 .import-preview-remove svg *,
 .dropdown-btn svg * {
   stroke-width: 2.5;
@@ -2698,7 +2668,7 @@
 }
 .confirm-modal-quote {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.8;
   color: var(--text-2);
@@ -3292,7 +3262,7 @@
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
   .view-btns { margin-left: auto; }
-  .books-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .books-grid { grid-template-columns: 1fr; gap: 12px; }
   .now-reading-list { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .books-list { overflow-x: hidden; }
   .selection-bar {
