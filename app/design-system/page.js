@@ -10,8 +10,8 @@ import GradientDropzone from "@/components/library/GradientDropzone";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
-  Components:  ["autocomplete","badges","book-chip","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","theme-toggle","view-toggle"],
-  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
+  Components:  ["autocomplete","badges","book-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","theme-toggle","view-toggle"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -20,10 +20,10 @@ const NAV_LABELS = {
   "buttons":"Buttons","dropdown":"Dropdown Menu",
   "inputs":"Inputs","view-toggle":"View Toggle","badges":"Badges",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
-  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
+  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","book-card-kebab":"Book Card Kebab","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
-  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
+  "modal":"Modal","delete-modal":"Delete Modal","upload-box":"Upload Box","selection-bar":"Selection Bar","toast":"Toast","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
   "token-usage":"Token Usage",
 };
 
@@ -927,6 +927,68 @@ export default function DesignSystemPage() {
             </div>
           </DSSection>
 
+          {/* ── BOOK CARD KEBAB ── */}
+          <DSSection id="book-card-kebab" title="Book Card Kebab" sub="Three-dot trigger on book cards — opens a state-aware context menu portalised on document.body. Shared between BookCard (grid + list), QuotesView (inline) and CollectionDetailView.">
+            <div className="ds-card">
+              <div className="ds-card-head">Preview — trigger + open menu (Reading state)</div>
+              <div className="ds-card-body" style={{ alignItems: "flex-start", gap: 32, flexWrap: "wrap" }}>
+                <button type="button" className="col-card-kebab" aria-haspopup="menu" aria-expanded="false" aria-label="More actions">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <circle cx="12" cy="6" r="2"/>
+                    <circle cx="12" cy="12" r="2"/>
+                    <circle cx="12" cy="18" r="2"/>
+                  </svg>
+                </button>
+                <div className="dropdown-menu" style={{ position: "static", margin: 0 }}>
+                  <button type="button" className="dropdown-item">Mark as finished</button>
+                  <button type="button" className="dropdown-item">Add a quote</button>
+                  <button type="button" className="dropdown-item">Cancel reading</button>
+                  <button type="button" className="dropdown-item">Share</button>
+                  <div className="dropdown-divider" role="separator" />
+                  <button type="button" className="dropdown-item is-destructive">Delete</button>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col padded">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.col-card-kebab</code></td><td className="meta">Trigger (3 dots)</td><td className="mono">40×40 · radius 8 · bg <span className="ds-token-chip">--primary-5</span> · hover <span className="ds-token-chip">--primary-10</span> · svg 18×18 · color <span className="ds-token-chip">--primary-60</span></td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.dropdown-menu.dropdown-menu--portal</code></td><td className="meta">Menu (portalised on document.body)</td><td className="mono">position fixed, top/right computed from trigger rect (offset 6px below). Reuses Dropdown Menu primitive.</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.dropdown-item</code></td><td className="meta">Action row</td><td className="mono">Inherits Dropdown · destructive last, separated by <code>.dropdown-divider</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Behavior</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">State-aware items</div>
+                  <p><strong>Wishlist</strong> → Mark as owned · Share · Delete. <strong>Not started</strong> → Start reading (disabled if reading limit reached, with title tooltip) · Share · Delete. <strong>Reading</strong> → Mark as finished · Add a quote · Cancel reading · Share · Delete. <strong>Finished</strong> → Edit / Add review · Share · Delete.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Close triggers</div>
+                  <p>Click-outside, <code>Escape</code>, scroll/resize. Position recomputed only on open via <code>getBoundingClientRect()</code>.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Share</div>
+                  <p>Uses <code>navigator.share</code> when available, falls back to <code>clipboard.writeText</code> and fires <code>onShared</code> → triggers the <Link href="#toast">Toast</Link> "Copied!".</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">A11y</div>
+                  <p><code>aria-haspopup="menu"</code> + <code>aria-expanded</code> on the trigger. Menu has <code>role="menu"</code>, items as <code>&lt;button&gt;</code>. Escape closes ; no focus trap (lightweight contextual menu).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Source</div>
+                  <p>Component : <code>components/library/BookCardKebab.js</code>.</p>
+                </div>
+              </div>
+            </div>
+          </DSSection>
+
           {/* ── BUTTONS ── */}
           <DSSection id="buttons" title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all.">
             {/* States — 5 variants × 5 states */}
@@ -965,7 +1027,7 @@ export default function DesignSystemPage() {
                   ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".col-delete-btn"]],
                   ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
                   ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
-                  ["Text link (inline, not dimensional)", "(no canonical)", [".footer-link · 11/500 · hover --primary-60", ".quote-see-more · 14/600 · hover --primary-60 + underline"]],
+                  ["Text link (inline, not dimensional)", "btn-link / btn-link--critical", [".btn-link · 14/600 · hover --primary-60 + underline", ".btn-link--critical · destructive variant", ".footer-link · 11/500 (footer-specific)", ".quote-see-more · 14/600 (quote/cast expand-collapse)"]],
                   ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
                   ["AI action", "btn-ai btn-md", [".panel-cast-action (Generate state)"]],
                 ].map(([role, canon, classes]) => (
@@ -1135,6 +1197,31 @@ export default function DesignSystemPage() {
                 <div className="ds-token-block">
                   <div className="ds-token-name">Icon · sizes · usage</div>
                   <p>Pair with <code>.import-tab-ai-icon</code> 16×16 sparkle SVG. Sizes : SM / MD (default) / LG. Reserved for AI-generated actions. First app usage : <code>.panel-cast-action</code> in BookPanel (Now Reading) — the "Generate cast" / "Regenerate" call to the Gemini cast endpoint.</p>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Text link — .btn-link</div>
+              <div className="ds-card-body" style={{ alignItems: "center", gap: 32, flexWrap: "wrap" }}>
+                <button type="button" className="btn-link">Remove goal</button>
+                <button type="button" className="btn-link btn-link--critical">Remove goal</button>
+              </div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.btn-link</div>
+                  <p>Inline text action — 14 / 600 · <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span> + underline · no padding, no border, no fixed height. Used for low-key actions inside forms or cards (e.g. "Remove goal" in ReadingGoalModal).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.btn-link--critical</div>
+                  <p><span className="ds-token-chip">--destructive</span> color · same typography and behavior. For destructive inline actions.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Form coupling · :has()</div>
+                  <p><code>.modal-form:has(.btn-link) {`{ gap: 12px }`}</code> — auto-tightens the form gap (24 → 12) when a btn-link is present, so the link sits close to the field above.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Focus</div>
+                  <p>2px <span className="ds-token-chip">--primary-50</span> ring via <code>box-shadow</code> (or <span className="ds-token-chip">--destructive</span> for the critical variant), radius 4. No default outline.</p>
                 </div>
               </div>
             </div>
@@ -2281,9 +2368,31 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.modal-form</code></td><td className="meta">{'<form>'} wrapping inputs only</td><td className="mono">id="..." — referenced by submit button outside</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-fields</code></td><td className="meta">Body content stack</td><td className="mono">flex col gap 24</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.modal-field</code></td><td className="meta">Label + input pair</td><td className="mono">flex col gap 8 — label 13/500/<span className="ds-token-chip">--text-2</span></td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.modal-actions</code></td><td className="meta">Footer button row (sibling of form)</td><td className="mono">flex space-between, margin 0 -24px (extends edges), padding 18 24</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.modal-actions</code></td><td className="meta">Footer button row (sibling of form)</td><td className="mono">flex space-between, margin 0 -24px (extends edges), padding 18 24 · <strong>position: sticky; bottom: 0</strong> · border-top 1px <span className="ds-token-chip">--border-subtle</span> · z-index 1</td></tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Sticky actions on scroll</div>
+              <div className="ds-card-body">
+                <div className="modal" style={{ animation: "none", margin: "0 auto", maxHeight: 320 }}>
+                  <div className="modal-title">Long form</div>
+                  <form className="modal-form" onSubmit={e => e.preventDefault()}>
+                    <div className="modal-fields">
+                      {Array.from({ length: 8 }, (_, i) => (
+                        <div key={i} className="modal-field"><label>Field {i + 1}</label><input placeholder="—" readOnly /></div>
+                      ))}
+                    </div>
+                  </form>
+                  <div className="modal-actions">
+                    <button type="button" className="modal-cancel">Cancel</button>
+                    <button type="button" className="modal-submit">Save</button>
+                  </div>
+                </div>
+              </div>
+              <div className="ds-card-foot">
+                Scroll the form inside the modal — <code>.modal-actions</code> stays pinned at the bottom via <code>position: sticky; bottom: 0</code>. Background <code>inherit</code> + <code>border-top</code> <span className="ds-token-chip">--border-subtle</span>. Active on all modals whose content can overflow (Mark as finished, Add a book with photo scan list, etc.).
               </div>
             </div>
           </DSSection>
@@ -2596,6 +2705,63 @@ function handleDeleteConfirm(payload) {
               </div>
               <div className="ds-card-foot">
                 Background <span className="ds-token-chip">--primary-60</span> light & dark. Mobile (max-width 600px) : flex column, gap 16 (count → .sel-actions stacked → cancel). Buttons full-width via <code>.sel-btn {`{ width: 100% }`}</code>.
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── TOAST ── */}
+          <DSSection id="toast" title="Toast" sub="Global confirmation feedback after destructive actions, state changes and share. Same primary-60 surface family as the Selection Bar; auto-dismissed after 3s.">
+            <div className="ds-card">
+              <div className="ds-card-head">Preview</div>
+              <div className="ds-card-body col padded">
+                <div className="toast toast-visible" style={{ position: "static", transform: "none", width: "fit-content", margin: 0 }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span>Reading started</span>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col padded">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.toast</code></td><td className="meta">Floating container</td><td className="mono">fixed bottom 28, centered, padding 13 20 13 12, radius 8, gap 8, white-space nowrap, shadow 0 8 32 rgba(0,0,0,0.25)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.toast.toast-visible</code></td><td className="meta">Active state</td><td className="mono">opacity 1, translateY 0 (from 20 hidden), transition 0.2s opacity / 0.25s transform</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.toast svg</code></td><td className="meta">Leading icon</td><td className="mono">16×16 · padding 2 (content-box → frame 20) · stroke 2.5 (formule 36/16)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>span</code></td><td className="meta">Message text</td><td className="mono">15 / 500 · #fff</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="ds-card-foot">
+                Background <span className="ds-token-chip">--primary-60</span> light & dark, ISO <code>.selection-bar.visible</code>. Padding asymétrique 12 / 20 iso <code>.btn-md</code> avec icon-left.
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Behavior</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Auto-dismiss · 3s</div>
+                  <p>No close button. Timer set on each new message; replacing the message resets it.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">A11y</div>
+                  <p><code>role="status"</code> + <code>aria-live="polite"</code>. Announced by screen readers without stealing focus.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Width-stable fade-out</div>
+                  <p>Local <code>useState('shown')</code> caches the last non-empty message; the <code>&lt;span&gt;</code> renders <code>shown</code>, not <code>message</code>. Prevents visual shrink when the parent clears the message at dismissal.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Single feedback channel</div>
+                  <p>Toast is the unique confirmation channel — no in-context icon-flip or label-flip after the toast was wired (cross-surface consistency).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Wording</div>
+                  <p>i18n keys préfixées <code>toastXxx</code> dans <code>lib/i18n.js</code>. Pour les pluriels FR, fonctions <code>(n) =&gt; ...</code> (ex. <code>toastBooksRemoved(3)</code>).</p>
+                </div>
               </div>
             </div>
           </DSSection>
