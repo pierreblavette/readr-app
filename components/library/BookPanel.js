@@ -170,7 +170,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   </div>
                   <div className="panel-finished-actions">
                     <button type="button" className="panel-finished-btn" onClick={() => onEditFinished?.(book)}>
-                      {(book.rating || book.note) ? t.btnEdit : t.btnAddRating}
+                      {(book.rating || book.note) ? t.btnEditReview : t.btnAddReview}
                     </button>
                     {(book.rating || book.note) && (
                       <button type="button" className="panel-finished-btn" onClick={() => onRemoveFinished?.(book)}>
