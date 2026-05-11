@@ -4720,12 +4720,19 @@ button.quote-book-chip {
   font-weight: 500;
   color: var(--text-2);
 }
-.overview-goal-pace-sep { opacity: 0.5; }
-.overview-goal-pace-delta { font-weight: 600; }
-.overview-goal-pace--ahead .overview-goal-pace-delta { color: #16A34A; }
-.overview-goal-pace--behind .overview-goal-pace-delta { color: #ef4444; }
-[data-theme="dark"] .overview-goal-pace--ahead .overview-goal-pace-delta { color: #4ADE80; }
-[data-theme="dark"] .overview-goal-pace--behind .overview-goal-pace-delta { color: #ef4444; }
+.overview-goal-pace-delta {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.overview-goal-pace--ahead .overview-goal-pace-delta { background: rgba(22,163,74,0.1); color: #16A34A; }
+.overview-goal-pace--behind .overview-goal-pace-delta { background: rgba(239,68,68,0.1); color: #ef4444; }
+[data-theme="dark"] .overview-goal-pace--ahead .overview-goal-pace-delta { background: rgba(74,222,128,0.12); color: #4ADE80; }
+[data-theme="dark"] .overview-goal-pace--behind .overview-goal-pace-delta { background: rgba(255,107,107,0.12); color: #FF6B6B; }
 /* Generic text-link button primitive — reusable across modals/forms
  * where a low-key inline action is needed (e.g. "Remove goal").
  * Mirrors the .quote-see-more typography but generic naming. */
@@ -4786,7 +4793,7 @@ button.quote-book-chip {
 /* Weekly activity — bar chart with metric switcher + week navigation */
 .overview-activity-head {
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
 }
 .overview-activity-pills {
@@ -4842,7 +4849,7 @@ button.quote-book-chip {
 [data-theme="dark"] .overview-activity-nav-btn { background: var(--primary-90); color: var(--primary-30); }
 [data-theme="dark"] .overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-80); }
 .overview-activity-week-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
   font-variant-numeric: tabular-nums;
@@ -4891,7 +4898,7 @@ button.quote-book-chip {
 
 .overview-activity-track {
   width: 100%;
-  height: 80px;
+  height: 120px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -4905,7 +4912,20 @@ button.quote-book-chip {
   background: var(--primary);
   border-radius: 5px 5px 0 0;
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
+.overview-activity-fill > .overview-activity-count {
+  height: auto;
+  line-height: 1;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary-foreground);
+}
+.overview-activity-fill.is-words > .overview-activity-count { color: var(--primary-70); }
+[data-theme="dark"] .overview-activity-fill.is-words > .overview-activity-count { color: var(--primary-90); }
 .overview-activity-fill.is-books { background: var(--primary); }
 .overview-activity-fill.is-quotes { background: var(--primary-40); }
 .overview-activity-fill.is-words { background: var(--primary-20); }
@@ -5002,13 +5022,12 @@ button.quote-book-chip {
 
 /* Mobile: tighten gaps */
 @media (max-width: 600px) {
-  .overview-activity-head { gap: 12px; }
+  .overview-activity-head { gap: 16px; }
   .overview-activity-pills { display: flex; width: 100%; }
   .overview-activity-pills .overview-activity-pill { flex: 1; }
   .overview-activity-nav { display: flex; width: 100%; justify-content: space-between; }
-  .overview-activity-week-label { min-width: 90px; font-size: 12px; }
+  .overview-activity-week-label { min-width: 90px; }
   .overview-activity-bars { gap: 6px; }
-  .overview-activity-track { height: 70px; }
 }
 
 /* Cloud chip primitive — used by Top Genres + Top Authors (Overview) */

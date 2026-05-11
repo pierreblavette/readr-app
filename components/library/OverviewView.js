@@ -294,7 +294,6 @@ function ReadingGoalCard({ goal, onEdit, t }) {
         {!achieved && goal.pace && (
           <div className={`overview-goal-pace${goal.pace.delta >= 0 ? ' overview-goal-pace--ahead' : ' overview-goal-pace--behind'}`}>
             <span className="overview-goal-pace-projected">{t.overviewPaceProjected(goal.pace.projected, goal.target)}</span>
-            <span className="overview-goal-pace-sep" aria-hidden="true">·</span>
             <span className="overview-goal-pace-delta">{t.overviewPaceDelta(goal.pace.delta)}</span>
           </div>
         )}

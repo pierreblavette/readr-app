@@ -139,11 +139,6 @@ export default function WeeklyActivityCard({ owned = [], quotes = [], words = []
           const fillHeight = Math.max(8, ratio * 100);
           return (
             <div key={i} className="overview-activity-col">
-              {metric !== 'all' && (
-                <span className={`overview-activity-count${d.count > 0 ? '' : ' is-empty'}`}>
-                  {d.count > 0 ? d.count : ''}
-                </span>
-              )}
               <div className="overview-activity-track" aria-hidden="true">
                 {d.count === 0 ? (
                   <div className="overview-activity-dot"/>
@@ -163,7 +158,9 @@ export default function WeeklyActivityCard({ owned = [], quotes = [], words = []
                     </div>
                   </div>
                 ) : (
-                  <div className={`overview-activity-fill is-${metric}`} style={{ height: `${fillHeight}%` }}/>
+                  <div className={`overview-activity-fill is-${metric}`} style={{ height: `${fillHeight}%` }}>
+                    <span className="overview-activity-count">{d.count}</span>
+                  </div>
                 )}
               </div>
               <span className="overview-activity-day">{initials[i]}</span>
@@ -171,25 +168,21 @@ export default function WeeklyActivityCard({ owned = [], quotes = [], words = []
           );
         })}
       </div>
-      {metric === 'all' && (
-        <>
-          <div className="overview-activity-divider" aria-hidden="true"/>
-          <div className="overview-activity-legend">
-            <span className="overview-activity-legend-item">
-              <span className="overview-activity-legend-dot is-books" aria-hidden="true"/>
-              <span>{t.overviewActivityBooks}</span>
-            </span>
-            <span className="overview-activity-legend-item">
-              <span className="overview-activity-legend-dot is-quotes" aria-hidden="true"/>
-              <span>{t.overviewActivityQuotes}</span>
-            </span>
-            <span className="overview-activity-legend-item">
-              <span className="overview-activity-legend-dot is-words" aria-hidden="true"/>
-              <span>{t.overviewActivityWords}</span>
-            </span>
-          </div>
-        </>
-      )}
+      <div className="overview-activity-divider" aria-hidden="true"/>
+      <div className="overview-activity-legend">
+        <span className="overview-activity-legend-item">
+          <span className="overview-activity-legend-dot is-books" aria-hidden="true"/>
+          <span>{t.overviewActivityBooks}</span>
+        </span>
+        <span className="overview-activity-legend-item">
+          <span className="overview-activity-legend-dot is-quotes" aria-hidden="true"/>
+          <span>{t.overviewActivityQuotes}</span>
+        </span>
+        <span className="overview-activity-legend-item">
+          <span className="overview-activity-legend-dot is-words" aria-hidden="true"/>
+          <span>{t.overviewActivityWords}</span>
+        </span>
+      </div>
     </div>
   );
 }
