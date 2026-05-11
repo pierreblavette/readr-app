@@ -4,6 +4,9 @@ import { useStats } from "@/lib/useStats";
 import BookChip from "./BookChip";
 import ReadingGoalModal from "./ReadingGoalModal";
 import BookListPanel from "./BookListPanel";
+import QuoteListPanel from "./QuoteListPanel";
+import WordListPanel from "./WordListPanel";
+import OverviewQuoteCard from "./OverviewQuoteCard";
 import WeeklyActivityCard from "./WeeklyActivityCard";
 import NowReadingSection from "./NowReadingSection";
 
@@ -20,6 +23,8 @@ export default function OverviewView({
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [lovedPanelOpen, setLovedPanelOpen] = useState(false);
   const [finishedPanelOpen, setFinishedPanelOpen] = useState(false);
+  const [quotesPanelOpen, setQuotesPanelOpen] = useState(false);
+  const [wordsPanelOpen, setWordsPanelOpen] = useState(false);
   const [activeGenre, setActiveGenre] = useState(null);
   const [activeAuthor, setActiveAuthor] = useState(null);
 
@@ -73,11 +78,12 @@ export default function OverviewView({
     ? stats.finishedBooks.filter(b => (b.author || '').trim() === activeAuthor)
     : [];
   function handleHeroQuotes() {
-    if (quotes.length === 1) onOpenQuote?.(quotes[0]);
-    else onNavigate?.('quotes');
+    if (quotes.length === 0) onNavigate?.('quotes');
+    else setQuotesPanelOpen(true);
   }
   function handleHeroWords() {
-    onNavigate?.('dictionary');
+    if (words.length === 0) onNavigate?.('dictionary');
+    else setWordsPanelOpen(true);
   }
 
   const allBooks = [...owned, ...wishlist];
@@ -104,7 +110,7 @@ export default function OverviewView({
           label={t.overviewHeroFinished(stats.heroStats.finished)}
           icon={
             <span className="overview-hero-icon-chip">
-              <svg className="overview-hero-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="overview-hero-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/>
                 <polyline points="9 12 11 14 15 10"/>
               </svg>
@@ -117,7 +123,7 @@ export default function OverviewView({
           label={t.overviewHeroQuotes(stats.heroStats.quotesCount)}
           icon={
             <span className="overview-hero-icon-chip">
-              <svg className="overview-hero-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="overview-hero-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M3 21c3 0 7-1 7-8V5H3v8h4"/>
                 <path d="M14 21c3 0 7-1 7-8V5h-7v8h4"/>
               </svg>
@@ -130,7 +136,7 @@ export default function OverviewView({
           label={t.overviewHeroWords(stats.heroStats.wordsCount)}
           icon={
             <span className="overview-hero-icon-chip">
-              <svg className="overview-hero-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg className="overview-hero-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <line x1="17" y1="10" x2="3" y2="10"/>
                 <line x1="21" y1="6" x2="3" y2="6"/>
                 <line x1="21" y1="14" x2="3" y2="14"/>
@@ -224,6 +230,24 @@ export default function OverviewView({
         title={activeAuthor || ''}
         books={activeAuthorBooks}
         onOpenBook={onOpenBook}
+        t={t}
+      />
+
+      <QuoteListPanel
+        open={quotesPanelOpen}
+        onClose={() => setQuotesPanelOpen(false)}
+        quotes={quotes}
+        resolveBook={resolveBook}
+        onOpenQuote={onOpenQuote}
+        onSeeAll={() => { setQuotesPanelOpen(false); onNavigate?.('quotes'); }}
+        t={t}
+      />
+
+      <WordListPanel
+        open={wordsPanelOpen}
+        onClose={() => setWordsPanelOpen(false)}
+        words={words}
+        onSeeAll={() => { setWordsPanelOpen(false); onNavigate?.('dictionary'); }}
         t={t}
       />
 
@@ -454,7 +478,7 @@ function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onShuffle, canShuffl
       ) : (
         <div className="overview-quotes-list">
           {quotes.map(q => (
-            <SpotlightQuote
+            <OverviewQuoteCard
               key={q.id}
               quote={q}
               book={resolveBook(q)}
@@ -480,36 +504,3 @@ function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onShuffle, canShuffl
   );
 }
 
-function SpotlightQuote({ quote, book, onOpen, t }) {
-  function activate() { onOpen?.(quote); }
-  function onKeyDown(e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
-  }
-  const chipBook = book || { title: quote.bookTitle || '', author: quote.bookAuthor || '' };
-  return (
-    <div
-      className="quote-card overview-quote-card"
-      role="button"
-      tabIndex={0}
-      onClick={activate}
-      onKeyDown={onKeyDown}
-      aria-label={quote.bookTitle || t.overviewQuotesTitle}
-    >
-      <div className="quote-card-body">
-        <div className="quote-card-text-wrap">
-          <div className="quote-card-text">
-            <span className="quote-mark">&ldquo;</span>
-            {quote.text}
-            <span className="quote-mark">&rdquo;</span>
-          </div>
-        </div>
-      </div>
-      {(book || quote.bookTitle) && (
-        <>
-          <div className="quote-card-divider" />
-          <BookChip book={chipBook} />
-        </>
-      )}
-    </div>
-  );
-}

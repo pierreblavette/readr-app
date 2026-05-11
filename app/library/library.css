@@ -3945,7 +3945,7 @@
 .dictionary-saved-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 .dictionary-saved-card {
   background: var(--bg2);
@@ -4039,7 +4039,7 @@
 
 .dictionary-saved-body {
   padding: 20px;
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1.5px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -5070,30 +5070,58 @@ button.quote-book-chip {
   flex-direction: column;
   gap: 12px;
 }
-/* In the Quotes spotlight context only, the .quote-card mirrors the
- * .quote-book-chip-interactive UI: neutral bg + primary-tint on hover,
- * no transform / no shadow / no border / no entry animation. */
-.overview-quotes .quote-card {
+/* .overview-quote-card modifier — neutral bg + primary-tint on hover,
+ * no transform / no shadow / no border / no entry animation.
+ * Mirrors the .quote-book-chip-interactive UI. Used in Quotes spotlight
+ * (OverviewView) and QuoteListPanel. */
+.quote-card.overview-quote-card {
   background: var(--bg3);
   border-color: transparent;
   animation: none;
   transition: background 0.15s;
 }
-.overview-quotes .quote-card:hover {
+.quote-card.overview-quote-card:hover {
   background: var(--primary-5);
   border-color: transparent;
   transform: none;
   box-shadow: none;
 }
-[data-theme="dark"] .overview-quotes .quote-card { background: #262626; }
-[data-theme="dark"] .overview-quotes .quote-card:hover { background: var(--primary-10); }
-.overview-quotes .quote-card .quote-card-divider { display: none; }
-/* Inner BookChip is non-interactive in the spotlight context — drop
- * its bg so it doesn't read as a clickable affordance. */
-.overview-quotes .quote-card .quote-book-chip,
-[data-theme="dark"] .overview-quotes .quote-card .quote-book-chip {
+[data-theme="dark"] .quote-card.overview-quote-card { background: #262626; }
+[data-theme="dark"] .quote-card.overview-quote-card:hover { background: var(--primary-10); }
+.quote-card.overview-quote-card .quote-card-divider { display: none; }
+/* Inner BookChip is non-interactive — drop its bg so it doesn't read as
+ * a clickable affordance. */
+.quote-card.overview-quote-card .quote-book-chip,
+[data-theme="dark"] .quote-card.overview-quote-card .quote-book-chip {
   background: transparent;
   padding: 0;
+}
+
+/* .overview-word-card modifier — neutral bg + primary-tint on hover,
+ * no transform / no shadow / no border / no entry animation.
+ * Iso .quote-card.overview-quote-card. Used in WordListPanel.
+ * Head padding iso .btn-md (13px vertical) for size homogeneity with
+ * the canonical interactive element. */
+.dictionary-saved-card.overview-word-card {
+  background: var(--bg3);
+  border-color: transparent;
+  animation: none;
+  transition: background 0.15s;
+}
+.dictionary-saved-card.overview-word-card:hover {
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+[data-theme="dark"] .dictionary-saved-card.overview-word-card { background: #262626; }
+.dictionary-saved-card.overview-word-card .dictionary-saved-head {
+  padding: 13px 20px;
+}
+.dictionary-saved-card.overview-word-card .dictionary-saved-head:hover {
+  background: var(--primary-5);
+}
+[data-theme="dark"] .dictionary-saved-card.overview-word-card .dictionary-saved-head:hover {
+  background: var(--primary-10);
 }
 
 /* Empty state */
