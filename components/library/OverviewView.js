@@ -9,6 +9,7 @@ import WordListPanel from "./WordListPanel";
 import OverviewQuoteCard from "./OverviewQuoteCard";
 import WeeklyActivityCard from "./WeeklyActivityCard";
 import NowReadingSection from "./NowReadingSection";
+import { OverviewIcon } from "./EmptyState";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
@@ -46,10 +47,13 @@ export default function OverviewView({
 
   if (isEmpty) {
     return (
-      <div className="overview-empty">
-        <h2 className="overview-empty-title">{t.overviewEmptyTitle}</h2>
-        <p className="overview-empty-hint">{t.overviewEmptyHint}</p>
-        <button className="btn-primary" onClick={onAddBook}>{t.btnAdd}</button>
+      <div className="empty">
+        <OverviewIcon />
+        <div className="empty-text">
+          <p className="empty-title">{t.overviewEmptyTitle}</p>
+          <p className="empty-sub">{t.overviewEmptyHint}</p>
+        </div>
+        <button className="empty-cta" onClick={onAddBook}>{t.emptyLibCta}</button>
       </div>
     );
   }

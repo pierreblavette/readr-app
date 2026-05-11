@@ -2767,10 +2767,10 @@ function handleDeleteConfirm(payload) {
           </DSSection>
 
           {/* ── EMPTY STATE ── */}
-          <DSSection id="empty" title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Illustration SVGs displayed at 96×96, custom per page (Library, Wishlist, Quotes, Dictionary, Collections).">
+          <DSSection id="empty" title="Empty State" sub="Gap-driven layout (20px between blocks, 8px inside .empty-text). Illustration SVGs displayed at 96×96, custom per page (Library, Wishlist, Quotes, Dictionary, Collections, Overview).">
 
             <div className="ds-card">
-              <div className="ds-card-head">Icon set — 4 illustrative SVGs (80×80, viewBox 60)</div>
+              <div className="ds-card-head">Icon set — 6 illustrative SVGs (96×96, viewBox 60)</div>
               <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
                 <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
@@ -2858,6 +2858,27 @@ function handleDeleteConfirm(payload) {
                   </svg>
                   <span className="panel-section-eyebrow">Collections</span>
                 </div>
+
+                <div className="ds-icon-tile">
+                  <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                    <path d="M29.9468 29.9693L7.45355 42.9541C5.25765 39.1403 4.00159 34.7168 4.00159 30C4.00159 15.659 15.6127 4.03098 29.9468 4.00186V29.9693Z" fill="#E8EAFD"/>
+                    <path d="M30.0558 4.00186C44.3895 4.03155 56 15.6594 56 30C56 34.717 54.7431 39.1402 52.547 42.9541L30.0558 29.9693V4.00186Z" fill="#9BA5F8"/>
+                    <path d="M52.492 43.0472C47.9897 50.7916 39.6041 55.9992 30.0008 55.9992C20.3973 55.9992 12.0108 50.7918 7.50858 43.0472L30.0008 30.0614L52.492 43.0472Z" fill="#6F7CF2"/>
+                    <path d="M21.0877 5.56874C27.3681 3.28288 34.2874 3.50336 40.4095 6.18439C46.5316 8.86542 51.3861 13.8011 53.9652 19.9667C56.5444 26.1324 56.6501 33.0545 54.2604 39.2961C51.8708 45.5377 47.1693 50.6193 41.1319 53.486C35.0946 56.3527 28.1852 56.7844 21.838 54.6914C15.4907 52.5984 10.1933 48.1415 7.04537 42.2459C3.89742 36.3503 3.14075 29.4689 4.93243 23.0301C6.72411 16.5914 10.9265 11.0899 16.6673 7.66771" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M30.0008 4.00079L30.0233 29.987L52.5168 42.9996L30.0008 30.026L7.48482 42.9996L29.9783 29.987L30.0008 4.00079Z" stroke="#131860"/>
+                    <path d="M32 35C32 34.4477 32.4477 34 33 34H41C41.5523 34 42 34.4477 42 35V55C42 55.5523 41.5523 56 41 56H33C32.4477 56 32 55.5523 32 55L32 35Z" fill="#C1C7FB"/>
+                    <path d="M20 42C20 41.4477 20.4477 41 21 41H29C29.5523 41 30 41.4477 30 42V55C30 55.5523 29.5523 56 29 56H21C20.4477 56 20 55.5523 20 55L20 42Z" fill="#E8EAFD"/>
+                    <path d="M33 56H41C41.5523 56 42 55.5523 42 55L42 35C42 34.4477 41.5523 34 41 34H33C32.4477 34 32 34.4477 32 35V55C32 55.5523 32.4477 56 33 56Z" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M30 49L30 55C30 55.5523 29.5523 56 29 56L21 56C20.4477 56 20 55.5523 20 55L20 42C20 41.4477 20.4477 41 21 41L29 41C29.5523 41 30 41.4477 30 42L30 45" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M44 33C44 32.4477 44.4477 32 45 32H53C53.5523 32 54 32.4477 54 33V55C54 55.5523 53.5523 56 53 56H45C44.4477 56 44 55.5523 44 55V33Z" fill="#4959E6"/>
+                    <path d="M54 48V33C54 32.4477 53.5523 32 53 32H45C44.4477 32 44 32.4477 44 33V55C44 55.5523 44.4477 56 45 56H53C53.5523 56 54 55.5523 54 55V52" stroke="#131860" strokeLinecap="round"/>
+                    <path d="M25 48L37 41L49 45" stroke="#131860" strokeLinecap="round"/>
+                    <circle cx="25" cy="48" r="2" fill="#C1C7FB" stroke="#131860" strokeLinecap="round"/>
+                    <circle cx="37" cy="41" r="2" fill="#6F7CF2" stroke="#131860" strokeLinecap="round"/>
+                    <circle cx="49" cy="45" r="2" fill="#E8EAFD" stroke="#131860" strokeLinecap="round"/>
+                  </svg>
+                  <span className="panel-section-eyebrow">Overview</span>
+                </div>
               </div>
             </div>
 
@@ -2871,6 +2892,7 @@ function handleDeleteConfirm(payload) {
                     ["quotes", "Quotes"],
                     ["dictionary", "Dictionary"],
                     ["collections", "Collections"],
+                    ["overview", "Overview"],
                   ].map(([key, label]) => (
                     <button key={key} type="button" className={`btn btn-xs ${emptyTab === key ? "btn-primary" : "btn-secondary"}`} onClick={(e) => { e.stopPropagation(); setEmptyTab(key); }}>{label}</button>
                   ))}
@@ -2933,6 +2955,25 @@ function handleDeleteConfirm(payload) {
                       <path d="M34 50H46" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   )}
+                  {emptyTab === "overview" && (
+                    <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
+                      <path d="M29.9468 29.9693L7.45355 42.9541C5.25765 39.1403 4.00159 34.7168 4.00159 30C4.00159 15.659 15.6127 4.03098 29.9468 4.00186V29.9693Z" fill="#E8EAFD"/>
+                      <path d="M30.0558 4.00186C44.3895 4.03155 56 15.6594 56 30C56 34.717 54.7431 39.1402 52.547 42.9541L30.0558 29.9693V4.00186Z" fill="#9BA5F8"/>
+                      <path d="M52.492 43.0472C47.9897 50.7916 39.6041 55.9992 30.0008 55.9992C20.3973 55.9992 12.0108 50.7918 7.50858 43.0472L30.0008 30.0614L52.492 43.0472Z" fill="#6F7CF2"/>
+                      <path d="M21.0877 5.56874C27.3681 3.28288 34.2874 3.50336 40.4095 6.18439C46.5316 8.86542 51.3861 13.8011 53.9652 19.9667C56.5444 26.1324 56.6501 33.0545 54.2604 39.2961C51.8708 45.5377 47.1693 50.6193 41.1319 53.486C35.0946 56.3527 28.1852 56.7844 21.838 54.6914C15.4907 52.5984 10.1933 48.1415 7.04537 42.2459C3.89742 36.3503 3.14075 29.4689 4.93243 23.0301C6.72411 16.5914 10.9265 11.0899 16.6673 7.66771" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M30.0008 4.00079L30.0233 29.987L52.5168 42.9996L30.0008 30.026L7.48482 42.9996L29.9783 29.987L30.0008 4.00079Z" stroke="#131860"/>
+                      <path d="M32 35C32 34.4477 32.4477 34 33 34H41C41.5523 34 42 34.4477 42 35V55C42 55.5523 41.5523 56 41 56H33C32.4477 56 32 55.5523 32 55L32 35Z" fill="#C1C7FB"/>
+                      <path d="M20 42C20 41.4477 20.4477 41 21 41H29C29.5523 41 30 41.4477 30 42V55C30 55.5523 29.5523 56 29 56H21C20.4477 56 20 55.5523 20 55L20 42Z" fill="#E8EAFD"/>
+                      <path d="M33 56H41C41.5523 56 42 55.5523 42 55L42 35C42 34.4477 41.5523 34 41 34H33C32.4477 34 32 34.4477 32 35V55C32 55.5523 32.4477 56 33 56Z" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M30 49L30 55C30 55.5523 29.5523 56 29 56L21 56C20.4477 56 20 55.5523 20 55L20 42C20 41.4477 20.4477 41 21 41L29 41C29.5523 41 30 41.4477 30 42L30 45" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M44 33C44 32.4477 44.4477 32 45 32H53C53.5523 32 54 32.4477 54 33V55C54 55.5523 53.5523 56 53 56H45C44.4477 56 44 55.5523 44 55V33Z" fill="#4959E6"/>
+                      <path d="M54 48V33C54 32.4477 53.5523 32 53 32H45C44.4477 32 44 32.4477 44 33V55C44 55.5523 44.4477 56 45 56H53C53.5523 56 54 55.5523 54 55V52" stroke="#131860" strokeLinecap="round"/>
+                      <path d="M25 48L37 41L49 45" stroke="#131860" strokeLinecap="round"/>
+                      <circle cx="25" cy="48" r="2" fill="#C1C7FB" stroke="#131860" strokeLinecap="round"/>
+                      <circle cx="37" cy="41" r="2" fill="#6F7CF2" stroke="#131860" strokeLinecap="round"/>
+                      <circle cx="49" cy="45" r="2" fill="#E8EAFD" stroke="#131860" strokeLinecap="round"/>
+                    </svg>
+                  )}
                   {emptyTab === "collections" && (
                     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                       <path d="M7 52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H9C7.89543 6 7 6.89543 7 8V52Z" fill="#E8EAFD"/>
@@ -2958,6 +2999,7 @@ function handleDeleteConfirm(payload) {
                       quotes:     "No quotes yet",
                       dictionary: "No saved words yet",
                       collections:"No collections yet",
+                      overview:   "Your reading dashboard awaits",
                     })[emptyTab]}</p>
                     <p className="empty-sub">{({
                       library:    "Start building your collection, add your first read.",
@@ -2965,13 +3007,15 @@ function handleDeleteConfirm(payload) {
                       quotes:     "Save a passage that moved you.",
                       dictionary: "Save a word to keep its definition handy.",
                       collections:"Create your first collection to organise your books.",
+                      overview:   "Add a book to start tracking your reading journey.",
                     })[emptyTab]}</p>
                   </div>
-                  {(emptyTab === "library" || emptyTab === "wishlist" || emptyTab === "collections") && (
+                  {(emptyTab === "library" || emptyTab === "wishlist" || emptyTab === "collections" || emptyTab === "overview") && (
                     <button className="empty-cta">{({
                       library:     "Add a book",
                       wishlist:    "Add to wishlist",
                       collections: "New collection",
+                      overview:    "Add a book",
                     })[emptyTab]}</button>
                   )}
                 </div>

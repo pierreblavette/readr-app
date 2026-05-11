@@ -5124,27 +5124,6 @@ button.quote-book-chip {
   background: var(--primary-10);
 }
 
-/* Empty state */
-.overview-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 40px 0;
-}
-.overview-empty-title {
-  font-family: var(--font-fraunces), serif;
-  font-size: 28px;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-.overview-empty-hint {
-  font-size: 15px;
-  color: var(--text-3);
-  line-height: 1.5;
-}
-
 /* Mobile */
 @media (max-width: 600px) {
   .overview-row-2 { grid-template-columns: 1fr; }
