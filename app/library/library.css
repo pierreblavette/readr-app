@@ -739,21 +739,6 @@
   object-position: center top;
 }
 
-.wishlist-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0,0,0,0.22);
-  color: #FFFFFF !important;
-  backdrop-filter: blur(6px);
-  display: inline-flex; align-items: center; justify-content: center;
-  height: 20px; min-width: 20px; padding: 0 8px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
 
 .cover-letter {
   font-size: 3.5rem;
@@ -809,7 +794,7 @@
 
 /* Card body */
 .book-body {
-  padding: 14px 16px;
+  padding: 8px 8px 16px 16px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -821,6 +806,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-top: 8px;
 }
 .book-card .col-card-kebab { flex-shrink: 0; }
 
@@ -844,15 +830,17 @@
 }
 
 .book-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: block;
   font-size: 14px;
   font-weight: 500;
   color: var(--text-3);
   margin-top: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.book-meta-sep { color: var(--text-3); }
+.book-meta-sep { color: var(--text-3); margin: 0 6px; }
 
 /* ─── BOOK CARD — Craft additions (a11y + touch + reduced motion) ─── */
 
@@ -982,9 +970,10 @@
 }
 
 .list-table td.list-cell-action {
-  padding: 0 16px 0 8px;
+  padding: 0 8px;
   overflow: visible;
   max-width: none;
+  text-align: right;
 }
 
 .list-table td.list-cell-title {
@@ -1251,21 +1240,22 @@
 }
 .col-card-kebab {
   width: 40px; height: 40px;
-  border: none; background: var(--primary-5); cursor: pointer;
+  border: none; background: transparent; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
-  color: var(--primary-60);
+  color: var(--text);
   transition: background 0.15s, color 0.15s;
   flex-shrink: 0;
   font-family: inherit;
 }
 .col-card-kebab svg { width: 18px; height: 18px; }
 .col-card-kebab:hover,
-.col-card-kebab[aria-expanded="true"] { background: var(--primary-10); }
-.col-card-kebab:active { background: var(--primary-20); color: var(--primary-70); }
-[data-theme="dark"] .col-card-kebab { background: var(--primary-5); color: var(--primary-40); }
+.col-card-kebab[aria-expanded="true"] { background: var(--primary-5); color: var(--primary-50); }
+[data-theme="dark"] .col-card-kebab { color: var(--text); }
 [data-theme="dark"] .col-card-kebab:hover,
-[data-theme="dark"] .col-card-kebab[aria-expanded="true"] { background: var(--primary-10); color: var(--primary-30); }
+[data-theme="dark"] .col-card-kebab[aria-expanded="true"] { background: var(--primary-5); color: var(--primary-40); }
+
+.list-row .col-card-kebab { display: inline-flex; }
 .col-card-name { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-card-count { font-size: 15px; font-weight: 500; color: var(--text-2); }
 
@@ -2121,7 +2111,7 @@
  * ─── BADGES — CANONICAL ANATOMY ───
  * Pill-shaped counters/labels, always weight 600, radius 999px.
  *   XS : fs 10, h 16, min-w 16, padding 0 6   (.badge generic)
- *   SM : fs 11, h 20, min-w 20, padding 0 8   (.sidebar-badge, .wishlist-badge)
+ *   SM : fs 11, h 20, min-w 20, padding 0 8   (.sidebar-badge)
  *   MD : fs 12, h 24, min-w 24, padding 0 10
  *   LG : fs 13, h 28, min-w 28, padding 0 12  (placeholder, not currently used)
  */

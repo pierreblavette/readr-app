@@ -59,10 +59,6 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
           <span className="cover-letter">{letter}</span>
         )}
 
-        {tab === 'wishlist' && !cover && (
-          <span className="wishlist-badge">{t.wishBadge}</span>
-        )}
-
         {/* Checkbox in edit mode */}
         {editMode && (
           <div className="card-checkbox" aria-hidden="true">
