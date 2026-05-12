@@ -3973,6 +3973,46 @@
   flex-direction: column;
   gap: 12px;
 }
+
+/* Per-letter table layout (main Dictionary view).
+   Each letter renders as a standalone .list-table with the letter as the only header cell.
+   The data rows compose .list-row + .dictionary-saved-row; expanded body is a sibling tr. */
+.dictionary-saved-letters {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.dictionary-letter-table th.dictionary-letter-head {
+  cursor: default;
+  width: auto;
+}
+.dictionary-letter-table th.dictionary-letter-head:hover { color: var(--text-2); }
+
+.dictionary-saved-row .dictionary-saved-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.dictionary-saved-row.expanded { border-bottom: none; }
+
+.dictionary-saved-row-body td {
+  padding: 0;
+  background: var(--card);
+  white-space: normal;
+  max-width: none;
+  overflow: visible;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.dictionary-saved-row-body:last-child td { border-bottom: none; }
+.dictionary-saved-row-body .dictionary-saved-body {
+  padding: 20px 24px;
+}
+
+@media (max-width: 600px) {
+  .list-table th.dictionary-letter-head { padding-left: 8px; padding-right: 8px; }
+  .dictionary-saved-row-body .dictionary-saved-body { padding: 16px 8px; }
+}
 .dictionary-saved-card {
   background: var(--bg2);
   border: 1.5px solid var(--border-subtle);

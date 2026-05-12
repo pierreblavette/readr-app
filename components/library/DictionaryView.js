@@ -1,7 +1,6 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import ExportMenu from "@/components/library/ExportMenu";
-import SortMenu from "@/components/library/SortMenu";
 
 const CACHE_KEY = 'readr-dict-cache';
 
@@ -19,22 +18,34 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
   const [loading, setLoading] = useState(false);
   const [expandedIds, setExpandedIds] = useState(() => new Set());
   const [savedSearch, setSavedSearch] = useState('');
-  const [savedSort, setSavedSort] = useState('recent');
   const inputRef = useRef(null);
 
   const sortedWords = useMemo(() => {
-    const arr = [...words];
-    if (savedSort === 'alpha') {
-      return arr.sort((a, b) => a.word.localeCompare(b.word, lang === 'fr' ? 'fr' : 'en', { sensitivity: 'base' }));
-    }
-    return arr.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-  }, [words, savedSort, lang]);
+    return [...words].sort((a, b) =>
+      a.word.localeCompare(b.word, lang === 'fr' ? 'fr' : 'en', { sensitivity: 'base' })
+    );
+  }, [words, lang]);
 
   const filteredSavedWords = useMemo(() => {
     const q = savedSearch.trim().toLowerCase();
     if (!q) return sortedWords;
     return sortedWords.filter(w => w.word.toLowerCase().includes(q));
   }, [sortedWords, savedSearch]);
+
+  const groupedByLetter = useMemo(() => {
+    const groups = {};
+    for (const w of filteredSavedWords) {
+      const first = w.word.normalize('NFD').replace(/[\u0300-\u036f]/g, '').charAt(0).toUpperCase();
+      const key = /^[A-Z]$/.test(first) ? first : '#';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(w);
+    }
+    return Object.entries(groups).sort(([a], [b]) => {
+      if (a === '#') return 1;
+      if (b === '#') return -1;
+      return a.localeCompare(b);
+    });
+  }, [filteredSavedWords]);
 
   const savedKey = result
     ? `${result.lang}::${result.word.toLowerCase()}`
@@ -215,15 +226,6 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                 />
               </div>
               <div className="counter-actions">
-                <SortMenu
-                  current={savedSort}
-                  onChange={setSavedSort}
-                  ariaLabel={t.dictionarySortToggle || 'Sort'}
-                  options={[
-                    { key: 'recent', label: t.dictionarySortRecent || 'Recent' },
-                    { key: 'alpha',  label: t.dictionarySortAlpha  || 'A–Z' },
-                  ]}
-                />
                 {(exportPDF || exportMD) && (
                   <ExportMenu
                     t={t}
@@ -243,57 +245,79 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                 </div>
               </div>
             ) : (
-              <div className="dictionary-saved-list">
-                {filteredSavedWords.map(w => {
-                  const expanded = expandedIds.has(w.id);
-                  return (
-                    <div key={w.id} className={`dictionary-saved-card${expanded ? ' expanded' : ''}`}>
-                      <div
-                        className="dictionary-saved-head"
-                        role="button"
-                        tabIndex={0}
-                        aria-expanded={expanded}
-                        onClick={() => toggleExpanded(w.id)}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpanded(w.id); }
-                        }}>
-                        <span className="dictionary-saved-toggle">
-                          <svg className={`dictionary-chevron${expanded ? ' open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                            <polyline points="9 18 15 12 9 6"/>
-                          </svg>
-                          <span className="dictionary-saved-word">{w.word}</span>
-                        </span>
-                        <button
-                          type="button"
-                          className="dictionary-delete-btn"
-                          onClick={e => { e.stopPropagation(); onDelete(w.id); }}
-                          aria-label={t.dictionaryDelete}>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M10 3h4"/>
-                            <line x1="3" y1="6" x2="21" y2="6"/>
-                            <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
-                          </svg>
-                        </button>
-                      </div>
-                      {expanded && (
-                        <div className="dictionary-saved-body">
-                          {w.definitions.map((d, i) => (
-                            <div key={i} className="dictionary-definition">
-                              {d.pos && <span className="dictionary-pos">{d.pos}</span>}
-                              <p className="dictionary-meaning">{d.meaning}</p>
-                              {d.example && (
-                                <div className="dictionary-example">
-                                  <span className="dictionary-example-label">{t.dictionaryExample}</span>
-                                  <p className="dictionary-example-text">{d.example}</p>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+              <div className="dictionary-saved-letters">
+                {groupedByLetter.map(([letter, items]) => (
+                  <div key={letter} className="books-list">
+                  <table className="list-table dictionary-letter-table">
+                    <thead className="table-head">
+                      <tr>
+                        <th className="dictionary-letter-head">{letter}</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {items.map(w => {
+                        const expanded = expandedIds.has(w.id);
+                        return (
+                          <Fragment key={w.id}>
+                            <tr
+                              className={`list-row dictionary-saved-row${expanded ? ' expanded' : ''}`}
+                              role="button"
+                              tabIndex={0}
+                              aria-expanded={expanded}
+                              onClick={() => toggleExpanded(w.id)}
+                              onKeyDown={e => {
+                                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpanded(w.id); }
+                              }}>
+                              <td className="list-cell-title">
+                                <span className="dictionary-saved-toggle">
+                                  <svg className={`dictionary-chevron${expanded ? ' open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                  </svg>
+                                  <span className="dictionary-saved-word">{w.word}</span>
+                                </span>
+                              </td>
+                              <td className="list-cell-action" onClick={e => e.stopPropagation()}>
+                                <button
+                                  type="button"
+                                  className="dictionary-delete-btn"
+                                  onClick={e => { e.stopPropagation(); onDelete(w.id); }}
+                                  aria-label={t.dictionaryDelete}>
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M10 3h4"/>
+                                    <line x1="3" y1="6" x2="21" y2="6"/>
+                                    <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                                  </svg>
+                                </button>
+                              </td>
+                            </tr>
+                            {expanded && (
+                              <tr className="dictionary-saved-row-body">
+                                <td colSpan={2}>
+                                  <div className="dictionary-saved-body">
+                                    {w.definitions.map((d, i) => (
+                                      <div key={i} className="dictionary-definition">
+                                        {d.pos && <span className="dictionary-pos">{d.pos}</span>}
+                                        <p className="dictionary-meaning">{d.meaning}</p>
+                                        {d.example && (
+                                          <div className="dictionary-example">
+                                            <span className="dictionary-example-label">{t.dictionaryExample}</span>
+                                            <p className="dictionary-example-text">{d.example}</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  </div>
+                ))}
               </div>
             )}
           </>
