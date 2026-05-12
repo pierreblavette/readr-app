@@ -2593,7 +2593,8 @@
 .modal-submit:hover:not(:disabled) { background: var(--primary-60); }
 .modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
-[data-theme="dark"] .modal { background: var(--card); }
+[data-theme="dark"] .modal { background: var(--card); box-shadow: 0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30); }
+[data-theme="dark"] .confirm-modal { box-shadow: 0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30); }
 [data-theme="dark"] .modal-submit { background: var(--primary-40); }
 [data-theme="dark"] .modal-submit:hover:not(:disabled) { background: var(--primary-50); }
 

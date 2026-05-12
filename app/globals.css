@@ -149,7 +149,7 @@
   --illus-accent-1: #7B89F8;  /* lighter for contrast on dark */
   --illus-accent-2: #6F7CF2;
   --illus-accent-3: #4959E6;
-  --illus-stroke:   #E8EAFD;  /* light stroke on dark */
+  --illus-stroke:   var(--primary-20);  /* primary-20 (#C1C7FB) — light brand-tinted stroke */
 }
 
 /* iOS Safari auto-zooms any input/textarea/select with font-size < 16px on focus.

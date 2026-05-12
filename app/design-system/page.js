@@ -429,6 +429,43 @@ export default function DesignSystemPage() {
                 <p><span className="ds-token-chip">--light-N</span> · base #F5F6FF · only the steps actually used in the codebase</p>
               </div>
             </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Illustration tokens</div>
+              <div className="ds-card-body col">
+                <p className="ds-token-name">8 tokens used in <code>.empty-icon</code> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
+                <div className="palette-grid">
+                  {[
+                    ["bg-1",     "#F4F5FF", "#232536"],
+                    ["bg-2",     "#E8EAFD", "#272B4A"],
+                    ["bg-3",     "#C1C7FB", "#353A66"],
+                    ["mid",      "#9BA5F8", "#525D9E"],
+                    ["accent-1", "#6F7CF2", "#7B89F8"],
+                    ["accent-2", "#4959E6", "#6F7CF2"],
+                    ["accent-3", "#3646D4", "#4959E6"],
+                    ["stroke",   "#131860", "var(--primary-20) — #C1C7FB"],
+                  ].map(([step, lightHex, darkHex]) => (
+                    <Swatch
+                      key={step}
+                      size="sm"
+                      bg={`var(--illus-${step})`}
+                      title={step}
+                      token={`--illus-${step}`}
+                      light={lightHex}
+                      dark={darkHex}
+                    />
+                  ))}
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Stroke</div>
+                  <p><span className="ds-token-chip">--illus-stroke</span> resolves to <span className="ds-token-chip">--primary-90</span> in light (#131860 navy) and <span className="ds-token-chip">--primary-20</span> in dark (#C1C7FB lavender). Brand-tinted stroke instead of neutral white — gives a monochrome blue feel to illustrations.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Usage</div>
+                  <p>In SVG: <code>fill="var(--illus-bg-2)"</code> / <code>stroke="var(--illus-stroke)"</code>. <code>var()</code> in attribute values works in modern browsers.</p>
+                </div>
+              </div>
+            </div>
           </DSSection>
 
           {/* ── TYPOGRAPHY ── */}
@@ -620,13 +657,17 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 {[
                   ["--shadow-md", "Cartes hover (drop primary-tinted)"],
-                  ["--shadow-lg", "Modales, autocomplete, mobile sidebar"],
+                  ["--shadow-lg", "Autocomplete, mobile sidebar (primary-tinted)"],
                 ].map(([token, use]) => (
                   <div key={token} className="spacing-row">
                     <div style={{ width: 240, height: 100, background: "var(--card)", borderRadius: 8, boxShadow: `var(${token})`, flexShrink: 0 }} />
                     <span className="type-sample-meta" style={{ marginLeft: 0 }}><span className="ds-token-chip">{token}</span> · {use}</span>
                   </div>
                 ))}
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Modal shadow — dark override</div>
+                  <p><code>.modal</code> and <code>.confirm-modal</code> in dark mode use a hardcoded neutral black shadow <code>0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30)</code> instead of the primary-tinted <span className="ds-token-chip">--shadow-lg</span>. Reason: blue-tinted shadow on dark UI reads as a brand wash; pure black gives proper depth without color contamination.</p>
+                </div>
               </div>
             </div>
             <div className="ds-card">
