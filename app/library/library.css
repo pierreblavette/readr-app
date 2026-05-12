@@ -2835,9 +2835,13 @@
   justify-content: center;
   transition: border-color 0.15s, background 0.15s;
   color: var(--text-2);
+  background: var(--bg3);
 }
 
-.import-dropzone:hover, .import-dropzone.dragover { border-color: var(--accent); background: var(--accent-bg); }
+.import-dropzone:hover, .import-dropzone.dragover { border-color: var(--accent); background: var(--primary-5); }
+[data-theme="dark"] .import-dropzone { background: #262626; }
+[data-theme="dark"] .import-dropzone:hover,
+[data-theme="dark"] .import-dropzone.dragover { background: var(--primary-10); }
 .import-dropzone-photo {
   cursor: default;
   border: none;
