@@ -145,13 +145,17 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64, mimeType }),
       });
-      if (res.status === 413) throw new Error('Photo too large after resizing. Try a smaller image.');
+      if (res.status === 413) throw new Error('TOO_LARGE');
       const data = await res.json();
       if (!res.ok || data.error) {
         console.error('[vision/quote] upstream error', { status: res.status, data });
+        const msg = (data.error || '').toLowerCase();
+        if (msg.includes('high demand') || msg.includes('overloaded') || msg.includes('experiencing')) {
+          throw new Error('OVERLOAD');
+        }
         throw new Error(data.error || `Worker error ${res.status}`);
       }
-      if (!data.text) throw new Error('empty');
+      if (!data.text) throw new Error('EMPTY');
       const readingElapsed = Date.now() - readingStart;
       if (readingElapsed < 700) await new Promise(r => setTimeout(r, 700 - readingElapsed));
       setText(data.text.replace(/([^\n])\n([^\n])/g, '$1 $2').trim());
@@ -159,7 +163,12 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
       setTimeout(() => textareaRef.current?.focus(), 80);
     } catch (err) {
       console.error('[vision/quote] scan failed', err);
-      setScanError(t.quotePhotoError);
+      const code = err?.message;
+      const msg = code === 'TOO_LARGE' ? t.quotePhotoErrorTooLarge
+                : code === 'OVERLOAD'  ? t.quotePhotoErrorOverload
+                : code === 'EMPTY'     ? t.quotePhotoErrorEmpty
+                : t.quotePhotoError;
+      setScanError(msg);
       setPhotoState('idle');
     } finally {
       if (fileRef.current) fileRef.current.value = '';

@@ -547,8 +547,9 @@
 .now-reading-card:has(.dropdown-menu) { z-index: 10; }
 
 /* Overview context — UI state iso .quote-book-chip-interactive
- * (bg3 light / primary-5 dark resting, primary-5 / primary-10 hover,
- * no border, no transform, no shadow). */
+ * (bg3 light / #262626 dark resting, primary-5 / primary-10 hover,
+ * no border, no transform, no shadow). Neutral gray surface = interactive
+ * content tile (vs primary-5 surfaces = button/control affordance). */
 .overview-card .now-reading-card {
   background: var(--bg3);
   border: none;
@@ -4773,7 +4774,7 @@ button.quote-book-chip {
   background: transparent;
   font-family: inherit;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-2);
   border-radius: 999px;
   cursor: pointer;
@@ -4865,7 +4866,7 @@ button.quote-book-chip {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: var(--primary-5);
+  background: var(--bg3);
   border-radius: 6px;
   overflow: hidden;
   position: relative;
@@ -5005,8 +5006,8 @@ button.quote-book-chip {
   gap: 8px;
   height: 36px;
   padding: 0 8px 0 16px;
-  background: var(--primary-5);
-  color: var(--primary-60);
+  background: var(--bg3);
+  color: var(--text);
   border: none;
   border-radius: 999px;
   font-family: inherit;
@@ -5015,8 +5016,8 @@ button.quote-book-chip {
   cursor: pointer;
   transition: background 0.15s;
 }
-.overview-cloud-chip:hover { background: var(--primary-10); }
-[data-theme="dark"] .overview-cloud-chip { background: var(--primary-5); color: var(--primary-30); }
+.overview-cloud-chip:hover { background: var(--primary-5); }
+[data-theme="dark"] .overview-cloud-chip { background: #262626; }
 [data-theme="dark"] .overview-cloud-chip:hover { background: var(--primary-10); }
 .overview-cloud-chip-name { line-height: 1; }
 .overview-cloud-chip-count {

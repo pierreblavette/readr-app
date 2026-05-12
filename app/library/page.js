@@ -193,7 +193,10 @@ export default function LibraryPage() {
         /* Re-resolve the book from current data so the panel reflects
            reading state changes (startReading/finishReading) immediately. */
         book={panelBook ? [...data.owned, ...data.wishlist].find(b => b.id === panelBook.id) || panelBook : null}
-        tab={tab}
+        /* Derive the panel "source" from where the book actually lives,
+         * not the current UI tab — so Mark/Cancel buttons surface even
+         * when the panel is opened from Overview, Collections, etc. */
+        tab={panelBook && data.wishlist.some(b => b.id === panelBook.id) ? 'wishlist' : 'owned'}
         onClose={() => setPanelBook(null)}
         onDelete={b => { setPanelBook(null); setDeleteTarget(b); }}
         onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setPanelBook(null); setToastMsg(t.toastMoved); }}
