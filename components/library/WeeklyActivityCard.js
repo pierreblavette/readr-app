@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import { OverviewIcon } from "./EmptyState";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -88,6 +89,7 @@ export default function WeeklyActivityCard({ owned = [], quotes = [], words = []
   const canPrev = weekOffset > earliestWeekOffset;
   const canNext = weekOffset < 0;
   const initials = dayInitials(lang);
+  const hasAnyActivity = owned.some(b => b.finishedAt) || quotes.some(q => q.createdAt) || words.some(w => w.createdAt);
 
   return (
     <div className="overview-card overview-activity">
@@ -133,41 +135,51 @@ export default function WeeklyActivityCard({ owned = [], quotes = [], words = []
         </div>
       </div>
       <div className="overview-activity-divider" aria-hidden="true"/>
-      <div className="overview-activity-bars">
-        {weekData.days.map((d, i) => {
-          const ratio = weekData.max > 0 ? d.count / weekData.max : 0;
-          const fillHeight = Math.max(8, ratio * 100);
-          return (
-            <div key={i} className="overview-activity-col">
-              <div className="overview-activity-track" aria-hidden="true">
-                {d.count === 0 ? (
-                  <div className="overview-activity-dot"/>
-                ) : metric === 'all' ? (
-                  <div className="overview-activity-fill is-stacked">
-                    <div className={`overview-activity-seg overview-activity-seg--books${d.books > 0 ? '' : ' is-empty'}`}
-                         style={d.books > 0 ? { height: `${Math.max(8, (d.books / weekData.segMax) * 100)}%` } : undefined}>
-                      {d.books > 0 && <span className="overview-activity-count">{d.books}</span>}
+      {!hasAnyActivity ? (
+        <div className="empty overview-card-empty">
+          <OverviewIcon />
+          <div className="empty-text">
+            <p className="empty-title">{t.overviewActivityEmptyTitle}</p>
+            <p className="empty-sub">{t.overviewActivityEmptySub}</p>
+          </div>
+        </div>
+      ) : (
+        <div className="overview-activity-bars">
+          {weekData.days.map((d, i) => {
+            const ratio = weekData.max > 0 ? d.count / weekData.max : 0;
+            const fillHeight = Math.max(8, ratio * 100);
+            return (
+              <div key={i} className="overview-activity-col">
+                <div className="overview-activity-track" aria-hidden="true">
+                  {d.count === 0 ? (
+                    <div className="overview-activity-dot"/>
+                  ) : metric === 'all' ? (
+                    <div className="overview-activity-fill is-stacked">
+                      <div className={`overview-activity-seg overview-activity-seg--books${d.books > 0 ? '' : ' is-empty'}`}
+                           style={d.books > 0 ? { height: `${Math.max(8, (d.books / weekData.segMax) * 100)}%` } : undefined}>
+                        {d.books > 0 && <span className="overview-activity-count">{d.books}</span>}
+                      </div>
+                      <div className={`overview-activity-seg overview-activity-seg--quotes${d.quotes > 0 ? '' : ' is-empty'}`}
+                           style={d.quotes > 0 ? { height: `${Math.max(8, (d.quotes / weekData.segMax) * 100)}%` } : undefined}>
+                        {d.quotes > 0 && <span className="overview-activity-count">{d.quotes}</span>}
+                      </div>
+                      <div className={`overview-activity-seg overview-activity-seg--words${d.words > 0 ? '' : ' is-empty'}`}
+                           style={d.words > 0 ? { height: `${Math.max(8, (d.words / weekData.segMax) * 100)}%` } : undefined}>
+                        {d.words > 0 && <span className="overview-activity-count">{d.words}</span>}
+                      </div>
                     </div>
-                    <div className={`overview-activity-seg overview-activity-seg--quotes${d.quotes > 0 ? '' : ' is-empty'}`}
-                         style={d.quotes > 0 ? { height: `${Math.max(8, (d.quotes / weekData.segMax) * 100)}%` } : undefined}>
-                      {d.quotes > 0 && <span className="overview-activity-count">{d.quotes}</span>}
+                  ) : (
+                    <div className={`overview-activity-fill is-${metric}`} style={{ height: `${fillHeight}%` }}>
+                      <span className="overview-activity-count">{d.count}</span>
                     </div>
-                    <div className={`overview-activity-seg overview-activity-seg--words${d.words > 0 ? '' : ' is-empty'}`}
-                         style={d.words > 0 ? { height: `${Math.max(8, (d.words / weekData.segMax) * 100)}%` } : undefined}>
-                      {d.words > 0 && <span className="overview-activity-count">{d.words}</span>}
-                    </div>
-                  </div>
-                ) : (
-                  <div className={`overview-activity-fill is-${metric}`} style={{ height: `${fillHeight}%` }}>
-                    <span className="overview-activity-count">{d.count}</span>
-                  </div>
-                )}
+                  )}
+                </div>
+                <span className="overview-activity-day">{initials[i]}</span>
               </div>
-              <span className="overview-activity-day">{initials[i]}</span>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
       <div className="overview-activity-divider" aria-hidden="true"/>
       <div className="overview-activity-legend">
         <span className="overview-activity-legend-item">

@@ -9,7 +9,7 @@ import WordListPanel from "./WordListPanel";
 import OverviewQuoteCard from "./OverviewQuoteCard";
 import WeeklyActivityCard from "./WeeklyActivityCard";
 import NowReadingSection from "./NowReadingSection";
-import { OverviewIcon } from "./EmptyState";
+import { OverviewGoalIcon, OverviewStreakIcon, OverviewGenresIcon, OverviewAuthorsIcon, OverviewLovedIcon, OverviewQuotesIcon } from "./EmptyState";
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
@@ -42,21 +42,6 @@ export default function OverviewView({
   }, [quotes, shuffleKey]);
 
   const finishedBooks = useMemo(() => owned.filter(b => b.finishedAt), [owned]);
-
-  const isEmpty = owned.length === 0 && quotes.length === 0 && words.length === 0;
-
-  if (isEmpty) {
-    return (
-      <div className="empty">
-        <OverviewIcon />
-        <div className="empty-text">
-          <p className="empty-title">{t.overviewEmptyTitle}</p>
-          <p className="empty-sub">{t.overviewEmptyHint}</p>
-        </div>
-        <button className="empty-cta" onClick={onAddBook}>{t.emptyLibCta}</button>
-      </div>
-    );
-  }
 
   function handleHeroBooks() {
     if (finishedBooks.length === 0) onNavigate?.('owned');
@@ -176,7 +161,7 @@ export default function OverviewView({
           onEdit={() => setGoalModalOpen(true)}
           t={t}
         />
-        <StreakCard streak={stats.streak} t={t} />
+        <StreakCard streak={stats.streak} onAddBook={onAddBook} t={t} />
       </div>
 
       <ReadingGoalModal
@@ -290,12 +275,20 @@ function HeroCard({ num, label, icon, onClick }) {
 function ReadingGoalCard({ goal, onEdit, t }) {
   if (!goal.isSet) {
     return (
-      <div className="overview-card overview-goal overview-goal--empty">
-        <span className="panel-section-eyebrow">{t.overviewGoalTitle}</span>
-        <span className="panel-quotes-empty">{t.overviewGoalEmptyHint}</span>
-        <button type="button" className="add-btn" onClick={onEdit}>
-          {t.overviewGoalEmpty}
-        </button>
+      <div className="overview-card overview-goal">
+        <div className="overview-card-head">
+          <span className="panel-section-eyebrow">{t.overviewGoalTitle}</span>
+        </div>
+        <div className="empty overview-card-empty">
+          <div className="overview-card-empty-body">
+            <OverviewGoalIcon />
+            <div className="empty-text">
+              <p className="empty-title">{t.overviewGoalEmptyTitle}</p>
+              <p className="empty-sub">{t.overviewGoalEmptySub}</p>
+            </div>
+          </div>
+          <button type="button" className="btn btn-md btn-secondary" onClick={onEdit}>{t.overviewGoalEmptyCta}</button>
+        </div>
       </div>
     );
   }
@@ -330,7 +323,7 @@ function ReadingGoalCard({ goal, onEdit, t }) {
   );
 }
 
-function StreakCard({ streak, t }) {
+function StreakCard({ streak, onAddBook, t }) {
   const hasAny = streak.current > 0 || streak.best > 0;
   // When no active streak but a best exists, surface the best as the
   // primary metric — losing it visually would erase past progress.
@@ -341,7 +334,16 @@ function StreakCard({ streak, t }) {
         <span className="panel-section-eyebrow">{t.overviewStreakTitle}</span>
       </div>
       {!hasAny ? (
-        <span className="panel-quotes-empty">{t.overviewStreakEmpty}</span>
+        <div className="empty overview-card-empty">
+          <div className="overview-card-empty-body">
+            <OverviewStreakIcon />
+            <div className="empty-text">
+              <p className="empty-title">{t.overviewStreakEmptyTitle}</p>
+              <p className="empty-sub">{t.overviewStreakEmptySub}</p>
+            </div>
+          </div>
+          <button type="button" className="btn btn-md btn-secondary" onClick={onAddBook}>{t.overviewStreakEmptyCta}</button>
+        </div>
       ) : (
         <div className="overview-streak-meter">
           <div className="overview-streak-body">
@@ -370,7 +372,13 @@ function TopGenresCard({ genres, onSelect, t }) {
         <span className="panel-section-eyebrow">{t.overviewGenresTitle}</span>
       </div>
       {genres.length === 0 ? (
-        <span className="panel-quotes-empty">{t.overviewGenresEmpty}</span>
+        <div className="empty overview-card-empty">
+          <OverviewGenresIcon />
+          <div className="empty-text">
+            <p className="empty-title">{t.overviewGenresEmptyTitle}</p>
+            <p className="empty-sub">{t.overviewGenresEmptySub}</p>
+          </div>
+        </div>
       ) : (
         <div className="overview-cloud">
           {genres.map(g => (
@@ -397,7 +405,13 @@ function TopAuthorsCard({ authors, onSelect, t }) {
         <span className="panel-section-eyebrow">{t.overviewAuthorsTitle}</span>
       </div>
       {authors.length === 0 ? (
-        <span className="panel-quotes-empty">{t.overviewAuthorsEmpty}</span>
+        <div className="empty overview-card-empty">
+          <OverviewAuthorsIcon />
+          <div className="empty-text">
+            <p className="empty-title">{t.overviewAuthorsEmptyTitle}</p>
+            <p className="empty-sub">{t.overviewAuthorsEmptySub}</p>
+          </div>
+        </div>
       ) : (
         <div className="overview-cloud">
           {authors.map(a => (
@@ -424,7 +438,13 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
         <div className="overview-card-head">
           <span className="panel-section-eyebrow">{t.overviewLovedTitle}</span>
         </div>
-        <span className="panel-quotes-empty">{t.overviewLovedEmpty}</span>
+        <div className="empty overview-card-empty">
+          <OverviewLovedIcon />
+          <div className="empty-text">
+            <p className="empty-title">{t.overviewLovedEmptyTitle}</p>
+            <p className="empty-sub">{t.overviewLovedEmptySub}</p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -478,7 +498,13 @@ function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onShuffle, canShuffl
         )}
       </div>
       {quotes.length === 0 ? (
-        <span className="panel-quotes-empty">{t.overviewQuotesEmpty}</span>
+        <div className="empty overview-card-empty">
+          <OverviewQuotesIcon />
+          <div className="empty-text">
+            <p className="empty-title">{t.overviewQuotesEmptyTitle}</p>
+            <p className="empty-sub">{t.overviewQuotesEmptySub}</p>
+          </div>
+        </div>
       ) : (
         <div className="overview-quotes-list">
           {quotes.map(q => (

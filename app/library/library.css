@@ -3683,7 +3683,8 @@
 
 .sidebar-empty {
   padding: 4px 12px 8px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-3);
 }
 
@@ -4567,7 +4568,8 @@ button.quote-book-chip {
   cursor: pointer;
   transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
 }
-.overview-hero-card:disabled { opacity: 0.4; cursor: not-allowed; }
+.overview-hero-card:disabled { cursor: default; }
+.overview-hero-card:disabled .overview-hero-chevron { display: none; }
 .overview-hero-card:hover:not(:disabled) {
   border-color: var(--primary-50);
   background: var(--primary-3);
@@ -4618,12 +4620,12 @@ button.quote-book-chip {
 .overview-hero-chevron {
   transition: color 0.18s ease;
 }
-.overview-hero-card:hover .overview-hero-chevron,
-.overview-hero-card:focus-visible .overview-hero-chevron {
+.overview-hero-card:hover:not(:disabled) .overview-hero-chevron,
+.overview-hero-card:focus-visible:not(:disabled) .overview-hero-chevron {
   color: var(--primary-50);
 }
-[data-theme="dark"] .overview-hero-card:hover .overview-hero-chevron,
-[data-theme="dark"] .overview-hero-card:focus-visible .overview-hero-chevron { color: var(--primary-30); }
+[data-theme="dark"] .overview-hero-card:hover:not(:disabled) .overview-hero-chevron,
+[data-theme="dark"] .overview-hero-card:focus-visible:not(:disabled) .overview-hero-chevron { color: var(--primary-30); }
 
 /* Reading goal */
 .overview-goal-meter {
@@ -4691,9 +4693,9 @@ button.quote-book-chip {
   font-weight: 600;
 }
 .overview-goal-pace--ahead .overview-goal-pace-delta { background: rgba(22,163,74,0.1); color: #16A34A; }
-.overview-goal-pace--behind .overview-goal-pace-delta { background: rgba(239,68,68,0.1); color: #ef4444; }
+.overview-goal-pace--behind .overview-goal-pace-delta { background: rgba(245,158,11,0.1); color: #B45309; }
 [data-theme="dark"] .overview-goal-pace--ahead .overview-goal-pace-delta { background: rgba(74,222,128,0.12); color: #4ADE80; }
-[data-theme="dark"] .overview-goal-pace--behind .overview-goal-pace-delta { background: rgba(255,107,107,0.12); color: #FF6B6B; }
+[data-theme="dark"] .overview-goal-pace--behind .overview-goal-pace-delta { background: rgba(251,191,36,0.12); color: #FBBF24; }
 /* Generic text-link button primitive — reusable across modals/forms
  * where a low-key inline action is needed (e.g. "Remove goal").
  * Mirrors the .quote-see-more typography but generic naming. */
@@ -5031,6 +5033,73 @@ button.quote-book-chip {
   background: var(--primary-50);
   border-radius: 999px;
   flex-shrink: 0;
+}
+
+/* Mini empty state — used inside .overview-card across 7 sections.
+ * Two layouts:
+ *   • DEFAULT (horizontal) — icon | text-block side-by-side, left-aligned.
+ *     Used by Genres, Authors, Most Loved, Quotes Spotlight.
+ *   • VERTICAL (override below) — icon then text, centered. Used by
+ *     Reading Goal, Reading Streak (both carry a CTA) and Weekly Activity. */
+.overview-card-empty {
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  padding: 12px 0;
+  gap: 16px;
+}
+.overview-card-empty .empty-icon { width: 60px; height: 60px; flex-shrink: 0; }
+.overview-card-empty .empty-icon:empty {
+  background: var(--bg);
+  border: 1.5px dashed var(--primary-30);
+  border-radius: 8px;
+}
+.overview-card-empty .empty-text { align-items: flex-start; flex: 1; min-width: 0; }
+.overview-card-empty .empty-title { font-size: 16px; font-weight: 600; }
+.overview-card-empty .empty-sub { font-size: 15px; line-height: 1.5; max-width: none; }
+/* Body wrapper — groups icon + text inside the empty state so the CTA can
+ * sit as a separate sibling below with its own spacing. Used by Goal +
+ * Streak (the only cards with a CTA). */
+.overview-card-empty-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+/* When a body wrapper is present (= card carries a CTA), bump the parent
+ * gap to 20 — that's the wrapper ↔ CTA spacing. */
+.overview-card-empty:has(.overview-card-empty-body) { gap: 20px; }
+/* Vertical centered override — Reading Goal, Reading Streak, Weekly
+ * Activity. Goal also carries a CTA (.btn-md.btn-secondary) as a 3rd
+ * child of the empty. */
+.overview-goal .overview-card-empty,
+.overview-streak .overview-card-empty,
+.overview-activity .overview-card-empty {
+  flex-direction: column;
+  text-align: center;
+}
+.overview-goal .overview-card-empty .empty-icon,
+.overview-streak .overview-card-empty .empty-icon,
+.overview-activity .overview-card-empty .empty-icon {
+  width: 72px;
+  height: 72px;
+}
+.overview-goal .overview-card-empty .empty-text,
+.overview-streak .overview-card-empty .empty-text,
+.overview-activity .overview-card-empty .empty-text {
+  align-items: center;
+  flex: initial;
+}
+/* Mobile — collapse the 4 horizontal cards (Genres, Authors, Loved, Quotes)
+ * into the same vertical centered + icon 72 layout used by Goal/Streak/
+ * Activity. Avoids cramped icon ↔ text rows at narrow widths. */
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+  .overview-card-empty {
+    flex-direction: column;
+    text-align: center;
+  }
+  .overview-card-empty .empty-icon { width: 72px; height: 72px; }
+  .overview-card-empty .empty-text { align-items: center; flex: initial; }
 }
 
 /* Most loved — top rated books */
