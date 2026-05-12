@@ -179,19 +179,19 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
         {sortedWords.length === 0 ? (
           <div className="empty">
             <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
-              <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="#C1C7FB"/>
-              <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="#F4F5FF"/>
-              <path d="M21 46C18.7909 46 17 47.7909 17 50C17 52.2091 18.7909 54 21 54H14C11.7909 54 10 52.2091 10 50C10 47.7909 11.7909 46 14 46H21Z" fill="#C1C7FB"/>
-              <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="#131860" strokeLinecap="round"/>
-              <path d="M14 20C14 18.8954 14.8954 18 16 18H26C27.1046 18 28 18.8954 28 20V32C28 33.1046 27.1046 34 26 34H16C14.8954 34 14 33.1046 14 32V20Z" fill="#F4F5FF"/>
-              <path d="M28 26V20C28 18.8954 27.1046 18 26 18H16C14.8954 18 14 18.8954 14 20V32C14 33.1046 14.8954 34 16 34H26C27.1046 34 28 33.1046 28 32V30" stroke="#131860" strokeLinecap="round"/>
-              <path d="M18 29L21 23L24 29" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M19.5 26H22.5" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M32 20C32 18.8954 32.8954 18 34 18H44C45.1046 18 46 18.8954 46 20V32C46 33.1046 45.1046 34 44 34H34C32.8954 34 32 33.1046 32 32V20Z" fill="#6F7CF2"/>
-              <path d="M46 26V20C46 18.8954 45.1046 18 44 18H34C32.8954 18 32 18.8954 32 20V32C32 33.1046 32.8954 34 34 34H44C45.1046 34 46 33.1046 46 32V30" stroke="#131860" strokeLinecap="round"/>
-              <path d="M41 29H37L41 23H37" stroke="#F4F5FF" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M36 50H44V55.5858C44 56.4767 42.9229 56.9229 42.2929 56.2929L40.1768 54.1768C40.0791 54.0791 39.9209 54.0791 39.8232 54.1768L37.7071 56.2929C37.0771 56.9229 36 56.4767 36 55.5858V50Z" fill="#6F7CF2" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M34 50H46" stroke="#131860" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 10C10 7.79086 11.7909 6 14 6H48C49.1046 6 50 6.89543 50 8V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50V10Z" fill="var(--illus-bg-3)"/>
+              <path d="M10 50C10 47.7909 11.7909 46 14 46H50V52C50 53.1046 49.1046 54 48 54H14C11.7909 54 10 52.2091 10 50Z" fill="var(--illus-bg-1)"/>
+              <path d="M21 46C18.7909 46 17 47.7909 17 50C17 52.2091 18.7909 54 21 54H14C11.7909 54 10 52.2091 10 50C10 47.7909 11.7909 46 14 46H21Z" fill="var(--illus-bg-3)"/>
+              <path d="M50 43V50C50 52.2091 48.2091 54 46 54H14C11.7909 54 10 52.2091 10 50M10 50V10C10 7.79086 11.7909 6 14 6L48 6C49.1046 6 50 6.89543 50 8V44C50 45.1046 49.1046 46 48 46H42M10 50C10 47.7909 11.7909 46 14 46H38" stroke="var(--illus-stroke)" strokeLinecap="round"/>
+              <path d="M14 20C14 18.8954 14.8954 18 16 18H26C27.1046 18 28 18.8954 28 20V32C28 33.1046 27.1046 34 26 34H16C14.8954 34 14 33.1046 14 32V20Z" fill="var(--illus-bg-1)"/>
+              <path d="M28 26V20C28 18.8954 27.1046 18 26 18H16C14.8954 18 14 18.8954 14 20V32C14 33.1046 14.8954 34 16 34H26C27.1046 34 28 33.1046 28 32V30" stroke="var(--illus-stroke)" strokeLinecap="round"/>
+              <path d="M18 29L21 23L24 29" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M19.5 26H22.5" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M32 20C32 18.8954 32.8954 18 34 18H44C45.1046 18 46 18.8954 46 20V32C46 33.1046 45.1046 34 44 34H34C32.8954 34 32 33.1046 32 32V20Z" fill="var(--illus-accent-1)"/>
+              <path d="M46 26V20C46 18.8954 45.1046 18 44 18H34C32.8954 18 32 18.8954 32 20V32C32 33.1046 32.8954 34 34 34H44C45.1046 34 46 33.1046 46 32V30" stroke="var(--illus-stroke)" strokeLinecap="round"/>
+              <path d="M41 29H37L41 23H37" stroke="var(--illus-bg-1)" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M36 50H44V55.5858C44 56.4767 42.9229 56.9229 42.2929 56.2929L40.1768 54.1768C40.0791 54.0791 39.9209 54.0791 39.8232 54.1768L37.7071 56.2929C37.0771 56.9229 36 56.4767 36 55.5858V50Z" fill="var(--illus-accent-1)" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M34 50H46" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <div className="empty-text">
               <p className="empty-title">{t.dictionarySavedEmpty}</p>

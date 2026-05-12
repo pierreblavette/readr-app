@@ -3976,7 +3976,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 8px 8px 8px 16px;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -4013,8 +4013,8 @@
   height: 40px;
   border: none;
   border-radius: 8px;
-  background: var(--primary-5);
-  color: var(--text-3);
+  background: transparent;
+  color: var(--text);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4022,9 +4022,9 @@
   transition: background 0.15s, color 0.15s;
 }
 .dictionary-delete-btn svg { width: 18px; height: 18px; }
-.dictionary-delete-btn:hover { background: var(--primary-10); color: var(--primary-50); }
-[data-theme="dark"] .dictionary-delete-btn { background: var(--primary-5); }
-[data-theme="dark"] .dictionary-delete-btn:hover { background: var(--primary-10); color: var(--primary-30); }
+.dictionary-delete-btn:hover { background: var(--primary-5); color: var(--primary-50); }
+[data-theme="dark"] .dictionary-delete-btn { color: var(--text); }
+[data-theme="dark"] .dictionary-delete-btn:hover { background: var(--primary-5); color: var(--primary-40); }
 
 .dictionary-saved-body {
   padding: 20px;
