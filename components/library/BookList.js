@@ -4,12 +4,12 @@ import BookCardKebab from "./BookCardKebab";
 export default function BookList({ books, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onSelectAll, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onShared, readingCount, maxReading, t, sortCol, sortDir, toggleSort }) {
   const cols = [
     { key: 'title',  label: t.colTitle,  cellClass: 'list-cell-title' },
-    { key: 'author', label: t.colAuthor, cellClass: 'list-cell-meta'  },
+    { key: 'author', label: t.colAuthor, cellClass: 'list-cell-meta list-cell-meta--col-author' },
     { key: 'genre',  label: t.colGenre,  cellClass: 'list-cell-tag'   },
     { key: 'year',   label: t.colYear,   cellClass: 'list-cell-meta'  },
   ];
 
-  const allSelected = selected.size === books.length && books.length > 0;
+  const allSelected = books.length > 0 && books.every(b => selected.has(b.id));
 
   return (
     <div className="books-list">
@@ -70,7 +70,7 @@ export default function BookList({ books, tab, editMode, selected, onToggleSelec
               )}
 
               <td className="list-cell-title"><span className="list-title">{book.title}</span></td>
-              <td className="list-cell-meta"><span className="list-author">{book.author}</span></td>
+              <td className="list-cell-meta list-cell-meta--col-author"><span className="list-author">{book.author}</span></td>
               <td className="list-cell-tag"><span className="list-genre">{book.genre || 'NC'}</span></td>
               <td className="list-cell-meta"><span className="list-year">{book.year || 'NC'}</span></td>
 

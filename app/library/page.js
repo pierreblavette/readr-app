@@ -69,7 +69,7 @@ export default function LibraryPage() {
     addModalOpen, setAddModal,
     deleteTarget, setDeleteTarget,
     obOpen, openOb, closeOb,
-    books,
+    books, recentlyFinished, recentlyAdded,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
     collections, createCollection, deleteCollection, deleteCollections, renameCollection,
@@ -87,11 +87,30 @@ export default function LibraryPage() {
   const isDictionary = tab === 'dictionary';
   const currentCollection = activeCollection ? collections.find(c => c.id === activeCollection) : null;
   const pageTitle = tab === 'overview' ? t.pageOverview : tab === 'owned' ? t.pageLibrary : tab === 'wishlist' ? t.pageWishlist : tab === 'collections' ? t.pageCollections : tab === 'dictionary' ? t.pageDictionary : t.pageQuotes;
-  const resultInfo = !isOverview && !isCollections && !isQuotes && !isDictionary && data[tab]
-    ? search.trim()
-      ? t.resultQuery(books.length, data[tab].length)
-      : t.resultTotal(data[tab].length)
+  const isOwned = tab === 'owned';
+  const isWishlist = tab === 'wishlist';
+  const isBookTab = isOwned || isWishlist;
+  const recent = isOwned ? recentlyFinished : isWishlist ? recentlyAdded : [];
+  const recentLabel = isOwned ? t.resultRecentLabel : isWishlist ? t.resultRecentAddedLabel : '';
+  const recentFootnote = isOwned ? t.resultRecentFootnote : isWishlist ? t.resultRecentAddedFootnote : '';
+  const showResultLine = !isOverview && !isCollections && !isQuotes && !isDictionary && data[tab];
+  const resultCount = showResultLine
+    ? (search.trim() ? t.resultQuery(books.length, data[tab].length) : t.resultTotal(data[tab].length))
     : '';
+  const recentCount = recent.length > 0
+    ? (search.trim() ? t.resultQuery(recent.length, books.length) : t.resultTotal(recent.length))
+    : '';
+
+  function toggleSelectAllRecent() {
+    const recentIds = recent.map(b => b.id);
+    const allIn = recentIds.every(id => selected.has(id));
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (allIn) recentIds.forEach(id => next.delete(id));
+      else recentIds.forEach(id => next.add(id));
+      return next;
+    });
+  }
 
   function handleConfirmSelection(action) {
     if (action === 'delete') {
@@ -380,9 +399,70 @@ export default function LibraryPage() {
               setAddModal={setAddModal} view={view} switchView={switchView}
             />
 
-            <div className="books-section">
+            {isBookTab && recent.length > 0 && (
+              <div className="books-block">
+                  <div className="panel-section-eyebrow result-line">
+                    <span>{recentLabel}</span>
+                    <span>{recentCount}</span>
+                  </div>
+                  {view === 'grid' ? (
+                    <div className="books-grid">
+                      {recent.map(book => (
+                        <BookCard key={`recent-${book.id}`} book={book} tab={tab}
+                          editMode={editMode} selected={selected}
+                          onToggleSelect={toggleSelected}
+                          onOpen={b => setPanelBook(b)}
+                          onDelete={b => setDeleteTarget(b)}
+                          onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
+                          onFinishReading={b => setFinishBook(b)}
+                          onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
+                          onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+                          onEditFinished={b => setFinishBook(b)}
+                          onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setToastMsg(t.toastMoved); }}
+                          onShared={() => setToastMsg(t.shareCopied)}
+                          readingCount={readingBooks.length}
+                          maxReading={MAX_READING}
+                          t={t}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <BookList books={recent} tab={tab}
+                      editMode={editMode} selected={selected}
+                      onToggleSelect={toggleSelected}
+                      onSelectAll={toggleSelectAllRecent}
+                      onOpen={b => setPanelBook(b)}
+                      onDelete={b => setDeleteTarget(b)}
+                      onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
+                      onFinishReading={b => setFinishBook(b)}
+                      onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
+                      onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
+                      onEditFinished={b => setFinishBook(b)}
+                      onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setToastMsg(t.toastMoved); }}
+                      onShared={() => setToastMsg(t.shareCopied)}
+                      readingCount={readingBooks.length}
+                      maxReading={MAX_READING}
+                      t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
+                    />
+                  )}
+                  <div className="recent-footer">
+                    <span className="recent-footnote">{recentFootnote}</span>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-secondary"
+                      onClick={() => setDeleteTarget({ bulk: true, ids: new Set(recent.map(b => b.id)), count: recent.length })}>
+                      {t.resultRecentClear}
+                    </button>
+                  </div>
+              </div>
+            )}
+
+            <div className="books-block">
               {data[tab].length > 0 && (
-                <div className="result-line">{resultInfo}</div>
+                <div className="panel-section-eyebrow result-line">
+                  {isBookTab ? <span>{t.resultAllLabel}</span> : <span />}
+                  <span>{resultCount}</span>
+                </div>
               )}
 
               {view === 'grid' ? (

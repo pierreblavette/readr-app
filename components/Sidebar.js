@@ -136,7 +136,7 @@ export default function Sidebar({
             </button>
           )}
 
-          {!collapsed && collections.length > 0 && (
+          {!collapsed && (
             <div
               className={`sidebar-item sidebar-col-item sidebar-col-all${tab === 'collections' && !activeCollection ? ' active' : ''}`}
               role="button"
@@ -147,6 +147,7 @@ export default function Sidebar({
                 type="button"
                 className="sidebar-col-toggle sidebar-col-toggle--sm"
                 onClick={e => { e.stopPropagation(); setCollectionsOpen(o => !o); }}
+                disabled={collections.length === 0}
                 aria-label={collectionsOpen ? 'Collapse' : 'Expand'}>
                 <svg className={`sidebar-section-chevron${collectionsOpen ? ' open' : ''}`}
                   viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
