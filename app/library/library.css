@@ -3584,12 +3584,12 @@
 .sidebar-item:hover { background: var(--primary-5); color: var(--primary-50); }
 [data-theme="dark"] .sidebar-item:hover { background: var(--primary-3); color: var(--primary-40); }
 .sidebar-item.active {
-  background: var(--primary-10);
-  color: var(--primary-60);
+  background: var(--primary-50);
+  color: #FFFFFF;
 }
 [data-theme="dark"] .sidebar-item.active {
-  background: rgba(123,137,248,0.15);
-  color: var(--primary);
+  background: var(--primary-50);
+  color: #FFFFFF;
 }
 
 .sidebar-icon {
@@ -3616,15 +3616,8 @@
   background: rgba(123,137,248,0.15);
   color: var(--primary);
 }
-.sidebar-item.active .sidebar-badge {
-  background: var(--primary-50);
-  color: #FFFFFF;
-}
-[data-theme="dark"] .sidebar-item.active .sidebar-badge {
-  background: var(--primary-50);
-  color: #FFFFFF;
-}
-
+.sidebar-item.active .sidebar-badge { background: #FFFFFF; }
+[data-theme="dark"] .sidebar-item.active .sidebar-badge { background: #FFFFFF; }
 /* Collections section */
 .sidebar-section {
   flex-shrink: 0;
@@ -3673,6 +3666,11 @@
   transform: rotate(90deg);
 }
 .sidebar-section-chevron.open polyline { stroke-width: 2.5; }
+.sidebar-item.active .sidebar-section-chevron { color: #FFFFFF; }
+.sidebar-item.active .sidebar-col-toggle:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+}
 .sidebar-section-add {
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
@@ -3710,7 +3708,7 @@
 .sidebar-col-toggle--sm .sidebar-section-chevron { width: 14px; height: 14px; }
 
 .sidebar-empty {
-  padding: 4px 12px 8px;
+  padding: 4px 12px 8px 40px;
   font-size: 14px;
   font-weight: 500;
   color: var(--text-3);
@@ -4070,7 +4068,7 @@
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  color: var(--text-3);
+  color: var(--text);
   transition: transform 0.2s ease;
 }
 .dictionary-chevron.open { transform: rotate(90deg); }
