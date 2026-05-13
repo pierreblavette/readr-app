@@ -164,6 +164,7 @@ export default function Sidebar({
               className={`sidebar-item sidebar-col-item${tab === 'collections' && activeCollection === col.id ? ' active' : ''}`}
               onClick={() => { handleNav('collections'); onOpenCollection?.(col); }}>
               <span className="sidebar-label">{col.name}</span>
+              <span className="sidebar-badge">{(col.bookIds || []).length}</span>
             </button>
           ))}
 
@@ -181,7 +182,7 @@ export default function Sidebar({
 
           {!collapsed && (
             <div className="cell-row cell-row--lg sidebar-appearance-row">
-              <span className="sidebar-appearance-label">
+              <span className="sidebar-row-label">
                 {t.themeAppearance || 'Appearance'}
               </span>
               <button

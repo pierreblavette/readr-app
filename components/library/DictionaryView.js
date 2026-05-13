@@ -1,6 +1,7 @@
 "use client";
 import { Fragment, useMemo, useRef, useState } from "react";
 import ExportMenu from "@/components/library/ExportMenu";
+import NoMatchesIcon from "@/components/library/NoMatchesIcon";
 
 const CACHE_KEY = 'readr-dict-cache';
 
@@ -210,7 +211,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
             </div>
           </div>
         ) : (
-          <>
+          <div className="dictionary-saved-wrap">
             <div className="cell-row cell-row--lg cell-row--between search-row">
               <div className="search-box dictionary-saved-search">
                 <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -239,6 +240,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
 
             {filteredSavedWords.length === 0 ? (
               <div className="empty dictionary-saved-empty">
+                <NoMatchesIcon />
                 <div className="empty-text">
                   <p className="empty-title">{t.emptyNoMatch}</p>
                   <p className="empty-sub">{t.emptyNoMatchSub}</p>
@@ -284,10 +286,9 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                                   className="dictionary-delete-btn"
                                   onClick={e => { e.stopPropagation(); onDelete(w.id); }}
                                   aria-label={t.dictionaryDelete}>
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M10 3h4"/>
-                                    <line x1="3" y1="6" x2="21" y2="6"/>
-                                    <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
                                   </svg>
                                 </button>
                               </td>
@@ -321,7 +322,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                 ))}
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>

@@ -91,7 +91,11 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
     : isRemoveFinished ? t.removeFinishedConfirm
     : (isColRemove || isColRemoveBulk) ? t.colRemoveConfirm
     : t.deleteBtnConfirm;
-  const confirmClass = isCancelReading ? 'ob-next' : 'confirm-modal-delete';
+  const confirmClass = isCancelReading
+    ? 'ob-next'
+    : isWord
+      ? 'confirm-modal-delete confirm-modal-delete--soft'
+      : 'confirm-modal-delete';
 
   function handleConfirm() {
     if (isBulk) onConfirm(target.ids);

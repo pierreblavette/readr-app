@@ -358,7 +358,8 @@ export default function LibraryPage() {
               count: ids.length,
             })}
             onOpenBook={b => setPanelBook(b)}
-            t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
+            quotes={quotes}
+            t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort} setSort={setSort}
           />
         )}
 
@@ -401,7 +402,7 @@ export default function LibraryPage() {
               {view === 'grid' ? (
                 <div className="books-grid">
                   {books.length === 0
-                    ? <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} />
+                    ? <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} noMatch={data[tab]?.length > 0} />
                     : books.map(book => (
                         <BookCard key={book.id} book={book} tab={tab}
                           editMode={editMode} selected={selected}
@@ -423,7 +424,7 @@ export default function LibraryPage() {
                   }
                 </div>
               ) : books.length === 0 ? (
-                <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} />
+                <EmptyState tab={tab} search={search} t={t} onAdd={() => setAddModal(true)} noMatch={data[tab]?.length > 0} />
               ) : (
                 <BookList books={books} tab={tab}
                   editMode={editMode} selected={selected}

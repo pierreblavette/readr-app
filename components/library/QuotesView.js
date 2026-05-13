@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import ExportMenu from "@/components/library/ExportMenu";
 import SortMenu from "@/components/library/SortMenu";
 import BookChip from "@/components/library/BookChip";
+import NoMatchesIcon from "@/components/library/NoMatchesIcon";
 
 export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDelete, onShared, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
   const [search, setSearch] = useState('');
@@ -29,26 +30,39 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
 
   return (
     <>
-      <div className="cell-row cell-row--lg cell-row--between search-row">
-        <div className="search-box">
-          <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input
-            className="search-input"
-            placeholder={t.searchPlaceholder}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="counter-actions">
-          <button className="add-btn" onClick={onAdd}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      <div className="search-bar-wrap">
+        <div className="cell-row cell-row--lg cell-row--between search-row">
+          <div className="search-box">
+            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            {t.quoteAdd}
-          </button>
-          {quotes.length > 0 && (
+            <input
+              className="search-input"
+              placeholder={t.searchPlaceholder}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+          <div className="counter-actions">
+            <button className="add-btn" onClick={onAdd}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              {t.quoteAdd}
+            </button>
+            {(exportPDF || exportMD) && (
+              <ExportMenu
+                t={t}
+                exportPDF={exportPDF}
+                exportMD={exportMD}
+                disabled={!quotes.length}
+              />
+            )}
+          </div>
+        </div>
+
+        {quotes.length > 0 && (
+          <div className="cell-row cell-row--lg filters-row">
             <SortMenu
               current={sort}
               onChange={setSort}
@@ -58,16 +72,8 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
                 { key: 'book',   label: t.quoteSortBook   || 'By book' },
               ]}
             />
-          )}
-          {(exportPDF || exportMD) && (
-            <ExportMenu
-              t={t}
-              exportPDF={exportPDF}
-              exportMD={exportMD}
-              disabled={!quotes.length}
-            />
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div className="quotes-section">
@@ -94,6 +100,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
           </div>
         ) : filtered.length === 0 ? (
           <div className="empty">
+            <NoMatchesIcon />
             <div className="empty-text">
               <div className="empty-title">{t.emptyNoMatch}</div>
               <div className="empty-sub">{t.emptyNoMatchSub}</div>

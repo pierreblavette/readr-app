@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import SelectionBar from "./SelectionBar";
 import CollectionCoverGrid from "./CollectionCoverGrid";
+import NoMatchesIcon from "./NoMatchesIcon";
 
 function CollectionsIcon() {
   return (
@@ -210,6 +211,7 @@ export default function CollectionsView({ collections, data, view, switchView, o
         </div>
       ) : filtered.length === 0 ? (
         <div className="empty">
+          <NoMatchesIcon />
           <div className="empty-text">
             <p className="empty-title">{t.emptyNoMatch}</p>
             <p className="empty-sub">{t.emptyNoMatchSub}</p>

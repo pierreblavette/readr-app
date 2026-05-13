@@ -126,6 +126,7 @@ export default function MobileFiltersPanel({
               </svg>
             </button>
 
+            <div className="filters-panel-wrap">
             {typeof bookCount === 'number' && (
               <div className="filters-panel-header">
                 <span className="filters-panel-count">
@@ -133,11 +134,6 @@ export default function MobileFiltersPanel({
                     ? t.resultQuery(bookCount, totalCount)
                     : t.resultTotal(totalCount)}
                 </span>
-                {isOwned && hasActiveFilters && (
-                  <button type="button" className="btn btn-sm btn-secondary" onClick={resetAllFilters}>
-                    {t.filterClear || 'Clear filters'}
-                  </button>
-                )}
               </div>
             )}
 
@@ -195,6 +191,28 @@ export default function MobileFiltersPanel({
                 </FilterSection>
               </>
             )}
+
+            {isOwned && (
+              <div className="filters-panel-footer">
+                <button
+                  type="button"
+                  className="btn btn-md btn-primary filters-panel-confirm"
+                  onClick={onClose}>
+                  <span>{t.btnConfirm || 'Confirm'}</span>
+                  {typeof bookCount === 'number' && (
+                    <span className="filters-confirm-count">{bookCount}</span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-md btn-secondary"
+                  onClick={resetAllFilters}
+                  disabled={!hasActiveFilters}>
+                  {t.filterClear || 'Clear filters'}
+                </button>
+              </div>
+            )}
+            </div>
           </div>
         )}
       </div>

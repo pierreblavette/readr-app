@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import ExportMenu from "@/components/library/ExportMenu";
 import SortMenu from "@/components/library/SortMenu";
 import GenresMenu from "@/components/library/GenresMenu";
+import AuthorsMenu from "@/components/library/AuthorsMenu";
 import MobileFiltersPanel from "@/components/library/MobileFiltersPanel";
 
 function RatingStars({ count }) {
@@ -72,6 +73,21 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
     });
     return counts;
   }, [data.owned, isOwned]);
+  const availableAuthors = useMemo(() => {
+    if (!isOwned) return [];
+    const set = new Set();
+    (data.owned || []).forEach(b => { if (b.author && b.author.trim()) set.add(b.author.trim()); });
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'fr'));
+  }, [data.owned, isOwned]);
+  const authorCounts = useMemo(() => {
+    const counts = {};
+    if (!isOwned) return counts;
+    (data.owned || []).forEach(b => {
+      const a = (b.author || '').trim();
+      if (a) counts[a] = (counts[a] || 0) + 1;
+    });
+    return counts;
+  }, [data.owned, isOwned]);
   const booksWithQuotesCount = useMemo(() => {
     if (!isOwned) return 0;
     const bookIds = new Set(quotes.map(q => q.bookId).filter(Boolean));
@@ -87,6 +103,7 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
     if (filters.readingStatus && filters.readingStatus !== 'any') n++;
     if (filters.rating && filters.rating !== 'any') n++;
     if (filters.genres?.size > 0) n++;
+    if (filters.authors?.size > 0) n++;
     return n;
   }
   useEffect(() => {
@@ -203,6 +220,19 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
         />
         {isOwned && filters && (
           <>
+            <AuthorsMenu
+              selected={filters.authors || new Set()}
+              onToggle={author => {
+                const next = new Set(filters.authors || new Set());
+                if (next.has(author)) next.delete(author);
+                else next.add(author);
+                setFilter('authors', next);
+              }}
+              onReset={() => setFilter('authors', new Set())}
+              availableAuthors={availableAuthors}
+              counts={authorCounts}
+              t={t}
+            />
             <SortMenu
               current={filters.readingStatus}
               onChange={key => setFilter('readingStatus', key)}
@@ -248,8 +278,8 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
                 onClick={() => setQuotesMenuOpen(o => !o)}
                 aria-haspopup="dialog"
                 aria-expanded={quotesMenuOpen}
-                aria-label={t.filterToggle || 'Filter'}
-                title={t.filterToggle || 'Filter'}>
+                aria-label={t.filterWithQuotes || 'Books with quotes'}
+                title={t.filterWithQuotes || 'Books with quotes'}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <line x1="3"  y1="6"  x2="21" y2="6"/>
                   <line x1="6"  y1="12" x2="18" y2="12"/>
@@ -275,6 +305,20 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
                 </div>
               )}
             </div>
+            {activeFilterCount() > 0 && (
+              <button
+                type="button"
+                className="btn btn-md btn-secondary filters-reset-btn"
+                onClick={() => {
+                  setFilter('hasQuotes', false);
+                  setFilter('readingStatus', 'any');
+                  setFilter('rating', 'any');
+                  setFilter('genres', new Set());
+                  setFilter('authors', new Set());
+                }}>
+                {t.filterClear || 'Clear filters'}
+              </button>
+            )}
           </>
         )}
       </div>

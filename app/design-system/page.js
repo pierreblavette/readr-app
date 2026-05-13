@@ -10,8 +10,8 @@ import GradientDropzone from "@/components/library/GradientDropzone";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
-  Components:  ["autocomplete","badges","book-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","theme-toggle","view-toggle"],
-  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","modal","delete-modal","message-box","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
+  Components:  ["autocomplete","badges","book-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","rating-stars","row-checkbox","theme-toggle","view-toggle"],
+  Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","filters-row","filters-panel","modal","delete-modal","message-box","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
 const NAV_LABELS = {
@@ -20,9 +20,11 @@ const NAV_LABELS = {
   "buttons":"Buttons","dropdown":"Dropdown Menu",
   "inputs":"Inputs","view-toggle":"View Toggle","badges":"Badges",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
+  "rating-stars":"Rating Stars","row-checkbox":"Row Checkbox",
   "theme-toggle":"Theme Toggle","book-chip":"Book Chip","book-card-kebab":"Book Card Kebab","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
+  "filters-panel":"Filters Panel","filters-row":"Filters Row",
   "modal":"Modal","delete-modal":"Delete Modal","message-box":"Message Box","upload-box":"Upload Box","selection-bar":"Selection Bar","toast":"Toast","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
   "token-usage":"Token Usage",
 };
@@ -35,6 +37,8 @@ export default function DesignSystemPage() {
   const [active, setActive] = useState("logo");
   const [theme, setTheme] = useState("light");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [hideText, setHideText] = useState(false);
+  const [hiddenIds, setHiddenIds] = useState(() => new Set());
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -43,13 +47,21 @@ export default function DesignSystemPage() {
   useEffect(() => {
     const ids = Object.values(NAV).flat();
 
+    // Scroll spy — scan every section (no DOM-order assumption) and pick
+    // the one whose top is closest to the 120px trigger line from below.
+    // Robust against any NAV/DOM mismatch or reordering, and indifferent
+    // to offsetParent changes in ancestor wrappers.
     function onScroll() {
-      const scrollY = window.scrollY + 120;
       let current = ids[0];
+      let bestTop = -Infinity;
       for (const id of ids) {
         const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollY) current = id;
-        else break;
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top <= 120 && top > bestTop) {
+          bestTop = top;
+          current = id;
+        }
       }
       setActive(current);
     }
@@ -58,6 +70,36 @@ export default function DesignSystemPage() {
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Recompute which sections collapse to zero height when Text rules are
+  // hidden (Strokes, Finish Reading, Token Usage, etc.). Their sidebar
+  // items get filtered out so the nav stays clean. Two RAFs let the CSS
+  // :has() cascade settle before we measure ; getComputedStyle catches
+  // both display:none and any zero-height collapse.
+  useEffect(() => {
+    if (!hideText) {
+      setHiddenIds(new Set());
+      return;
+    }
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        const ids = Object.values(NAV).flat();
+        const hidden = new Set();
+        for (const id of ids) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          const display = window.getComputedStyle(el).display;
+          if (display === 'none' || el.offsetHeight === 0) hidden.add(id);
+        }
+        setHiddenIds(hidden);
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
+  }, [hideText]);
 
   useEffect(() => {
     const item = document.querySelector('.sidebar-item.active');
@@ -190,29 +232,43 @@ export default function DesignSystemPage() {
             <Link href="/" className="logo">readr</Link>
           </div>
           <nav className="sidebar-nav">
-            {Object.entries(NAV).map(([section, ids]) => (
-              <div key={section} className="sidebar-section">
-                <div className="sidebar-section-head sidebar-section-head--no-action">
-                  <span className="sidebar-section-label">{section}</span>
-                </div>
-                {ids.map(id => (
-                  <button key={id} className={`sidebar-item${active === id ? " active" : ""}`} onClick={() => { scrollTo(id); setMobileSidebarOpen(false); }}>
-                    <span className="sidebar-label">{NAV_LABELS[id]}</span>
-                  </button>
-                ))}
+            <div className="sidebar-appearance-wrap">
+              <div className="sidebar-appearance-row cell-row cell-row--lg cell-row--between">
+                <span className="sidebar-row-label">Text rules</span>
+                <button
+                  className={`theme-btn-ds${hideText ? '' : ' is-on'}`}
+                  onClick={() => setHideText(v => !v)}
+                  title={hideText ? "Show text rules" : "Hide text rules"}
+                  aria-pressed={!hideText}>
+                  <span className="toggle-thumb-ds" />
+                </button>
               </div>
-            ))}
-          </nav>
-          <div className="sidebar-bottom">
-            <div className="sidebar-appearance-row cell-row cell-row--lg cell-row--between">
-              <span className="sidebar-appearance-label">Appearance</span>
-              <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
-                <span className="toggle-thumb-ds">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                </span>
-              </button>
+              <div className="sidebar-appearance-row cell-row cell-row--lg cell-row--between">
+                <span className="sidebar-row-label">Appearance</span>
+                <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
+                  <span className="toggle-thumb-ds">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                  </span>
+                </button>
+              </div>
             </div>
-          </div>
+            {Object.entries(NAV).map(([section, ids]) => {
+              const visibleIds = ids.filter(id => !hiddenIds.has(id));
+              if (visibleIds.length === 0) return null;
+              return (
+                <div key={section} className="sidebar-section">
+                  <div className="sidebar-section-head sidebar-section-head--no-action">
+                    <span className="sidebar-section-label">{section}</span>
+                  </div>
+                  {visibleIds.map(id => (
+                    <button key={id} className={`sidebar-item${active === id ? " active" : ""}`} onClick={() => { scrollTo(id); setMobileSidebarOpen(false); }}>
+                      <span className="sidebar-label">{NAV_LABELS[id]}</span>
+                    </button>
+                  ))}
+                </div>
+              );
+            })}
+          </nav>
         </aside>
 
         <main className="page-main">
@@ -245,7 +301,7 @@ export default function DesignSystemPage() {
           <div className="main-wrap">
 
             {/* CONTENT */}
-            <div className="ds-content">
+            <div className={`ds-content${hideText ? ' ds-content--text-hidden' : ''}`}>
 
           {/* INTRO */}
           <div className="ds-intro">
@@ -254,6 +310,10 @@ export default function DesignSystemPage() {
               Complete reference for tokens, components and patterns. Native light/dark themes via <code style={{ fontSize: 12, background: "var(--bg3)", padding: "2px 6px", borderRadius: 4 }}>data-theme</code>.
             </p>
           </div>
+
+          <div className="ds-group">
+          <h2 className="ds-group-title">Foundations</h2>
+          <div className="ds-group-sections">
 
           {/* ── LOGO ── */}
           <DSSection id="logo" title="Logo" sub="Wordmark only — Fraunces Regular. No icon, no bold version, no font substitution.">
@@ -433,7 +493,7 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Illustration tokens</div>
               <div className="ds-card-body col">
-                <p className="ds-token-name">8 tokens used in <code>.empty-icon</code> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
+                <p>8 tokens used in <code>.empty-icon</code> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
                 <div className="palette-grid">
                   {[
                     ["bg-1",     "#F4F5FF", "#232536"],
@@ -456,6 +516,8 @@ export default function DesignSystemPage() {
                     />
                   ))}
                 </div>
+              </div>
+              <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">Stroke</div>
                   <p><span className="ds-token-chip">--illus-stroke</span> resolves to <span className="ds-token-chip">--primary-90</span> in light (#131860 navy) and <span className="ds-token-chip">--primary-20</span> in dark (#C1C7FB lavender). Brand-tinted stroke instead of neutral white — gives a monochrome blue feel to illustrations.</p>
@@ -664,6 +726,8 @@ export default function DesignSystemPage() {
                     <span className="type-sample-meta" style={{ marginLeft: 0 }}><span className="ds-token-chip">{token}</span> · {use}</span>
                   </div>
                 ))}
+              </div>
+              <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">Modal shadow — dark override</div>
                   <p><code>.modal</code> and <code>.confirm-modal</code> in dark mode use a hardcoded neutral black shadow <code>0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30)</code> instead of the primary-tinted <span className="ds-token-chip">--shadow-lg</span>. Reason: blue-tinted shadow on dark UI reads as a brand wash; pure black gives proper depth without color contamination.</p>
@@ -753,6 +817,13 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── AUTOCOMPLETE ── */}
+          </div>
+          </div>
+
+          <div className="ds-group">
+          <h2 className="ds-group-title">Components</h2>
+          <div className="ds-group-sections">
+
           <DSSection id="autocomplete" title="Autocomplete" sub="Dropdown suggestions below the title field in the AddModal.">
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
@@ -1266,6 +1337,33 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Button with count badge — text + pill</div>
+              <div className="ds-card-body" style={{ alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+                <button type="button" className="btn btn-md btn-primary filters-panel-confirm">
+                  <span>Confirm</span>
+                  <span className="filters-confirm-count">12</span>
+                </button>
+              </div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Anatomy</div>
+                  <p>Text label in a <code>&lt;span&gt;</code> + a count pill in <code>.filters-confirm-count</code> (22px min height, 8px horizontal padding, radius 11, <code>rgba(255,255,255,0.18)</code> bg over the primary fill, <code>tabular-nums</code> for stable digit width).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Padding</div>
+                  <p>Asymmetric — <code>padding-right: 12</code> (iso 20) so the pill doesn't float in a 20px gutter. Mirrors the canonical <code>.btn-md:has(svg:last-child)</code> rule for trailing icons.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Gap</div>
+                  <p>12 (iso 8 default) — gives the count pill room to read as a separate token from the label.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Usage</div>
+                  <p>First consumer : <code>.filters-panel-confirm</code> in MobileFiltersPanel — shows the live <code>bookCount</code> so the user understands filters apply on tap. If a second consumer surfaces (e.g. "Show results [N]"), promote to a generic <code>.btn-count</code> primitive + extend the <code>.btn-md:has()</code> padding rule to match.</p>
+                </div>
+              </div>
+            </div>
           </DSSection>
 
           {/* ── CHECKBOX ── */}
@@ -1592,7 +1690,7 @@ export default function DesignSystemPage() {
           <DSSection id="rating-stars" title="Rating Stars" sub="Inline 5-star visual primitive. Filled positions use primary-50 (currentColor), empty use --border gray. Composed inside dropdown labels and trigger buttons.">
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
-              <div className="ds-card-body col" style={{ gap: 12 }}>
+              <div className="ds-card-body col padded" style={{ gap: 12 }}>
                 {[5, 4, 3, 2, 1].map(n => (
                   <span key={n} className="rating-stars-inline" style={{ color: "var(--primary-50)" }}>
                     {[1,2,3,4,5].map(i => (
@@ -1610,20 +1708,6 @@ export default function DesignSystemPage() {
                 <p><code>.rating-stars-inline</code> — inline-flex container, gap 2, color <code>var(--primary-50)</code> light / <code>var(--primary-40)</code> dark.</p>
                 <p>Each <code>svg</code> is 14×14, <code>fill={"\"currentColor\""}</code> when filled (inherits the container color), <code>fill={"\"var(--border)\""}</code> when empty.</p>
                 <p>Inside <code>.dropdown-item-label</code> stars are bumped to 18×18 (more prominent in dropdown context).</p>
-              </div>
-            </div>
-          </DSSection>
-
-          {/* ── FILTERS ROW ── */}
-          <DSSection id="filters-row" title="Filters Row" sub="Horizontal cluster of filter triggers below the search row. Each trigger is a SortMenu (radio) or a custom dropdown (multi-select Genres, icon-only Quotes toggle).">
-            <div className="ds-card">
-              <div className="ds-card-head">Anatomy</div>
-              <div className="ds-card-body col">
-                <p><code>.filters-row</code> — flex row gap 12. Lives inside <code>.search-bar-wrap</code> (column gap 32), positioned below the search row.</p>
-                <p>Children are <code>.dropdown-wrap.sort-menu</code> instances (4 radio dropdowns: Sort / Reading status / Rating / Genres) + a single <code>.dropdown-btn.dropdown-btn--icon</code> (Books with quotes toggle).</p>
-                <p>The last sort-menu (<code>.genres-menu</code>) flips its dropdown anchor (<code>right: 0</code>) to avoid viewport overflow on narrow desktops.</p>
-                <p>Filter active state: <code>.dropdown-btn.is-active</code> — border + color + bg in primary-50/5 (primary-40/3 dark).</p>
-                <p>Mobile (≤768px): all 5 triggers hidden, replaced by <code>.filters-mobile-trigger</code> (icon + "Filter" label) that opens <code>MobileFiltersPanel</code> (slide-in panel reusing <code>.book-panel</code>).</p>
               </div>
             </div>
           </DSSection>
@@ -1687,6 +1771,13 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── BOOK CARD ── */}
+          </div>
+          </div>
+
+          <div className="ds-group">
+          <h2 className="ds-group-title">Patterns</h2>
+          <div className="ds-group-sections">
+
           <DSSection id="card" title="Book Card" sub="Visual primitive for a single book — cover + title + author + meta. Same surface + hover family as BookPanel, NowReadingCard, BookChip.">
             <div className="ds-card">
               <div className="ds-card-head">Grid view</div>
@@ -1830,9 +1921,9 @@ export default function DesignSystemPage() {
                       <span className="dictionary-saved-word">Voiture</span>
                     </span>
                     <button type="button" className="dictionary-delete-btn" aria-label="Delete">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M10 3h4"/><line x1="3" y1="6" x2="21" y2="6"/>
-                        <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
                       </svg>
                     </button>
                   </div>
@@ -1852,9 +1943,9 @@ export default function DesignSystemPage() {
                       <span className="dictionary-saved-word">Voiture</span>
                     </span>
                     <button type="button" className="dictionary-delete-btn" aria-label="Delete">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M10 3h4"/><line x1="3" y1="6" x2="21" y2="6"/>
-                        <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
                       </svg>
                     </button>
                   </div>
@@ -2023,7 +2114,7 @@ export default function DesignSystemPage() {
                   </nav>
                   <div className="sidebar-bottom">
                     <div className="cell-row cell-row--lg sidebar-appearance-row">
-                      <span className="sidebar-appearance-label">Appearance</span>
+                      <span className="sidebar-row-label">Appearance</span>
                       <button type="button" className="theme-btn" aria-label="Toggle theme">
                         <span className="toggle-thumb">
                           <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
@@ -2276,6 +2367,67 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.panel-section</code> (Book)</td><td className="meta">Eyebrow "Book" + &lt;BookChip&gt; (base palette, <span className="ds-token-chip">--bg3</span> default)</td><td className="mono">16px</td></tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── FILTERS ROW ── */}
+          <DSSection id="filters-row" title="Filters Row" sub="Horizontal cluster of filter triggers below the search row. Each trigger is a SortMenu (radio) or a custom dropdown (multi-select Genres, icon-only Quotes toggle).">
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col padded">
+                <p><code>.filters-row</code> — flex row gap 12. Lives inside <code>.search-bar-wrap</code> (column gap 32), positioned below the search row.</p>
+                <p>Children are <code>.dropdown-wrap.sort-menu</code> instances (4 radio dropdowns: Sort / Reading status / Rating / Genres) + a single <code>.dropdown-btn.dropdown-btn--icon</code> (Books with quotes toggle).</p>
+                <p>The last sort-menu (<code>.genres-menu</code>) flips its dropdown anchor (<code>right: 0</code>) to avoid viewport overflow on narrow desktops.</p>
+                <p>Filter active state: <code>.dropdown-btn.is-active</code> — border + color + bg in primary-50/5 (primary-40/3 dark).</p>
+                <p>Mobile (≤768px): all 5 triggers hidden, replaced by <code>.filters-mobile-trigger</code> (icon + "Filter" label) that opens the <a href="#filters-panel">Filters Panel</a>.</p>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── FILTERS PANEL ── */}
+          <DSSection id="filters-panel" title="Filters Panel" sub="Mobile (≤768px) slide-in panel that expands all 5 filter dimensions inline. Reuses .book-panel primitive ; sticky footer with Confirm + Clear filters.">
+            <div className="ds-card">
+              <div className="ds-card-head">Structure</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.book-panel.filters-panel</div>
+                  <p>Reuses the slide-in side panel primitive — same transform / transition / overlay / a11y hook (<code>useModalA11y</code>) as BookPanel, QuoteListPanel, WordListPanel.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.filters-panel-wrap</div>
+                  <p>Inner wrapper around <strong>header + sections + footer</strong>. Owns the 40px <code>gap</code> rhythm so the parent <code>.panel-inner</code> can override its default <code>gap: 40</code> to <code>0</code> (avoids double-counting before the sticky footer).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.filters-panel-header</div>
+                  <p>Result count in Fraunces 28 — <code>resultQuery(N, total)</code> when filters narrow the set, <code>resultTotal(total)</code> otherwise. Mirrors the panel headlines elsewhere (BookListPanel, QuoteListPanel).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.filters-panel-section · .filter-row</div>
+                  <p>Each section is a labeled group with eyebrow + rows. Each row is a <code>.filter-row</code> (padding 12, gap 12, hover bg primary-5) carrying a <a href="#row-checkbox">Row Checkbox</a>, label, and an optional count <span className="ds-token-chip">.sidebar-badge</span> right-aligned via <code>.dropdown-item-count-wrap</code>.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">.filters-panel-footer</div>
+                  <p>Sticky bottom — sits flush at the bottom of the <code>.book-panel</code> scroll container. <strong>Confirm</strong> (<code>.btn.btn-md.btn-primary.filters-panel-confirm</code>) with a live <code>bookCount</code> pill, left-aligned ; <strong>Clear filters</strong> (<code>.btn.btn-md.btn-secondary</code>), right-aligned, <code>disabled</code> when no filter is active. Negative side margins (<code>0 -32px</code> desktop / <code>0 -16px</code> mobile) make the bg fill edge-to-edge, with a 1px <span className="ds-token-chip">--border-subtle</span> top.</p>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Sections (5)</div>
+              <div className="ds-card-body col">
+                <p><strong>Sort</strong> — radio · A–Z / Date added / Date finished (owned only).</p>
+                <p><strong>Reading status</strong> — radio · Any / Not started / Currently reading / Finished — with live counts.</p>
+                <p><strong>Rating</strong> — radio · All + 5★→1★ (exact-N match) — labels rendered with <a href="#rating-stars">Rating Stars</a> + counts.</p>
+                <p><strong>Genres</strong> — checkbox multi-select · dynamic from <code>data.owned</code> genres — hidden when <code>availableGenres.length === 0</code>.</p>
+                <p><strong>Books with quotes</strong> — single checkbox toggle · count = books that have at least one quote.</p>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Behavior</div>
+              <div className="ds-card-body col">
+                <p>Live update on tap — no Apply button. Confirm only closes the panel ; filters are already applied behind it. The count pill on Confirm reinforces this so the user understands filtering is automatic.</p>
+                <p>Clear filters dispatches 4 <code>setFilter</code> calls in the same handler — React 18 auto-batching collapses them into a single render.</p>
+                <p>Filters reset on tab change (Library / Wishlist / Quotes / …) — same effect that resets <code>search</code> + <code>edit</code> + <code>selected</code>.</p>
               </div>
             </div>
           </DSSection>
@@ -2906,7 +3058,7 @@ function handleDeleteConfirm(payload) {
 
             <div className="ds-card">
               <div className="ds-card-head">Icon set — 12 illustrative SVGs (viewBox 60)</div>
-              <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
+              <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "flex-start" }}>
                 <div className="ds-icon-tile">
                   <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
                     <path d="M14 8H51C47 11 47 17 51 20H14C10.6863 20 8 17.3137 8 14C8 10.6863 10.6863 8 14 8Z" fill="var(--illus-bg-2)" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>
@@ -3803,7 +3955,7 @@ function handleDeleteConfirm(payload) {
 
             <div className="ds-card">
               <div className="ds-card-head">Icon set — 6 illustrative SVGs (120×120, viewBox 60)</div>
-              <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "space-around" }}>
+              <div className="ds-card-body" style={{ gap: 32, flexWrap: "wrap", justifyContent: "flex-start" }}>
                 <div className="ds-icon-tile">
                   <ReadrIcon />
                   <span className="panel-section-eyebrow">Readr (slide 1)</span>
@@ -3932,6 +4084,13 @@ function handleDeleteConfirm(payload) {
           </DSSection>
 
           {/* ── TOKEN USAGE ── */}
+          </div>
+          </div>
+
+          <div className="ds-group">
+          <h2 className="ds-group-title">Reference</h2>
+          <div className="ds-group-sections">
+
           <DSSection id="token-usage" title="Token Usage" sub="Authoritative mapping component → tokens. Reflects the current lib state (post border-subtle migration).">
 
             {[
@@ -4044,6 +4203,8 @@ function handleDeleteConfirm(payload) {
               </div>
             ))}
           </DSSection>
+          </div>
+          </div>
 
             </div>
           </div>

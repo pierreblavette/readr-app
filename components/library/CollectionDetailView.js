@@ -1,15 +1,113 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import BookCard from "./BookCard";
 import BookList from "./BookList";
 import SelectionBar from "./SelectionBar";
+import SortMenu from "./SortMenu";
+import GenresMenu from "./GenresMenu";
+import AuthorsMenu from "./AuthorsMenu";
+import NoMatchesIcon from "./NoMatchesIcon";
 import { MAX_BOOKS_PER_COLLECTION } from "../../lib/useLibrary";
+
+function RatingStars({ count }) {
+  return (
+    <span className="rating-stars-inline" aria-hidden="true">
+      {[1, 2, 3, 4, 5].map(i => (
+        <svg key={i} viewBox="0 0 24 24" fill={i <= count ? 'currentColor' : 'var(--border)'}>
+          <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
+        </svg>
+      ))}
+    </span>
+  );
+}
 
 export default function CollectionDetailView({
   collection, books, view, switchView,
   onBack, onDelete, onShare, onAddBooks, onRequestRemoveBook, onRequestRemoveMany, onOpenBook, onRenameRequest,
-  t, sortCol, sortDir, toggleSort,
+  quotes = [],
+  t, sortCol, sortDir, toggleSort, setSort,
 }) {
+  const currentSortKey =
+    sortCol === 'dateAdded' && sortDir === 'desc' ? 'dateAdded' : 'alpha';
+  function handleSort(key) {
+    if (key === 'alpha')          setSort?.('title', 'asc');
+    else if (key === 'dateAdded') setSort?.('dateAdded', 'desc');
+  }
+  // Local filter state — independent from Library's global filters so
+  // collections each have their own filtering UX (no cross-leakage).
+  const [filters, setFilters] = useState({
+    hasQuotes: false,
+    readingStatus: 'any',
+    rating: 'any',
+    genres: new Set(),
+    authors: new Set(),
+  });
+  function setFilter(key, value) {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  }
+  const availableGenres = useMemo(() => {
+    const set = new Set();
+    books.forEach(b => { if (b?.genre && b.genre.trim()) set.add(b.genre.trim()); });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [books]);
+  const ratingCounts = useMemo(() => {
+    const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    books.forEach(b => {
+      const r = b?.rating || 0;
+      if (r >= 1 && r <= 5) counts[r]++;
+    });
+    return counts;
+  }, [books]);
+  const readingCounts = useMemo(() => {
+    const counts = { any: books.length, notStarted: 0, reading: 0, finished: 0 };
+    books.forEach(b => {
+      if (!b) return;
+      if (b.finishedAt) counts.finished++;
+      else if (b.startedAt) counts.reading++;
+      else counts.notStarted++;
+    });
+    return counts;
+  }, [books]);
+  const genreCounts = useMemo(() => {
+    const counts = {};
+    books.forEach(b => {
+      const g = (b?.genre || '').trim();
+      if (g) counts[g] = (counts[g] || 0) + 1;
+    });
+    return counts;
+  }, [books]);
+  const availableAuthors = useMemo(() => {
+    const set = new Set();
+    books.forEach(b => { if (b?.author && b.author.trim()) set.add(b.author.trim()); });
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'fr'));
+  }, [books]);
+  const authorCounts = useMemo(() => {
+    const counts = {};
+    books.forEach(b => {
+      const a = (b?.author || '').trim();
+      if (a) counts[a] = (counts[a] || 0) + 1;
+    });
+    return counts;
+  }, [books]);
+  const booksWithQuotesCount = useMemo(() => {
+    const bookIds = new Set(quotes.map(q => q.bookId).filter(Boolean));
+    return books.filter(b => b && bookIds.has(b.id)).length;
+  }, [books, quotes]);
+  const [quotesMenuOpen, setQuotesMenuOpen] = useState(false);
+  const quotesMenuRef = useRef(null);
+  useEffect(() => {
+    if (!quotesMenuOpen) return;
+    function close(e) {
+      if (!quotesMenuRef.current?.contains(e.target)) setQuotesMenuOpen(false);
+    }
+    function onKey(e) { if (e.key === 'Escape') setQuotesMenuOpen(false); }
+    document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [quotesMenuOpen]);
   const [search, setSearch] = useState('');
   const [moreOpen, setMoreOpen] = useState(false);
   const [editMenuOpen, setEditMenuOpen] = useState(false);
@@ -84,6 +182,28 @@ export default function CollectionDetailView({
         b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
       );
     }
+    if (filters.hasQuotes) {
+      const ids = new Set(quotes.map(q => q.bookId).filter(Boolean));
+      list = list.filter(b => ids.has(b.id));
+    }
+    if (filters.readingStatus !== 'any') {
+      list = list.filter(b => {
+        if (filters.readingStatus === 'finished')   return !!b.finishedAt;
+        if (filters.readingStatus === 'reading')    return !!b.startedAt && !b.finishedAt;
+        if (filters.readingStatus === 'notStarted') return !b.startedAt && !b.finishedAt;
+        return true;
+      });
+    }
+    if (filters.rating !== 'any') {
+      const r = parseInt(filters.rating);
+      list = list.filter(b => (b.rating || 0) === r);
+    }
+    if (filters.genres.size > 0) {
+      list = list.filter(b => b.genre && filters.genres.has(b.genre.trim()));
+    }
+    if (filters.authors.size > 0) {
+      list = list.filter(b => b.author && filters.authors.has(b.author.trim()));
+    }
     list.sort((a, b) => {
       let cmp;
       if (sortCol === 'dateAdded') {
@@ -93,9 +213,7 @@ export default function CollectionDetailView({
         const yb = b.year ? parseInt(b.year) : 9999;
         cmp = ya !== yb ? ya - yb : normalize(a.title).localeCompare(normalize(b.title), 'fr');
       } else if (sortCol === 'author') {
-        const la = a.author.split(' ').pop() || a.author;
-        const lb = b.author.split(' ').pop() || b.author;
-        cmp = normalize(la).localeCompare(normalize(lb), 'fr');
+        cmp = normalize(a.author || '').localeCompare(normalize(b.author || ''), 'fr');
       } else if (sortCol === 'genre') {
         cmp = (a.genre || '').localeCompare(b.genre || '', 'fr');
       } else {
@@ -106,7 +224,13 @@ export default function CollectionDetailView({
     return list;
   })();
 
-  const resultInfo = search.trim()
+  const hasActiveFilters =
+    filters.hasQuotes ||
+    filters.readingStatus !== 'any' ||
+    filters.rating !== 'any' ||
+    filters.genres.size > 0 ||
+    filters.authors.size > 0;
+  const resultInfo = (search.trim() || hasActiveFilters)
     ? t.resultQuery(filtered.length, books.length)
     : t.colLimitCount(books.length, MAX_BOOKS_PER_COLLECTION);
   const limitReached = books.length >= MAX_BOOKS_PER_COLLECTION;
@@ -124,6 +248,7 @@ export default function CollectionDetailView({
         <h1 className="page-title">{collection.name}</h1>
       </div>
 
+      <div className="search-bar-wrap">
       <div className="cell-row cell-row--lg cell-row--between search-row">
         <div className="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -270,6 +395,123 @@ export default function CollectionDetailView({
         </div>
       </div>
 
+      <div className="cell-row cell-row--lg filters-row">
+        <SortMenu
+          current={currentSortKey}
+          onChange={handleSort}
+          ariaLabel={t.sortToggle || 'Sort'}
+          options={[
+            { key: 'alpha',     label: t.sortAlpha     || 'A–Z' },
+            { key: 'dateAdded', label: t.sortDateAdded || 'Date added' },
+          ]}
+        />
+        <AuthorsMenu
+          selected={filters.authors}
+          onToggle={author => {
+            const next = new Set(filters.authors);
+            if (next.has(author)) next.delete(author);
+            else next.add(author);
+            setFilter('authors', next);
+          }}
+          onReset={() => setFilter('authors', new Set())}
+          availableAuthors={availableAuthors}
+          counts={authorCounts}
+          t={t}
+        />
+        <SortMenu
+          current={filters.readingStatus}
+          onChange={key => setFilter('readingStatus', key)}
+          ariaLabel={t.filterReadingStatus}
+          defaultTriggerLabel={t.filterReadingStatus}
+          options={[
+            { key: 'any',        label: t.filterReadingAny        || 'Any',               count: readingCounts.any },
+            { key: 'notStarted', label: t.filterReadingNotStarted || 'Not started',       count: readingCounts.notStarted },
+            { key: 'reading',    label: t.filterReadingCurrent    || 'Currently reading', count: readingCounts.reading },
+            { key: 'finished',   label: t.filterReadingFinished   || 'Finished',          count: readingCounts.finished },
+          ]}
+        />
+        <SortMenu
+          current={filters.rating}
+          onChange={key => setFilter('rating', key)}
+          ariaLabel={t.filterRating}
+          defaultTriggerLabel={t.filterRating}
+          options={[
+            { key: 'any', label: t.filterRatingAll || 'All', count: books.length },
+            { key: '5',   triggerLabel: <RatingStars count={5} />, label: <RatingStars count={5} />, count: ratingCounts[5] },
+            { key: '4',   triggerLabel: <RatingStars count={4} />, label: <RatingStars count={4} />, count: ratingCounts[4] },
+            { key: '3',   triggerLabel: <RatingStars count={3} />, label: <RatingStars count={3} />, count: ratingCounts[3] },
+            { key: '2',   triggerLabel: <RatingStars count={2} />, label: <RatingStars count={2} />, count: ratingCounts[2] },
+            { key: '1',   triggerLabel: <RatingStars count={1} />, label: <RatingStars count={1} />, count: ratingCounts[1] },
+          ]}
+        />
+        {availableGenres.length > 0 && (
+          <GenresMenu
+            selected={filters.genres}
+            onToggle={genre => {
+              const next = new Set(filters.genres);
+              if (next.has(genre)) next.delete(genre);
+              else next.add(genre);
+              setFilter('genres', next);
+            }}
+            availableGenres={availableGenres}
+            counts={genreCounts}
+            t={t}
+          />
+        )}
+        <div className="dropdown-wrap quotes-toggle" ref={quotesMenuRef}>
+          <button
+            type="button"
+            className={`dropdown-btn dropdown-btn--icon${filters.hasQuotes ? ' is-active' : ''}`}
+            onClick={() => setQuotesMenuOpen(o => !o)}
+            aria-haspopup="dialog"
+            aria-expanded={quotesMenuOpen}
+            aria-label={t.filterWithQuotes || 'Books with quotes'}
+            title={t.filterWithQuotes || 'Books with quotes'}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="3"  y1="6"  x2="21" y2="6"/>
+              <line x1="6"  y1="12" x2="18" y2="12"/>
+              <line x1="9"  y1="18" x2="15" y2="18"/>
+            </svg>
+          </button>
+          {quotesMenuOpen && (
+            <div className="dropdown-menu" role="dialog">
+              <div
+                className="filter-row"
+                role="checkbox"
+                aria-checked={filters.hasQuotes}
+                tabIndex={0}
+                onClick={() => setFilter('hasQuotes', !filters.hasQuotes)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFilter('hasQuotes', !filters.hasQuotes); } }}>
+                <span className={`row-checkbox${filters.hasQuotes ? ' is-selected' : ''}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </span>
+                <span className="dropdown-item-label">{t.filterWithQuotes}</span>
+                <span className="dropdown-item-count-wrap">
+                  <span className="dropdown-item-count sidebar-badge">{booksWithQuotesCount}</span>
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+        {hasActiveFilters && (
+          <button
+            type="button"
+            className="btn btn-md btn-secondary filters-reset-btn"
+            onClick={() => {
+              setFilter('hasQuotes', false);
+              setFilter('readingStatus', 'any');
+              setFilter('rating', 'any');
+              setFilter('genres', new Set());
+              setFilter('authors', new Set());
+            }}>
+            {t.filterClear || 'Clear filters'}
+          </button>
+        )}
+      </div>
+      </div>
+
       <div className="books-section">
         {books.length > 0 && (
           <div className="result-line">{resultInfo}</div>
@@ -302,6 +544,7 @@ export default function CollectionDetailView({
 
         {books.length > 0 && filtered.length === 0 && (
           <div className="empty">
+            <NoMatchesIcon />
             <div className="empty-text">
               <p className="empty-title">{t.emptyNoMatch}</p>
               <p className="empty-sub">{t.emptyNoMatchSub}</p>
