@@ -62,14 +62,15 @@ export default function LibraryPage() {
 
   const {
     data, tab, setTab, view, switchView, lang, setLang, t,
-    search, setSearch, sortCol, sortDir, toggleSort,
+    search, setSearch, sortCol, sortDir, toggleSort, setSort,
+    filters, setFilter,
     editMode, setEditMode, selected, setSelected,
     toggleSelected, toggleSelectAll,
     panelBook, setPanelBook,
     addModalOpen, setAddModal,
     deleteTarget, setDeleteTarget,
     obOpen, openOb, closeOb,
-    books, recentlyFinished, recentlyAdded,
+    books,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
     collections, createCollection, deleteCollection, deleteCollections, renameCollection,
@@ -90,27 +91,10 @@ export default function LibraryPage() {
   const isOwned = tab === 'owned';
   const isWishlist = tab === 'wishlist';
   const isBookTab = isOwned || isWishlist;
-  const recent = isOwned ? recentlyFinished : isWishlist ? recentlyAdded : [];
-  const recentLabel = isOwned ? t.resultRecentLabel : isWishlist ? t.resultRecentAddedLabel : '';
-  const recentFootnote = isOwned ? t.resultRecentFootnote : isWishlist ? t.resultRecentAddedFootnote : '';
   const showResultLine = !isOverview && !isCollections && !isQuotes && !isDictionary && data[tab];
   const resultCount = showResultLine
-    ? (search.trim() ? t.resultQuery(books.length, data[tab].length) : t.resultTotal(data[tab].length))
+    ? (books.length < data[tab].length ? t.resultQuery(books.length, data[tab].length) : t.resultTotal(data[tab].length))
     : '';
-  const recentCount = recent.length > 0
-    ? (search.trim() ? t.resultQuery(recent.length, books.length) : t.resultTotal(recent.length))
-    : '';
-
-  function toggleSelectAllRecent() {
-    const recentIds = recent.map(b => b.id);
-    const allIn = recentIds.every(id => selected.has(id));
-    setSelected(prev => {
-      const next = new Set(prev);
-      if (allIn) recentIds.forEach(id => next.delete(id));
-      else recentIds.forEach(id => next.add(id));
-      return next;
-    });
-  }
 
   function handleConfirmSelection(action) {
     if (action === 'delete') {
@@ -269,6 +253,9 @@ export default function LibraryPage() {
               wishlist={data.wishlist}
               quotes={quotes}
               words={words}
+              collections={collections}
+              getBooksForCol={col => getBooksForCollection(col.id)}
+              onOpenCollection={col => { setTab('collections'); setActiveCollection(col.id); }}
               readingGoal={readingGoal}
               setReadingGoal={setReadingGoal}
               readingBooks={readingBooks}
@@ -397,65 +384,11 @@ export default function LibraryPage() {
               editMode={editMode} setEditMode={setEditMode} setSelected={setSelected}
               tab={tab} data={data} exportData={exportData} exportPDF={exportPDF}
               setAddModal={setAddModal} view={view} switchView={switchView}
+              sortCol={sortCol} sortDir={sortDir} setSort={setSort}
+              filters={filters} setFilter={setFilter}
+              bookCount={books.length}
+              quotes={quotes}
             />
-
-            {isBookTab && recent.length > 0 && (
-              <div className="books-block">
-                  <div className="panel-section-eyebrow result-line">
-                    <span>{recentLabel}</span>
-                    <span>{recentCount}</span>
-                  </div>
-                  {view === 'grid' ? (
-                    <div className="books-grid">
-                      {recent.map(book => (
-                        <BookCard key={`recent-${book.id}`} book={book} tab={tab}
-                          editMode={editMode} selected={selected}
-                          onToggleSelect={toggleSelected}
-                          onOpen={b => setPanelBook(b)}
-                          onDelete={b => setDeleteTarget(b)}
-                          onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
-                          onFinishReading={b => setFinishBook(b)}
-                          onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
-                          onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
-                          onEditFinished={b => setFinishBook(b)}
-                          onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setToastMsg(t.toastMoved); }}
-                          onShared={() => setToastMsg(t.shareCopied)}
-                          readingCount={readingBooks.length}
-                          maxReading={MAX_READING}
-                          t={t}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <BookList books={recent} tab={tab}
-                      editMode={editMode} selected={selected}
-                      onToggleSelect={toggleSelected}
-                      onSelectAll={toggleSelectAllRecent}
-                      onOpen={b => setPanelBook(b)}
-                      onDelete={b => setDeleteTarget(b)}
-                      onStartReading={b => { startReading(b.id); setToastMsg(t.toastReadingStarted); }}
-                      onFinishReading={b => setFinishBook(b)}
-                      onCancelReading={b => setDeleteTarget({ type: 'cancelReading', id: b.id, title: b.title, author: b.author })}
-                      onAddQuoteFromBook={b => { setQuotePrefillBook(b); setAddQuoteOpen(true); }}
-                      onEditFinished={b => setFinishBook(b)}
-                      onMoveToLibrary={b => { moveToLibrary(new Set([b.id])); setToastMsg(t.toastMoved); }}
-                      onShared={() => setToastMsg(t.shareCopied)}
-                      readingCount={readingBooks.length}
-                      maxReading={MAX_READING}
-                      t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort}
-                    />
-                  )}
-                  <div className="recent-footer">
-                    <span className="recent-footnote">{recentFootnote}</span>
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-secondary"
-                      onClick={() => setDeleteTarget({ bulk: true, ids: new Set(recent.map(b => b.id)), count: recent.length })}>
-                      {t.resultRecentClear}
-                    </button>
-                  </div>
-              </div>
-            )}
 
             <div className="books-block">
               {data[tab].length > 0 && (

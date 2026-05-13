@@ -6,6 +6,7 @@ import ReadingGoalModal from "./ReadingGoalModal";
 import BookListPanel from "./BookListPanel";
 import QuoteListPanel from "./QuoteListPanel";
 import WordListPanel from "./WordListPanel";
+import CollectionListPanel from "./CollectionListPanel";
 import OverviewQuoteCard from "./OverviewQuoteCard";
 import WeeklyActivityCard from "./WeeklyActivityCard";
 import NowReadingSection from "./NowReadingSection";
@@ -13,6 +14,7 @@ import { OverviewGoalIcon, OverviewStreakIcon, OverviewGenresIcon, OverviewAutho
 
 export default function OverviewView({
   owned, quotes, words, wishlist = [],
+  collections = [], getBooksForCol, onOpenCollection,
   readingGoal, setReadingGoal,
   readingBooks = [],
   onOpenBook, onOpenQuote, onAddBook, onNavigate,
@@ -26,6 +28,7 @@ export default function OverviewView({
   const [finishedPanelOpen, setFinishedPanelOpen] = useState(false);
   const [quotesPanelOpen, setQuotesPanelOpen] = useState(false);
   const [wordsPanelOpen, setWordsPanelOpen] = useState(false);
+  const [collectionsPanelOpen, setCollectionsPanelOpen] = useState(false);
   const [activeGenre, setActiveGenre] = useState(null);
   const [activeAuthor, setActiveAuthor] = useState(null);
 
@@ -73,6 +76,11 @@ export default function OverviewView({
   function handleHeroWords() {
     if (words.length === 0) onNavigate?.('dictionary');
     else setWordsPanelOpen(true);
+  }
+  function handleHeroCollections() {
+    if (collections.length === 0) onNavigate?.('collections');
+    else if (collections.length === 1) onOpenCollection?.(collections[0]);
+    else setCollectionsPanelOpen(true);
   }
 
   const allBooks = [...owned, ...wishlist];
@@ -134,6 +142,21 @@ export default function OverviewView({
             </span>
           }
           onClick={handleHeroWords}
+        />
+        <HeroCard
+          num={collections.length}
+          label={t.overviewHeroCollections(collections.length)}
+          icon={
+            <span className="overview-hero-icon-chip">
+              <svg className="overview-hero-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="3"  width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </span>
+          }
+          onClick={handleHeroCollections}
         />
       </div>
 
@@ -237,6 +260,16 @@ export default function OverviewView({
         onClose={() => setWordsPanelOpen(false)}
         words={words}
         onSeeAll={() => { setWordsPanelOpen(false); onNavigate?.('dictionary'); }}
+        t={t}
+      />
+
+      <CollectionListPanel
+        open={collectionsPanelOpen}
+        onClose={() => setCollectionsPanelOpen(false)}
+        title={t.overviewCollectionsListTitle}
+        collections={collections}
+        getBooksForCol={getBooksForCol}
+        onOpenCollection={onOpenCollection}
         t={t}
       />
 

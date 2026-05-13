@@ -22,7 +22,7 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
   }, [open]);
 
   return (
-    <div className="dropdown-wrap" ref={ref}>
+    <div className="dropdown-wrap export-menu" ref={ref}>
       <button
         className="dropdown-btn"
         disabled={disabled}

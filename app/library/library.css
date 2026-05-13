@@ -240,7 +240,120 @@
 
 /* Layout from .cell-row.cell-row--lg.cell-row--between primitive
  * — local class only tunes gap (16 instead of primitive default 8). */
-.search-row { gap: 16px; }
+.search-row { gap: 16px; flex-wrap: wrap; row-gap: 12px; }
+.search-row .counter-actions { margin-left: auto; }
+
+.search-bar-wrap { display: flex; flex-direction: column; gap: 32px; }
+
+.filters-row { gap: 12px; }
+.filters-row .sort-menu .dropdown-menu,
+.filters-row .filter-menu .dropdown-menu { left: 0; right: auto; }
+/* Last filter trigger sits near the right edge — flip anchor to open
+   leftward so the menu stays inside the viewport on narrow desktops. */
+.filters-row .genres-menu .dropdown-menu { left: auto; right: 0; }
+
+/* Export menu — icon-only trigger (iso .dropdown-btn--icon: 40x40),
+   dropdown at 140px so the short item labels "pdf/md/json" don't produce
+   a tiny menu. */
+.export-menu .dropdown-btn {
+  width: 40px;
+  padding: 0;
+  justify-content: center;
+}
+.export-menu .dropdown-btn-label,
+.export-menu .dropdown-btn-chevron { display: none; }
+.export-menu .dropdown-menu { width: 140px; }
+
+/* Mobile : only the trigger button stays in filters-row, dropdowns hidden.
+   Tapping the trigger opens MobileFiltersPanel (book-panel slide-in style).
+   .dropdown-btn (defined later in the file) sets display: flex by default —
+   the compound selector here wins specificity to keep the trigger hidden
+   on desktop. */
+.dropdown-btn.filters-mobile-trigger { display: none; }
+@media (max-width: 768px) {
+  .filters-row > *:not(.filters-mobile-trigger) { display: none; }
+  .dropdown-btn.filters-mobile-trigger { display: inline-flex; }
+}
+
+/* Filters panel : reuses .book-panel slide-in primitive.
+   gap: 40 matches other panels (BookListPanel/QuoteListPanel/WordListPanel)
+   which inherit from .panel-inner default. */
+.book-panel.filters-panel .panel-inner {
+  align-items: stretch;
+}
+.filters-panel-section { display: flex; flex-direction: column; gap: 8px; }
+.filters-panel-rows { display: flex; flex-direction: column; gap: 4px; }
+.filters-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.filters-panel-count {
+  font-family: var(--font-fraunces), serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+/* Filter menu — extends .dropdown-menu primitive with section headers,
+   radio/checkbox controls, and a clear-all footer. */
+.filter-dropdown {
+  padding: 8px;
+  min-width: 240px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+}
+.filter-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 4px 8px 6px;
+}
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  user-select: none;
+  transition: background 0.1s;
+}
+.filter-row:hover { background: var(--primary-5); }
+.row-checkbox.is-selected { background: var(--primary-50); border-color: var(--primary-50); }
+[data-theme="dark"] .row-checkbox.is-selected { background: var(--primary-40); border-color: var(--primary-40); }
+.row-checkbox.is-selected svg { opacity: 1; }
+.filter-clear-btn { color: var(--text-2); justify-content: center; }
+.filter-clear-btn:hover:not(:disabled) { color: var(--primary-50); }
+
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: var(--primary-50);
+  border-radius: 999px;
+  margin-left: 4px;
+}
 
 .books-section,
 .quotes-section {
@@ -287,9 +400,10 @@
 .counter-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex-shrink: 0;
 }
+.counter-actions .counter-secondary-actions { margin-left: auto; }
 /* Sub-group: secondary actions (Edit + Export) tighter than the parent gap
    to read as one logical unit (manage items) vs the surrounding actions. */
 .counter-secondary-actions {
@@ -304,7 +418,7 @@
   display: flex;
   align-items: center;
   flex: 0 1 24%;
-  min-width: 240px;
+  min-width: 280px;
 }
 
 .search-box svg {
@@ -471,7 +585,7 @@
   background: var(--bg); border: 1.5px solid var(--border-subtle);
   border-radius: 10px; padding: 4px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  z-index: 200; min-width: 140px;
+  z-index: 200; width: fit-content;
   animation: dropdownIn 0.12s cubic-bezier(0.16,1,0.3,1);
 }
 @keyframes dropdownIn {
@@ -479,8 +593,9 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 .dropdown-item {
-  display: flex; align-items: center; gap: 8px;
-  width: 100%; height: 40px; padding: 0 12px;
+  display: flex; align-items: center; gap: 12px;
+  width: 100%;
+  height: 40px; padding: 0 12px;
   border: none; background: transparent;
   font-family: inherit; font-size: 15px; font-weight: 500;
   color: var(--text); border-radius: 7px;
@@ -490,7 +605,9 @@
 .dropdown-item:hover:not(:disabled) { background: var(--primary-5); color: var(--primary-60); }
 .dropdown-item:active:not(:disabled) { background: var(--primary-10); }
 .dropdown-item:disabled { opacity: 0.4; cursor: not-allowed; }
-.dropdown-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.dropdown-item svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--primary-50); }
+.dropdown-item:hover:not(:disabled) svg { color: var(--primary-60); }
+[data-theme="dark"] .dropdown-item:hover:not(:disabled) svg { color: var(--primary-40); }
 .dropdown-divider { height: 1px; background: var(--border-subtle); margin: 4px 8px; }
 [data-theme="dark"] .dropdown-menu {
   background: var(--bg2); border-color: var(--light-20);
@@ -3090,7 +3207,7 @@
 .import-preview-title { font-size: 13px; font-weight: 600; color: var(--text-3); }
 .import-preview-list {
   width: 100%;
-  height: clamp(240px, 45dvh, 400px);
+  max-height: clamp(240px, 45dvh, 400px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -3224,6 +3341,15 @@
   .list-table td.list-cell-title--col-name { padding-left: 20px; padding-right: 20px; }
 }
 
+@media (min-width: 769px) and (max-width: 1100px) {
+  /* Narrow desktop / tablet landscape : the fixed widths of num+title+author+action
+     (728px total) overflow the main area when sidebar is visible. Genre + Year
+     collapse to 0px and their text overlaps. Hide them in this range — author
+     stays visible, columns reappear at ≥1101px. */
+  .list-table .list-cell-tag,
+  .list-table .list-cell-meta:not(.list-cell-meta--col-author) { display: none; }
+}
+
 @media (min-width: 769px) {
   /* Hide mobile-only dropdown items on desktop */
   .dropdown-item--mobile-only,
@@ -3240,22 +3366,19 @@
   }
   .main-wrap { padding-left: 16px; padding-right: 16px; padding-top: 40px; }
   .search-row { flex-direction: column; align-items: stretch; gap: 16px; }
-  /* On stacked search-row, .counter-actions sits at the left edge —
-   * .sort-menu trigger ends up near x=16. Default dropdown anchor
-   * (right: 0) makes the menu overflow on the left. Anchor left
-   * instead. ExportMenu (further right within counter-actions) keeps
-   * the default right anchor since it fits. */
-  .search-row .sort-menu .dropdown-menu { left: 0; right: auto; }
   .page-title { font-size: 40px; }
   .search-box { min-width: 0; flex: none; width: 100%; }
-  .counter-actions { gap: 8px; }
+  .counter-actions { gap: 8px; width: 100%; }
   /* Mobile: collapse to icon-only (hide label + chevron, keep export icon) */
   .dropdown-btn { padding: 0; width: 40px; justify-content: center; }
   .dropdown-btn-label,
   .dropdown-btn-chevron { display: none; }
   /* Sort menu shares .dropdown-btn but must keep its label visible —
-     opt out of the icon-only collapse. */
-  .sort-menu-btn { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
+     opt out of the icon-only collapse. Same for the mobile filters trigger
+     (icon + "Filter" label form). */
+  .sort-menu-btn,
+  .filters-mobile-trigger { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
+  .filters-mobile-trigger .dropdown-btn-label { display: inline-flex; }
   /* Manual ISBN lookup button collapses to icon-only on mobile because
      the FR label "Rechercher" makes the row overflow. */
   /* Stack the lookup button below the input on mobile (column layout has
@@ -3278,7 +3401,6 @@
   .panel-header-share { margin-left: 0; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
-  .view-btns { margin-left: auto; }
   .books-grid { grid-template-columns: 1fr; gap: 12px; }
   .now-reading-list { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .books-list { overflow-x: hidden; }
@@ -3961,6 +4083,49 @@
   .ob-title { white-space: pre-line; }
 }
 .sort-menu-btn { margin-left: 0; }
+.dropdown-btn.is-active {
+  border-color: var(--primary-50);
+  color: var(--primary-50);
+  background: var(--primary-5);
+}
+[data-theme="dark"] .dropdown-btn.is-active {
+  border-color: var(--primary-40);
+  color: var(--primary-40);
+  background: var(--primary-3);
+}
+
+.rating-stars-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--primary-50);
+}
+[data-theme="dark"] .rating-stars-inline { color: var(--primary-40); }
+.rating-stars-inline svg { width: 16px; height: 16px; flex-shrink: 0; }
+.dropdown-item-label .rating-stars-inline svg { width: 18px; height: 18px; }
+
+.dropdown-item-label {
+  width: 130px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.dropdown-item-count-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+
+.dropdown-btn.dropdown-btn--icon {
+  width: 40px;
+  padding: 0;
+  justify-content: center;
+}
+.dropdown-btn.dropdown-btn--icon svg { width: 18px; height: 18px; }
+.quotes-toggle { flex-shrink: 0; }
 
 .dictionary-saved-empty {
   padding: 32px 16px;
@@ -4616,7 +4781,7 @@ button.quote-book-chip {
 /* Hero stats — 3 clickable cards */
 .overview-hero-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 .overview-hero-card {

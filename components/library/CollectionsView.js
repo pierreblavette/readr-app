@@ -2,35 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import SelectionBar from "./SelectionBar";
-import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "../../lib/bookUtils";
-
-function CoverCell({ book }) {
-  const [cover, setCover] = useState(null);
-  const [c1, c2] = book ? coverColors(book.title) : ['var(--illus-bg-2)', 'var(--illus-bg-3)'];
-
-  useEffect(() => {
-    if (!book) return;
-    const cache = loadGBCache();
-    const key = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
-    fetchBookCover(book.title, book.author, cache).then(res => {
-      saveGBCache({ ...cache, [key]: res });
-      setCover(res?.thumb || null);
-    });
-  }, [book]);
-
-  if (!book) {
-    return <div className="col-card-cover-cell"><div className="col-card-cover-placeholder" /></div>;
-  }
-  return (
-    <div className="col-card-cover-cell">
-      {cover
-        ? <img src={cover} alt="" className="col-card-cover-img" />
-        : <div className="col-card-cover-placeholder" style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }} />
-      }
-    </div>
-  );
-}
+import CollectionCoverGrid from "./CollectionCoverGrid";
 
 function CollectionsIcon() {
   return (
@@ -50,15 +22,6 @@ function CollectionsIcon() {
       <path d="M32 18H39" stroke="var(--illus-stroke)" strokeLinecap="round"/>
       <path d="M45 24H49" stroke="var(--illus-bg-1)" strokeLinecap="round"/>
     </svg>
-  );
-}
-
-function CollectionCoverGrid({ books }) {
-  const slots = [0, 1, 2, 3];
-  return (
-    <div className="col-card-cover-grid">
-      {slots.map(i => <CoverCell key={i} book={books[i] || null} />)}
-    </div>
   );
 }
 

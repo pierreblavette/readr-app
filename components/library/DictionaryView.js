@@ -265,6 +265,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                               role="button"
                               tabIndex={0}
                               aria-expanded={expanded}
+                              onMouseDown={e => e.preventDefault()}
                               onClick={() => toggleExpanded(w.id)}
                               onKeyDown={e => {
                                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpanded(w.id); }

@@ -1561,7 +1561,7 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── SORT MENU ── */}
-          <DSSection id="sort-menu" title="Sort Menu" sub="Generic sort dropdown — current selection shown inline, options passed as array. Used in Quotes and Dictionary lists.">
+          <DSSection id="sort-menu" title="Sort Menu" sub="Generic radio dropdown — current selection shown inline. Used for sort + filter dimensions (Reading status, Rating, etc).">
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
               <div className="ds-card-body">
@@ -1576,13 +1576,81 @@ export default function DesignSystemPage() {
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component mono">current</td><td className="mono">string</td><td className="meta">Key of the active option. Trigger label reflects its label.</td></tr>
                     <tr className="table-row"><td className="token-table-component mono">onChange</td><td className="mono">(key) =&gt; void</td><td className="meta">Fires with the selected option key.</td></tr>
-                    <tr className="table-row"><td className="token-table-component mono">options</td><td className="mono">{"{ key, label }[]"}</td><td className="meta">Options list. Selected one gets a checkmark icon.</td></tr>
+                    <tr className="table-row"><td className="token-table-component mono">options</td><td className="mono">{"{ key, label, triggerLabel?, count? }[]"}</td><td className="meta">Options list. Selected one gets a checkmark icon. Optional <code>triggerLabel</code> overrides the button label per option (useful when dropdown shows stars + count, but button shows stars only). Optional <code>count</code> renders a <code>.sidebar-badge</code> right-aligned in the row.</td></tr>
+                    <tr className="table-row"><td className="token-table-component mono">defaultTriggerLabel</td><td className="mono">string</td><td className="meta">When <code>current === options[0].key</code> (the "any" default), trigger shows this string instead of options[0].label. Used for filter dimensions: "Rating" / "Reading status" placeholder until the user picks a value, then the picked label takes over and the button gets <code>.is-active</code>.</td></tr>
                     <tr className="table-row"><td className="token-table-component mono">ariaLabel</td><td className="mono">string</td><td className="meta">Accessibility label for the trigger button.</td></tr>
                   </tbody>
                 </table>
               </div>
               <div className="ds-card-foot">
-                Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.dropdown-btn.sort-menu-btn</code> (shares the outline button anatomy).
+                Source: <code>components/library/SortMenu.js</code>. Trigger class: <code>.dropdown-btn.sort-menu-btn</code> (shares the outline button anatomy). When a filter is active (non-default selection), the trigger gets <code>.is-active</code> — border + color + bg in primary-50/5.
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── RATING STARS ── */}
+          <DSSection id="rating-stars" title="Rating Stars" sub="Inline 5-star visual primitive. Filled positions use primary-50 (currentColor), empty use --border gray. Composed inside dropdown labels and trigger buttons.">
+            <div className="ds-card">
+              <div className="ds-card-head">Preview</div>
+              <div className="ds-card-body col" style={{ gap: 12 }}>
+                {[5, 4, 3, 2, 1].map(n => (
+                  <span key={n} className="rating-stars-inline" style={{ color: "var(--primary-50)" }}>
+                    {[1,2,3,4,5].map(i => (
+                      <svg key={i} viewBox="0 0 24 24" fill={i <= n ? "currentColor" : "var(--border)"} style={{ width: 14, height: 14 }}>
+                        <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z"/>
+                      </svg>
+                    ))}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <p><code>.rating-stars-inline</code> — inline-flex container, gap 2, color <code>var(--primary-50)</code> light / <code>var(--primary-40)</code> dark.</p>
+                <p>Each <code>svg</code> is 14×14, <code>fill={"\"currentColor\""}</code> when filled (inherits the container color), <code>fill={"\"var(--border)\""}</code> when empty.</p>
+                <p>Inside <code>.dropdown-item-label</code> stars are bumped to 18×18 (more prominent in dropdown context).</p>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── FILTERS ROW ── */}
+          <DSSection id="filters-row" title="Filters Row" sub="Horizontal cluster of filter triggers below the search row. Each trigger is a SortMenu (radio) or a custom dropdown (multi-select Genres, icon-only Quotes toggle).">
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <p><code>.filters-row</code> — flex row gap 12. Lives inside <code>.search-bar-wrap</code> (column gap 32), positioned below the search row.</p>
+                <p>Children are <code>.dropdown-wrap.sort-menu</code> instances (4 radio dropdowns: Sort / Reading status / Rating / Genres) + a single <code>.dropdown-btn.dropdown-btn--icon</code> (Books with quotes toggle).</p>
+                <p>The last sort-menu (<code>.genres-menu</code>) flips its dropdown anchor (<code>right: 0</code>) to avoid viewport overflow on narrow desktops.</p>
+                <p>Filter active state: <code>.dropdown-btn.is-active</code> — border + color + bg in primary-50/5 (primary-40/3 dark).</p>
+                <p>Mobile (≤768px): all 5 triggers hidden, replaced by <code>.filters-mobile-trigger</code> (icon + "Filter" label) that opens <code>MobileFiltersPanel</code> (slide-in panel reusing <code>.book-panel</code>).</p>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── ROW CHECKBOX ── */}
+          <DSSection id="row-checkbox" title="Row Checkbox" sub="18×18 square selectable indicator. Reused across BookList (row selection) and filter rows (genres, quotes, mobile panel). Custom UI (not native input).">
+            <div className="ds-card">
+              <div className="ds-card-head">States</div>
+              <div className="ds-card-body" style={{ display: "flex", gap: 24, alignItems: "center" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <span className="row-checkbox" />
+                  <span className="meta">Default</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <span className="row-checkbox is-selected">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                  <span className="meta">Selected</span>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col">
+                <p>18×18 square, border-radius 5, border 1.5 <code>--border-subtle</code>, bg <code>--bg</code> (--card dark).</p>
+                <p>Modifier <code>.is-selected</code> → bg + border <code>primary-50</code> (primary-40 dark) + check svg visible (opacity 1, color --bg).</p>
+                <p>Click target is the parent row (<code>.list-row</code> or <code>.filter-row</code>), <code>role="checkbox"</code> + <code>aria-checked</code> + keyboard (Enter/Space) handled at the row level.</p>
               </div>
             </div>
           </DSSection>

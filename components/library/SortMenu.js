@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-export default function SortMenu({ current, onChange, options, ariaLabel }) {
+export default function SortMenu({ current, onChange, options, ariaLabel, defaultTriggerLabel }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -22,18 +22,22 @@ export default function SortMenu({ current, onChange, options, ariaLabel }) {
   }, [open]);
 
   const currentOpt = options.find(o => o.key === current) || options[0];
+  const isDefaultSelection = current === options[0].key;
+  const triggerLabel = (defaultTriggerLabel && isDefaultSelection)
+    ? defaultTriggerLabel
+    : (currentOpt.triggerLabel ?? currentOpt.label);
 
   return (
     <div className="dropdown-wrap sort-menu" ref={ref}>
       <button
         type="button"
-        className="dropdown-btn sort-menu-btn"
+        className={`dropdown-btn sort-menu-btn${defaultTriggerLabel && !isDefaultSelection ? ' is-active' : ''}`}
         onClick={() => setOpen(o => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={ariaLabel}
       >
-        {currentOpt.label}
+        {triggerLabel}
         <svg
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
@@ -61,7 +65,10 @@ export default function SortMenu({ current, onChange, options, ariaLabel }) {
               >
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              {opt.label}
+              <span className="dropdown-item-label">{opt.label}</span>
+              <span className="dropdown-item-count-wrap">
+                {opt.count !== undefined && <span className="dropdown-item-count sidebar-badge">{opt.count}</span>}
+              </span>
             </button>
           ))}
         </div>
