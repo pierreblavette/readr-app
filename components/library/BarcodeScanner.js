@@ -13,7 +13,7 @@ function normalizeISBN(raw) {
 }
 
 async function lookupISBN(isbn) {
-  const url = `${WORKER_URL}/books?q=${encodeURIComponent('isbn:' + isbn)}`;
+  const url = `${WORKER_URL}/isbn?isbn=${encodeURIComponent(isbn)}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`books_${res.status}`);
   const data = await res.json();

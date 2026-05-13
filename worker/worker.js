@@ -173,6 +173,116 @@ export default {
       }
     }
 
+    // GET /isbn — lookup by ISBN, OpenLibrary primary + Google Books fallback.
+    // Response is normalized to the Google Books shape so consumers stay unchanged.
+    if (request.method === 'GET' && url.pathname === '/isbn') {
+      try {
+        const isbn = (url.searchParams.get('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+        if (isbn.length !== 10 && isbn.length !== 13) {
+          return json({ error: 'Invalid ISBN' }, 400);
+        }
+
+        // 1. Try OpenLibrary (bibkeys = flat authors + ready-to-use cover URLs).
+        try {
+          const olUrl = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
+          const olRes = await fetch(olUrl);
+          if (olRes.ok) {
+            const olData = await olRes.json();
+            const entry  = olData[`ISBN:${isbn}`];
+            const cover  = entry?.cover?.large || entry?.cover?.medium;
+            // Only accept OL when it has a cover — the main reason we chose OL.
+            if (entry && cover) {
+              const authors    = (entry.authors || []).map(a => a.name).filter(Boolean);
+              const categories = (entry.subjects || []).map(s => s?.name || s).filter(Boolean).slice(0, 5);
+              const desc       = typeof entry.notes === 'string' ? entry.notes : (entry.notes?.value || null);
+              return json({
+                source: 'openlibrary',
+                items: [{
+                  volumeInfo: {
+                    title: entry.title || '',
+                    authors,
+                    publishedDate: entry.publish_date || '',
+                    description: desc,
+                    imageLinks: { thumbnail: cover.replace('http:', 'https:') },
+                    categories,
+                  },
+                }],
+              });
+            }
+          }
+        } catch (e) {
+          // Swallow OL errors and fall through to Google Books.
+        }
+
+        // 2. Fallback Google Books (same shape as /books?q=isbn:).
+        const query  = encodeURIComponent(`isbn:${isbn}`);
+        const fields = 'items(volumeInfo(title,authors,publishedDate,description,imageLinks,categories))';
+        const gbUrl  = `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=1&fields=${fields}&key=${env.GOOGLE_BOOKS_API_KEY}`;
+        const gbRes  = await fetch(gbUrl);
+        const gbData = await gbRes.json();
+        return json({ source: 'googlebooks', ...gbData });
+      } catch (e) {
+        return json({ error: e.message || 'ISBN lookup error' }, 500);
+      }
+    }
+
+    // GET /cover — lookup cover by title + author, OpenLibrary primary + Google Books fallback.
+    // Normalized to the Google Books shape so fetchBookCover consumers stay unchanged.
+    // Note: OL search.json does not return descriptions — when OL is the source,
+    // description is null. The fallback path keeps GB's description as before.
+    if (request.method === 'GET' && url.pathname === '/cover') {
+      try {
+        const title  = (url.searchParams.get('title')  || '').trim();
+        const author = (url.searchParams.get('author') || '').trim();
+        if (!title) {
+          return json({ error: 'Missing title' }, 400);
+        }
+
+        // 1. Try OpenLibrary search.
+        try {
+          const olParams = new URLSearchParams();
+          olParams.set('title', title);
+          if (author) olParams.set('author', author);
+          olParams.set('limit', '1');
+          const olUrl = `https://openlibrary.org/search.json?${olParams.toString()}`;
+          const olRes = await fetch(olUrl);
+          if (olRes.ok) {
+            const olData  = await olRes.json();
+            const doc     = olData?.docs?.[0];
+            const coverId = doc?.cover_i;
+            // Only accept OL when it has a cover id — that's the whole point.
+            if (doc && coverId) {
+              return json({
+                source: 'openlibrary',
+                items: [{
+                  volumeInfo: {
+                    title: doc.title || title,
+                    authors: doc.author_name || [],
+                    publishedDate: doc.first_publish_year ? String(doc.first_publish_year) : '',
+                    description: null,
+                    imageLinks: { thumbnail: `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` },
+                    categories: [],
+                  },
+                }],
+              });
+            }
+          }
+        } catch (e) {
+          // Swallow OL errors and fall through to Google Books.
+        }
+
+        // 2. Fallback Google Books (same query shape as /books?title=&author=).
+        const query  = encodeURIComponent(`intitle:${title} inauthor:${author}`);
+        const fields = 'items(volumeInfo(imageLinks,publishedDate,description))';
+        const gbUrl  = `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=1&fields=${fields}&key=${env.GOOGLE_BOOKS_API_KEY}`;
+        const gbRes  = await fetch(gbUrl);
+        const gbData = await gbRes.json();
+        return json({ source: 'googlebooks', ...gbData });
+      } catch (e) {
+        return json({ error: e.message || 'Cover lookup error' }, 500);
+      }
+    }
+
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
