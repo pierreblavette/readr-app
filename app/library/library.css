@@ -400,8 +400,8 @@
   transition: all 0.2s;
 }
 .authors-search-input::placeholder { color: var(--text-2); }
-.authors-search-input:hover:not(:focus) { border-color: var(--primary-50); background: var(--primary-5); }
-.authors-search-input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); }
+.authors-search-input:hover:not(:focus) { border: 1.5px solid var(--primary-50); background: var(--primary-5); }
+.authors-search-input:focus { border: 1.5px solid var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
 [data-theme="dark"] .authors-search-input:hover:not(:focus) { border-color: var(--primary-40); background: var(--primary-3); }
 [data-theme="dark"] .authors-search-input:focus { border-color: var(--primary-40); background: var(--primary-3); box-shadow: 0 0 0 3px rgba(73,89,230,0.2); }
 .authors-list {
@@ -4459,6 +4459,10 @@
   gap: 16px;
   animation: fadeUp 0.2s ease both;
 }
+/* Overview WordListPanel only — body bg passes to white so the expanded
+   definitions stand out from the panel's translucent surface. */
+.overview-word-card .dictionary-saved-body { background: #FFFFFF; }
+[data-theme="dark"] .overview-word-card .dictionary-saved-body { background: var(--card); }
 .dictionary-saved-body .dictionary-definition {
   padding-top: 16px;
   border-top: 1px solid var(--border-subtle);
