@@ -196,7 +196,15 @@ export default function OverviewView({
         t={t}
       />
 
-      <WeeklyActivityCard owned={owned} quotes={quotes} words={words} lang={lang} t={t} />
+      <WeeklyActivityCard
+        owned={owned}
+        quotes={quotes}
+        words={words}
+        lang={lang}
+        t={t}
+        onOpenBook={onOpenBook}
+        onOpenQuote={onOpenQuote}
+      />
 
       <TopGenresCard genres={stats.topGenres.slice(0, 5)} onSelect={handleGenreSelect} t={t} />
 
