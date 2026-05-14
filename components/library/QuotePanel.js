@@ -57,16 +57,17 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onS
             <div className="panel-info-meta">
               <div className="panel-section">
                 <span className="panel-section-eyebrow">{t.quoteLabel}</span>
-                <div className="quote-panel-text">
-                  <span className="quote-mark">"</span>
-                  {quote.text}
-                  <span className="quote-mark">"</span>
+                <div className="quote-panel-content">
+                  <div className="quote-panel-text">
+                    <span className="quote-mark">"</span>
+                    {quote.text}
+                    <span className="quote-mark">"</span>
+                  </div>
+                  {quote.createdAt && (
+                    <div className="quote-panel-date">{t.quoteAddedOn(formatDate(quote.createdAt, lang))}</div>
+                  )}
                 </div>
               </div>
-
-              {quote.createdAt && (
-                <div className="quote-panel-date">{t.quoteAddedOn(formatDate(quote.createdAt, lang))}</div>
-              )}
             </div>
 
             <div className="panel-actions">

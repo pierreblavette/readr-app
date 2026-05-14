@@ -1137,7 +1137,7 @@ export default function DesignSystemPage() {
                 {[
                   ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
                   ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".col-delete-btn"]],
-                  ["Destructive icon", "(no canonical)", [".delete-row-btn", ".dictionary-delete-btn"]],
+                  ["Destructive icon", "(no canonical)", [".delete-row-btn"]],
                   ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
                   ["Text link (inline, not dimensional)", "btn-link / btn-link--critical", [".btn-link · 14/600 · hover --primary-60 + underline", ".btn-link--critical · destructive variant", ".footer-link · 11/500 (footer-specific)", ".quote-see-more · 14/600 (quote/cast expand-collapse)"]],
                   ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
@@ -1974,10 +1974,11 @@ export default function DesignSystemPage() {
                       </svg>
                       <span className="dictionary-saved-word">Voiture</span>
                     </span>
-                    <button type="button" className="dictionary-delete-btn" aria-label="Delete">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    <button type="button" className="col-card-kebab" aria-label="More actions">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
                       </svg>
                     </button>
                   </div>
@@ -1996,10 +1997,11 @@ export default function DesignSystemPage() {
                       </svg>
                       <span className="dictionary-saved-word">Voiture</span>
                     </span>
-                    <button type="button" className="dictionary-delete-btn" aria-label="Delete">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    <button type="button" className="col-card-kebab" aria-label="More actions">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
                       </svg>
                     </button>
                   </div>
@@ -2045,11 +2047,11 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <div className="ds-token-name">Head padding (asymmetric)</div>
-                  <p><code>.dictionary-saved-head</code> uses <code>padding: 8px 8px 8px 16px</code> — right reduced to 8 to pull the <code>.dictionary-delete-btn</code> close to the right edge of the card.</p>
+                  <p><code>.dictionary-saved-head</code> uses <code>padding: 8px 8px 8px 16px</code> — right reduced to 8 to pull the <code>.col-card-kebab</code> close to the right edge of the card.</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">Delete button — ghost pattern</div>
-                  <p><code>.dictionary-delete-btn</code> follows the same ghost pattern as <code>.col-card-kebab</code> (aligned on <code>.btn-icon</code>): 40×40, radius 8, bg transparent → <span className="ds-token-chip">--primary-5</span> hover, color <span className="ds-token-chip">--text</span> → <span className="ds-token-chip">--primary-50</span> light / <span className="ds-token-chip">--primary-40</span> dark.</p>
+                  <div className="ds-token-name">Action button — col-card-kebab</div>
+                  <p>Saved words use <code>.col-card-kebab</code> (canonical 3-dots ghost button) with a single "Delete word" menu option. Aligned on <code>.btn-icon</code>: 40×40, radius 8, bg transparent → <span className="ds-token-chip">--primary-5</span> hover, color <span className="ds-token-chip">--text</span> → <span className="ds-token-chip">--primary-50</span> light / <span className="ds-token-chip">--primary-40</span> dark.</p>
                 </div>
               </div>
             </div>
@@ -4177,10 +4179,6 @@ function handleDeleteConfirm(payload) {
                   [".delete-row-btn", "light active", ["bg --primary-20", "color --primary-70"]],
                   [".delete-row-btn", "dark default", ["bg --primary-5", "color --primary-40"]],
                   [".delete-row-btn", "dark hover", ["bg --primary-10", "color --primary-30"]],
-                  [".dictionary-delete-btn", "light default", ["bg transparent", "color --text", "40×40"]],
-                  [".dictionary-delete-btn", "light hover", ["bg --primary-5", "color --primary-50"]],
-                  [".dictionary-delete-btn", "dark default", ["bg transparent", "color --text"]],
-                  [".dictionary-delete-btn", "dark hover", ["bg --primary-5", "color --primary-40"]],
                 ],
               },
               {

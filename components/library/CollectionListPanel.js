@@ -26,7 +26,7 @@ export default function CollectionListPanel({ open, onClose, title, collections,
                     <button
                       key={col.id}
                       type="button"
-                      className="quote-book-chip quote-book-chip-interactive"
+                      className="quote-book-chip quote-book-chip-interactive collection-chip"
                       onClick={() => { onOpenCollection?.(col); onClose(); }}>
                       <div className="quote-book-chip-body">
                         <div className="quote-book-chip-title">{col.name}</div>

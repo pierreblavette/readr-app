@@ -791,7 +791,7 @@
 .now-reading-card {
   position: relative;
   /* matches .book-body vertical/left padding ; right reserves space for the kebab (40×40 at top-right + 8px gap) */
-  padding: 14px 56px 14px 16px;
+  padding: 16px 56px 16px 16px;
   background: var(--card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius);
@@ -1263,6 +1263,8 @@
   font-weight: 700;
   color: var(--text);
 }
+/* Dictionary context — tighter padding for the saved words letter tables */
+.list-table.dictionary-letter-table td.list-cell-title { padding: 8px 16px; }
 
 .list-table td.list-cell-meta {
   font-size: 15px;
@@ -1540,6 +1542,8 @@
 [data-theme="dark"] .col-card-kebab[aria-expanded="true"] { background: var(--primary-5); color: var(--primary-40); }
 
 .list-row .col-card-kebab { display: inline-flex; }
+/* Inside .quote-card : bleed -8/-8 into card padding so kebab sits at 8px from top/right edges without touching padding or going absolute */
+.quote-card .col-card-kebab { margin-top: -8px; margin-right: -8px; }
 .col-card-name { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-card-count { font-size: 15px; font-weight: 500; color: var(--text-2); }
 
@@ -1759,6 +1763,7 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+  width: 100%;
 }
 .panel-info-header {
   display: flex;
@@ -1854,12 +1859,6 @@
   color: var(--text-2);
   line-height: 1.8;
 }
-.panel-synopsis-placeholder {
-  font-size: 13px;
-  color: var(--text-2);
-  font-style: italic;
-}
-
 /* Character cast (Now Reading only) — spacing mirrors .panel-quotes */
 .panel-cast {
   gap: 40px;
@@ -2447,7 +2446,6 @@
 /* Glyph 18 (MD icon-only) */
 .view-btn svg *,
 .delete-row-btn svg *,
-.dictionary-delete-btn svg *,
 .toolbar-hamburger svg *,
 .modal-close svg * {
   stroke-width: 2;
@@ -4433,26 +4431,6 @@
   white-space: nowrap;
 }
 
-.dictionary-delete-btn {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  transition: background 0.15s, color 0.15s;
-}
-.dictionary-delete-btn svg { width: 18px; height: 18px; }
-.dictionary-delete-btn:hover { background: var(--primary-5); color: var(--primary-50); }
-[data-theme="dark"] .dictionary-delete-btn { color: var(--text); }
-[data-theme="dark"] .dictionary-delete-btn:hover { background: var(--primary-5); color: var(--primary-40); }
-
 .dictionary-saved-body {
   padding: 20px;
   border-top: 1.5px solid var(--border-subtle);
@@ -4484,7 +4462,7 @@
   background: var(--bg2);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -4505,6 +4483,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-top: 4px;
 }
 .quote-card-delete {
   flex-shrink: 0;
@@ -4548,6 +4527,11 @@
   margin: 0 2px;
 }
 
+.quote-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 .quote-panel-text {
   font-family: var(--font-jakarta), sans-serif;
   font-size: 16px;
@@ -4681,10 +4665,13 @@ button.quote-book-chip {
   text-align: left;
 }
 .quote-book-chip-interactive {
+  padding: 12px;
   cursor: pointer;
   transition: background 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
+/* Collection variant — asymmetric padding (16/12) since chevron is right-aligned */
+.collection-chip { padding: 12px 12px 12px 16px; }
 .quote-book-chip-interactive:hover,
 .quote-book-chip-interactive:active { background: var(--primary-5); }
 [data-theme="dark"] .quote-book-chip-interactive { background: #262626; }
@@ -4856,13 +4843,13 @@ button.quote-book-chip {
 .panel-quotes-list { display: flex; flex-direction: column; gap: 10px; }
 
 .panel-quote-item {
-  padding: 10px 12px;
+  padding: 12px 12px 16px;
   background: var(--bg3);
   border: none;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   width: 100%;
   text-align: left;
   font-family: inherit;
@@ -4895,10 +4882,11 @@ button.quote-book-chip {
 }
 .panel-quote-see-more { margin-top: 6px; }
 .panel-quote-page {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--text-2);
 }
-.panel-quotes-empty {
+.panel-empty-text {
   font-size: 15px;
   font-weight: 500;
   color: var(--text-2);
@@ -5766,6 +5754,7 @@ button.quote-book-chip {
 .quote-card.overview-quote-card {
   background: var(--bg3);
   border-color: transparent;
+  padding: 12px;
   animation: none;
   transition: background 0.15s;
 }

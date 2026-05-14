@@ -1,7 +1,76 @@
 "use client";
-import { Fragment, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import ExportMenu from "@/components/library/ExportMenu";
 import NoMatchesIcon from "@/components/library/NoMatchesIcon";
+
+function WordKebab({ wordId, onDelete, t }) {
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState(null);
+  const btnRef = useRef(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function close(e) {
+      if (btnRef.current?.contains(e.target)) return;
+      if (menuRef.current?.contains(e.target)) return;
+      setOpen(false);
+    }
+    function onScroll() { setOpen(false); }
+    function onKey(e) { if (e.key === 'Escape') setOpen(false); }
+    document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onScroll, true);
+    window.addEventListener('resize', onScroll);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('scroll', onScroll, true);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [open]);
+
+  function handleToggle() {
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, right: window.innerWidth - r.right });
+    }
+    setOpen(o => !o);
+  }
+
+  return (
+    <>
+      <button
+        ref={btnRef}
+        type="button"
+        className="col-card-kebab"
+        onClick={e => { e.stopPropagation(); handleToggle(); }}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={t.moreActions}>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <circle cx="12" cy="6" r="2"/>
+          <circle cx="12" cy="12" r="2"/>
+          <circle cx="12" cy="18" r="2"/>
+        </svg>
+      </button>
+      {open && pos && typeof document !== 'undefined' && createPortal(
+        <div
+          ref={menuRef}
+          className="dropdown-menu dropdown-menu--portal"
+          role="menu"
+          style={{ position: 'fixed', top: pos.top, right: pos.right }}
+          onClick={e => e.stopPropagation()}>
+          <button type="button" className="dropdown-item" onClick={() => { setOpen(false); onDelete(wordId); }}>
+            {t.dictionaryDelete}
+          </button>
+        </div>,
+        document.body
+      )}
+    </>
+  );
+}
 
 const CACHE_KEY = 'readr-dict-cache';
 
@@ -281,16 +350,7 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                                 </span>
                               </td>
                               <td className="list-cell-action" onClick={e => e.stopPropagation()}>
-                                <button
-                                  type="button"
-                                  className="dictionary-delete-btn"
-                                  onClick={e => { e.stopPropagation(); onDelete(w.id); }}
-                                  aria-label={t.dictionaryDelete}>
-                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="18" y1="6" x2="6" y2="18"/>
-                                    <line x1="6" y1="6" x2="18" y2="18"/>
-                                  </svg>
-                                </button>
+                                <WordKebab wordId={w.id} onDelete={onDelete} t={t} />
                               </td>
                             </tr>
                             {expanded && (

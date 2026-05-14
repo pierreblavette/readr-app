@@ -207,7 +207,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
             <span className="panel-section-eyebrow">{t.aboutSectionTitle}</span>
             {synopsis
               ? <div className="panel-synopsis">{synopsis}</div>
-              : <div className="panel-synopsis-placeholder">No synopsis available.</div>
+              : <div className="panel-empty-text">No synopsis available.</div>
             }
           </div>
 
@@ -225,7 +225,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       ))}
                     </div>
                   ) : (
-                    <p className="panel-quotes-empty">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
+                    <p className="panel-empty-text">{t.quoteEmptyBook || 'No quotes for this book yet.'}</p>
                   )}
                 </div>
                 <button className="panel-quotes-add" onClick={() => onAddQuote?.(book)}>

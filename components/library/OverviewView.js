@@ -399,7 +399,7 @@ function StreakCard({ streak, onAddBook, t }) {
               </>
             )}
           </div>
-          <span className="panel-synopsis-placeholder">{t.overviewStreakHint}</span>
+          <span className="panel-empty-text">{t.overviewStreakHint}</span>
         </div>
       )}
     </div>
