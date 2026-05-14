@@ -3507,7 +3507,7 @@
   /* Action column = kebab (40×40) + 16px breathing on the right edge so
      the button doesn't sit flush against the card border on mobile. */
   .list-table th:last-child { width: 64px; }
-  .list-table td.list-cell-action { padding: 0 16px 0 0; }
+  .list-table td.list-cell-action { padding: 0 8px 0 0; }
 }
 
 @media (min-width: 769px) {
