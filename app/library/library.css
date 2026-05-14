@@ -787,7 +787,7 @@
 }
 .now-reading-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 .now-reading-card {
@@ -3464,7 +3464,7 @@
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
   .books-grid,
   .col-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .now-reading-list { gap: 14px; }
+  .now-reading-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 
   /* Table list: hide secondary columns below 768px so Title gets
    * the full width. Tap on a row opens BookPanel/detail which shows all fields. */
