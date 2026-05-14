@@ -4905,8 +4905,8 @@ button.quote-book-chip {
 
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   /* z-index above .book-panel (320) so the mobile drawer covers the panel */
-  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: var(--shadow-lg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; pointer-events: none; }
-  .sidebar.mobile-open { transform: translateX(0); pointer-events: auto; }
+  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; pointer-events: none; }
+  .sidebar.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); pointer-events: auto; }
   .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }
   /* theme-btn is already exposed in the mobile toolbar — drop the sidebar
