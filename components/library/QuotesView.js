@@ -62,17 +62,15 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
         </div>
 
         {quotes.length > 0 && (
-          <div className="cell-row cell-row--lg filters-row">
-            <SortMenu
-              current={sort}
-              onChange={setSort}
-              ariaLabel={t.quoteSortToggle || 'Sort'}
-              options={[
-                { key: 'recent', label: t.quoteSortRecent || 'Recent' },
-                { key: 'book',   label: t.quoteSortBook   || 'By book' },
-              ]}
-            />
-          </div>
+          <SortMenu
+            current={sort}
+            onChange={setSort}
+            ariaLabel={t.quoteSortToggle || 'Sort'}
+            options={[
+              { key: 'recent', label: t.quoteSortRecent || 'Recent' },
+              { key: 'book',   label: t.quoteSortBook   || 'By book' },
+            ]}
+          />
         )}
       </div>
 

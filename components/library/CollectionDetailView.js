@@ -279,10 +279,11 @@ export default function CollectionDetailView({
             {t.colAddBooks}
           </button>
 
-          {editMode ? (
-            <button onClick={exitEditMode} className="edit-btn">{t.btnDone}</button>
-          ) : (
-            <div className="dropdown-wrap col-edit-dropdown" ref={editMenuRef}>
+          <div className="counter-secondary-actions">
+            {editMode ? (
+              <button onClick={exitEditMode} className="edit-btn">{t.btnDone}</button>
+            ) : (
+              <div className="dropdown-wrap col-edit-dropdown" ref={editMenuRef}>
               <button
                 type="button"
                 className="dropdown-btn"
@@ -372,6 +373,7 @@ export default function CollectionDetailView({
                 </button>
               </div>
             )}
+          </div>
           </div>
 
           <div className="view-btns">

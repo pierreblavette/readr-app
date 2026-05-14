@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-export default function SortMenu({ current, onChange, options, ariaLabel, defaultTriggerLabel, triggerIcon }) {
+export default function SortMenu({ current, onChange, options, ariaLabel, defaultTriggerLabel, triggerIcon, className }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -28,7 +28,7 @@ export default function SortMenu({ current, onChange, options, ariaLabel, defaul
     : (currentOpt.triggerLabel ?? currentOpt.label);
 
   return (
-    <div className="dropdown-wrap sort-menu" ref={ref}>
+    <div className={`dropdown-wrap sort-menu${className ? ' ' + className : ''}`} ref={ref}>
       <button
         type="button"
         className={`dropdown-btn sort-menu-btn${defaultTriggerLabel && !isDefaultSelection ? ' is-active' : ''}`}

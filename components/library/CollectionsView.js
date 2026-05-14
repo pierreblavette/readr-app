@@ -174,11 +174,13 @@ export default function CollectionsView({ collections, data, view, switchView, o
             {t.colNewCollection}
           </button>
 
-          {collections.length > 0 && (
-            <button onClick={() => editMode ? exitEditMode() : setEditMode(true)} className="edit-btn">
-              {editMode ? t.btnDone : t.btnEdit}
-            </button>
-          )}
+          <div className="counter-secondary-actions">
+            {collections.length > 0 && (
+              <button onClick={() => editMode ? exitEditMode() : setEditMode(true)} className="edit-btn">
+                {editMode ? t.btnDone : t.btnEdit}
+              </button>
+            )}
+          </div>
 
           <div className="view-btns">
             <button onClick={() => switchView('grid')} className={`view-btn${view === 'grid' ? ' active' : ''}`} aria-label="Grid view">

@@ -199,20 +199,23 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
 
     {isBookTab && data[tab].length > 0 && (
       <div className="cell-row cell-row--lg filters-row">
-        <button
-          type="button"
-          className={`dropdown-btn filters-mobile-trigger${activeFilterCount() > 0 ? ' is-active' : ''}`}
-          onClick={() => setMobilePanelOpen(true)}
-          aria-label={t.filterToggle || 'Filter'}>
-          <svg className="dropdown-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <line x1="3"  y1="6"  x2="21" y2="6"/>
-            <line x1="6"  y1="12" x2="18" y2="12"/>
-            <line x1="9"  y1="18" x2="15" y2="18"/>
-          </svg>
-          <span className="dropdown-btn-label">{t.filterToggle || 'Filter'}</span>
-          {activeFilterCount() > 0 && <span className="filter-badge">{activeFilterCount()}</span>}
-        </button>
+        {isOwned && (
+          <button
+            type="button"
+            className={`dropdown-btn filters-mobile-trigger${activeFilterCount() > 0 ? ' is-active' : ''}`}
+            onClick={() => setMobilePanelOpen(true)}
+            aria-label={t.filterToggle || 'Filter'}>
+            <svg className="dropdown-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="3"  y1="6"  x2="21" y2="6"/>
+              <line x1="6"  y1="12" x2="18" y2="12"/>
+              <line x1="9"  y1="18" x2="15" y2="18"/>
+            </svg>
+            <span className="dropdown-btn-label">{t.filterToggle || 'Filter'}</span>
+            {activeFilterCount() > 0 && <span className="filter-badge">{activeFilterCount()}</span>}
+          </button>
+        )}
         <SortMenu
+          className="filters-sort"
           current={currentSortKey}
           onChange={handleSort}
           ariaLabel={t.sortToggle || 'Sort'}
