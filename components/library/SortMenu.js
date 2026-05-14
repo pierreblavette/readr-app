@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-export default function SortMenu({ current, onChange, options, ariaLabel, defaultTriggerLabel }) {
+export default function SortMenu({ current, onChange, options, ariaLabel, defaultTriggerLabel, triggerIcon }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -37,7 +37,8 @@ export default function SortMenu({ current, onChange, options, ariaLabel, defaul
         aria-expanded={open}
         aria-label={ariaLabel}
       >
-        {triggerLabel}
+        {triggerIcon}
+        <span className="sort-menu-btn-label">{triggerLabel}</span>
         <svg
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"

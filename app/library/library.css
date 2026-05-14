@@ -3650,6 +3650,8 @@
     justify-content: start;
   }
   .panel-header-share { margin-left: 0; }
+  .range-dropdown-wrap .sort-menu-btn-label { display: none; }
+  .range-dropdown-wrap .dropdown-btn { padding: 0 12px; }
 }
 
 /* ─── ONBOARDING ─── */
@@ -4937,6 +4939,7 @@ button.quote-book-chip {
   gap: 16px;
   min-width: 0;
 }
+.overview-card.overview-activity { gap: 20px; }
 .overview-card-head {
   display: flex;
   align-items: flex-start;
@@ -5174,7 +5177,6 @@ button.quote-book-chip {
 }
 
 /* Activity card — Week bar chart + Month heatmap, metric switcher, range toggle */
-.overview-activity-head { width: 100%; }
 .overview-activity-head-row {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -5185,6 +5187,7 @@ button.quote-book-chip {
 .overview-activity-head-row > .overview-activity-pills { justify-self: start; }
 .overview-activity-head-row > .overview-activity-range { justify-self: center; }
 .overview-activity-head-row > .overview-activity-nav { justify-self: end; }
+.overview-activity-mobile-filters { display: none; }
 .overview-activity-range {
   display: inline-flex;
   gap: 4px;
@@ -5200,7 +5203,7 @@ button.quote-book-chip {
   border-radius: 999px;
 }
 .overview-activity-pill {
-  height: 28px;
+  height: 32px;
   padding: 0 12px;
   border: none;
   background: transparent;
@@ -5219,6 +5222,15 @@ button.quote-book-chip {
   color: var(--primary-foreground);
   font-weight: 600;
 }
+.overview-activity-pills.is-xs,
+.overview-activity-range.is-xs { padding: 2px; }
+.overview-activity-pill.is-xs { height: 24px; padding: 0 10px; font-size: 12px; }
+.overview-activity-pills.is-md,
+.overview-activity-range.is-md { padding: 4px; }
+.overview-activity-pill.is-md { height: 40px; padding: 0 16px; font-size: 14px; }
+.overview-activity-pills.is-lg,
+.overview-activity-range.is-lg { padding: 5px; }
+.overview-activity-pill.is-lg { height: 48px; padding: 0 20px; font-size: 14px; }
 
 .overview-activity-nav {
   display: inline-flex;
@@ -5226,15 +5238,15 @@ button.quote-book-chip {
   gap: 8px;
 }
 .overview-activity-nav-btn {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   background: var(--primary-5);
   color: var(--primary-60);
-  border-radius: 7px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
@@ -5526,6 +5538,29 @@ button.quote-book-chip {
 .overview-activity-cube.is-clickable:hover .overview-activity-fill.is-books { background: var(--primary-60); }
 .overview-activity-cube.is-clickable:hover .overview-activity-fill.is-quotes { background: var(--primary-50); }
 .overview-activity-cube.is-clickable:hover .overview-activity-fill.is-words { background: var(--primary-30); }
+.overview-activity-cube-counter-wrap {
+  display: none;
+  flex: 1;
+  width: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+}
+.overview-activity-cube-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--primary-50);
+  border-radius: 3px;
+  padding: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
 [data-theme="dark"] .overview-activity-cube.is-today { box-shadow: inset 0 0 0 2px var(--primary-40); }
 
 /* Activity Day Panel — heading + empty */
@@ -5549,25 +5584,34 @@ button.quote-book-chip {
 
 /* Mobile: tighten gaps */
 @media (max-width: 600px) {
-  .overview-activity-head-row {
+  .overview-activity > .overview-card-head { display: contents; }
+  .overview-activity-head-row { display: contents; }
+  .overview-activity-pills,
+  .overview-activity-range { display: none; }
+  .overview-activity-mobile-filters {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    width: 100%;
+    justify-content: space-between;
   }
-  .overview-activity-head-row > .overview-activity-pills,
-  .overview-activity-head-row > .overview-activity-range,
-  .overview-activity-head-row > .overview-activity-nav {
-    justify-self: stretch;
-  }
-  .overview-activity-pills { display: flex; width: 100%; }
-  .overview-activity-pills .overview-activity-pill { flex: 1; }
-  .overview-activity-range { display: flex; width: 100%; }
-  .overview-activity-range .overview-activity-pill { flex: 1; }
+  .overview-activity-mobile-filters > .sort-menu,
+  .overview-activity-mobile-filters > .range-dropdown-wrap { flex: 0 0 auto; }
+  .overview-activity-mobile-filters > .sort-menu .dropdown-menu { left: 0; right: auto; }
   .overview-activity-nav { display: flex; width: 100%; justify-content: space-between; }
   .overview-activity-week-label { min-width: 90px; }
   .overview-activity-bars { gap: 6px; }
   .overview-activity-grid-body { gap: 4px; }
   .overview-activity-grid-head { gap: 4px; }
+  .overview-activity-cube { aspect-ratio: 9 / 16; }
+  .overview-activity-cube-num { padding: 8px; }
+  .overview-activity-track { flex-direction: column; align-items: stretch; justify-content: stretch; }
+  .overview-activity-track > .overview-activity-fill,
+  .overview-activity-track > .overview-activity-dot { display: none; }
+  .overview-activity-track > .overview-activity-cube-counter-wrap { display: block; }
+  .overview-activity-legend,
+  .overview-activity-divider { display: none; }
+  .overview-activity-cube > .overview-activity-fill { display: none; }
+  .overview-activity-cube > .overview-activity-cube-counter-wrap { display: block; }
   .activity-day-title { font-size: 22px; }
 }
 

@@ -1608,7 +1608,19 @@ export default function DesignSystemPage() {
           <DSSection id="segmented-pills" title="Segmented Pills" sub="Pill-style segmented switcher — inline tabs on a track bg that toggle a single active state.">
 
             <div className="ds-card">
-              <div className="ds-card-head">Live preview</div>
+              <div className="ds-card-head">Live preview — xs</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-activity-pills is-xs" role="tablist" style={{ alignSelf: 'flex-start' }}>
+                  <button type="button" className="overview-activity-pill is-xs is-active">All</button>
+                  <button type="button" className="overview-activity-pill is-xs">Books</button>
+                  <button type="button" className="overview-activity-pill is-xs">Quotes</button>
+                  <button type="button" className="overview-activity-pill is-xs">Words</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview — sm (default)</div>
               <div className="ds-card-body col padded">
                 <div className="overview-activity-pills" role="tablist" style={{ alignSelf: 'flex-start' }}>
                   <button type="button" className="overview-activity-pill is-active">All</button>
@@ -1620,13 +1632,55 @@ export default function DesignSystemPage() {
             </div>
 
             <div className="ds-card">
+              <div className="ds-card-head">Live preview — md</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-activity-pills is-md" role="tablist" style={{ alignSelf: 'flex-start' }}>
+                  <button type="button" className="overview-activity-pill is-md is-active">All</button>
+                  <button type="button" className="overview-activity-pill is-md">Books</button>
+                  <button type="button" className="overview-activity-pill is-md">Quotes</button>
+                  <button type="button" className="overview-activity-pill is-md">Words</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Live preview — lg</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-activity-pills is-lg" role="tablist" style={{ alignSelf: 'flex-start' }}>
+                  <button type="button" className="overview-activity-pill is-lg is-active">All</button>
+                  <button type="button" className="overview-activity-pill is-lg">Books</button>
+                  <button type="button" className="overview-activity-pill is-lg">Quotes</button>
+                  <button type="button" className="overview-activity-pill is-lg">Words</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Sizes</div>
+              <div className="ds-card-body col">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Size</th><th>Wrapper padding</th><th>Pill height</th><th>Pill padding</th><th>Font size</th></tr></thead>
+                  <tbody>
+                    <tr className="table-row"><td className="token-table-component"><code>.is-xs</code></td><td className="mono">2</td><td className="mono">24</td><td className="mono">0 10</td><td className="mono">12</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>sm</code> (default)</td><td className="mono">3</td><td className="mono">32</td><td className="mono">0 12</td><td className="mono">13</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.is-md</code></td><td className="mono">4</td><td className="mono">40</td><td className="mono">0 16</td><td className="mono">14</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.is-lg</code></td><td className="mono">5</td><td className="mono">48</td><td className="mono">0 20</td><td className="mono">14</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="ds-card-foot">
+                Apply the size modifier (<code>.is-xs</code> / <code>.is-md</code> / <code>.is-lg</code>) to both the wrapper (<code>.overview-activity-pills</code> or <code>.overview-activity-range</code>) AND each pill child. Scale aligned with the DS button scale (24/32/40/48). Use md when targets need a generous tap area (mobile, dense panels) — switch via <code>useMediaQuery('(max-width: 600px)')</code> for responsive use.
+              </div>
+            </div>
+
+            <div className="ds-card">
               <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col">
                 <table className="token-table">
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
                   <tbody>
-                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pills</code></td><td className="meta">Wrapper / track</td><td className="mono">Inline-flex, gap 4, padding 3, bg <span className="ds-token-chip">--bg3</span>, radius 999. Acts as the "rail" the active pill floats on</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill</code></td><td className="meta">Single tab</td><td className="mono">28h, padding 0/12, radius 999, font 13/500. Color <span className="ds-token-chip">--text-2</span> default</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pills</code></td><td className="meta">Wrapper / track</td><td className="mono">Inline-flex, gap 4, bg <span className="ds-token-chip">--bg3</span>, radius 999. Acts as the "rail" the active pill floats on. Padding depends on size (sm 3 / md 4)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill</code></td><td className="meta">Single tab</td><td className="mono">Radius 999, weight 600, color <span className="ds-token-chip">--text-2</span> default. Height/padding/font depend on size — see Sizes table</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill:hover:not(.is-active)</code></td><td className="meta">Hover (inactive)</td><td className="mono">Bg <span className="ds-token-chip">--primary-5</span>, color <span className="ds-token-chip">--primary-50</span> (light) · <span className="ds-token-chip">--primary-40</span> (dark) — iso <code>.edit-btn</code> hover</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.overview-activity-pill.is-active</code></td><td className="meta">Active (selected)</td><td className="mono">Bg <span className="ds-token-chip">--primary</span>, color <span className="ds-token-chip">--primary-foreground</span>, weight 600. Hover state suppressed (no bg/color shift while selected)</td></tr>
                   </tbody>
@@ -3711,7 +3765,7 @@ function handleDeleteConfirm(payload) {
               <div className="ds-card-head">Live preview · All mode</div>
               <div className="ds-card-body col padded">
                 <div className="overview-card overview-activity" style={{ alignSelf: 'stretch' }}>
-                  <div className="overview-card-head overview-activity-head">
+                  <div className="overview-card-head">
                     <div className="overview-activity-pills" role="tablist">
                       <button type="button" className="overview-activity-pill is-active">All</button>
                       <button type="button" className="overview-activity-pill">Books</button>
@@ -3796,7 +3850,7 @@ function handleDeleteConfirm(payload) {
               <div className="ds-card-head">Live preview · Single metric (Books)</div>
               <div className="ds-card-body col padded">
                 <div className="overview-card overview-activity" style={{ alignSelf: 'stretch' }}>
-                  <div className="overview-card-head overview-activity-head">
+                  <div className="overview-card-head">
                     <div className="overview-activity-pills" role="tablist">
                       <button type="button" className="overview-activity-pill">All</button>
                       <button type="button" className="overview-activity-pill is-active">Books</button>

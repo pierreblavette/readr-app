@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { OverviewIcon } from "./EmptyState";
 import ActivityDayPanel from "./ActivityDayPanel";
+import SortMenu from "./SortMenu";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -179,41 +180,65 @@ export default function WeeklyActivityCard({
 
   return (
     <div className="overview-card overview-activity">
-      <div className="overview-card-head overview-activity-head">
+      <div className="overview-card-head">
         <div className="overview-activity-head-row">
-          <div className="overview-activity-pills" role="tablist" aria-label={t.overviewActivityTitle}>
+          <div className="overview-activity-pills is-md" role="tablist" aria-label={t.overviewActivityTitle}>
             <button type="button" role="tab" aria-selected={metric === 'all'}
-                    className={`overview-activity-pill${metric === 'all' ? ' is-active' : ''}`}
+                    className={`overview-activity-pill is-md${metric === 'all' ? ' is-active' : ''}`}
                     onClick={() => setMetric('all')}>
               {t.overviewActivityAll}
             </button>
             <button type="button" role="tab" aria-selected={metric === 'books'}
-                    className={`overview-activity-pill${metric === 'books' ? ' is-active' : ''}`}
+                    className={`overview-activity-pill is-md${metric === 'books' ? ' is-active' : ''}`}
                     onClick={() => setMetric('books')}>
               {t.overviewActivityBooks}
             </button>
             <button type="button" role="tab" aria-selected={metric === 'quotes'}
-                    className={`overview-activity-pill${metric === 'quotes' ? ' is-active' : ''}`}
+                    className={`overview-activity-pill is-md${metric === 'quotes' ? ' is-active' : ''}`}
                     onClick={() => setMetric('quotes')}>
               {t.overviewActivityQuotes}
             </button>
             <button type="button" role="tab" aria-selected={metric === 'words'}
-                    className={`overview-activity-pill${metric === 'words' ? ' is-active' : ''}`}
+                    className={`overview-activity-pill is-md${metric === 'words' ? ' is-active' : ''}`}
                     onClick={() => setMetric('words')}>
               {t.overviewActivityWords}
             </button>
           </div>
-          <div className="overview-activity-range" role="tablist" aria-label={t.overviewActivityTitle}>
+          <div className="overview-activity-range is-md" role="tablist" aria-label={t.overviewActivityTitle}>
             <button type="button" role="tab" aria-selected={view === 'week'}
-                    className={`overview-activity-pill${view === 'week' ? ' is-active' : ''}`}
+                    className={`overview-activity-pill is-md${view === 'week' ? ' is-active' : ''}`}
                     onClick={() => setView('week')}>
               {t.overviewActivityWeek}
             </button>
             <button type="button" role="tab" aria-selected={view === 'month'}
-                    className={`overview-activity-pill${view === 'month' ? ' is-active' : ''}`}
+                    className={`overview-activity-pill is-md${view === 'month' ? ' is-active' : ''}`}
                     onClick={() => setView('month')}>
               {t.overviewActivityMonth}
             </button>
+          </div>
+          <div className="overview-activity-mobile-filters">
+            <SortMenu
+              current={metric}
+              onChange={setMetric}
+              options={[
+                { key: 'all', label: t.overviewActivityAll },
+                { key: 'books', label: t.overviewActivityBooks },
+                { key: 'quotes', label: t.overviewActivityQuotes },
+                { key: 'words', label: t.overviewActivityWords },
+              ]}
+              ariaLabel={t.overviewActivityTitle}
+            />
+            <div className="range-dropdown-wrap">
+              <SortMenu
+                current={view}
+                onChange={setView}
+                options={[
+                  { key: 'week', label: t.overviewActivityWeek },
+                  { key: 'month', label: t.overviewActivityMonth },
+                ]}
+                ariaLabel={t.overviewActivityTitle}
+              />
+            </div>
           </div>
           <div className="overview-activity-nav">
             <button type="button" className="overview-activity-nav-btn" disabled={!canPrev}
@@ -289,6 +314,9 @@ export default function WeeklyActivityCard({
                       <span className="overview-activity-count">{cell.count}</span>
                     </div>
                   )}
+                  <div className="overview-activity-cube-counter-wrap">
+                    <span className="overview-activity-cube-counter">{cell.count}</span>
+                  </div>
                 </button>
               ) : (
                 <div key={i} className={classes} aria-label={label}>
@@ -336,6 +364,11 @@ export default function WeeklyActivityCard({
                   ) : (
                     <div className={`overview-activity-fill is-${metric}`} style={{ height: `${fillHeight}%` }}>
                       <span className="overview-activity-count">{d.count}</span>
+                    </div>
+                  )}
+                  {d.count > 0 && (
+                    <div className="overview-activity-cube-counter-wrap">
+                      <span className="overview-activity-cube-counter">{d.count}</span>
                     </div>
                   )}
                 </div>
