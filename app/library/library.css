@@ -15,6 +15,8 @@
 .btn-primary:active:not(:disabled) { background: var(--primary-70); }
 .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border-subtle); }
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
+.btn-outline.is-active { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
+[data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-30); color: var(--primary-30); }
 /* Button size scale — step 8 linear progression (height, padding, gap) with
    proportional SVG sizing. Font sizes anchored to the canonical Readr typo
    scale (10/11/12/13/14/15/16/18/20/28 — see project_typography_scale.md).
@@ -30,34 +32,42 @@
 .btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
 .btn-lg svg { width: 18px; height: 18px; padding: 2px; box-sizing: content-box; }
 .btn-xl svg { width: 20px; height: 20px; padding: 2px; box-sizing: content-box; }
-/* Asymmetric padding when an icon (or chevron) sits adjacent to an edge —
-   shrinks that side from the base padding by 4 so the SVG sits closer to
-   the edge. Scale-proportional : base - 4 across all sizes.
-   Chevron exception : when the trailing SVG carries .dropdown-btn-chevron,
-   the gutter shrinks further (base - 8) since the chevron is a smaller,
-   less-prominent indicator than a full icon. */
-.btn-xs:has(svg:first-child:not(:last-child)) { padding-left: 8px; }
-.btn-xs:has(svg:last-child:not(:first-child)) { padding-right: 8px; }
-.btn-xs:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 4px; }
-.btn-sm:has(svg:first-child:not(:last-child)) { padding-left: 12px; }
-.btn-sm:has(svg:last-child:not(:first-child)) { padding-right: 12px; }
-.btn-sm:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 8px; }
-.btn-md:has(svg:first-child:not(:last-child)) { padding-left: 16px; }
-.btn-md:has(svg:last-child:not(:first-child)) { padding-right: 16px; }
-.btn-md:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 12px; }
-.btn-lg:has(svg:first-child:not(:last-child)) { padding-left: 20px; }
-.btn-lg:has(svg:last-child:not(:first-child)) { padding-right: 20px; }
-.btn-lg:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 16px; }
-.btn-xl:has(svg:first-child:not(:last-child)) { padding-left: 24px; }
-.btn-xl:has(svg:last-child:not(:first-child)) { padding-right: 24px; }
-.btn-xl:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 20px; }
+/* Chevron exception : when the trailing SVG is a chevron (right of text),
+   drop the 2px frame so the visible size matches its width/height (e.g. 16
+   in md instead of 20). Iso .dropdown-btn-chevron which renders 16x16. */
+.btn .sidebar-section-chevron:last-child:not(:first-child),
+.btn .dropdown-btn-chevron:last-child:not(:first-child) { padding: 0; }
+/* Asymmetric padding when an icon (or chevron) sits adjacent to an edge.
+   Icon-side gutter = base - 8 (tight, gives the SVG room near the edge).
+   Text-side gutter = base - 4 (softer, balances the label visually).
+   Both sides reduced vs the symmetric base (text-only buttons). */
+.btn-xs:has(svg:first-child:not(:last-child)) { padding-left: 4px; padding-right: 8px; }
+.btn-xs:has(svg:last-child:not(:first-child)) { padding-left: 8px; padding-right: 4px; }
+.btn-xs:has(.dropdown-btn-chevron:last-child:not(:first-child)),
+.btn-xs:has(.sidebar-section-chevron:last-child:not(:first-child)) { padding-right: 4px; }
+.btn-sm:has(svg:first-child:not(:last-child)) { padding-left: 8px; padding-right: 12px; }
+.btn-sm:has(svg:last-child:not(:first-child)) { padding-left: 12px; padding-right: 8px; }
+.btn-sm:has(.dropdown-btn-chevron:last-child:not(:first-child)),
+.btn-sm:has(.sidebar-section-chevron:last-child:not(:first-child)) { padding-right: 8px; }
+.btn-md:has(svg:first-child:not(:last-child)) { padding-left: 12px; padding-right: 16px; }
+.btn-md:has(svg:last-child:not(:first-child)) { padding-left: 16px; padding-right: 12px; }
+.btn-md:has(.dropdown-btn-chevron:last-child:not(:first-child)),
+.btn-md:has(.sidebar-section-chevron:last-child:not(:first-child)) { padding-right: 12px; }
+.btn-lg:has(svg:first-child:not(:last-child)) { padding-left: 16px; padding-right: 20px; }
+.btn-lg:has(svg:last-child:not(:first-child)) { padding-left: 20px; padding-right: 16px; }
+.btn-lg:has(.dropdown-btn-chevron:last-child:not(:first-child)),
+.btn-lg:has(.sidebar-section-chevron:last-child:not(:first-child)) { padding-right: 16px; }
+.btn-xl:has(svg:first-child:not(:last-child)) { padding-left: 20px; padding-right: 24px; }
+.btn-xl:has(svg:last-child:not(:first-child)) { padding-left: 24px; padding-right: 20px; }
+.btn-xl:has(.dropdown-btn-chevron:last-child:not(:first-child)),
+.btn-xl:has(.sidebar-section-chevron:last-child:not(:first-child)) { padding-right: 20px; }
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
 .btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
 .btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
 .btn-secondary:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
-[data-theme="dark"] .btn-secondary { background: var(--primary-90); color: var(--primary-30); }
-[data-theme="dark"] .btn-secondary:hover:not(:disabled) { background: var(--primary-80); }
+[data-theme="dark"] .btn-secondary { background: var(--primary-5); color: var(--primary-30); }
+[data-theme="dark"] .btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
 [data-theme="dark"] .btn-outline { border-color: var(--light-20); color: var(--light-90); background: transparent; }
 [data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-5); }
 
@@ -265,6 +275,8 @@
 .search-row .counter-actions { margin-left: auto; }
 
 .search-bar-wrap { display: flex; flex-direction: column; gap: 28px; }
+.search-bar-wrap > .sort-menu { align-self: flex-start; }
+.search-bar-wrap > .sort-menu .dropdown-menu { left: 0; right: auto; }
 
 .filters-row { gap: 8px; flex-wrap: wrap; row-gap: 12px; }
 .filters-row .sort-menu .dropdown-menu,
@@ -297,13 +309,13 @@
    dropdown-btn collapse to icon-only (40x40 with padding: 0), and the
    asymmetric padding would otherwise off-center the icon. */
 @media (min-width: 1081px) {
-  /* Icon-left : padding-left 16 (iso button). */
-  .dropdown-btn:has(.dropdown-btn-icon:first-child:not(:last-child)) { padding-left: 16px; }
-  /* Icon-right (non-chevron) : padding-right 16 (iso button). */
-  .dropdown-btn:has(.dropdown-btn-icon:last-child:not(:first-child)) { padding-right: 16px; }
-  /* Chevron-right : padding-right 12 (chevron est un indicateur plus discret
-     qu'un icon principal, gutter plus serre). */
-  .dropdown-btn:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 12px; }
+  /* Icon-left : icon-side 12 (base - 8), text-side 16 (base - 4), iso .btn-md DS. */
+  .dropdown-btn:has(.dropdown-btn-icon:first-child:not(:last-child)) { padding-left: 12px; padding-right: 16px; }
+  /* Icon-right : icon-side 12, text-side 16. */
+  .dropdown-btn:has(.dropdown-btn-icon:last-child:not(:first-child)) { padding-left: 16px; padding-right: 12px; }
+  /* Chevron-right : icon-side 12, text-side 16 (chevron et icon partagent
+     la meme gutter). */
+  .dropdown-btn:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-left: 16px; padding-right: 12px; }
 }
 .dropdown-btn.filters-mobile-trigger { display: none; }
 @media (max-width: 1280px) {
@@ -696,7 +708,7 @@
 /* ─── BUTTONS ─── */
 .add-btn {
   height: 40px;
-  padding: 0 20px 0 16px;
+  padding: 0 16px 0 12px;
   border-radius: 8px;
   border: none;
   background: var(--accent);
@@ -729,7 +741,7 @@
   height: 40px;
   /* Asymmetric icon-left padding (mirrors .add-btn) — Edit always has a
      pencil or check SVG as first child. */
-  padding: 0 20px 0 16px;
+  padding: 0 16px 0 12px;
   border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF;
@@ -780,7 +792,7 @@
 .dropdown-btn-chevron { width: 16px; height: 16px; flex-shrink: 0; }
 
 [data-theme="dark"] .dropdown-btn { background: var(--bg3); }
-[data-theme="dark"] .dropdown-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-3); }
+[data-theme="dark"] .dropdown-btn:hover:not(:disabled) { border-color: var(--primary-30); color: var(--primary-30); background: var(--primary-3); }
 
 /* ─── DROPDOWN MENU ─── */
 .dropdown-wrap { position: relative; display: inline-flex; flex-shrink: 0; }
@@ -1621,14 +1633,33 @@
 }
 .col-card-kebab svg { width: 18px; height: 18px; }
 .col-card-kebab:hover,
-.col-card-kebab[aria-expanded="true"] { background: var(--primary-5); color: var(--primary-50); }
+.col-card-kebab[aria-expanded="true"] { background: var(--ghost-hover); color: var(--primary-50); }
 [data-theme="dark"] .col-card-kebab { color: var(--text); }
 [data-theme="dark"] .col-card-kebab:hover,
-[data-theme="dark"] .col-card-kebab[aria-expanded="true"] { background: var(--primary-5); color: var(--primary-40); }
+[data-theme="dark"] .col-card-kebab[aria-expanded="true"] { background: var(--ghost-hover); color: var(--primary-40); }
 
 .list-row .col-card-kebab { display: inline-flex; }
-/* Inside .quote-card : bleed -8/-8 into card padding so kebab sits at 8px from top/right edges without touching padding or going absolute */
+/* Inside .quote-card : the kebab uses negative margin to bleed into the
+   16px card padding (8px from edges). The .quote-card-actions wrapper sits
+   flush within the padding (no bleed) to keep the row aligned with the card
+   content. */
 .quote-card .col-card-kebab { margin-top: -8px; margin-right: -8px; }
+.quote-card .quote-card-actions { display: flex; align-items: flex-start; gap: 0; }
+.quote-card .quote-card-actions .col-card-kebab { margin: 0; }
+.quote-card-like {
+  width: 40px; height: 40px;
+  border: none; background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  color: var(--text-2);
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.quote-card-like svg { width: 18px; height: 18px; }
+.quote-card-like:hover { background: var(--ghost-hover); color: var(--primary-50); }
+.quote-card-like.is-saved { color: var(--primary-50); }
+[data-theme="dark"] .quote-card-like:hover { background: var(--ghost-hover); color: var(--primary-30); }
+[data-theme="dark"] .quote-card-like.is-saved { color: var(--primary-30); }
 .col-card-name { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-card-count { font-size: 15px; font-weight: 500; color: var(--text-2); }
 
@@ -1640,8 +1671,8 @@
 .col-back-btn {
   display: inline-flex; align-items: center; gap: 6px;
   width: fit-content;
-  /* btn-sm scale : asymmetric icon-side = 12 (ratio 0.75 of base 16). */
-  height: 32px; padding: 0 16px 0 12px;
+  /* btn-sm scale : icon-side = base - 8 = 8, text-side = base - 4 = 12. */
+  height: 32px; padding: 0 12px 0 8px;
   border-radius: 7px; border: none;
   background: none; color: var(--text-2);
   font-family: var(--font-jakarta), sans-serif;
@@ -1650,7 +1681,7 @@
   transition: color 0.15s, background 0.15s;
 }
 .col-back-btn:hover { color: var(--primary-50); background: var(--primary-5); }
-[data-theme="dark"] .col-back-btn:hover { color: var(--primary-40); background: var(--primary-3); }
+[data-theme="dark"] .col-back-btn:hover { color: var(--primary-30); background: var(--primary-3); }
 
 .col-more-btn {
   width: 40px; height: 40px;
@@ -1875,6 +1906,7 @@
 /* Share flows naturally as a flex sibling — no auto-margin push.
    On wrap, lands on row 2 at flex-start (left-aligned under move-btn/group).
    Asymmetric icon-left padding is inherited from .btn-md :has() rule. */
+
 .panel-byline {
   display: flex;
   flex-direction: column;
@@ -1964,7 +1996,7 @@
 .panel-cast-action {
   align-self: flex-start;
   /* Asymmetric padding for icon-left button (mirrors .btn-ai, .panel-quotes-add) */
-  padding: 0 20px 0 16px;
+  padding: 0 16px 0 12px;
 }
 /* AI button — gradient border + tinted gradient fill
    (gradient stops mirror .import-tab-indicator.gradient).
@@ -1977,7 +2009,7 @@
   border: 1.5px solid transparent;
   /* Asymmetric padding: 12px left for the leading sparkle icon, 20px right
      for label breathing — mirrors .panel-quotes-add. */
-  padding: 0 20px 0 16px;
+  padding: 0 16px 0 12px;
   background:
     linear-gradient(to right, rgba(246,123,248,0.05), rgba(73,89,230,0.05)) padding-box,
     linear-gradient(var(--bg), var(--bg)) padding-box,
@@ -2195,7 +2227,7 @@
   margin-top: 8px;
 }
 /* Asymmetric padding when icon is on the trailing edge */
-.panel-quiz-nav-next { padding: 0 16px 0 20px; }
+.panel-quiz-nav-next { padding: 0 12px 0 16px; }
 
 /* Result */
 .panel-quiz-result {
@@ -2389,9 +2421,11 @@
 .panel-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  align-self: stretch;
+  justify-content: space-between;
   width: 100%;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .panel-move-btn {
@@ -3251,7 +3285,7 @@
 .import-tab-pane { display: flex; flex-direction: column; gap: 24px; }
 
 /* ─── BARCODE SCANNER (ISBN) ─── */
-.scan-start-btn { align-self: stretch; width: 100%; padding: 0 20px 0 16px; justify-content: center; }
+.scan-start-btn { align-self: stretch; width: 100%; padding: 0 16px 0 12px; justify-content: center; }
 .scan-manual { display: flex; flex-direction: column; gap: 8px; }
 .scan-or-separator {
   display: flex;
@@ -3496,7 +3530,7 @@
 .import-change-file {
   display: inline-flex; align-items: center; gap: 8px;
   align-self: flex-start;
-  height: 40px; padding: 0 20px 0 16px;
+  height: 40px; padding: 0 16px 0 12px;
   border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF; color: var(--text);
@@ -3618,8 +3652,8 @@
   .dropdown-btn-chevron { display: none; }
   /* sort-menu-btn keeps label + chevron at ≤1080 — re-show the chevron */
   .sort-menu-btn .dropdown-btn-chevron { display: inline-block; }
-  .sort-menu-btn { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
-  .filters-mobile-trigger { width: auto; padding: 0 20px 0 16px; justify-content: flex-start; }
+  .sort-menu-btn { width: auto; padding: 0 12px 0 16px; justify-content: flex-start; }
+  .filters-mobile-trigger { width: auto; padding: 0 16px 0 12px; justify-content: flex-start; }
   .filters-mobile-trigger .dropdown-btn-label { display: inline-flex; }
   .search-row { flex-direction: column; align-items: stretch; gap: 16px; }
   .search-box { min-width: 0; flex: none; width: 100%; }
@@ -3646,7 +3680,7 @@
   /* In a column flex parent, flex: 1 stretches on the main axis (= height),
      so we have to neutralise it. */
   .scan-manual-input { flex: 0 0 auto; }
-  .scan-lookup-btn { padding: 0 20px 0 16px; width: 100%; justify-content: center; }
+  .scan-lookup-btn { padding: 0 16px 0 12px; width: 100%; justify-content: center; }
   /* Hide the barcode tab hint on mobile to reduce visual noise */
   .import-tab-hint { display: none; }
   /* Stack the retry button below the error text on mobile, centered.
@@ -3657,9 +3691,12 @@
      The :has() override cancels the DS asymmetric padding-left:12 (which
      still fires because the span exists in DOM even when display:none),
      so the SVG centers properly inside the 40×40 box. */
-  .panel-header-share { padding: 0; width: 40px; justify-content: center; }
-  .panel-header-share:has(svg:first-child:not(:last-child)) { padding-left: 0; }
-  .panel-header-share span { display: none; }
+  .panel-header-share,
+  .panel-header-like { padding: 0; width: 40px; justify-content: center; }
+  .panel-header-share:has(svg:first-child:not(:last-child)),
+  .panel-header-like:has(svg:first-child:not(:last-child)) { padding-left: 0; padding-right: 0; }
+  .panel-header-share span,
+  .panel-header-like span { display: none; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
   /* Filters panel footer follows .panel-inner padding (32 → 16 on mobile) :
@@ -3921,13 +3958,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-3);
+  color: var(--text-2);
   transition: background 0.15s, color 0.15s;
   flex-shrink: 0;
 }
 .sidebar-logo-collapse:hover {
   background: var(--ghost-hover);
-  color: var(--text);
+  color: var(--primary-50);
+}
+[data-theme="dark"] .sidebar-logo-collapse:hover {
+  color: var(--primary-30);
 }
 /* Collapsed: "r" is the expand trigger, centered */
 .sidebar.collapsed .sidebar-logo {
@@ -4018,8 +4058,8 @@
   background: rgba(123,137,248,0.15);
   color: var(--primary);
 }
-.sidebar-item.active .sidebar-badge { background: var(--primary-5); }
-[data-theme="dark"] .sidebar-item.active .sidebar-badge { background: var(--primary-5); }
+.sidebar-item.active .sidebar-badge,
+[data-theme="dark"] .sidebar-item.active .sidebar-badge { background: #fff; }
 /* Collections section */
 .sidebar-section {
   flex-shrink: 0;
@@ -4048,7 +4088,11 @@
   transition: background 0.15s;
 }
 .sidebar-section-head:hover { background: var(--ghost-hover); }
+.sidebar-section-head:hover .sidebar-section-chevron { color: var(--primary-50); }
+[data-theme="dark"] .sidebar-section-head:hover .sidebar-section-chevron { color: var(--primary-30); }
 .sidebar-section-head.sidebar-section-head--no-action:hover { background: transparent; }
+.sidebar-section-head.sidebar-section-head--no-action:hover .sidebar-section-chevron { color: var(--text-2); }
+[data-theme="dark"] .sidebar-section-head.sidebar-section-head--no-action:hover .sidebar-section-chevron { color: var(--text-2); }
 .sidebar-section-label {
   font-size: 11px;
   font-weight: 700;
@@ -4084,7 +4128,8 @@
   padding: 0;
   transition: background 0.15s, color 0.15s;
 }
-.sidebar-section-add:hover { background: var(--ghost-hover); color: var(--text); }
+.sidebar-section-add:hover { background: var(--ghost-hover); color: var(--primary-50); }
+[data-theme="dark"] .sidebar-section-add:hover { color: var(--primary-30); }
 .sidebar-section-add svg { width: 18px; height: 18px; }
 
 .sidebar-item.sidebar-col-item { padding-left: 40px; }
@@ -4104,7 +4149,10 @@
   flex-shrink: 0;
   transition: background 0.15s, color 0.15s;
 }
-.sidebar-col-toggle:hover:not(:disabled) { background: rgba(73, 89, 230, 0.16); color: var(--primary-60); }
+.sidebar-col-toggle:hover:not(:disabled) { background: var(--ghost-hover); color: var(--primary-50); }
+.sidebar-col-toggle:hover:not(:disabled) .sidebar-section-chevron { color: var(--primary-50); }
+[data-theme="dark"] .sidebar-col-toggle:hover:not(:disabled) { color: var(--primary-30); }
+[data-theme="dark"] .sidebar-col-toggle:hover:not(:disabled) .sidebar-section-chevron { color: var(--primary-30); }
 .sidebar-col-toggle:disabled { opacity: 0.4; cursor: not-allowed; }
 .sidebar-col-toggle--sm { width: 28px; height: 28px; border-radius: 6px; }
 .sidebar-col-toggle--sm .sidebar-section-chevron { width: 14px; height: 14px; }
@@ -4316,7 +4364,7 @@
   gap: 16px;
   flex-wrap: wrap;
 }
-.dictionary-save-toggle { padding: 0 20px 0 16px; }
+.dictionary-save-toggle { padding: 0 16px 0 12px; }
 .dict-save-rest,
 .dict-save-hover {
   display: inline-flex;
@@ -4532,10 +4580,14 @@
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  color: var(--text);
-  transition: transform 0.2s ease;
+  color: var(--text-2);
+  transition: transform 0.2s ease, color 0.18s ease;
 }
 .dictionary-chevron.open { transform: rotate(90deg); }
+.dictionary-saved-head:hover .dictionary-chevron,
+.dictionary-saved-row:hover .dictionary-chevron { color: var(--primary-50); }
+[data-theme="dark"] .dictionary-saved-head:hover .dictionary-chevron,
+[data-theme="dark"] .dictionary-saved-row:hover .dictionary-chevron { color: var(--primary-30); }
 .dictionary-saved-word {
   font-family: var(--font-jakarta), sans-serif;
   font-size: 15px;
@@ -4580,7 +4632,7 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   transition: transform 0.22s ease, border-color 0.22s;
   animation: fadeUp 0.28s ease both;
   position: relative;
@@ -4598,8 +4650,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 4px;
 }
+/* When the quote text fits on a single line (detected via JS), vertically
+   center it against the actions wrapper which dictates the body height. */
+.quote-card-body.is-single-line .quote-card-text-wrap { align-self: center; }
 .quote-card-delete {
   flex-shrink: 0;
 }
@@ -4616,7 +4670,7 @@
 }
 .quote-card:hover .quote-card-divider { background: var(--primary-10); }
 [data-theme="dark"] .quote-card:hover { border-color: var(--primary-40); background: var(--primary-3); }
-[data-theme="dark"] .quote-card:hover .quote-card-divider { background: var(--primary-20); }
+[data-theme="dark"] .quote-card:hover .quote-card-divider { background: var(--primary-10); }
 
 
 .quote-card-text {
@@ -4656,7 +4710,7 @@
   margin-bottom: 0;
 }
 .quote-panel-date {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-3);
 }
@@ -4757,11 +4811,15 @@
   pointer-events: none;
   transition: transform 0.2s ease, color 0.15s;
 }
+.quote-link-select:hover .quote-link-select-chevron,
 .quote-link-select.open .quote-link-select-chevron {
-  transform: translateY(-50%) rotate(180deg);
   color: var(--primary-50);
 }
-[data-theme="dark"] .quote-link-select.open .quote-link-select-chevron { color: var(--primary-40); }
+.quote-link-select.open .quote-link-select-chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+[data-theme="dark"] .quote-link-select:hover .quote-link-select-chevron,
+[data-theme="dark"] .quote-link-select.open .quote-link-select-chevron { color: var(--primary-30); }
 
 .quote-book-chip {
   display: flex;
@@ -4810,11 +4868,16 @@ button.quote-book-chip {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  color: var(--text-3);
+  color: var(--text-2);
   margin-left: 4px;
   stroke-width: 2.5;
   align-self: center;
+  transition: color 0.18s ease;
 }
+.quote-book-chip-interactive:hover .quote-book-chip-chevron,
+.quote-book-chip-interactive:focus-visible .quote-book-chip-chevron { color: var(--primary-50); }
+[data-theme="dark"] .quote-book-chip-interactive:hover .quote-book-chip-chevron,
+[data-theme="dark"] .quote-book-chip-interactive:focus-visible .quote-book-chip-chevron { color: var(--primary-30); }
 
 .quote-book-chip-cover {
   width: 32px;
@@ -4944,7 +5007,7 @@ button.quote-book-chip {
 .panel-quotes-add {
   display: flex; align-items: center; gap: 8px;
   align-self: flex-start;
-  height: 40px; padding: 0 20px 0 16px;
+  height: 40px; padding: 0 16px 0 12px;
   border-radius: 8px;
   background: var(--primary-50); border: none;
   color: #FFFFFF; cursor: pointer;
@@ -5263,9 +5326,9 @@ button.quote-book-chip {
 }
 .overview-streak-body {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
 .overview-streak-current {
   font-family: var(--font-fraunces), serif;
@@ -5357,8 +5420,8 @@ button.quote-book-chip {
 .overview-activity-nav-btn:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
 .overview-activity-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .overview-activity-nav-btn svg { width: 16px; height: 16px; }
-[data-theme="dark"] .overview-activity-nav-btn { background: var(--primary-90); color: var(--primary-30); }
-[data-theme="dark"] .overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-80); }
+[data-theme="dark"] .overview-activity-nav-btn { background: var(--primary-5); color: var(--primary-30); }
+[data-theme="dark"] .overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-10); }
 .overview-activity-week-label {
   font-size: 14px;
   font-weight: 600;
@@ -5881,7 +5944,8 @@ button.quote-book-chip {
 }
 [data-theme="dark"] .quote-card.overview-quote-card { background: #262626; }
 [data-theme="dark"] .quote-card.overview-quote-card:hover { background: var(--primary-10); }
-.quote-card.overview-quote-card .quote-card-divider { display: none; }
+[data-theme="dark"] .quote-card.overview-quote-card .quote-card-divider,
+[data-theme="dark"] .quote-card.overview-quote-card:hover .quote-card-divider { background: rgba(255, 255, 255, 0.1); }
 /* Inner BookChip is non-interactive — drop its bg so it doesn't read as
  * a clickable affordance. */
 .quote-card.overview-quote-card .quote-book-chip,

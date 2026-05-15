@@ -19,7 +19,7 @@ export default function QuoteListPanel({ open, onClose, quotes, resolveBook, onO
             </button>
 
             <div className="panel-section">
-              <span className="panel-section-eyebrow">{t.tabQuotes}</span>
+              <span className="panel-section-eyebrow">{t.overviewQuotesTitle}</span>
               <div className="overview-quotes-list">
                 {quotes.map(q => (
                   <OverviewQuoteCard
@@ -31,15 +31,6 @@ export default function QuoteListPanel({ open, onClose, quotes, resolveBook, onO
                   />
                 ))}
               </div>
-              <button
-                type="button"
-                className="btn btn-outline btn-md overview-loved-more"
-                onClick={onSeeAll}>
-                <span>{t.overviewLovedSeeMore}</span>
-                <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="9 18 15 12 9 6"/>
-                </svg>
-              </button>
             </div>
           </div>
         )}

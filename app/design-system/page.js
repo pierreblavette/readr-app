@@ -245,7 +245,7 @@ export default function DesignSystemPage() {
               </div>
               <div className="sidebar-appearance-row cell-row cell-row--lg cell-row--between">
                 <span className="sidebar-row-label">Appearance</span>
-                <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
+                <button className={`theme-btn-ds${theme === 'dark' ? ' is-on' : ''}`} onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
                   <span className="toggle-thumb-ds">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                   </span>
@@ -1259,16 +1259,16 @@ export default function DesignSystemPage() {
                   <p>Symmetrical baseline.</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">Icon left + text · 0 20 0 16 (md) / 0 16 0 12 (sm)</div>
-                  <p>Icon eats visual space — drop padding-left by 4 to balance. Ratio constant across sizes (xs/sm/md/lg/xl all base - 4).</p>
+                  <div className="ds-token-name">Icon left + text · 0 20 0 12 (md) / 0 16 0 8 (sm)</div>
+                  <p>Icon eats visual space — drop padding-left by 8 to balance. Ratio constant across sizes (xs/sm/md/lg/xl all base - 8). Same gutter as chevron.</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">Text + icon right · 0 16 0 20 (md) / 0 12 0 16 (sm)</div>
+                  <div className="ds-token-name">Text + icon right · 0 12 0 20 (md) / 0 8 0 16 (sm)</div>
                   <p>Same logic, mirrored.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Text + chevron right · 0 12 0 20 (md)</div>
-                  <p>Special case for <code>.dropdown-btn</code> when the trailing SVG carries class <code>.dropdown-btn-chevron</code> — the chevron is a smaller, less-prominent indicator than a full icon, so the right gutter shrinks further (12 iso 16).</p>
+                  <p>Same gutter as icon-right (no distinction since spec unified to base - 8). Detected via <code>.dropdown-btn-chevron</code> / <code>.sidebar-section-chevron</code> classes.</p>
                 </div>
                 <div className="ds-token-block">
                   <p>Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> and <code>.dropdown-btn</code> — no extra class needed unless the chevron exception applies. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding).</p>
@@ -1802,7 +1802,7 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Toggle</div>
               <div className="ds-card-body">
-                <button className="theme-btn-ds" onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
+                <button className={`theme-btn-ds${theme === 'dark' ? ' is-on' : ''}`} onClick={() => setTheme(t => t === "light" ? "dark" : "light")} title="Theme">
                   <span className="toggle-thumb-ds">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                   </span>

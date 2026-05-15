@@ -22,7 +22,6 @@ export default function OverviewView({
   lang, t,
 }) {
   const stats = useStats({ owned, quotes, words, readingGoal });
-  const [shuffleKey, setShuffleKey] = useState(0);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [lovedPanelOpen, setLovedPanelOpen] = useState(false);
   const [finishedPanelOpen, setFinishedPanelOpen] = useState(false);
@@ -32,17 +31,9 @@ export default function OverviewView({
   const [activeGenre, setActiveGenre] = useState(null);
   const [activeAuthor, setActiveAuthor] = useState(null);
 
-  const spotlightQuotes = useMemo(() => {
-    if (quotes.length === 0) return [];
-    const pool = [...quotes];
-    const out = [];
-    const n = Math.min(2, pool.length);
-    while (out.length < n && pool.length) {
-      const i = Math.floor(Math.random() * pool.length);
-      out.push(pool.splice(i, 1)[0]);
-    }
-    return out;
-  }, [quotes, shuffleKey]);
+  const savedQuotes = useMemo(() => quotes.filter(q => q.saved), [quotes]);
+
+  const spotlightQuotes = useMemo(() => savedQuotes.slice(0, 3), [savedQuotes]);
 
   const finishedBooks = useMemo(() => owned.filter(b => b.finishedAt), [owned]);
 
@@ -256,7 +247,7 @@ export default function OverviewView({
       <QuoteListPanel
         open={quotesPanelOpen}
         onClose={() => setQuotesPanelOpen(false)}
-        quotes={quotes}
+        quotes={savedQuotes}
         resolveBook={resolveBook}
         onOpenQuote={onOpenQuote}
         onSeeAll={() => { setQuotesPanelOpen(false); onNavigate?.('quotes'); }}
@@ -283,11 +274,9 @@ export default function OverviewView({
 
       <QuotesSpotlightCard
         quotes={spotlightQuotes}
-        totalQuotes={quotes.length}
+        totalQuotes={savedQuotes.length}
         onOpen={onOpenQuote}
-        onShuffle={() => setShuffleKey(k => k + 1)}
-        canShuffle={quotes.length > 2}
-        onSeeAll={() => onNavigate?.('quotes')}
+        onSeeAll={() => setQuotesPanelOpen(true)}
         resolveBook={resolveBook}
         t={t}
       />
@@ -520,23 +509,11 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
   );
 }
 
-function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onShuffle, canShuffle, onSeeAll, resolveBook, t }) {
+function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onSeeAll, resolveBook, t }) {
   return (
     <div className="overview-card overview-quotes">
       <div className="overview-card-head">
         <span className="panel-section-eyebrow">{t.overviewQuotesTitle}</span>
-        {canShuffle && (
-          <button type="button" className="overview-card-action" onClick={onShuffle}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M16 3h5v5" />
-              <path d="M4 20L21 3" />
-              <path d="M21 16v5h-5" />
-              <path d="M15 15l6 6" />
-              <path d="M4 4l5 5" />
-            </svg>
-            {t.overviewQuotesShuffle}
-          </button>
-        )}
       </div>
       {quotes.length === 0 ? (
         <div className="empty overview-card-empty">

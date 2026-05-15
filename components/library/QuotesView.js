@@ -6,7 +6,7 @@ import SortMenu from "@/components/library/SortMenu";
 import BookChip from "@/components/library/BookChip";
 import NoMatchesIcon from "@/components/library/NoMatchesIcon";
 
-export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDelete, onShared, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
+export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDelete, onShared, onToggleSave, onOpen, onOpenBook, exportMD, exportPDF, lang, t }) {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('recent');
 
@@ -116,7 +116,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
                 : null;
               const book = byId || byMeta || null;
               return (
-                <QuoteCard key={q.id} quote={q} book={book} onEdit={onEdit} onDelete={onDelete} onShared={onShared} onOpen={onOpen} onOpenBook={onOpenBook} t={t} />
+                <QuoteCard key={q.id} quote={q} book={book} onEdit={onEdit} onDelete={onDelete} onShared={onShared} onToggleSave={onToggleSave} onOpen={onOpen} onOpenBook={onOpenBook} t={t} />
               );
             })}
           </div>
@@ -212,9 +212,10 @@ function QuoteCardKebab({ quote, onEdit, onDelete, onShared, t }) {
   );
 }
 
-function QuoteCard({ quote, book, onEdit, onDelete, onShared, onOpen, onOpenBook, t }) {
+function QuoteCard({ quote, book, onEdit, onDelete, onShared, onToggleSave, onOpen, onOpenBook, t }) {
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
+  const [singleLine, setSingleLine] = useState(false);
   const textRef = useRef(null);
 
   useEffect(() => {
@@ -243,6 +244,7 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onOpen, onOpenBook
 
       const lines = lineHeight ? Math.round(naturalHeight / lineHeight) : 0;
       setOverflows(lines > maxLines);
+      setSingleLine(lines === 1);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -265,7 +267,7 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onOpen, onOpenBook
       onKeyDown={onKeyDown}
       aria-label={quote.bookTitle || t.quoteAdd}
     >
-      <div className="quote-card-body">
+      <div className={`quote-card-body${singleLine ? ' is-single-line' : ''}`}>
         <div className="quote-card-text-wrap">
           <div ref={textRef} className={`quote-card-text${expanded ? ' expanded' : ''}`}>
             <span className="quote-mark">"</span>
@@ -278,7 +280,19 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onOpen, onOpenBook
             </button>
           )}
         </div>
-        <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} onShared={onShared} t={t} />
+        <div className="quote-card-actions">
+          <button
+            type="button"
+            className={`quote-card-like${quote.saved ? ' is-saved' : ''}`}
+            onClick={e => { e.stopPropagation(); onToggleSave?.(quote.id, !quote.saved); }}
+            aria-label={quote.saved ? (t.quoteFavoriteOn || 'Loved') : (t.quoteFavoriteOff || 'Add to loved')}
+            aria-pressed={!!quote.saved}>
+            <svg viewBox="0 0 24 24" fill={quote.saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M20 21l-8-5-8 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+          <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} onShared={onShared} t={t} />
+        </div>
       </div>
       <div className="quote-card-divider" />
       <BookChip

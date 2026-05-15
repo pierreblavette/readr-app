@@ -12,7 +12,7 @@ function formatDate(ts, lang) {
   } catch { return ''; }
 }
 
-export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onShared, onOpenBook, lang, t }) {
+export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onShared, onToggleSave, onOpenBook, lang, t }) {
   const panelRef = useModalA11y(!!quote, onClose);
 
   async function handleShare() {
@@ -71,12 +71,24 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onS
             </div>
 
             <div className="panel-actions">
-              <button className="panel-move-btn" onClick={() => onEdit(quote)}>
-                {t.quoteEdit}
-              </button>
-              <button className="panel-delete-btn" onClick={() => { onDelete(quote); onClose(); }}>
-                {t.btnDelete || 'Delete'}
-              </button>
+              <div className="panel-header-actions-group">
+                <button className="panel-move-btn" onClick={() => onEdit(quote)}>
+                  {t.quoteEdit}
+                </button>
+                {onToggleSave && (
+                  <button
+                    type="button"
+                    className={`btn btn-outline btn-md panel-header-like${quote.saved ? ' is-active' : ''}`}
+                    onClick={() => onToggleSave(quote.id, !quote.saved)}
+                    aria-label={quote.saved ? (t.quoteFavoriteOn || 'Loved') : (t.quoteFavoriteOff || 'Add to loved')}
+                    aria-pressed={!!quote.saved}>
+                    <svg viewBox="0 0 24 24" fill={quote.saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M20 21l-8-5-8 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>{quote.saved ? (t.quoteFavoriteOn || 'Loved') : (t.quoteFavoriteOff || 'Add to loved')}</span>
+                  </button>
+                )}
+              </div>
               <button className="btn btn-outline btn-md panel-header-share" onClick={handleShare} aria-label={t.btnShare} title={t.btnShare}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
@@ -100,6 +112,13 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onS
               </div>
             </>
           )}
+
+          <div className="panel-divider" />
+          <div className="panel-actions">
+            <button className="panel-delete-btn" onClick={() => { onDelete(quote); onClose(); }}>
+              {t.btnDelete || 'Delete'}
+            </button>
+          </div>
 
         </div>
       )}

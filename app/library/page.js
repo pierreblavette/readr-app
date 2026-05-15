@@ -218,7 +218,7 @@ export default function LibraryPage() {
         t={t}
       />
       <QuotePanel
-        quote={panelQuote}
+        quote={panelQuote ? quotes.find(q => q.id === panelQuote.id) || panelQuote : null}
         book={(() => {
           if (!panelQuote) return null;
           const all = [...data.owned, ...data.wishlist];
@@ -236,6 +236,7 @@ export default function LibraryPage() {
         onDelete={q => { setPanelQuote(null); setDeleteTarget({ type: 'quote', id: q.id, text: q.text }); }}
         onEdit={q => { setPanelQuote(null); setEditingQuote(q); setAddQuoteOpen(true); }}
         onShared={() => setToastMsg(t.shareCopied)}
+        onToggleSave={(id, value) => updateQuote(id, { saved: value })}
         onOpenBook={b => { setPanelQuote(null); setPanelBook(b); }}
         lang={lang}
         t={t}
@@ -299,6 +300,7 @@ export default function LibraryPage() {
               onEdit={q => { setEditingQuote(q); setAddQuoteOpen(true); }}
               onDelete={q => setDeleteTarget({ type: 'quote', id: q.id, text: q.text })}
               onShared={() => setToastMsg(t.shareCopied)}
+              onToggleSave={(id, value) => updateQuote(id, { saved: value })}
               onOpen={q => setPanelQuote(q)}
               onOpenBook={b => setPanelBook(b)}
               exportMD={exportQuotesMD}

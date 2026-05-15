@@ -62,7 +62,7 @@
   --teal-bg:               rgba(0,166,153,0.08);
   --ai-from:               #F67BF8;
   --ai-to:                 #4959E6;
-  --ghost-hover:           #F4F5FF;
+  --ghost-hover:           rgba(73,89,230,0.05);
   --transition:            background 0.25s, color 0.25s, border-color 0.25s;
   --shadow-md:             0 4px 16px rgba(73,89,230,0.12);
   --shadow-lg:             0 4px 20px rgba(73,89,230,0.18), 0 1px 6px rgba(73,89,230,0.10);
@@ -132,14 +132,14 @@
   --teal-bg:               rgba(0,201,190,0.1);
   --ai-from:               #F67BF8;
   --ai-to:                 #7B89F8;
-  --ghost-hover:           rgba(73,89,230,0.12);
+  --ghost-hover:           rgba(73,89,230,0.20);
   --shadow-lg:             0 6px 28px rgba(73,89,230,0.40);
   /* Solid dark equivalents of light tints — computed over card baseline #1E1E1E
      (the dominant baseline: cards, books-list, modals all sit on var(--card)).
      Solid (not rgba) so render is identical regardless of actual parent baseline. */
-  --primary-3:             #222432;  /* card hover (was rgba 0.10) */
-  --primary-5:             #232536;  /* button bg / input hover (was rgba 0.12) */
-  --primary-10:            #272B4A;  /* button hover stronger (was rgba 0.22) */
+  --primary-3:             #1F2128;  /* card hover (linear scale, was #222432) */
+  --primary-5:             #232536;  /* button bg / input hover */
+  --primary-10:            #2F3666;  /* button hover stronger (linear scale, was #272B4A) */
 
   /* Illustration tokens — dark swap: value scale inverted, stroke becomes light. */
   --illus-bg-1:     #232536;  /* darkest fill (was lightest in light) */
