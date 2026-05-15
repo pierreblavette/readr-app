@@ -72,28 +72,28 @@ function StarsLabel({ count }) {
 
 export default function MobileFiltersPanel({
   open, onClose,
-  sortCol, sortDir, setSort,
   filters, setFilter,
   isOwned,
+  availableAuthors = [],
   availableGenres,
   totalCount,
   bookCount,
   ratingCounts,
   readingCounts,
   genreCounts,
+  authorCounts = {},
   booksWithQuotesCount,
+  promotedFilters,
   t,
 }) {
   const panelRef = useModalA11y(open, onClose, { autoFocus: false });
+  const promoted = promotedFilters || new Set();
 
-  const currentSortKey =
-    sortCol === 'dateAdded'    && sortDir === 'desc' ? 'dateAdded' :
-    sortCol === 'dateFinished' && sortDir === 'desc' ? 'dateFinished' :
-    'alpha';
-  function handleSort(key) {
-    if (key === 'alpha')             setSort('title', 'asc');
-    else if (key === 'dateAdded')    setSort('dateAdded', 'desc');
-    else if (key === 'dateFinished') setSort('dateFinished', 'desc');
+  function toggleAuthor(author) {
+    const next = new Set(filters.authors || new Set());
+    if (next.has(author)) next.delete(author);
+    else next.add(author);
+    setFilter('authors', next);
   }
   function toggleGenre(genre) {
     const next = new Set(filters.genres);
@@ -103,11 +103,13 @@ export default function MobileFiltersPanel({
   }
   const hasActiveFilters =
     filters.hasQuotes ||
+    (filters.authors?.size > 0) ||
     filters.readingStatus !== 'any' ||
     filters.rating !== 'any' ||
     filters.genres.size > 0;
   function resetAllFilters() {
     setFilter('hasQuotes', false);
+    setFilter('authors', new Set());
     setFilter('readingStatus', 'any');
     setFilter('rating', 'any');
     setFilter('genres', new Set());
@@ -137,37 +139,47 @@ export default function MobileFiltersPanel({
               </div>
             )}
 
-            <FilterSection label={t.sortToggle || 'Sort'}>
-              <RadioRow checked={currentSortKey === 'alpha'}     onSelect={() => handleSort('alpha')}     label={t.sortAlpha     || 'A–Z'} />
-              <RadioRow checked={currentSortKey === 'dateAdded'} onSelect={() => handleSort('dateAdded')} label={t.sortDateAdded || 'Date added'} />
-              {isOwned && (
-                <RadioRow checked={currentSortKey === 'dateFinished'} onSelect={() => handleSort('dateFinished')} label={t.sortDateFinished || 'Date finished'} />
-              )}
-            </FilterSection>
-
             {isOwned && (
               <>
-                <FilterSection label={t.filterReadingStatus}>
-                  <RadioRow checked={filters.readingStatus === 'any'}        onSelect={() => setFilter('readingStatus', 'any')}        label={t.filterReadingAny}         count={readingCounts.any} />
-                  <RadioRow checked={filters.readingStatus === 'notStarted'} onSelect={() => setFilter('readingStatus', 'notStarted')} label={t.filterReadingNotStarted}  count={readingCounts.notStarted} />
-                  <RadioRow checked={filters.readingStatus === 'reading'}    onSelect={() => setFilter('readingStatus', 'reading')}    label={t.filterReadingCurrent}     count={readingCounts.reading} />
-                  <RadioRow checked={filters.readingStatus === 'finished'}   onSelect={() => setFilter('readingStatus', 'finished')}   label={t.filterReadingFinished}    count={readingCounts.finished} />
-                </FilterSection>
+                {!promoted.has('authors') && availableAuthors.length > 0 && (
+                  <FilterSection label={t.filterAuthors || 'Authors'}>
+                    {availableAuthors.map(author => (
+                      <CheckboxRow
+                        key={author}
+                        checked={(filters.authors || new Set()).has(author)}
+                        onToggle={() => toggleAuthor(author)}
+                        label={author}
+                        count={authorCounts[author]}
+                      />
+                    ))}
+                  </FilterSection>
+                )}
 
-                <FilterSection label={t.filterRating}>
-                  <RadioRow checked={filters.rating === 'any'} onSelect={() => setFilter('rating', 'any')} label={t.filterRatingAll || 'All'} count={totalCount} />
-                  {[5, 4, 3, 2, 1].map(n => (
-                    <RadioRow
-                      key={n}
-                      checked={filters.rating === String(n)}
-                      onSelect={() => setFilter('rating', String(n))}
-                      label={<StarsLabel count={n} />}
-                      count={ratingCounts[n]}
-                    />
-                  ))}
-                </FilterSection>
+                {!promoted.has('readingStatus') && (
+                  <FilterSection label={t.filterReadingStatus}>
+                    <RadioRow checked={filters.readingStatus === 'any'}        onSelect={() => setFilter('readingStatus', 'any')}        label={t.filterReadingAny}         count={readingCounts.any} />
+                    <RadioRow checked={filters.readingStatus === 'notStarted'} onSelect={() => setFilter('readingStatus', 'notStarted')} label={t.filterReadingNotStarted}  count={readingCounts.notStarted} />
+                    <RadioRow checked={filters.readingStatus === 'reading'}    onSelect={() => setFilter('readingStatus', 'reading')}    label={t.filterReadingCurrent}     count={readingCounts.reading} />
+                    <RadioRow checked={filters.readingStatus === 'finished'}   onSelect={() => setFilter('readingStatus', 'finished')}   label={t.filterReadingFinished}    count={readingCounts.finished} />
+                  </FilterSection>
+                )}
 
-                {availableGenres.length > 0 && (
+                {!promoted.has('rating') && (
+                  <FilterSection label={t.filterRating}>
+                    <RadioRow checked={filters.rating === 'any'} onSelect={() => setFilter('rating', 'any')} label={t.filterRatingAll || 'All'} count={totalCount} />
+                    {[5, 4, 3, 2, 1].map(n => (
+                      <RadioRow
+                        key={n}
+                        checked={filters.rating === String(n)}
+                        onSelect={() => setFilter('rating', String(n))}
+                        label={<StarsLabel count={n} />}
+                        count={ratingCounts[n]}
+                      />
+                    ))}
+                  </FilterSection>
+                )}
+
+                {!promoted.has('genres') && availableGenres.length > 0 && (
                   <FilterSection label={t.filterGenres}>
                     {availableGenres.map(genre => (
                       <CheckboxRow
@@ -181,14 +193,16 @@ export default function MobileFiltersPanel({
                   </FilterSection>
                 )}
 
-                <FilterSection label={t.tabQuotes}>
-                  <CheckboxRow
-                    checked={filters.hasQuotes}
-                    onToggle={() => setFilter('hasQuotes', !filters.hasQuotes)}
-                    label={t.filterWithQuotes}
-                    count={booksWithQuotesCount}
-                  />
-                </FilterSection>
+                {!promoted.has('hasQuotes') && (
+                  <FilterSection label={t.tabQuotes}>
+                    <CheckboxRow
+                      checked={filters.hasQuotes}
+                      onToggle={() => setFilter('hasQuotes', !filters.hasQuotes)}
+                      label={t.filterWithQuotes}
+                      count={booksWithQuotesCount}
+                    />
+                  </FilterSection>
+                )}
               </>
             )}
 

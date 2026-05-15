@@ -5,6 +5,7 @@ import SortMenu from "@/components/library/SortMenu";
 import GenresMenu from "@/components/library/GenresMenu";
 import AuthorsMenu from "@/components/library/AuthorsMenu";
 import MobileFiltersPanel from "@/components/library/MobileFiltersPanel";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 
 function RatingStars({ count }) {
   return (
@@ -96,15 +97,44 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
   const [quotesMenuOpen, setQuotesMenuOpen] = useState(false);
   const quotesMenuRef = useRef(null);
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
-  function activeFilterCount() {
+  // Progressive fold/unfold : filters are promoted inline by priority as the
+  // viewport widens. The trigger button stays visible (with a badge count of
+  // remaining filters) until every filter is inline (≥1281).
+  // Order : Authors → Reading → Rating → Genres → Quotes.
+  // Authors is always inline (≤400 collapses it to icon-only via CSS).
+  const hasReadingInline = useMediaQuery('(min-width: 601px)');
+  const hasRatingInline  = useMediaQuery('(min-width: 769px)');
+  const hasGenresInline  = useMediaQuery('(min-width: 1081px)');
+  const hasQuotesInline  = useMediaQuery('(min-width: 1281px)');
+  const promotedFilters = useMemo(() => {
+    const s = new Set(['authors']);
+    if (hasReadingInline) s.add('readingStatus');
+    if (hasRatingInline)  s.add('rating');
+    if (hasGenresInline)  s.add('genres');
+    if (hasQuotesInline)  s.add('hasQuotes');
+    return s;
+  }, [hasReadingInline, hasRatingInline, hasGenresInline, hasQuotesInline]);
+  // Trigger badge counts only filters still in the panel (i.e. not promoted
+  // inline). Reset btn uses the total — promoted filters still need clearing.
+  function triggerFilterCount() {
     if (!filters) return 0;
     let n = 0;
-    if (filters.hasQuotes) n++;
-    if (filters.readingStatus && filters.readingStatus !== 'any') n++;
-    if (filters.rating && filters.rating !== 'any') n++;
-    if (filters.genres?.size > 0) n++;
-    if (filters.authors?.size > 0) n++;
+    if (filters.hasQuotes && !promotedFilters.has('hasQuotes')) n++;
+    if (filters.readingStatus && filters.readingStatus !== 'any' && !promotedFilters.has('readingStatus')) n++;
+    if (filters.rating && filters.rating !== 'any' && !promotedFilters.has('rating')) n++;
+    if (filters.genres?.size > 0 && !promotedFilters.has('genres')) n++;
+    if (filters.authors?.size > 0 && !promotedFilters.has('authors')) n++;
     return n;
+  }
+  function hasAnyActiveFilter() {
+    if (!filters) return false;
+    return Boolean(
+      filters.hasQuotes ||
+      (filters.readingStatus && filters.readingStatus !== 'any') ||
+      (filters.rating && filters.rating !== 'any') ||
+      filters.genres?.size > 0 ||
+      filters.authors?.size > 0
+    );
   }
   useEffect(() => {
     if (!quotesMenuOpen) return;
@@ -199,21 +229,8 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
 
     {isBookTab && data[tab].length > 0 && (
       <div className="cell-row cell-row--lg filters-row">
-        {isOwned && (
-          <button
-            type="button"
-            className={`dropdown-btn filters-mobile-trigger${activeFilterCount() > 0 ? ' is-active' : ''}`}
-            onClick={() => setMobilePanelOpen(true)}
-            aria-label={t.filterToggle || 'Filter'}>
-            <svg className="dropdown-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <line x1="3"  y1="6"  x2="21" y2="6"/>
-              <line x1="6"  y1="12" x2="18" y2="12"/>
-              <line x1="9"  y1="18" x2="15" y2="18"/>
-            </svg>
-            <span className="dropdown-btn-label">{t.filterToggle || 'Filter'}</span>
-            {activeFilterCount() > 0 && <span className="filter-badge">{activeFilterCount()}</span>}
-          </button>
-        )}
+        {/* Visual order : Sort → [promoted filters in priority order] → Trigger → Reset.
+            CSS controls which filters are inline vs in the panel per breakpoint. */}
         <SortMenu
           className="filters-sort"
           current={currentSortKey}
@@ -237,6 +254,7 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
               t={t}
             />
             <SortMenu
+              className="filters-reading"
               current={filters.readingStatus}
               onChange={key => setFilter('readingStatus', key)}
               ariaLabel={t.filterReadingStatus}
@@ -249,6 +267,7 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
               ]}
             />
             <SortMenu
+              className="filters-rating"
               current={filters.rating}
               onChange={key => setFilter('rating', key)}
               ariaLabel={t.filterRating}
@@ -290,7 +309,7 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
                 </svg>
               </button>
               {quotesMenuOpen && (
-                <div className="dropdown-menu" role="dialog">
+                <div className="dropdown-menu filter-dropdown" role="dialog">
                   <div
                     className="filter-row"
                     role="checkbox"
@@ -308,21 +327,36 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
                 </div>
               )}
             </div>
-            {activeFilterCount() > 0 && (
-              <button
-                type="button"
-                className="btn btn-md btn-secondary filters-reset-btn"
-                onClick={() => {
-                  setFilter('hasQuotes', false);
-                  setFilter('readingStatus', 'any');
-                  setFilter('rating', 'any');
-                  setFilter('genres', new Set());
-                  setFilter('authors', new Set());
-                }}>
-                {t.filterClear || 'Clear filters'}
-              </button>
-            )}
           </>
+        )}
+        {isOwned && (
+          <button
+            type="button"
+            className={`dropdown-btn filters-mobile-trigger${triggerFilterCount() > 0 ? ' is-active' : ''}`}
+            onClick={() => setMobilePanelOpen(true)}
+            aria-label={t.filterToggle || 'Filter'}>
+            <svg className="dropdown-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="3"  y1="6"  x2="21" y2="6"/>
+              <line x1="6"  y1="12" x2="18" y2="12"/>
+              <line x1="9"  y1="18" x2="15" y2="18"/>
+            </svg>
+            <span className="dropdown-btn-label">{t.filterToggle || 'Filter'}</span>
+            {triggerFilterCount() > 0 && <span className="filter-badge">{triggerFilterCount()}</span>}
+          </button>
+        )}
+        {isOwned && filters && hasAnyActiveFilter() && (
+          <button
+            type="button"
+            className="btn btn-md btn-secondary filters-reset-btn"
+            onClick={() => {
+              setFilter('hasQuotes', false);
+              setFilter('readingStatus', 'any');
+              setFilter('rating', 'any');
+              setFilter('genres', new Set());
+              setFilter('authors', new Set());
+            }}>
+            {t.filterClear || 'Clear filters'}
+          </button>
         )}
       </div>
     )}
@@ -331,16 +365,18 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
       <MobileFiltersPanel
         open={mobilePanelOpen}
         onClose={() => setMobilePanelOpen(false)}
-        sortCol={sortCol} sortDir={sortDir} setSort={setSort}
         filters={filters} setFilter={setFilter}
         isOwned={isOwned}
+        availableAuthors={availableAuthors}
         availableGenres={availableGenres}
         totalCount={(data.owned || []).length}
         bookCount={bookCount}
         ratingCounts={ratingCounts}
         readingCounts={readingCounts}
         genreCounts={genreCounts}
+        authorCounts={authorCounts}
         booksWithQuotesCount={booksWithQuotesCount}
+        promotedFilters={promotedFilters}
         t={t}
       />
     )}

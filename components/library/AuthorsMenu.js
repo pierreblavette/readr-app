@@ -45,7 +45,7 @@ export default function AuthorsMenu({ selected, onToggle, onReset, availableAuth
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}>
-        {label}
+        <span className="sort-menu-btn-label">{label}</span>
         {count > 0 && <span className="filter-badge">{count}</span>}
         <svg
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -105,7 +105,7 @@ export default function AuthorsMenu({ selected, onToggle, onReset, availableAuth
             <div className="authors-footer">
               <button
                 type="button"
-                className="btn btn-sm btn-secondary"
+                className="btn btn-md btn-secondary"
                 onClick={onReset}>
                 {t.filterAuthorsReset || 'Reset'}
               </button>

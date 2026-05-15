@@ -36,7 +36,7 @@ export default function GenresMenu({ selected, onToggle, availableGenres, counts
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}>
-        {label}
+        <span className="sort-menu-btn-label">{label}</span>
         {count > 0 && <span className="filter-badge">{count}</span>}
         <svg
           viewBox="0 0 24 24" fill="none" stroke="currentColor"

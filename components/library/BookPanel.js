@@ -124,14 +124,14 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                     </button>
                   )}
                   {tab === 'owned' && book.startedAt && !book.finishedAt && (
-                    <>
+                    <div className="panel-header-actions-group">
                       <button className="panel-move-btn" onClick={() => onFinishReading?.(book)}>
                         {t.btnFinishReading}
                       </button>
                       <button className="btn btn-secondary btn-md" onClick={() => onCancelReading?.(book)}>
                         {t.btnCancelReading}
                       </button>
-                    </>
+                    </div>
                   )}
                   {tab === 'wishlist' && (
                     <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
@@ -144,6 +144,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       <polyline points="16 6 12 2 8 6"/>
                       <line x1="12" y1="2" x2="12" y2="15"/>
                     </svg>
+                    <span>{t.btnShare}</span>
                   </button>
                 </div>
               </div>

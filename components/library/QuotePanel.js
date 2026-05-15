@@ -83,6 +83,7 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onS
                   <polyline points="16 6 12 2 8 6"/>
                   <line x1="12" y1="2" x2="12" y2="15"/>
                 </svg>
+                <span>{t.btnShare}</span>
               </button>
             </div>
           </div>

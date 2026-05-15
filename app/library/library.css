@@ -67,10 +67,8 @@
   position: sticky;
   top: 0;
   z-index: 400;
-  background: var(--nav);
+  background: var(--bg);
   border-bottom: 1px solid var(--border-subtle);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   transition: var(--transition);
 }
 
@@ -245,8 +243,7 @@
 
 .search-bar-wrap { display: flex; flex-direction: column; gap: 28px; }
 
-.filters-row { gap: 8px; }
-.filters-row .filters-reset-btn { margin-left: auto; }
+.filters-row { gap: 8px; flex-wrap: wrap; row-gap: 12px; }
 .filters-row .sort-menu .dropdown-menu,
 .filters-row .filter-menu .dropdown-menu { left: 0; right: auto; }
 /* Last filter trigger sits near the right edge — flip anchor to open
@@ -262,16 +259,38 @@
    icon + label + chevron rendering. */
 .export-menu .dropdown-menu { width: 140px; }
 
-/* Mobile : only the trigger button + Sort (reorder) stay in filters-row,
-   the rest of the dropdowns (filters proper) are hidden. Tapping the trigger
-   opens MobileFiltersPanel (book-panel slide-in style). .dropdown-btn (defined
-   later in the file) sets display: flex by default — the compound selector
-   here wins specificity to keep the trigger hidden on desktop. */
+/* Progressive fold/unfold of .filters-row :
+   - JSX order is Sort → Authors → Reading → Rating → Genres → Quotes → Trigger → Reset.
+   - At each breakpoint widening, the next filter in priority order is unhidden
+     inline. Filters not yet inline stay accessible via MobileFiltersPanel
+     (opened by the trigger).
+   - The trigger is shown whenever at least one filter is in the panel (≤1280)
+     and hidden when everything is inline (≥1281).
+   - SearchBar uses useMediaQuery to mirror these breakpoints and pass
+     promotedFilters to the panel so it skips already-inline sections. */
 .dropdown-btn.filters-mobile-trigger { display: none; }
+@media (max-width: 1280px) {
+  .dropdown-btn.filters-mobile-trigger { display: inline-flex; }
+  .filters-row > .quotes-toggle { display: none; }
+}
+@media (max-width: 1080px) {
+  .filters-row > .genres-menu { display: none; }
+}
 @media (max-width: 768px) {
-  .filters-row > *:not(.filters-mobile-trigger):not(.filters-sort) { display: none; }
-  .dropdown-btn.filters-mobile-trigger { display: inline-flex; order: 1; }
-  .filters-row .filters-sort { order: 0; }
+  .filters-row > .filters-rating { display: none; }
+}
+/* ≤600 : Trigger collapses to icon (+badge) — label hidden, width auto so
+   the inline badge sits next to the icon like in the icon+text version.
+   Sort/Authors keep their labels across the whole range. */
+@media (max-width: 600px) {
+  .filters-row > .filters-reading { display: none; }
+  .filters-row .filters-mobile-trigger {
+    padding: 0 12px;
+    justify-content: center;
+  }
+  .filters-row .filters-mobile-trigger .dropdown-btn-label {
+    display: none;
+  }
 }
 
 /* Filters panel : reuses .book-panel slide-in primitive.
@@ -319,7 +338,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 32px 24px;
+  padding: 16px;
   /* Negative side margins cancel .panel-inner side padding so the bg fills
      edge-to-edge ; vertical rhythm is owned by .filters-panel-wrap. */
   margin: 0 -32px;
@@ -1661,9 +1680,7 @@
   bottom: 0;
   width: 540px;
   height: 100vh;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: var(--bg);
   border-left: 1px solid var(--border-subtle);
   border-radius: 0;
   box-shadow: none;
@@ -1777,20 +1794,22 @@
   display: flex;
   align-items: center;
   align-self: stretch;
+  justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
 }
-/* Asymmetric padding for icon-left button (mirrors .panel-quotes-add, .btn-ai)
-   + push to the right edge of .panel-header-actions when siblings exist. */
-.panel-header-share {
-  padding: 0;
-  width: 40px;
-  justify-content: center;
-  margin-left: auto;
+/* Groups primary actions (e.g. Mark as finished + Cancel reading) as a single
+   unit inside .panel-header-actions, so Share stays aligned right via its
+   margin-left: auto regardless of how many siblings are in the group. */
+.panel-header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-/* Finished books: Share is the only button in the row — align to the left
-   instead of floating alone on the right. */
-.panel-header-share:only-child { margin-left: 0; }
+/* Share flows naturally as a flex sibling — no auto-margin push.
+   On wrap, lands on row 2 at flex-start (left-aligned under move-btn/group).
+   Asymmetric icon-left padding is inherited from .btn-md :has() rule. */
 .panel-byline {
   display: flex;
   flex-direction: column;
@@ -3466,6 +3485,12 @@
   .col-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
   .now-reading-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 
+  /* Mobile toolbar (.toolbar-mobile-only, 60px high, z 400) is shown in
+     this range — push the panel below it so the close button (top: 16
+     inside panel = 16 + 64 = 80 from viewport) stays visible. The ≤600
+     block below further overrides for full-width mobile. */
+  .book-panel { top: 64px; height: calc(100dvh - 64px); }
+
   /* Table list: hide secondary columns below 768px so Title gets
    * the full width. Tap on a row opens BookPanel/detail which shows all fields. */
   .list-table .list-cell-meta,
@@ -3561,20 +3586,26 @@
      Button takes the full row width (iso .scan-lookup-btn). */
   .scan-error-state { flex-direction: column; align-items: stretch; text-align: center; }
   .scan-error-state .btn { width: 100%; justify-content: center; }
-  /* Mobile: panel-header Share collapses to icon-only (40×40)
-     and aligns left after wrap (no auto-margin push) — avoids the
-     "lonely button on row 2" rendering when FR labels make the first
-     row wrap. */
-  .panel-header-share { margin-left: 0; }
+  /* Mobile: Share collapses to icon-only (40×40) — text label hidden.
+     The :has() override cancels the DS asymmetric padding-left:12 (which
+     still fires because the span exists in DOM even when display:none),
+     so the SVG centers properly inside the 40×40 box. */
+  .panel-header-share { padding: 0; width: 40px; justify-content: center; }
+  .panel-header-share:has(svg:first-child:not(:last-child)) { padding-left: 0; }
+  .panel-header-share span { display: none; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
   /* Filters panel footer follows .panel-inner padding (32 → 16 on mobile) :
      match the negative side margin so the bg still fills edge-to-edge. */
   .filters-panel-footer {
     margin: 0 -16px;
-    padding: 16px 16px 24px;
+    padding: 16px;
   }
-  .books-grid { grid-template-columns: 1fr; gap: 12px; }
+  /* 2 cols pour books-grid / col-grid (inherit du ≤768) ; just override gap.
+     now-reading-list passe en single col (cards larges + cover lisible
+     sur viewport étroit). */
+  .books-grid,
+  .col-grid { gap: 12px; }
   .now-reading-list { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .books-list { overflow-x: hidden; }
   .selection-bar {
@@ -3609,12 +3640,6 @@
        bottom of scroll). */
     height: calc(100dvh - 64px);
     -webkit-overflow-scrolling: touch;
-    /* iOS Safari/Chromium-WebKit: backdrop-filter: blur over the scrollable
-       library is GPU-heavy and causes multi-second freezes on open. Drop the
-       blur on mobile and use a solid bg instead. */
-    background: var(--bg);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     /* Touch handling fixes for iOS Safari : prevent scroll-chain to body
        (overscroll-behavior) and remove the 300ms tap delay (touch-action). */
     overscroll-behavior: contain;
@@ -3622,7 +3647,6 @@
     /* Shorter transition on mobile to reduce window where touches are lost during slide-in animation. */
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  [data-theme="dark"] .book-panel { background: var(--bg); }
   .library-footer-inner { padding: 0 16px; flex-direction: column; align-items: stretch; gap: clamp(16px, 4vw, 24px); }
   .library-footer-inner > span { width: 100%; justify-content: space-between; flex-wrap: wrap; }
   /* Only hide separators that sit directly between groups (children of row spans), not those inside .footer-group */
@@ -3641,15 +3665,14 @@
 }
 
 /* Very small screens (iPhone SE etc.) — grid layout for panel-header-actions
-   so Share aligns under .panel-move-btn instead of sticking to the right. */
+   with space-between : group/move-btn at flex-start, Share at flex-end. */
 @media (max-width: 400px) {
   .panel-header-actions {
     display: grid;
     grid-template-columns: max-content max-content;
     gap: 12px;
-    justify-content: start;
+    justify-content: space-between;
   }
-  .panel-header-share { margin-left: 0; }
   .range-dropdown-wrap .sort-menu-btn-label { display: none; }
   .range-dropdown-wrap .dropdown-btn { padding: 0 12px; }
 }
