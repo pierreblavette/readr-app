@@ -101,19 +101,20 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
   // viewport widens. The trigger button stays visible (with a badge count of
   // remaining filters) until every filter is inline (≥1281).
   // Order : Authors → Reading → Rating → Genres → Quotes.
-  // Authors is always inline (≤400 collapses it to icon-only via CSS).
+  const hasAuthorsInline = useMediaQuery('(min-width: 481px)');
   const hasReadingInline = useMediaQuery('(min-width: 601px)');
   const hasRatingInline  = useMediaQuery('(min-width: 769px)');
   const hasGenresInline  = useMediaQuery('(min-width: 1081px)');
   const hasQuotesInline  = useMediaQuery('(min-width: 1281px)');
   const promotedFilters = useMemo(() => {
-    const s = new Set(['authors']);
+    const s = new Set();
+    if (hasAuthorsInline) s.add('authors');
     if (hasReadingInline) s.add('readingStatus');
     if (hasRatingInline)  s.add('rating');
     if (hasGenresInline)  s.add('genres');
     if (hasQuotesInline)  s.add('hasQuotes');
     return s;
-  }, [hasReadingInline, hasRatingInline, hasGenresInline, hasQuotesInline]);
+  }, [hasAuthorsInline, hasReadingInline, hasRatingInline, hasGenresInline, hasQuotesInline]);
   // Trigger badge counts only filters still in the panel (i.e. not promoted
   // inline). Reset btn uses the total — promoted filters still need clearing.
   function triggerFilterCount() {
@@ -186,7 +187,8 @@ export default function SearchBar({ search, setSearch, t, editMode, setEditMode,
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
-          {t.btnAdd}
+          <span className="add-btn-label-full">{t.btnAdd}</span>
+          <span className="add-btn-label-short">{t.btnAddShort}</span>
         </button>
 
         <div className="counter-secondary-actions">

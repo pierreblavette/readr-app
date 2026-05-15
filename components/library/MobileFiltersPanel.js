@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useModalA11y } from "@/lib/useModalA11y";
 
 function FilterSection({ label, children }) {
@@ -88,6 +89,15 @@ export default function MobileFiltersPanel({
 }) {
   const panelRef = useModalA11y(open, onClose, { autoFocus: false });
   const promoted = promotedFilters || new Set();
+  const [authorSearch, setAuthorSearch] = useState('');
+
+  // Reset author search when panel closes so reopening starts fresh.
+  useEffect(() => { if (!open) setAuthorSearch(''); }, [open]);
+
+  const authorQuery = authorSearch.trim().toLowerCase();
+  const filteredAuthors = authorQuery
+    ? availableAuthors.filter(a => a.toLowerCase().includes(authorQuery))
+    : availableAuthors;
 
   function toggleAuthor(author) {
     const next = new Set(filters.authors || new Set());
@@ -143,7 +153,23 @@ export default function MobileFiltersPanel({
               <>
                 {!promoted.has('authors') && availableAuthors.length > 0 && (
                   <FilterSection label={t.filterAuthors || 'Authors'}>
-                    {availableAuthors.map(author => (
+                    <div className="authors-search">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      </svg>
+                      <input
+                        type="text"
+                        className="authors-search-input"
+                        placeholder={t.placeholderAuthor || 'e.g. F. Scott Fitzgerald'}
+                        value={authorSearch}
+                        onChange={e => setAuthorSearch(e.target.value)}
+                        autoComplete="off"
+                        spellCheck="false"
+                      />
+                    </div>
+                    {filteredAuthors.length === 0 ? (
+                      <div className="authors-empty">{t.emptyNoMatch || 'No matches'}</div>
+                    ) : filteredAuthors.map(author => (
                       <CheckboxRow
                         key={author}
                         checked={(filters.authors || new Set()).has(author)}

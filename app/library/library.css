@@ -319,12 +319,14 @@
 @media (max-width: 600px) {
   .filters-row > .filters-reading { display: none; }
 }
-/* ≤480 (standard mobile portrait) : trigger collapses to icon-only — label
-   hidden, aligned with the edit-btn icon-only breakpoint.
+/* ≤480 (standard mobile portrait) : Authors goes to the filter panel +
+   trigger collapses to icon-only — label hidden, aligned with the edit-btn
+   icon-only breakpoint.
    - Default (no active filter) : square 40x40 with icon centered.
    - .is-active (badge present) : width auto so the inline badge sits next
      to the icon (cas spécifique avec counter inline). */
 @media (max-width: 480px) {
+  .filters-row > .authors-menu { display: none; }
   .filters-row .filters-mobile-trigger {
     width: 40px;
     padding: 0;
@@ -428,12 +430,15 @@
 }
 
 /* Authors menu — search input pinned top, scrollable list, Reset footer
-   pinned bottom. Outer overflow hidden so only the list scrolls. */
+   pinned bottom. Outer overflow hidden so only the list scrolls.
+   max-width clamp to viewport (minus 32px margins) so the menu never
+   extends beyond the screen on narrow viewports. */
 .dropdown-menu.authors-dropdown {
   display: flex;
   flex-direction: column;
   padding: 0;
   width: 300px;
+  max-width: calc(100vw - 32px);
   max-height: 60vh;
   overflow: hidden;
 }
@@ -442,7 +447,6 @@
   display: flex;
   align-items: center;
   padding: 8px;
-  border-bottom: 1px solid var(--border-subtle);
   flex-shrink: 0;
 }
 .authors-search svg {
@@ -3745,6 +3749,14 @@
 @media (max-width: 480px) {
   .edit-btn { width: 40px; padding: 0; justify-content: center; }
   .edit-btn-label { display: none; }
+}
+
+/* add-btn (Library SearchBar) switches to a shorter label ("Add" / "Ajout")
+   at ≤400 to fit narrow viewports without losing the action text. */
+.add-btn-label-short { display: none; }
+@media (max-width: 400px) {
+  .add-btn-label-full { display: none; }
+  .add-btn-label-short { display: inline-flex; }
 }
 
 /* ─── ONBOARDING ─── */
