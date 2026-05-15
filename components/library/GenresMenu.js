@@ -39,9 +39,10 @@ export default function GenresMenu({ selected, onToggle, availableGenres, counts
         <span className="sort-menu-btn-label">{label}</span>
         {count > 0 && <span className="filter-badge">{count}</span>}
         <svg
+          className="dropdown-btn-chevron"
           viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          style={{ width: 14, height: 14, transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}
+          style={{ transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
           aria-hidden="true">
           <path d="M6 9l6 6 6-6"/>
         </svg>

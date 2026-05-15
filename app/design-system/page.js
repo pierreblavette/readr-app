@@ -1177,11 +1177,11 @@ export default function DesignSystemPage() {
               <div className="ds-card-head">Anatomy</div>
               <div className="ds-card-body col">
                 {[
-                  ["XS", "24", "8", "6", "11", "4", "24×24 · svg 12"],
-                  ["SM", "32", "16", "7", "12", "6", "32×32 · svg 14"],
-                  ["MD ★", "40", "20", "8", "14", "8", "40×40 · svg 18"],
-                  ["LG", "48", "24", "8", "14", "8", "48×48 · svg 20"],
-                  ["XL", "56", "28", "8", "15", "10", "—"],
+                  ["XS", "24", "12", "6",  "11", "4",  "24×24 · svg 12"],
+                  ["SM", "32", "16", "7",  "12", "6",  "32×32 · svg 12"],
+                  ["MD ★", "40", "20", "8",  "15", "8",  "40×40 · svg 16"],
+                  ["LG", "48", "24", "10", "18", "10", "48×48 · svg 18"],
+                  ["XL", "56", "28", "12", "20", "12", "56×56 · svg 20"],
                 ].map(([sz, h, p, r, f, g, io]) => (
                   <div key={sz} className="ds-token-block">
                     <div className="ds-token-name">{sz} · {h}px</div>
@@ -1250,7 +1250,7 @@ export default function DesignSystemPage() {
                 </button>
                 <button className="btn btn-outline btn-md">
                   <span>Icon right</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </button>
               </div>
               <div className="ds-card-body col">
@@ -1259,15 +1259,19 @@ export default function DesignSystemPage() {
                   <p>Symmetrical baseline.</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">Icon left + text · 0 20 0 12 (md) / 0 16 0 12 (sm)</div>
-                  <p>Icon eats visual space — drop padding-left to balance.</p>
+                  <div className="ds-token-name">Icon left + text · 0 20 0 16 (md) / 0 16 0 12 (sm)</div>
+                  <p>Icon eats visual space — drop padding-left by 4 to balance. Ratio constant across sizes (xs/sm/md/lg/xl all base - 4).</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">Text + icon right · 0 12 0 20 (md) / 0 12 0 16 (sm)</div>
+                  <div className="ds-token-name">Text + icon right · 0 16 0 20 (md) / 0 12 0 16 (sm)</div>
                   <p>Same logic, mirrored.</p>
                 </div>
                 <div className="ds-token-block">
-                  <p>Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> — no extra class needed. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding via <code>.btn-icon</code> / <code>.btn-solid</code>).</p>
+                  <div className="ds-token-name">Text + chevron right · 0 12 0 20 (md)</div>
+                  <p>Special case for <code>.dropdown-btn</code> when the trailing SVG carries class <code>.dropdown-btn-chevron</code> — the chevron is a smaller, less-prominent indicator than a full icon, so the right gutter shrinks further (12 iso 16).</p>
+                </div>
+                <div className="ds-token-block">
+                  <p>Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> and <code>.dropdown-btn</code> — no extra class needed unless the chevron exception applies. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding).</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Convention</div>
@@ -1304,7 +1308,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Padding</div>
-                  <p><code>0 20px 0 12px</code> (asymmetric — mirrors <code>.panel-quotes-add</code> ; 12px left for the leading sparkle icon).</p>
+                  <p><code>0 20px 0 16px</code> (asymmetric icon-left — mirrors <code>.panel-quotes-add</code> ; 16px left for the leading sparkle icon, scale-proportional base - 4 at md scale).</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Icon · sizes · usage</div>

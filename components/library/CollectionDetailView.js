@@ -281,7 +281,12 @@ export default function CollectionDetailView({
 
           <div className="counter-secondary-actions">
             {editMode ? (
-              <button onClick={exitEditMode} className="edit-btn">{t.btnDone}</button>
+              <button onClick={exitEditMode} className="edit-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span className="edit-btn-label">{t.btnDone}</span>
+              </button>
             ) : (
               <div className="dropdown-wrap col-edit-dropdown" ref={editMenuRef}>
               <button

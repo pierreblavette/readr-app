@@ -15,19 +15,42 @@
 .btn-primary:active:not(:disabled) { background: var(--primary-70); }
 .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border-subtle); }
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-.btn-xs svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
+/* Button size scale — step 8 linear progression (height, padding, gap) with
+   proportional SVG sizing. Font sizes anchored to the canonical Readr typo
+   scale (10/11/12/13/14/15/16/18/20/28 — see project_typography_scale.md).
+   Asymmetric padding (icon-side -4) applied automatically via :has() when an
+   SVG sits at first or last position. */
+.btn-xs { height: 24px; padding: 0 12px; border-radius: 6px; font-size: 11px; gap: 4px; }
 .btn-sm { height: 32px; padding: 0 16px; border-radius: 7px; font-size: 12px; gap: 6px; }
-.btn-sm svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
 .btn-md { height: 40px; padding: 0 20px; border-radius: 8px; font-size: 15px; gap: 8px; }
+.btn-lg { height: 48px; padding: 0 24px; border-radius: 10px; font-size: 18px; gap: 10px; }
+.btn-xl { height: 56px; padding: 0 28px; border-radius: 12px; font-size: 20px; gap: 12px; }
+.btn-xs svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
+.btn-sm svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
 .btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
 .btn-lg svg { width: 18px; height: 18px; padding: 2px; box-sizing: content-box; }
 .btn-xl svg { width: 20px; height: 20px; padding: 2px; box-sizing: content-box; }
-/* Asymmetric padding when an icon sits beside text — reduce padding
- * on the icon side so the visual weight matches the text side. */
+/* Asymmetric padding when an icon (or chevron) sits adjacent to an edge —
+   shrinks that side from the base padding by 4 so the SVG sits closer to
+   the edge. Scale-proportional : base - 4 across all sizes.
+   Chevron exception : when the trailing SVG carries .dropdown-btn-chevron,
+   the gutter shrinks further (base - 8) since the chevron is a smaller,
+   less-prominent indicator than a full icon. */
+.btn-xs:has(svg:first-child:not(:last-child)) { padding-left: 8px; }
+.btn-xs:has(svg:last-child:not(:first-child)) { padding-right: 8px; }
+.btn-xs:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 4px; }
 .btn-sm:has(svg:first-child:not(:last-child)) { padding-left: 12px; }
 .btn-sm:has(svg:last-child:not(:first-child)) { padding-right: 12px; }
-.btn-md:has(svg:first-child:not(:last-child)) { padding-left: 12px; }
-.btn-md:has(svg:last-child:not(:first-child)) { padding-right: 12px; }
+.btn-sm:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 8px; }
+.btn-md:has(svg:first-child:not(:last-child)) { padding-left: 16px; }
+.btn-md:has(svg:last-child:not(:first-child)) { padding-right: 16px; }
+.btn-md:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 12px; }
+.btn-lg:has(svg:first-child:not(:last-child)) { padding-left: 20px; }
+.btn-lg:has(svg:last-child:not(:first-child)) { padding-right: 20px; }
+.btn-lg:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 16px; }
+.btn-xl:has(svg:first-child:not(:last-child)) { padding-left: 24px; }
+.btn-xl:has(svg:last-child:not(:first-child)) { padding-right: 24px; }
+.btn-xl:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 20px; }
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
 .btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
@@ -268,6 +291,20 @@
      and hidden when everything is inline (≥1281).
    - SearchBar uses useMediaQuery to mirror these breakpoints and pass
      promotedFilters to the panel so it skips already-inline sections. */
+/* Asymmetric padding when an icon or chevron sits adjacent to an edge —
+   shrinks that side from the base 20 down. Independent left/right rules
+   (mirrors .btn-md DS pattern). Scoped to >1080 since at ≤1080 most
+   dropdown-btn collapse to icon-only (40x40 with padding: 0), and the
+   asymmetric padding would otherwise off-center the icon. */
+@media (min-width: 1081px) {
+  /* Icon-left : padding-left 16 (iso button). */
+  .dropdown-btn:has(.dropdown-btn-icon:first-child:not(:last-child)) { padding-left: 16px; }
+  /* Icon-right (non-chevron) : padding-right 16 (iso button). */
+  .dropdown-btn:has(.dropdown-btn-icon:last-child:not(:first-child)) { padding-right: 16px; }
+  /* Chevron-right : padding-right 12 (chevron est un indicateur plus discret
+     qu'un icon principal, gutter plus serre). */
+  .dropdown-btn:has(.dropdown-btn-chevron:last-child:not(:first-child)) { padding-right: 12px; }
+}
 .dropdown-btn.filters-mobile-trigger { display: none; }
 @media (max-width: 1280px) {
   .dropdown-btn.filters-mobile-trigger { display: inline-flex; }
@@ -279,17 +316,26 @@
 @media (max-width: 768px) {
   .filters-row > .filters-rating { display: none; }
 }
-/* ≤600 : Trigger collapses to icon (+badge) — label hidden, width auto so
-   the inline badge sits next to the icon like in the icon+text version.
-   Sort/Authors keep their labels across the whole range. */
 @media (max-width: 600px) {
   .filters-row > .filters-reading { display: none; }
+}
+/* ≤480 (standard mobile portrait) : trigger collapses to icon-only — label
+   hidden, aligned with the edit-btn icon-only breakpoint.
+   - Default (no active filter) : square 40x40 with icon centered.
+   - .is-active (badge present) : width auto so the inline badge sits next
+     to the icon (cas spécifique avec counter inline). */
+@media (max-width: 480px) {
   .filters-row .filters-mobile-trigger {
-    padding: 0 12px;
+    width: 40px;
+    padding: 0;
     justify-content: center;
   }
   .filters-row .filters-mobile-trigger .dropdown-btn-label {
     display: none;
+  }
+  .filters-row .filters-mobile-trigger.is-active {
+    width: auto;
+    padding: 0 12px;
   }
 }
 
@@ -300,15 +346,20 @@
   align-items: stretch;
   padding-bottom: 0;
   /* gap: 0 so the wrap below controls all internal rhythm — avoids
-     double-counting the 40px parent gap before the footer. */
+     double-counting the 40px parent gap before the footer.
+     min-height: 100% so the wrap can flex-1 and push the footer to the
+     panel bottom regardless of how short the filter content is. */
   gap: 0;
+  min-height: 100%;
 }
 /* Wrapper around header + sections + footer. Owns the 40px gap rhythm
    so the parent .panel-inner can keep gap: 0 in filters-panel context
-   (avoids double-counting before the footer). */
+   (avoids double-counting before the footer). flex: 1 fills the panel-inner
+   height so the footer's margin-top: auto can pin it to the bottom. */
 .filters-panel-wrap {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 40px;
 }
 .filters-panel-section { display: flex; flex-direction: column; gap: 8px; }
@@ -340,16 +391,18 @@
   gap: 12px;
   padding: 16px;
   /* Negative side margins cancel .panel-inner side padding so the bg fills
-     edge-to-edge ; vertical rhythm is owned by .filters-panel-wrap. */
-  margin: 0 -32px;
+     edge-to-edge ; vertical rhythm is owned by .filters-panel-wrap.
+     margin-top: auto pushes the footer to the bottom of .filters-panel-wrap
+     when content is shorter than the panel (sticky alone doesn't push). */
+  margin: auto -32px 0;
   background: var(--bg);
   border-top: 1px solid var(--border-subtle);
 }
 .filters-panel-footer .btn { flex: 0 0 auto; }
 /* Asymmetric padding-right when a count pill sits at the right edge —
-   mirrors the .btn-md icon+text rule (12 iso 20) so the pill doesn't
+   mirrors the .btn-md icon+text rule (16 iso 20) so the pill doesn't
    float in a 20px gutter. */
-.filters-panel-confirm { padding-right: 12px; gap: 12px; }
+.filters-panel-confirm { padding-right: 16px; gap: 12px; }
 .filters-confirm-count {
   display: inline-flex;
   align-items: center;
@@ -639,7 +692,7 @@
 /* ─── BUTTONS ─── */
 .add-btn {
   height: 40px;
-  padding: 0 20px 0 12px;
+  padding: 0 20px 0 16px;
   border-radius: 8px;
   border: none;
   background: var(--accent);
@@ -670,7 +723,9 @@
 
 .edit-btn {
   height: 40px;
-  padding: 0 20px;
+  /* Asymmetric icon-left padding (mirrors .add-btn) — Edit always has a
+     pencil or check SVG as first child. */
+  padding: 0 20px 0 16px;
   border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF;
@@ -694,7 +749,12 @@
 
 .dropdown-btn {
   height: 40px;
-  padding: 0 12px 0 20px;
+  /* Symmetric base — :has() rules above shrink left side when icon-first
+     and/or right side when chevron-last (mirrors .btn-md DS pattern).
+     box-sizing: border-box so the explicit 40px width (icon-only mode at
+     ≤1080) renders as a true 40x40 square including the 1.5px border. */
+  box-sizing: border-box;
+  padding: 0 20px;
   border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF;
@@ -712,8 +772,8 @@
 
 .dropdown-btn:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 .dropdown-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.dropdown-btn-icon { width: 16px; height: 16px; flex-shrink: 0; }
-.dropdown-btn-chevron { width: 14px; height: 14px; flex-shrink: 0; }
+.dropdown-btn-icon,
+.dropdown-btn-chevron { width: 16px; height: 16px; flex-shrink: 0; }
 
 [data-theme="dark"] .dropdown-btn { background: var(--bg3); }
 [data-theme="dark"] .dropdown-btn:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--primary-3); }
@@ -1576,6 +1636,7 @@
 .col-back-btn {
   display: inline-flex; align-items: center; gap: 6px;
   width: fit-content;
+  /* btn-sm scale : asymmetric icon-side = 12 (ratio 0.75 of base 16). */
   height: 32px; padding: 0 16px 0 12px;
   border-radius: 7px; border: none;
   background: none; color: var(--text-2);
@@ -1899,7 +1960,7 @@
 .panel-cast-action {
   align-self: flex-start;
   /* Asymmetric padding for icon-left button (mirrors .btn-ai, .panel-quotes-add) */
-  padding: 0 20px 0 12px;
+  padding: 0 20px 0 16px;
 }
 /* AI button — gradient border + tinted gradient fill
    (gradient stops mirror .import-tab-indicator.gradient).
@@ -1912,7 +1973,7 @@
   border: 1.5px solid transparent;
   /* Asymmetric padding: 12px left for the leading sparkle icon, 20px right
      for label breathing — mirrors .panel-quotes-add. */
-  padding: 0 20px 0 12px;
+  padding: 0 20px 0 16px;
   background:
     linear-gradient(to right, rgba(246,123,248,0.05), rgba(73,89,230,0.05)) padding-box,
     linear-gradient(var(--bg), var(--bg)) padding-box,
@@ -2130,7 +2191,7 @@
   margin-top: 8px;
 }
 /* Asymmetric padding when icon is on the trailing edge */
-.panel-quiz-nav-next { padding: 0 12px 0 20px; }
+.panel-quiz-nav-next { padding: 0 16px 0 20px; }
 
 /* Result */
 .panel-quiz-result {
@@ -2526,7 +2587,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   transition: opacity 0.15s;
 }
 
@@ -3186,7 +3247,7 @@
 .import-tab-pane { display: flex; flex-direction: column; gap: 24px; }
 
 /* ─── BARCODE SCANNER (ISBN) ─── */
-.scan-start-btn { align-self: stretch; width: 100%; padding: 0 20px 0 12px; justify-content: center; }
+.scan-start-btn { align-self: stretch; width: 100%; padding: 0 20px 0 16px; justify-content: center; }
 .scan-manual { display: flex; flex-direction: column; gap: 8px; }
 .scan-or-separator {
   display: flex;
@@ -3431,7 +3492,7 @@
 .import-change-file {
   display: inline-flex; align-items: center; gap: 8px;
   align-self: flex-start;
-  height: 40px; padding: 0 20px 0 12px;
+  height: 40px; padding: 0 20px 0 16px;
   border-radius: 8px;
   border: 1.5px solid var(--border-subtle);
   background: #FFFFFF; color: var(--text);
@@ -3551,8 +3612,10 @@
   .dropdown-btn { padding: 0; width: 40px; justify-content: center; }
   .dropdown-btn-label,
   .dropdown-btn-chevron { display: none; }
-  .sort-menu-btn,
-  .filters-mobile-trigger { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
+  /* sort-menu-btn keeps label + chevron at ≤1080 — re-show the chevron */
+  .sort-menu-btn .dropdown-btn-chevron { display: inline-block; }
+  .sort-menu-btn { width: auto; padding: 0 12px 0 20px; justify-content: flex-start; }
+  .filters-mobile-trigger { width: auto; padding: 0 20px 0 16px; justify-content: flex-start; }
   .filters-mobile-trigger .dropdown-btn-label { display: inline-flex; }
   .search-row { flex-direction: column; align-items: stretch; gap: 16px; }
   .search-box { min-width: 0; flex: none; width: 100%; }
@@ -3579,7 +3642,7 @@
   /* In a column flex parent, flex: 1 stretches on the main axis (= height),
      so we have to neutralise it. */
   .scan-manual-input { flex: 0 0 auto; }
-  .scan-lookup-btn { padding: 0 20px 0 12px; width: 100%; justify-content: center; }
+  .scan-lookup-btn { padding: 0 20px 0 16px; width: 100%; justify-content: center; }
   /* Hide the barcode tab hint on mobile to reduce visual noise */
   .import-tab-hint { display: none; }
   /* Stack the retry button below the error text on mobile, centered.
@@ -3598,7 +3661,7 @@
   /* Filters panel footer follows .panel-inner padding (32 → 16 on mobile) :
      match the negative side margin so the bg still fills edge-to-edge. */
   .filters-panel-footer {
-    margin: 0 -16px;
+    margin: auto -16px 0;
     padding: 16px;
   }
   /* 2 cols pour books-grid / col-grid (inherit du ≤768) ; just override gap.
@@ -3675,6 +3738,13 @@
   }
   .range-dropdown-wrap .sort-menu-btn-label { display: none; }
   .range-dropdown-wrap .dropdown-btn { padding: 0 12px; }
+}
+
+/* edit-btn collapses to icon-only (40x40 square) on standard mobile portrait
+   (≤480 covers iPhone SE/standard/Plus). */
+@media (max-width: 480px) {
+  .edit-btn { width: 40px; padding: 0; justify-content: center; }
+  .edit-btn-label { display: none; }
 }
 
 /* ─── ONBOARDING ─── */
@@ -4234,7 +4304,7 @@
   gap: 16px;
   flex-wrap: wrap;
 }
-.dictionary-save-toggle { padding: 0 20px 0 12px; }
+.dictionary-save-toggle { padding: 0 20px 0 16px; }
 .dict-save-rest,
 .dict-save-hover {
   display: inline-flex;
@@ -4862,7 +4932,7 @@ button.quote-book-chip {
 .panel-quotes-add {
   display: flex; align-items: center; gap: 8px;
   align-self: flex-start;
-  height: 40px; padding: 0 20px 0 12px;
+  height: 40px; padding: 0 20px 0 16px;
   border-radius: 8px;
   background: var(--primary-50); border: none;
   color: #FFFFFF; cursor: pointer;
