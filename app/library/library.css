@@ -331,26 +331,11 @@
 @media (max-width: 600px) {
   .filters-row > .filters-reading { display: none; }
 }
-/* ≤480 (standard mobile portrait) : Authors goes to the filter panel +
-   trigger collapses to icon-only — label hidden, aligned with the edit-btn
-   icon-only breakpoint.
-   - Default (no active filter) : square 40x40 with icon centered.
-   - .is-active (badge present) : width auto so the inline badge sits next
-     to the icon (cas spécifique avec counter inline). */
+/* ≤480 (standard mobile portrait) : Authors goes to the filter panel.
+   filters-mobile-trigger garde icon + label à <600 — pas de collapse
+   icon-only (label "Filter" / "Filtrer" reste lisible). */
 @media (max-width: 480px) {
   .filters-row > .authors-menu { display: none; }
-  .filters-row .filters-mobile-trigger {
-    width: 40px;
-    padding: 0;
-    justify-content: center;
-  }
-  .filters-row .filters-mobile-trigger .dropdown-btn-label {
-    display: none;
-  }
-  .filters-row .filters-mobile-trigger.is-active {
-    width: auto;
-    padding: 0 12px;
-  }
 }
 
 /* Filters panel : reuses .book-panel slide-in primitive.
@@ -1660,6 +1645,12 @@
 .quote-card-like.is-saved { color: var(--primary-50); }
 [data-theme="dark"] .quote-card-like:hover { background: var(--ghost-hover); color: var(--primary-30); }
 [data-theme="dark"] .quote-card-like.is-saved { color: var(--primary-30); }
+/* Favoris action lives in the kebab menu at <=600 (default hidden >=601). */
+.dropdown-item--quote-favorite { display: none; }
+@media (max-width: 600px) {
+  .quote-card-like { display: none; }
+  .dropdown-item--quote-favorite { display: flex; }
+}
 .col-card-name { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .col-card-count { font-size: 15px; font-weight: 500; color: var(--text-2); }
 
@@ -1885,6 +1876,15 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
+}
+/* Liste verticale des collections auxquelles appartient le livre (sibling
+   de .panel-info-header dans .panel-info gap 40). Stack 1 chip par
+   collection iso CollectionListPanel pattern. */
+.panel-collections {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
 }
 .panel-header-actions {
   display: flex;
@@ -3661,6 +3661,11 @@
 }
 
 @media (max-width: 600px) {
+  /* Citations (QuotesView) Export menu : re-show icon + label at <600
+     (override the ≤1080 .dropdown-btn icon-only collapse). Chevron stays
+     hidden. Padding asym icon-side 12 / text-side 16 iso DS. */
+  .export-menu.export-quotes .dropdown-btn { width: auto; padding: 0 16px 0 12px; justify-content: flex-start; }
+  .export-menu.export-quotes .dropdown-btn .dropdown-btn-label { display: inline-flex; }
   .toolbar { display: flex; align-items: center; padding: 0 16px; height: 64px; }
   .toolbar-inner {
     flex: 1; min-width: 0;
@@ -3687,15 +3692,14 @@
      Button takes the full row width (iso .scan-lookup-btn). */
   .scan-error-state { flex-direction: column; align-items: stretch; text-align: center; }
   .scan-error-state .btn { width: 100%; justify-content: center; }
-  /* Mobile: Share collapses to icon-only (40×40) — text label hidden.
-     The :has() override cancels the DS asymmetric padding-left:12 (which
-     still fires because the span exists in DOM even when display:none),
-     so the SVG centers properly inside the 40×40 box. */
-  .panel-header-share,
+  /* Mobile: Like collapses to icon-only (40×40) — text label hidden, since
+     the bookmark fill/outline déjà conveys the state. Share garde icon + text
+     entre 401-599 (collapse plus bas, voir @media ≤400).
+     Le :has() override cancel l'asymmetric padding du DS rule (qui fire
+     toujours car le span existe dans le DOM même en display:none),
+     pour que le SVG soit centré dans la box 40×40. */
   .panel-header-like { padding: 0; width: 40px; justify-content: center; }
-  .panel-header-share:has(svg:first-child:not(:last-child)),
   .panel-header-like:has(svg:first-child:not(:last-child)) { padding-left: 0; padding-right: 0; }
-  .panel-header-share span,
   .panel-header-like span { display: none; }
   /* Mobile: tighter horizontal padding for the panel content */
   .panel-inner { padding-left: 16px; padding-right: 16px; }
@@ -3779,22 +3783,23 @@
   }
   .range-dropdown-wrap .sort-menu-btn-label { display: none; }
   .range-dropdown-wrap .dropdown-btn { padding: 0 12px; }
+  /* Share collapses to icon-only (40×40) only below 400 — entre 401-599
+     icon + text reste visible (label "Share"/"Partager" fits sur viewport ≥401). */
+  .panel-header-share { padding: 0; width: 40px; justify-content: center; }
+  .panel-header-share:has(svg:first-child:not(:last-child)) { padding-left: 0; padding-right: 0; }
+  .panel-header-share span { display: none; }
 }
 
-/* edit-btn collapses to icon-only (40x40 square) on standard mobile portrait
-   (≤480 covers iPhone SE/standard/Plus). */
-@media (max-width: 480px) {
+/* edit-btn collapses to icon-only pencil (40x40 square) on mobile (≤600). */
+@media (max-width: 600px) {
   .edit-btn { width: 40px; padding: 0; justify-content: center; }
   .edit-btn-label { display: none; }
 }
 
-/* add-btn (Library SearchBar) switches to a shorter label ("Add" / "Ajout")
-   at ≤400 to fit narrow viewports without losing the action text. */
+/* add-btn (Library SearchBar) — label-full visible à tous les viewports.
+   Le span .add-btn-label-short est conservé pour évolution future mais
+   reste hidden (le full "Ajouter" / "Add books" reste l'action canonique). */
 .add-btn-label-short { display: none; }
-@media (max-width: 400px) {
-  .add-btn-label-full { display: none; }
-  .add-btn-label-short { display: inline-flex; }
-}
 
 /* ─── ONBOARDING ─── */
 .ob-overlay {
@@ -4117,6 +4122,11 @@
   background: rgba(255, 255, 255, 0.16);
   color: #FFFFFF;
 }
+/* Scope white-on-hover du chevron à .sidebar-col-all.active uniquement.
+   Les autres items active gardent le pattern ghost (primary-50/30) via
+   la rule générique .sidebar-col-toggle:hover .sidebar-section-chevron. */
+.sidebar-item.sidebar-col-all.active .sidebar-col-toggle:hover:not(:disabled) .sidebar-section-chevron,
+[data-theme="dark"] .sidebar-item.sidebar-col-all.active .sidebar-col-toggle:hover:not(:disabled) .sidebar-section-chevron { color: #FFFFFF; }
 .sidebar-section-add {
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
@@ -4301,10 +4311,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-subtle);
 }
-.dictionary-definition:first-child { padding-top: 0; border-top: none; }
 .dictionary-pos {
   display: inline-block;
   width: fit-content;
@@ -4516,12 +4523,12 @@
 }
 .dictionary-saved-row-body:last-child td { border-bottom: none; }
 .dictionary-saved-row-body .dictionary-saved-body {
-  padding: 20px 24px;
+  padding: 20px 16px;
+  gap: 20px;
 }
 
 @media (max-width: 600px) {
   .list-table th.dictionary-letter-head { padding-left: 8px; padding-right: 8px; }
-  .dictionary-saved-row-body .dictionary-saved-body { padding: 16px 8px; }
 }
 .dictionary-saved-card {
   background: var(--bg2);
@@ -4599,25 +4606,19 @@
 }
 
 .dictionary-saved-body {
-  padding: 20px;
+  padding: 20px 16px;
   border-top: 1.5px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   animation: fadeUp 0.2s ease both;
 }
 /* Overview WordListPanel only — body bg passes to white so the expanded
    definitions stand out from the panel's translucent surface. */
 .overview-word-card .dictionary-saved-body { background: #FFFFFF; }
 [data-theme="dark"] .overview-word-card .dictionary-saved-body { background: var(--card); }
-.dictionary-saved-body .dictionary-definition {
-  padding-top: 16px;
-  border-top: 1px solid var(--border-subtle);
-}
-.dictionary-saved-body .dictionary-definition:first-child {
-  padding-top: 0;
-  border-top: none;
-}
+/* Definitions separés par un .panel-divider dans le JSX — pas de
+   padding-top/border-top sur les items, le gap 16 du parent suffit. */
 
 .quotes-list {
   display: flex;

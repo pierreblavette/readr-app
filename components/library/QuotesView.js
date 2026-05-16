@@ -52,6 +52,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
             </button>
             {(exportPDF || exportMD) && (
               <ExportMenu
+                className="export-quotes"
                 t={t}
                 exportPDF={exportPDF}
                 exportMD={exportMD}
@@ -126,7 +127,7 @@ export default function QuotesView({ quotes, allBooks = [], onAdd, onEdit, onDel
   );
 }
 
-function QuoteCardKebab({ quote, onEdit, onDelete, onShared, t }) {
+function QuoteCardKebab({ quote, onEdit, onDelete, onShared, onToggleSave, t }) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(null);
   const btnRef = useRef(null);
@@ -198,6 +199,17 @@ function QuoteCardKebab({ quote, onEdit, onDelete, onShared, t }) {
           <button type="button" className="dropdown-item" onClick={() => { setOpen(false); onEdit?.(quote); }}>
             {t.quoteEdit}
           </button>
+          {onToggleSave && (
+            <button
+              type="button"
+              className="dropdown-item dropdown-item--quote-favorite"
+              onClick={() => { setOpen(false); onToggleSave(quote.id, !quote.saved); }}
+              aria-pressed={!!quote.saved}>
+              {quote.saved
+                ? (t.quoteRemoveFromFavorites || 'Remove from favorites')
+                : (t.quoteAddToFavorites || 'Add to favorites')}
+            </button>
+          )}
           <button type="button" className="dropdown-item" onClick={handleShare}>
             {t.btnShare}
           </button>
@@ -291,7 +303,7 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onToggleSave, onOp
               <path d="M20 21l-8-5-8 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
             </svg>
           </button>
-          <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} onShared={onShared} t={t} />
+          <QuoteCardKebab quote={quote} onEdit={onEdit} onDelete={onDelete} onShared={onShared} onToggleSave={onToggleSave} t={t} />
         </div>
       </div>
       <div className="quote-card-divider" />

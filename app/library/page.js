@@ -214,6 +214,8 @@ export default function LibraryPage() {
         readingCount={readingBooks.length}
         maxReading={MAX_READING}
         quotes={panelBook ? getQuotesForBook(panelBook) : []}
+        collections={panelBook ? collections.filter(c => (c.bookIds || []).includes(panelBook.id)) : []}
+        onOpenCollection={col => { setPanelBook(null); setTab('collections'); setActiveCollection(col.id); }}
         lang={lang}
         t={t}
       />

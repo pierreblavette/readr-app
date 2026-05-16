@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 
-export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, t }) {
+export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, t, className }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -22,7 +22,7 @@ export default function ExportMenu({ exportData, exportPDF, exportMD, disabled, 
   }, [open]);
 
   return (
-    <div className="dropdown-wrap export-menu" ref={ref}>
+    <div className={`dropdown-wrap export-menu${className ? ' ' + className : ''}`} ref={ref}>
       <button
         className="dropdown-btn"
         disabled={disabled}

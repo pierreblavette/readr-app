@@ -7,6 +7,8 @@ import SortMenu from "./SortMenu";
 import GenresMenu from "./GenresMenu";
 import AuthorsMenu from "./AuthorsMenu";
 import NoMatchesIcon from "./NoMatchesIcon";
+import MobileFiltersPanel from "./MobileFiltersPanel";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { MAX_BOOKS_PER_COLLECTION } from "../../lib/useLibrary";
 
 function RatingStars({ count }) {
@@ -113,8 +115,34 @@ export default function CollectionDetailView({
   const [editMenuOpen, setEditMenuOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selected, setSelected] = useState(new Set());
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const moreRef = useRef(null);
   const editMenuRef = useRef(null);
+
+  // Mirror SearchBar breakpoints so promotedFilters skips already-inline sections.
+  const hasAuthorsInline = useMediaQuery('(min-width: 481px)');
+  const hasReadingInline = useMediaQuery('(min-width: 601px)');
+  const hasRatingInline  = useMediaQuery('(min-width: 769px)');
+  const hasGenresInline  = useMediaQuery('(min-width: 1081px)');
+  const hasQuotesInline  = useMediaQuery('(min-width: 1281px)');
+  const promotedFilters = useMemo(() => {
+    const s = new Set();
+    if (hasAuthorsInline) s.add('authors');
+    if (hasReadingInline) s.add('readingStatus');
+    if (hasRatingInline)  s.add('rating');
+    if (hasGenresInline)  s.add('genres');
+    if (hasQuotesInline)  s.add('hasQuotes');
+    return s;
+  }, [hasAuthorsInline, hasReadingInline, hasRatingInline, hasGenresInline, hasQuotesInline]);
+  function triggerFilterCount() {
+    let n = 0;
+    if (filters.hasQuotes && !promotedFilters.has('hasQuotes')) n++;
+    if (filters.readingStatus && filters.readingStatus !== 'any' && !promotedFilters.has('readingStatus')) n++;
+    if (filters.rating && filters.rating !== 'any' && !promotedFilters.has('rating')) n++;
+    if (filters.genres?.size > 0 && !promotedFilters.has('genres')) n++;
+    if (filters.authors?.size > 0 && !promotedFilters.has('authors')) n++;
+    return n;
+  }
 
   function toggleSelected(id) {
     setSelected(prev => {
@@ -404,6 +432,7 @@ export default function CollectionDetailView({
 
       <div className="cell-row cell-row--lg filters-row">
         <SortMenu
+          className="filters-sort"
           current={currentSortKey}
           onChange={handleSort}
           ariaLabel={t.sortToggle || 'Sort'}
@@ -426,6 +455,7 @@ export default function CollectionDetailView({
           t={t}
         />
         <SortMenu
+          className="filters-reading"
           current={filters.readingStatus}
           onChange={key => setFilter('readingStatus', key)}
           ariaLabel={t.filterReadingStatus}
@@ -438,6 +468,7 @@ export default function CollectionDetailView({
           ]}
         />
         <SortMenu
+          className="filters-rating"
           current={filters.rating}
           onChange={key => setFilter('rating', key)}
           ariaLabel={t.filterRating}
@@ -502,6 +533,19 @@ export default function CollectionDetailView({
             </div>
           )}
         </div>
+        <button
+          type="button"
+          className={`dropdown-btn filters-mobile-trigger${triggerFilterCount() > 0 ? ' is-active' : ''}`}
+          onClick={() => setMobilePanelOpen(true)}
+          aria-label={t.filterToggle || 'Filter'}>
+          <svg className="dropdown-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="3"  y1="6"  x2="21" y2="6"/>
+            <line x1="6"  y1="12" x2="18" y2="12"/>
+            <line x1="9"  y1="18" x2="15" y2="18"/>
+          </svg>
+          <span className="dropdown-btn-label">{t.filterToggle || 'Filter'}</span>
+          {triggerFilterCount() > 0 && <span className="filter-badge">{triggerFilterCount()}</span>}
+        </button>
         {hasActiveFilters && (
           <button
             type="button"
@@ -518,6 +562,24 @@ export default function CollectionDetailView({
         )}
       </div>
       </div>
+
+      <MobileFiltersPanel
+        open={mobilePanelOpen}
+        onClose={() => setMobilePanelOpen(false)}
+        filters={filters} setFilter={setFilter}
+        isOwned={true}
+        availableAuthors={availableAuthors}
+        availableGenres={availableGenres}
+        totalCount={books.length}
+        bookCount={filtered.length}
+        ratingCounts={ratingCounts}
+        readingCounts={readingCounts}
+        genreCounts={genreCounts}
+        authorCounts={authorCounts}
+        booksWithQuotesCount={booksWithQuotesCount}
+        promotedFilters={promotedFilters}
+        t={t}
+      />
 
       <div className="books-section">
         {books.length > 0 && (

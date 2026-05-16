@@ -358,16 +358,19 @@ export default function DictionaryView({ lang, t, words, onSave, onDelete, expor
                                 <td colSpan={2}>
                                   <div className="dictionary-saved-body">
                                     {w.definitions.map((d, i) => (
-                                      <div key={i} className="dictionary-definition">
-                                        {d.pos && <span className="dictionary-pos">{d.pos}</span>}
-                                        <p className="dictionary-meaning">{d.meaning}</p>
-                                        {d.example && (
-                                          <div className="dictionary-example">
-                                            <span className="dictionary-example-label">{t.dictionaryExample}</span>
-                                            <p className="dictionary-example-text">{d.example}</p>
-                                          </div>
-                                        )}
-                                      </div>
+                                      <Fragment key={i}>
+                                        {i > 0 && <div className="panel-divider" />}
+                                        <div className="dictionary-definition">
+                                          {d.pos && <span className="dictionary-pos">{d.pos}</span>}
+                                          <p className="dictionary-meaning">{d.meaning}</p>
+                                          {d.example && (
+                                            <div className="dictionary-example">
+                                              <span className="dictionary-example-label">{t.dictionaryExample}</span>
+                                              <p className="dictionary-example-text">{d.example}</p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </Fragment>
                                     ))}
                                   </div>
                                 </td>
