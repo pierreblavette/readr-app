@@ -19,8 +19,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: "readr",
+  title: "Readr",
   description: "Your books, finally in their place.",
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({ children }) {

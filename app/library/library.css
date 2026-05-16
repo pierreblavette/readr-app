@@ -123,17 +123,15 @@
   gap: 16px;
 }
 
-/* Logo */
+/* Logo — wordmark SVG (Proxima Sera Semibold outlined). Sized via height; width: auto preserves 3.86:1 ratio. Color inherits via currentColor. overflow:visible fixes Safari clipping anti-aliasing edges where path touches viewBox bounds. */
 .logo {
-  display: flex;
-  align-items: center;
-  font-weight: 400;
-  font-size: 24px;
-  letter-spacing: -0.02em;
+  display: block;
+  height: 24px;
+  width: auto;
   color: var(--text);
   user-select: none;
   flex-shrink: 0;
-  font-family: var(--font-fraunces), serif;
+  overflow: visible;
 }
 
 [data-theme="dark"] .logo { color: #FFFFFF; }
@@ -256,7 +254,7 @@
 
 .page-title {
   font-size: 48px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.03em;
   color: var(--text);
   line-height: 1;
@@ -3952,16 +3950,17 @@
   flex-shrink: 0;
 }
 .sidebar-logo .logo {
-  font-size: 19px;
-  letter-spacing: -0.02em;
-  flex: 1;
+  height: 17px;
+  flex: 0 0 auto;
 }
 .sidebar-logo-mark {
-  font-family: var(--font-fraunces), serif;
-  font-size: 19px;
-  font-weight: 400;
+  display: block;
+  height: 15.7px;
+  width: auto;
   color: var(--text);
+  overflow: visible;
 }
+[data-theme="dark"] .sidebar-logo-mark { color: #FFFFFF; }
 .sidebar-logo-collapse {
   background: none;
   border: none;

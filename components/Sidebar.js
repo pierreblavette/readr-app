@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import Wordmark from "./brand/Wordmark";
+import RMark from "./brand/RMark";
 
 export default function Sidebar({
   tab, setTab, data, collections,
@@ -30,11 +32,11 @@ export default function Sidebar({
         <div className="sidebar-logo">
           {collapsed ? (
             <button className="sidebar-logo-collapse" onClick={onToggleCollapse} aria-label="Expand sidebar">
-              <span className="sidebar-logo-mark">r</span>
+              <RMark className="sidebar-logo-mark" />
             </button>
           ) : (
             <>
-              <span className="logo">readr</span>
+              <Wordmark className="logo" />
               <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" onClick={onToggleCollapse} aria-label="Collapse sidebar">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <polyline points="15 18 9 12 15 6"/>

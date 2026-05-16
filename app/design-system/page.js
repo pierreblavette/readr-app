@@ -7,6 +7,8 @@ import {
   ReadrIcon, TrackingIcon, ScanIcon, QuoteIcon, WordsIcon, DataControlIcon
 } from "@/components/library/Onboarding";
 import GradientDropzone from "@/components/library/GradientDropzone";
+import Wordmark from "@/components/brand/Wordmark";
+import RMark from "@/components/brand/RMark";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
@@ -229,7 +231,7 @@ export default function DesignSystemPage() {
         {/* SIDEBAR */}
         <aside className={`sidebar${mobileSidebarOpen ? ' mobile-open' : ''}`}>
           <div className="sidebar-logo">
-            <Link href="/" className="logo">readr</Link>
+            <Link href="/" aria-label="Readr"><Wordmark className="logo" /></Link>
           </div>
           <nav className="sidebar-nav">
             <div className="sidebar-appearance-wrap">
@@ -316,20 +318,70 @@ export default function DesignSystemPage() {
           <div className="ds-group-sections">
 
           {/* ── LOGO ── */}
-          <DSSection id="logo" title="Logo" sub="Wordmark only — Fraunces Regular. No icon, no bold version, no font substitution.">
+          <DSSection id="logo" title="Logo" sub="Wordmark Readr — Proxima Sera Semibold, exported as outlined SVG (no runtime webfont). R capitale + reste lowercase. Color via currentColor.">
             <div className="ds-card">
               <div className="ds-card-head">Contextes d'utilisation</div>
               <div className="ds-card-body col padded">
                 <div className="logo-bg-row">
-                  {[["logo-bg-page","#1B1B1B"],["logo-bg-dark","#ffffff"],["logo-bg-accent","#ffffff"]].map(([cls,col],i) => (
+                  {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","#FFFFFF"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
                     <div key={i} className={`logo-bg ${cls}`}>
-                      <span className="logo-wordmark" style={{ color: col }}>readr</span>
+                      <Wordmark className="logo-wordmark" style={{ color: col }} />
                     </div>
                   ))}
                   <div className="logo-bg-fill" aria-hidden="true" />
                 </div>
                 <div className="logo-spec-row">
-                  {[["Font","Fraunces"],["Weight","400"],["Letter-spacing","-0.02em"],["Default color","#1B1B1B"],["On dark","#FFFFFF"]].map(([l,v]) => (
+                  {[["Font","Proxima Sera"],["Weight","Semibold"],["Casing","Readr"],["Default color","#0F0F0F"],["On dark / accent","#FFFFFF"]].map(([l,v]) => (
+                    <div key={l} className="logo-spec-item">
+                      <span className="logo-spec-label">{l}</span>
+                      <span className="logo-spec-val">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Symbol — R standalone</div>
+              <div className="ds-card-body col padded">
+                <div className="logo-bg-row">
+                  {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","#FFFFFF"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
+                    <div key={i} className={`logo-bg ${cls}`}>
+                      <RMark className="logo-symbol" style={{ color: col }} />
+                    </div>
+                  ))}
+                  <div className="logo-bg-fill" aria-hidden="true" />
+                </div>
+                <div className="logo-spec-row">
+                  {[["Used for","Favicon · App icon · Sidebar collapsed"],["Ratio","~1:1 (745×760 viewBox)"],["Min size","16px height"]].map(([l,v]) => (
+                    <div key={l} className="logo-spec-item">
+                      <span className="logo-spec-label">{l}</span>
+                      <span className="logo-spec-val">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">App icon — squircle masters</div>
+              <div className="ds-card-body col padded">
+                <div className="app-icon-grid">
+                  <div className="app-icon-card">
+                    <img src="/brand/favicon-master.svg" alt="Favicon master" className="app-icon-preview" />
+                    <div className="app-icon-meta">
+                      <span className="app-icon-label">Favicon</span>
+                      <span className="app-icon-detail">Browser tab · R noir sur fond blanc. Meilleure lisibilité à 16px que la version brand saturée.</span>
+                    </div>
+                  </div>
+                  <div className="app-icon-card">
+                    <img src="/brand/app-icon-master.svg" alt="App icon master" className="app-icon-preview" />
+                    <div className="app-icon-meta">
+                      <span className="app-icon-label">App icon</span>
+                      <span className="app-icon-detail">iOS home screen · PWA install · Apple touch. R blanc sur squircle primary #4959E6.</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="logo-spec-row">
+                  {[["Master size","1024×1024px"],["Generated set","16/32/48/180/192/512"],["Build","node scripts/build-favicons.mjs"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
                       <span className="logo-spec-label">{l}</span>
                       <span className="logo-spec-val">{v}</span>
@@ -341,19 +393,84 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Sizes</div>
               <div className="ds-card-body col">
-                {[[40,"display / splash screen"],[28,"page header"],[24,"nav (reference size)"],[14,"footer / minimum size"]].map(([sz, use]) => (
+                {[[40,"display / splash screen"],[28,"page header"],[17,"sidebar (reference size)"],[12,"footer / minimum size"]].map(([sz, use]) => (
                   <div key={sz} className="type-sample">
-                    <span className="logo-wordmark" style={{ fontSize: sz, color: "var(--text)" }}>readr</span>
+                    <Wordmark className="logo-wordmark" style={{ height: sz, color: "var(--text)" }} />
                     <div className="type-meta">{sz}px · {use}</div>
                   </div>
                 ))}
               </div>
             </div>
             <div className="ds-card">
+              <div className="ds-card-head">Clear space</div>
+              <div className="ds-card-body col padded">
+                <div className="logo-clearspace">
+                  <div className="logo-clearspace-frame">
+                    <Wordmark className="logo-wordmark" style={{ height: 56, color: "var(--text)" }} />
+                  </div>
+                </div>
+                <div className="logo-spec-row">
+                  {[["Zone protégée","1× R cap-height de chaque côté"],["Calcul","≈ 92 % de la hauteur du wordmark"],["Règle","Aucun texte, image ou bord visuel dans cette zone"]].map(([l,v]) => (
+                    <div key={l} className="logo-spec-item">
+                      <span className="logo-spec-label">{l}</span>
+                      <span className="logo-spec-val">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Don'ts</div>
+              <div className="ds-card-body col padded">
+                <div className="logo-dont-grid">
+                  <div className="logo-dont">
+                    <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", transform: "scaleX(0.55)" }} />
+                    <span className="logo-dont-label">Pas de déformation</span>
+                  </div>
+                  <div className="logo-dont">
+                    <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", transform: "rotate(-8deg)" }} />
+                    <span className="logo-dont-label">Pas de rotation</span>
+                  </div>
+                  <div className="logo-dont">
+                    <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.45))" }} />
+                    <span className="logo-dont-label">Pas d'ombre portée</span>
+                  </div>
+                  <div className="logo-dont">
+                    <span className="logo-dont-fake">Readr</span>
+                    <span className="logo-dont-label">Pas de substitution de police</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Background contrast</div>
+              <div className="ds-card-body col padded">
+                <div className="logo-contrast-grid">
+                  {[
+                    { bg: "#FEFEFF",  fg: "#0F0F0F", ok: true,  label: "Surface light" },
+                    { bg: "#0F0F0F",  fg: "#FFFFFF", ok: true,  label: "Surface dark" },
+                    { bg: "#4959E6",  fg: "#FFFFFF", ok: true,  label: "Primary brand" },
+                    { bg: "#F7F7F7",  fg: "#C8C8C8", ok: false, label: "Trop faible contraste" },
+                    { bg: "#4959E6",  fg: "#0F0F0F", ok: false, label: "Conflit brand + dark" },
+                    { bg: "linear-gradient(135deg, #4959E6 0%, #F59E0B 100%)", fg: "#FFFFFF", ok: false, label: "Fond complexe / dégradé" },
+                  ].map((c, i) => (
+                    <div key={i} className="logo-contrast-item">
+                      <div className="logo-contrast" style={{ background: c.bg }}>
+                        <Wordmark className="logo-wordmark" style={{ height: 26, color: c.fg }} />
+                      </div>
+                      <span className={`logo-contrast-status ${c.ok ? 'logo-contrast-status--ok' : 'logo-contrast-status--ko'}`}>
+                        {c.ok ? '✓ ' : '✗ '}{c.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
               <div className="ds-card-head">Usage rules</div>
               <div className="ds-card-body col padded" style={{ gap: 8 }}>
                 <p>
-                  Always lowercase — <strong>readr</strong>, never <em>Readr</em> or <em>READR</em>. Do not modify the font, weight or letter-spacing. Minimum size: 14px. On colored backgrounds, use white only (#FFFFFF).
+                  Always <strong>Readr</strong> (R capitale + reste lowercase), never <em>readr</em>, <em>READR</em> or <em>ReadR</em>. Do not re-outline, recolor selectively, or apply font substitution — use the SVG component. Minimum size: 12px height. On colored backgrounds, use white only (#FFFFFF).
                 </p>
               </div>
             </div>
@@ -559,12 +676,8 @@ export default function DesignSystemPage() {
               <div className="ds-card-head">Fraunces — display + serif</div>
               <div className="ds-card-body col">
                 {[
-                  [48, "3.43rem", "500", "Heading display", ".h-display (reserved — landing hero)"],
-                  [36, "2.57rem", "300", "Heading XL", ".h-xl (reserved — landing)"],
-                  [28, "2rem",    "500", "Hero panel", ".panel-title"],
-                  [24, "1.71rem", "500", "Heading LG", ".h-lg (reserved — landing)"],
-                  [19, "1.36rem", "400", "Logo nav", ".logo-nav (reserved)"],
-                  [14, "1rem",    "400", "Logo footer", ".logo-min (reserved — minimum size)"],
+                  [48, "3.43rem", "500", "Page title", ".page-title"],
+                  [28, "2rem",    "500", "Book title", ".panel-title"],
                 ].map(([px, rem, weight, label, detail]) => (
                   <div key={label} className="type-sample">
                     <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{label}</div>
@@ -2129,7 +2242,7 @@ export default function DesignSystemPage() {
                 {/* Expanded — uses real .sidebar classes, with position/height overridden for the preview */}
                 <aside className="sidebar" style={{ position: 'static', height: 500 }}>
                   <div className="sidebar-logo">
-                    <span className="logo">readr</span>
+                    <Wordmark className="logo" />
                     <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" aria-label="Collapse">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
                     </button>
@@ -2187,7 +2300,7 @@ export default function DesignSystemPage() {
                 <aside className="sidebar collapsed" style={{ position: 'static', height: 500 }}>
                   <div className="sidebar-logo">
                     <button className="sidebar-logo-collapse" aria-label="Expand">
-                      <span className="sidebar-logo-mark">r</span>
+                      <RMark className="sidebar-logo-mark" />
                     </button>
                   </div>
                   <nav className="sidebar-nav">
