@@ -133,6 +133,15 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       </button>
                     </div>
                   )}
+                  {tab === 'owned' && book.finishedAt && (
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-md panel-header-finished"
+                      disabled
+                      aria-disabled="true">
+                      {t.btnBookFinished || 'Finished'}
+                    </button>
+                  )}
                   {tab === 'wishlist' && (
                     <button className="panel-move-btn" onClick={() => onMoveToLibrary(book)}>
                       {t.selConfirmOwned || 'Move to Library'}

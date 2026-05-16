@@ -1585,9 +1585,10 @@
   background: var(--primary-3);
   box-shadow: 0 0 0 3px rgba(73,89,230,0.20);
 }
-/* Portal dropdown — escapes table/card stacking contexts. Fixed 240
-   width for consistent kebab menu sizing across cards / lists / quotes. */
-.dropdown-menu--portal { z-index: 1000; width: 180px; }
+/* Portal dropdown — escapes table/card stacking contexts. min-width 180
+   pour cohérence visuelle minimale ; auto width au-dessus quand un item
+   plus long apparaît (ex: "Remove from favorites"). */
+.dropdown-menu--portal { z-index: 1000; min-width: 180px; width: auto; }
 .col-card-cover-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2612,8 +2613,7 @@
   pointer-events: auto;
 }
 
-/* Wishlist: 3 actions (Select all + Mark as owned + Remove) — extra breathing room */
-.selection-bar:has(.sel-confirm:not(.danger)) { gap: 24px; }
+/* Harmonized : tous les tabs utilisent gap 16 (rule de base de .selection-bar). */
 
 .sel-actions { display: flex; align-items: center; gap: 8px; }
 
