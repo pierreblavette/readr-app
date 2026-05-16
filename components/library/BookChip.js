@@ -1,18 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
-import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "../../lib/bookUtils";
+import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "../../lib/bookUtils";
 
 export default function BookChip({ book, onRemove, onClick, ariaLabel, rating }) {
-  const [cover, setCover] = useState(null);
+  const [cover, setCover] = useState(() => getCoverFromCache(book.title, book.author)?.thumb || null);
   const [c1, c2] = coverColors(book.title);
   const letter = coverLetter(book.title);
 
   useEffect(() => {
-    const cache = loadGBCache();
-    const key = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
-    fetchBookCover(book.title, book.author, cache).then(res => {
-      saveGBCache({ ...cache, [key]: res });
+    const cached = getCoverFromCache(book.title, book.author);
+    if (cached !== undefined) { setCover(cached?.thumb || null); return; }
+    fetchBookCover(book.title, book.author, loadGBCache()).then(res => {
+      setCoverInCache(book.title, book.author, res);
       setCover(res?.thumb || null);
     });
   }, [book.title, book.author]);

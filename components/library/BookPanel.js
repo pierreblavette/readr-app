@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
 import { useModalA11y } from "@/lib/useModalA11y";
 import CharacterCast from "./CharacterCast";
 import BookQuiz from "./BookQuiz";
@@ -57,18 +57,18 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
 
   useEffect(() => {
     if (!book) return;
-    setCover(null);
-    setSynopsis(null);
-    const cache = loadGBCache();
-    const key   = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) {
-      setCover(cache[key]?.thumb || null);
-      setSynopsis(cache[key]?.description || null);
+    // Lit le cache synchronement avant tout setState à null — si déjà en
+    // mémoire, le 1er render après book change utilise la cover directement.
+    const cached = getCoverFromCache(book.title, book.author);
+    if (cached !== undefined) {
+      setCover(cached?.thumb || null);
+      setSynopsis(cached?.description || null);
       return;
     }
-    fetchBookCover(book.title, book.author, cache).then(res => {
-      const next = { ...cache, [key]: res };
-      saveGBCache(next);
+    setCover(null);
+    setSynopsis(null);
+    fetchBookCover(book.title, book.author, loadGBCache()).then(res => {
+      setCoverInCache(book.title, book.author, res);
       setCover(res?.thumb || null);
       setSynopsis(res?.description || null);
     });

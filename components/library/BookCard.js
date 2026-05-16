@@ -1,24 +1,27 @@
 "use client";
 import { memo, useCallback, useEffect, useState } from "react";
-import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import { fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
 import BookCardKebab from "./BookCardKebab";
 
 function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onShared, readingCount, maxReading, t }) {
-  const [cover, setCover] = useState(null);
+  // Lazy init : lit le cache singleton au 1er render → pas de flash placeholder.
+  const [cover, setCover] = useState(() => getCoverFromCache(book.title, book.author)?.thumb || null);
+  // Tracke le load réel de l'<img> — shimmer visible tant que l'image n'a
+  // pas fini son fetch (HTTP cache miss au remount → re-download network).
+  const [imageLoaded, setImageLoaded] = useState(false);
   const isSelected = selected.has(book.id);
-  const [c1, c2] = coverColors(book.title);
-  const letter   = coverLetter(book.title);
 
   useEffect(() => {
-    const cache = loadGBCache();
-    const key   = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
-    fetchBookCover(book.title, book.author, cache).then(res => {
-      const next = { ...cache, [key]: res };
-      saveGBCache(next);
+    const cached = getCoverFromCache(book.title, book.author);
+    if (cached !== undefined) { setCover(cached?.thumb || null); return; }
+    fetchBookCover(book.title, book.author, loadGBCache()).then(res => {
+      setCoverInCache(book.title, book.author, res);
       setCover(res?.thumb || null);
     });
   }, [book.title, book.author]);
+
+  // Reset l'état loaded quand la URL change (nouveau book ou nouvelle cover).
+  useEffect(() => { setImageLoaded(false); }, [cover]);
 
   const handleActivate = useCallback(() => {
     editMode ? onToggleSelect(book.id) : onOpen(book);
@@ -42,21 +45,20 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
       className={`book-card${isSelected ? ' selected' : ''}`}>
 
       {/* Cover */}
-      <div
-        className={`book-cover${cover ? '' : ' book-cover-placeholder'}`}
-        style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
-        {cover ? (
+      <div className={`book-cover${cover && imageLoaded ? '' : ' book-cover-placeholder'}`}>
+        {cover && (
           <img
             src={cover}
             alt=""
             width="160"
             height="148"
-            loading="lazy"
-            decoding="async"
+            loading="eager"
+            decoding="sync"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(true)}
+            style={{ opacity: imageLoaded ? 1 : 0 }}
             className="panel-cover-img"
           />
-        ) : (
-          <span className="cover-letter">{letter}</span>
         )}
 
         {/* Checkbox in edit mode */}

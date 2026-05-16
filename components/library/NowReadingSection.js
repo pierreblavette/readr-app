@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { coverColors, coverLetter, fetchBookCover, loadGBCache, saveGBCache } from "@/lib/bookUtils";
+import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -66,17 +66,15 @@ function NowReadingMenu({ book, onFinish, onAddQuote, onCancel, t }) {
 }
 
 function NowReadingCard({ book, onOpen, onFinish, onAddQuote, onCancel, lang, t }) {
-  const [cover, setCover] = useState(null);
+  const [cover, setCover] = useState(() => getCoverFromCache(book.title, book.author)?.thumb || null);
   const [c1, c2] = coverColors(book.title);
   const letter = coverLetter(book.title);
 
   useEffect(() => {
-    const cache = loadGBCache();
-    const key = `${book.title}||${book.author}`;
-    if (cache[key] !== undefined) { setCover(cache[key]?.thumb || null); return; }
-    fetchBookCover(book.title, book.author, cache).then(res => {
-      const next = { ...cache, [key]: res };
-      saveGBCache(next);
+    const cached = getCoverFromCache(book.title, book.author);
+    if (cached !== undefined) { setCover(cached?.thumb || null); return; }
+    fetchBookCover(book.title, book.author, loadGBCache()).then(res => {
+      setCoverInCache(book.title, book.author, res);
       setCover(res?.thumb || null);
     });
   }, [book.title, book.author]);

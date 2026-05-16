@@ -1062,10 +1062,6 @@
   box-shadow: 0 0 0 3px rgba(73,89,230,0.20);
 }
 
-/* Cover zone */
-.book-cover-placeholder { background: var(--primary-5); }
-[data-theme="dark"] .book-cover-placeholder { background: var(--primary-3); }
-
 .book-cover {
   height: 192px;
   display: flex;
@@ -1076,6 +1072,20 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* Cover zone — skeleton shimmer pendant le chargement de l'image. Gradient
+   2-stops primary-3 → primary-50 répété qui défile en boucle. Placé APRÈS
+   .book-cover dans le source pour override background-size/position/repeat. */
+@keyframes coverShimmer {
+  0%   { background-position: 0% 0; }
+  100% { background-position: -300% 0; }
+}
+.book-cover-placeholder {
+  background: linear-gradient(90deg, var(--primary-3) 0%, var(--primary-10) 50%, var(--primary-3) 100%);
+  background-size: 300% 100%;
+  background-repeat: repeat;
+  animation: coverShimmer 3.5s infinite linear;
 }
 
 .book-cover img {

@@ -2,6 +2,7 @@
 import "./library.css";
 import { useState, useEffect } from "react";
 import { useLibrary, MAX_READING } from "@/lib/useLibrary";
+import { preloadKnownCovers } from "@/lib/bookUtils";
 import Sidebar       from "@/components/Sidebar";
 import AppToolbar    from "@/components/library/AppToolbar";
 import SearchBar     from "@/components/library/SearchBar";
@@ -38,6 +39,13 @@ export default function LibraryPage() {
   const [finishBook, setFinishBook] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
   const lib = useLibrary();
+
+  // Précharge toutes les covers déjà connues au mount initial de la page
+  // — maintient une ref Image() vivante pour chaque URL → le browser ne
+  // re-fetch pas l'image au remount des <img> (layout swap, tab change).
+  useEffect(() => {
+    preloadKnownCovers();
+  }, []);
 
   useEffect(() => {
     if (!mobileSidebarOpen) return;
