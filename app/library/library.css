@@ -4548,7 +4548,8 @@
   gap: 12px;
   min-width: 0;
 }
-.dictionary-saved-row.expanded { border-bottom: none; }
+.dictionary-saved-row.expanded,
+.dictionary-saved-row.expanded td { border-bottom: 1px solid transparent; }
 
 .dictionary-saved-row-body td {
   padding: 0;
@@ -4556,6 +4557,7 @@
   white-space: normal;
   max-width: none;
   overflow: visible;
+  border-top: 1px solid var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
 }
 .dictionary-saved-row-body:last-child td { border-bottom: none; }
@@ -4613,6 +4615,8 @@
 }
 .dictionary-saved-head:hover { background: var(--primary-10); }
 [data-theme="dark"] .dictionary-saved-head:hover { background: var(--primary-10); }
+.dictionary-saved-row.expanded .dictionary-saved-head:hover,
+[data-theme="dark"] .dictionary-saved-row.expanded .dictionary-saved-head:hover { background: transparent; }
 .dictionary-saved-toggle {
   display: flex;
   align-items: center;
@@ -4644,15 +4648,13 @@
 
 .dictionary-saved-body {
   padding: 20px 16px;
-  border-top: 1.5px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   gap: 20px;
-  animation: fadeUp 0.2s ease both;
 }
 /* Overview WordListPanel only — body bg passes to white so the expanded
    definitions stand out from the panel's translucent surface. */
-.overview-word-card .dictionary-saved-body { background: #FFFFFF; }
+.overview-word-card .dictionary-saved-body { background: #FFFFFF; border-top: 1px solid var(--border-subtle); }
 [data-theme="dark"] .overview-word-card .dictionary-saved-body { background: var(--card); }
 /* Definitions separés par un .panel-divider dans le JSX — pas de
    padding-top/border-top sur les items, le gap 16 du parent suffit. */
