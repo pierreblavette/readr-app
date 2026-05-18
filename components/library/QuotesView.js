@@ -309,7 +309,6 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onToggleSave, onOp
       <div className="quote-card-divider" />
       <BookChip
         book={book || { title: quote.bookTitle || '', author: quote.bookAuthor || '' }}
-        onClick={onOpenBook ? (e) => { e.stopPropagation(); if (book) onOpenBook(book); } : undefined}
       />
     </div>
   );
