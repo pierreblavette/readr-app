@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useTheme } from "next-themes";
 import Wordmark from "./brand/Wordmark";
-import RMark from "./brand/RMark";
 
 export default function Sidebar({
   tab, setTab, data, collections,
@@ -31,15 +30,21 @@ export default function Sidebar({
         {/* Logo + collapse */}
         <div className="sidebar-logo">
           {collapsed ? (
-            <button className="sidebar-logo-collapse" onClick={onToggleCollapse} aria-label="Expand sidebar">
-              <RMark className="sidebar-logo-mark" />
+            <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" onClick={onToggleCollapse} aria-label="Expand sidebar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 12H3"/>
+                <path d="m11 18 6-6-6-6"/>
+                <path d="M21 5v14"/>
+              </svg>
             </button>
           ) : (
             <>
               <Wordmark className="logo" />
               <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" onClick={onToggleCollapse} aria-label="Collapse sidebar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <polyline points="15 18 9 12 15 6"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 19V5"/>
+                  <path d="m12 19-7-7 7-7"/>
+                  <path d="M19 12H5"/>
                 </svg>
               </button>
             </>

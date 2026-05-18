@@ -305,11 +305,11 @@
 [data-theme="dark"] .btn-outline { border-color: var(--light-20); color: var(--light-90); background: transparent; }
 [data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.12); }
 [data-theme="dark"] .btn-outline.is-hover { border-color: var(--primary-40) !important; color: var(--primary-40) !important; background: rgba(73,89,230,0.12) !important; }
-[data-theme="dark"] .btn-solid { background: rgba(73,89,230,0.15); color: var(--primary-30); }
+[data-theme="dark"] .btn-solid { background: rgba(73,89,230,0.15); color: var(--primary-50); }
 [data-theme="dark"] .btn-icon { border-color: var(--light-20); color: var(--light-70); }
 [data-theme="dark"] .btn-icon:hover:not(:disabled) { border-color: var(--primary-40); background: rgba(73,89,230,0.12); color: var(--primary-40); }
-[data-theme="dark"] .btn-ghost.is-active { color: var(--primary-30) !important; }
-[data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-30) !important; color: var(--primary-30) !important; }
+[data-theme="dark"] .btn-ghost.is-active { color: var(--primary-50) !important; }
+[data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-50) !important; color: var(--primary-50) !important; }
 
 /* ─── VIEW TOGGLE ─── */
 .view-btns-ds { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }

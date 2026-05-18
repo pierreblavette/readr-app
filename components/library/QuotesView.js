@@ -299,7 +299,7 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onToggleSave, onOp
             onClick={e => { e.stopPropagation(); onToggleSave?.(quote.id, !quote.saved); }}
             aria-label={quote.saved ? (t.quoteFavoriteOn || 'Loved') : (t.quoteFavoriteOff || 'Add to loved')}
             aria-pressed={!!quote.saved}>
-            <svg viewBox="0 0 24 24" fill={quote.saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill={quote.saved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 21l-8-5-8 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
             </svg>
           </button>

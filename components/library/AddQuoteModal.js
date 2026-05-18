@@ -328,8 +328,10 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                   <polyline points="17 8 12 3 7 8"/>
                   <line x1="12" y1="3" x2="12" y2="15"/>
                 </svg>
-                <div className="import-dropzone-title">Drop a photo or click to browse</div>
-                <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
+                <div className="import-dropzone-text">
+                  <div className="import-dropzone-title">Drop a photo or click to browse</div>
+                  <div className="import-dropzone-sub">JPG · PNG · HEIC. Photo of a bookshelf or a handwritten list.</div>
+                </div>
               </GradientDropzone>
               {scanError && (
                 <div className="scan-alert" role="alert">
@@ -345,8 +347,10 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
           {inputMode === 'photo' && photoState === 'scanning' && (
             <GradientDropzone gradientId="quoteGradScan">
               <svg className="quote-scanning-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round"/></svg>
-              <div key={`qtitle-${scanStep}-${readingIdx}`} className="import-dropzone-title scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrep : (t.quoteReadingPool?.[readingIdx] || t.quoteStepReading)}</div>
-              <div key={`qsub-${scanStep}`} className="import-dropzone-sub scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrepSub : t.quoteStepReadingSub}</div>
+              <div className="import-dropzone-text">
+                <div key={`qtitle-${scanStep}-${readingIdx}`} className="import-dropzone-title scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrep : (t.quoteReadingPool?.[readingIdx] || t.quoteStepReading)}</div>
+                <div key={`qsub-${scanStep}`} className="import-dropzone-sub scan-step-fade">{scanStep === 'prep' ? t.quoteStepPrepSub : t.quoteStepReadingSub}</div>
+              </div>
             </GradientDropzone>
           )}
 

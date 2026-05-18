@@ -7,7 +7,9 @@ export default function SelectionBar({ editMode, selected, books, tab, t, onCanc
   return (
     <div className={`selection-bar${editMode ? ' visible' : ''}`}>
 
-      <span className="selection-count">{t.selCount(count)}</span>
+      <span className="selection-count">
+        {tab === 'collections' ? t.selCountCollections(count) : t.selCount(count)}
+      </span>
 
       <div className="sel-actions">
         <button className="sel-btn sel-select-all" onClick={onSelectAll}>

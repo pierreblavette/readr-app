@@ -83,6 +83,7 @@ export default function LibraryPage() {
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
     collections, createCollection, deleteCollection, deleteCollections, renameCollection,
     addBookToCollection, addBooksToCollection, removeBookFromCollection, removeBooksFromCollection, getBooksForCollection,
+    exportCollectionsMD, exportCollectionsPDF, exportCollectionMD, exportCollectionPDF,
     activeCollection, setActiveCollection,
     quotes, addQuote, updateQuote, deleteQuote, getQuotesForBook, exportQuotesMD, exportQuotesPDF,
     words, saveWord, deleteWord, exportWordsMD, exportWordsPDF,
@@ -332,6 +333,8 @@ export default function LibraryPage() {
             onDelete={col => setDeleteTarget({ type: 'collection', id: col.id, title: col.name, count: getBooksForCollection(col.id).length })}
             onRename={col => setEditingCollection(col)}
             onRequestDeleteMany={ids => setDeleteTarget({ type: 'collectionsBulk', ids, count: ids.length })}
+            exportCollectionsMD={exportCollectionsMD}
+            exportCollectionsPDF={exportCollectionsPDF}
             t={t}
           />
         )}
@@ -371,6 +374,8 @@ export default function LibraryPage() {
             })}
             onOpenBook={b => setPanelBook(b)}
             quotes={quotes}
+            exportCollectionMD={exportCollectionMD}
+            exportCollectionPDF={exportCollectionPDF}
             t={t} sortCol={sortCol} sortDir={sortDir} toggleSort={toggleSort} setSort={setSort}
           />
         )}

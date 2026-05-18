@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import SelectionBar from "./SelectionBar";
 import CollectionCoverGrid from "./CollectionCoverGrid";
 import NoMatchesIcon from "./NoMatchesIcon";
+import ExportMenu from "./ExportMenu";
 
 function CollectionsIcon() {
   return (
@@ -100,7 +101,7 @@ function ColCardKebab({ col, onRename, onDelete, t }) {
   );
 }
 
-export default function CollectionsView({ collections, data, view, switchView, onOpen, onCreate, onDelete, onRename, onRequestDeleteMany, t }) {
+export default function CollectionsView({ collections, data, view, switchView, onOpen, onCreate, onDelete, onRename, onRequestDeleteMany, exportCollectionsMD, exportCollectionsPDF, t }) {
   const [search, setSearch] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [selected, setSelected] = useState(new Set());
@@ -189,6 +190,14 @@ export default function CollectionsView({ collections, data, view, switchView, o
                 )}
                 <span className="edit-btn-label">{editMode ? t.btnDone : t.btnEdit}</span>
               </button>
+            )}
+            {collections.length > 0 && (
+              <ExportMenu
+                exportPDF={exportCollectionsPDF}
+                exportMD={exportCollectionsMD}
+                disabled={editMode}
+                t={t}
+              />
             )}
           </div>
 

@@ -8,6 +8,7 @@ import GenresMenu from "./GenresMenu";
 import AuthorsMenu from "./AuthorsMenu";
 import NoMatchesIcon from "./NoMatchesIcon";
 import MobileFiltersPanel from "./MobileFiltersPanel";
+import ExportMenu from "./ExportMenu";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { MAX_BOOKS_PER_COLLECTION } from "../../lib/useLibrary";
 
@@ -27,6 +28,7 @@ export default function CollectionDetailView({
   collection, books, view, switchView,
   onBack, onDelete, onShare, onAddBooks, onRequestRemoveBook, onRequestRemoveMany, onOpenBook, onRenameRequest,
   quotes = [],
+  exportCollectionMD, exportCollectionPDF,
   t, sortCol, sortDir, toggleSort, setSort,
 }) {
   const currentSortKey =
@@ -354,6 +356,13 @@ export default function CollectionDetailView({
             </div>
           )}
 
+          <ExportMenu
+            exportPDF={() => exportCollectionPDF?.(collection.id)}
+            exportMD={() => exportCollectionMD?.(collection.id)}
+            disabled={editMode}
+            t={t}
+          />
+
           <div className="dropdown-wrap" ref={moreRef}>
             <button
               type="button"
@@ -390,11 +399,6 @@ export default function CollectionDetailView({
                   type="button"
                   className="dropdown-item"
                   onClick={() => { setMoreOpen(false); onShare?.(collection); }}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"/>
-                    <polyline points="16 6 12 2 8 6"/>
-                    <line x1="12" y1="2" x2="12" y2="15"/>
-                  </svg>
                   {t.colShare}
                 </button>
                 <div className="dropdown-divider" role="separator" />
