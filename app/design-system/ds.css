@@ -571,7 +571,7 @@
 .logo-bg .logo-symbol { height: clamp(28px, 20cqw, 64px); }
 .app-icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; width: 100%; }
 .app-icon-card { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-.app-icon-preview { width: 160px; height: 160px; display: block; flex-shrink: 0; border: 1px solid var(--border-subtle); border-radius: 32px; }
+.app-icon-preview { width: 160px; height: 160px; display: block; flex-shrink: 0; }
 .app-icon-meta { display: flex; flex-direction: column; gap: 4px; }
 .app-icon-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
 .app-icon-detail { font-size: 13px; color: var(--text); line-height: 1.4; }

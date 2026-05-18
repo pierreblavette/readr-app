@@ -105,6 +105,7 @@
   transition: var(--transition);
 }
 
+.toolbar-inner .logo { height: 15px; }
 .toolbar-inner {
   max-width: 1280px;
   margin: 0 auto;
@@ -3950,12 +3951,12 @@
   flex-shrink: 0;
 }
 .sidebar-logo .logo {
-  height: 17px;
+  height: 15px;
   flex: 0 0 auto;
 }
 .sidebar-logo-mark {
   display: block;
-  height: 15.7px;
+  height: 13.875px;
   width: auto;
   color: var(--text);
   overflow: visible;

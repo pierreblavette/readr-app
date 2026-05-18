@@ -1,5 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
+import Wordmark from "@/components/brand/Wordmark";
 
 export default function AppToolbar({
   lang, setLang, t,
@@ -27,7 +28,7 @@ export default function AppToolbar({
         </button>
 
         {/* Logo */}
-        <div className="logo">readr</div>
+        <Wordmark className="logo" />
 
         {/* Right controls */}
         <div className="toolbar-right">
