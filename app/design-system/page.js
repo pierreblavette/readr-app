@@ -468,7 +468,7 @@ export default function DesignSystemPage() {
             </div>
             <div className="ds-card">
               <div className="ds-card-head">Usage rules</div>
-              <div className="ds-card-body col padded" style={{ gap: 8 }}>
+              <div className="ds-card-body col padded">
                 <p>
                   Always <strong>Readr</strong> (R capitale + reste lowercase), never <em>readr</em>, <em>READR</em> or <em>ReadR</em>. Do not re-outline, recolor selectively, or apply font substitution — use the SVG component. Minimum size: 12px height. On colored backgrounds, use white only (#FFFFFF).
                 </p>
@@ -1405,7 +1405,7 @@ export default function DesignSystemPage() {
                       </defs>
                       <path d="M12 1.5C12.28 1.5 12.5 1.72 12.5 2C12.5 7.25 16.75 11.5 22 11.5C22.28 11.5 22.5 11.72 22.5 12C22.5 12.28 22.28 12.5 22 12.5C16.75 12.5 12.5 16.75 12.5 22C12.5 22.28 12.28 22.5 12 22.5C11.72 22.5 11.5 22.28 11.5 22C11.5 16.75 7.25 12.5 2 12.5C1.72 12.5 1.5 12.28 1.5 12C1.5 11.72 1.72 11.5 2 11.5C7.25 11.5 11.5 7.25 11.5 2C11.5 1.72 11.72 1.5 12 1.5Z" fill={`url(#aiGradDS-${sz})`}/>
                     </svg>
-                    Generate {label}
+                    <span>Generate {label}</span>
                   </button>
                 ))}
               </div>
@@ -1860,7 +1860,7 @@ export default function DesignSystemPage() {
           <DSSection id="rating-stars" title="Rating Stars" sub="Inline 5-star visual primitive. Filled positions use primary-50 (currentColor), empty use --border gray. Composed inside dropdown labels and trigger buttons.">
             <div className="ds-card">
               <div className="ds-card-head">Preview</div>
-              <div className="ds-card-body col padded" style={{ gap: 12 }}>
+              <div className="ds-card-body col padded">
                 {[5, 4, 3, 2, 1].map(n => (
                   <span key={n} className="rating-stars-inline" style={{ color: "var(--primary-50)" }}>
                     {[1,2,3,4,5].map(i => (
@@ -2697,7 +2697,7 @@ export default function DesignSystemPage() {
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                             <circle cx="12" cy="13" r="4"/>
                           </svg>
-                          Scan with camera
+                          <span>Scan with camera</span>
                         </button>
                         <div className="scan-or-separator"><span>or</span></div>
                         <p className="import-tab-hint">Look up a book by its barcode.</p>
@@ -3039,7 +3039,7 @@ function handleDeleteConfirm(payload) {
           <DSSection id="message-box" title="Message Box" sub="4 variants — info / alert / success / critical. Used inside modals (limit reached, scan errors), photo blocks and any contextual feedback within a flow.">
             <div className="ds-card">
               <div className="ds-card-head">Live preview — 4 variants (info / alert / success / critical)</div>
-              <div className="ds-card-body col padded" style={{ gap: 16 }}>
+              <div className="ds-card-body col padded">
                 <div className="modal-info-box">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
