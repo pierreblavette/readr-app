@@ -1,5 +1,7 @@
+import { withSerwist } from "@serwist/turbopack";
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withSerwist({
   allowedDevOrigins: ['192.168.86.107'],
   async redirects() {
     return [
@@ -9,6 +11,6 @@ const nextConfig = {
       { source: '/', destination: '/library', permanent: false },
     ];
   },
-};
+});
 
 export default nextConfig;

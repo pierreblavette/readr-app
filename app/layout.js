@@ -1,5 +1,6 @@
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { SerwistProvider } from "@serwist/turbopack/react";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -46,7 +47,12 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false}>
-          {children}
+          <SerwistProvider
+            swUrl="/serwist/sw.js"
+            disable={process.env.NODE_ENV === "development"}
+          >
+            {children}
+          </SerwistProvider>
         </ThemeProvider>
       </body>
     </html>
