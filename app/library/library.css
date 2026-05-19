@@ -1918,6 +1918,13 @@
   width: 100%;
 }
 .panel-add-to-collection { align-self: flex-start; }
+.panel-find-online-list {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .panel-header-actions {
   display: flex;
   align-items: center;
