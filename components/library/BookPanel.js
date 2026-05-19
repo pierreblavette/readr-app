@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
+import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache, getAmazonSearchUrl, getFnacSearchUrl } from "@/lib/bookUtils";
 import { useModalA11y } from "@/lib/useModalA11y";
 import CharacterCast from "./CharacterCast";
 import BookQuiz from "./BookQuiz";
@@ -157,6 +157,36 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   </button>
                 </div>
               </div>
+              {tab === 'wishlist' && (
+                <>
+                  <div className="panel-divider" />
+                  <div className="panel-section">
+                    <span className="panel-section-eyebrow">{t.panelFindOnline}</span>
+                    <div className="panel-find-online-list">
+                      <a
+                        href={getAmazonSearchUrl(book)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline btn-md panel-find-online-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        </svg>
+                        <span>{t.panelViewOnAmazon}</span>
+                      </a>
+                      <a
+                        href={getFnacSearchUrl(book)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline btn-md panel-find-online-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        </svg>
+                        <span>{t.panelViewOnFnac}</span>
+                      </a>
+                    </div>
+                  </div>
+                </>
+              )}
               <div className="panel-divider" />
               <div className="panel-collections-section">
                 <div className="panel-section">
