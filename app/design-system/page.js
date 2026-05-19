@@ -286,7 +286,7 @@ export default function DesignSystemPage() {
                 <span className="hamburger-line hamburger-line-mid" />
                 <span className="hamburger-line hamburger-line-bot" />
               </button>
-              <div className="logo">readr</div>
+              <Wordmark className="logo" />
               <div className="toolbar-right">
                 <button onClick={() => setTheme(t => t === "light" ? "dark" : "light")}
                   className="theme-btn" aria-label="Toggle theme">
