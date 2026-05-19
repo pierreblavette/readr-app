@@ -19,15 +19,15 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
   const inner = (
     <>
       <div
-        className={`quote-book-chip-cover${cover ? '' : ' quote-book-chip-cover-placeholder'}`}
+        className={`book-chip-cover${cover ? '' : ' book-chip-cover-placeholder'}`}
         style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
       >
         {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
       </div>
-      <div className="quote-book-chip-body">
-        <div className="quote-book-chip-name">
-          <div className="quote-book-chip-title">{book.title}</div>
-          {book.author && <div className="quote-book-chip-author">{book.author}</div>}
+      <div className="book-chip-body">
+        <div className="book-chip-name">
+          <div className="book-chip-title">{book.title}</div>
+          {book.author && <div className="book-chip-author">{book.author}</div>}
         </div>
         {rating > 0 && (
           <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
@@ -40,7 +40,7 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
         )}
       </div>
       {onRemove && (
-        <button type="button" className="quote-book-chip-remove" onClick={onRemove} aria-label={ariaLabel}>
+        <button type="button" className="book-chip-remove" onClick={onRemove} aria-label={ariaLabel}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
@@ -51,14 +51,14 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
 
   if (onClick) {
     return (
-      <button type="button" className="quote-book-chip quote-book-chip-interactive" onClick={onClick}>
+      <button type="button" className="book-chip book-chip-interactive" onClick={onClick}>
         {inner}
-        <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
       </button>
     );
   }
 
-  return <div className="quote-book-chip">{inner}</div>;
+  return <div className="book-chip">{inner}</div>;
 }

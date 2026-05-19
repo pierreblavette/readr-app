@@ -197,13 +197,13 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                         <button
                           key={col.id}
                           type="button"
-                          className="quote-book-chip quote-book-chip-interactive collection-chip"
+                          className="book-chip book-chip-interactive collection-chip"
                           onClick={() => onOpenCollection?.(col)}>
-                          <div className="quote-book-chip-body">
-                            <div className="quote-book-chip-title">{col.name}</div>
-                            <div className="quote-book-chip-author">{t.colBookCount((col.bookIds || []).length)}</div>
+                          <div className="book-chip-body">
+                            <div className="book-chip-title">{col.name}</div>
+                            <div className="book-chip-author">{t.colBookCount((col.bookIds || []).length)}</div>
                           </div>
-                          <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <polyline points="9 18 15 12 9 6"/>
                           </svg>
                         </button>

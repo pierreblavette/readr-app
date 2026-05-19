@@ -560,7 +560,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (#FAFAFF)</div>
-                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.quote-book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
+                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Dark mode override</div>
@@ -819,7 +819,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">.add-to-col-row</div>
-                  <p>State modifier (background / selected / disabled) on top of <code>.quote-book-chip</code>, not a layout class.</p>
+                  <p>State modifier (background / selected / disabled) on top of <code>.book-chip</code>, not a layout class.</p>
                 </div>
               </div>
             </div>
@@ -1035,11 +1035,11 @@ export default function DesignSystemPage() {
                 {/* Display (no onClick, no onRemove) */}
                 <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
                   <span className="panel-section-eyebrow">Display</span>
-                  <div className="quote-book-chip">
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">Tropique du Cancer</div>
-                      <div className="quote-book-chip-author">Henry Miller</div>
+                  <div className="book-chip">
+                    <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                    <div className="book-chip-body">
+                      <div className="book-chip-title">Tropique du Cancer</div>
+                      <div className="book-chip-author">Henry Miller</div>
                     </div>
                   </div>
                 </div>
@@ -1047,13 +1047,13 @@ export default function DesignSystemPage() {
                 {/* Interactive (with onClick → chevron) */}
                 <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
                   <span className="panel-section-eyebrow">Interactive</span>
-                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #9EEB97, #4959E6)" }}><span>1</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">1984</div>
-                      <div className="quote-book-chip-author">George Orwell</div>
+                  <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #9EEB97, #4959E6)" }}><span>1</span></div>
+                    <div className="book-chip-body">
+                      <div className="book-chip-title">1984</div>
+                      <div className="book-chip-author">George Orwell</div>
                     </div>
-                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <polyline points="9 18 15 12 9 6"/>
                     </svg>
                   </button>
@@ -1062,13 +1062,13 @@ export default function DesignSystemPage() {
                 {/* With remove */}
                 <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
                   <span className="panel-section-eyebrow">With remove</span>
-                  <div className="quote-book-chip">
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #FE7E4E, #FFCEE3)" }}><span>B</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">A Brief History of Time</div>
-                      <div className="quote-book-chip-author">Stephen Hawking</div>
+                  <div className="book-chip">
+                    <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #FE7E4E, #FFCEE3)" }}><span>B</span></div>
+                    <div className="book-chip-body">
+                      <div className="book-chip-title">A Brief History of Time</div>
+                      <div className="book-chip-author">Stephen Hawking</div>
                     </div>
-                    <button type="button" className="quote-book-chip-remove" aria-label="Remove">
+                    <button type="button" className="book-chip-remove" aria-label="Remove">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                       </svg>
@@ -1079,12 +1079,12 @@ export default function DesignSystemPage() {
                 {/* With rating (interactive) */}
                 <div style={{ flex: "1 1 260px", minWidth: 240, display: "flex", flexDirection: "column", gap: 8 }}>
                   <span className="panel-section-eyebrow">With rating</span>
-                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #4959E6, #00A699)" }}><span>D</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-name">
-                        <div className="quote-book-chip-title">Dune</div>
-                        <div className="quote-book-chip-author">Frank Herbert</div>
+                  <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #4959E6, #00A699)" }}><span>D</span></div>
+                    <div className="book-chip-body">
+                      <div className="book-chip-name">
+                        <div className="book-chip-title">Dune</div>
+                        <div className="book-chip-author">Frank Herbert</div>
                       </div>
                       <div className="overview-stars" aria-label="Rating 5/5">
                         {[1,2,3,4,5].map(n => (
@@ -1094,7 +1094,7 @@ export default function DesignSystemPage() {
                         ))}
                       </div>
                     </div>
-                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <polyline points="9 18 15 12 9 6"/>
                     </svg>
                   </button>
@@ -1137,7 +1137,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">rating · number (1–5)</div>
-                  <p>Renders 5 stars (<code>.overview-stars</code>, padding 4 0) below title/author when {'>'} 0. Title/author auto-wrapped in <code>.quote-book-chip-name</code> (gap 2). Body gap 4. Stars: 14×14, filled <span className="ds-token-chip">--primary-50</span> / empty <span className="ds-token-chip">--border</span>.</p>
+                  <p>Renders 5 stars (<code>.overview-stars</code>, padding 4 0) below title/author when {'>'} 0. Title/author auto-wrapped in <code>.book-chip-name</code> (gap 2). Body gap 4. Stars: 14×14, filled <span className="ds-token-chip">--primary-50</span> / empty <span className="ds-token-chip">--border</span>.</p>
                 </div>
               </div>
             </div>
@@ -2124,13 +2124,13 @@ export default function DesignSystemPage() {
                     </div>
                   </div>
                   <div className="quote-card-divider" />
-                  <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
-                    <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
-                    <div className="quote-book-chip-body">
-                      <div className="quote-book-chip-title">Tropique du Cancer</div>
-                      <div className="quote-book-chip-author">Henry Miller</div>
+                  <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%" }}>
+                    <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                    <div className="book-chip-body">
+                      <div className="book-chip-title">Tropique du Cancer</div>
+                      <div className="book-chip-author">Henry Miller</div>
                     </div>
-                    <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <polyline points="9 18 15 12 9 6"/>
                     </svg>
                   </button>
@@ -2588,15 +2588,15 @@ export default function DesignSystemPage() {
                     <div className="panel-divider" />
                     <div className="panel-section">
                       <span className="panel-section-eyebrow">Book</span>
-                      <button type="button" className="quote-book-chip quote-book-chip-interactive">
-                        <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
-                        <div className="quote-book-chip-body">
-                          <div className="quote-book-chip-name">
-                            <div className="quote-book-chip-title">Tropique du Cancer</div>
-                            <div className="quote-book-chip-author">Henry Miller</div>
+                      <button type="button" className="book-chip book-chip-interactive">
+                        <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>T</span></div>
+                        <div className="book-chip-body">
+                          <div className="book-chip-name">
+                            <div className="book-chip-title">Tropique du Cancer</div>
+                            <div className="book-chip-author">Henry Miller</div>
                           </div>
                         </div>
-                        <svg className="quote-book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <polyline points="9 18 15 12 9 6"/>
                         </svg>
                       </button>
@@ -2917,12 +2917,12 @@ export default function DesignSystemPage() {
                     </div>
                     {deleteVariant === "book" && (
                       <div className="confirm-modal-chip">
-                        <div className="quote-book-chip">
-                          <div className="quote-book-chip-cover quote-book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>A</span></div>
-                          <div className="quote-book-chip-body">
-                            <div className="quote-book-chip-name">
-                              <div className="quote-book-chip-title">A Brief History of Time</div>
-                              <div className="quote-book-chip-author">Stephen Hawking</div>
+                        <div className="book-chip">
+                          <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, #6F7CF2, #F67BF8)" }}><span>A</span></div>
+                          <div className="book-chip-body">
+                            <div className="book-chip-name">
+                              <div className="book-chip-title">A Brief History of Time</div>
+                              <div className="book-chip-author">Stephen Hawking</div>
                             </div>
                           </div>
                         </div>
@@ -3036,7 +3036,7 @@ export default function DesignSystemPage() {
                       <td className="mono">{"{ type: 'collection', id, title, count }"}</td>
                       <td className="mono">t.colDeleteTitle</td>
                       <td className="mono">t.colDeleteMsg</td>
-                      <td className="mono">.confirm-modal-chip + .quote-book-chip (no cover, count as author)</td>
+                      <td className="mono">.confirm-modal-chip + .book-chip (no cover, count as author)</td>
                       <td className="mono">.confirm-modal-delete → deleteCollection</td>
                     </tr>
                     <tr className="table-row">
@@ -4399,7 +4399,7 @@ function handleDeleteConfirm(payload) {
                   ["Dictionary saved card", "hover (card)", ["border --primary-50", "translateY(-2px)", "shadow — body stays on --bg2"]],
                   ["Dictionary saved head", "hover", ["bg --primary-3"]],
                   ["Dictionary result", "default", ["--bg2", "1.5px --border-subtle"]],
-                  ["BookChip — base (.quote-book-chip)", "default", ["bg --bg3"]],
+                  ["BookChip — base (.book-chip)", "default", ["bg --bg3"]],
                   ["BookChip — base interactive", "hover", ["bg --primary-5"]],
                   ["BookChip inside .quote-card", "default", ["bg --primary-5"]],
                   ["BookChip inside .quote-card interactive", "hover", ["bg --primary-10"]],

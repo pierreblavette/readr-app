@@ -910,7 +910,7 @@
 [data-theme="dark"] .now-reading-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
 .now-reading-card:has(.dropdown-menu) { z-index: 10; }
 
-/* Overview context — UI state iso .quote-book-chip-interactive
+/* Overview context — UI state iso .book-chip-interactive
  * (bg3 light / #262626 dark resting, primary-5 / primary-10 hover,
  * no border, no transform, no shadow). Neutral gray surface = interactive
  * content tile (vs primary-5 surfaces = button/control affordance). */
@@ -4826,7 +4826,7 @@
 [data-theme="dark"] .quote-link-select:hover .quote-link-select-chevron,
 [data-theme="dark"] .quote-link-select.open .quote-link-select-chevron { color: var(--primary-40); }
 
-.quote-book-chip {
+.book-chip {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -4835,14 +4835,14 @@
   border-radius: 8px;
   animation: fadeUp 0.2s ease both;
 }
-button.quote-book-chip {
+button.book-chip {
   width: 100%;
   border: none;
   font-family: inherit;
   color: inherit;
   text-align: left;
 }
-.quote-book-chip-interactive {
+.book-chip-interactive {
   padding: 12px;
   cursor: pointer;
   transition: background 0.15s;
@@ -4850,22 +4850,22 @@ button.quote-book-chip {
 }
 /* Collection variant — asymmetric padding (16/12) since chevron is right-aligned */
 .collection-chip { padding: 12px 12px 12px 16px; }
-.quote-book-chip-interactive:hover,
-.quote-book-chip-interactive:active { background: var(--primary-10); }
-[data-theme="dark"] .quote-book-chip-interactive { background: var(--bg-elevated); }
-[data-theme="dark"] .quote-book-chip-interactive:hover,
-[data-theme="dark"] .quote-book-chip-interactive:active { background: var(--primary-10); }
+.book-chip-interactive:hover,
+.book-chip-interactive:active { background: var(--primary-10); }
+[data-theme="dark"] .book-chip-interactive { background: var(--bg-elevated); }
+[data-theme="dark"] .book-chip-interactive:hover,
+[data-theme="dark"] .book-chip-interactive:active { background: var(--primary-10); }
 
 /* Quote-card context — book chip is non-interactive inside the card,
    rendered flat (transparent bg + no padding) so it reads as a label
    row, not as a clickable cell. */
-.quote-card .quote-book-chip { background: transparent; padding: 0; }
+.quote-card .book-chip { background: transparent; padding: 0; }
 
-.quote-book-chip-interactive:focus-visible {
+.book-chip-interactive:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
 }
-.quote-book-chip-chevron {
+.book-chip-chevron {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
@@ -4875,12 +4875,12 @@ button.quote-book-chip {
   align-self: center;
   transition: color 0.18s ease;
 }
-.quote-book-chip-interactive:hover .quote-book-chip-chevron,
-.quote-book-chip-interactive:focus-visible .quote-book-chip-chevron { color: var(--primary-50); }
-[data-theme="dark"] .quote-book-chip-interactive:hover .quote-book-chip-chevron,
-[data-theme="dark"] .quote-book-chip-interactive:focus-visible .quote-book-chip-chevron { color: var(--primary-40); }
+.book-chip-interactive:hover .book-chip-chevron,
+.book-chip-interactive:focus-visible .book-chip-chevron { color: var(--primary-50); }
+[data-theme="dark"] .book-chip-interactive:hover .book-chip-chevron,
+[data-theme="dark"] .book-chip-interactive:focus-visible .book-chip-chevron { color: var(--primary-40); }
 
-.quote-book-chip-cover {
+.book-chip-cover {
   width: 32px;
   height: 44px;
   border-radius: 4px;
@@ -4895,25 +4895,25 @@ button.quote-book-chip {
   letter-spacing: 0.02em;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
-.quote-book-chip-cover img {
+.book-chip-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.quote-book-chip-body {
+.book-chip-body {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.quote-book-chip-name {
+.book-chip-name {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.quote-book-chip-title {
+.book-chip-title {
   font-weight: 600;
   font-size: 15px;
   color: var(--text);
@@ -4921,7 +4921,7 @@ button.quote-book-chip {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.quote-book-chip-author {
+.book-chip-author {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-2);
@@ -4929,7 +4929,7 @@ button.quote-book-chip {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.quote-book-chip-remove {
+.book-chip-remove {
   flex-shrink: 0;
   width: 28px;
   height: 28px;
@@ -4943,13 +4943,13 @@ button.quote-book-chip {
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.quote-book-chip-remove:hover { background: var(--primary-10); color: var(--primary-50); }
-[data-theme="dark"] .quote-book-chip-remove:hover { background: var(--primary-10); color: var(--primary-40); }
-.quote-book-chip-remove:focus-visible {
+.book-chip-remove:hover { background: var(--primary-10); color: var(--primary-50); }
+[data-theme="dark"] .book-chip-remove:hover { background: var(--primary-10); color: var(--primary-40); }
+.book-chip-remove:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
 }
-.quote-book-chip-remove svg { width: 14px; height: 14px; }
+.book-chip-remove svg { width: 14px; height: 14px; }
 
 .quote-scanning {
   display: flex;
@@ -5891,8 +5891,8 @@ button.quote-book-chip {
 }
 .overview-stars svg.is-filled { color: var(--primary-50); }
 /* When the chip has stars, pin the cover to the top. Chevron stays
- * centered via align-self (rule above on .quote-book-chip-chevron). */
-.quote-book-chip:has(.overview-stars) {
+ * centered via align-self (rule above on .book-chip-chevron). */
+.book-chip:has(.overview-stars) {
   align-items: flex-start;
 }
 
@@ -5904,7 +5904,7 @@ button.quote-book-chip {
 }
 /* .overview-quote-card modifier — neutral bg + primary-tint on hover,
  * no transform / no shadow / no border / no entry animation.
- * Mirrors the .quote-book-chip-interactive UI. Used in Quotes spotlight
+ * Mirrors the .book-chip-interactive UI. Used in Quotes spotlight
  * (OverviewView) and QuoteListPanel. */
 .quote-card.overview-quote-card {
   background: var(--bg3);
@@ -5927,8 +5927,8 @@ button.quote-book-chip {
 [data-theme="dark"] .quote-card.overview-quote-card:hover .quote-card-divider { background: rgba(255, 255, 255, 0.1); }
 /* Inner BookChip is non-interactive — drop its bg so it doesn't read as
  * a clickable affordance. */
-.quote-card.overview-quote-card .quote-book-chip,
-[data-theme="dark"] .quote-card.overview-quote-card .quote-book-chip {
+.quote-card.overview-quote-card .book-chip,
+[data-theme="dark"] .quote-card.overview-quote-card .book-chip {
   background: transparent;
   padding: 0;
 }

@@ -19,16 +19,16 @@ function AddBookRow({ book, isSelected, isDisabled, onToggle }) {
   }, [book.title, book.author]);
 
   return (
-    <div className={`quote-book-chip add-to-col-row${isSelected ? ' is-selected' : ''}${isDisabled && !isSelected ? ' is-disabled' : ''}`}>
+    <div className={`book-chip add-to-col-row${isSelected ? ' is-selected' : ''}${isDisabled && !isSelected ? ' is-disabled' : ''}`}>
       <div
-        className={`quote-book-chip-cover${cover ? '' : ' quote-book-chip-cover-placeholder'}`}
+        className={`book-chip-cover${cover ? '' : ' book-chip-cover-placeholder'}`}
         style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
       >
         {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
       </div>
-      <div className="quote-book-chip-body">
-        <div className="quote-book-chip-title">{book.title}</div>
-        {book.author && <div className="quote-book-chip-author">{book.author}</div>}
+      <div className="book-chip-body">
+        <div className="book-chip-title">{book.title}</div>
+        {book.author && <div className="book-chip-author">{book.author}</div>}
       </div>
       <button
         type="button"

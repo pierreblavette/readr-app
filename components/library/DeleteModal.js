@@ -116,10 +116,10 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
           )}
           {isCollection && target.title && (
             <div className="confirm-modal-chip">
-              <div className="quote-book-chip">
-                <div className="quote-book-chip-body">
-                  <div className="quote-book-chip-title">{target.title}</div>
-                  <div className="quote-book-chip-author">{t.colBookCount(target.count || 0)}</div>
+              <div className="book-chip">
+                <div className="book-chip-body">
+                  <div className="book-chip-title">{target.title}</div>
+                  <div className="book-chip-author">{t.colBookCount(target.count || 0)}</div>
                 </div>
               </div>
             </div>
