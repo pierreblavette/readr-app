@@ -757,11 +757,11 @@
 [data-theme="dark"] .edit-btn { background: var(--bg3); }
 [data-theme="dark"] .edit-btn:hover { border-color: var(--primary-50); color: var(--primary-40); background: var(--primary-3); }
 
-/* >600 : text-only (hide pencil/check SVG, symmetric padding). Scoped to
+/* >480 : text-only (hide pencil/check SVG, symmetric padding). Scoped to
    exclude .dictionary-save-toggle which is a toggle Save/Saved/Delete
-   with intentional +/check/x icon + label. Mobile (≤600) restores
+   with intentional +/check/x icon + label. Mobile (≤480) restores
    icon-only via the .edit-btn { width:40 } rule below. */
-@media (min-width: 601px) {
+@media (min-width: 481px) {
   .edit-btn:not(.dictionary-save-toggle) > svg { display: none; }
   .edit-btn:not(.dictionary-save-toggle) { padding: 0 16px; }
 }
@@ -3787,8 +3787,8 @@
   .panel-header-share span { display: none; }
 }
 
-/* edit-btn collapses to icon-only pencil (40x40 square) on mobile (≤600). */
-@media (max-width: 600px) {
+/* edit-btn collapses to icon-only pencil (40x40 square) on mobile (≤480). */
+@media (max-width: 480px) {
   .edit-btn { width: 40px; padding: 0; justify-content: center; }
   .edit-btn-label { display: none; }
 }
