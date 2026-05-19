@@ -3574,7 +3574,12 @@
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
-  .toolbar { display: flex; align-items: center; padding: 0 16px; padding-top: env(safe-area-inset-top); height: 60px; }
+  /* No `height` on the toolbar : with `box-sizing: border-box` (global),
+     a fixed height would clamp the content box to 0 once `padding-top:
+     env(safe-area-inset-top)` resolves to ~50-62px (iPhone notch).
+     `.toolbar-inner` defines the row height (60px) ; the toolbar auto-
+     sizes to padding-top + inner + border. */
+  .toolbar { display: flex; align-items: center; padding: 0 16px; padding-top: env(safe-area-inset-top); }
   .toolbar-inner { flex: 1; min-width: 0; padding: 0; max-width: none; margin: 0; height: 60px; gap: 16px; }
   .main-wrap { padding-left: 16px; padding-right: 16px; }
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
