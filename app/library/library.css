@@ -2832,7 +2832,7 @@
 
 .modal-title {
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
   font-family: inherit;
@@ -2860,7 +2860,7 @@
   font-family: inherit;
 }
 
-.modal-close:hover { background: var(--primary-5); color: var(--primary-60); }
+.modal-close:hover { background: var(--primary-5); color: var(--primary-50); }
 .modal-close svg { width: 24px; height: 24px; }
 
 [data-theme="dark"] .modal-close:hover { background: var(--primary-5); color: var(--primary-40); }
@@ -3133,7 +3133,7 @@
    the action is easily redoable. */
 .confirm-modal-delete--soft {
   background: var(--primary-5);
-  color: var(--primary-60);
+  color: var(--primary-50);
 }
 .confirm-modal-delete--soft:hover { background: var(--primary-10); }
 [data-theme="dark"] .confirm-modal-delete--soft { color: var(--primary-40); }
@@ -3197,7 +3197,7 @@
   font-family: inherit;
   padding: 0;
 }
-.footer-link:hover { color: var(--primary-60); }
+.footer-link:hover { color: var(--primary-50); }
 [data-theme="dark"] .footer-link:hover { color: var(--primary-40); }
 .footer-sep { color: var(--border-subtle); }
 
@@ -3259,7 +3259,7 @@
   margin-left: 8px;
 }
 .autocomplete-item:hover,
-.autocomplete-item.focused { background: var(--primary-5); color: var(--primary-60); }
+.autocomplete-item.focused { background: var(--primary-5); color: var(--primary-50); }
 [data-theme="dark"] .autocomplete-item:hover,
 [data-theme="dark"] .autocomplete-item.focused { background: var(--primary-5); color: var(--primary-40); }
 
@@ -3906,10 +3906,10 @@
   font-family: inherit; font-size: 15px; font-weight: 600;
   color: var(--text-2); cursor: pointer; transition: all 0.15s;
 }
-.ob-skip:hover { background: var(--primary-5); color: var(--primary-60); }
+.ob-skip:hover { background: var(--primary-5); color: var(--primary-50); }
 .ob-prev {
   height: 40px; padding: 0 20px; border-radius: 8px;
-  background: var(--primary-5); color: var(--primary-60); border: none;
+  background: var(--primary-5); color: var(--primary-50); border: none;
   font-family: inherit; font-size: 15px; font-weight: 600;
   cursor: pointer; transition: background 0.15s;
 }
@@ -4422,7 +4422,7 @@
 .dictionary-save-toggle.is-saved {
   background: var(--primary-5);
   border-color: transparent;
-  color: var(--primary-60);
+  color: var(--primary-50);
 }
 .dictionary-save-toggle.is-saved:hover {
   background: var(--primary-10);
@@ -4776,7 +4776,7 @@
   cursor: pointer;
   transition: color 0.15s;
 }
-.quote-see-more:hover { color: var(--primary-60); text-decoration: underline; }
+.quote-see-more:hover { color: var(--primary-50); text-decoration: underline; }
 [data-theme="dark"] .quote-see-more { color: var(--primary-40); }
 [data-theme="dark"] .quote-see-more:hover { color: var(--primary-40); }
 .quote-see-more:focus-visible {
