@@ -552,8 +552,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
         {/* Actions — direct child of .modal so they get the 32px gap (matches finish-modal pattern) */}
         {(activeTab === 'photo' || activeTab === 'file' || activeTab === 'scan') && (
           <div className="modal-actions">
-            <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
-            <button type="button" className="modal-submit"
+            <button type="button" className="btn btn-outline btn-md" onClick={resetAndClose}>{t.btnCancel}</button>
+            <button type="button" className="btn btn-primary btn-md"
               disabled={photoState === 'scanning' || previewBooks.length === 0}
               onClick={handleImportConfirm}>
               {activeTab === 'scan' && previewBooks.length === 1
@@ -564,8 +564,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
         )}
         {activeTab === 'manual' && (
           <div className="modal-actions">
-            <button type="button" className="modal-cancel" onClick={resetAndClose}>{t.btnCancel}</button>
-            <button type="submit" form="add-book-form" className="modal-submit" disabled={!title.trim() || !author.trim()}>{t.btnAddLibrary}</button>
+            <button type="button" className="btn btn-outline btn-md" onClick={resetAndClose}>{t.btnCancel}</button>
+            <button type="submit" form="add-book-form" className="btn btn-primary btn-md" disabled={!title.trim() || !author.trim()}>{t.btnAddLibrary}</button>
           </div>
         )}
 

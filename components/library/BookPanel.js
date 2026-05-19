@@ -180,7 +180,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       ))}
                     </div>
                   ) : (
-                    <p className="panel-empty-text">{t.colNoCollectionsYet}</p>
+                    <p className="panel-empty-text">{t.panelBookNoCollections}</p>
                   )}
                 </div>
                 {collections.length === 0 && (

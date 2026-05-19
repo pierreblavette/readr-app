@@ -87,10 +87,10 @@ export default function FinishReadingModal({ open, book, onClose, onConfirm, t }
         </form>
 
         <div className="modal-actions">
-          <button type="button" className="modal-cancel" onClick={onClose}>
+          <button type="button" className="btn btn-outline btn-md" onClick={onClose}>
             {t.btnCancel}
           </button>
-          <button type="submit" form="finish-reading-form" className="modal-submit">
+          <button type="submit" form="finish-reading-form" className="btn btn-primary btn-md">
             {t.finishModalSave}
           </button>
         </div>

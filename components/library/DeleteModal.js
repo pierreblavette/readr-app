@@ -145,7 +145,7 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
           )}
         </div>
         <div className="confirm-modal-actions">
-          <button className="modal-cancel" onClick={onClose}>{t.deleteBtnCancel}</button>
+          <button className="btn btn-outline btn-md" onClick={onClose}>{t.deleteBtnCancel}</button>
           <button className={confirmClass} onClick={handleConfirm}>
             {confirmLabel}
           </button>

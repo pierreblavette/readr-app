@@ -49,10 +49,10 @@ export default function CreateCollectionModal({ open, onClose, onCreate, editing
           </div>
         </form>
         <div className="confirm-modal-actions">
-          <button type="button" className="modal-cancel" onClick={onClose}>
+          <button type="button" className="btn btn-outline btn-md" onClick={onClose}>
             {t.btnCancel}
           </button>
-          <button type="submit" form="create-col-form" className="modal-submit" disabled={!name.trim() || (editing && name.trim() === editing.name)}>
+          <button type="submit" form="create-col-form" className="btn btn-primary btn-md" disabled={!name.trim() || (editing && name.trim() === editing.name)}>
             {submitLabel}
           </button>
         </div>

@@ -702,7 +702,7 @@
   padding: 0 16px 0 12px;
   border-radius: 8px;
   border: none;
-  background: var(--accent);
+  background: var(--primary-50);
   color: #FFFFFF;
   font-family: inherit;
   font-size: 15px;
@@ -869,7 +869,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 18px;
+  gap: 16px;
 }
 
 /* ─── NOW READING SECTION ─── */
@@ -883,7 +883,7 @@
 .now-reading-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  gap: 16px;
 }
 .now-reading-card {
   position: relative;
@@ -1546,7 +1546,7 @@
   gap: 8px;
   height: 40px;
   padding: 0 20px;
-  background: var(--accent);
+  background: var(--primary-50);
   color: #FFFFFF;
   border: none;
   border-radius: 8px;
@@ -1569,7 +1569,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 18px;
+  gap: 16px;
 }
 .col-card {
   background: var(--card);
@@ -2698,7 +2698,7 @@
 [data-theme="dark"] .modal-overlay { background: rgba(0,0,0,0.55); }
 
 .modal {
-  background: #FFFFFF;
+  background: var(--card);
   border-radius: 8px;
   animation: modalIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
   padding: 32px 24px 0;
@@ -2951,9 +2951,11 @@
 /* Modal fields */
 .modal-fields { display: flex; flex-direction: column; gap: 24px; }
 .modal-field { display: flex; flex-direction: column; gap: 8px; position: relative; }
-.modal-field label { font-size: 13px; font-weight: 500; color: var(--text-2); }
+.modal-field label,
+.modal-field-label { font-size: 13px; font-weight: 500; color: var(--text-2); }
 
-.modal-field input {
+.modal-field input,
+.modal-field-input {
   height: 40px;
   padding: 0 14px;
   border-radius: 8px;
@@ -2966,13 +2968,20 @@
   outline: none;
   transition: border-color 0.15s, background 0.15s;
 }
-.modal-field input::placeholder { color: var(--text-2); }
+.modal-field input::placeholder,
+.modal-field-input::placeholder { color: var(--text-2); }
 
-.modal-field input:hover:not(:focus) { background: var(--primary-5); border: 1.5px solid var(--primary-50); }
-.modal-field input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
+.modal-field input:hover:not(:focus),
+.modal-field-input:hover:not(:focus):not(:disabled) { background: var(--primary-5); border: 1.5px solid var(--primary-50); }
+.modal-field input:focus,
+.modal-field-input:focus:not(:disabled) { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
 
-[data-theme="dark"] .modal-field input:hover:not(:focus) { border: 1.5px solid var(--primary-50); background: var(--primary-3); }
-[data-theme="dark"] .modal-field input:focus { border-color: var(--primary-50); box-shadow: 0 0 0 3px rgba(73,89,230,0.4); }
+[data-theme="dark"] .modal-field input:hover:not(:focus),
+[data-theme="dark"] .modal-field-input:hover:not(:focus):not(:disabled) { border: 1.5px solid var(--primary-50); background: var(--primary-3); }
+[data-theme="dark"] .modal-field input:focus,
+[data-theme="dark"] .modal-field-input:focus:not(:disabled) { border-color: var(--primary-50); box-shadow: 0 0 0 3px rgba(73,89,230,0.4); }
+
+.modal-field-input:disabled { color: var(--text-2); cursor: not-allowed; }
 
 .modal-actions {
   display: flex;
@@ -2988,47 +2997,8 @@
   z-index: 1;
 }
 
-.modal-cancel {
-  height: 40px;
-  padding: 0 20px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border-subtle);
-  background: transparent;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color 0.15s;
-  white-space: nowrap;
-}
-
-.modal-cancel:hover { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-
-[data-theme="dark"] .modal-cancel:hover { border-color: var(--primary-50); color: var(--primary-40); background: var(--primary-5); }
-
-.modal-submit {
-  height: 40px;
-  padding: 0 20px;
-  border-radius: 8px;
-  border: none;
-  background: var(--primary-50);
-  color: #FFFFFF;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
-
-.modal-submit:hover:not(:disabled) { background: var(--primary-60); }
-.modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-
 [data-theme="dark"] .modal { background: var(--card); box-shadow: 0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30); }
 [data-theme="dark"] .confirm-modal { box-shadow: 0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30); }
-[data-theme="dark"] .modal-submit { background: var(--primary-50); }
-[data-theme="dark"] .modal-submit:hover:not(:disabled) { background: var(--primary-60); }
 
 /* Modal error */
 .modal-error { color: var(--destructive); font-size: 13px; margin-top: -8px; }
@@ -3582,7 +3552,7 @@
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--primary-60);
+  background: var(--primary-50);
   color: #FFFFFF;
   padding: 13px 20px 13px 12px;
   border-radius: 8px;
@@ -4068,10 +4038,6 @@
   background: var(--primary-50);
   color: #FFFFFF;
 }
-[data-theme="dark"] .sidebar-item.active {
-  background: var(--primary-50);
-  color: #FFFFFF;
-}
 
 .sidebar-icon {
   width: 20px; height: 20px;
@@ -4526,7 +4492,7 @@
 .dictionary-saved-letters {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 /* Wraps the saved-words search row + the letters list (or no-match empty)
    with a 32 gap — mirrors .search-bar-wrap rhythm. */
@@ -4669,11 +4635,11 @@
 .quotes-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .quote-card {
-  background: var(--bg2);
+  background: var(--card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: 16px;
@@ -5006,35 +4972,11 @@ button.quote-book-chip {
 }
 .quote-scanning-spinner {
   width: 28px; height: 28px;
-  animation: spin 1s linear infinite;
+  animation: spin 0.7s linear infinite;
   color: var(--primary-50);
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.modal-field-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-2);
-}
-.modal-field-input {
-  height: 40px;
-  padding: 0 14px;
-  border-radius: 8px;
-  border: 1.5px solid transparent;
-  background: var(--bg3);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  outline: none;
-  transition: border-color 0.15s, background 0.15s;
-}
-.modal-field-input::placeholder { color: var(--text-2); }
-.modal-field-input:hover:not(:focus):not(:disabled) { background: var(--primary-5); border-color: var(--primary-50); }
-.modal-field-input:focus:not(:disabled) { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); }
-[data-theme="dark"] .modal-field-input:hover:not(:focus):not(:disabled) { border-color: var(--primary-50); background: var(--primary-3); }
-[data-theme="dark"] .modal-field-input:focus:not(:disabled) { border-color: var(--primary-50); box-shadow: 0 0 0 3px rgba(73,89,230,0.4); }
-.modal-field-input:disabled { color: var(--text-2); cursor: not-allowed; }
 
 /* ─── BOOK PANEL QUOTES ─── */
 .panel-quotes {
@@ -5463,7 +5405,7 @@ button.quote-book-chip {
 }
 .overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-10); }
 .overview-activity-nav-btn:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
-.overview-activity-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.overview-activity-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .overview-activity-nav-btn svg { width: 16px; height: 16px; }
 [data-theme="dark"] .overview-activity-nav-btn { background: var(--primary-5); color: var(--primary-40); }
 [data-theme="dark"] .overview-activity-nav-btn:hover:not(:disabled) { background: var(--primary-10); }
@@ -5939,7 +5881,7 @@ button.quote-book-chip {
 .overview-loved-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 .overview-loved-more { align-self: flex-start; }
 .overview-loved-more .sidebar-section-chevron { color: currentColor; width: 16px; height: 16px; }
@@ -5967,7 +5909,7 @@ button.quote-book-chip {
 .overview-quotes-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 /* .overview-quote-card modifier — neutral bg + primary-tint on hover,
  * no transform / no shadow / no border / no entry animation.

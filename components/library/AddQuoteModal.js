@@ -443,7 +443,6 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
                   <div className="modal-field">
                     <label className="modal-field-label">{t.quoteBookTitle}</label>
                     <input
-                      className="modal-field-input"
                       placeholder={t.placeholderTitle}
                       value={bookSearch}
                       onChange={e => handleBookSearchChange(e.target.value)}
@@ -480,8 +479,8 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
         </div>{/* end modal-tabs-section */}
 
         <div className="modal-actions">
-          <button className="modal-cancel" onClick={onClose}>{t.btnCancel}</button>
-          <button className="modal-submit" onClick={handleSave} disabled={!canSave}>
+          <button className="btn btn-outline btn-md" onClick={onClose}>{t.btnCancel}</button>
+          <button className="btn btn-primary btn-md" onClick={handleSave} disabled={!canSave}>
             {editing ? t.quoteSaveEdit : t.quoteSave}
           </button>
         </div>

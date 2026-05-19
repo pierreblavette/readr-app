@@ -56,10 +56,10 @@ export default function ReadingGoalModal({ open, onClose, onSetGoal, year, curre
         </form>
 
         <div className="confirm-modal-actions">
-          <button type="button" className="modal-cancel" onClick={onClose}>
+          <button type="button" className="btn btn-outline btn-md" onClick={onClose}>
             {t.btnCancel}
           </button>
-          <button type="submit" form="reading-goal-form" className="modal-submit" disabled={!canSubmit}>
+          <button type="submit" form="reading-goal-form" className="btn btn-primary btn-md" disabled={!canSubmit}>
             {t.overviewGoalSave}
           </button>
         </div>

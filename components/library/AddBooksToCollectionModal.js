@@ -167,9 +167,9 @@ export default function AddBooksToCollectionModal({ open, collection, allBooks, 
         </div>
 
         <div className="modal-actions">
-          <button className="modal-cancel" onClick={onClose}>{t.btnCancel}</button>
+          <button className="btn btn-outline btn-md" onClick={onClose}>{t.btnCancel}</button>
           <button
-            className="modal-submit"
+            className="btn btn-primary btn-md"
             onClick={handleConfirm}
             disabled={selected.size === 0}>
             {t.btnConfirm || 'Confirm'}{selected.size > 0 ? ` (${selected.size})` : ''}
