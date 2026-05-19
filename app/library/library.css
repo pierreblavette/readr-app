@@ -4556,7 +4556,7 @@
   min-width: 0;
 }
 .dictionary-saved-row.expanded,
-.dictionary-saved-row.expanded td { border-bottom: 1px solid transparent; }
+.dictionary-saved-row.expanded td { border-bottom: 1px solid var(--border-subtle); }
 
 .dictionary-saved-row-body td {
   padding: 0;
