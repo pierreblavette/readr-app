@@ -15,9 +15,9 @@
 .btn-primary:active:not(:disabled) { background: var(--primary-70); }
 .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border-subtle); }
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
-.btn-outline.is-active { background: var(--primary-10); border-color: var(--primary-50); color: var(--primary-50); }
+.btn-outline.is-active { background: var(--primary-5); border-color: var(--primary-50); color: var(--primary-50); }
 .btn-outline.is-active:hover:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
-[data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-50); color: var(--primary-50); }
+[data-theme="dark"] .btn-outline.is-active { background: var(--primary-5); border-color: var(--primary-50); color: var(--primary-50); }
 [data-theme="dark"] .btn-outline.is-active:hover:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
 /* Button size scale — step 8 linear progression (height, padding, gap) with
    proportional SVG sizing. Font sizes anchored to the canonical Readr typo
@@ -1911,6 +1911,7 @@
   gap: 8px;
   align-self: stretch;
 }
+.panel-add-to-collection { align-self: flex-start; }
 .panel-header-actions {
   display: flex;
   align-items: center;

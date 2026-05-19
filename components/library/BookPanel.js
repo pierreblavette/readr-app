@@ -26,7 +26,7 @@ function StarsDisplay({ value }) {
   );
 }
 
-export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onCancelReading, onEditFinished, onRemoveFinished, onShared, onOpenCollection, readingCount, maxReading, quotes, collections = [], lang, t }) {
+export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onCancelReading, onEditFinished, onRemoveFinished, onShared, onOpenCollection, onAddToCollection, readingCount, maxReading, quotes, collections = [], lang, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
   const panelRef = useModalA11y(!!book, onClose);
@@ -157,11 +157,10 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   </button>
                 </div>
               </div>
-              {collections.length > 0 && (
-                <>
-                <div className="panel-divider" />
-                <div className="panel-section">
-                  <span className="panel-section-eyebrow">{t.panelCollectionsSection}</span>
+              <div className="panel-divider" />
+              <div className="panel-section">
+                <span className="panel-section-eyebrow">{t.panelCollectionsSection}</span>
+                {collections.length > 0 ? (
                   <div className="panel-collections">
                     {collections.map(col => (
                       <button
@@ -179,9 +178,18 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                       </button>
                     ))}
                   </div>
-                </div>
-                </>
-              )}
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-md panel-add-to-collection"
+                    onClick={() => onAddToCollection?.(book)}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    <span>{t.panelAddToCollection}</span>
+                  </button>
+                )}
+              </div>
               {/* Finished section — same outer rhythm as .panel-quiz */}
               {book.finishedAt && (
                 <>

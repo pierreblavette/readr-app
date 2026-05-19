@@ -26,12 +26,15 @@ import OverviewView  from "@/components/library/OverviewView";
 import AddQuoteModal from "@/components/library/AddQuoteModal";
 import Onboarding    from "@/components/library/Onboarding";
 import Toast         from "@/components/library/Toast";
+import AddBookToCollectionsModal from "@/components/library/AddBookToCollectionsModal";
 
 export default function LibraryPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [createColOpen, setCreateColOpen] = useState(false);
   const [editingCollection, setEditingCollection] = useState(null);
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
+  const [addToColBook, setAddToColBook] = useState(null);
+  const [pendingAddBook, setPendingAddBook] = useState(null);
   const [addQuoteOpen, setAddQuoteOpen] = useState(false);
   const [quotePrefillBook, setQuotePrefillBook] = useState(null);
   const [panelQuote, setPanelQuote] = useState(null);
@@ -81,7 +84,7 @@ export default function LibraryPage() {
     books,
     addBook, addMany, deleteBook, moveToLibrary, deleteMany, exportData, exportPDF,
     readingBooks, startReading, finishReading, cancelReading, updateFinished,
-    collections, createCollection, deleteCollection, deleteCollections, renameCollection,
+    collections, createCollection, createCollectionWithBook, deleteCollection, deleteCollections, renameCollection,
     addBookToCollection, addBooksToCollection, removeBookFromCollection, removeBooksFromCollection, getBooksForCollection,
     exportCollectionsMD, exportCollectionsPDF, exportCollectionMD, exportCollectionPDF,
     activeCollection, setActiveCollection,
@@ -225,6 +228,7 @@ export default function LibraryPage() {
         quotes={panelBook ? getQuotesForBook(panelBook) : []}
         collections={panelBook ? collections.filter(c => (c.bookIds || []).includes(panelBook.id)) : []}
         onOpenCollection={col => { setPanelBook(null); setTab('collections'); setActiveCollection(col.id); }}
+        onAddToCollection={(book) => setAddToColBook(book)}
         lang={lang}
         t={t}
       />
@@ -491,7 +495,19 @@ export default function LibraryPage() {
         onAddMany={b => { addMany(b); setToastMsg(t.toastImported(b.length)); }}
         t={t} />
       <DeleteModal target={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={handleDeleteConfirm} t={t} />
-      <CreateCollectionModal open={createColOpen} onClose={() => setCreateColOpen(false)} onCreate={createCollection} t={t} />
+      <CreateCollectionModal
+        open={createColOpen}
+        onClose={() => { setCreateColOpen(false); setPendingAddBook(null); }}
+        onCreate={(name) => {
+          if (pendingAddBook) {
+            const col = createCollectionWithBook(name, pendingAddBook.id);
+            setToastMsg(t.toastCollectionAdded?.(col.name) || `Added to ${col.name}`);
+            setPendingAddBook(null);
+          } else {
+            createCollection(name);
+          }
+        }}
+        t={t} />
       <CreateCollectionModal
         open={!!editingCollection}
         editing={editingCollection}
@@ -522,6 +538,19 @@ export default function LibraryPage() {
         allBooks={[...data.owned, ...data.wishlist]}
         onAdd={addBooksToCollection}
         onClose={() => setAddBooksColOpen(false)}
+        t={t}
+      />
+      <AddBookToCollectionsModal
+        open={!!addToColBook}
+        book={addToColBook}
+        collections={collections}
+        onAdd={(colId, bookId) => {
+          addBookToCollection(colId, bookId);
+          const col = collections.find(c => c.id === colId);
+          setToastMsg(t.toastCollectionAdded?.(col?.name) || `Added to ${col?.name}`);
+        }}
+        onCreateNew={(book) => { setPendingAddBook(book); setCreateColOpen(true); }}
+        onClose={() => setAddToColBook(null)}
         t={t}
       />
       <FinishReadingModal
