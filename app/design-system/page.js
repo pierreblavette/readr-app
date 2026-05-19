@@ -2034,6 +2034,20 @@ export default function DesignSystemPage() {
                         <span className="quote-mark">"</span>
                       </div>
                     </div>
+                    <div className="quote-card-actions">
+                      <button type="button" className="quote-card-like is-saved" aria-label="Loved" aria-pressed="true">
+                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M20 21l-8-5-8 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+                        </svg>
+                      </button>
+                      <button type="button" className="col-card-kebab" aria-label="More actions">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <circle cx="12" cy="6" r="2"/>
+                          <circle cx="12" cy="12" r="2"/>
+                          <circle cx="12" cy="18" r="2"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                   <div className="quote-card-divider" />
                   <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
@@ -2061,6 +2075,9 @@ export default function DesignSystemPage() {
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text-wrap</code></td><td className="meta">Text column</td><td className="mono">flex: 1, min-width: 0, flex-col, gap 12</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text</code></td><td className="meta">The quote</td><td className="mono">font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-see-more</code></td><td className="meta">Expand toggle (conditional)</td><td className="mono">Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-actions</code></td><td className="meta">Actions column (like + kebab)</td><td className="mono">flex-row, gap 0, align-items: flex-start. Kebab inside resets its default <code>-8px / -8px</code> negative margin (<code>margin: 0</code>) — actions sit flush within the card padding</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-like</code></td><td className="meta">Favorite (bookmark) toggle</td><td className="mono">40×40 ghost button, color <span className="ds-token-chip">--text</span> → <span className="ds-token-chip">--primary-50</span> on hover/saved. Hidden ≤600px (moved into kebab menu via <code>.dropdown-item--quote-favorite</code>)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.col-card-kebab</code></td><td className="meta">Overflow menu (Edit / Share / Delete + Favorite ≤600px)</td><td className="mono">Reuses the shared kebab primitive — see Book Card Kebab section</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-divider</code></td><td className="meta">Separator</td><td className="mono">1px, <span className="ds-token-chip">--border-subtle</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td className="meta">Book reference</td><td className="mono">Override bg <span className="ds-token-chip">--primary-5</span> / <span className="ds-token-chip">--primary-10</span> when inside .quote-card</td></tr>
                   </tbody>
