@@ -21,7 +21,22 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata = {
   title: "Readr",
   description: "Your books, finally in their place.",
-  manifest: "/manifest.webmanifest",
+  applicationName: "Readr",
+  appleWebApp: {
+    capable: true,
+    title: "Readr",
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#FEFEFF",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }) {
