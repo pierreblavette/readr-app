@@ -108,13 +108,6 @@
   /* PWA standalone iOS (status bar black-translucent) : push the inner row
      below the notch / dynamic island. No-op on browsers where env() = 0. */
   padding-top: env(safe-area-inset-top);
-  /* iOS WebKit fix : the sidebar has `transform: translateX(...)` which
-     promotes it to a GPU compositing layer. Without same promotion here,
-     iOS Safari may render the sidebar above the toolbar regardless of
-     z-index (and lets content scroll through the toolbar bg). Forcing
-     a translateZ(0) layer + isolation puts them on equal footing. */
-  transform: translateZ(0);
-  isolation: isolate;
 }
 
 .toolbar-inner .logo { height: 15px; }
