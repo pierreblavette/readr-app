@@ -560,7 +560,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (#FAFAFF)</div>
-                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.delete-row-btn, .quote-book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
+                  <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.quote-book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">Dark mode override</div>
@@ -1250,7 +1250,6 @@ export default function DesignSystemPage() {
                 {[
                   ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
                   ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".col-delete-btn"]],
-                  ["Destructive icon", "(no canonical)", [".delete-row-btn"]],
                   ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
                   ["Text link (inline, not dimensional)", "btn-link / btn-link--critical", [".btn-link · 14/600 · hover --primary-60 + underline", ".btn-link--critical · destructive variant", ".footer-link · 11/500 (footer-specific)", ".quote-see-more · 14/600 (quote/cast expand-collapse)"]],
                   ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
@@ -1302,7 +1301,7 @@ export default function DesignSystemPage() {
                   </div>
                 ))}
                 <div className="ds-token-block">
-                  <p>★ Default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box). Icon destructive (<code>.delete-row-btn</code>) uses fill <span className="ds-token-chip">--primary-5</span> default, <span className="ds-token-chip">--primary-10</span> hover.</p>
+                  <p>★ Default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box).</p>
                 </div>
               </div>
             </div>
@@ -2035,12 +2034,6 @@ export default function DesignSystemPage() {
                         <span className="quote-mark">"</span>
                       </div>
                     </div>
-                    <button type="button" className="delete-row-btn quote-card-delete" aria-label="Delete">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M10 3h4"/><line x1="3" y1="6" x2="21" y2="6"/>
-                        <path d="M5 6l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13"/>
-                      </svg>
-                    </button>
                   </div>
                   <div className="quote-card-divider" />
                   <button type="button" className="quote-book-chip quote-book-chip-interactive" style={{ width: "100%" }}>
@@ -2064,11 +2057,10 @@ export default function DesignSystemPage() {
                   <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Key styles</th></tr></thead>
                   <tbody className="table-body">
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card</code></td><td className="meta">Outer clickable container</td><td className="mono">padding 20, gap 20, role=button, hover: lift + border-primary-50 + shadow</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-body</code></td><td className="meta">Text + delete row</td><td className="mono">flex-row, gap 20, align-items: flex-start</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-body</code></td><td className="meta">Text + actions row</td><td className="mono">flex-row, gap 20, align-items: flex-start</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text-wrap</code></td><td className="meta">Text column</td><td className="mono">flex: 1, min-width: 0, flex-col, gap 12</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-text</code></td><td className="meta">The quote</td><td className="mono">font 16 / lh 1.7 · -webkit-line-clamp 3</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-see-more</code></td><td className="meta">Expand toggle (conditional)</td><td className="mono">Detected via hidden clone measurement (avoids scrollHeight clamp quirks)</td></tr>
-                    <tr className="table-row"><td className="token-table-component"><code>.quote-card-delete</code></td><td className="meta">Wrapper around .delete-row-btn</td><td className="mono">flex-shrink: 0 — colors / 40×40 sizing inherited from .delete-row-btn child</td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>.quote-card-divider</code></td><td className="meta">Separator</td><td className="mono">1px, <span className="ds-token-chip">--border-subtle</span></td></tr>
                     <tr className="table-row"><td className="token-table-component"><code>&lt;BookChip&gt;</code></td><td className="meta">Book reference</td><td className="mono">Override bg <span className="ds-token-chip">--primary-5</span> / <span className="ds-token-chip">--primary-10</span> when inside .quote-card</td></tr>
                   </tbody>
@@ -4293,11 +4285,6 @@ function handleDeleteConfirm(payload) {
                   ["Outline", "light hover", ["border --primary-50", "bg --primary-5", "color --primary-50"]],
                   ["Outline", "dark default", ["bg --bg3"]],
                   ["Outline", "dark hover", ["border --primary-40", "bg --primary-3", "color --primary-40"]],
-                  [".delete-row-btn", "light default", ["bg --primary-5", "color --primary-60", "40×40"]],
-                  [".delete-row-btn", "light hover", ["bg --primary-10"]],
-                  [".delete-row-btn", "light active", ["bg --primary-20", "color --primary-70"]],
-                  [".delete-row-btn", "dark default", ["bg --primary-5", "color --primary-40"]],
-                  [".delete-row-btn", "dark hover", ["bg --primary-10", "color --primary-30"]],
                 ],
               },
               {

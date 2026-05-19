@@ -1483,25 +1483,6 @@
 [data-theme="dark"] .th-checkbox-wrap .row-checkbox.all-selected { background: var(--primary-50); border-color: var(--primary-50); }
 .th-checkbox-wrap .row-checkbox.all-selected svg { opacity: 1; }
 
-/* Delete button in list rows */
-.delete-row-btn {
-  width: 40px; height: 40px;
-  border: none; background: var(--primary-5); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 8px;
-  color: var(--primary-50);
-  transition: background 0.15s, color 0.15s;
-  flex-shrink: 0;
-  font-family: inherit;
-}
-
-.delete-row-btn:hover { background: var(--primary-10); }
-.delete-row-btn:active { background: var(--primary-20); color: var(--primary-70); }
-[data-theme="dark"] .delete-row-btn { background: var(--primary-5); color: var(--primary-40); }
-[data-theme="dark"] .delete-row-btn:hover { background: var(--primary-10); color: var(--primary-40); }
-.delete-row-btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
-.delete-row-btn svg { width: 18px; height: 18px; }
-
 /* ─── EMPTY STATE ─── */
 .empty {
   grid-column: 1 / -1;
@@ -2609,7 +2590,6 @@
 
 /* Glyph 18 (MD icon-only) */
 .view-btn svg *,
-.delete-row-btn svg *,
 .toolbar-hamburger svg *,
 .modal-close svg * {
   stroke-width: 2;
@@ -4681,9 +4661,6 @@
 /* When the quote text fits on a single line (detected via JS), vertically
    center it against the actions wrapper which dictates the body height. */
 .quote-card-body.is-single-line .quote-card-text-wrap { align-self: center; }
-.quote-card-delete {
-  flex-shrink: 0;
-}
 .quote-card-divider {
   height: 1px;
   background: var(--border-subtle);
