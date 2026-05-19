@@ -9,12 +9,13 @@ import {
 import GradientDropzone from "@/components/library/GradientDropzone";
 import Wordmark from "@/components/brand/Wordmark";
 import RMark from "@/components/brand/RMark";
+import { loadDemoData, wipeAllData } from "@/lib/demoData";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
   Components:  ["autocomplete","badges","book-chip","cloud-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","rating-stars","row-checkbox","theme-toggle","view-toggle"],
   Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","filters-row","filters-panel","modal","delete-modal","message-box","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
-  Reference:   ["token-usage"],
+  Reference:   ["token-usage","dev-tools"],
 };
 const NAV_LABELS = {
   "logo":"Logo","colors":"Colors","typography":"Typography",
@@ -28,7 +29,7 @@ const NAV_LABELS = {
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
   "filters-panel":"Filters Panel","filters-row":"Filters Row",
   "modal":"Modal","delete-modal":"Delete Modal","message-box":"Message Box","upload-box":"Upload Box","selection-bar":"Selection Bar","toast":"Toast","empty":"Empty State","now-reading":"Now Reading","weekly-activity":"Weekly Activity","finish-reading":"Finish Reading Modal","onboarding":"Onboarding","footer":"Footer",
-  "token-usage":"Token Usage",
+  "token-usage":"Token Usage","dev-tools":"Dev Tools",
 };
 
 function scrollTo(id) {
@@ -4451,6 +4452,63 @@ function handleDeleteConfirm(payload) {
                 </div>
               </div>
             ))}
+          </DSSection>
+
+          <DSSection id="dev-tools" title="Dev Tools" sub="Local utilities for quick PWA testing — fills or wipes the localStorage layer. Not for production users.">
+            <div className="ds-card">
+              <div className="ds-card-head">Load demo data</div>
+              <div className="ds-card-body col padded">
+                <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
+                  Injects a realistic seed into localStorage : 15 owned books (mix Reading / Finished with ratings + notes), 10 wishlist items, ~25 quotes, 15 dictionary words (EN + FR), 4 collections, and a yearly reading goal of 30. Timestamps are spread over the last 5 months so the Activity card shows real cubes. Existing data is overwritten. Page reloads after seed.
+                </p>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-md"
+                    onClick={() => {
+                      if (!window.confirm("Load demo data ? This will overwrite your current library, quotes, words and collections.")) return;
+                      const res = loadDemoData();
+                      if (res.ok) {
+                        const c = res.counts;
+                        alert(`Loaded : ${c.books} books, ${c.wishlist} wishlist, ${c.quotes} quotes, ${c.words} words, ${c.collections} collections. Reloading…`);
+                        window.location.href = "/library";
+                      } else {
+                        alert(`Failed : ${res.error}`);
+                      }
+                    }}
+                  >
+                    Load demo data
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="ds-card">
+              <div className="ds-card-head">Wipe all data</div>
+              <div className="ds-card-body col padded">
+                <p style={{ color: "var(--text-2)", fontSize: 14, lineHeight: 1.6 }}>
+                  Removes every <code>readr-*</code> key from localStorage : books, quotes, words, collections, reading goal, last tab, active collection, sidebar collapsed state. Cannot be undone. Page reloads after wipe.
+                </p>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    className="btn btn-critical btn-md"
+                    onClick={() => {
+                      if (!window.confirm("Wipe ALL Readr data from this device ? This cannot be undone.")) return;
+                      const res = wipeAllData();
+                      if (res.ok) {
+                        alert("All Readr data wiped. Reloading…");
+                        window.location.href = "/library";
+                      } else {
+                        alert(`Failed : ${res.error}`);
+                      }
+                    }}
+                  >
+                    Wipe all data
+                  </button>
+                </div>
+              </div>
+            </div>
           </DSSection>
           </div>
           </div>
