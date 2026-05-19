@@ -12,7 +12,7 @@ import RMark from "@/components/brand/RMark";
 
 const NAV = {
   Foundations: ["logo","colors","typography","spacing","cell-row","shadows","strokes"],
-  Components:  ["autocomplete","badges","book-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","rating-stars","row-checkbox","theme-toggle","view-toggle"],
+  Components:  ["autocomplete","badges","book-chip","cloud-chip","book-card-kebab","buttons","checkbox","dropdown","export-menu","inputs","lang-switcher","segmented-pills","sort-menu","rating-stars","row-checkbox","theme-toggle","view-toggle"],
   Patterns:    ["card","quote-card","dictionary-card","list","sidebar","panel","quote-panel","filters-row","filters-panel","modal","delete-modal","message-box","upload-box","selection-bar","toast","empty","now-reading","weekly-activity","finish-reading","onboarding","footer"],
   Reference:   ["token-usage"],
 };
@@ -23,7 +23,7 @@ const NAV_LABELS = {
   "inputs":"Inputs","view-toggle":"View Toggle","badges":"Badges",
   "checkbox":"Checkbox","autocomplete":"Autocomplete","lang-switcher":"Language Switcher",
   "rating-stars":"Rating Stars","row-checkbox":"Row Checkbox",
-  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","book-card-kebab":"Book Card Kebab","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
+  "theme-toggle":"Theme Toggle","book-chip":"Book Chip","cloud-chip":"Cloud Chip","book-card-kebab":"Book Card Kebab","export-menu":"Export Menu","sort-menu":"Sort Menu","segmented-pills":"Segmented Pills",
   "card":"Book Card","quote-card":"Quote Card","dictionary-card":"Dictionary Card",
   "list":"List View","sidebar":"Sidebar","panel":"Side Panel","quote-panel":"Quote Panel",
   "filters-panel":"Filters Panel","filters-row":"Filters Row",
@@ -1147,6 +1147,80 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col">
                 <div className="ds-token-block">
                   <p>Component : <code>components/library/BookChip.js</code>. Cover 32×44, radius 4. Fallback : gradient from <code>coverColors(title)</code> + first letter.</p>
+                </div>
+              </div>
+            </div>
+          </DSSection>
+
+          {/* ── CLOUD CHIP ── */}
+          <DSSection id="cloud-chip" title="Cloud Chip" sub="Pill-style filter chip — name + count badge. Used in Overview Top Genres + Top Authors as clickable filter shortcuts. Container .overview-cloud wraps multiple chips with flex-wrap.">
+            <div className="ds-card">
+              <div className="ds-card-head">Preview — Top Genres cloud</div>
+              <div className="ds-card-body col padded">
+                <div className="overview-cloud">
+                  <button type="button" className="overview-cloud-chip">
+                    <span className="overview-cloud-chip-name">Fiction</span>
+                    <span className="overview-cloud-chip-count">12</span>
+                  </button>
+                  <button type="button" className="overview-cloud-chip">
+                    <span className="overview-cloud-chip-name">Essais</span>
+                    <span className="overview-cloud-chip-count">8</span>
+                  </button>
+                  <button type="button" className="overview-cloud-chip">
+                    <span className="overview-cloud-chip-name">Science-Fiction</span>
+                    <span className="overview-cloud-chip-count">5</span>
+                  </button>
+                  <button type="button" className="overview-cloud-chip">
+                    <span className="overview-cloud-chip-name">Poésie</span>
+                    <span className="overview-cloud-chip-count">3</span>
+                  </button>
+                  <button type="button" className="overview-cloud-chip">
+                    <span className="overview-cloud-chip-name">Biographie</span>
+                    <span className="overview-cloud-chip-count">2</span>
+                  </button>
+                  <button type="button" className="overview-cloud-chip">
+                    <span className="overview-cloud-chip-name">Histoire</span>
+                    <span className="overview-cloud-chip-count">1</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Anatomy</div>
+              <div className="ds-card-body col padded">
+                <table className="token-table">
+                  <thead className="table-head"><tr><th>Element</th><th>Role</th><th>Specs</th></tr></thead>
+                  <tbody className="table-body">
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-cloud</code></td><td className="meta">Container</td><td className="mono">flex, flex-wrap, gap 8 — wraps chips on multiple lines</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-cloud-chip</code></td><td className="meta">Chip (button)</td><td className="mono">height 36 · padding 0/8/0/16 (asym, less right for badge) · radius 999 · bg <span className="ds-token-chip">--bg3</span> light / <span className="ds-token-chip">--bg-elevated</span> dark · color <span className="ds-token-chip">--text</span> · font 14/600 · hover bg <span className="ds-token-chip">--primary-10</span> (both themes) · gap 8 between name and count</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-cloud-chip-name</code></td><td className="meta">Label</td><td className="mono">line-height 1 (no extra vertical space)</td></tr>
+                    <tr className="table-row"><td className="token-table-component"><code>.overview-cloud-chip-count</code></td><td className="meta">Count badge</td><td className="mono">height 20 · min-width 20 · padding 0/8 · radius 999 · bg <span className="ds-token-chip">--primary-50</span> · color <span className="ds-token-chip">#FFFFFF</span> · font 11/600 tabular-nums · flex-shrink 0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Behavior</div>
+              <div className="ds-card-body col">
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Click</div>
+                  <p>Each chip is a <code>&lt;button&gt;</code> firing <code>onSelect(item)</code>. In Overview, this navigates to My Library with the corresponding filter pre-applied (genre or author).</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Sort + cap</div>
+                  <p>Consumers sort items by descending count, then alphabetical. Top Genres caps at 6, Top Authors caps at 8. Display order respects the cap, not the raw alphabetic list.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Hover</div>
+                  <p>Single transition on <code>background</code> (0.15s) — no transform / shadow lift (cf. Readr DS convention). Light: <span className="ds-token-chip">--bg3</span> → <span className="ds-token-chip">--primary-10</span>. Dark: <span className="ds-token-chip">--bg-elevated</span> → <span className="ds-token-chip">--primary-10</span>.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Empty state</div>
+                  <p>Container is replaced (not just emptied) by <code>.overview-card-empty</code> when the source array is empty — see <Link href="#empty">Empty State</Link>.</p>
+                </div>
+                <div className="ds-token-block">
+                  <div className="ds-token-name">Source</div>
+                  <p>Consumers : <code>components/library/OverviewView.js</code> (TopGenresCard, TopAuthorsCard). Primitive promue depuis l'Overview v3 (commit <code>c8ce1f03</code>).</p>
                 </div>
               </div>
             </div>
