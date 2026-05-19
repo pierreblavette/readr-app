@@ -516,7 +516,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--text-2);
   padding: 4px 8px 6px;
 }
 .filter-row {
@@ -1911,6 +1911,12 @@
   gap: 8px;
   align-self: stretch;
 }
+.panel-collections-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
 .panel-add-to-collection { align-self: flex-start; }
 .panel-header-actions {
   display: flex;
@@ -2005,7 +2011,7 @@
 }
 /* Character cast (Now Reading only) — spacing mirrors .panel-quotes */
 .panel-cast {
-  gap: 40px;
+  gap: 24px;
 }
 .panel-cast-content {
   display: flex;
@@ -2086,10 +2092,10 @@
 }
 .panel-cast-field-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-3);
+  color: var(--text-2);
 }
 .panel-cast-role {
   font-size: 15px;
@@ -2160,10 +2166,10 @@
 }
 .panel-quiz-progress-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-3);
+  color: var(--text-2);
 }
 .panel-quiz-progress-bar {
   height: 4px;
@@ -2338,16 +2344,16 @@
 }
 .panel-quiz-review-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-3);
+  color: var(--text-2);
 }
 /* Mirrors .panel-cast-role */
 .panel-quiz-review-value {
   font-size: 15px;
   font-weight: 500;
-  color: var(--text-2);
+  color: var(--text);
   line-height: 1.8;
 }
 .panel-quiz-review-explanation {
@@ -3317,11 +3323,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-3);
+  color: var(--text-2);
 }
 .scan-or-separator::before,
 .scan-or-separator::after {
@@ -4131,7 +4137,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--text-3);
+  color: var(--text-2);
   flex: 1;
 }
 .sidebar-section-chevron {
@@ -5034,7 +5040,7 @@ button.quote-book-chip {
 .panel-quotes {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 24px;
   width: 100%;
 }
 .panel-quotes-content {
