@@ -105,6 +105,9 @@
   background: var(--bg);
   border-bottom: 1px solid var(--border-subtle);
   transition: var(--transition);
+  /* PWA standalone iOS (status bar black-translucent) : push the inner row
+     below the notch / dynamic island. No-op on browsers where env() = 0. */
+  padding-top: env(safe-area-inset-top);
 }
 
 .toolbar-inner .logo { height: 15px; }
@@ -1800,6 +1803,9 @@
   transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 320;
   overflow-y: auto;
+  /* PWA standalone iOS : keep inner content out of the notch + home indicator. */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .book-panel .panel-scroll-fade {
   position: sticky;
@@ -2612,7 +2618,8 @@
 /* ─── SELECTION BAR ─── */
 .selection-bar {
   position: fixed;
-  bottom: 28px;
+  /* PWA standalone iOS : float above the home indicator instead of being clipped. */
+  bottom: calc(28px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(120px);
   background: var(--primary-60);
@@ -3136,7 +3143,7 @@
 /* ─── FOOTER ─── */
 .library-footer {
   border-top: 1px solid var(--border-subtle);
-  padding: 20px 0;
+  padding: 20px 0 calc(20px + env(safe-area-inset-bottom));
   font-size: 11px;
   font-weight: 500;
   color: var(--text-3);
@@ -5066,7 +5073,7 @@ button.quote-book-chip {
 
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   /* z-index above .book-panel (320) so the mobile drawer covers the panel */
-  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; pointer-events: none; }
+  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; pointer-events: none; padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: env(safe-area-inset-bottom); }
   .sidebar.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); pointer-events: auto; }
   .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }

@@ -25,7 +25,7 @@ export const metadata = {
   appleWebApp: {
     capable: true,
     title: "Readr",
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
   },
   formatDetection: {
     telephone: false,
