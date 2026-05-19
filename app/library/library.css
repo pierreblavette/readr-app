@@ -3663,11 +3663,11 @@
   .export-menu.export-quotes .dropdown-btn { width: auto; padding: 0 16px; justify-content: flex-start; }
   .export-menu.export-quotes .dropdown-btn .dropdown-btn-label { display: inline-flex; }
   .export-menu.export-quotes .dropdown-btn .dropdown-btn-icon { display: none; }
-  .toolbar { display: flex; align-items: center; padding: 0 16px; padding-top: env(safe-area-inset-top); height: 64px; }
+  .toolbar { display: flex; align-items: center; padding: 0 16px; padding-top: env(safe-area-inset-top); height: 60px; }
   .toolbar-inner {
     flex: 1; min-width: 0;
     padding: 0; max-width: none; margin: 0;
-    height: 64px; gap: 12px;
+    height: 60px; gap: 12px;
   }
   .main-wrap { padding-left: 16px; padding-right: 16px; padding-top: 40px; }
   .search-row { flex-direction: column; align-items: stretch; gap: 16px; }
@@ -3991,6 +3991,7 @@
 /* Nav */
 .sidebar-nav {
   padding-top: 24px;
+  padding-bottom: 24px;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
