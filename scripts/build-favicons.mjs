@@ -3,12 +3,14 @@ import { readFile } from "node:fs/promises";
 
 const APP_ICON = await readFile("public/brand/app-icon-master.svg");
 const FAVICON  = await readFile("public/brand/favicon-master.svg");
+const MASKABLE = await readFile("public/brand/maskable-master.svg");
 
 const targets = [
-  { src: FAVICON,  out: "app/icon.png",        size: 512 },
-  { src: APP_ICON, out: "app/apple-icon.png",  size: 180 },
-  { src: APP_ICON, out: "public/icon-192.png", size: 192 },
-  { src: APP_ICON, out: "public/icon-512.png", size: 512 },
+  { src: FAVICON,  out: "app/icon.png",                  size: 512 },
+  { src: APP_ICON, out: "app/apple-icon.png",            size: 180 },
+  { src: APP_ICON, out: "public/icon-192.png",           size: 192 },
+  { src: APP_ICON, out: "public/icon-512.png",           size: 512 },
+  { src: MASKABLE, out: "public/icon-maskable-512.png",  size: 512 },
 ];
 
 for (const { src, out, size } of targets) {
