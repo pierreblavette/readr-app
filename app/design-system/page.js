@@ -8,7 +8,7 @@ import {
 } from "@/components/library/Onboarding";
 import GradientDropzone from "@/components/library/GradientDropzone";
 import Wordmark from "@/components/brand/Wordmark";
-import RMark from "@/components/brand/RMark";
+import SymbolMark from "@/components/brand/SymbolMark";
 import { loadDemoData, wipeAllData } from "@/lib/demoData";
 
 const NAV = {
@@ -342,18 +342,18 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
-              <div className="ds-card-head">Symbol — R standalone</div>
+              <div className="ds-card-head">Symbol — standalone</div>
               <div className="ds-card-body col padded">
                 <div className="logo-bg-row">
                   {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","#FFFFFF"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
                     <div key={i} className={`logo-bg ${cls}`}>
-                      <RMark className="logo-symbol" style={{ color: col }} />
+                      <SymbolMark className="logo-symbol" style={{ color: col }} />
                     </div>
                   ))}
                   <div className="logo-bg-fill" aria-hidden="true" />
                 </div>
                 <div className="logo-spec-row">
-                  {[["Used for","Favicon · App icon · Sidebar collapsed"],["Ratio","~1:1 (745×760 viewBox)"],["Min size","16px height"]].map(([l,v]) => (
+                  {[["Used for","Favicon · App icon · Splash"],["Ratio","1:1 (1024×1024 viewBox)"],["Min size","16px height"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
                       <span className="logo-spec-label">{l}</span>
                       <span className="logo-spec-val">{v}</span>
@@ -370,14 +370,14 @@ export default function DesignSystemPage() {
                     <img src="/brand/app-icon-master.svg" alt="Favicon master" className="app-icon-preview" />
                     <div className="app-icon-meta">
                       <span className="app-icon-label">Favicon</span>
-                      <span className="app-icon-detail">Browser tab · PWA Android. R noir #0D0F1A sur fond blanc, coins arrondis (rx 200) — le navigateur conserve l'arrondi tel quel.</span>
+                      <span className="app-icon-detail">Browser tab · PWA Android. Symbole blanc sur fond primary #4959E6, coins arrondis (rx 200) — le navigateur conserve l'arrondi tel quel.</span>
                     </div>
                   </div>
                   <div className="app-icon-card">
                     <img src="/brand/app-icon-ios.svg" alt="App icon iOS" className="app-icon-preview" />
                     <div className="app-icon-meta">
                       <span className="app-icon-label">App icon iOS</span>
-                      <span className="app-icon-detail">iOS home screen · Apple touch. Carré full-bleed (rx 0) — iOS applique lui-même son masque squircle ; un arrondi dans l'asset créerait un liseré aux coins.</span>
+                      <span className="app-icon-detail">iOS home screen · Apple touch. Symbole blanc sur fond primary #4959E6, carré full-bleed (rx 0) — iOS applique lui-même son masque squircle ; un arrondi dans l'asset créerait un liseré aux coins.</span>
                     </div>
                   </div>
                 </div>
@@ -397,7 +397,7 @@ export default function DesignSystemPage() {
                 <div className="splash-preview-row">
                   <img src="/splash/iphone-16-pro.png" alt="iOS splash screen" className="splash-preview" />
                 </div>
-                <div className="app-icon-detail">Wordmark centré sur fond #FEFEFF, footer « Données stockées localement · v1.0 » en bas. Affiché par iOS au lancement de la PWA standalone (avant le chargement du webview).</div>
+                <div className="app-icon-detail">Symbole bleu #4959E6 centré (42% de la hauteur) sur fond #FEFEFF, footer « Données stockées localement · v1.0 » en bas. Affiché par iOS au lancement de la PWA standalone (avant le chargement du webview).</div>
                 <div className="logo-spec-row">
                   {[["Résolutions","11 (iPhone SE → 16 Pro Max)"],["Format","Clair only · #FEFEFF / R noir"],["Build","node scripts/build-splash.mjs"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
@@ -2401,7 +2401,7 @@ export default function DesignSystemPage() {
                 <aside className="sidebar collapsed" style={{ position: 'static', height: 500 }}>
                   <div className="sidebar-logo">
                     <button className="sidebar-logo-collapse" aria-label="Expand">
-                      <RMark className="sidebar-logo-mark" />
+                      <SymbolMark className="sidebar-logo-mark" />
                     </button>
                   </div>
                   <nav className="sidebar-nav">

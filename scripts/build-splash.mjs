@@ -10,16 +10,16 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 // Dropping the color-scheme condition makes matching reliable, at the cost of
 // a single (light) splash regardless of theme.
 
-const wordmark = await readFile("public/brand/wordmark.svg", "utf8");
+const symbol = await readFile("public/brand/symbol.svg", "utf8");
 const tint = (svg, color) => svg.replaceAll("currentColor", color);
 
 const BG = "#FEFEFF";
-const FG = "#0F0F0F";
+const SYMBOL_COLOR = "#4959E6"; // brand primary — symbol on the page bg
 const FOOTER_FG = "#9A9A9A";
-// Vertical center of the wordmark as a fraction of screen height (0.5 = dead
+// Vertical center of the symbol as a fraction of screen height (0.5 = dead
 // center). Slightly above center reads better on a tall phone screen.
-const WORDMARK_CENTER_Y = 0.42;
-const WORDMARK_RATIO = 160 / 617; // wordmark.svg viewBox is 617×160
+const SYMBOL_CENTER_Y = 0.42;
+const SYMBOL_WIDTH_FRAC = 0.30; // square symbol — narrower than the wordmark
 // Splash is a static image (default app language = fr). Mirrors the in-app footer.
 const FOOTER_TOP = "Données stockées localement";
 const FOOTER_BOTTOM = "v1.0";
@@ -42,17 +42,17 @@ const DEVICES = [
 
 await mkdir("public/splash", { recursive: true });
 
-const wm = Buffer.from(tint(wordmark, FG));
+const sym = Buffer.from(tint(symbol, SYMBOL_COLOR));
 const entries = [];
 
 for (const d of DEVICES) {
   const w = d.cssW * d.dpr;
   const h = d.cssH * d.dpr;
-  const wmW = Math.round(w * 0.42);
-  const wmH = Math.round(wmW * WORDMARK_RATIO);
-  const wmTop = Math.round(h * WORDMARK_CENTER_Y - wmH / 2);
+  const wmW = Math.round(w * SYMBOL_WIDTH_FRAC);
+  const wmH = wmW; // square symbol (1024×1024 viewBox)
+  const wmTop = Math.round(h * SYMBOL_CENTER_Y - wmH / 2);
   const wmLeft = Math.round((w - wmW) / 2);
-  const wmPng = await sharp(wm, { density: 512 })
+  const wmPng = await sharp(sym, { density: 512 })
     .resize({ width: wmW })
     .png()
     .toBuffer();

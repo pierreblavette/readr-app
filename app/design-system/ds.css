@@ -568,7 +568,7 @@
 .logo-symbol { display: block; width: auto; overflow: visible; }
 .logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; flex: 1; min-width: 0; container-type: inline-size; }
 .logo-bg .logo-wordmark { height: clamp(16px, 11cqw, 38px); }
-.logo-bg .logo-symbol { height: clamp(28px, 20cqw, 64px); }
+.logo-bg .logo-symbol { height: clamp(34px, 38cqw, 160px); }
 .app-icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; width: 100%; }
 .app-icon-card { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .app-icon-preview { width: 160px; height: 160px; display: block; flex-shrink: 0; }
