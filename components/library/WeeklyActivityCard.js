@@ -1,10 +1,15 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useLayoutEffect, useEffect } from "react";
 import { OverviewIcon } from "./EmptyState";
 import ActivityDayPanel from "./ActivityDayPanel";
 import SortMenu from "./SortMenu";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+// Width below which the head switches to the compact dropdown layout.
+const COMPACT_BREAKPOINT = 740;
+// Run before paint on the client (no flash) ; fall back to useEffect on SSR.
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 function getWeekStart(date) {
   const d = new Date(date);
@@ -64,6 +69,23 @@ export default function WeeklyActivityCard({
   const [weekOffset, setWeekOffset] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
   const [selectedDay, setSelectedDay] = useState(null);
+  // Compact head layout (dropdowns) vs full (pills) — driven by the card's
+  // real width via ResizeObserver. JS instead of a CSS container query because
+  // WebKit (Safari / Mac web app) fails to resolve @container on first layout.
+  // Default true = compact, so the wide 3-col head never renders (and overflows)
+  // before the first measurement.
+  const cardRef = useRef(null);
+  const [isCompact, setIsCompact] = useState(true);
+
+  useIsoLayoutEffect(() => {
+    const el = cardRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(([entry]) => {
+      setIsCompact(entry.contentRect.width < COMPACT_BREAKPOINT);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const todayMs = useMemo(() => {
     const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime();
@@ -179,7 +201,7 @@ export default function WeeklyActivityCard({
     : formatWeekRange(weekData.weekStart, lang);
 
   return (
-    <div className="overview-card overview-activity">
+    <div className={`overview-card overview-activity${isCompact ? ' is-compact' : ''}`} ref={cardRef}>
       <div className="overview-card-head">
         <div className="overview-activity-head-row">
           <div className="overview-activity-pills is-md" role="tablist" aria-label={t.overviewActivityTitle}>

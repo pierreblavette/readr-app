@@ -5332,15 +5332,13 @@ button.book-chip {
 }
 
 /* Activity card — Week bar chart + Month heatmap, metric switcher, range toggle */
-/* Establishes the query container for the head-row layout switch below.
-   inline-size = track width only ; the card's height stays content-driven.
-   width:100% + min-width:0 force the container to take its inline-size from
-   the parent (not its content) — without them WebKit (Safari, Mac web app)
-   fails to resolve the container query on first layout, leaving the head in
-   3-col mode ; it overflows and widens the whole page until a repaint (e.g.
-   hovering the sidebar) forces recalculation. */
+/* The head layout switch (.is-compact) is driven by a ResizeObserver in
+   WeeklyActivityCard.js, not a CSS container query : WebKit (Safari / Mac web
+   app) failed to resolve @container on first layout, leaving the 3-col head
+   to overflow and widen the whole page until a repaint. width:100% +
+   min-width:0 keep the card at the parent's width so the observed width is
+   the available width, not the content's min-content. */
 .overview-activity {
-  container-type: inline-size;
   width: 100%;
   min-width: 0;
 }
@@ -5752,28 +5750,25 @@ button.book-chip {
 
 /* Mobile: tighten gaps */
 /* Activity head : the 3-col grid (pills | range | nav) needs ~700px of CARD
-   width, not viewport. The card narrows when the sidebar becomes static
-   (>768px), so a viewport media query can't capture it (non-monotonic: a
-   760px viewport with the drawer hidden has a WIDER card than an 800px one
-   with the sidebar shown). Container query keys off the card's real width
-   and switches to the compact dropdown layout below 740px, sidebar or not. */
-@container (max-width: 740px) {
-  .overview-activity > .overview-card-head { display: contents; }
-  .overview-activity-head-row { display: contents; }
-  .overview-activity-pills,
-  .overview-activity-range { display: none; }
-  .overview-activity-mobile-filters {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-    justify-content: space-between;
-  }
-  .overview-activity-mobile-filters > .sort-menu,
-  .overview-activity-mobile-filters > .range-dropdown-wrap { flex: 0 0 auto; }
-  .overview-activity-mobile-filters > .sort-menu .dropdown-menu { left: 0; right: auto; }
-  .overview-activity-nav { display: flex; width: 100%; justify-content: space-between; }
-  .overview-activity-week-label { min-width: 90px; }
+   width, not viewport — the card narrows when the sidebar becomes static
+   (>768px), a non-monotonic relation a viewport media query can't capture.
+   `.is-compact` is toggled by a ResizeObserver on the card (see
+   WeeklyActivityCard.js) below 740px of real card width, sidebar or not. */
+.overview-activity.is-compact > .overview-card-head { display: contents; }
+.overview-activity.is-compact .overview-activity-head-row { display: contents; }
+.overview-activity.is-compact .overview-activity-pills,
+.overview-activity.is-compact .overview-activity-range { display: none; }
+.overview-activity.is-compact .overview-activity-mobile-filters {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
 }
+.overview-activity.is-compact .overview-activity-mobile-filters > .sort-menu,
+.overview-activity.is-compact .overview-activity-mobile-filters > .range-dropdown-wrap { flex: 0 0 auto; }
+.overview-activity.is-compact .overview-activity-mobile-filters > .sort-menu .dropdown-menu { left: 0; right: auto; }
+.overview-activity.is-compact .overview-activity-nav { display: flex; width: 100%; justify-content: space-between; }
+.overview-activity.is-compact .overview-activity-week-label { min-width: 90px; }
 
 @media (max-width: 600px) {
   .overview-activity-bars { gap: 6px; }
