@@ -2,6 +2,7 @@ import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { SerwistProvider } from "@serwist/turbopack/react";
 import ThemeColorSync from "@/components/ThemeColorSync";
+import { appleStartupImages } from "@/lib/splashScreens";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -28,6 +29,7 @@ export const metadata = {
     capable: true,
     title: "Readr",
     statusBarStyle: "black-translucent",
+    startupImage: appleStartupImages,
   },
   formatDetection: {
     telephone: false,
