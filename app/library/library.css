@@ -5331,6 +5331,10 @@ button.book-chip {
 }
 
 /* Activity card — Week bar chart + Month heatmap, metric switcher, range toggle */
+/* Establishes the query container for the head-row layout switch below.
+   inline-size = track width only ; the card's height stays content-driven. */
+.overview-activity { container-type: inline-size; }
+
 .overview-activity-head-row {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -5737,7 +5741,13 @@ button.book-chip {
 }
 
 /* Mobile: tighten gaps */
-@media (max-width: 600px) {
+/* Activity head : the 3-col grid (pills | range | nav) needs ~700px of CARD
+   width, not viewport. The card narrows when the sidebar becomes static
+   (>768px), so a viewport media query can't capture it (non-monotonic: a
+   760px viewport with the drawer hidden has a WIDER card than an 800px one
+   with the sidebar shown). Container query keys off the card's real width
+   and switches to the compact dropdown layout below 740px, sidebar or not. */
+@container (max-width: 740px) {
   .overview-activity > .overview-card-head { display: contents; }
   .overview-activity-head-row { display: contents; }
   .overview-activity-pills,
@@ -5753,6 +5763,9 @@ button.book-chip {
   .overview-activity-mobile-filters > .sort-menu .dropdown-menu { left: 0; right: auto; }
   .overview-activity-nav { display: flex; width: 100%; justify-content: space-between; }
   .overview-activity-week-label { min-width: 90px; }
+}
+
+@media (max-width: 600px) {
   .overview-activity-bars { gap: 6px; }
   .overview-activity-grid-body { gap: 4px; }
   .overview-activity-grid-head { gap: 4px; }
