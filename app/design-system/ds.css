@@ -575,6 +575,8 @@
 .app-icon-meta { display: flex; flex-direction: column; gap: 4px; }
 .app-icon-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
 .app-icon-detail { font-size: 13px; color: var(--text); line-height: 1.4; }
+.splash-preview-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+.splash-preview { height: 440px; width: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 20px; background: #FEFEFF; }
 .logo-clearspace { width: 100%; background: var(--bg3); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; padding: 24px; }
 .logo-clearspace-frame { position: relative; padding: 52px; display: flex; align-items: center; justify-content: center; }
 .logo-clearspace-frame::before { content: ''; position: absolute; inset: 0; border: 1px dashed var(--primary-50); border-radius: 4px; opacity: 0.5; pointer-events: none; }

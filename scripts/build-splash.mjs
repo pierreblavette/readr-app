@@ -16,6 +16,10 @@ const tint = (svg, color) => svg.replaceAll("currentColor", color);
 const BG = "#FEFEFF";
 const FG = "#0F0F0F";
 const FOOTER_FG = "#9A9A9A";
+// Vertical center of the wordmark as a fraction of screen height (0.5 = dead
+// center). Slightly above center reads better on a tall phone screen.
+const WORDMARK_CENTER_Y = 0.42;
+const WORDMARK_RATIO = 160 / 617; // wordmark.svg viewBox is 617×160
 // Splash is a static image (default app language = fr). Mirrors the in-app footer.
 const FOOTER_TOP = "Données stockées localement";
 const FOOTER_BOTTOM = "v1.0";
@@ -44,8 +48,12 @@ const entries = [];
 for (const d of DEVICES) {
   const w = d.cssW * d.dpr;
   const h = d.cssH * d.dpr;
+  const wmW = Math.round(w * 0.42);
+  const wmH = Math.round(wmW * WORDMARK_RATIO);
+  const wmTop = Math.round(h * WORDMARK_CENTER_Y - wmH / 2);
+  const wmLeft = Math.round((w - wmW) / 2);
   const wmPng = await sharp(wm, { density: 512 })
-    .resize({ width: Math.round(w * 0.42) })
+    .resize({ width: wmW })
     .png()
     .toBuffer();
   // Footer text pinned near the bottom, centered (mirrors the app footer).
@@ -61,7 +69,7 @@ for (const d of DEVICES) {
   const out = `public/splash/${d.name}.png`;
   await sharp({ create: { width: w, height: h, channels: 4, background: BG } })
     .composite([
-      { input: wmPng, gravity: "center" },
+      { input: wmPng, top: wmTop, left: wmLeft },
       { input: footerSvg, top: 0, left: 0 },
     ])
     .png({ compressionLevel: 9, palette: true })

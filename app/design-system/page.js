@@ -367,22 +367,39 @@ export default function DesignSystemPage() {
               <div className="ds-card-body col padded">
                 <div className="app-icon-grid">
                   <div className="app-icon-card">
-                    <img src="/brand/favicon-master.svg" alt="Favicon master" className="app-icon-preview" />
+                    <img src="/brand/app-icon-master.svg" alt="Favicon master" className="app-icon-preview" />
                     <div className="app-icon-meta">
                       <span className="app-icon-label">Favicon</span>
-                      <span className="app-icon-detail">Browser tab · R noir sur fond blanc. Meilleure lisibilité à 16px que la version brand saturée.</span>
+                      <span className="app-icon-detail">Browser tab · PWA Android. R noir #0D0F1A sur fond blanc, coins arrondis (rx 200) — le navigateur conserve l'arrondi tel quel.</span>
                     </div>
                   </div>
                   <div className="app-icon-card">
-                    <img src="/brand/app-icon-master.svg" alt="App icon master" className="app-icon-preview" />
+                    <img src="/brand/app-icon-ios.svg" alt="App icon iOS" className="app-icon-preview" />
                     <div className="app-icon-meta">
-                      <span className="app-icon-label">App icon</span>
-                      <span className="app-icon-detail">iOS home screen · PWA install · Apple touch. R blanc sur squircle primary #4959E6.</span>
+                      <span className="app-icon-label">App icon iOS</span>
+                      <span className="app-icon-detail">iOS home screen · Apple touch. Carré full-bleed (rx 0) — iOS applique lui-même son masque squircle ; un arrondi dans l'asset créerait un liseré aux coins.</span>
                     </div>
                   </div>
                 </div>
                 <div className="logo-spec-row">
                   {[["Master size","1024×1024px"],["Generated set","16/32/48/180/192/512"],["Build","node scripts/build-favicons.mjs"]].map(([l,v]) => (
+                    <div key={l} className="logo-spec-item">
+                      <span className="logo-spec-label">{l}</span>
+                      <span className="logo-spec-val">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Splash screen — iOS launch</div>
+              <div className="ds-card-body col padded">
+                <div className="splash-preview-row">
+                  <img src="/splash/iphone-16-pro.png" alt="iOS splash screen" className="splash-preview" />
+                </div>
+                <div className="app-icon-detail">Wordmark centré sur fond #FEFEFF, footer « Données stockées localement · v1.0 » en bas. Affiché par iOS au lancement de la PWA standalone (avant le chargement du webview).</div>
+                <div className="logo-spec-row">
+                  {[["Résolutions","11 (iPhone SE → 16 Pro Max)"],["Format","Clair only · #FEFEFF / R noir"],["Build","node scripts/build-splash.mjs"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
                       <span className="logo-spec-label">{l}</span>
                       <span className="logo-spec-val">{v}</span>
