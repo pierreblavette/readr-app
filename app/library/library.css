@@ -3586,11 +3586,20 @@
   .col-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
   .now-reading-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 
-  /* Mobile toolbar (.toolbar-mobile-only, 60px high, z 400) is shown in
-     this range — push the panel below it so the close button (top: 16
-     inside panel = 16 + 64 = 80 from viewport) stays visible. The ≤600
-     block below further overrides for full-width mobile. */
-  .book-panel { top: 64px; height: calc(100dvh - 64px); }
+  /* Mobile toolbar (.toolbar-mobile-only) is shown in this range — push
+     the panel below it. Real toolbar height = env(safe-area-inset-top) +
+     60 (inner) + 1 (border) ; matching it exactly removes the old 3px gap
+     (the panel used a hardcoded 64px) AND keeps the panel below the toolbar
+     in PWA standalone where the notch inset is non-zero. The panel now
+     starts past the safe area, so it drops the base padding-top env() and
+     the close button drops its env() offset (both below). */
+  .book-panel {
+    top: calc(env(safe-area-inset-top) + 61px);
+    height: calc(100dvh - env(safe-area-inset-top) - 61px);
+    padding-top: 0;
+  }
+  /* Panel already sits past the notch via top: above — don't re-add env(). */
+  .panel-close { top: 16px; }
 
   /* Table list: hide secondary columns below 768px so Title gets
    * the full width. Tap on a row opens BookPanel/detail which shows all fields. */
@@ -3739,11 +3748,12 @@
   .sel-cancel { width: 100%; justify-content: center; }
   .selection-count { text-align: center; margin: 8px 0; }
   .book-panel {
-    width: 100%; top: 64px;
+    width: 100%;
+    top: calc(env(safe-area-inset-top) + 61px);
     /* iOS Safari URL bar shrinks viewport: dvh tracks the visible area
        so the panel doesn't extend under the address bar (was cutting off
-       bottom of scroll). */
-    height: calc(100dvh - 64px);
+       bottom of scroll). Toolbar offset matches the @768 block above. */
+    height: calc(100dvh - env(safe-area-inset-top) - 61px);
     -webkit-overflow-scrolling: touch;
     /* Touch handling fixes for iOS Safari : prevent scroll-chain to body
        (overscroll-behavior) and remove the 300ms tap delay (touch-action). */
