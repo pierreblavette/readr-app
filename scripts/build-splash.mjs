@@ -25,6 +25,8 @@ const DEVICES = [
   { name: "iphone-14-plus", cssW: 428, cssH: 926, dpr: 3 },
   { name: "iphone-14-pro", cssW: 393, cssH: 852, dpr: 3 },
   { name: "iphone-15-pro-max", cssW: 430, cssH: 932, dpr: 3 },
+  { name: "iphone-16-pro", cssW: 402, cssH: 874, dpr: 3 },
+  { name: "iphone-16-pro-max", cssW: 440, cssH: 956, dpr: 3 },
 ];
 
 await mkdir("public/splash", { recursive: true });
