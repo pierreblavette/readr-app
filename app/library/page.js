@@ -65,6 +65,12 @@ export default function LibraryPage() {
     };
   }, [mobileSidebarOpen]);
 
+  // Keep <html lang> aligned with the in-app FR/EN toggle (a11y + correct
+  // hyphenation / screen-reader pronunciation).
+  useEffect(() => {
+    if (lib.lang) document.documentElement.lang = lib.lang;
+  }, [lib.lang]);
+
   if (!lib.hydrated) return (
     <div className="app-loading-wrap">
       <div className="panel-spinner" />
