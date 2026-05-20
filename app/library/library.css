@@ -5333,8 +5333,17 @@ button.book-chip {
 
 /* Activity card — Week bar chart + Month heatmap, metric switcher, range toggle */
 /* Establishes the query container for the head-row layout switch below.
-   inline-size = track width only ; the card's height stays content-driven. */
-.overview-activity { container-type: inline-size; }
+   inline-size = track width only ; the card's height stays content-driven.
+   width:100% + min-width:0 force the container to take its inline-size from
+   the parent (not its content) — without them WebKit (Safari, Mac web app)
+   fails to resolve the container query on first layout, leaving the head in
+   3-col mode ; it overflows and widens the whole page until a repaint (e.g.
+   hovering the sidebar) forces recalculation. */
+.overview-activity {
+  container-type: inline-size;
+  width: 100%;
+  min-width: 0;
+}
 
 .overview-activity-head-row {
   display: grid;
