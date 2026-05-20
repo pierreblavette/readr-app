@@ -15,6 +15,10 @@ const tint = (svg, color) => svg.replaceAll("currentColor", color);
 
 const BG = "#FEFEFF";
 const FG = "#0F0F0F";
+const FOOTER_FG = "#9A9A9A";
+// Splash is a static image (default app language = fr). Mirrors the in-app footer.
+const FOOTER_TOP = "Données stockées localement";
+const FOOTER_BOTTOM = "v1.0";
 
 // device-width/height are CSS logical px (for the media query) ; w/h are the
 // physical pixels of the generated PNG (= css × dpr).
@@ -44,9 +48,22 @@ for (const d of DEVICES) {
     .resize({ width: Math.round(w * 0.42) })
     .png()
     .toBuffer();
+  // Footer text pinned near the bottom, centered (mirrors the app footer).
+  const fontPx = Math.round(12 * d.dpr);
+  const lineH = Math.round(fontPx * 1.6);
+  const marginBottom = Math.round(54 * d.dpr);
+  const footerSvg = Buffer.from(
+    `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <text x="50%" y="${h - marginBottom - lineH}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="${fontPx}" fill="${FOOTER_FG}">${FOOTER_TOP}</text>
+      <text x="50%" y="${h - marginBottom}" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="${fontPx}" fill="${FOOTER_FG}">${FOOTER_BOTTOM}</text>
+    </svg>`
+  );
   const out = `public/splash/${d.name}.png`;
   await sharp({ create: { width: w, height: h, channels: 4, background: BG } })
-    .composite([{ input: wmPng, gravity: "center" }])
+    .composite([
+      { input: wmPng, gravity: "center" },
+      { input: footerSvg, top: 0, left: 0 },
+    ])
     .png({ compressionLevel: 9, palette: true })
     .toFile(out);
   console.log(`✓ ${out} (${w}×${h})`);
