@@ -57,7 +57,7 @@ for (const d of DEVICES) {
     .png()
     .toBuffer();
   // Footer text pinned near the bottom, centered (mirrors the app footer).
-  const fontPx = Math.round(12 * d.dpr);
+  const fontPx = Math.round(15 * d.dpr);
   const lineH = Math.round(fontPx * 1.6);
   const marginBottom = Math.round(54 * d.dpr);
   const footerSvg = Buffer.from(
