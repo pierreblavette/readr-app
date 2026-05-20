@@ -34,6 +34,12 @@ export const metadata = {
   formatDetection: {
     telephone: false,
   },
+  // Next 16 only emits the modern `mobile-web-app-capable` ; iOS ignores
+  // apple-touch-startup-image (splash screens) unless the legacy
+  // `apple-mobile-web-app-capable` meta is also present.
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+  },
 };
 
 export const viewport = {
