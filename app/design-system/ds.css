@@ -588,6 +588,10 @@
 .maskable-shape--rounded { border-radius: 22px; }
 .maskable-shape--square { border-radius: 0; }
 .maskable-shape-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-3); }
+.lockup-row { display: flex; flex-wrap: wrap; gap: 20px; }
+.lockup-card { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 280px; max-width: 460px; }
+.lockup-preview { width: 100%; height: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 12px; }
+.lockup-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-3); }
 .logo-clearspace { width: 100%; background: var(--bg3); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; padding: 24px; }
 .logo-clearspace-frame { position: relative; padding: 52px; display: flex; align-items: center; justify-content: center; }
 .logo-clearspace-frame::before { content: ''; position: absolute; inset: 0; border: 1px dashed var(--primary-50); border-radius: 4px; opacity: 0.5; pointer-events: none; }

@@ -319,7 +319,7 @@ export default function DesignSystemPage() {
           <div className="ds-group-sections">
 
           {/* ── LOGO ── */}
-          <DSSection id="logo" title="Logo" sub="Wordmark Readr — Proxima Sera Semibold, exported as outlined SVG (no runtime webfont). R capitale + reste lowercase. Color via currentColor.">
+          <DSSection id="logo" title="Logo" sub="Wordmark Readr — MG12 Medium (Atipo), exported as outlined SVG (no runtime webfont). R capitale + reste lowercase. Color via currentColor.">
             <div className="ds-card">
               <div className="ds-card-head">Contextes d'utilisation</div>
               <div className="ds-card-body col padded">
@@ -332,7 +332,7 @@ export default function DesignSystemPage() {
                   <div className="logo-bg-fill" aria-hidden="true" />
                 </div>
                 <div className="logo-spec-row">
-                  {[["Font","Proxima Sera"],["Weight","Semibold"],["Casing","Readr"],["Default color","#0F0F0F"],["On dark / accent","#FFFFFF"]].map(([l,v]) => (
+                  {[["Font","MG12 (Atipo)"],["Weight","Medium"],["Casing","Readr"],["Default color","#0D0F1A"],["On dark / accent","#FFFFFF"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
                       <span className="logo-spec-label">{l}</span>
                       <span className="logo-spec-val">{v}</span>
@@ -360,6 +360,20 @@ export default function DesignSystemPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Lockup — Symbol &amp; Text</div>
+              <div className="ds-card-body col padded">
+                <div className="lockup-row">
+                  {[["light","Light"],["dark","Dark"],["accent","Accent"]].map(([bg,label]) => (
+                    <div key={bg} className="lockup-card">
+                      <img src={`/brand/logo-lockup-${bg}.svg`} alt={`Readr lockup — ${label} background`} className="lockup-preview" />
+                      <span className="lockup-label">{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="app-icon-detail">Symbole + wordmark (MG12 Medium) alignés horizontalement, clear space 2× autour / 0.5× entre symbole et texte. Fond clair : symbole accent #4959E6 + texte #0D0F1A ; fond sombre ou accent : symbole et texte blancs.</div>
               </div>
             </div>
             <div className="ds-card">
