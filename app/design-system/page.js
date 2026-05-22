@@ -392,6 +392,22 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
+              <div className="ds-card-head">Maskable Android — shapes</div>
+              <div className="ds-card-body col padded">
+                <div className="maskable-shapes-row">
+                  {[["circle","Circle"],["squircle","Squircle"],["rounded","Rounded"],["square","Square"]].map(([shape,label]) => (
+                    <div key={shape} className="maskable-shape-card">
+                      <div className={`maskable-shape maskable-shape--${shape}`}>
+                        <img src="/brand/maskable-master.svg" alt="" className="maskable-shape-img" />
+                      </div>
+                      <span className="maskable-shape-label">{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="app-icon-detail">Aperçu de <code>maskable-master.svg</code> sous les masques qu'Android applique selon le launcher. Le symbole doit rester entièrement visible dans chaque forme (safe zone 80%) — s'il est rogné, réduire le symbole dans le master.</div>
+              </div>
+            </div>
+            <div className="ds-card">
               <div className="ds-card-head">Splash screen — iOS launch</div>
               <div className="ds-card-body col padded">
                 <div className="splash-preview-row">
