@@ -9,6 +9,7 @@ import {
 import GradientDropzone from "@/components/library/GradientDropzone";
 import Wordmark from "@/components/brand/Wordmark";
 import SymbolMark from "@/components/brand/SymbolMark";
+import LogoLockup from "@/components/brand/LogoLockup";
 import { loadDemoData, wipeAllData } from "@/lib/demoData";
 
 const NAV = {
@@ -232,7 +233,7 @@ export default function DesignSystemPage() {
         {/* SIDEBAR */}
         <aside className={`sidebar${mobileSidebarOpen ? ' mobile-open' : ''}`}>
           <div className="sidebar-logo">
-            <Link href="/" aria-label="Readr"><Wordmark className="logo" /></Link>
+            <Link href="/" aria-label="Readr"><LogoLockup className="logo" /></Link>
           </div>
           <nav className="sidebar-nav">
             <div className="sidebar-appearance-wrap">
@@ -369,7 +370,7 @@ export default function DesignSystemPage() {
                   {[["light","Light"],["dark","Dark"],["accent","Accent"]].map(([bg,label]) => (
                     <div key={bg} className="lockup-card">
                       <img src={`/brand/logo-lockup-${bg}.svg`} alt={`Readr lockup — ${label} background`} className="lockup-preview" />
-                      <span className="lockup-label">{label}</span>
+                      <span className="panel-section-eyebrow">{label}</span>
                     </div>
                   ))}
                 </div>
@@ -414,7 +415,7 @@ export default function DesignSystemPage() {
                       <div className={`maskable-shape maskable-shape--${shape}`}>
                         <img src="/brand/maskable-master.svg" alt="" className="maskable-shape-img" />
                       </div>
-                      <span className="maskable-shape-label">{label}</span>
+                      <span className="panel-section-eyebrow">{label}</span>
                     </div>
                   ))}
                 </div>
@@ -2373,7 +2374,7 @@ export default function DesignSystemPage() {
                 {/* Expanded — uses real .sidebar classes, with position/height overridden for the preview */}
                 <aside className="sidebar" style={{ position: 'static', height: 500 }}>
                   <div className="sidebar-logo">
-                    <Wordmark className="logo" />
+                    <LogoLockup className="logo" />
                     <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" aria-label="Collapse">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
                     </button>

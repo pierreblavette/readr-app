@@ -1989,14 +1989,6 @@
   flex-direction: column;
   gap: 16px;
 }
-.panel-section-eyebrow {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-2);
-}
 .panel-synopsis {
   font-size: 16px;
   font-weight: 500;
@@ -3946,7 +3938,7 @@
   flex-shrink: 0;
 }
 .sidebar-logo .logo {
-  height: 13px;
+  height: 20px;
   flex: 0 0 auto;
 }
 .sidebar-logo-mark {

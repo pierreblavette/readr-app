@@ -185,3 +185,11 @@
     font-family: var(--font-fraunces), serif;
   }
 }
+.panel-section-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}

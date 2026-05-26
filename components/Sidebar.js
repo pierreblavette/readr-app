@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useTheme } from "next-themes";
-import Wordmark from "./brand/Wordmark";
+import LogoLockup from "./brand/LogoLockup";
 
 export default function Sidebar({
   tab, setTab, data, collections,
@@ -39,7 +39,7 @@ export default function Sidebar({
             </button>
           ) : (
             <>
-              <Wordmark className="logo" />
+              <LogoLockup className="logo" />
               <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" onClick={onToggleCollapse} aria-label="Collapse sidebar">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 19V5"/>
