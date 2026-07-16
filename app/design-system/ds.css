@@ -120,6 +120,10 @@
   flex-direction: column;
   gap: 8px;
 }
+/* In a column body the samples stack, so they must span the full width — their
+   content (grids, rows) sizes off the parent. Scoped to `.col` on purpose : in a
+   row body the samples sit side by side and must stay shrink-to-fit. */
+.ds-card-body.col > .ds-state-sample { width: 100%; }
 /* Icon + label centered tile (Empty State / Onboarding icon grids) */
 .ds-icon-tile {
   display: flex;
@@ -569,6 +573,8 @@
 .logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; flex: 1; min-width: 0; container-type: inline-size; }
 .logo-bg .logo-wordmark { height: clamp(16px, 11cqw, 38px); }
 .logo-bg .logo-symbol { height: clamp(34px, 38cqw, 160px); }
+/* Lockup is 5.43:1 — sized off the wordmark's scale so both read alike here. */
+.logo-bg .logo { height: clamp(14px, 11cqw, 38px); }
 .app-icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; width: 100%; }
 .app-icon-card { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .app-icon-preview { width: 160px; height: 160px; display: block; flex-shrink: 0; }
@@ -593,7 +599,14 @@
 .lockup-preview { width: 100%; height: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 12px; }
 .lockup-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-3); }
 .logo-clearspace { width: 100%; background: var(--bg3); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; padding: 24px; }
-.logo-clearspace-frame { position: relative; padding: 52px; display: flex; align-items: center; justify-content: center; }
+/* Clear space, unit = the wordmark's "d" glyph (102 × 148). It is NOT uniform :
+   - sides : 1× d, i.e. its width (102) → 102/148 of the logo height
+   - top/bottom : 0.5x — the logo is 1x tall (= the d's height) and centres in a
+     2x band, leaving half an x each side (74 for 148).
+   Derived from --logo-h rather than hardcoded so the frame stays exact if the
+   preview height changes. The wordmark sizes off the same variable. */
+.logo-clearspace-frame { --logo-h: 56px; position: relative; padding: calc(var(--logo-h) / 2) calc(var(--logo-h) * 102 / 148); display: flex; align-items: center; justify-content: center; }
+.logo-clearspace-frame .logo-wordmark { height: var(--logo-h); }
 .logo-clearspace-frame::before { content: ''; position: absolute; inset: 0; border: 1px dashed var(--primary-50); border-radius: 4px; opacity: 0.5; pointer-events: none; }
 .logo-dont-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; width: 100%; }
 .logo-dont { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: var(--bg3); border-radius: var(--radius); padding: 32px 24px; min-height: 140px; position: relative; overflow: hidden; }

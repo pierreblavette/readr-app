@@ -41,6 +41,8 @@ export default function DesignSystemPage() {
   const [active, setActive] = useState("logo");
   const [theme, setTheme] = useState("light");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  // Bumping this remounts the brand marks, which restarts their CSS draw-on.
+  const [replayLogo, setReplayLogo] = useState(0);
   const [hideText, setHideText] = useState(false);
   const [hiddenIds, setHiddenIds] = useState(() => new Set());
 
@@ -374,7 +376,42 @@ export default function DesignSystemPage() {
                     </div>
                   ))}
                 </div>
-                <div className="app-icon-detail">Symbole + wordmark (MG12 Medium) alignés horizontalement, clear space 2× autour / 0.5× entre symbole et texte. Fond clair : symbole accent #4959E6 + texte #0D0F1A ; fond sombre ou accent : symbole et texte blancs.</div>
+                <div className="app-icon-detail">Symbole + wordmark (MG12 Medium) alignés horizontalement — même hauteur (148) dans un cadre 804×148, séparés par 1× d (102). Fond clair : symbole #4959E6 + texte #0D0F1A ; fond sombre : symbole #4959E6 + texte blanc ; fond accent : symbole et texte blancs.</div>
+              </div>
+            </div>
+            <div className="ds-card">
+              <div className="ds-card-head">Motion — draw-on</div>
+              <div className="ds-card-body col padded">
+                <div className="ds-state-sample">
+                  <span className="panel-section-eyebrow">Symbol</span>
+                  <div className="logo-bg-row">
+                    {[["logo-bg-page","#4959E6",undefined],["logo-bg-dark","#4959E6",undefined],["logo-bg-accent","#FFFFFF",["#FFFFFF","#FFFFFF"]]].map(([cls,col,echo],i) => (
+                      <div key={i} className={`logo-bg ${cls}`}>
+                        <SymbolMark key={replayLogo} animated echo={echo} className="logo-symbol" style={{ color: col }} />
+                      </div>
+                    ))}
+                    <div className="logo-bg-fill" aria-hidden="true" />
+                  </div>
+                </div>
+                <div className="ds-state-sample">
+                  <span className="panel-section-eyebrow">Symbol &amp; Text</span>
+                  <div className="logo-bg-row">
+                    {[["logo-bg-page","#0D0F1A"],["logo-bg-dark","#FFFFFF"]].map(([cls,col],i) => (
+                      <div key={i} className={`logo-bg ${cls}`}>
+                        <LogoLockup key={replayLogo} animated className="logo" style={{ color: col }} />
+                      </div>
+                    ))}
+                    <div className="logo-bg-fill" aria-hidden="true" />
+                  </div>
+                </div>
+                <button className="btn btn-primary btn-md" onClick={() => setReplayLogo((n) => n + 1)}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M3 2v6h6" />
+                    <path d="M3 13a9 9 0 1 0 3-7.7L3 8" />
+                  </svg>
+                  <span>Replay</span>
+                </button>
+                <div className="app-icon-detail">Les 3 traits se tracent dans l&apos;ordre de construction (couche haute + pointe, crochet du R, couche basse), stagger 0.2s, draw 0.5s. Deux calques echo à 20% précèdent le trait plein de 0.2s chacun. Le symbole est donc plein à 1.3s. Le wordmark étant vectorisé, il ne se trace pas : il enchaîne en fondu de 0.5s à partir de 1.4s, soit une respiration de 0.1s après le dernier trait. Total ≈ 1.9s. Le tracé plein est l&apos;état CSS par défaut — l&apos;animation pose l&apos;état vide, jamais l&apos;inverse, donc une animation qui ne joue pas laisse le logo visible. En <code>prefers-reduced-motion</code>, tout est affiché plein et les calques echo sont retirés.</div>
               </div>
             </div>
             <div className="ds-card">
@@ -451,15 +488,37 @@ export default function DesignSystemPage() {
               </div>
             </div>
             <div className="ds-card">
+              <div className="ds-card-head">Construction — grille</div>
+              <div className="ds-card-body col padded">
+                <div className="lockup-row">
+                  {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (
+                    <div key={kind} className="lockup-card">
+                      <img src={`/brand/logo-construction-${kind}.svg`} alt={`Grille de construction Readr — ${label}`} className="lockup-preview" />
+                      <span className="panel-section-eyebrow">{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="logo-spec-row">
+                  {[["Unité","x = d, le glyphe du wordmark (102 × 148)"],["Lockup","180 + 102 + 522 = 804 × 148"],["Gap symbole ↔ texte","1× d"],["Hauteur","logo 1x, centré dans 2x"],["Cadre","au plus près du 16:9"]].map(([l,v]) => (
+                    <div key={l} className="logo-spec-item">
+                      <span className="logo-spec-label">{l}</span>
+                      <span className="logo-spec-val">{v}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="app-icon-detail">L&apos;unité <strong>x</strong> est le « d » du wordmark (102 × 148) — repris en filigrane à 25 % dans les cases de mesure. En hauteur, le logo mesure <strong>1x</strong> (celle du d) et se centre dans une bande de <strong>2x</strong> : il reste donc <strong>0.5x</strong> (74) de clear space au-dessus et en dessous. Latéralement, l&apos;unité s&apos;emploie couchée : 1× d (102) sépare le symbole du texte, et borde le wordmark isolé de chaque côté. La largeur totale n&apos;a pas de règle stricte — viser un cadre au plus près du <strong>16:9</strong>.</div>
+              </div>
+            </div>
+            <div className="ds-card">
               <div className="ds-card-head">Clear space</div>
               <div className="ds-card-body col padded">
                 <div className="logo-clearspace">
                   <div className="logo-clearspace-frame">
-                    <Wordmark className="logo-wordmark" style={{ height: 56, color: "var(--text)" }} />
+                    <Wordmark className="logo-wordmark" style={{ color: "var(--text)" }} />
                   </div>
                 </div>
                 <div className="logo-spec-row">
-                  {[["Zone protégée","1× R cap-height de chaque côté"],["Calcul","≈ 92 % de la hauteur du wordmark"],["Règle","Aucun texte, image ou bord visuel dans cette zone"]].map(([l,v]) => (
+                  {[["Latéral","1× d — sa largeur (102)"],["Haut / bas","0.5x — logo 1x centré dans 2x (74)"],["Règle","Aucun texte, image ou bord visuel dans cette zone"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
                       <span className="logo-spec-label">{l}</span>
                       <span className="logo-spec-val">{v}</span>
@@ -2431,8 +2490,12 @@ export default function DesignSystemPage() {
                 {/* Collapsed — same .sidebar with .collapsed modifier */}
                 <aside className="sidebar collapsed" style={{ position: 'static', height: 500 }}>
                   <div className="sidebar-logo">
-                    <button className="sidebar-logo-collapse" aria-label="Expand">
-                      <SymbolMark className="sidebar-logo-mark" />
+                    <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" aria-label="Expand">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 12H3"/>
+                        <path d="m11 18 6-6-6-6"/>
+                        <path d="M21 5v14"/>
+                      </svg>
                     </button>
                   </div>
                   <nav className="sidebar-nav">

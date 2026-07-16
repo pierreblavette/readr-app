@@ -130,9 +130,11 @@
 }
 
 /* Logo — wordmark SVG (Proxima Sera Semibold outlined). Sized via height; width: auto preserves 3.86:1 ratio. Color inherits via currentColor. overflow:visible fixes Safari clipping anti-aliasing edges where path touches viewBox bounds. */
+/* No height here on purpose : every context sets its own (.sidebar-logo 16,
+   .toolbar-inner 15, .logo-bg clamp). A base height would only ever be dead
+   weight — and misleading, since it never won over those. */
 .logo {
   display: block;
-  height: 24px;
   width: auto;
   color: var(--text);
   user-select: none;
@@ -3938,17 +3940,9 @@
   flex-shrink: 0;
 }
 .sidebar-logo .logo {
-  height: 20px;
+  height: 16px;
   flex: 0 0 auto;
 }
-.sidebar-logo-mark {
-  display: block;
-  height: 13.875px;
-  width: auto;
-  color: var(--text);
-  overflow: visible;
-}
-[data-theme="dark"] .sidebar-logo-mark { color: #FFFFFF; }
 .sidebar-logo-collapse {
   background: none;
   border: none;
@@ -5987,4 +5981,52 @@ button.book-chip {
   .overview-hero-num { font-size: 36px; }
   .overview-card,
   .overview-hero-card { padding: 16px; }
+}
+
+/* ---------------------------------------------------------------------------
+   Brand draw-on motion (SymbolMark / LogoLockup with `animated`)
+   ---------------------------------------------------------------------------
+   The symbol is drawn by animating stroke-dashoffset over a normalised
+   pathLength of 1 (so every stroke draws in the same time regardless of its
+   real length). Per-path animation-delay is set inline by SymbolStrokes.
+
+   Fail-safe : the default state is dashoffset 0 — fully drawn. The animation is
+   what hides the mark (via `both`), never the other way round. A dropped or
+   dead animation therefore leaves the logo visible rather than blank.
+--------------------------------------------------------------------------- */
+.brand-draw g path {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  animation: brandDrawOn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes brandDrawOn {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.brand-draw-echo { opacity: 0.2; }
+
+/* Wordmark is outlined (fill), so it can't be drawn — it fades in once the
+   symbol is fully traced. The symbol lands at 1.3s (see SymbolStrokes), so the
+   0.1s gap here is deliberate : the text must read as a beat after the mark,
+   never over its last frame. Bump this delay if the stagger there changes. */
+.brand-draw-wordmark {
+  opacity: 1;
+  animation: brandWordmarkIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 1.4s both;
+}
+@keyframes brandWordmarkIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-draw g path {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+  .brand-draw-wordmark { animation: none; opacity: 1; }
+  /* Ghost layers only read as a trail while drawing — they sit exactly under the
+     opaque stroke, so hide them outright rather than stack them for nothing. */
+  .brand-draw-echo { display: none; }
 }
