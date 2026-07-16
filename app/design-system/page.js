@@ -405,7 +405,7 @@ export default function DesignSystemPage() {
                   </div>
                 </div>
                 <button className="btn btn-primary btn-md" onClick={() => setReplayLogo((n) => n + 1)}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M3 2v6h6" />
                     <path d="M3 13a9 9 0 1 0 3-7.7L3 8" />
                   </svg>
