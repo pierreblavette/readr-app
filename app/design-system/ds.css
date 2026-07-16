@@ -570,7 +570,7 @@
 /* ─── LOGO ─── */
 .logo-wordmark { display: block; width: auto; overflow: visible; }
 .logo-symbol { display: block; width: auto; overflow: visible; }
-.logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; flex: 1; min-width: 0; container-type: inline-size; }
+.logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; min-width: 0; container-type: inline-size; }
 .logo-bg .logo-wordmark { height: clamp(16px, 11cqw, 38px); }
 .logo-bg .logo-symbol { height: clamp(34px, 38cqw, 160px); }
 /* Lockup is 5.43:1 — sized off the wordmark's scale so both read alike here. */
@@ -594,10 +594,10 @@
 .maskable-shape--rounded { border-radius: 22px; }
 .maskable-shape--square { border-radius: 0; }
 .maskable-shape-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-3); }
-.lockup-row { display: flex; flex-wrap: wrap; gap: 20px; }
-.lockup-card { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 280px; max-width: 460px; }
+/* Board card (img + eyebrow) — sits in a .logo-bg-row cell, so it owns no
+   width of its own : the grid track sizes it. */
+.lockup-card { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .lockup-preview { width: 100%; height: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 12px; }
-.lockup-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-3); }
 .logo-clearspace { width: 100%; background: var(--bg3); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; padding: 24px; }
 /* Clear space, unit = the wordmark's "d" glyph (102 × 148). It is NOT uniform :
    - sides : 1× d, i.e. its width (102) → 102/148 of the logo height
@@ -620,9 +620,16 @@
 .logo-contrast-status--ko { background: var(--primary-5); color: var(--primary-50); }
 .logo-bg-page    { background: #FEFEFF; border: 1px solid var(--border-subtle); }
 .logo-bg-dark    { background: #1B1B1B; }
-.logo-bg-accent  { background: #4959E6; }
-.logo-bg-row     { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; width: 100%; }
-.logo-bg-fill    { pointer-events: none; }
+.logo-bg-accent  { background: var(--primary-50); }
+/* The single tile row of the Logo section — CSS tiles (.logo-bg) and board cards
+   (.lockup-card) alike. Column count is fixed rather than auto-fit so every tile
+   is the same width whatever the row holds : a 2-tile row leaves its 3rd track
+   empty instead of stretching, which auto-fit cannot do (it collapses empty
+   tracks). Same reason as the Now Reading grid cap. */
+.logo-bg-row     { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: 100%; align-items: start; }
+@media (max-width: 600px) {
+  .logo-bg-row   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .logo-spec-row   { display: flex; gap: 24px; flex-wrap: wrap; width: 100%; border-top: 1px solid var(--border-subtle); padding-top: 24px; }
 .logo-spec-item  { display: flex; flex-direction: column; gap: 4px; }
 .logo-spec-item:not(:first-child) { border-left: 1px solid var(--border-subtle); padding-left: 24px; }

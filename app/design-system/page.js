@@ -332,7 +332,6 @@ export default function DesignSystemPage() {
                       <Wordmark className="logo-wordmark" style={{ color: col }} />
                     </div>
                   ))}
-                  <div className="logo-bg-fill" aria-hidden="true" />
                 </div>
                 <div className="logo-spec-row">
                   {[["Font","MG12 (Atipo)"],["Weight","Medium"],["Casing","Readr"],["Default color","#0D0F1A"],["On dark / accent","#FFFFFF"]].map(([l,v]) => (
@@ -348,12 +347,11 @@ export default function DesignSystemPage() {
               <div className="ds-card-head">Symbol — standalone</div>
               <div className="ds-card-body col padded">
                 <div className="logo-bg-row">
-                  {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","#FFFFFF"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
+                  {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","var(--primary-50)"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
                     <div key={i} className={`logo-bg ${cls}`}>
                       <SymbolMark className="logo-symbol" style={{ color: col }} />
                     </div>
                   ))}
-                  <div className="logo-bg-fill" aria-hidden="true" />
                 </div>
                 <div className="logo-spec-row">
                   {[["Used for","Favicon · App icon · Splash"],["Ratio","1:1 (1024×1024 viewBox)"],["Min size","16px height"]].map(([l,v]) => (
@@ -368,10 +366,12 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Lockup — Symbol &amp; Text</div>
               <div className="ds-card-body col padded">
-                <div className="lockup-row">
-                  {[["light","Light"],["dark","Dark"],["accent","Accent"]].map(([bg,label]) => (
-                    <div key={bg} className="lockup-card">
-                      <img src={`/brand/logo-lockup-${bg}.svg`} alt={`Readr lockup — ${label} background`} className="lockup-preview" />
+                <div className="logo-bg-row">
+                  {[["logo-bg-page","#0D0F1A",undefined,"Light"],["logo-bg-dark","#FFFFFF",undefined,"Dark"],["logo-bg-accent","#FFFFFF","#FFFFFF","Accent"]].map(([cls,col,symbolColor,label]) => (
+                    <div key={cls} className="lockup-card">
+                      <div className={`logo-bg ${cls}`}>
+                        <LogoLockup className="logo" style={{ color: col }} symbolColor={symbolColor} />
+                      </div>
                       <span className="panel-section-eyebrow">{label}</span>
                     </div>
                   ))}
@@ -385,23 +385,21 @@ export default function DesignSystemPage() {
                 <div className="ds-state-sample">
                   <span className="panel-section-eyebrow">Symbol</span>
                   <div className="logo-bg-row">
-                    {[["logo-bg-page","#4959E6",undefined],["logo-bg-dark","#4959E6",undefined],["logo-bg-accent","#FFFFFF",["#FFFFFF","#FFFFFF"]]].map(([cls,col,echo],i) => (
+                    {[["logo-bg-page","var(--primary-50)",undefined],["logo-bg-dark","var(--primary-50)",undefined],["logo-bg-accent","#FFFFFF",["#FFFFFF","#FFFFFF"]]].map(([cls,col,echo],i) => (
                       <div key={i} className={`logo-bg ${cls}`}>
                         <SymbolMark key={replayLogo} animated echo={echo} className="logo-symbol" style={{ color: col }} />
                       </div>
                     ))}
-                    <div className="logo-bg-fill" aria-hidden="true" />
                   </div>
                 </div>
                 <div className="ds-state-sample">
                   <span className="panel-section-eyebrow">Symbol &amp; Text</span>
                   <div className="logo-bg-row">
-                    {[["logo-bg-page","#0D0F1A"],["logo-bg-dark","#FFFFFF"]].map(([cls,col],i) => (
+                    {[["logo-bg-page","#0D0F1A",undefined,undefined],["logo-bg-dark","#FFFFFF",undefined,undefined],["logo-bg-accent","#FFFFFF",["#FFFFFF","#FFFFFF"],"#FFFFFF"]].map(([cls,col,echo,symbolColor],i) => (
                       <div key={i} className={`logo-bg ${cls}`}>
-                        <LogoLockup key={replayLogo} animated className="logo" style={{ color: col }} />
+                        <LogoLockup key={replayLogo} animated echo={echo} symbolColor={symbolColor} className="logo" style={{ color: col }} />
                       </div>
                     ))}
-                    <div className="logo-bg-fill" aria-hidden="true" />
                   </div>
                 </div>
                 <button className="btn btn-primary btn-md" onClick={() => setReplayLogo((n) => n + 1)}>
@@ -490,7 +488,7 @@ export default function DesignSystemPage() {
             <div className="ds-card">
               <div className="ds-card-head">Construction — grille</div>
               <div className="ds-card-body col padded">
-                <div className="lockup-row">
+                <div className="logo-bg-row">
                   {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (
                     <div key={kind} className="lockup-card">
                       <img src={`/brand/logo-construction-${kind}.svg`} alt={`Grille de construction Readr — ${label}`} className="lockup-preview" />

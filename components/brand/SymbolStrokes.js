@@ -27,7 +27,7 @@ export default function SymbolStrokes({
           key={li}
           className={layer.isEcho ? "brand-draw-echo" : undefined}
           transform={transform}
-          stroke={layer.color}
+          style={{ stroke: layer.color }}
           strokeWidth={SYMBOL_STROKE}
           strokeLinecap="round"
           strokeLinejoin="round"

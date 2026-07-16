@@ -5,14 +5,17 @@ import {
   LOCKUP_WORDMARK_PATH,
 } from "./symbolGeometry";
 
-// Horizontal lockup : symbol (#4959E6 fixed) + wordmark (currentColor).
+// Horizontal lockup : symbol (primary-50 by default) + wordmark (currentColor).
 // Symbol and wordmark are height-aligned by design — both span the full 148.
+// On accent backgrounds the symbol turns white like the wordmark : pass
+// symbolColor="#FFFFFF" (and matching echo tints when animated).
 export default function LogoLockup({
   className,
   style,
   title = "Readr",
   animated = false,
   echo,
+  symbolColor = "var(--primary-50)",
 }) {
   return (
     <svg
@@ -25,7 +28,7 @@ export default function LogoLockup({
       aria-label={title}
     >
       <SymbolStrokes
-        color="#4959E6"
+        color={symbolColor}
         animated={animated}
         echo={echo}
         transform={LOCKUP_SYMBOL_TRANSFORM}
