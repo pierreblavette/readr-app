@@ -252,21 +252,20 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: clamp(28px, 5.6vh, 56px) 40px 40px;
+  padding: clamp(28px, 5.6vh, 64px) 40px 40px;
   transition: margin-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 64px;
 }
 
 .page-title {
   font-size: 48px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
   line-height: 1;
-  font-family: var(--font-fraunces), serif;
 }
 .page-sub {
   font-size: 16px;
@@ -381,9 +380,8 @@
   gap: 12px;
 }
 .filters-panel-count {
-  font-family: var(--font-fraunces), serif;
   font-size: 28px;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--text);
@@ -1949,11 +1947,10 @@
 
 .panel-title {
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
   line-height: 1.2;
-  font-family: var(--font-fraunces), serif;
 }
 
 .panel-author {
@@ -4247,7 +4244,7 @@
 [data-theme="dark"] .col-name-input:focus { border-color: var(--primary-50); box-shadow: 0 0 0 3px rgba(73,89,230,0.4); }
 
 /* ─── DICTIONARY ─── */
-.dictionary-wrap { display: flex; flex-direction: column; gap: 48px; }
+.dictionary-wrap { display: flex; flex-direction: column; gap: 64px; }
 .dictionary-form {
   display: flex;
   align-items: center;
@@ -4277,7 +4274,7 @@
 .dictionary-result {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 40px;
   padding: 24px;
   background: var(--bg2);
   border: 1.5px solid var(--border-subtle);
@@ -4285,9 +4282,8 @@
   animation: fadeUp 0.28s ease both;
 }
 .dictionary-word {
-  font-family: var(--font-fraunces), serif;
   font-size: 40px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--text);
@@ -5076,15 +5072,25 @@ button.book-chip {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  /* Tight against the head because the head now reserves a CTA's height (32)
+     and spends its slack below the eyebrow — that slack already reads as the
+     gap. Keep on .overview-card, not per-card : an uneven gap would offset the
+     bodies the min-height is there to align. */
+  gap: 4px;
   min-width: 0;
 }
 .overview-card.overview-activity { gap: 20px; }
+/* Every head reserves the height of a CTA (32) whether it carries one or not,
+ * so card bodies start on the same line across the grid — the Goal card's Edit
+ * button would otherwise push its meter 15.5px below the Streak card's.
+ * flex-start keeps eyebrow and CTA hanging from the card's padding edge : the
+ * slack is spent below them, never above. */
 .overview-card-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  min-height: 32px;
 }
 .overview-card-action {
   display: inline-flex;
@@ -5145,9 +5151,8 @@ button.book-chip {
   box-shadow: 0 0 0 3px var(--primary-20);
 }
 .overview-hero-num {
-  font-family: var(--font-fraunces), serif;
-  font-size: 48px;
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
   color: var(--text);
@@ -5202,12 +5207,26 @@ button.book-chip {
   margin-top: auto;
 }
 /* Overrides .cell-row align-items (center → baseline) for typography
- * baseline alignment between large num (28px Fraunces) + small pct. */
+ * baseline alignment between large num (40px) + small pct. */
 .overview-goal-progress-row { align-items: baseline; gap: 12px; }
+/* Progress reads as one figure split in two tiers : the count carries the
+ * display size, the target trails it a tier down. Baseline-aligned so the
+ * size step does not break the shared reading line. */
+.overview-goal-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
 .overview-goal-num {
-  font-family: var(--font-fraunces), serif;
-  font-size: 28px;
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.overview-goal-total {
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text);
 }
@@ -5305,10 +5324,23 @@ button.book-chip {
   align-items: flex-start;
   gap: 4px;
 }
+/* Same split as .overview-goal-count : figure at display size, unit a tier
+ * down, baseline-aligned so the size step keeps one reading line. */
+.overview-streak-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
 .overview-streak-current {
-  font-family: var(--font-fraunces), serif;
-  font-size: 32px;
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.overview-streak-unit {
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text);
 }
@@ -5720,9 +5752,8 @@ button.book-chip {
   gap: 8px !important;
 }
 .activity-day-title {
-  font-family: var(--font-fraunces), serif;
   font-size: 28px;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text);
   margin: 0;

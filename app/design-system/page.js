@@ -754,11 +754,13 @@ export default function DesignSystemPage() {
           </DSSection>
 
           {/* ── TYPOGRAPHY ── */}
-          <DSSection id="typography" title="Typography" sub="Base : 14px — 1rem = 14px · 9-tier canonical scale (28/20/18/16/15/14/13/12/11/10)">
+          <DSSection id="typography" title="Typography" sub="Plus Jakarta Sans, une seule font sur toute l'app. Base : 14px — 1rem = 14px · 11-tier canonical scale (48/28/20/18/16/15/14/13/12/11/10)">
             <div className="ds-card">
-              <div className="ds-card-head">Plus Jakarta Sans — 9-tier scale</div>
+              <div className="ds-card-head">Plus Jakarta Sans — 11-tier scale</div>
               <div className="ds-card-body col">
                 {[
+                  [48, "3.43rem", "700", "Page title", ".page-title"],
+                  [28, "2rem",    "700", "Book title", ".panel-title"],
                   [20, "1.43rem", "800", "Hero onboarding", ".ob-title (exception, marketing only)"],
                   [18, "1.29rem", "700", "Empty state title", ".empty-title (off-grid, pairs with icon 96)"],
                   [16, "1.14rem", "500", "Content tier", "synopsis, quotes, cast names, ob-desc"],
@@ -772,21 +774,6 @@ export default function DesignSystemPage() {
                 ].map(([px, rem, weight, label, detail]) => (
                   <div key={label + px + weight} className="type-sample">
                     <div style={{ fontSize: px, fontWeight: weight, lineHeight: 1.2 }}>{label}</div>
-                    {detail && <div className="ds-token-name">{detail}</div>}
-                    <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="ds-card">
-              <div className="ds-card-head">Fraunces — display + serif</div>
-              <div className="ds-card-body col">
-                {[
-                  [48, "3.43rem", "500", "Page title", ".page-title"],
-                  [28, "2rem",    "500", "Book title", ".panel-title"],
-                ].map(([px, rem, weight, label, detail]) => (
-                  <div key={label} className="type-sample">
-                    <div style={{ fontSize: px, fontWeight: weight, fontFamily: "var(--font-fraunces), serif", lineHeight: 1.2 }}>{label}</div>
                     {detail && <div className="ds-token-name">{detail}</div>}
                     <div className="type-sample-meta">{rem} · {px}px · {weight}</div>
                   </div>
@@ -826,11 +813,11 @@ export default function DesignSystemPage() {
               <div className="ds-card-head">Page rhythm — applied scale</div>
               <div className="ds-card-body col">
                 <div className="ds-token-block">
-                  <div className="ds-token-name">.main-wrap · 48px</div>
+                  <div className="ds-token-name">.main-wrap · 64px</div>
                   <p>Top-level page blocks — separates page-title, search-row, content section.</p>
                 </div>
                 <div className="ds-token-block">
-                  <div className="ds-token-name">.dictionary-wrap · 48px</div>
+                  <div className="ds-token-name">.dictionary-wrap · 64px</div>
                   <p>Mirrors <code>.main-wrap</code> — between lookup form and saved section.</p>
                 </div>
                 <div className="ds-token-block">
@@ -838,7 +825,7 @@ export default function DesignSystemPage() {
                   <p>Internal sub-header (eyebrow / result-line) → content list.</p>
                 </div>
                 <div className="ds-token-block">
-                  <p>Two-tier rhythm : <strong>48px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.</p>
+                  <p>Two-tier rhythm : <strong>64px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.</p>
                 </div>
               </div>
             </div>
@@ -2768,7 +2755,7 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">.filters-panel-header</div>
-                  <p>Result count in Fraunces 28 — <code>resultQuery(N, total)</code> when filters narrow the set, <code>resultTotal(total)</code> otherwise. Mirrors the panel headlines elsewhere (BookListPanel, QuoteListPanel).</p>
+                  <p>Result count at tier 28 — <code>resultQuery(N, total)</code> when filters narrow the set, <code>resultTotal(total)</code> otherwise. Mirrors the panel headlines elsewhere (BookListPanel, QuoteListPanel).</p>
                 </div>
                 <div className="ds-token-block">
                   <div className="ds-token-name">.filters-panel-section · .filter-row</div>

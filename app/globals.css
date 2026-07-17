@@ -23,8 +23,9 @@
   --radius-md:  var(--radius);
   --radius-lg:  calc(var(--radius) * 1.5);
   --radius-xl:  calc(var(--radius) * 2);
+  /* One font across the whole app — no --font-heading counterpart : with a
+     single family there is no heading/body split left to alias. */
   --font-sans:    var(--font-jakarta);
-  --font-heading: var(--font-fraunces);
 }
 
 /* ─── READR TOKENS ─── */
@@ -180,9 +181,6 @@
     font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 700;
     font-size: 1.071rem;
-  }
-  h1, h2, h3, h4 {
-    font-family: var(--font-fraunces), serif;
   }
 }
 .panel-section-eyebrow {

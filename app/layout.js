@@ -1,18 +1,9 @@
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { SerwistProvider } from "@serwist/turbopack/react";
 import ThemeColorSync from "@/components/ThemeColorSync";
 import { appleStartupImages } from "@/lib/splashScreens";
 import "./globals.css";
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  axes: ["opsz"],
-  weight: "variable",
-  style: ["normal", "italic"],
-  display: "swap",
-});
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -52,7 +43,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" suppressHydrationWarning
-      className={`${fraunces.variable} ${jakarta.variable} h-full antialiased`}
+      className={`${jakarta.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false}>

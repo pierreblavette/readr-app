@@ -334,7 +334,10 @@ function ReadingGoalCard({ goal, onEdit, t }) {
       </div>
       <div className="overview-goal-meter">
         <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row">
-          <span className="overview-goal-num">{t.overviewGoalProgress(goal.progress, goal.target)}</span>
+          <span className="overview-goal-count">
+            <span className="overview-goal-num">{goal.progress}</span>
+            <span className="overview-goal-total">{t.overviewGoalTotal(goal.target)}</span>
+          </span>
           <span className="overview-goal-pct">
             {achieved ? t.overviewGoalReached : `${Math.round(goal.ratio * 100)}%`}
           </span>
@@ -381,7 +384,10 @@ function StreakCard({ streak, onAddBook, t }) {
               <span className="overview-streak-current">{t.overviewStreakBest(streak.best)}</span>
             ) : (
               <>
-                <span className="overview-streak-current">{t.overviewStreakDays(streak.current)}</span>
+                <span className="overview-streak-count">
+                  <span className="overview-streak-current">{streak.current}</span>
+                  <span className="overview-streak-unit">{t.overviewStreakUnit(streak.current)}</span>
+                </span>
                 {streak.best > 0 && streak.best !== streak.current && (
                   <span className="overview-streak-best">{t.overviewStreakBest(streak.best)}</span>
                 )}

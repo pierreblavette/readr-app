@@ -37,13 +37,14 @@
   padding-top: 48px;
   border-top: 1px solid var(--border-subtle);
 }
-/* Group title — Fraunces serif at 28 makes it visually distinct from the
-   20px sans-serif .ds-section-title nested inside the group. */
+/* Group title — the whole DS runs on Plus Jakarta Sans, so size and weight
+   alone separate this from the 20/800 .ds-section-title nested inside the
+   group : 36 against 20 is gap enough, and 700 keeps it from reading thin at
+   that size the way a display serif could afford to. */
 .ds-group-title {
-  font-family: var(--font-fraunces), serif;
   font-size: 36px;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   line-height: 1.15;
   color: var(--text);
   margin: 0;
