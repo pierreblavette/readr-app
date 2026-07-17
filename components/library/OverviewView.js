@@ -498,19 +498,19 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
             rating={b.rating}
           />
         ))}
+        {books.length > 3 && (
+          <button
+            type="button"
+            className="btn btn-outline btn-md overview-loved-more"
+            onClick={onSeeMore}
+          >
+            <span>{t.overviewLovedSeeMore}</span>
+            <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        )}
       </div>
-      {books.length > 3 && (
-        <button
-          type="button"
-          className="btn btn-outline btn-md overview-loved-more"
-          onClick={onSeeMore}
-        >
-          <span>{t.overviewLovedSeeMore}</span>
-          <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      )}
     </div>
   );
 }
@@ -540,19 +540,19 @@ function QuotesSpotlightCard({ quotes, totalQuotes, onOpen, onSeeAll, resolveBoo
               t={t}
             />
           ))}
+          {totalQuotes > 3 && (
+            <button
+              type="button"
+              className="btn btn-outline btn-md overview-loved-more"
+              onClick={onSeeAll}
+            >
+              <span>{t.overviewLovedSeeMore}</span>
+              <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          )}
         </div>
-      )}
-      {totalQuotes > 3 && (
-        <button
-          type="button"
-          className="btn btn-outline btn-md overview-loved-more"
-          onClick={onSeeAll}
-        >
-          <span>{t.overviewLovedSeeMore}</span>
-          <svg className="sidebar-section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
       )}
     </div>
   );
