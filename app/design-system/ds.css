@@ -597,7 +597,9 @@
 /* Board card (img + eyebrow) — sits in a .logo-bg-row cell, so it owns no
    width of its own : the grid track sizes it. */
 .lockup-card { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.lockup-preview { width: 100%; height: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 12px; }
+/* Square corners on purpose : the board artwork is drawn to the edge with no
+   radius of its own, so a rounded border would cut its corners off. */
+.lockup-preview { width: 100%; height: auto; display: block; border: 1px solid var(--border-subtle); }
 .logo-clearspace { width: 100%; background: var(--bg3); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; padding: 24px; }
 /* Clear space, unit = the wordmark's "d" glyph (102 × 148). It is NOT uniform :
    - sides : 1× d, i.e. its width (102) → 102/148 of the logo height
@@ -608,13 +610,17 @@
 .logo-clearspace-frame { --logo-h: 56px; position: relative; padding: calc(var(--logo-h) / 2) calc(var(--logo-h) * 102 / 148); display: flex; align-items: center; justify-content: center; }
 .logo-clearspace-frame .logo-wordmark { height: var(--logo-h); }
 .logo-clearspace-frame::before { content: ''; position: absolute; inset: 0; border: 1px dashed var(--primary-50); border-radius: 4px; opacity: 0.5; pointer-events: none; }
-.logo-dont-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; width: 100%; }
-.logo-dont { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: var(--bg3); border-radius: var(--radius); padding: 32px 24px; min-height: 140px; position: relative; overflow: hidden; }
+/* Tile + caption below, the same shape as .lockup-card and .logo-contrast-item —
+   the caption sits outside the tile so it never reads as part of the artwork. */
+.logo-dont-item { display: flex; flex-direction: column; gap: 10px; align-items: center; min-width: 0; }
+/* Same tile as .logo-bg (it rides a .logo-bg-row) — only the surface differs, so
+   it takes the section's ratio rather than a min-height of its own. */
+.logo-dont { width: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg3); border-radius: var(--radius); aspect-ratio: 16 / 9; padding: 24px; position: relative; overflow: hidden; }
 .logo-dont-label { font-size: 12px; font-weight: 500; color: var(--text-3); text-align: center; }
 .logo-dont-fake { font-family: var(--font-jakarta), sans-serif; font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
-.logo-contrast-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); column-gap: 12px; row-gap: 24px; width: 100%; }
-.logo-contrast-item { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-.logo-contrast { width: 100%; display: flex; align-items: center; justify-content: center; border-radius: var(--radius); padding: 28px 20px; aspect-ratio: 4 / 3; }
+/* Cell of a .logo-bg-row : stretches its .logo-bg tile, while the status pill
+   keeps its own align-self so it stays left and hugs its label. */
+.logo-contrast-item { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .logo-contrast-status { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; align-self: flex-start; }
 .logo-contrast-status--ok { background: var(--primary-50); color: #FFFFFF; }
 .logo-contrast-status--ko { background: var(--primary-5); color: var(--primary-50); }
@@ -625,8 +631,11 @@
    (.lockup-card) alike. Column count is fixed rather than auto-fit so every tile
    is the same width whatever the row holds : a 2-tile row leaves its 3rd track
    empty instead of stretching, which auto-fit cannot do (it collapses empty
-   tracks). Same reason as the Now Reading grid cap. */
-.logo-bg-row     { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: 100%; align-items: start; }
+   tracks). Same reason as the Now Reading grid cap.
+   Rows breathe wider than columns : on the multi-row cards (Don'ts, Background
+   contrast) each tile carries a caption below it, so an equal gap would read as
+   the caption belonging to the tile underneath. */
+.logo-bg-row     { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 12px; row-gap: 24px; width: 100%; align-items: start; }
 @media (max-width: 600px) {
   .logo-bg-row   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

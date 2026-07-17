@@ -497,14 +497,14 @@ export default function DesignSystemPage() {
                   ))}
                 </div>
                 <div className="logo-spec-row">
-                  {[["Unité","x = d, le glyphe du wordmark (102 × 148)"],["Lockup","180 + 102 + 522 = 804 × 148"],["Gap symbole ↔ texte","1× d"],["Hauteur","logo 1x, centré dans 2x"],["Cadre","au plus près du 16:9"]].map(([l,v]) => (
+                  {[["Unité","x = d, le glyphe du wordmark (102 × 148)"],["Lockup","180 + 102 + 522 = 804 × 148"],["Gap symbole ↔ texte","1× d couché (102)"],["Cadre","au plus près du 16:9"]].map(([l,v]) => (
                     <div key={l} className="logo-spec-item">
                       <span className="logo-spec-label">{l}</span>
                       <span className="logo-spec-val">{v}</span>
                     </div>
                   ))}
                 </div>
-                <div className="app-icon-detail">L&apos;unité <strong>x</strong> est le « d » du wordmark (102 × 148) — repris en filigrane à 25 % dans les cases de mesure. En hauteur, le logo mesure <strong>1x</strong> (celle du d) et se centre dans une bande de <strong>2x</strong> : il reste donc <strong>0.5x</strong> (74) de clear space au-dessus et en dessous. Latéralement, l&apos;unité s&apos;emploie couchée : 1× d (102) sépare le symbole du texte, et borde le wordmark isolé de chaque côté. La largeur totale n&apos;a pas de règle stricte — viser un cadre au plus près du <strong>16:9</strong>.</div>
+                <div className="app-icon-detail">L&apos;unité <strong>x</strong> est le « d » du wordmark (102 × 148) — repris en filigrane à 25 % dans les cases de mesure. Symbole et wordmark s&apos;alignent sur une même hauteur de <strong>1x</strong> (148), séparés par l&apos;unité couchée — 1× d, soit sa largeur (102) : le lockup mesure donc 180 + 102 + 522 = <strong>804 × 148</strong>. La largeur totale n&apos;a pas de règle stricte — viser un cadre au plus près du <strong>16:9</strong>. Le dégagement à réserver <em>autour</em> du logo ne se lit pas sur ces planches : voir <strong>Clear space</strong>.</div>
               </div>
             </div>
             <div className="ds-card">
@@ -523,46 +523,46 @@ export default function DesignSystemPage() {
                     </div>
                   ))}
                 </div>
+                <div className="app-icon-detail">Le dégagement dérive de la même unité <strong>x</strong> que la construction, mais il n&apos;est <strong>pas uniforme</strong> : l&apos;unité change d&apos;orientation selon l&apos;axe. Latéralement, le « d » s&apos;emploie couché — sa largeur (102) borde le logo de chaque côté. En hauteur, le logo mesure 1x et se centre dans une bande de <strong>2x</strong>, laissant <strong>0.5x</strong> (74) au-dessus et en dessous. Rapporté à une hauteur de logo quelconque : <strong>102/148</strong> sur les côtés, <strong>74/148</strong> en haut et en bas — le calcul qu&apos;applique le cadre ci-dessus.</div>
               </div>
             </div>
             <div className="ds-card">
               <div className="ds-card-head">Don'ts</div>
               <div className="ds-card-body col padded">
-                <div className="logo-dont-grid">
-                  <div className="logo-dont">
-                    <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", transform: "scaleX(0.55)" }} />
-                    <span className="logo-dont-label">Pas de déformation</span>
-                  </div>
-                  <div className="logo-dont">
-                    <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", transform: "rotate(-8deg)" }} />
-                    <span className="logo-dont-label">Pas de rotation</span>
-                  </div>
-                  <div className="logo-dont">
-                    <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.45))" }} />
-                    <span className="logo-dont-label">Pas d'ombre portée</span>
-                  </div>
-                  <div className="logo-dont">
-                    <span className="logo-dont-fake">Readr</span>
-                    <span className="logo-dont-label">Pas de substitution de police</span>
-                  </div>
+                <div className="logo-bg-row">
+                  {[
+                    ["Pas de déformation", { transform: "scaleX(0.55)" }],
+                    ["Pas de rotation", { transform: "rotate(-8deg)" }],
+                    ["Pas d'ombre portée", { filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.45))" }],
+                    ["Pas de substitution de police", null],
+                  ].map(([label, style]) => (
+                    <div key={label} className="logo-dont-item">
+                      <div className="logo-dont">
+                        {style
+                          ? <Wordmark className="logo-wordmark" style={{ height: 32, color: "var(--text)", ...style }} />
+                          : <span className="logo-dont-fake">Readr</span>}
+                      </div>
+                      <span className="logo-dont-label">{label}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
             <div className="ds-card">
               <div className="ds-card-head">Background contrast</div>
               <div className="ds-card-body col padded">
-                <div className="logo-contrast-grid">
+                <div className="logo-bg-row">
                   {[
                     { bg: "#FEFEFF",  fg: "#0F0F0F", ok: true,  label: "Surface light" },
                     { bg: "#0F0F0F",  fg: "#FFFFFF", ok: true,  label: "Surface dark" },
-                    { bg: "#4959E6",  fg: "#FFFFFF", ok: true,  label: "Primary brand" },
+                    { bg: "var(--primary-50)", fg: "#FFFFFF", ok: true,  label: "Primary brand" },
                     { bg: "#F7F7F7",  fg: "#C8C8C8", ok: false, label: "Trop faible contraste" },
-                    { bg: "#4959E6",  fg: "#0F0F0F", ok: false, label: "Conflit brand + dark" },
-                    { bg: "linear-gradient(135deg, #4959E6 0%, #F59E0B 100%)", fg: "#FFFFFF", ok: false, label: "Fond complexe / dégradé" },
+                    { bg: "var(--primary-50)", fg: "#0F0F0F", ok: false, label: "Conflit brand + dark" },
+                    { bg: "linear-gradient(135deg, var(--primary-50) 0%, #F59E0B 100%)", fg: "#FFFFFF", ok: false, label: "Fond complexe / dégradé" },
                   ].map((c, i) => (
                     <div key={i} className="logo-contrast-item">
-                      <div className="logo-contrast" style={{ background: c.bg }}>
-                        <Wordmark className="logo-wordmark" style={{ height: 26, color: c.fg }} />
+                      <div className="logo-bg" style={{ background: c.bg }}>
+                        <Wordmark className="logo-wordmark" style={{ color: c.fg }} />
                       </div>
                       <span className={`logo-contrast-status ${c.ok ? 'logo-contrast-status--ok' : 'logo-contrast-status--ko'}`}>
                         {c.ok ? '✓ ' : '✗ '}{c.label}
