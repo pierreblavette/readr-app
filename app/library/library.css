@@ -2663,6 +2663,41 @@
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+/* ── Doctrine d'entrée des surfaces ──────────────────────────────────────
+   UNE courbe, cubic-bezier(0.16, 1, 0.3, 1) — expo-out : le gros du
+   déplacement au début, la fin se pose au ralenti. C'est elle qui donne son
+   identité au mouvement, donc elle ne varie jamais (hors micro-interactions
+   type toggle, qui ont leur propre bounce).
+
+   TROIS durées, selon le geste — surtout pas une seule : modalIn déplace la
+   surface de 64px, un panneau de 540px. À durée égale le panneau file 8× plus
+   vite ; le chiffre serait identique et la sensation, non.
+
+     0.4s   fondu d'overlay (aucune distance)  → overlayIn, ease-out
+            le fond se pose toujours avant la surface qui arrive dessus
+     0.8s   modale (translateY 64px, ponctuel) → .modal, .confirm-modal,
+            .ob-modal — courte distance, on peut s'attarder
+     0.55s  surface qui glisse (grande distance, usage fréquent)
+            → .book-panel, .selection-bar
+
+   Exceptions mobiles assumées, documentées sur place : .book-panel @768
+   (0.25s) et .sidebar mobile (0.3s). Un slide long élargit la fenêtre où iOS
+   Safari perd les touches — la durée y est un correctif, pas un réglage.
+
+   Garde reduced-motion centralisée ici : ces sélecteurs sont dispersés dans
+   le fichier, les lister au même endroit que les keyframes évite d'oublier
+   le prochain. */
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .confirm-modal-overlay,
+  .panel-overlay,
+  .ob-overlay,
+  .sidebar-overlay,
+  .modal,
+  .confirm-modal,
+  .ob-modal { animation: none; }
+  .book-panel { transition: none; }
+}
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(64px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -2678,14 +2713,14 @@
   justify-content: center;
   padding: 40px 24px;
   box-sizing: border-box;
-  animation: overlayIn 0.2s ease-out both;
+  animation: overlayIn 0.4s ease-out both;
 }
 [data-theme="dark"] .modal-overlay { background: rgba(0,0,0,0.55); }
 
 .modal {
   background: var(--card);
   border-radius: 8px;
-  animation: modalIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: modalIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   padding: 32px 24px 0;
   position: relative;
   width: 100%;
@@ -2999,7 +3034,7 @@
   z-index: 900;
   padding: 40px 24px;
   box-sizing: border-box;
-  animation: overlayIn 0.2s ease-out both;
+  animation: overlayIn 0.4s ease-out both;
 }
 
 .confirm-modal {
@@ -3013,6 +3048,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  animation: modalIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .confirm-modal-title {
@@ -3165,6 +3201,7 @@
   inset: 0;
   z-index: 310;
   background: rgba(30,38,120,0.12);
+  animation: overlayIn 0.4s ease-out both;
 }
 /* Mobile: panel takes full width, no "outside" to click. The overlay then
    can intercept touch events on iOS Safari (body scroll-lock + nested
@@ -3802,10 +3839,11 @@
   background: rgba(30,35,80,0.30);
   display: flex; align-items: center; justify-content: center;
   z-index: 1000;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.2s;
+  /* animation (pas transition) : le composant monte déjà dans son état final,
+     donc aucune transition ne peut se déclencher — il n'y a pas de changement
+     de valeur après le premier paint. Même mécanique que .modal-overlay. */
+  animation: overlayIn 0.4s ease-out both;
 }
-.ob-overlay.open { opacity: 1; pointer-events: auto; }
 .ob-modal {
   background: var(--card);
   border-radius: 16px;
@@ -3814,6 +3852,9 @@
   display: flex; flex-direction: column; align-items: center;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  /* Même entrée que .modal — modalIn est la courbe canonique des modales
+     (expo-out : le gros du déplacement au début, la fin se pose au ralenti). */
+  animation: modalIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .ob-body {
   width: 100%;
@@ -3924,6 +3965,7 @@
   background: rgba(0,0,0,0.4);
   z-index: 299;
   display: none;
+  animation: overlayIn 0.4s ease-out both;
 }
 
 /* Logo */
@@ -5042,7 +5084,10 @@ button.book-chip {
 
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   /* z-index above .book-panel (320) so the mobile drawer covers the panel */
-  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 330; pointer-events: none; padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: env(safe-area-inset-bottom); }
+  /* Courbe canonique, mais durée courte assumée (cf. doctrine) : on ouvre ce
+     menu pour taper aussitôt dedans, et un slide long élargit la fenêtre où
+     iOS Safari perd les touches. */
+  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: none; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 330; pointer-events: none; padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: env(safe-area-inset-bottom); }
   .sidebar.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); pointer-events: auto; }
   .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }
