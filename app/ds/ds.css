@@ -1,0 +1,747 @@
+
+/* Nav items = <Link> (<a>) en multipage, la classe .sidebar-item vient d'un
+ * shell qui l'utilisait sur des <button> (pas de reset text-decoration). */
+a.sidebar-item { text-decoration: none; }
+
+/* ─── CONTENT ─── */
+.ds-intro { display: flex; flex-direction: column; gap: 24px; }
+/* En multipage, la section EST la page (enfant direct de .main-wrap) : elle porte
+ * le rythme vertical (gap 64, iso .main-wrap de library) et le overflow-x: clip
+ * qui empêche les samples larges (search-box-demo 280, cell-row 320…) de forcer
+ * un scroll horizontal sur mobile. */
+.ds-section { display: flex; flex-direction: column; gap: 64px; scroll-margin-top: 84px; min-width: 0; overflow-x: clip; }
+.ds-section-header { display: flex; flex-direction: column; gap: 20px; }
+.ds-section-body { display: flex; flex-direction: column; gap: 40px; }
+/* Iso .page-title (library.css) — en multipage chaque section EST une page,
+   son titre est donc un titre de page plein. */
+.ds-section-title {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+  font-family: var(--font-jakarta), sans-serif;
+}
+@media (max-width: 600px) {
+  .ds-section-title { font-size: 40px; }
+}
+/* Top-level group (Foundations / Components / Patterns / Reference) — wraps
+   the group title + its sections. Internal gap 64 (tighter than the 96 inter-
+   group gap of .ds-content) so the group reads as a cohesive cluster. */
+.ds-group {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.ds-group-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+}
+/* Divider between consecutive groups. Negative margin-top + matching
+   padding-top preserves the original 96px total spacing inherited from
+   .ds-content gap, while centering the 1px rule between the two groups
+   (48 blank · rule · 48 blank). */
+.ds-group + .ds-group {
+  margin-top: -48px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border-subtle);
+}
+/* Group title — the whole DS runs on Plus Jakarta Sans, so size and weight
+   alone separate this from the 20/800 .ds-section-title nested inside the
+   group : 36 against 20 is gap enough, and 700 keeps it from reading thin at
+   that size the way a display serif could afford to. */
+.ds-group-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--text);
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .ds-group-title { font-size: 28px; }
+}
+.ds-section-sub {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+/* ─── DS CARD ─── */
+.ds-card {
+  background: var(--card);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius);
+}
+.ds-card-head {
+  box-sizing: border-box;
+  /* Padding vertical 8 pour breathing room quand le titre wrap sur 2 lignes
+   * (mobile) — sur 1 ligne le padding rentre dans la marge du min-height 40
+   * vs contenu ~14px, pas d'effet visuel. height retiré (était fixe et
+   * tronquait le texte sur 2 lignes). */
+  padding: 8px 16px;
+  min-height: var(--height-head, 40px);
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: var(--bg-head);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+}
+.ds-card-body {
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  align-items: flex-start;
+}
+.ds-card-body.col { flex-direction: column; }
+/* Modèle de padding uniforme : le container ne padde JAMAIS ; chaque bloc enfant
+   direct padde à 20, et en colonne se sépare du suivant par un divider (le look
+   .ds-token-block, généralisé). Table exclue — elle gère ses propres cells.
+   Une seule règle pour tout le DS : plus de padded/non-padded, zéro surprise. */
+.ds-card-body > *:not(table) { padding: 20px; gap: 20px; }
+.ds-card-body.col > table { padding: 0; }
+/* Séparateur entre blocs : un divider inset de 20 à gauche/droite (aligné sur le
+   padding du contenu), 0 en haut/bas, plutôt qu'un border pleine largeur. */
+.ds-card-body.col > * + * { position: relative; }
+.ds-card-body.col > * + *::before {
+  content: "";
+  position: absolute;
+  inset: 0 20px auto 20px;
+  height: 1px;
+  background: var(--border-subtle);
+}
+/* Bloc d'action (bouton) : exception au modèle — pas de padding top ni de
+   divider au-dessus, et largeur ajustée au contenu plutôt que pleine largeur. */
+.ds-card-body.col > .ds-action-block {
+  padding-top: 0;
+  width: fit-content;
+}
+.ds-card-body.col > .ds-action-block::before { content: none; }
+/* Micro-groupe (titre + valeur/texte serrés) : gap 8, pas l'espacement
+   inter-blocs de 20. Même valeur que les autres paires label+valeur du DS. */
+.ds-card-body > .ds-token-block { gap: 8px; }
+/* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
+ * — narrow tables won't scroll because their content fits, so this is safe globally. */
+.ds-card-body.col:has(> table) {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.ds-card-body.col:has(> table)::-webkit-scrollbar { height: 6px; }
+.ds-card-body.col:has(> table)::-webkit-scrollbar-track { background: transparent; }
+.ds-card-body.col:has(> table)::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.ds-card-body + .ds-card-body { position: relative; }
+.ds-card-body + .ds-card-body::before {
+  content: "";
+  position: absolute;
+  inset: 0 20px auto 20px;
+  height: 1px;
+  background: var(--border-subtle);
+}
+.ds-card-body.center { align-items: center; }
+.ds-card-foot {
+  padding: 12px 20px;
+  font-size: 14px;
+  color: var(--text-3);
+  border-top: 1px solid var(--border-subtle);
+}
+/* Sample with an eyebrow label above (Default / Focus / Active / etc.) */
+.ds-state-sample {
+  display: flex;
+  flex-direction: column;
+}
+/* In a column body the samples stack, so they must span the full width — their
+   content (grids, rows) sizes off the parent. Scoped to `.col` on purpose : in a
+   row body the samples sit side by side and must stay shrink-to-fit. */
+.ds-card-body.col > .ds-state-sample { width: 100%; }
+/* Icon + label centered tile (Empty State / Onboarding icon grids) */
+.ds-icon-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+/* Doc bullet list (small subtext list inside .ds-card-body.col) */
+.ds-doc-list {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+  padding-left: 0;
+  list-style-position: inside;
+}
+
+/* ─── TOKENS ─── */
+.ds-token-name {
+  font-size: 13px;
+  font-family: var(--font-jakarta), sans-serif;
+  font-weight: 600;
+  color: var(--text);
+}
+.ds-token-val {
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.7;
+}
+.ds-token-chip {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  width: fit-content;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-5);
+  color: var(--primary-60);
+  border: none;
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  white-space: nowrap;
+}
+[data-theme="dark"] .ds-token-chip { background: var(--primary-5); color: var(--primary-30); }
+/* Token chips footer — variante de .ds-card-foot.
+ * Hérite border-top + padding ; ajoute flex layout pour les chips. */
+.ds-card-foot.ds-card-foot--tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ─── COLORS ─── */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+.palette-grid.on-white { background: #FFFFFF; border-radius: var(--radius); }
+.palette-grid.on-dark-bg { background: #0F0F0F; padding: 16px; border-radius: var(--radius); }
+
+.ds-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; width: 100%; }
+/* Mobile: 2 colonnes garanties pour toutes les grilles colors
+ * (le min 160 forcerait 1 col sur ~311 disponibles). */
+@media (max-width: 600px) {
+  .ds-swatch-grid,
+  .palette-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.ds-swatch { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; }
+.ds-swatch-block { height: 120px; }
+.ds-swatch-block.is-anchor { box-shadow: inset 0 0 0 2px var(--primary-50); }
+.ds-swatch-info { flex: 1; padding: 16px; background: var(--card); display: flex; flex-direction: column; gap: 8px; }
+/* Compact variant — used in palette grids (12+ swatches) */
+.ds-swatch--sm .ds-swatch-block { height: 80px; }
+/* Exception (not referenced): subtle border on dark contrast bg */
+.palette-grid.on-dark-bg .ds-swatch--sm { border-color: color-mix(in srgb, var(--border-subtle) 30%, transparent); }
+.ds-swatch-title { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ─── TYPOGRAPHY ─── */
+.type-sample { display: flex; align-items: center; gap: 12px; width: 100%; }
+.type-sample-meta { flex-shrink: 0; font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); white-space: nowrap; margin-left: auto; }
+.type-sample-preview { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.type-sample-label { font-size: 10px; font-weight: 500; color: var(--text-3); font-family: var(--font-jakarta), sans-serif; }
+.type-meta { font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); }
+
+/* ─── SPACING ─── */
+.spacing-row { display: flex; align-items: center; gap: 16px; padding: 20px 0; width: 100%; border-bottom: 1px solid var(--border-subtle); }
+.spacing-row:last-child { border-bottom: none; }
+.spacing-block { background: var(--accent-bg); flex-shrink: 0; height: 20px; }
+.spacing-label { font-size: 15px; font-weight: 700; color: var(--text); min-width: 40px; }
+.spacing-use { font-size: 13px; color: var(--text); font-family: 'SF Mono','Fira Code',monospace; }
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: none; font-family: inherit; font-weight: 600; cursor: pointer;
+  white-space: nowrap; transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+  flex-shrink: 0;
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary { background: var(--primary-50); color: #fff; border: none; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-60); }
+.btn-primary:active:not(:disabled) { background: var(--primary-70); }
+.btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
+.btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
+.btn-secondary:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
+.btn-ghost { background: transparent; color: var(--dark-80); border: none; }
+.btn-ghost:hover:not(:disabled) { background: var(--primary-5); color: var(--primary-60); }
+.btn-ghost:active:not(:disabled) { background: var(--primary-10); }
+.btn-outline { background: #FFFFFF; color: var(--dark-80); border: 1.5px solid var(--border-subtle); }
+.btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
+.btn-outline:active:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
+.btn-solid { background: var(--primary-5); color: var(--dark-80); border: none; aspect-ratio: 1; }
+.btn-solid svg { pointer-events: none; }
+.btn-solid:hover:not(:disabled) { background: var(--primary-10); }
+.btn-solid:active:not(:disabled) { background: var(--primary-20); }
+.btn-icon { background: transparent; color: var(--dark-70); border: 1px solid var(--border); aspect-ratio: 1; }
+.btn-icon:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-50); background: var(--primary-5); }
+.btn-icon svg { pointer-events: none; }
+
+/* Icon-only buttons (btn-solid / btn-icon): SVG sizes 12/14/16/18 selon size.
+ * Les règles canoniques de library.css (.btn-sm svg* → 3, .btn-md svg* → 2.25)
+ * ciblent les icon+text (glyphs 12/16). Pour les icon-only, on override pour
+ * matcher chaque glyph avec la formule 36/glyph_size pour ~1.5px visual stroke. */
+.btn-solid.btn-xs svg *,
+.btn-icon.btn-xs svg *  { stroke-width: 3; }     /* glyph 12 → 1.5 */
+.btn-solid.btn-sm svg *,
+.btn-icon.btn-sm svg *  { stroke-width: 2.5; }   /* glyph 14 → 1.46 */
+.btn-solid.btn-md svg *,
+.btn-icon.btn-md svg *  { stroke-width: 2.25; }  /* glyph 16 → 1.5 */
+.btn-solid.btn-lg svg *,
+.btn-icon.btn-lg svg *  { stroke-width: 2; }     /* glyph 18 → 1.5 */
+.btn-critical { background: #EF4444; color: #fff; border: none; }
+.btn-critical:hover:not(:disabled) { background: #DC2626; }
+
+.btn-xs { height: 24px; padding: 0 8px;  border-radius: 6px;  font-size: 11px; gap: 4px; }
+.btn-sm { height: 32px; padding: 0 16px; border-radius: 7px;  font-size: 12px; gap: 6px; }
+.btn-md { height: 40px; padding: 0 20px; border-radius: 8px;  font-size: 14px; gap: 8px; }
+.btn-lg { height: 48px; padding: 0 24px; border-radius: 8px;  font-size: 14px; gap: 8px; }
+.btn-xl { height: 56px; padding: 0 28px; border-radius: 8px;  font-size: 15px; gap: 10px; }
+.btn-icon.btn-xs { width: 24px; padding: 0; } .btn-icon.btn-xs svg { width: 12px; height: 12px; }
+.btn-icon.btn-sm { width: 32px; padding: 0; } .btn-icon.btn-sm svg { width: 14px; height: 14px; }
+.btn-icon.btn-md { width: 40px; padding: 0; } .btn-icon.btn-md svg { width: 16px; height: 16px; }
+.btn-icon.btn-lg { width: 48px; padding: 0; } .btn-icon.btn-lg svg { width: 18px; height: 18px; }
+.btn-solid.btn-xs { width: 24px; padding: 0; } .btn-solid.btn-xs svg { width: 12px; height: 12px; }
+.btn-solid.btn-sm { width: 32px; padding: 0; } .btn-solid.btn-sm svg { width: 14px; height: 14px; }
+.btn-solid.btn-md { width: 40px; padding: 0; } .btn-solid.btn-md svg { width: 16px; height: 16px; }
+.btn-solid.btn-lg { width: 48px; padding: 0; } .btn-solid.btn-lg svg { width: 18px; height: 18px; }
+.btn-square { aspect-ratio: 1 !important; padding: 0 !important; }
+.btn-square svg { width: 16px; height: 16px; pointer-events: none; }
+
+/* Hover/active/focus state simulation */
+.btn-primary.is-hover   { background: var(--primary-60) !important; }
+.btn-secondary.is-hover { background: var(--primary-10) !important; }
+.btn-ghost.is-hover     { background: var(--primary-5) !important; color: var(--primary-60) !important; }
+.btn-outline.is-hover   { background: var(--primary-5) !important; border-color: var(--primary-50) !important; color: var(--primary-50) !important; }
+.btn-solid.is-hover     { background: var(--primary-10) !important; }
+.btn-critical.is-hover  { background: #DC2626 !important; }
+.btn.is-active          { transform: scale(0.97); }
+.btn-primary.is-active  { background: var(--primary-70) !important; }
+.btn-secondary.is-active { background: var(--primary-20) !important; color: var(--primary-70) !important; }
+.btn-ghost.is-active    { background: var(--primary-10) !important; color: var(--primary-70) !important; }
+.btn-outline.is-active  { background: var(--primary-10) !important; border-color: var(--primary-60) !important; color: var(--primary-60) !important; }
+.btn-solid.is-active    { background: var(--primary-20) !important; }
+.btn-critical.is-active { background: #B91C1C !important; }
+.btn.is-focus           { outline: 2px solid var(--primary-50); outline-offset: 2px; }
+
+[data-theme="dark"] .btn-primary { background: var(--primary-40); }
+[data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
+[data-theme="dark"] .btn-primary.is-hover { background: var(--primary-50) !important; }
+[data-theme="dark"] .btn-secondary { background: var(--primary-5); color: var(--primary-30); }
+[data-theme="dark"] .btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
+[data-theme="dark"] .btn-secondary.is-hover { background: var(--primary-10) !important; color: var(--primary-30) !important; }
+[data-theme="dark"] .btn-ghost { color: var(--light-90); }
+[data-theme="dark"] .btn-ghost:hover:not(:disabled) { background: rgba(73,89,230,0.12); color: var(--primary-40); }
+[data-theme="dark"] .btn-ghost.is-hover { background: rgba(73,89,230,0.12) !important; color: var(--primary-40) !important; }
+[data-theme="dark"] .btn-outline { border-color: var(--light-20); color: var(--light-90); background: transparent; }
+[data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.12); }
+[data-theme="dark"] .btn-outline.is-hover { border-color: var(--primary-40) !important; color: var(--primary-40) !important; background: rgba(73,89,230,0.12) !important; }
+[data-theme="dark"] .btn-solid { background: rgba(73,89,230,0.15); color: var(--primary-50); }
+[data-theme="dark"] .btn-icon { border-color: var(--light-20); color: var(--light-70); }
+[data-theme="dark"] .btn-icon:hover:not(:disabled) { border-color: var(--primary-40); background: rgba(73,89,230,0.12); color: var(--primary-40); }
+[data-theme="dark"] .btn-ghost.is-active { color: var(--primary-50) !important; }
+[data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-50) !important; color: var(--primary-50) !important; }
+
+/* ─── VIEW TOGGLE ─── */
+.view-btns-ds { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.view-btn-ds { width: 38px; height: 38px; border: none; background: var(--bg3); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; font-family: inherit; }
+.view-btn-ds:first-child { border-right: 1px solid var(--border); }
+.view-btn-ds:hover { background: var(--primary-10); color: var(--primary-60); }
+.view-btn-ds.active { background: var(--primary-50); color: #fff; }
+.view-btn-ds svg { width: 15px; height: 15px; }
+
+/* ─── LANG SWITCHER ─── */
+.lang-toggle-ds { display: flex; align-items: center; gap: 4px; }
+.lang-sep-ds { color: var(--text-3); font-size: 12px; line-height: 1; }
+.lang-btn-ds { background: none; border: none; padding: 2px 0; font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-3); cursor: pointer; font-family: inherit; transition: color 0.15s; }
+.lang-btn-ds.active { color: var(--text); font-weight: 600; }
+.lang-btn-ds:hover:not(.active) { color: var(--text-2); }
+
+/* ─── BADGES ─── */
+
+/* ─── DROPDOWN MENU ─── */
+.dropdown-wrap { position: relative; display: inline-block; }
+.dropdown-menu {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  z-index: 200; min-width: 140px;
+  animation: dropdownIn 0.12s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dropdown-item {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 8px 12px;
+  border: none; background: transparent;
+  font-family: inherit; font-size: 13px; font-weight: 500;
+  color: var(--text); border-radius: 7px;
+  cursor: pointer; white-space: nowrap; text-align: left;
+  transition: background 0.1s, color 0.1s;
+}
+.dropdown-item:hover { background: var(--primary-5); color: var(--primary-60); }
+.dropdown-item:active { background: var(--primary-10); }
+[data-theme="dark"] .dropdown-menu {
+  background: var(--bg2); border-color: var(--light-20);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+[data-theme="dark"] .dropdown-item:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
+
+/* ─── INPUTS ─── */
+.search-box-demo { position: relative; display: flex; align-items: center; width: 280px; }
+.search-box-demo svg { position: absolute; left: 14px; width: 15px; height: 15px; color: var(--text-3); pointer-events: none; }
+.search-box-demo input {
+  height: 40px; width: 100%; padding: 0 34px 0 38px;
+  border: 1.5px solid var(--border-subtle); border-radius: 32px;
+  background: #FFFFFF; font-family: inherit; font-size: 15px;
+  font-weight: 600; color: var(--text); outline: none; transition: all 0.2s;
+}
+.search-box-demo input::placeholder { color: var(--text-2); }
+.search-box-demo input:hover:not(:focus) { border-color: var(--primary-50); background: var(--primary-5); }
+.search-box-demo input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
+
+.field-demo { display: flex; flex-direction: column; gap: 6px; width: 280px; }
+.field-demo label { font-size: 12px; font-weight: 500; color: var(--text-3); }
+.field-demo input {
+  height: 40px; padding: 0 14px; border-radius: 8px;
+  border: 1.5px solid transparent; background: var(--bg3);
+  color: var(--text); font-family: inherit; font-size: 15px;
+  font-weight: 600; outline: none; transition: border-color 0.15s, background 0.15s;
+}
+.field-demo input::placeholder { font-weight: 500; color: var(--text-2); }
+.field-demo input:hover:not(:focus) { background: var(--primary-5); border-color: var(--primary-50); }
+.field-demo input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); }
+
+/* ─── BOOK CARD ─── */
+.book-card-ds {
+  background: var(--card); border-radius: var(--radius); overflow: hidden;
+  border: 1.5px solid var(--border-subtle); transition: transform 0.22s ease, border-color 0.22s, background 0.22s, box-shadow 0.22s;
+  cursor: pointer; width: 195px;
+}
+.book-card-ds:not(.book-card-ds--static):hover { transform: translateY(-2px); border-color: var(--primary-50); background: var(--primary-3); box-shadow: var(--shadow-md); }
+[data-theme="dark"] .book-card-ds:not(.book-card-ds--static):hover { border-color: var(--primary-40); background: var(--primary-3); }
+.book-card-ds--static { cursor: default; }
+.book-cover-ds {
+  height: 148px; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.book-cover-ds img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.book-body-ds { padding: 8px 8px 16px 16px; display: flex; flex-direction: column; gap: 4px; }
+.book-title-ds { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-author-ds { font-size: 15px; font-weight: 500; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-meta-ds { display: block; max-width: 100%; font-size: 14px; font-weight: 500; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-meta-sep-ds { color: var(--text-3); margin: 0 6px; }
+
+/* ─── LIST VIEW ─── */
+.list-demo { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; width: 100%; }
+.list-demo table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.list-demo th { padding: 11px 16px; text-align: left; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+.list-demo tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; cursor: pointer; }
+.list-demo tbody tr:last-child { border-bottom: none; }
+.list-demo tbody tr:hover { background: rgba(73,89,230,0.04); }
+.list-demo td { padding: 16px; vertical-align: middle; }
+.list-title-cell { font-weight: 700; color: var(--text); }
+.list-author-cell { font-size: 14px; font-weight: 500; color: var(--text-2); }
+.list-year-cell { font-size: 14px; font-weight: 500; color: var(--text-2); white-space: nowrap; }
+
+/* ─── CHECKBOX ─── */
+.checkbox-demo { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border); background: var(--bg); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.checkbox-demo.checked { background: var(--primary-50); border-color: var(--primary-50); }
+.checkbox-demo svg { width: 10px; height: 10px; color: var(--bg); }
+
+/* ─── AUTOCOMPLETE ─── */
+.autocomplete-preview { border: 1.5px solid var(--border-subtle); border-radius: var(--radius); background: var(--card); overflow: hidden; width: 280px; }
+.ac-item { padding: 10px 14px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; border-bottom: 1px solid var(--border); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ac-item:last-child { border-bottom: none; }
+.ac-item:hover, .ac-item.focused { background: var(--primary-5); color: var(--primary-60); }
+.ac-item .ac-sep { font-size: 14px; font-weight: 400; color: var(--text-3); margin-left: 8px; }
+.ac-item span { font-size: 14px; font-weight: 400; color: var(--text-2); margin-left: 8px; }
+
+/* ─── THEME TOGGLE ─── */
+.theme-btn-ds { width: 48px; height: 26px; border-radius: 13px; border: none; background: var(--primary-10); cursor: pointer; position: relative; display: flex; align-items: center; padding: 0 6px; transition: background 0.4s; }
+.theme-btn-ds:hover { background: var(--primary-20); }
+[data-theme="dark"] .search-box-demo input { background: var(--bg3); }
+[data-theme="dark"] .theme-btn-ds { background: var(--primary-40); }
+[data-theme="dark"] .theme-btn-ds:hover { background: var(--primary-50); }
+.toggle-thumb-ds { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: center; justify-content: center; }
+.toggle-thumb-ds svg { width: 10px; height: 10px; color: var(--primary-40); }
+[data-theme="dark"] .toggle-thumb-ds { background: #111; }
+/* Generic ON state (independent of theme) — used by the Text rules toggle. */
+.theme-btn-ds.is-on { background: var(--primary-50); }
+.theme-btn-ds.is-on .toggle-thumb-ds { transform: translateX(22px); }
+[data-theme="dark"] .theme-btn-ds.is-on { background: var(--primary-30); }
+
+/* DS sidebar — wrapper around Text rules + Appearance toggles. Sits at the
+   top of .sidebar-nav above the section groups ; gap 0 so the two rows
+   read as a single tight cluster (rather than two separate items spaced
+   by the 24px .sidebar-nav gap). */
+.sidebar-appearance-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+/* Scoped override : only the DS sidebar-nav has the appearance wrap inside ;
+   drop the 24px top padding (now visually owned by the wrap itself) and
+   move the breathing room to the bottom. */
+.sidebar-nav:has(.sidebar-appearance-wrap) {
+  padding-top: 12px;
+  padding-bottom: 24px;
+}
+
+/* ─── HIDE TEXT RULES — declutter mode ─── */
+/* Strip prose, anatomy blocks, ref tables, and card footers — keep only
+   visual previews and section titles. Useful for a quick visual scan. */
+.ds-content--text-hidden .ds-section-sub,
+.ds-content--text-hidden .ds-card-body.col > p,
+.ds-content--text-hidden .ds-card-body.col > table,
+.ds-content--text-hidden .ds-token-block,
+.ds-content--text-hidden .ds-card-foot {
+  display: none;
+}
+/* Collapse card bodies that only held textual children (no preview left). */
+.ds-content--text-hidden .ds-card-body.col:not(:has(> :not(p):not(table):not(.ds-token-block))) {
+  display: none;
+}
+/* Hide entire cards that are purely textual (no preview body anywhere). */
+.ds-content--text-hidden .ds-card:not(:has(.ds-card-body:not(.col), .ds-card-body.col > :not(p):not(table):not(.ds-token-block))) {
+  display: none;
+}
+/* Hide entire sections that contain no visual card content — section title
+   would otherwise hang alone (Finish Reading Modal, Token Usage, etc). */
+.ds-content--text-hidden .ds-section:not(:has(.ds-card-body:not(.col), .ds-card-body.col > :not(p):not(table):not(.ds-token-block))) {
+  display: none;
+}
+
+/* ─── PANEL PREVIEW ─── */
+/* Panel DS viewport — simulates app layout with panel on the right */
+.panel-ds-viewport {
+  display: flex; width: 100%; height: 480px; overflow: hidden;
+}
+.panel-ds-content {
+  flex: 1; background: var(--bg2, #f5f5f7); padding: 24px; display: flex; flex-direction: column; gap: 10px;
+}
+.panel-ds-placeholder-row {
+  height: 40px; border-radius: 8px; background: var(--border); opacity: 0.4;
+}
+.panel-ds-panel {
+  width: 420px; flex-shrink: 0; background: rgba(255,255,255,0.95); border-left: 1px solid var(--border); overflow-y: auto;
+}
+/* On mobile, drop the app shell preview (placeholder) and let the panel take
+ * the full card width — same intent as the real Library where the panel
+ * covers the screen on small viewports. Height: auto pour afficher tout le
+ * contenu sans scroll interne (iso .sidebar mobile preview). */
+@media (max-width: 600px) {
+  .panel-ds-viewport { flex-direction: column; height: auto; overflow: visible; }
+  .panel-ds-content { display: none; }
+  .panel-ds-panel { width: 100%; border-left: none; overflow-y: visible; }
+}
+
+/* DS preview override — the real .sidebar in mobile (≤768px) uses
+ * position: fixed + transform: translateX(-100%) for the drawer pattern.
+ * Inline samples in the DS need to stay statically positioned and visible. */
+.ds-card-body .sidebar:not(.mobile-open) {
+  position: static;
+  transform: none;
+  pointer-events: auto;
+  box-shadow: none;
+  width: 260px;
+}
+.ds-card-body .sidebar.collapsed { width: 60px; }
+/* Mobile: hide la version Collapsed (peu représentative + économise le scroll)
+ * et height auto pour que la preview Expanded affiche tout le contenu sans
+ * scroll interne (override la height: 500 inline du sample). */
+@media (max-width: 600px) {
+  .ds-card-body > .sidebar.collapsed { display: none; }
+  .ds-card-body > .sidebar:not(.collapsed) { height: auto !important; }
+}
+
+/* Stack sample rows on mobile — .type-sample-meta has white-space: nowrap
+ * + flex-shrink: 0, so long mono strings (eg. "1.43rem · 20px · 800") would
+ * overflow horizontally. Stacking preview + meta is cleaner than wrapping. */
+@media (max-width: 600px) {
+  /* Buttons states cards (5 variants × 5 states) — 2 cols mobile so each
+   * state block stays readable instead of compressing to 5-in-a-row. */
+  .ds-states-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+  .type-sample,
+  .spacing-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  /* Inline align-self: center (desktop vertical centering) becomes horizontal
+   * centering in column direction — force left-align in mobile via !important
+   * (the inline style otherwise wins by specificity). */
+  .type-sample-meta {
+    margin-left: 0;
+    white-space: normal;
+    align-self: flex-start !important;
+  }
+}
+[data-theme="dark"] .panel-ds-panel { background: var(--bg); }
+[data-theme="dark"] .panel-ds-content { background: var(--bg2); }
+
+
+
+/* ─── SELECTION BAR ─── */
+/* ─── SPINNER ─── */
+.spinner-ds { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin-ds 0.7s linear infinite; }
+@keyframes spin-ds { to { transform: rotate(360deg); } }
+
+/* ─── LOGO ─── */
+.logo-wordmark { display: block; width: auto; overflow: visible; }
+.logo-symbol { display: block; width: auto; overflow: visible; }
+.logo-bg { display: flex; align-items: center; justify-content: center; border-radius: var(--radius); aspect-ratio: 16 / 9; min-width: 0; container-type: inline-size; }
+.logo-bg .logo-wordmark { height: clamp(16px, 11cqw, 38px); }
+.logo-bg .logo-symbol { height: clamp(34px, 38cqw, 160px); }
+/* Lockup is 5.43:1 — sized off the wordmark's scale so both read alike here. */
+.logo-bg .logo { height: clamp(14px, 11cqw, 38px); }
+.app-icon-card { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.app-icon-preview { width: 160px; height: 160px; display: block; flex-shrink: 0; }
+.app-icon-meta { display: flex; flex-direction: column; gap: 8px; }
+.app-icon-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+.ds-note { font-size: 15px; color: var(--text); line-height: 1.7; }
+.splash-preview-row { display: flex; flex-wrap: wrap; align-items: flex-start; }
+.splash-preview { height: 440px; width: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 20px; background: #FEFEFF; }
+.maskable-shapes-row { display: flex; flex-wrap: wrap; }
+.maskable-shape-card { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.maskable-shape { width: 104px; height: 104px; overflow: hidden; flex-shrink: 0; }
+.maskable-shape-img { width: 100%; height: 100%; display: block; }
+/* Android adaptive-icon mask shapes (approximated). Circle is the most
+   aggressive — reveals if the symbol's edges survive the safe zone. */
+.maskable-shape--circle { border-radius: 50%; }
+.maskable-shape--squircle { border-radius: 32px; }
+.maskable-shape--rounded { border-radius: 22px; }
+.maskable-shape--square { border-radius: 0; }
+.maskable-shape-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-3); }
+/* Board card (img + eyebrow) — sits in a .logo-bg-row cell, so it owns no
+   width of its own : the grid track sizes it. */
+.lockup-card { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+/* Square corners on purpose : the board artwork is drawn to the edge with no
+   radius of its own, so a rounded border would cut its corners off. */
+.lockup-preview { width: 100%; height: auto; display: block; border: 1px solid var(--border-subtle); }
+.logo-clearspace { width: 100%; display: flex; align-items: center; justify-content: center; }
+/* Clear space, unit = the wordmark's "d" glyph (102 × 148). It is NOT uniform :
+   - sides : 1× d, i.e. its width (102) → 102/148 of the logo height
+   - top/bottom : 0.5x — the logo is 1x tall (= the d's height) and centres in a
+     2x band, leaving half an x each side (74 for 148).
+   Derived from --logo-h rather than hardcoded so the frame stays exact if the
+   preview height changes. The wordmark sizes off the same variable. */
+.logo-clearspace-frame { --logo-h: 56px; position: relative; padding: calc(var(--logo-h) / 2) calc(var(--logo-h) * 102 / 148); display: flex; align-items: center; justify-content: center; }
+.logo-clearspace-frame .logo-wordmark { height: var(--logo-h); }
+.logo-clearspace-frame::before { content: ''; position: absolute; inset: 0; border: 1px dashed var(--primary-50); border-radius: 4px; opacity: 0.5; pointer-events: none; }
+/* Tile + caption below, the same shape as .lockup-card and .logo-contrast-item —
+   the caption sits outside the tile so it never reads as part of the artwork. */
+.logo-dont-item { display: flex; flex-direction: column; gap: 10px; align-items: center; min-width: 0; }
+/* Same tile as .logo-bg (it rides a .logo-bg-row) — only the surface differs, so
+   it takes the section's ratio rather than a min-height of its own. */
+.logo-dont { width: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg3); border-radius: var(--radius); aspect-ratio: 16 / 9; padding: 24px; position: relative; overflow: hidden; }
+.logo-dont-label { font-size: 12px; font-weight: 500; color: var(--text-3); text-align: center; }
+.logo-dont-fake { font-family: var(--font-jakarta), sans-serif; font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+/* Cell of a .logo-bg-row : stretches its .logo-bg tile, while the status pill
+   keeps its own align-self so it stays left and hugs its label. */
+.logo-contrast-item { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.logo-contrast-status { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; align-self: flex-start; }
+.logo-contrast-status--ok { background: var(--primary-50); color: #FFFFFF; }
+.logo-contrast-status--ko { background: var(--alert-bg); color: var(--alert); }
+.logo-bg-page    { background: #FEFEFF; border: 1px solid var(--border-subtle); }
+.logo-bg-dark    { background: #1B1B1B; }
+.logo-bg-accent  { background: var(--primary-50); }
+/* The single tile row of the Logo section — CSS tiles (.logo-bg) and board cards
+   (.lockup-card) alike. Column count is fixed rather than auto-fit so every tile
+   is the same width whatever the row holds : a 2-tile row leaves its 3rd track
+   empty instead of stretching, which auto-fit cannot do (it collapses empty
+   tracks). Same reason as the Now Reading grid cap.
+   Rows breathe wider than columns : on the multi-row cards (Don'ts, Background
+   contrast) each tile carries a caption below it, so an equal gap would read as
+   the caption belonging to the tile underneath. */
+/* Grille de tuiles unifiée : la base porte tout le spacing (gap + padding + width),
+   partagé entre toutes les grilles ; seul le template de colonnes est un modifier
+   (--cols3 : rangées de tuiles égales · --auto : previews larges auto-adaptées). */
+.ds-tile-grid { display: grid; gap: 20px; width: 100%; align-items: start; }
+.ds-tile-grid--cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ds-tile-grid--auto  { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+@media (max-width: 600px) {
+  .ds-tile-grid--cols3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.logo-spec-row   { display: flex; flex-wrap: wrap; width: 100%; }
+.logo-spec-item  { display: flex; flex-direction: column; gap: 8px; }
+.logo-spec-item:not(:first-child) { border-left: 1px solid var(--border-subtle); padding-left: 24px; }
+/* Mobile: dividers (top + between items) deviennent confus avec le wrap — drop. */
+@media (max-width: 600px) {
+  .logo-spec-row { gap: 20px; }
+  .logo-spec-item:not(:first-child) { border-left: none; padding-left: 0; }
+}
+.logo-spec-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+.logo-spec-val   { font-size: 13px; font-weight: 500; color: var(--text); font-family: 'SF Mono','Fira Code',monospace; }
+
+/* ─── TOKEN TABLE ─── */
+.token-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.token-table th { padding: 12px 20px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+/* Row borders + hover removed — handled by .table-row primitive (library.css) */
+.token-table td { padding: 16px 20px; vertical-align: middle; }
+.token-table-component { font-weight: 600; color: var(--text); white-space: nowrap; }
+.token-table td:last-child:has(.ds-token-chip) { display: flex; flex-wrap: wrap; gap: 5px; padding: 16px 20px; }
+
+/* ─── DS CAPTION (paragraphs in .ds-card-body.col) ─── */
+.ds-card-body.col p,
+.ds-card-body.col > p {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+/* Long inline code spans must wrap on narrow viewports instead of forcing
+ * the parent to overflow (eg. `setDeleteTarget({ type: 'quote', ... })`). */
+/* Tout texte qui touche à un token/valeur (inline code, hex, nom de token) partage
+   la même font mono que .ds-token-chip / .ds-token-val — une seule voix « code ». */
+.ds-card-body code {
+  overflow-wrap: anywhere;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.92em;
+  color: var(--primary-50);
+}
+/* Code blocks scroll horizontally instead of expanding their parent. */
+.ds-card-body pre {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.ds-card-body pre::-webkit-scrollbar { height: 4px; }
+.ds-card-body pre::-webkit-scrollbar-track { background: transparent; }
+.ds-card-body pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.ds-token-block { display: flex; flex-direction: column; width: 100%; }
+.ds-token-block .ds-token-name { font-weight: 600; }
+
+/* ─── TOKEN TABLE — cell modifiers ─── */
+.token-table td.mono {
+  font-family: 'SF Mono','Fira Code',monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+.token-table td.meta { font-size: 14px; }
+.token-table td.is-empty { color: var(--text-3); }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+

@@ -63,6 +63,8 @@
   --accent-bg:             rgba(73,89,230,0.08);
   --teal:                  #00A699;
   --teal-bg:               rgba(0,166,153,0.08);
+  --alert:                 #E63946;
+  --alert-bg:              rgba(230,57,70,0.10);
   --ai-from:               #F67BF8;
   --ai-to:                 #4959E6;
   --ghost-hover:           rgba(73,89,230,0.05);
@@ -135,6 +137,8 @@
   --accent-bg:             rgba(123,137,248,0.12);
   --teal:                  #00C9BE;
   --teal-bg:               rgba(0,201,190,0.1);
+  --alert:                 #FF6B6B;
+  --alert-bg:              rgba(255,107,107,0.14);
   --ai-from:               #F67BF8;
   --ai-to:                 #7B89F8;
   --ghost-hover:           rgba(73,89,230,0.20);
