@@ -3,7 +3,7 @@
 // migration : n'y lister que les sections dont la route existe déjà, pour ne
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
-  Foundations: ["logo", "colors", "typography"],
+  Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
 };
 
 export const NAV_LABELS = {

@@ -141,7 +141,7 @@ a.sidebar-item { text-decoration: none; }
 .ds-card-body.col > .ds-action-block::before { content: none; }
 /* Micro-groupe (titre + valeur/texte serrés) : gap 8, pas l'espacement
    inter-blocs de 20. Même valeur que les autres paires label+valeur du DS. */
-.ds-card-body > .ds-token-block { gap: 12px; }
+.ds-card-body > .ds-token-block { gap: 8px; }
 /* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
  * — narrow tables won't scroll because their content fits, so this is safe globally. */
 .ds-card-body.col:has(> table) {
@@ -274,12 +274,13 @@ a.sidebar-item { text-decoration: none; }
 .type-specimen-hero { font-size: 88px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--text); }
 .type-specimen-pangram { font-size: 18px; font-weight: 400; line-height: 1.6; color: var(--text-2); }
 
-/* ─── SPACING ─── */
-.spacing-row { display: flex; align-items: center; gap: 16px; padding: 20px 0; width: 100%; border-bottom: 1px solid var(--border-subtle); }
-.spacing-row:last-child { border-bottom: none; }
+/* ─── SPACING / SPEC ROWS ─── */
+/* Même contrat que .type-sample : le modèle (.ds-card-body > *) pose padding 20,
+ * divider inset et gap 20 ; la row n'assume que le flex + l'alignement vertical.
+ * La meta (.type-sample-meta) est poussée à droite → colonnes alignées. */
+.spacing-row { display: flex; align-items: center; width: 100%; }
 .spacing-block { background: var(--accent-bg); flex-shrink: 0; height: 20px; }
 .spacing-label { font-size: 15px; font-weight: 700; color: var(--text); min-width: 40px; }
-.spacing-use { font-size: 13px; color: var(--text); font-family: 'SF Mono','Fira Code',monospace; }
 
 /* ─── BUTTONS ─── */
 .btn {
