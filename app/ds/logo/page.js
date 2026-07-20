@@ -10,10 +10,10 @@ export default function LogoPage() {
   const [replayLogo, setReplayLogo] = useState(0);
 
   return (
-    <DSSection id="logo" title="Logo" sub="Wordmark Readr — MG12 Medium (Atipo), exported as outlined SVG (no runtime webfont). R capitale + reste lowercase. Color via currentColor.">
+    <DSSection id="logo" title="Logo" sub="The Readr logo — wordmark, symbol, and their usage rules.">
       <div className="ds-card">
         <div className="ds-card-head">Contextes d'utilisation</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","#FFFFFF"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
               <div key={i} className={`logo-bg ${cls}`}>
@@ -33,7 +33,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Symbol — standalone</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","var(--primary-50)"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
               <div key={i} className={`logo-bg ${cls}`}>
@@ -53,7 +53,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Lockup — Symbol &amp; Text</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[["logo-bg-page","#0D0F1A",undefined,"Light"],["logo-bg-dark","#FFFFFF",undefined,"Dark"],["logo-bg-accent","#FFFFFF","#FFFFFF","Accent"]].map(([cls,col,symbolColor,label]) => (
               <div key={cls} className="lockup-card">
@@ -69,7 +69,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Motion — draw-on</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-state-sample">
             <span className="panel-section-eyebrow">Symbol</span>
             <div className="ds-tile-grid ds-tile-grid--cols3">
@@ -104,7 +104,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">App icon — squircle masters</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--auto">
             <div className="app-icon-card">
               <span className="panel-section-eyebrow">Favicon</span>
@@ -137,7 +137,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Maskable Android — shapes</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="maskable-shapes-row">
             {[["circle","Circle"],["squircle","Squircle"],["rounded","Rounded"],["square","Square"]].map(([shape,label]) => (
               <div key={shape} className="maskable-shape-card">
@@ -153,7 +153,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Splash screen — iOS launch</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="splash-preview-row">
             <img src="/splash/iphone-16-pro.png" alt="iOS splash screen" className="splash-preview" />
           </div>
@@ -174,14 +174,14 @@ export default function LogoPage() {
           {[[40,"display / splash screen"],[28,"page header"],[17,"sidebar (reference size)"],[12,"footer / minimum size"]].map(([sz, use]) => (
             <div key={sz} className="type-sample">
               <Wordmark className="logo-wordmark" style={{ height: sz, color: "var(--text)" }} />
-              <div className="type-meta">{sz}px · {use}</div>
+              <div className="type-sample-meta">{sz}px · {use}</div>
             </div>
           ))}
         </div>
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Construction — grille</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (
               <div key={kind} className="lockup-card">
@@ -205,7 +205,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Clear space</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="logo-clearspace">
             <div className="logo-clearspace-frame">
               <Wordmark className="logo-wordmark" style={{ color: "var(--text)" }} />
@@ -224,7 +224,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Don'ts</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[
               ["Pas de déformation", { transform: "scaleX(0.55)" }],
@@ -246,7 +246,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Background contrast</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[
               { bg: "#FEFEFF",  fg: "#0F0F0F", ok: true,  label: "Surface light" },
@@ -270,7 +270,7 @@ export default function LogoPage() {
       </div>
       <div className="ds-card">
         <div className="ds-card-head">Usage rules</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <p className="ds-note">
             Always <strong>Readr</strong> (R capitale + reste lowercase), never <em>readr</em>, <em>READR</em> or <em>ReadR</em>. Do not re-outline, recolor selectively, or apply font substitution — use the SVG component. Minimum size: 12px height. On colored backgrounds, use white only (<code>#FFFFFF</code>).
           </p>

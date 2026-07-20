@@ -7,12 +7,19 @@ import { useTheme } from "./ThemeContext";
 export default function Swatch({ bg, title, token, light, dark, size = "md", anchor = false }) {
   const { theme } = useTheme();
   const value = theme === "dark" ? (dark || light) : (light || dark);
+  // Un token composite ("--accent / --primary-50") = un chip par nom : chaque
+  // chip reste insécable, mais le conteneur wrap au lieu de rogner dans la tuile.
+  const tokens = token ? String(token).split("/").map((t) => t.trim()).filter(Boolean) : [];
   return (
     <div className={`ds-swatch${size === "sm" ? " ds-swatch--sm" : ""}`}>
       <div className={`ds-swatch-block${anchor ? " is-anchor" : ""}`} style={{ background: bg, borderBottom: "1px solid var(--border-subtle)" }} />
       <div className="ds-swatch-info">
         {title && <div className="ds-swatch-title">{title}</div>}
-        {token && <span className="ds-token-chip">{token}</span>}
+        {tokens.length > 0 && (
+          <div className="ds-swatch-tokens">
+            {tokens.map((t) => <span key={t} className="ds-token-chip">{t}</span>)}
+          </div>
+        )}
         {value && <div className="ds-token-val">{value}</div>}
       </div>
     </div>

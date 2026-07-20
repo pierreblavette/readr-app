@@ -2,9 +2,23 @@
 /* Nav items = <Link> (<a>) en multipage, la classe .sidebar-item vient d'un
  * shell qui l'utilisait sur des <button> (pas de reset text-decoration). */
 a.sidebar-item { text-decoration: none; }
+/* Les groupes DS (Foundations…) ne sont pas collapsibles : --no-action retire le
+ * hover mais pas le cursor: pointer hérité de .sidebar-section-head. */
+.sidebar-section-head--no-action { cursor: default; }
 
 /* ─── CONTENT ─── */
 .ds-intro { display: flex; flex-direction: column; gap: 24px; }
+/* Sommaire navigable de la landing /ds — groupes NAV + cards-liens vers les sections. */
+.ds-index { display: flex; flex-direction: column; gap: 40px; }
+.ds-index-group { display: flex; flex-direction: column; gap: 16px; }
+.ds-index-card {
+  display: flex; align-items: center; min-height: 72px; padding: 20px;
+  background: var(--card); border: 1.5px solid var(--border-subtle); border-radius: var(--radius);
+  font-size: 15px; font-weight: 600; color: var(--text); text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.ds-index-card:hover { border-color: var(--primary-50); background: var(--primary-5); }
+[data-theme="dark"] .ds-index-card:hover { background: var(--primary-3); }
 /* En multipage, la section EST la page (enfant direct de .main-wrap) : elle porte
  * le rythme vertical (gap 64, iso .main-wrap de library) et le overflow-x: clip
  * qui empêche les samples larges (search-box-demo 280, cell-row 320…) de forcer
@@ -127,7 +141,7 @@ a.sidebar-item { text-decoration: none; }
 .ds-card-body.col > .ds-action-block::before { content: none; }
 /* Micro-groupe (titre + valeur/texte serrés) : gap 8, pas l'espacement
    inter-blocs de 20. Même valeur que les autres paires label+valeur du DS. */
-.ds-card-body > .ds-token-block { gap: 8px; }
+.ds-card-body > .ds-token-block { gap: 12px; }
 /* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
  * — narrow tables won't scroll because their content fits, so this is safe globally. */
 .ds-card-body.col:has(> table) {
@@ -179,7 +193,7 @@ a.sidebar-item { text-decoration: none; }
 
 /* ─── TOKENS ─── */
 .ds-token-name {
-  font-size: 13px;
+  font-size: 15px;
   font-family: var(--font-jakarta), sans-serif;
   font-weight: 600;
   color: var(--text);
@@ -238,6 +252,9 @@ a.sidebar-item { text-decoration: none; }
 .ds-swatch-block { height: 120px; }
 .ds-swatch-block.is-anchor { box-shadow: inset 0 0 0 2px var(--primary-50); }
 .ds-swatch-info { flex: 1; padding: 16px; background: var(--card); display: flex; flex-direction: column; gap: 8px; }
+/* Tokens du swatch : row de chips qui wrap (un chip par nom) plutôt qu'un chip
+ * unique nowrap qui déborderait la tuile. Même gap que le footer de chips. */
+.ds-swatch-tokens { display: flex; flex-wrap: wrap; gap: 6px; }
 /* Compact variant — used in palette grids (12+ swatches) */
 .ds-swatch--sm .ds-swatch-block { height: 80px; }
 /* Exception (not referenced): subtle border on dark contrast bg */
@@ -245,11 +262,17 @@ a.sidebar-item { text-decoration: none; }
 .ds-swatch-title { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ─── TYPOGRAPHY ─── */
-.type-sample { display: flex; align-items: center; gap: 12px; width: 100%; }
+/* gap non déclaré : le modèle (.ds-card-body > *) impose 20 en tant qu'enfant
+ * direct — la row assume ce spacing de bloc entre échantillon / annotation / meta. */
+.type-sample { display: flex; align-items: center; width: 100%; }
+/* Colonne gauche : échantillon au-dessus, références en dessous. flex:1 pousse
+ * la meta à droite ; min-width:0 pour autoriser le wrap interne. */
+.type-sample-preview { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .type-sample-meta { flex-shrink: 0; font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); white-space: nowrap; margin-left: auto; }
-.type-sample-preview { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-.type-sample-label { font-size: 10px; font-weight: 500; color: var(--text-3); font-family: var(--font-jakarta), sans-serif; }
-.type-meta { font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); }
+/* Grand specimen de la police (section Typeface) */
+.type-specimen { display: flex; flex-direction: column; }
+.type-specimen-hero { font-size: 88px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--text); }
+.type-specimen-pangram { font-size: 18px; font-weight: 400; line-height: 1.6; color: var(--text-2); }
 
 /* ─── SPACING ─── */
 .spacing-row { display: flex; align-items: center; gap: 16px; padding: 20px 0; width: 100%; border-bottom: 1px solid var(--border-subtle); }

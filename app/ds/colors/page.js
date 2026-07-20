@@ -3,11 +3,11 @@ import DSSection from "../_components/DSSection";
 
 export default function ColorsPage() {
   return (
-    <DSSection id="colors" title="Colors" sub="CSS tokens defined on :root and [data-theme='dark']">
+    <DSSection id="colors" title="Colors" sub="Interface color tokens, in light and dark themes.">
 
       <div className="ds-card">
         <div className="ds-card-head">Surfaces</div>
-        <div className="ds-card-body">
+        <div className="ds-card-body col">
           <div className="ds-swatch-grid">
             <Swatch bg="var(--bg)" title="Page" token="--bg" light="#FEFEFF" dark="#0F0F0F" />
             <Swatch bg="var(--bg3)" title="Subtle" token="--bg3" light="#F7F7F7" dark="#1A1A1A" />
@@ -18,7 +18,7 @@ export default function ColorsPage() {
 
       <div className="ds-card">
         <div className="ds-card-head">Strokes</div>
-        <div className="ds-card-body">
+        <div className="ds-card-body col">
           <div className="ds-swatch-grid">
             <Swatch bg="var(--border-subtle)" title="Subtle" token="--border-subtle" light="#EFEFEF" dark="#2E2E2E" />
             <Swatch bg="var(--border)" title="Strong" token="--border" light="#E0E0E0" dark="#2E2E2E" />
@@ -33,15 +33,13 @@ export default function ColorsPage() {
             <div className="ds-token-name"><span className="ds-token-chip">--border</span></div>
             <p>reserved for stronger visual affordances where a subtle stroke isn't enough : <code>.panel-spinner</code> ring (2px), <code>.import-dropzone</code> dashed border (2px), <code>.ob-dot</code> background. Do not use for regular component strokes.</p>
           </div>
-          <div className="ds-token-block">
-            <p>In dark mode both tokens resolve to <code>#2E2E2E</code> — divergence exists only in light mode.</p>
-          </div>
+          <p className="ds-note">In dark mode both tokens resolve to <code>#2E2E2E</code> — divergence exists only in light mode.</p>
         </div>
       </div>
 
       <div className="ds-card">
         <div className="ds-card-head">Accent</div>
-        <div className="ds-card-body">
+        <div className="ds-card-body col">
           <div className="ds-swatch-grid">
             <Swatch bg="var(--accent)" title="Primary" token="--accent / --primary-50" light="#4959E6" dark="#7B89F8" />
             <Swatch bg="var(--accent-bg)" title="Primary Subtle" token="--accent-bg" light="rgba(73,89,230,.08)" />
@@ -54,7 +52,7 @@ export default function ColorsPage() {
 
       <div className="ds-card">
         <div className="ds-card-head">Text</div>
-        <div className="ds-card-body">
+        <div className="ds-card-body col">
           <div className="ds-swatch-grid">
             <Swatch bg="var(--text)" title="Default" token="--text" light="#222" dark="#F0F0F0" />
             <Swatch bg="var(--text-2)" title="Secondary" token="--text-2" light="#555" dark="#909090" />
@@ -65,7 +63,7 @@ export default function ColorsPage() {
 
       <div className="ds-card">
         <div className="ds-card-head">Primary scale</div>
-        <div className="ds-card-body">
+        <div className="ds-card-body col">
           <div className="palette-grid">
           {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
             <Swatch
@@ -81,9 +79,7 @@ export default function ColorsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <p><span className="ds-token-chip">--primary-N</span> · ★ anchor = <span className="ds-token-chip">--accent</span> (#4959E6)</p>
-          </div>
+          <p className="ds-note"><span className="ds-token-chip">--primary-N</span> · ★ anchor = <span className="ds-token-chip">--accent</span> (#4959E6)</p>
           <div className="ds-token-block">
             <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (#FAFAFF)</div>
             <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
@@ -97,7 +93,7 @@ export default function ColorsPage() {
 
       <div className="ds-card">
         <div className="ds-card-head">Neutrals — Dark (tinted primary)</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="palette-grid on-white">
           {["70","80","100"].map(n => (
             <Swatch
@@ -110,13 +106,13 @@ export default function ColorsPage() {
             />
           ))}
           </div>
-          <p><span className="ds-token-chip">--dark-N</span> · base #0D0F1A · only the steps actually used in the codebase</p>
+          <p className="ds-note"><span className="ds-token-chip">--dark-N</span> · base #0D0F1A · only the steps actually used in the codebase</p>
         </div>
       </div>
 
       <div className="ds-card">
         <div className="ds-card-head">Neutrals — Light (tinted primary)</div>
-        <div className="ds-card-body col padded">
+        <div className="ds-card-body col">
           <div className="palette-grid on-dark-bg">
           {["20","90"].map(n => (
             <Swatch
@@ -129,14 +125,13 @@ export default function ColorsPage() {
             />
           ))}
           </div>
-          <p><span className="ds-token-chip">--light-N</span> · base #F5F6FF · only the steps actually used in the codebase</p>
+          <p className="ds-note"><span className="ds-token-chip">--light-N</span> · base #F5F6FF · only the steps actually used in the codebase</p>
         </div>
       </div>
 
       <div className="ds-card">
         <div className="ds-card-head">Illustration tokens</div>
         <div className="ds-card-body col">
-          <p>8 tokens used in <code>.empty-icon</code> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
           <div className="palette-grid">
             {[
               ["bg-1",     "#F4F5FF", "#232536"],
@@ -161,6 +156,7 @@ export default function ColorsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
+          <p className="ds-note">8 tokens used in <code>.empty-icon</code> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
           <div className="ds-token-block">
             <div className="ds-token-name">Stroke</div>
             <p><span className="ds-token-chip">--illus-stroke</span> resolves to <span className="ds-token-chip">--primary-90</span> in light (#131860 navy) and <span className="ds-token-chip">--primary-20</span> in dark (#C1C7FB lavender). Brand-tinted stroke instead of neutral white — gives a monochrome blue feel to illustrations.</p>

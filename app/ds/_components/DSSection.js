@@ -5,6 +5,7 @@ export default function DSSection({ id, title, sub, children }) {
     <section className="ds-section" id={id}>
       <div className="ds-section-header">
         <h2 className="ds-section-title">{title}</h2>
+        {sub && <p className="ds-section-sub">{sub}</p>}
       </div>
       <div className="ds-section-body">{children}</div>
     </section>
