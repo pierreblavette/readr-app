@@ -19,9 +19,13 @@
 .btn-outline.is-active:hover:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
 [data-theme="dark"] .btn-outline.is-active { background: var(--primary-5); border-color: var(--primary-50); color: var(--primary-50); }
 [data-theme="dark"] .btn-outline.is-active:hover:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
-/* Button size scale — step 8 linear progression (height, padding, gap) with
-   proportional SVG sizing. Font sizes anchored to the canonical Readr typo
-   scale (10/11/12/13/14/15/16/18/20/28 — see project_typography_scale.md).
+/* Button size scale — cascade de pas 8 / 4 / 2 : chaque métrique progresse
+   linéairement, à la moitié du pas de la précédente. Hauteur pas 8 (24→56),
+   padding horizontal pas 4 (12→28, soit hauteur ÷ 2), gap pas 2 (4→12). Un pas
+   unique pour les trois donnerait un gap de 36 en XL : l'espace entre icône et
+   label doit rester proportionnel à ce qu'il sépare, pas à la taille du bouton.
+   SVG dimensionné proportionnellement. Font sizes anchored to the canonical
+   Readr typo scale (10/11/12/13/14/15/16/18/20/28 — see project_typography_scale.md).
    Asymmetric padding (icon-side -4) applied automatically via :has() when an
    SVG sits at first or last position. */
 .btn-xs { height: 24px; padding: 0 12px; border-radius: 6px; font-size: 11px; gap: 4px; }
@@ -429,7 +433,10 @@
 /* Filter menu — extends .dropdown-menu primitive with section headers,
    radio/checkbox controls, and a clear-all footer. */
 .filter-dropdown {
-  padding: 8px;
+  /* 4 comme .dropdown-menu et .autocomplete-list : une liste flottante a un
+     seul contrat — radius 10, padding 4, item 6 (rayons imbriqués). À 8 les
+     items étaient sur un retrait qui ne correspondait plus à leur rayon. */
+  padding: 4px;
   min-width: 240px;
   max-height: 60vh;
   overflow-y: auto;
@@ -817,7 +824,11 @@
   height: 40px; padding: 0 12px;
   border: none; background: transparent;
   font-family: inherit; font-size: 15px; font-weight: 500;
-  color: var(--text); border-radius: 7px;
+  /* 6 = radius du conteneur (.dropdown-menu, 10) moins son padding (4) : c'est
+     la règle des rayons imbriqués, deux courbes concentriques ne se lisent
+     comme parallèles que si la différence vaut l'espace qui les sépare. Valait
+     7 — off de 1px, et 7 n'appartient qu'à l'échelle des boutons. */
+  color: var(--text); border-radius: 6px;
   cursor: pointer; white-space: nowrap; text-align: left;
   transition: background 0.1s, color 0.1s;
 }
@@ -3217,7 +3228,12 @@
   left: 0; right: 0;
   background: var(--card);
   border: 1.5px solid var(--border-subtle);
-  border-radius: var(--radius);
+  /* Même contrat que .dropdown-menu : liste flottante = radius 10, padding 4,
+     item 6 (10 − 4, rayons imbriqués). Le padding n'est pas cosmétique — sans
+     lui les items touchent la bordure, et la pastille de hover d'un item de
+     bout vient buter dans l'angle arrondi du conteneur. */
+  border-radius: 10px;
+  padding: 4px;
   box-shadow: var(--shadow-lg);
   list-style: none;
   max-height: 220px;
@@ -4036,7 +4052,12 @@
 .sidebar-nav::-webkit-scrollbar { width: 6px; }
 .sidebar-nav::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
 .sidebar-nav:hover::-webkit-scrollbar-thumb { background: var(--border); }
-.sidebar-section-head--no-action {
+/* Section head non collapsible (pas de handler) : le curseur doit dire qu'il
+   n'y a rien à cliquer. Double classe obligatoire — en simple classe la règle
+   a la même spécificité que `.sidebar-section-head` mais la précède dans le
+   fichier, donc le `cursor: pointer` de la base gagnait à l'ordre source.
+   Même forme que les overrides :hover plus bas. */
+.sidebar-section-head.sidebar-section-head--no-action {
   cursor: default;
 }
 
