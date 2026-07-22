@@ -142,6 +142,19 @@ a.sidebar-item { text-decoration: none; }
 /* Micro-groupe (titre + valeur/texte serrés) : gap 8, pas l'espacement
    inter-blocs de 20. Même valeur que les autres paires label+valeur du DS. */
 .ds-card-body > .ds-token-block { gap: 8px; }
+/* Rangée d'échantillons atomiques (boutons, badges, chips…). INDISPENSABLE pour
+   les sections Components : le modèle ci-dessus a une spécificité (0,1,1) qui
+   écraserait le padding/gap propre d'un `.btn-md` (0,1,0) placé en enfant direct
+   — bouton déformé (padding:20 au lieu de 0 20). Le wrapper absorbe le padding
+   du modèle ; les atomes restent intacts dedans. Gap resserré : ce sont des
+   atomes côte à côte, pas des blocs de doc. */
+.ds-sample-row { display: flex; flex-wrap: wrap; align-items: center; width: 100%; }
+.ds-card-body > .ds-sample-row { gap: 12px; }
+/* Grille d'états (Default / Hover / Active / Focus / Disabled) : chaque état est
+   une colonne échantillon + eyebrow. Gap large pour séparer les états. */
+.ds-states-grid { display: flex; flex-wrap: wrap; align-items: center; width: 100%; }
+.ds-card-body > .ds-states-grid { gap: 32px; }
+.ds-states-grid > .ds-state-sample { align-items: center; gap: 16px; }
 /* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
  * — narrow tables won't scroll because their content fits, so this is safe globally. */
 .ds-card-body.col:has(> table) {

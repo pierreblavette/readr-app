@@ -24,10 +24,8 @@ export default function ShadowsPage() {
         <div className="ds-card-body col">
           <div className="ds-swatch-grid">
             {SHADOWS.map(({ token, use }) => (
-              <div key={token} className="ds-swatch">
-                <div className="ds-swatch-block" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "var(--card)", borderBottom: "1px solid var(--border-subtle)" }}>
-                  <div style={{ width: "62%", height: 48, background: "var(--card)", borderRadius: 8, boxShadow: `var(${token})` }} />
-                </div>
+              <div key={token} className="ds-swatch" style={{ boxShadow: `var(${token})` }}>
+                <div className="ds-swatch-block" style={{ background: "var(--card)", borderBottom: "1px solid var(--border-subtle)" }} />
                 <div className="ds-swatch-info">
                   <div className="ds-swatch-tokens"><span className="ds-token-chip">{token}</span></div>
                   <div className="ds-token-val">{use}</div>
