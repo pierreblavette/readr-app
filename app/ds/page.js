@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NAV, NAV_LABELS } from "./_lib/nav";
+import { NAV, NAV_LABELS, sectionsOf } from "./_lib/nav";
 
 // Landing du Design System (/ds) — intro + sommaire navigable de toutes les
 // sections migrées. NAV grandit lot par lot, le sommaire suit automatiquement.
@@ -13,11 +13,11 @@ export default function DSIndexPage() {
         </p>
       </div>
       <div className="ds-index">
-        {Object.entries(NAV).map(([group, ids]) => (
+        {Object.keys(NAV).map((group) => (
           <section key={group} className="ds-index-group">
             <h2 className="panel-section-eyebrow">{group}</h2>
             <div className="ds-tile-grid ds-tile-grid--auto">
-              {ids.map((id) => (
+              {sectionsOf(group).map((id) => (
                 <Link key={id} href={`/ds/${id}`} className="ds-index-card">
                   {NAV_LABELS[id]}
                 </Link>

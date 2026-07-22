@@ -2,10 +2,6 @@
 /* Nav items = <Link> (<a>) en multipage, la classe .sidebar-item vient d'un
  * shell qui l'utilisait sur des <button> (pas de reset text-decoration). */
 a.sidebar-item { text-decoration: none; }
-/* Les groupes DS (Foundations…) ne sont pas collapsibles : --no-action retire le
- * hover mais pas le cursor: pointer hérité de .sidebar-section-head. */
-.sidebar-section-head--no-action { cursor: default; }
-
 /* ─── CONTENT ─── */
 .ds-intro { display: flex; flex-direction: column; gap: 24px; }
 /* Sommaire navigable de la landing /ds — groupes NAV + cards-liens vers les sections. */
@@ -155,6 +151,102 @@ a.sidebar-item { text-decoration: none; }
 .ds-states-grid { display: flex; flex-wrap: wrap; align-items: center; width: 100%; }
 .ds-card-body > .ds-states-grid { gap: 32px; }
 .ds-states-grid > .ds-state-sample { align-items: center; gap: 16px; }
+/* L'étiquette se cale à gauche de son échantillon, qui reste centré dans sa
+   colonne. Un titre qui flotte au centre ne dit pas où commence ce qu'il
+   nomme ; le bord gauche est le point d'ancrage de lecture. */
+.ds-states-grid > .ds-state-sample > .panel-section-eyebrow { align-self: flex-start; }
+/* Échantillons de hauteurs inégales (menus, panneaux) : alignés par le haut,
+   sinon leurs eyebrows se décalent en escalier et la rangée devient illisible. */
+.ds-states-grid--top { align-items: flex-start; }
+/* Menu rendu dans le flux pour la doc — en usage réel il est portalisé sur
+   document.body en position:fixed. On neutralise le positionnement, jamais
+   l'apparence : radius, padding, ombre et items restent ceux du produit.
+   Double classe obligatoire : ds.css est importé AVANT library.css, donc à
+   spécificité égale le `position: absolute` de .dropdown-menu gagnerait à
+   l'ordre source (même piège que .sidebar-section-head--no-action). */
+.dropdown-menu.ds-menu-static { position: static; margin: 0; }
+
+/* ─── REDLINE (spec annotée) ───
+ * Planche de cotes façon redline Figma : bandes de padding/gap + cadre d'icône
+ * + hauteur, posées PAR MESURE du composant réel (voir _components/Redline.js).
+ * La réserve d'espace est ici, pas en inline : le composant ne connaît que la
+ * géométrie du bouton, la place des annotations est une affaire de layout.
+ * 48 sur les 4 côtés couvre le pire cas : cote basse décalée (30 de trait + 4
+ * + 11 de texte = 45) et cote haute d'icône en XL (30 + 4 + 11 = 45).
+ * Couleur d'annotation volontairement HORS palette DS (rose) : ces traits ne
+ * sont pas du produit, ils ne doivent jamais se confondre avec un token réel. */
+/* Plaque : UN seul bloc enfant direct de .ds-card-body (donc padding/gap 20 du
+   modèle appliqués une fois), les rangées cotées vivent dedans. Grouper évite
+   une réserve verticale + un divider par rangée pour une même planche.
+   gap 0 : la séparation est portée par les strokes des rangées, pas par du vide. */
+.ds-redline-board { display: flex; flex-direction: column; width: 100%; }
+.ds-card-body > .ds-redline-board { gap: 0; }
+/* Une rangée = une taille. 2 colonnes : Text only | Icon + Text.
+   Strokes de séparation (horizontal entre tailles, vertical entre configs) :
+   la grille de cotes se lit comme un tableau, pas comme une pile. */
+.ds-redline-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.ds-redline-row + .ds-redline-row { border-top: 1px solid var(--border-subtle); }
+/* Ciblage explicite plutôt que `* + *` : le stroke vertical n'appartient qu'à
+   la 2e colonne cotée, il ne doit pas se poser sur un éventuel autre frère. */
+.ds-redline-row > .ds-redline + .ds-redline { border-left: 1px solid var(--border-subtle); }
+.ds-redline {
+  --rl: #E5326E;
+  --rl-fill: rgba(229, 50, 110, 0.14);
+  --rl-fill-strong: rgba(229, 50, 110, 0.30);
+  padding: 48px;
+  width: 100%;
+}
+.ds-redline-target { position: relative; display: inline-flex; }
+/* Le composant coté seul (jamais les annotations, qui sont en absolute). */
+.ds-redline-target > :not([class^="ds-redline-"]) { position: relative; z-index: 1; }
+/* Bandes : sous le contenu (z-index 0) mais au-dessus du fond du bouton — le
+   bouton lui-même n'est pas positionné, la bande le recouvre donc en teinte. */
+.ds-redline-band {
+  position: absolute; top: 0; bottom: 0; z-index: 2;
+  background: var(--rl-fill); pointer-events: none;
+}
+.ds-redline-band.is-gap { background: var(--rl-fill-strong); }
+.ds-redline-iconframe {
+  position: absolute; z-index: 3;
+  border: 1px dashed var(--rl); pointer-events: none;
+}
+.ds-redline-num {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 11px; font-weight: 500; color: var(--text);
+  font-variant-numeric: tabular-nums; line-height: 1; white-space: nowrap;
+}
+.ds-redline-lead { border-left: 1px dashed var(--rl); height: var(--lead, 14px); }
+/* Cote basse : trait pointillé depuis le centre de la bande, puis le nombre. */
+.ds-redline-callout {
+  position: absolute; top: 100%; z-index: 4;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  pointer-events: none;
+}
+/* Cote haute (boîte d'icône) : nombre puis trait qui redescend vers le cadre. */
+.ds-redline-icallout {
+  position: absolute; bottom: 100%; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.ds-redline-icallout .ds-redline-lead { height: calc(var(--lead) + 4px); }
+/* Crochet de hauteur : trait vertical + embouts, calé sur la hauteur réelle. */
+.ds-redline-hgauge {
+  position: absolute; right: 100%; top: 0; bottom: 0; z-index: 4;
+  display: flex; align-items: center; gap: 8px; padding-right: 10px;
+}
+.ds-redline-bracket {
+  position: relative; align-self: stretch;
+  border-left: 1px solid var(--rl); width: 1px;
+}
+.ds-redline-bracket::before,
+.ds-redline-bracket::after {
+  content: ""; position: absolute; left: -3px; width: 7px;
+  border-top: 1px solid var(--rl);
+}
+.ds-redline-bracket::before { top: 0; }
+.ds-redline-bracket::after { bottom: 0; }
+
 /* Wide tables (5+ cols, mono content) need horizontal scroll on narrow viewports
  * — narrow tables won't scroll because their content fits, so this is safe globally. */
 .ds-card-body.col:has(> table) {
@@ -499,12 +591,16 @@ a.sidebar-item { text-decoration: none; }
 .checkbox-demo svg { width: 10px; height: 10px; color: var(--bg); }
 
 /* ─── AUTOCOMPLETE ─── */
-.autocomplete-preview { border: 1.5px solid var(--border-subtle); border-radius: var(--radius); background: var(--card); overflow: hidden; width: 280px; }
-.ac-item { padding: 10px 14px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; border-bottom: 1px solid var(--border); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ac-item:last-child { border-bottom: none; }
-.ac-item:hover, .ac-item.focused { background: var(--primary-5); color: var(--primary-60); }
-.ac-item .ac-sep { font-size: 14px; font-weight: 400; color: var(--text-3); margin-left: 8px; }
-.ac-item span { font-size: 14px; font-weight: 400; color: var(--text-2); margin-left: 8px; }
+/* Autocomplete : la doc monte le composant RÉEL (.autocomplete-list /
+   .autocomplete-item de library.css), il n'y a donc plus de réplique ici. La
+   réplique `.ac-item` qui vivait à cet endroit avait divergé du produit sur 5
+   points (font 14 vs 15, border-bottom inexistante, pas de radius d'item, hover
+   --primary-60 vs --primary-50, pas d'ombre) : elle documentait un composant
+   qui n'existait pas. Seule reste la réserve d'espace, qui est du layout de doc.
+   Le composant est en position:absolute sous son champ → hors flux, la carte ne
+   peut pas le mesurer. On réserve ici plutôt que de le repasser en static :
+   le remettre dans le flux mentirait sur son positionnement réel. */
+.ds-autocomplete-stage { width: 360px; max-width: 100%; height: 244px; }
 
 /* ─── THEME TOGGLE ─── */
 .theme-btn-ds { width: 48px; height: 26px; border-radius: 13px; border: none; background: var(--primary-10); cursor: pointer; position: relative; display: flex; align-items: center; padding: 0 6px; transition: background 0.4s; }

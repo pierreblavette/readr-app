@@ -6,9 +6,10 @@ const SHADOWS = [
 ];
 
 const RADII = [
-  { r: 6, use: "Buttons SM" },
+  { r: 6, use: "Buttons XS, items de menu (dropdown, autocomplete)" },
+  { r: 7, use: "Buttons SM" },
   { r: 8, use: "Default", token: "--radius" },
-  { r: 10, use: "Dropdown, dropzone" },
+  { r: 10, use: "Listes flottantes (dropdown, autocomplete), dropzone" },
   { r: 12, use: "Camera scan viewfinder" },
   { r: 16, use: "Onboarding modal" },
   { r: 32, use: "Pill (search input)" },
@@ -53,6 +54,12 @@ export default function ShadowsPage() {
               </span>
             </div>
           ))}
+        </div>
+        <div className="ds-card-body col">
+          <div className="ds-token-block">
+            <div className="ds-token-name">Rayons imbriqués</div>
+            <p>Un élément posé dans un conteneur arrondi prend <strong>radius du conteneur moins son padding</strong> : les deux courbes ne se lisent comme parallèles que si leur écart vaut l&apos;espace qui les sépare. Un item de <code>.dropdown-menu</code> (radius 10, padding 4) vaut donc 6.</p>
+          </div>
         </div>
       </div>
 

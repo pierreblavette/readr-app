@@ -1,4 +1,5 @@
 import DSSection from "../_components/DSSection";
+import Redline from "../_components/Redline";
 
 const VARIANTS = [
   { name: "Primary", variant: "btn-primary" },
@@ -53,10 +54,10 @@ export default function ButtonsPage() {
             <div className="ds-states-grid">
               {STATES.map(([state, mod]) => (
                 <div key={state} className="ds-state-sample">
+                  <span className="panel-section-eyebrow">{state}</span>
                   <button className={`btn ${variant} btn-md${mod ? " " + mod : ""}`} disabled={state === "Disabled"}>
                     {name}
                   </button>
-                  <span className="panel-section-eyebrow">{state}</span>
                 </div>
               ))}
             </div>
@@ -214,6 +215,33 @@ export default function ButtonsPage() {
           <div className="ds-token-block">
             <div className="ds-token-name">Convention</div>
             <p>Always wrap label text in a <code>&lt;span&gt;</code>. CSS <code>:first-child</code> / <code>:last-child</code> only count element children — a bare text node next to an SVG would make the SVG both first AND last child, breaking the detection.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 9 bis — REDLINE (test MD) */}
+      <div className="ds-card">
+        <div className="ds-card-head">Redline — padding & spacing, XS → XL</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board">
+            {SIZES.map(([cls]) => (
+              <div key={cls} className="ds-redline-row">
+                <Redline>
+                  <button className={`btn btn-secondary ${cls}`}><span>Common button</span></button>
+                </Redline>
+                <Redline>
+                  <button className={`btn btn-secondary ${cls}`}>
+                    <PlusIcon strokeWidth={2} />
+                    <span>Common button</span>
+                  </button>
+                </Redline>
+              </div>
+            ))}
+          </div>
+          <p className="ds-note">Cotes <strong>mesurées à l&apos;exécution</strong> sur le bouton réel (padding calculé, gap flex réel, boîte SVG), jamais écrites en dur : le schéma suit le CSS. La boîte d&apos;icône cotée est la boîte réservée (glyph + cadre 2px, ex. 16 + 4 = 20 en md), pas le glyph. Colonne gauche : padding symétrique. Colonne droite : padding asymétrique auto (<code>:has()</code>), côté icône réduit de 8, côté texte de 4.</p>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Cascade des pas — 8 / 4 / 2</div>
+            <p>Les trois métriques progressent linéairement mais chacune à la moitié du pas de la précédente : hauteur <strong>pas 8</strong> (24 → 56), padding <strong>pas 4</strong> (12 → 28, soit exactement hauteur ÷ 2), gap <strong>pas 2</strong> (4 → 12). Un pas unique pour les trois donnerait un gap de 36 en XL — le rapport doit rester proportionnel à ce qu&apos;il sépare, pas à la taille du composant.</p>
           </div>
         </div>
       </div>

@@ -4,8 +4,24 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["buttons"],
+  Components: ["autocomplete", "badges", "book-card-kebab", "book-chip", "buttons", "checkbox"],
 };
+
+// Groupes triés alphabétiquement à l'affichage. Foundations en est exclu : son
+// ordre est un parcours d'apprentissage (identité → couleur → typo → espace),
+// le casser rendrait la lecture arbitraire. Components, lui, est un inventaire
+// plat de 17 atomes sans narration — l'alphabétique y est le seul ordre que le
+// lecteur peut deviner, et il évite que l'ordre dérive au fil des migrations.
+const ALPHA_GROUPS = ["Components"];
+
+// Point d'entrée unique des consommateurs (sidebar + landing) : le tri vit ici,
+// pas dupliqué dans chaque vue. Tri sur le LABEL affiché, pas sur le slug —
+// c'est ce que le lecteur voit ("Book Card Kebab" avant "Book Chip").
+export function sectionsOf(group) {
+  const ids = NAV[group] ?? [];
+  if (!ALPHA_GROUPS.includes(group)) return ids;
+  return [...ids].sort((a, b) => (NAV_LABELS[a] ?? a).localeCompare(NAV_LABELS[b] ?? b));
+}
 
 export const NAV_LABELS = {
   "logo": "Logo", "colors": "Colors", "typography": "Typography",

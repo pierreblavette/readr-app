@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Wordmark from "@/components/brand/Wordmark";
-import { NAV, NAV_LABELS } from "./_lib/nav";
+import { NAV, NAV_LABELS, sectionsOf } from "./_lib/nav";
 import { DSThemeContext } from "./_components/ThemeContext";
 
 // Chrome partagé du Design System : sidebar + toolbar mobile + thème.
@@ -38,12 +38,12 @@ export default function DSLayout({ children }) {
               <Link href="/ds" aria-label="Design System"><Wordmark className="logo" /></Link>
             </div>
             <nav className="sidebar-nav">
-              {Object.entries(NAV).map(([section, ids]) => (
+              {Object.keys(NAV).map((section) => (
                 <div key={section} className="sidebar-section">
                   <div className="sidebar-section-head sidebar-section-head--no-action">
                     <span className="sidebar-section-label">{section}</span>
                   </div>
-                  {ids.map((id) => {
+                  {sectionsOf(section).map((id) => {
                     const href = `/ds/${id}`;
                     const active = pathname === href;
                     return (
