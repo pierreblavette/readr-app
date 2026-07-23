@@ -158,6 +158,44 @@ a.sidebar-item { text-decoration: none; }
 /* Échantillons de hauteurs inégales (menus, panneaux) : alignés par le haut,
    sinon leurs eyebrows se décalent en escalier et la rangée devient illisible. */
 .ds-states-grid--top { align-items: flex-start; }
+/* Variante « boardée » (traitement Carbon) — gap remplacé par des dividers,
+   chaque état dans sa cellule. Pas d'eyebrow : le label du composant réel EST le
+   nom de l'état, aligné à gauche dans la cellule. Colonnes égales sur une rangée
+   (grid-auto-flow column), stroke vertical entre cellules, pas de cadre extérieur
+   (c'est la carte qui borne). Le modèle padding 20 de .ds-card-body insère déjà
+   le board ; la cellule ajoute sa respiration interne. */
+.ds-states-grid--boxed {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.ds-card-body > .ds-states-grid--boxed { gap: 0; }
+/* Dividers par bordure (pas par fond) : le modèle .ds-card-body pose padding 20
+   sur la grille ; un fond y peindrait un cadre gris de 20px. Bordure top+left sur
+   chaque cellule, puis on retire la 1re rangée et la 1re colonne → grille interne
+   sans cadre extérieur. Composant centré dans sa cellule (align + justify). */
+.ds-states-grid--boxed > .ds-state-sample {
+  padding: 32px;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid var(--border-subtle);
+  border-left: 1px solid var(--border-subtle);
+}
+.ds-states-grid--boxed > .ds-state-sample:nth-child(-n + 4) { border-top: none; }
+.ds-states-grid--boxed > .ds-state-sample:nth-child(4n + 1) { border-left: none; }
+@media (max-width: 760px) {
+  .ds-states-grid--boxed { grid-template-columns: repeat(2, 1fr); }
+  /* Réinitialiser puis re-retirer pour la nouvelle grille 2 colonnes. */
+  .ds-states-grid--boxed > .ds-state-sample {
+    border-top: 1px solid var(--border-subtle);
+    border-left: 1px solid var(--border-subtle);
+  }
+  .ds-states-grid--boxed > .ds-state-sample:nth-child(-n + 2) { border-top: none; }
+  .ds-states-grid--boxed > .ds-state-sample:nth-child(2n + 1) { border-left: none; }
+}
+/* Force le halo :focus-visible pour l'échantillon statique — le vrai état ne
+   s'obtient qu'au clavier et ne se figerait pas dans une grille. Valeurs miroir
+   de la règle .modal-toggle-input:focus-visible ~ .modal-toggle-check. */
+.modal-toggle-check.is-focus-demo { box-shadow: 0 0 0 2px var(--primary-50); }
 /* Menu rendu dans le flux pour la doc — en usage réel il est portalisé sur
    document.body en position:fixed. On neutralise le positionnement, jamais
    l'apparence : radius, padding, ombre et items restent ceux du produit.

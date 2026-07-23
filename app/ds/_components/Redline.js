@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true }) {
+export default function Redline({ children, showHeight = true, boxSelector = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -33,9 +33,15 @@ export default function Redline({ children, showHeight = true }) {
       if (pl) bands.push({ left: bl, width: pl, value: Math.round(pl) });
       if (pr) bands.push({ left: w - brw - pr, width: pr, value: Math.round(pr) });
 
+      // Enfants VISIBLES seulement : un input masqué (0×0, position absolue, ex.
+      // la checkbox) fausserait sinon la boucle de gaps avec une bande parasite.
+      const kids = [...el.children].filter((k) => {
+        const r = k.getBoundingClientRect();
+        return r.width > 0.5 && r.height > 0.5;
+      });
+
       // Gaps réels entre enfants (flex gap) — mesurés, pas lus dans le CSS :
       // ça couvre aussi les cas où un enfant porte sa propre marge.
-      const kids = [...el.children];
       for (let i = 0; i < kids.length - 1; i++) {
         const a = kids[i].getBoundingClientRect();
         const b = kids[i + 1].getBoundingClientRect();
@@ -52,7 +58,27 @@ export default function Redline({ children, showHeight = true }) {
           return { left: r.left - br.left, top: r.top - br.top, width: r.width, height: r.height };
         });
 
-      setM({ w, h: Math.round(h), bands, icons });
+      // Boîte désignée (opt-in) : pour les composants dont l'anatomie est un carré
+      // — checkbox, radio, avatar. On cote sa taille et son radius, pas un padding.
+      let box = null;
+      if (boxSelector) {
+        const bx = el.querySelector(boxSelector);
+        if (bx) {
+          const r = bx.getBoundingClientRect();
+          if (r.width > 0.5) {
+            const bcs = getComputedStyle(bx);
+            box = {
+              left: r.left - br.left,
+              top: r.top - br.top,
+              width: r.width,
+              height: r.height,
+              radius: Math.round(parseFloat(bcs.borderTopLeftRadius) || 0),
+            };
+          }
+        }
+      }
+
+      setM({ w, h: Math.round(h), bands, icons, box });
     };
 
     measure();
@@ -103,6 +129,17 @@ export default function Redline({ children, showHeight = true }) {
                 </span>
               </span>
             ))}
+            {m.box && (
+              <span className="ds-redline-iconframe" style={{ left: m.box.left, top: m.box.top, width: m.box.width, height: m.box.height }}>
+                <span className="ds-redline-icallout" style={{ "--lead": `${m.box.top + 14}px` }}>
+                  <span className="ds-redline-num">
+                    {Math.round(m.box.width)}×{Math.round(m.box.height)}
+                    {m.box.radius > 0 && ` · r${m.box.radius}`}
+                  </span>
+                  <span className="ds-redline-lead" />
+                </span>
+              </span>
+            )}
             {m.bands.map((b, i) => (
               <span
                 key={`c${i}`}
