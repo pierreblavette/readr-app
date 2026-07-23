@@ -4931,7 +4931,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 12px; /* canonique conteneur chip (cf. .book-chip-interactive, .collection-chip) */
   background: var(--bg3);
   border-radius: 8px;
   animation: fadeUp 0.2s ease both;
@@ -4944,7 +4944,6 @@ button.book-chip {
   text-align: left;
 }
 .book-chip-interactive {
-  padding: 12px;
   cursor: pointer;
   transition: background 0.15s;
   -webkit-tap-highlight-color: transparent;
@@ -4994,7 +4993,6 @@ button.book-chip {
   font-weight: 700;
   font-size: 16px;
   letter-spacing: 0.02em;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 .book-chip-cover img {
   width: 100%;
