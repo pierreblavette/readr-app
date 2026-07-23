@@ -166,29 +166,52 @@ a.sidebar-item { text-decoration: none; }
    le board ; la cellule ajoute sa respiration interne. */
 .ds-states-grid--boxed {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  /* Cellules étirées (annule le align-items:center hérité de .ds-states-grid) :
+     sinon elles se dimensionnent au contenu et leurs bordures se désalignent
+     quand un specimen est plus haut qu'un autre. Le centrage du specimen est
+     porté par la cellule elle-même (justify/align-items), pas par la grille. */
+  align-items: stretch;
 }
 .ds-card-body > .ds-states-grid--boxed { gap: 0; }
-/* Dividers par bordure (pas par fond) : le modèle .ds-card-body pose padding 20
-   sur la grille ; un fond y peindrait un cadre gris de 20px. Bordure top+left sur
-   chaque cellule, puis on retire la 1re rangée et la 1re colonne → grille interne
-   sans cadre extérieur. Composant centré dans sa cellule (align + justify). */
+/* Rangée unique de colonnes égales, divider vertical entre cellules (pas par
+   fond : le modèle pose padding 20 sur la grille, un fond y peindrait un cadre
+   gris). Le nombre de colonnes s'adapte au nombre d'états — checkbox 4, buttons
+   5 — sans être figé. Composant centré, pas de cadre extérieur. */
 .ds-states-grid--boxed > .ds-state-sample {
   padding: 32px;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid var(--border-subtle);
+}
+/* Le specimen se recentre même s'il porte son propre align-self (ex. .btn-link
+   est en flex-start pour son usage réel sous un champ) : align-self sur l'enfant
+   l'emporte sinon sur align-items de la cellule. Spécificité (0,2,0) > (0,1,0). */
+.ds-states-grid--boxed > .ds-state-sample > * { align-self: center; }
+/* Specimens larges (ex. book-chip 260px) : une rangée unique de N déborderait.
+   Board 2 colonnes qui wrappent, dividers sur les deux axes. Le border-left vient
+   de la règle de base ci-dessus, retiré pour la 1re colonne ; border-top ajouté
+   sauf 1re rangée. Placé APRÈS --boxed pour gagner sur l'ordre source. */
+.ds-states-grid--boxed.ds-states-grid--cols-2 {
+  grid-auto-flow: row;
+  grid-template-columns: repeat(2, 1fr);
+}
+/* Double classe → (0,4,0), bat sans ambiguïté la règle de base border-left
+   (0,3,0). Col 1 (cellules impaires) perd le divider gauche ; les rangées 2+
+   (cellules 3,4,…) gagnent le divider haut. Le border-left des cellules paires
+   reste hérité de la règle de base. */
+.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(2n + 1) { border-left: none; }
+.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(n + 3) { border-top: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed > .ds-state-sample + .ds-state-sample {
   border-left: 1px solid var(--border-subtle);
 }
-.ds-states-grid--boxed > .ds-state-sample:nth-child(-n + 4) { border-top: none; }
-.ds-states-grid--boxed > .ds-state-sample:nth-child(4n + 1) { border-left: none; }
 @media (max-width: 760px) {
-  .ds-states-grid--boxed { grid-template-columns: repeat(2, 1fr); }
-  /* Réinitialiser puis re-retirer pour la nouvelle grille 2 colonnes. */
-  .ds-states-grid--boxed > .ds-state-sample {
-    border-top: 1px solid var(--border-subtle);
-    border-left: 1px solid var(--border-subtle);
+  /* Repli : 2 colonnes qui wrappent → dividers sur les deux axes. */
+  .ds-states-grid--boxed {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, 1fr);
   }
+  .ds-states-grid--boxed > .ds-state-sample { border-top: 1px solid var(--border-subtle); }
   .ds-states-grid--boxed > .ds-state-sample:nth-child(-n + 2) { border-top: none; }
   .ds-states-grid--boxed > .ds-state-sample:nth-child(2n + 1) { border-left: none; }
 }
@@ -230,20 +253,23 @@ a.sidebar-item { text-decoration: none; }
 .ds-redline {
   --rl: #E5326E;
   --rl-fill: rgba(229, 50, 110, 0.14);
-  --rl-fill-strong: rgba(229, 50, 110, 0.30);
   padding: 48px;
   width: 100%;
 }
-.ds-redline-target { position: relative; display: inline-flex; }
+/* Le specimen d'une planche est un spécimen figé, pas une démo : pointer-events
+   none coupe hover/press pour que le fond ne change pas sous la souris pendant
+   la lecture des cotes. La mesure (getComputedStyle/rects) n'en dépend pas. */
+.ds-redline-target { position: relative; display: inline-flex; pointer-events: none; }
 /* Le composant coté seul (jamais les annotations, qui sont en absolute). */
 .ds-redline-target > :not([class^="ds-redline-"]) { position: relative; z-index: 1; }
 /* Bandes : sous le contenu (z-index 0) mais au-dessus du fond du bouton — le
    bouton lui-même n'est pas positionné, la bande le recouvre donc en teinte. */
+/* Bandes padding et gap partagent la même teinte : la cote chiffrée porte la
+   nature de la mesure, pas la couleur (unifié — plus de --rl-fill-strong). */
 .ds-redline-band {
   position: absolute; top: 0; bottom: 0; z-index: 2;
   background: var(--rl-fill); pointer-events: none;
 }
-.ds-redline-band.is-gap { background: var(--rl-fill-strong); }
 .ds-redline-iconframe {
   position: absolute; z-index: 3;
   border: 1px dashed var(--rl); pointer-events: none;
@@ -517,6 +543,15 @@ a.sidebar-item { text-decoration: none; }
 [data-theme="dark"] .btn-icon:hover:not(:disabled) { border-color: var(--primary-40); background: rgba(73,89,230,0.12); color: var(--primary-40); }
 [data-theme="dark"] .btn-ghost.is-active { color: var(--primary-50) !important; }
 [data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-50) !important; color: var(--primary-50) !important; }
+
+/* États forcés du chip interactif pour la doc — mirror des vraies valeurs
+   :hover / :active / :focus-visible de library.css. Survol et press partagent
+   --primary-10 (aucun lift, aucune ombre) ; le focus pose l'anneau --primary-50. */
+.book-chip-interactive.is-hover,
+.book-chip-interactive.is-active { background: var(--primary-10) !important; }
+[data-theme="dark"] .book-chip-interactive.is-hover,
+[data-theme="dark"] .book-chip-interactive.is-active { background: var(--primary-10) !important; }
+.book-chip-interactive.is-focus { box-shadow: 0 0 0 2px var(--primary-50) !important; }
 
 /* ─── VIEW TOGGLE ─── */
 .view-btns-ds { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }

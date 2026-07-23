@@ -1,4 +1,5 @@
 import DSSection from "../_components/DSSection";
+import Redline from "../_components/Redline";
 
 const StarIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="is-filled">
@@ -53,9 +54,8 @@ export default function BookChipPage() {
       <div className="ds-card">
         <div className="ds-card-head">Modes</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--top">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">Display</span>
               <div className="book-chip" style={{ width: 260 }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
                 <Body title="Tropique du Cancer" author="Henry Miller" />
@@ -63,7 +63,6 @@ export default function BookChipPage() {
             </div>
 
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">Interactive</span>
               <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
                 <Cover from="#9EEB97" to="#4959E6" letter="1" />
                 <Body title="1984" author="George Orwell" />
@@ -72,7 +71,6 @@ export default function BookChipPage() {
             </div>
 
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">With remove</span>
               <div className="book-chip" style={{ width: 260 }}>
                 <Cover from="#FE7E4E" to="#FFCEE3" letter="B" />
                 <Body title="A Brief History of Time" author="Stephen Hawking" />
@@ -85,7 +83,6 @@ export default function BookChipPage() {
             </div>
 
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">With rating</span>
               <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
                 <Cover from="#4959E6" to="#00A699" letter="D" />
                 <Body title="Dune" author="Frank Herbert" rating={5} />
@@ -100,15 +97,68 @@ export default function BookChipPage() {
       </div>
 
       <div className="ds-card">
+        <div className="ds-card-head">États — chip interactif</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+            <div className="ds-state-sample">
+              <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
+                <Cover from="#6F7CF2" to="#F67BF8" letter="D" />
+                <Body title="Default" author="--bg3" />
+                <Chevron />
+              </button>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="book-chip book-chip-interactive is-hover" style={{ width: 260 }}>
+                <Cover from="#9EEB97" to="#4959E6" letter="H" />
+                <Body title="Hover" author="--primary-10" />
+                <Chevron />
+              </button>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="book-chip book-chip-interactive is-active" style={{ width: 260 }}>
+                <Cover from="#FE7E4E" to="#FFCEE3" letter="A" />
+                <Body title="Active" author="--primary-10" />
+                <Chevron />
+              </button>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="book-chip book-chip-interactive is-focus" style={{ width: 260 }}>
+                <Cover from="#4959E6" to="#00A699" letter="F" />
+                <Body title="Focus" author="ring --primary-50" />
+                <Chevron />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Réservé au mode <strong>interactif</strong> (<code>&lt;button&gt;</code>) : le chip ne réagit qu&apos;au fond. Survol et press partagent <span className="ds-token-chip">--primary-10</span> — donc <strong>Hover et Active sont visuellement identiques</strong>, aucun lift ni ombre. Le focus clavier pose un anneau <span className="ds-token-chip">--primary-50</span> (<code>:focus-visible</code>). Les modes Display / With remove, non cliquables, n&apos;ont aucun de ces états.</p>
+        </div>
+      </div>
+
+      <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          {/* Planche cotée au runtime — boxSelector cadre la vignette (32×44 · r4) ;
+              padding 12, gaps et hauteur mesurés. Wrapper .ds-redline-board pour
+              préserver le padding 48 (cf. piège specificity du modèle). */}
+          <div className="ds-redline-board">
+            <Redline boxSelector=".book-chip-cover">
+              <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
+                <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
+                <Body title="Tropique du Cancer" author="Henry Miller" />
+                <Chevron />
+              </button>
+            </Redline>
+          </div>
+        </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">.book-chip · conteneur</div>
-            <p>Flex, gap 12, padding 10/12, bg <span className="ds-token-chip">--bg3</span>, radius 8. En variante interactive le padding passe à 12 uniformes — le chevron à droite compense visuellement les 2px perdus à gauche.</p>
+            <p>Flex, gap 12, padding 12 uniforme, bg <span className="ds-token-chip">--bg3</span>, radius 8 — le padding canonique d&apos;un conteneur chip, partagé avec <code>.book-chip-interactive</code> et <code>.collection-chip</code>. La variante <code>.collection-chip</code> le passe en asymétrique 12/16 pour compenser le chevron à droite.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">.book-chip-cover · vignette</div>
-            <p>32×44 (ratio de couverture), radius 4, <code>overflow: hidden</code>, ombre portée légère. Sans image : dégradé + initiale en 16/700 blanc.</p>
+            <p>32×44 (ratio de couverture), radius 4, <code>overflow: hidden</code>, sans ombre portée. Sans image : <code>.book-chip-cover-placeholder</code> — dégradé + initiale 16/700 blanc.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">.book-chip-body · colonne de texte</div>

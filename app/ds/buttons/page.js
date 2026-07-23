@@ -51,12 +51,11 @@ export default function ButtonsPage() {
         <div key={name} className="ds-card">
           <div className="ds-card-head">{name} · states</div>
           <div className="ds-card-body col">
-            <div className="ds-states-grid">
+            <div className="ds-states-grid ds-states-grid--boxed">
               {STATES.map(([state, mod]) => (
                 <div key={state} className="ds-state-sample">
-                  <span className="panel-section-eyebrow">{state}</span>
                   <button className={`btn ${variant} btn-md${mod ? " " + mod : ""}`} disabled={state === "Disabled"}>
-                    {name}
+                    {state}
                   </button>
                 </div>
               ))}
@@ -78,40 +77,18 @@ export default function ButtonsPage() {
         </div>
       </div>
 
-      {/* 3 — VARIANTES MD */}
+      {/* 5 — ANATOMY (tailles intégrées : board XS → XL + specs) */}
       <div className="ds-card">
-        <div className="ds-card-head">Variantes — taille MD</div>
+        <div className="ds-card-head">Anatomy — tailles XS → XL</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
-            {[
-              ["btn-primary btn-md", "Primary"],
-              ["btn-secondary btn-md", "Secondary"],
-              ["btn-ghost btn-md", "Ghost"],
-              ["btn-outline btn-md", "Outline"],
-              ["btn-critical btn-md", "Critical"],
-              ["btn-primary btn-md", "Disabled"],
-            ].map(([cls, label], i) => (
-              <button key={i} className={`btn ${cls}`} disabled={label === "Disabled"}>{label}</button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 4 — TAILLES */}
-      <div className="ds-card">
-        <div className="ds-card-head">Tailles — variante Primary</div>
-        <div className="ds-card-body col">
-          <div className="ds-sample-row">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {SIZES.map(([sz, label]) => (
-              <button key={sz} className={`btn btn-primary ${sz}`}>{label}</button>
+              <div key={sz} className="ds-state-sample">
+                <button className={`btn btn-primary ${sz}`}>{label}</button>
+              </div>
             ))}
           </div>
         </div>
-      </div>
-
-      {/* 5 — ANATOMY */}
-      <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
           {ANATOMY.map(([sz, h, p, r, f, g, io]) => (
             <div key={sz} className="ds-token-block">
@@ -123,20 +100,26 @@ export default function ButtonsPage() {
         </div>
       </div>
 
-      {/* 6 — ICON BUTTONS */}
+      {/* 6 — ICON BUTTONS (deux boards : solid / icon) */}
       <div className="ds-card">
         <div className="ds-card-head">Icon buttons — Solid & Icon</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {["btn-xs", "btn-sm", "btn-md", "btn-lg"].map((sz) => (
-              <button key={"solid" + sz} className={`btn btn-solid ${sz}`}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-              </button>
+              <div key={"solid" + sz} className="ds-state-sample">
+                <button className={`btn btn-solid ${sz}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                </button>
+              </div>
             ))}
+          </div>
+          <div className="ds-states-grid ds-states-grid--boxed">
             {["btn-xs", "btn-sm", "btn-md", "btn-lg"].map((sz) => (
-              <button key={"icon" + sz} className={`btn btn-icon ${sz}`}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
-              </button>
+              <div key={"icon" + sz} className="ds-state-sample">
+                <button className={`btn btn-icon ${sz}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -146,7 +129,7 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Icon + Text — toutes variantes, taille MD</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {[
               ["btn-primary", "Add"],
               ["btn-secondary", "Edit"],
@@ -154,10 +137,12 @@ export default function ButtonsPage() {
               ["btn-outline", "Filter"],
               ["btn-critical", "Delete"],
             ].map(([variant, label]) => (
-              <button key={variant} className={`btn ${variant} btn-md`}>
-                <PlusIcon />
-                <span>{label}</span>
-              </button>
+              <div key={variant} className="ds-state-sample">
+                <button className={`btn ${variant} btn-md`}>
+                  <PlusIcon />
+                  <span>{label}</span>
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -167,12 +152,14 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Icon + Text — tailles, variante Primary</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {SIZES.map(([sz, label]) => (
-              <button key={sz} className={`btn btn-primary ${sz}`}>
-                <PlusIcon />
-                <span>{label}</span>
-              </button>
+              <div key={sz} className="ds-state-sample">
+                <button className={`btn btn-primary ${sz}`}>
+                  <PlusIcon />
+                  <span>{label}</span>
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -182,16 +169,22 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Asymmetric padding (icon + text)</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
-            <button className="btn btn-outline btn-md"><span>Text only</span></button>
-            <button className="btn btn-outline btn-md">
-              <PlusIcon strokeWidth={2} />
-              <span>Icon left</span>
-            </button>
-            <button className="btn btn-outline btn-md">
-              <span>Icon right</span>
-              <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-            </button>
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
+              <button className="btn btn-outline btn-md"><span>Text only</span></button>
+            </div>
+            <div className="ds-state-sample">
+              <button className="btn btn-outline btn-md">
+                <PlusIcon strokeWidth={2} />
+                <span>Icon left</span>
+              </button>
+            </div>
+            <div className="ds-state-sample">
+              <button className="btn btn-outline btn-md">
+                <span>Icon right</span>
+                <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
+            </div>
           </div>
         </div>
         <div className="ds-card-body col">
@@ -250,9 +243,10 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">AI action — gradient border + tinted fill</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {[["btn-sm", "SM"], ["btn-md", "MD"], ["btn-lg", "LG"]].map(([sz, label]) => (
-              <button key={sz} className={`btn btn-ai ${sz}`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
+              <div key={sz} className="ds-state-sample">
+              <button className={`btn btn-ai ${sz}`} style={{ display: "flex", alignItems: "center", gap: 7 }}>
                 <svg className="import-tab-ai-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <defs>
                     <linearGradient id={`aiGradDS-${sz}`} x1="23" y1="1" x2="2.1" y2="23" gradientUnits="userSpaceOnUse">
@@ -264,6 +258,7 @@ export default function ButtonsPage() {
                 </svg>
                 <span>Generate {label}</span>
               </button>
+              </div>
             ))}
           </div>
         </div>
@@ -291,9 +286,13 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Text link — .btn-link</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
-            <button type="button" className="btn-link">Remove goal</button>
-            <button type="button" className="btn-link btn-link--critical">Remove goal</button>
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
+              <button type="button" className="btn-link">Remove goal</button>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="btn-link btn-link--critical">Remove goal</button>
+            </div>
           </div>
         </div>
         <div className="ds-card-body col">
@@ -320,11 +319,13 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Button with count badge — text + pill</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
-            <button type="button" className="btn btn-md btn-primary filters-panel-confirm">
-              <span>Confirm</span>
-              <span className="filters-confirm-count">12</span>
-            </button>
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
+              <button type="button" className="btn btn-md btn-primary filters-panel-confirm">
+                <span>Confirm</span>
+                <span className="filters-confirm-count">12</span>
+              </button>
+            </div>
           </div>
         </div>
         <div className="ds-card-body col">
