@@ -2751,7 +2751,7 @@
 
 /* Inline checkbox row used inside modal flows (e.g. Add book → Mark as reading) */
 .modal-toggle-row {
-  gap: 10px;
+  gap: 12px; /* gap canonique des rangées icône/case + label (cf. .dropdown-item, .filter-row) */
   cursor: pointer;
   user-select: none;
 }
@@ -2777,6 +2777,11 @@
   transition: background 0.15s, border-color 0.15s;
 }
 [data-theme="dark"] .modal-toggle-check { border-color: var(--light-20); }
+/* Focus clavier : l'input réel est masqué, l'anneau se pose donc sur le carré
+   visible. Même halo que .book-chip-interactive / .book-chip-remove. */
+.modal-toggle-input:focus-visible ~ .modal-toggle-check {
+  box-shadow: 0 0 0 2px var(--primary-50);
+}
 .modal-toggle-row:hover:not(.is-disabled) .modal-toggle-check {
   border-color: var(--primary-50);
   background: var(--primary-5);
@@ -2808,6 +2813,47 @@
   font-weight: 500;
   color: var(--text);
 }
+/* --- États de référence : indeterminate / read-only / validation ---
+   Ajoutés au composant réel pour être prêts à l'emploi, mais AUCUN écran ne les
+   consomme aujourd'hui. Ils vivent ici (et non dans une réplique de doc) pour
+   rester le vrai composant. Documentés comme états de référence dans /ds/checkbox. */
+/* Indeterminate : rempli comme checked, glyphe tiret posé en JS ; l'attribut
+   input.indeterminate natif est réglé en parallèle pour l'arbre d'accessibilité. */
+.modal-toggle-input:indeterminate ~ .modal-toggle-check {
+  background: var(--primary-50);
+  border-color: transparent;
+}
+[data-theme="dark"] .modal-toggle-input:indeterminate ~ .modal-toggle-check {
+  background: var(--primary-40);
+}
+/* Read-only : non éditable, mais PAS grisé comme disabled — pleine opacité,
+   contour neutre, aucune réaction au survol. La coche s'affiche en gris. */
+.modal-toggle-row.is-readonly { cursor: default; }
+.modal-toggle-row.is-readonly .modal-toggle-input:checked ~ .modal-toggle-check,
+.modal-toggle-row.is-readonly .modal-toggle-input:indeterminate ~ .modal-toggle-check {
+  background: transparent;
+  border-color: var(--border);
+}
+.modal-toggle-row.is-readonly .modal-toggle-check svg { color: var(--text-3); }
+/* Error : contour rouge sur le carré, y compris coché. */
+.modal-toggle-row.has-error .modal-toggle-check,
+.modal-toggle-row.has-error .modal-toggle-input:checked ~ .modal-toggle-check {
+  border-color: var(--destructive);
+}
+/* Champ = rangée + message d'aide sous elle (error / warning). */
+.modal-toggle-field { display: flex; flex-direction: column; gap: 8px; }
+.modal-toggle-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.modal-toggle-message svg { width: 16px; height: 16px; flex-shrink: 0; }
+.modal-toggle-message.is-error { color: var(--destructive); }
+.modal-toggle-message.is-warning { color: #B45309; }
+[data-theme="dark"] .modal-toggle-message.is-warning { color: #FBBF24; }
 .modal-toggle-group {
   display: flex;
   flex-direction: column;
