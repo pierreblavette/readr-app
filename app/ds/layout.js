@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import Wordmark from "@/components/brand/Wordmark";
 import { NAV, NAV_LABELS, sectionsOf } from "./_lib/nav";
 import { DSThemeContext } from "./_components/ThemeContext";
+import ChipCopy from "./_components/ChipCopy";
 
 // Chrome partagé du Design System : sidebar + toolbar mobile + thème.
 // L'état actif de la nav vient de usePathname() (route), plus d'aucune mesure
@@ -99,6 +100,7 @@ export default function DSLayout({ children }) {
             </div>
           </main>
         </div>
+        <ChipCopy />
       </div>
     </DSThemeContext.Provider>
   );

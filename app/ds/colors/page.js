@@ -31,7 +31,7 @@ export default function ColorsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name"><span className="ds-token-chip">--border</span></div>
-            <p>reserved for stronger visual affordances where a subtle stroke isn't enough : <code>.panel-spinner</code> ring (2px), <code>.import-dropzone</code> dashed border (2px), <code>.ob-dot</code> background. Do not use for regular component strokes.</p>
+            <p>reserved for stronger visual affordances where a subtle stroke isn't enough : <span className="ds-class">.panel-spinner</span> ring (2px), <span className="ds-class">.import-dropzone</span> dashed border (2px), <span className="ds-class">.ob-dot</span> background. Do not use for regular component strokes.</p>
           </div>
           <p className="ds-note">In dark mode both tokens resolve to <code>#2E2E2E</code> — divergence exists only in light mode.</p>
         </div>
@@ -65,28 +65,28 @@ export default function ColorsPage() {
         <div className="ds-card-head">Primary scale</div>
         <div className="ds-card-body col">
           <div className="palette-grid">
-          {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50★","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
+          {[["3","#FAFAFF"],["5","#F4F5FF"],["10","#E8EAFD"],["20","#C1C7FB"],["30","#9BA5F8"],["40","#6F7CF2"],["50","#4959E6"],["60","#3646D4"],["70","#2836B8"],["80","#1D268A"],["90","#131860"],["100","#0C0F38"]].map(([step,hex]) => (
             <Swatch
               key={step}
               size="sm"
-              anchor={step === "50★"}
-              bg={`var(--primary-${step.replace("★","")})`}
+              anchor={step === "50"}
+              bg={`var(--primary-${step})`}
               title={step}
-              token={`--primary-${step.replace("★","")}`}
+              token={`--primary-${step}`}
               light={hex}
             />
           ))}
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note"><span className="ds-token-chip">--primary-N</span> · ★ anchor = <span className="ds-token-chip">--accent</span> (#4959E6)</p>
+          <p className="ds-note"><span className="ds-token-chip">--primary-N</span> · anchor (<span className="ds-token-chip">--primary-50</span>) = <span className="ds-token-chip">--accent</span> (#4959E6)</p>
           <div className="ds-token-block">
             <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (#FAFAFF)</div>
             <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Dark mode override</div>
-            <p><span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--primary-5</span> and <span className="ds-token-chip">--primary-10</span> resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <span className="ds-token-chip">--card</span> #1E1E1E to preserve visual rendering: <span className="ds-token-chip">--primary-3</span>=#222432 (card hover), <span className="ds-token-chip">--primary-5</span>=#232536 (button bg), <span className="ds-token-chip">--primary-10</span>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <code>.list-row</code> hover (parent <code>.books-list</code> on <span className="ds-token-chip">--card</span>) looked different from <code>.now-reading-card</code> hover (no parent bg, mixed with <span className="ds-token-chip">--bg</span>).</p>
+            <p><span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--primary-5</span> and <span className="ds-token-chip">--primary-10</span> resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <span className="ds-token-chip">--card</span> #1E1E1E to preserve visual rendering: <span className="ds-token-chip">--primary-3</span>=#222432 (card hover), <span className="ds-token-chip">--primary-5</span>=#232536 (button bg), <span className="ds-token-chip">--primary-10</span>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <span className="ds-class">.list-row</span> hover (parent <span className="ds-class">.books-list</span> on <span className="ds-token-chip">--card</span>) looked different from <span className="ds-class">.now-reading-card</span> hover (no parent bg, mixed with <span className="ds-token-chip">--bg</span>).</p>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@ export default function ColorsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">8 tokens used in <code>.empty-icon</code> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
+          <p className="ds-note">8 tokens used in <span className="ds-class">.empty-icon</span> SVGs (Library, Wishlist, Overview*, Dictionary, Quotes, Collections, Onboarding). Light = mirror of primary scale, dark = value scale inverted (bg fills dark muted, stroke light-tinted).</p>
           <div className="ds-token-block">
             <div className="ds-token-name">Stroke</div>
             <p><span className="ds-token-chip">--illus-stroke</span> resolves to <span className="ds-token-chip">--primary-90</span> in light (#131860 navy) and <span className="ds-token-chip">--primary-20</span> in dark (#C1C7FB lavender). Brand-tinted stroke instead of neutral white — gives a monochrome blue feel to illustrations.</p>

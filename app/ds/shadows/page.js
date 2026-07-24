@@ -36,7 +36,7 @@ export default function ShadowsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Modal shadow — dark override</div>
-            <p><code>.modal</code> and <code>.confirm-modal</code> in dark mode use a hardcoded neutral black shadow <code>0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30)</code> instead of the primary-tinted <span className="ds-token-chip">--shadow-lg</span>. Reason: blue-tinted shadow on dark UI reads as a brand wash; pure black gives proper depth without color contamination.</p>
+            <p><span className="ds-class">.modal</span> and <span className="ds-class">.confirm-modal</span> in dark mode use a hardcoded neutral black shadow <code>0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30)</code> instead of the primary-tinted <span className="ds-token-chip">--shadow-lg</span>. Reason: blue-tinted shadow on dark UI reads as a brand wash; pure black gives proper depth without color contamination.</p>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@ export default function ShadowsPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Rayons imbriqués</div>
-            <p>Un élément posé dans un conteneur arrondi prend <strong>radius du conteneur moins son padding</strong> : les deux courbes ne se lisent comme parallèles que si leur écart vaut l&apos;espace qui les sépare. Un item de <code>.dropdown-menu</code> (radius 10, padding 4) vaut donc 6.</p>
+            <p>Un élément posé dans un conteneur arrondi prend <strong>radius du conteneur moins son padding</strong> : les deux courbes ne se lisent comme parallèles que si leur écart vaut l&apos;espace qui les sépare. Un item de <span className="ds-class">.dropdown-menu</span> (radius 10, padding 4) vaut donc 6.</p>
           </div>
         </div>
       </div>

@@ -158,7 +158,7 @@ a.sidebar-item { text-decoration: none; }
 /* Échantillons de hauteurs inégales (menus, panneaux) : alignés par le haut,
    sinon leurs eyebrows se décalent en escalier et la rangée devient illisible. */
 .ds-states-grid--top { align-items: flex-start; }
-/* Variante « boardée » (traitement Carbon) — gap remplacé par des dividers,
+/* Variante « boardée » — gap remplacé par des dividers,
    chaque état dans sa cellule. Pas d'eyebrow : le label du composant réel EST le
    nom de l'état, aligné à gauche dans la cellule. Colonnes égales sur une rangée
    (grid-auto-flow column), stroke vertical entre cellules, pas de cadre extérieur
@@ -384,6 +384,9 @@ a.sidebar-item { text-decoration: none; }
   font-weight: 600;
   color: var(--text);
 }
+/* Nom de classe DANS un titre de bloc : voix « code » en mono, sans pastille — un
+   heading reste léger. Hérite couleur (--text) et weight du titre. */
+.ds-token-name .ds-cn { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.94em; }
 .ds-token-val {
   font-size: 13px;
   font-family: 'SF Mono', 'Fira Code', monospace;
@@ -401,13 +404,66 @@ a.sidebar-item { text-decoration: none; }
   border-radius: var(--radius-sm);
   background: var(--primary-5);
   color: var(--primary-60);
-  border: none;
+  border: 1px solid var(--primary-10);
   font-size: 13px;
   font-family: 'SF Mono', 'Fira Code', monospace;
   font-weight: 600;
   white-space: nowrap;
 }
-[data-theme="dark"] .ds-token-chip { background: var(--primary-5); color: var(--primary-30); }
+[data-theme="dark"] .ds-token-chip { background: var(--primary-5); color: var(--primary-30); border-color: var(--primary-10); }
+/* Référence de CLASSE (.modal-field-input, .search-box…) — même forme que le token
+   chip pour ressortir comme une référence, mais palette NEUTRE (gris) : le bleu
+   reste réservé aux tokens. Distincte aussi des valeurs/snippets (code, texte gras). */
+.ds-class {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  width: fit-content;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border-subtle);
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 600;
+  white-space: nowrap;
+}
+[data-theme="dark"] .ds-class { background: var(--bg3); color: var(--text); border-color: var(--border); }
+/* Léger décalage horizontal des pastilles INLINE (token + classe) pour qu'elles
+   respirent dans le texte. Scopé au paragraphe : les pastilles groupées (token
+   table avec son gap, chips standalone en flex-start dans un token-block) ne sont
+   pas en <p> → gardent leur espacement propre. */
+.ds-card-body p .ds-token-chip,
+.ds-card-body p .ds-class { margin: 0 6px; }
+/* Pastille de classe standalone (sous le texte d'un token-block) : léger retrait
+   du texte au-dessus, en plus du gap du bloc. */
+.ds-token-block > .ds-class { margin-top: 4px; }
+
+/* Copie au clic (cf. ChipCopy) : les pastilles sont cliquables → cursor + hover
+   discret dans leur propre palette (token reste bleu, classe reste neutre). */
+.ds-token-chip, .ds-class { cursor: pointer; transition: background 0.12s; }
+.ds-token-chip:hover { background: var(--primary-10); }
+.ds-class:hover { background: var(--border-subtle); }
+/* Feedback flottant « Copied » — positionné en fixed au-dessus de la pastille. */
+.ds-copy-toast {
+  position: fixed;
+  z-index: 9999;
+  transform: translate(-50%, -100%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
 /* Token chips footer — variante de .ds-card-foot.
  * Hérite border-top + padding ; ajoute flex layout pour les chips. */
 .ds-card-foot.ds-card-foot--tokens {
@@ -580,6 +636,54 @@ a.sidebar-item { text-decoration: none; }
 .dropdown-item.is-hover { background: var(--primary-5) !important; color: var(--primary-50) !important; }
 [data-theme="dark"] .dropdown-item.is-hover { background: var(--primary-5) !important; color: var(--primary-40) !important; }
 .dropdown-item.is-active { background: var(--primary-10) !important; }
+
+/* États forcés d'un champ pour la doc — mirror de :hover / :focus de library.css
+   (.modal-field-input). L'input réel ne peut pas être maintenu :hover/:focus en
+   statique, d'où ces classes. Hover : bg --primary-5 + bord --primary-50. Focus :
+   idem + anneau --primary-20 (rgba primary dark). Le disabled se pose en vrai
+   (attribut disabled), pas besoin de classe forcée. */
+.modal-field-input.is-hover { background: var(--primary-5) !important; border: 1.5px solid var(--primary-50) !important; }
+.modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; }
+[data-theme="dark"] .modal-field-input.is-hover { border-color: var(--primary-50) !important; background: var(--primary-3) !important; }
+[data-theme="dark"] .modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+
+/* ─── TEXT INPUT — éléments PROPOSÉS (doc /ds uniquement, pas encore dans
+   library.css). Le vocabulaire couleur de validation existe déjà (--destructive,
+   warning #B45309/#FBBF24, réutilisé de .modal-toggle-message) ; ne manque que son
+   application au bord du champ + une échelle de tailles + un texte d'aide. À
+   promouvoir dans library.css le jour où la validation de formulaire est câblée. */
+.modal-field-input.is-invalid { border: 1.5px solid var(--destructive) !important; background: var(--bg3) !important; }
+.modal-field-input.is-invalid.is-focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.2) !important; }
+.modal-field-input.is-warn { border: 1.5px solid #B45309 !important; }
+[data-theme="dark"] .modal-field-input.is-warn { border-color: #FBBF24 !important; }
+.modal-field-input.is-readonly { border-color: var(--border-subtle) !important; background: transparent !important; color: var(--text-2) !important; }
+/* Échelle de tailles proposée : sm 32 / md 40 (actuel) / lg 48 — pas 8, comme les
+   boutons, pour que champ et bouton restent alignables à chaque échelle. */
+.modal-field-input--sm { height: 32px !important; padding: 0 12px !important; font-size: 14px !important; }
+.modal-field-input--lg { height: 48px !important; padding: 0 16px !important; font-size: 16px !important; }
+/* Texte d'aide neutre sous le champ (« helper text ») — distinct du message
+   d'erreur .modal-error : guidance permanente, pas conditionnelle. */
+.modal-field-hint { font-size: 13px; font-weight: 500; color: var(--text-2); line-height: 1.4; }
+/* Pile d'anatomie visuelle (label / field / helper) — reproduit l'espacement RÉEL
+   de .modal-field (gap 8, hauteurs natives des parties) ; chaque partie est reliée
+   à son marqueur numéroté par une ligne, couleur du marqueur (primary-50). Pas de
+   scène teintée ni de radius : le fond primary-5 est réservé à l'anatomie qui cote
+   un padding (.ds-redline). La pile vit sur le fond de carte, comme les states.
+   Marqueur en position absolue → n'inflige pas sa hauteur aux lignes de texte, le
+   rythme du composant reste exact. Doc /ds uniquement. */
+.ds-anatomy { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 420px; }
+.ds-anatomy-row { display: flex; align-items: center; gap: 12px; }
+/* Container marqueur + ligne : la ligne pointe vers l'élément, séparée de lui par
+   le gap 12 de la rangée. */
+.ds-anatomy-lead { display: flex; align-items: center; flex-shrink: 0; }
+.ds-anatomy-marker { width: 22px; height: 22px; border-radius: 50%; background: var(--primary-50); color: #fff; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ds-anatomy-line { width: 28px; height: 1.5px; background: var(--primary-50); }
+.ds-anatomy-row > :last-child { flex: 1 1 auto; min-width: 0; }
+
+/* ─── CLOUD CHIP ─── état forcé pour la doc (mirror de .overview-cloud-chip:hover,
+   bg --primary-10 dans les deux thèmes). */
+.overview-cloud-chip.is-hover { background: var(--primary-10) !important; }
+[data-theme="dark"] .overview-cloud-chip.is-hover { background: var(--primary-10) !important; }
 
 /* ─── VIEW TOGGLE ─── */
 .view-btns-ds { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
@@ -950,7 +1054,11 @@ a.sidebar-item { text-decoration: none; }
   overflow-wrap: anywhere;
   font-family: 'SF Mono', 'Fira Code', monospace;
   font-size: 0.92em;
-  color: var(--primary-50);
+  /* Valeurs / snippets (padding, rgba, :has()…) : ni bleu ni link-like. Couleur de
+     texte + weight 600 (vs 400/500 du corps) pour se distinguer sans imiter un lien.
+     Le bleu reste réservé aux tokens (.ds-token-chip). */
+  color: var(--text);
+  font-weight: 600;
 }
 /* Code blocks scroll horizontally instead of expanding their parent. */
 .ds-card-body pre {

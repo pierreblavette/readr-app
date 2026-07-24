@@ -25,11 +25,11 @@ export default function StrokesPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Spinner ring · 2px solid var(--border)</div>
-            <p>Single usage — <code>.panel-spinner</code> loading ring needs stronger contrast.</p>
+            <p>Single usage — <span className="ds-class">.panel-spinner</span> loading ring needs stronger contrast.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Dropzone · 2px dashed var(--border)</div>
-            <p>Single usage — <code>.import-dropzone</code> dashed border for import file/photo zones.</p>
+            <p>Single usage — <span className="ds-class">.import-dropzone</span> dashed border for import file/photo zones.</p>
           </div>
         </div>
       </div>

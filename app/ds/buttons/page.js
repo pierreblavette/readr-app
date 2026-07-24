@@ -20,7 +20,7 @@ const STATES = [
 const ANATOMY = [
   ["XS", "24", "12", "6", "11", "4", "24×24 · svg 12"],
   ["SM", "32", "16", "7", "12", "6", "32×32 · svg 12"],
-  ["MD ★", "40", "20", "8", "15", "8", "40×40 · svg 16"],
+  ["MD", "40", "20", "8", "15", "8", "40×40 · svg 16"],
   ["LG", "48", "24", "10", "18", "10", "48×48 · svg 18"],
   ["XL", "56", "28", "12", "20", "12", "56×56 · svg 20"],
 ];
@@ -66,7 +66,7 @@ export default function ButtonsPage() {
 
       {/* ─────────── 2. SIZES & ANATOMY — la gamme de tailles montrée UNE fois (cotes + specs) ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Sizes &amp; anatomy — XS → XL</div>
+        <div className="ds-card-head">Anatomy &amp; sizes</div>
         <div className="ds-card-body col">
           <div className="ds-redline-board">
             {SIZES.map(([cls]) => (
@@ -96,13 +96,13 @@ export default function ButtonsPage() {
             <div className="ds-token-name">Cascade des pas — 8 / 4 / 2</div>
             <p>Les trois métriques progressent linéairement mais chacune à la moitié du pas de la précédente : hauteur <strong>pas 8</strong> (24 → 56), padding <strong>pas 4</strong> (12 → 28, soit exactement hauteur ÷ 2), gap <strong>pas 2</strong> (4 → 12). Un pas unique pour les trois donnerait un gap de 36 en XL — le rapport doit rester proportionnel à ce qu&apos;il sépare, pas à la taille du composant.</p>
           </div>
-          <p className="ds-note">★ Default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box).</p>
+          <p className="ds-note">MD is the default size used across the app. Outline buttons : stroke <code>1.5px</code> inside (box-sizing: border-box).</p>
         </div>
       </div>
 
       {/* ─────────── 3. ICONS & COMPOSITION — icon-only + doctrine du padding asymétrique (à MD) ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Icons &amp; composition</div>
+        <div className="ds-card-head">Variants · icons &amp; composition</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
@@ -142,9 +142,9 @@ export default function ButtonsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Text + icon right · 0 12 0 20 (md) / 0 8 0 16 (sm)</div>
-            <p>Same logic, mirrored. Text + chevron right uses the same gutter, detected via <code>.dropdown-btn-chevron</code> / <code>.sidebar-section-chevron</code>.</p>
+            <p>Same logic, mirrored. Text + chevron right uses the same gutter, detected via <span className="ds-class">.dropdown-btn-chevron</span> / <span className="ds-class">.sidebar-section-chevron</span>.</p>
           </div>
-          <p className="ds-note">Auto-detected via <code>:has()</code> on <code>.btn-md</code> / <code>.btn-sm</code> and <code>.dropdown-btn</code> — no extra class needed unless the chevron exception applies. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding).</p>
+          <p className="ds-note">Auto-detected via <code>:has()</code> on <span className="ds-class">.btn-md</span> / <span className="ds-class">.btn-sm</span> and <span className="ds-class">.dropdown-btn</span> — no extra class needed unless the chevron exception applies. Rule applies when the SVG is the first or last child but not both (so icon-only buttons keep symmetric padding).</p>
           <div className="ds-token-block">
             <div className="ds-token-name">Convention</div>
             <p>Always wrap label text in a <code>&lt;span&gt;</code>. CSS <code>:first-child</code> / <code>:last-child</code> only count element children — a bare text node next to an SVG would make the SVG both first AND last child, breaking the detection.</p>
@@ -154,7 +154,7 @@ export default function ButtonsPage() {
 
       {/* ─────────── 4. VARIANTES SPÉCIALES — AI action, text link, count badge (à MD, tailles couvertes en §2) ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">AI action — gradient border + tinted fill</div>
+        <div className="ds-card-head">Variants · AI action</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
@@ -184,17 +184,17 @@ export default function ButtonsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Padding</div>
-            <p><code>0 20px 0 16px</code> (asymmetric icon-left — mirrors <code>.panel-quotes-add</code> ; 16px left for the leading sparkle icon, scale-proportional base - 4 at md scale).</p>
+            <p><code>0 20px 0 16px</code> (asymmetric icon-left — mirrors <span className="ds-class">.panel-quotes-add</span> ; 16px left for the leading sparkle icon, scale-proportional base - 4 at md scale).</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Icon · sizes · usage</div>
-            <p>Pair with <code>.import-tab-ai-icon</code> 16×16 sparkle SVG. Sizes : SM / MD (default) / LG (échelle standard, cf. §Sizes). Reserved for AI-generated actions. First app usage : <code>.panel-cast-action</code> in BookPanel (Now Reading) — the &quot;Generate cast&quot; / &quot;Regenerate&quot; call to the Gemini cast endpoint.</p>
+            <p>Pair with <span className="ds-class">.import-tab-ai-icon</span> 16×16 sparkle SVG. Sizes : SM / MD (default) / LG (échelle standard, cf. §Sizes). Reserved for AI-generated actions. First app usage : <span className="ds-class">.panel-cast-action</span> in BookPanel (Now Reading) — the &quot;Generate cast&quot; / &quot;Regenerate&quot; call to the Gemini cast endpoint.</p>
           </div>
         </div>
       </div>
 
       <div className="ds-card">
-        <div className="ds-card-head">Text link — .btn-link</div>
+        <div className="ds-card-head">Variants · text link</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
@@ -207,11 +207,11 @@ export default function ButtonsPage() {
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">.btn-link</div>
+            <div className="ds-token-name"><span className="ds-cn">.btn-link</span></div>
             <p>Inline text action — 14 / 600 · <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span> + underline · no padding, no border, no fixed height. Used for low-key actions inside forms or cards (e.g. &quot;Remove goal&quot; in ReadingGoalModal).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">.btn-link--critical</div>
+            <div className="ds-token-name"><span className="ds-cn">.btn-link--critical</span></div>
             <p><span className="ds-token-chip">--destructive</span> color · same typography and behavior. For destructive inline actions.</p>
           </div>
           <div className="ds-token-block">
@@ -226,7 +226,7 @@ export default function ButtonsPage() {
       </div>
 
       <div className="ds-card">
-        <div className="ds-card-head">Button with count badge — text + pill</div>
+        <div className="ds-card-head">Variants · count badge</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
@@ -240,7 +240,7 @@ export default function ButtonsPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Anatomy</div>
-            <p>Text label in a <code>&lt;span&gt;</code> + a count pill in <code>.filters-confirm-count</code> (22px min height, 8px horizontal padding, radius 11, <code>rgba(255,255,255,0.18)</code> bg over the primary fill, <code>tabular-nums</code> for stable digit width).</p>
+            <p>Text label in a <code>&lt;span&gt;</code> + a count pill in <span className="ds-class">.filters-confirm-count</span> (22px min height, 8px horizontal padding, radius 11, <code>rgba(255,255,255,0.18)</code> bg over the primary fill, <code>tabular-nums</code> for stable digit width).</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Padding</div>
@@ -252,14 +252,14 @@ export default function ButtonsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Usage</div>
-            <p>First consumer : <code>.filters-panel-confirm</code> in MobileFiltersPanel — shows the live <code>bookCount</code> so the user understands filters apply on tap. If a second consumer surfaces (e.g. &quot;Show results [N]&quot;), promote to a generic <code>.btn-count</code> primitive + extend the <code>.btn-md:has()</code> padding rule to match.</p>
+            <p>First consumer : <span className="ds-class">.filters-panel-confirm</span> in MobileFiltersPanel — shows the live <code>bookCount</code> so the user understands filters apply on tap. If a second consumer surfaces (e.g. &quot;Show results [N]&quot;), promote to a generic <span className="ds-class">.btn-count</span> primitive + extend the <code>.btn-md:has()</code> padding rule to match.</p>
           </div>
         </div>
       </div>
 
       {/* ─────────── 5. REFERENCE — mapping canonique → classes nommées ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Reference — canonical → named class mapping</div>
+        <div className="ds-card-head">Usage · reference</div>
         <div className="ds-card-body col">
           {MAPPING.map(([role, canon, classes]) => (
             <div key={role} className="ds-token-block">

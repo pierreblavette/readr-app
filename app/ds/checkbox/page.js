@@ -89,8 +89,9 @@ export default function CheckboxPage() {
       title="Checkbox"
       sub="Case 18×18 dans une rangée cliquable de 40px de haut — input natif masqué, carré dessiné en CSS."
     >
+      {/* ─────────── 1. STATES ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">États</div>
+        <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
@@ -112,8 +113,55 @@ export default function CheckboxPage() {
         </div>
       </div>
 
+      {/* ─────────── 2. ANATOMY ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">États de référence — non consommés</div>
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          {/* Schéma coté mesuré au runtime — boxSelector cadre le carré (taille +
+              radius), gap et hauteur mesurés comme sur la planche Buttons. */}
+          <div className="ds-redline-board">
+            <Redline boxSelector=".modal-toggle-check">
+              <ToggleRow checked label="Mark as reading" />
+            </Redline>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <div className="ds-token-block">
+            <div className="ds-token-name">Row</div>
+            <p>La rangée n&apos;invente pas sa hauteur : elle emprunte <span className="ds-class">.cell-row--lg</span> (min-height 40), la primitive partagée avec <span className="ds-class">.search-row</span> et <span className="ds-class">.sidebar-appearance-row</span>. <span className="ds-class">.modal-toggle-row</span> écrase le gap 8 de <span className="ds-class">.cell-row</span> pour le porter à <strong>12</strong> (le gap canonique des rangées icône/case + label, partagé avec <span className="ds-class">.dropdown-item</span>), et ajoute le curseur + <code>user-select: none</code> — sans lui, un double-clic sélectionnerait le texte du libellé au lieu de basculer la case. C&apos;est le <code>&lt;label&gt;</code> qui porte la classe : <strong>toute la rangée est cliquable</strong> (cible 40px de haut sur toute la largeur), pas seulement le carré de 18px.</p>
+            <span className="ds-class">.modal-toggle-row</span>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Native input</div>
+            <p>Masqué par <code>position: absolute; opacity: 0; width/height: 0</code> — et surtout <strong>pas</strong> par <code>display: none</code>, qui le retirerait de l&apos;arbre d&apos;accessibilité et du parcours clavier. L&apos;état coché reste porté par un vrai champ de formulaire, pas simulé.</p>
+            <span className="ds-class">.modal-toggle-input</span>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Check square</div>
+            <p>18×18, radius 5, bordure 1.5 <span className="ds-token-chip">--border-subtle</span>, fond transparent. La coche est un SVG 10×10 blanc. C&apos;est le frère de l&apos;input, ce qui permet aux sélecteurs <code>:checked ~</code> et <code>:indeterminate ~</code> de le styler sans JS.</p>
+            <span className="ds-class">.modal-toggle-check</span>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Label</div>
+            <p>15/500 <span className="ds-token-chip">--text</span> — le palier « interactif », le même que les boutons MD et les champs de saisie.</p>
+            <span className="ds-class">.modal-toggle-label</span>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Field (row + message)</div>
+            <p>Colonne gap 8 qui enveloppe la rangée quand un message de validation la suit. Le message <span className="ds-class">.modal-toggle-message</span> (13/500, icône 16) prend <span className="ds-class">.is-error</span> <span className="ds-token-chip">--destructive</span> ou <span className="ds-class">.is-warning</span> ambre. Distinct de la <span className="ds-class">.modal-info-box</span>, plus lourde, réservée à une explication encadrée.</p>
+            <span className="ds-class">.modal-toggle-field</span>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Group</div>
+            <p>Colonne, gap 16. Sert quand la rangée est suivie d&apos;une <span className="ds-class">.modal-info-box</span> expliquant pourquoi elle est désactivée.</p>
+            <span className="ds-class">.modal-toggle-group</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ─────────── 3. VARIANTS — états de référence, non consommés ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Variants · reference states</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
@@ -131,108 +179,29 @@ export default function CheckboxPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Ces quatre états existent dans le composant réel (<code>library.css</code>) mais <strong>aucun écran Readr ne les utilise aujourd&apos;hui</strong> — ils sont posés pour être prêts le jour où un usage les appelle : <code>indeterminate</code> pour un futur select-all, <code>is-readonly</code> pour une valeur consultée non modifiable, <code>has-error</code> / <code>.modal-toggle-message</code> pour une case obligatoire dans un formulaire validé. Inspiration Carbon, filtrée à ce qui a du sens pour l&apos;app.</p>
+          <p className="ds-note">Ces quatre états existent dans le composant réel (<code>library.css</code>) mais <strong>aucun écran Readr ne les utilise aujourd&apos;hui</strong> — posés pour être prêts : <code>indeterminate</code> pour un futur select-all, <code>is-readonly</code> pour une valeur consultée non modifiable, <code>has-error</code> / <span className="ds-class">.modal-toggle-message</span> pour une case obligatoire dans un formulaire validé.</p>
         </div>
       </div>
 
-      <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
-        <div className="ds-card-body col">
-          {/* Schéma coté mesuré au runtime (jamais de valeur en dur) — boxSelector
-              cadre le carré et cote sa taille + son radius ; le gap et la hauteur
-              de cible sont mesurés comme sur la planche Buttons. Le wrapper
-              .ds-redline-board absorbe le padding 20 du modèle, laissant au
-              .ds-redline ses 48 (sinon .ds-card-body > *:not(table), plus
-              spécifique, écrase le padding et les cotes se font couper). */}
-          <div className="ds-redline-board">
-            <Redline boxSelector=".modal-toggle-check">
-              <ToggleRow checked label="Mark as reading" />
-            </Redline>
-          </div>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">label.cell-row.cell-row--lg.modal-toggle-row</div>
-            <p>La rangée n&apos;invente pas sa hauteur : elle emprunte <code>.cell-row--lg</code> (min-height 40), la primitive partagée avec <code>.search-row</code> et <code>.sidebar-appearance-row</code>. <code>.modal-toggle-row</code> n&apos;ajoute que le gap 10, le curseur et <code>user-select: none</code> — sans lui, un double-clic sélectionnerait le texte du libellé au lieu de basculer la case. C&apos;est le <code>&lt;label&gt;</code> qui porte la classe : <strong>toute la rangée est cliquable</strong>, pas seulement le carré de 18px, pour une cible de 40px de haut sur toute la largeur de la modale en usage réel.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">input.modal-toggle-input · l&apos;input natif, masqué</div>
-            <p>Masqué par <code>position: absolute; opacity: 0; width/height: 0</code> — et surtout <strong>pas</strong> par <code>display: none</code>, qui le retirerait de l&apos;arbre d&apos;accessibilité et du parcours clavier. L&apos;état coché reste donc porté par un vrai champ de formulaire, pas simulé.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">span.modal-toggle-check · le carré visible</div>
-            <p>18×18, radius 5, bordure 1.5 <span className="ds-token-chip">--border-subtle</span>, fond transparent. La coche est un SVG 10×10 blanc. C&apos;est le frère de l&apos;input, ce qui permet aux sélecteurs <code>:checked ~</code> et <code>:indeterminate ~</code> de le styler sans JS.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">span.modal-toggle-label · le libellé</div>
-            <p>15/500 <span className="ds-token-chip">--text</span> — le palier « interactif », le même que les boutons MD et les champs de saisie.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">.modal-toggle-field · rangée + message</div>
-            <p>Colonne gap 8 qui enveloppe la rangée quand un message de validation la suit. Le message <code>.modal-toggle-message</code> (13/500, icône 16) prend <code>.is-error</code> <span className="ds-token-chip">--destructive</span> ou <code>.is-warning</code> ambre. Distinct de la <code>.modal-info-box</code>, plus lourde, réservée à une explication encadrée.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">.modal-toggle-group · conteneur</div>
-            <p>Colonne, gap 16. Sert quand la rangée est suivie d&apos;une <code>.modal-info-box</code> expliquant pourquoi elle est désactivée.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="ds-card">
-        <div className="ds-card-head">Doctrine d&apos;états — la case cite les boutons</div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">À vide → .btn-outline</div>
-            <p>Bordure + fond transparent au repos, bordure <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-5</span> au survol. Exactement le comportement d&apos;un bouton outline.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Cochée → .btn-primary</div>
-            <p>Fond <span className="ds-token-chip">--primary-50</span> plein, bordure transparente, survol <span className="ds-token-chip">--primary-60</span>. En dark, <span className="ds-token-chip">--primary-40</span> puis <span className="ds-token-chip">--primary-50</span> — la même descente d&apos;un cran que les boutons primaires.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Pourquoi c&apos;est important</div>
-            <p>Une case n&apos;est pas un composant à part : c&apos;est un bouton binaire. Lui donner ses propres couleurs d&apos;état obligerait à maintenir deux échelles en parallèle et à les voir diverger. Ici toute évolution de <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-60</span> se propage aux deux.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="ds-card">
-        <div className="ds-card-head">Quand l&apos;utiliser — checkbox, toggle ou radio</div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Checkbox</div>
-            <p>Plusieurs choix indépendants cochables séparément, <strong>ou</strong> un binaire qui s&apos;applique à la validation d&apos;un formulaire — pas immédiatement. C&apos;est le cas de « Mark as reading » : la case prend effet au submit de la modale, pas au clic.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Toggle</div>
-            <p>Un réglage qui prend effet <strong>immédiatement</strong>, sans étape de validation — thème clair/sombre, activer une option. Si l&apos;action est instantanée et se défait d&apos;un geste, c&apos;est un toggle, pas une checkbox.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Radio · Segmented Pills</div>
-            <p>Un seul choix parmi plusieurs, mutuellement exclusifs. Dès qu&apos;une seule valeur peut être vraie à la fois, radio ou <strong>Segmented Pills</strong> — jamais un groupe de checkboxes.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="ds-card">
-        <div className="ds-card-head">Contenu &amp; alignement</div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Libellé</div>
-            <p>Formulation positive et actionnable — « Mark as reading », jamais « Ne pas marquer ». Un libellé négatif force à cocher pour refuser : source d&apos;erreur. Le libellé reste à droite de la case, jamais à gauche.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Alignement en liste</div>
-            <p>Plusieurs cases s&apos;empilent verticalement, une par ligne : la colonne des carrés donne un point d&apos;ancrage scannable. Une rangée horizontale de cases devient illisible dès trois items.</p>
-          </div>
-        </div>
-      </div>
-
+      {/* ─────────── 4. USAGE ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <p>Premier usage : <code>AddModal</code> → « Mark as reading » (<code>MarkAsReadingToggle</code>). Pour une case de sélection dans une rangée de liste, voir <strong>Row Checkbox</strong>, qui est un composant distinct — cible plus petite, contexte de sélection multiple.</p>
+            <div className="ds-token-name">State doctrine — la case cite les boutons</div>
+            <p>Une case n&apos;est pas un composant à part : c&apos;est un bouton binaire. À vide elle se comporte comme <span className="ds-class">.btn-outline</span> (bordure + fond transparent → survol <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-5</span>) ; cochée comme <span className="ds-class">.btn-primary</span> (fond <span className="ds-token-chip">--primary-50</span> → survol <span className="ds-token-chip">--primary-60</span> ; dark <span className="ds-token-chip">--primary-40</span> → <span className="ds-token-chip">--primary-50</span>). Toute évolution de <span className="ds-token-chip">--primary</span> se propage aux deux — pas de double échelle à maintenir.</p>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Checkbox vs toggle vs radio</div>
+            <p><strong>Checkbox</strong> : plusieurs choix indépendants, <em>ou</em> un binaire qui s&apos;applique à la validation d&apos;un formulaire (pas immédiatement) — cas de « Mark as reading », effet au submit. <strong>Toggle</strong> : un réglage qui prend effet <em>immédiatement</em> (thème, option). <strong>Radio / Segmented Pills</strong> : un seul choix mutuellement exclusif — jamais un groupe de checkboxes.</p>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Content &amp; alignment</div>
+            <p>Libellé positif et actionnable — « Mark as reading », jamais « Ne pas marquer » (un libellé négatif force à cocher pour refuser). Le libellé reste à droite de la case. En liste, les cases s&apos;empilent verticalement : la colonne des carrés donne un ancrage scannable — une rangée horizontale devient illisible dès trois items.</p>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Consumers</div>
+            <p>Premier usage : <code>AddModal</code> → « Mark as reading » (<code>MarkAsReadingToggle</code>). Pour une case de sélection dans une rangée de liste, voir <strong>Row Checkbox</strong> — composant distinct (cible plus petite, contexte de sélection multiple).</p>
           </div>
         </div>
       </div>

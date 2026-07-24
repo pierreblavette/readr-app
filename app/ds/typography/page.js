@@ -104,7 +104,7 @@ export default function TypographyPage() {
           </p>
           <div className="ds-token-block">
             <div className="ds-token-name">Page title — fluid</div>
-            <p><span className="ds-token-chip">.page-title</span> drops from <strong>48px → 40px</strong> at ≤600px. Line-height (1) and tracking (−0.03em) are unchanged — only the size scales down so the largest title never crowds a phone screen.</p>
+            <p><span className="ds-class">.page-title</span> drops from <strong>48px → 40px</strong> at ≤600px. Line-height (1) and tracking (−0.03em) are unchanged — only the size scales down so the largest title never crowds a phone screen.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Form controls — anti-zoom</div>
@@ -120,7 +120,7 @@ export default function TypographyPage() {
           <p className="ds-note">Leading opens up as text gets smaller and lines get longer — tight for display, generous for long-form reading.</p>
           <div className="ds-token-block">
             <div className="ds-token-name">Display &amp; titles · 1 – 1.2</div>
-            <p>Large type needs little leading — the glyphs already carry the vertical rhythm. <span className="ds-token-chip">.page-title</span> = 1, <span className="ds-token-chip">.panel-title</span> = 1.2.</p>
+            <p>Large type needs little leading — the glyphs already carry the vertical rhythm. <span className="ds-class">.page-title</span> = 1, <span className="ds-class">.panel-title</span> = 1.2.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Sub-titles · 1.3 – 1.35</div>
@@ -132,7 +132,7 @@ export default function TypographyPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Long-form prose · 1.7 – 1.8</div>
-            <p>Notes, synopses and multi-line descriptions get the loosest leading for sustained reading (<span className="ds-token-chip">.ds-note</span> = 1.7).</p>
+            <p>Notes, synopses and multi-line descriptions get the loosest leading for sustained reading (<span className="ds-class">.ds-note</span> = 1.7).</p>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@ export default function TypographyPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Uppercase eyebrow · +0.08em</div>
-            <p>Capitals read cramped by default, so eyebrows are opened up : <span className="ds-token-chip">.panel-section-eyebrow</span> at <strong>+0.08em</strong>.</p>
+            <p>Capitals read cramped by default, so eyebrows are opened up : <span className="ds-class">.panel-section-eyebrow</span> at <strong>+0.08em</strong>.</p>
           </div>
         </div>
       </div>
