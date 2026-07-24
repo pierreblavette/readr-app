@@ -183,7 +183,32 @@ export default function CheckboxPage() {
         </div>
       </div>
 
-      {/* ─────────── 4. USAGE ─────────── */}
+      {/* ─────────── 4. VARIANTS — row selection (case de liste sans libellé) ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Variants · row selection</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed">
+            {[["Default", ""], ["Hover", "is-hover"], ["Selected", "is-selected"]].map(([label, mod]) => (
+              <div key={label} className="ds-state-sample">
+                <span className={`row-checkbox${mod ? " " + mod : ""}`}><CheckIcon /></span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <div className="ds-token-block">
+            <div className="ds-token-name">Row checkbox — la case sans libellé</div>
+            <p>Même carré 18×18 / radius 5, mais <strong>sans libellé</strong> : une cible de sélection dans une rangée de <span className="ds-class">.list-table</span>. Repos bord <span className="ds-token-chip">--border-subtle</span> + fond <span className="ds-token-chip">--bg</span> ; survol (piloté par <code>.list-table tr:hover</code>, pas par la case) bord <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-5</span> ; sélectionné fond <span className="ds-token-chip">--primary-50</span> plein + coche blanche (svg 10, <code>opacity 0 → 1</code>). Case d&apos;en-tête <span className="ds-class">.all-selected</span> dans <span className="ds-class">.th-checkbox-wrap</span> pour tout (dé)sélectionner. Alimente la <strong>Selection Bar</strong>.</p>
+            <span className="ds-class">.row-checkbox</span>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Deux usages du même atome</div>
+            <p>La <strong>Checkbox</strong> (sections ci-dessus) est un choix de <em>formulaire</em> — libellé + rangée cliquable 40px, effet au submit. La <strong>row checkbox</strong> est une <em>sélection multiple</em> de tableau — sans libellé, c&apos;est la rangée entière qui est la cible.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ─────────── 5. USAGE ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
@@ -201,7 +226,7 @@ export default function CheckboxPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Consumers</div>
-            <p>Premier usage : <code>AddModal</code> → « Mark as reading » (<code>MarkAsReadingToggle</code>). Pour une case de sélection dans une rangée de liste, voir <strong>Row Checkbox</strong> — composant distinct (cible plus petite, contexte de sélection multiple).</p>
+            <p>Premier usage : <code>AddModal</code> → « Mark as reading » (<code>MarkAsReadingToggle</code>). Pour la sélection de rangées en liste, voir la variante <strong>row selection</strong> ci-dessus (même atome, sans libellé).</p>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "checkbox", "cloud-chip", "dropdown", "inputs"],
+  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "checkbox", "chip", "dropdown", "inputs", "rating-stars", "segmented-pills", "toggle"],
   // Patterns = assemblages de composants + logique + layout (input + liste flottante
   // + async + clavier pour Autocomplete). Pas des briques uniques → groupe à part.
   Patterns: ["autocomplete"],
@@ -33,7 +33,7 @@ export const NAV_LABELS = {
   "inputs": "Text Input", "view-toggle": "View Toggle", "badges": "Badges",
   "checkbox": "Checkbox", "autocomplete": "Autocomplete", "lang-switcher": "Language Switcher",
   "rating-stars": "Rating Stars", "row-checkbox": "Row Checkbox",
-  "theme-toggle": "Theme Toggle", "book-chip": "Book Chip", "cloud-chip": "Cloud Chip", "book-card-kebab": "Book Card Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
+  "theme-toggle": "Theme Toggle", "toggle": "Toggle", "book-chip": "Book Chip", "chip": "Chip", "book-card-kebab": "Book Card Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
   "card": "Book Card", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "List View", "sidebar": "Sidebar", "panel": "Side Panel", "quote-panel": "Quote Panel",
   "filters-panel": "Filters Panel", "filters-row": "Filters Row",

@@ -35,7 +35,7 @@ export default function LogoPage() {
         <div className="ds-card-head">Symbol — standalone</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","var(--primary-50)"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
+            {[["logo-bg-page","var(--primary-50)"],["logo-bg-dark","var(--primary-50)"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
               <div key={i} className={`logo-bg ${cls}`}>
                 <SymbolMark className="logo-symbol" style={{ color: col }} />
               </div>

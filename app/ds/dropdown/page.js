@@ -55,8 +55,11 @@ export default function DropdownMenuPage() {
               </Redline>
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              {/* Pas de --portal ici : son min-width 180 déborderait le mat de mesure
+                  (inline-flex) et décalerait la bande de padding droite. L'anatomy
+                  cote la boîte (padding 4 / radius 10), pas le gabarit du portal. */}
               <Redline>
-                <div className="dropdown-menu dropdown-menu--portal ds-menu-static" role="menu">
+                <div className="dropdown-menu ds-menu-static" role="menu">
                   <button type="button" className="dropdown-item">Mark as finished</button>
                   <button type="button" className="dropdown-item">Add a quote</button>
                 </div>

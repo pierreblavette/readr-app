@@ -60,9 +60,12 @@ export default function DSLayout({ children }) {
             <div className="sidebar-bottom">
               <div className="sidebar-appearance-row cell-row cell-row--lg cell-row--between">
                 <span className="sidebar-row-label">Appearance</span>
-                <button className={`theme-btn-ds${theme === 'dark' ? ' is-on' : ''}`} onClick={toggleTheme} title="Theme">
-                  <span className="toggle-thumb-ds">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <button onClick={toggleTheme} className="theme-btn" aria-label="Toggle theme" title="Theme">
+                  <span className="toggle-thumb">
+                    {theme === 'dark'
+                      ? <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                      : <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                    }
                   </span>
                 </button>
               </div>

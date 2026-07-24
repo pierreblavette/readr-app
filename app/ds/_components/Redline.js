@@ -86,11 +86,17 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
     };
 
     measure();
+    // En navigation client (soft nav), le layout n'est pas toujours stabilisé au
+    // moment du useLayoutEffect : la 1re mesure capture une largeur transitoire et,
+    // comme la taille ne rebouge plus, le ResizeObserver ne refire pas. On re-mesure
+    // donc après le prochain paint (double rAF) — au hard refresh c'était déjà bon,
+    // ici ça aligne le cas soft-nav.
+    const raf = requestAnimationFrame(() => requestAnimationFrame(measure));
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     // Les webfonts changent la largeur du label → re-mesure une fois chargées.
     document.fonts?.ready.then(measure).catch(() => {});
-    return () => ro.disconnect();
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
   }, [children]);
 
   // Cotes trop proches → on décale une ligne sur deux vers le bas pour que les
@@ -109,6 +115,18 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       last = b.c;
       lastLen = len;
       rows[b.i] = row;
+    });
+  }
+
+  // Icônes répétées (ex. 5 étoiles identiques) : coter la taille UNE fois suffit —
+  // sinon N callouts égaux se chevauchent (« 20x2020 »). On garde tous les cadres,
+  // un seul nombre par largeur×hauteur distincte.
+  const iconCallout = [];
+  if (m) {
+    const seen = new Set();
+    m.icons.forEach((ic, i) => {
+      const key = `${Math.round(ic.width)}x${Math.round(ic.height)}`;
+      if (!seen.has(key)) { seen.add(key); iconCallout[i] = true; }
     });
   }
 
@@ -142,10 +160,12 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
             ))}
             {m.icons.map((ic, i) => (
               <span key={`i${i}`} className="ds-redline-iconframe" style={{ left: ic.left, top: ic.top, width: ic.width, height: ic.height }}>
-                <span className="ds-redline-icallout" style={{ "--lead": `${ic.top + 14}px` }}>
-                  <span className="ds-redline-num">{Math.round(ic.width)}</span>
-                  <span className="ds-redline-lead" />
-                </span>
+                {iconCallout[i] && (
+                  <span className="ds-redline-icallout" style={{ "--lead": `${ic.top + 14}px` }}>
+                    <span className="ds-redline-num">{Math.round(ic.width)}</span>
+                    <span className="ds-redline-lead" />
+                  </span>
+                )}
               </span>
             ))}
             {m.box && (

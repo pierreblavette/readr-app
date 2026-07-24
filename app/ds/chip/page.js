@@ -23,7 +23,7 @@ function Chip({ name, count, cls = "" }) {
 
 export default function CloudChipPage() {
   return (
-    <DSSection id="cloud-chip" title="Cloud Chip" sub="Pill filtrante — nom + badge count. Utilisée par Top Genres et Top Authors (Overview) comme raccourcis de filtre cliquables ; le container .overview-cloud les enveloppe en flex-wrap.">
+    <DSSection id="chip" title="Chip" sub="Pill filtrante — nom + badge count. Utilisée par Top Genres et Top Authors (Overview) comme raccourcis de filtre cliquables ; le container .overview-cloud les enveloppe en flex-wrap.">
 
       {/* ─────────── 1. STATES ─────────── */}
       <div className="ds-card">

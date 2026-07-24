@@ -68,6 +68,15 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy &amp; sizes</div>
         <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed">
+            {SIZES.map(([cls, label]) => (
+              <div key={cls} className="ds-state-sample">
+                <button className={`btn btn-primary ${cls}`}><span>{label}</span></button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
           <div className="ds-redline-board">
             {SIZES.map(([cls]) => (
               <div key={cls} className="ds-redline-row">
