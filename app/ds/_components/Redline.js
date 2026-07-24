@@ -78,7 +78,11 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
         }
       }
 
-      setM({ w, h: Math.round(h), bands, icons, box });
+      // Radius du specimen : sert à clipper les bandes (sinon elles débordent aux
+      // coins arrondis) et à arrondir le mat blanc du target.
+      const rootRadius = parseFloat(cs.borderTopLeftRadius) || 0;
+
+      setM({ w, h: Math.round(h), bands, icons, box, rootRadius });
     };
 
     measure();
@@ -89,22 +93,28 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
     return () => ro.disconnect();
   }, [children]);
 
-  // Cotes trop proches (ex. xs : padding 4 et gap 4) → on décale une ligne sur
-  // deux vers le bas pour que les nombres ne se chevauchent pas.
+  // Cotes trop proches → on décale une ligne sur deux vers le bas pour que les
+  // nombres ne se chevauchent pas. Seuil basé sur la LARGEUR RÉELLE des deux
+  // nombres (mono ≈ 7px/caractère, donc ~3.5px par demi-nombre) + marge, plutôt
+  // qu'une valeur fixe : deux « 10 » écartés de 30px ne se touchent pas et restent
+  // alignés (badge symétrique) ; deux « 4 » collés (xs des boutons) se décalent.
   const rows = [];
   if (m) {
     const sorted = [...m.bands].map((b, i) => ({ ...b, i, c: b.left + b.width / 2 })).sort((a, b) => a.c - b.c);
-    let last = -Infinity, row = 0;
+    let last = -Infinity, lastLen = 0, row = 0;
     sorted.forEach((b) => {
-      row = b.c - last < 34 ? 1 - row : 0;
+      const len = String(b.value).length;
+      const threshold = (len + lastLen) * 3.5 + 10;
+      row = b.c - last < threshold ? 1 - row : 0;
       last = b.c;
+      lastLen = len;
       rows[b.i] = row;
     });
   }
 
   return (
     <div className="ds-redline">
-      <div className="ds-redline-target" ref={ref}>
+      <div className="ds-redline-target" ref={ref} style={{ borderRadius: m ? m.rootRadius : undefined }}>
         {children}
         {m && (
           <>
@@ -114,11 +124,20 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 <span className="ds-redline-bracket" />
               </div>
             )}
+            {/* Bandes de padding inset verticalement du radius du specimen : elles
+                restent sur la partie droite du bord (flush avec la border) et
+                n'entrent jamais dans les coins arrondis. Les bandes de gap (au
+                milieu) gardent la pleine hauteur — pas de coin à éviter. */}
             {m.bands.map((b, i) => (
               <span
                 key={`b${i}`}
                 className={`ds-redline-band${b.strong ? " is-gap" : ""}`}
-                style={{ left: b.left, width: b.width }}
+                style={{
+                  left: b.left,
+                  width: b.width,
+                  top: b.strong ? 0 : m.rootRadius,
+                  bottom: b.strong ? 0 : m.rootRadius,
+                }}
               />
             ))}
             {m.icons.map((ic, i) => (
@@ -134,7 +153,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 <span className="ds-redline-icallout" style={{ "--lead": `${m.box.top + 14}px` }}>
                   <span className="ds-redline-num">
                     {Math.round(m.box.width)}×{Math.round(m.box.height)}
-                    {m.box.radius > 0 && ` · r${m.box.radius}`}
+                    {m.box.radius > 0 && (m.box.radius * 2 >= m.box.height ? " · pill" : ` · r${m.box.radius}`)}
                   </span>
                   <span className="ds-redline-lead" />
                 </span>

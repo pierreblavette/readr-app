@@ -4,7 +4,10 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["autocomplete", "badges", "book-card-kebab", "book-chip", "buttons", "checkbox"],
+  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "checkbox", "dropdown"],
+  // Patterns = assemblages de composants + logique + layout (input + liste flottante
+  // + async + clavier pour Autocomplete). Pas des briques uniques → groupe à part.
+  Patterns: ["autocomplete"],
 };
 
 // Groupes triés alphabétiquement à l'affichage. Foundations en est exclu : son
@@ -12,7 +15,7 @@ export const NAV = {
 // le casser rendrait la lecture arbitraire. Components, lui, est un inventaire
 // plat de 17 atomes sans narration — l'alphabétique y est le seul ordre que le
 // lecteur peut deviner, et il évite que l'ordre dérive au fil des migrations.
-const ALPHA_GROUPS = ["Components"];
+const ALPHA_GROUPS = ["Components", "Patterns"];
 
 // Point d'entrée unique des consommateurs (sidebar + landing) : le tri vit ici,
 // pas dupliqué dans chaque vue. Tri sur le LABEL affiché, pas sur le slug —

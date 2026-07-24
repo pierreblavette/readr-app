@@ -255,19 +255,36 @@ a.sidebar-item { text-decoration: none; }
   --rl-fill: rgba(229, 50, 110, 0.14);
   padding: 48px;
   width: 100%;
+  /* Fond teinté (primary-5) : la scène se distingue du fond de carte. Le specimen
+     est posé sur une surface blanche (.ds-redline-target) pour ressortir même
+     s'il est transparent (item, trigger). */
+  background: var(--primary-5);
 }
 /* Le specimen d'une planche est un spécimen figé, pas une démo : pointer-events
    none coupe hover/press pour que le fond ne change pas sous la souris pendant
    la lecture des cotes. La mesure (getComputedStyle/rects) n'en dépend pas. */
-.ds-redline-target { position: relative; display: inline-flex; pointer-events: none; }
-/* Le composant coté seul (jamais les annotations, qui sont en absolute). */
-.ds-redline-target > :not([class^="ds-redline-"]) { position: relative; z-index: 1; }
+.ds-redline-target { position: relative; display: inline-flex; pointer-events: none; background: var(--card); }
+/* Le composant coté seul (jamais les annotations, qui sont en absolute).
+   Anatomy UNIFORME : le specimen racine est présenté sans border, sans radius,
+   sans ombre, sur le mat blanc du target — les bandes de padding sont alors
+   flush avec le bord, pleine hauteur, sans artefact de coin ni de décalage. La
+   forme réelle (radius, border, ombre) est documentée dans les token-blocks.
+   Les boîtes cotées par boxSelector (le cœur de l'anatomy : vignette, carré de
+   case…) ne sont PAS concernées — elles sont descendantes, pas racine. */
+.ds-redline-target > :not([class^="ds-redline-"]) {
+  position: relative; z-index: 1;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
 /* Bandes : sous le contenu (z-index 0) mais au-dessus du fond du bouton — le
    bouton lui-même n'est pas positionné, la bande le recouvre donc en teinte. */
 /* Bandes padding et gap partagent la même teinte : la cote chiffrée porte la
-   nature de la mesure, pas la couleur (unifié — plus de --rl-fill-strong). */
+   nature de la mesure, pas la couleur (unifié — plus de --rl-fill-strong).
+   top/bottom sont posés en inline (inset du radius pour les bandes de padding). */
 .ds-redline-band {
-  position: absolute; top: 0; bottom: 0; z-index: 2;
+  position: absolute; z-index: 2;
   background: var(--rl-fill); pointer-events: none;
 }
 .ds-redline-iconframe {
@@ -552,6 +569,17 @@ a.sidebar-item { text-decoration: none; }
 [data-theme="dark"] .book-chip-interactive.is-hover,
 [data-theme="dark"] .book-chip-interactive.is-active { background: var(--primary-10) !important; }
 .book-chip-interactive.is-focus { box-shadow: 0 0 0 2px var(--primary-50) !important; }
+/* Pas d'animation d'apparition dans la doc : plusieurs chips qui fadeUp au mount
+   distraient. Neutralisé uniquement sous /ds (la prod garde son animation). */
+.ds-section .book-chip { animation: none; }
+
+/* États forcés d'un item de menu pour la doc — mirror de .dropdown-item:hover /
+   :active de library.css (hover bg --primary-5 + color --primary-50 ; active
+   bg --primary-10). Le destructif et le disabled se posent en vrai (.is-destructive,
+   attribut disabled), pas besoin de classe forcée. */
+.dropdown-item.is-hover { background: var(--primary-5) !important; color: var(--primary-50) !important; }
+[data-theme="dark"] .dropdown-item.is-hover { background: var(--primary-5) !important; color: var(--primary-40) !important; }
+.dropdown-item.is-active { background: var(--primary-10) !important; }
 
 /* ─── VIEW TOGGLE ─── */
 .view-btns-ds { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }

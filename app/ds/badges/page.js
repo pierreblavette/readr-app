@@ -1,4 +1,5 @@
 import DSSection from "../_components/DSSection";
+import Redline from "../_components/Redline";
 
 // height / font-size / padding lus dans library.css (.now-reading-date--*).
 const SIZES = [
@@ -13,18 +14,40 @@ export default function BadgesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Date badge · sizes</div>
         <div className="ds-card-body col">
-          {SIZES.map(([mod, h, use]) => (
-            <div key={mod} className="spacing-row">
-              <span className={`now-reading-date now-reading-date--${mod}`}>Started Apr 28</span>
-              <span className="spacing-label">--{mod}</span>
-              <span className="type-sample-meta">{h}px · {use}</span>
-            </div>
-          ))}
+          <div className="ds-states-grid ds-states-grid--boxed">
+            {SIZES.map(([mod]) => (
+              <div key={mod} className="ds-state-sample">
+                <span className={`now-reading-date now-reading-date--${mod}`}>{mod.toUpperCase()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">
+            {SIZES.map(([mod, h, use], i) => (
+              <span key={mod}>{i > 0 && <br />}<strong>--{mod}</strong> · {h}px · {use}</span>
+            ))}
+          </p>
         </div>
       </div>
 
       <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-head">Anatomy — XS → MD</div>
+        <div className="ds-card-body col">
+          {/* Une planche par taille (comme Buttons). Specimen strippé (règle globale :
+              sans radius, bg blanc) ; texte du badge forcé en --text pour rester
+              lisible une fois le fond retiré. Les bandes cotent le padding horizontal
+              (10 / 12 / 14) + la hauteur ; la largeur dépend du texte, on ne la cote pas. */}
+          <div className="ds-redline-board">
+            {SIZES.map(([mod]) => (
+              <div key={mod} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+                <Redline>
+                  <span className={`now-reading-date now-reading-date--${mod}`} style={{ color: "var(--text)" }}>{mod.toUpperCase()}</span>
+                </Redline>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">.now-reading-date · primary pill (base)</div>

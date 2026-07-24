@@ -1,4 +1,5 @@
 import DSSection from "../_components/DSSection";
+import Redline from "../_components/Redline";
 
 const KebabIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -47,15 +48,13 @@ export default function BookCardKebabPage() {
       <div className="ds-card">
         <div className="ds-card-head">Trigger</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid">
+          <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">Default</span>
               <button type="button" className="col-card-kebab" aria-haspopup="menu" aria-expanded="false" aria-label="More actions">
                 <KebabIcon />
               </button>
             </div>
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">Hover / Open</span>
               <button type="button" className="col-card-kebab" aria-haspopup="menu" aria-expanded="true" aria-label="More actions">
                 <KebabIcon />
               </button>
@@ -63,44 +62,43 @@ export default function BookCardKebabPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">.col-card-kebab</div>
-            <p>40×40, radius 8, fond transparent, svg 18. Hover et menu ouvert partagent le même style — l&apos;état ouvert est porté par <code>[aria-expanded=&quot;true&quot;]</code>, pas par une classe : l&apos;attribut d&apos;accessibilité est déjà la source de vérité, une classe en parallèle pourrait en diverger.</p>
-          </div>
+          <p className="ds-note">Deux cellules : repos (transparent) et <strong>ouvert</strong> (fond). Hover et menu ouvert partagent le même style, porté par <code>[aria-expanded=&quot;true&quot;]</code> et non une classe — l&apos;attribut d&apos;accessibilité est déjà la source de vérité, une classe en parallèle pourrait en diverger.</p>
         </div>
       </div>
 
       <div className="ds-card">
-        <div className="ds-card-head">Menus — items selon l&apos;état du livre</div>
+        <div className="ds-card-head">Menu — structure</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--top">
-            {MENUS.map(([state, items]) => (
-              <div key={state} className="ds-state-sample">
-                <span className="panel-section-eyebrow">{state}</span>
-                <Menu items={items} />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="ds-card-body col">
-          <p className="ds-note">Menus rendus <code>position: static</code> pour la doc. En usage réel ils sont portalisés (voir Positionnement). <strong>Share</strong> et <strong>Delete</strong> sont communs aux quatre états ; seul le bloc de tête change.</p>
-        </div>
-      </div>
-
-      <div className="ds-card">
-        <div className="ds-card-head">État désactivé — limite de lecture</div>
-        <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--top">
+          <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
-              <span className="panel-section-eyebrow">Limite atteinte</span>
-              <Menu items={["Start reading"]} disabledFirst />
+              <Menu items={MENUS[2][1]} />
             </div>
           </div>
         </div>
         <div className="ds-card-body col">
+          <p className="ds-note">Un seul menu montré — l&apos;état <strong>Reading</strong>, le plus fourni. Seul le <strong>bloc de tête</strong> change selon l&apos;état du livre (les items exacts sont de la logique produit, pas du DS) ; <strong>Share</strong> et <strong>Delete</strong> sont communs. Rendu <code>position: static</code> pour la doc (portalisé en usage réel, voir Positionnement). L&apos;anatomie du conteneur et de la cellule (padding, états, rayons imbriqués) vit dans <strong>Dropdown Menu</strong> — c&apos;est un composant partagé, Kebab n&apos;en est qu&apos;un consommateur.</p>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy — trigger</div>
+        <div className="ds-card-body col">
+          {/* Le bouton est enveloppé pour que boxSelector le cible en descendant :
+              cote 40×40 · r8. Le glyphe (18) est décrit dans le token-block. */}
+          <div className="ds-redline-board">
+            <Redline boxSelector=".col-card-kebab">
+              <div>
+                <button type="button" className="col-card-kebab" aria-label="More actions">
+                  <KebabIcon />
+                </button>
+              </div>
+            </Redline>
+          </div>
+        </div>
+        <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Start reading · disabled</div>
-            <p>Désactivé quand le nombre de lectures en cours atteint le plafond. L&apos;item reste <strong>visible</strong> plutôt que retiré : le faire disparaître laisserait l&apos;utilisateur sans explication. Un <code>title</code> porte la raison, et le handler sort en early return — l&apos;attribut <code>disabled</code> seul ne suffit pas à garantir qu&apos;aucune action ne passe.</p>
+            <div className="ds-token-name">.col-card-kebab</div>
+            <p>40×40, radius 8, fond transparent, svg 18 (trois points de 2px). Cible tactile de 40px. Fond transparent au repos, teinté à l&apos;ouverture — l&apos;état ouvert est porté par <code>[aria-expanded=&quot;true&quot;]</code>, pas par une classe : l&apos;attribut d&apos;accessibilité est déjà la source de vérité, une classe en parallèle pourrait en diverger.</p>
           </div>
         </div>
       </div>
