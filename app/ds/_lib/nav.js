@@ -7,7 +7,10 @@ export const NAV = {
   Components: ["badges", "book-card-kebab", "book-chip", "buttons", "checkbox", "chip", "dropdown", "inputs", "rating-stars", "segmented-pills", "toggle"],
   // Patterns = assemblages de composants + logique + layout (input + liste flottante
   // + async + clavier pour Autocomplete). Pas des briques uniques → groupe à part.
-  Patterns: ["autocomplete"],
+  Patterns: ["autocomplete", "modal"],
+  // Reference = pages utilitaires (mapping tokens, outils de dev). Ordre déclaré,
+  // hors ALPHA_GROUPS : ce n'est pas un inventaire d'atomes.
+  Reference: ["dev-tools"],
 };
 
 // Groupes triés alphabétiquement à l'affichage. Foundations en est exclu : son

@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -25,13 +25,26 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       const br = el.getBoundingClientRect();
       const bl = parseFloat(cs.borderLeftWidth) || 0;
       const brw = parseFloat(cs.borderRightWidth) || 0;
+      const bt = parseFloat(cs.borderTopWidth) || 0;
+      const bbw = parseFloat(cs.borderBottomWidth) || 0;
       const pl = parseFloat(cs.paddingLeft) || 0;
       const pr = parseFloat(cs.paddingRight) || 0;
+      const pt = parseFloat(cs.paddingTop) || 0;
+      const pb = parseFloat(cs.paddingBottom) || 0;
       const w = br.width, h = br.height;
 
+      // Padding horizontal (gauche/droite) → stries verticales, cotées en bas.
       const bands = [];
       if (pl) bands.push({ left: bl, width: pl, value: Math.round(pl) });
       if (pr) bands.push({ left: w - brw - pr, width: pr, value: Math.round(pr) });
+
+      // Padding vertical (haut/bas) → stries horizontales, cotées à droite (la
+      // gauche est prise par le crochet de hauteur). Les atomes (padding 0 X) ont
+      // pt/pb = 0 → aucune bande verticale, comportement inchangé ; ça n'apparaît
+      // que sur les composants à padding vertical réel (modal, footer, cards).
+      const vbands = [];
+      if (pt) vbands.push({ top: bt, height: pt, value: Math.round(pt) });
+      if (pb) vbands.push({ top: h - bbw - pb, height: pb, value: Math.round(pb) });
 
       // Enfants VISIBLES seulement : un input masqué (0×0, position absolue, ex.
       // la checkbox) fausserait sinon la boucle de gaps avec une bande parasite.
@@ -41,12 +54,21 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       });
 
       // Gaps réels entre enfants (flex gap) — mesurés, pas lus dans le CSS :
-      // ça couvre aussi les cas où un enfant porte sa propre marge.
-      for (let i = 0; i < kids.length - 1; i++) {
-        const a = kids[i].getBoundingClientRect();
-        const b = kids[i + 1].getBoundingClientRect();
-        const gap = b.left - a.right;
-        if (gap > 0.5) bands.push({ left: a.right - br.left, width: gap, value: Math.round(gap), strong: true });
+      // ça couvre aussi les cas où un enfant porte sa propre marge. noGaps : à
+      // couper quand l'espacement est un space-between/auto (footer d'actions) —
+      // la distance mesurée n'est pas un gap fixe et n'a rien à coter.
+      if (!noGaps) {
+        for (let i = 0; i < kids.length - 1; i++) {
+          const a = kids[i].getBoundingClientRect();
+          const b = kids[i + 1].getBoundingClientRect();
+          const hgap = b.left - a.right;
+          const vgap = b.top - a.bottom;
+          // Enfants côte à côte → gap horizontal (strie verticale). Enfants empilés
+          // (colonne : modal title/body/footer, cards) → gap vertical (strie
+          // horizontale), coté à droite comme les paddings verticaux.
+          if (hgap > 0.5) bands.push({ left: a.right - br.left, width: hgap, value: Math.round(hgap), strong: true });
+          else if (vgap > 0.5) vbands.push({ top: a.bottom - br.top, height: vgap, value: Math.round(vgap) });
+        }
       }
 
       // Cadre d'icône : offsetWidth inclut le padding 2px (box-sizing:content-box)
@@ -82,7 +104,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       // coins arrondis) et à arrondir le mat blanc du target.
       const rootRadius = parseFloat(cs.borderTopLeftRadius) || 0;
 
-      setM({ w, h: Math.round(h), bands, icons, box, rootRadius });
+      setM({ w, h: Math.round(h), bands, vbands, icons, box, rootRadius });
     };
 
     measure();
@@ -158,6 +180,15 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 }}
               />
             ))}
+            {/* Bandes de padding vertical (haut/bas) : stries horizontales pleine
+                largeur, inset du radius sur les côtés pour ne pas mordre les coins. */}
+            {m.vbands.map((b, i) => (
+              <span
+                key={`vb${i}`}
+                className="ds-redline-band"
+                style={{ top: b.top, height: b.height, left: m.rootRadius, right: m.rootRadius }}
+              />
+            ))}
             {m.icons.map((ic, i) => (
               <span key={`i${i}`} className="ds-redline-iconframe" style={{ left: ic.left, top: ic.top, width: ic.width, height: ic.height }}>
                 {iconCallout[i] && (
@@ -186,6 +217,18 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 style={{ left: b.left + b.width / 2, "--lead": rows[i] ? "30px" : "14px" }}
               >
                 <span className="ds-redline-lead" />
+                <span className="ds-redline-num">{b.value}</span>
+              </span>
+            ))}
+            {/* Cotes des paddings verticaux : à droite du specimen, trait horizontal
+                depuis le bord droit vers le nombre. */}
+            {m.vbands.map((b, i) => (
+              <span
+                key={`vc${i}`}
+                className="ds-redline-vcallout"
+                style={{ top: b.top + b.height / 2 }}
+              >
+                <span className="ds-redline-vlead" />
                 <span className="ds-redline-num">{b.value}</span>
               </span>
             ))}
