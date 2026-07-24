@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import DSSection from "../_components/DSSection";
 import { useTheme } from "../_components/ThemeContext";
 
@@ -21,17 +22,18 @@ const ListIcon = () => (
   </svg>
 );
 
-function ViewToggle({ active }) {
+function ViewToggle({ view, setView }) {
   return (
     <div className="view-btns" role="tablist">
-      <button type="button" className={`view-btn${active === "grid" ? " active" : ""}`} aria-label="Grid view"><GridIcon /></button>
-      <button type="button" className={`view-btn${active === "list" ? " active" : ""}`} aria-label="List view"><ListIcon /></button>
+      <button type="button" onClick={() => setView("grid")} className={`view-btn${view === "grid" ? " active" : ""}`} aria-label="Grid view"><GridIcon /></button>
+      <button type="button" onClick={() => setView("list")} className={`view-btn${view === "list" ? " active" : ""}`} aria-label="List view"><ListIcon /></button>
     </div>
   );
 }
 
 export default function TogglePage() {
   const { theme, setTheme } = useTheme();
+  const [view, setView] = useState("grid");
   return (
     <DSSection
       id="toggle"
@@ -71,15 +73,12 @@ export default function TogglePage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
-              <ViewToggle active="grid" />
-            </div>
-            <div className="ds-state-sample">
-              <ViewToggle active="list" />
+              <ViewToggle view={view} setView={setView} />
             </div>
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Segment à deux cases, une seule active. La case active prend le fond primary plein ; le survol d&apos;une case inactive teinte en <span className="ds-token-chip">--primary-5</span>. Grille et liste sont mutuellement exclusives — pas de radio, juste deux boutons dont l&apos;un porte <span className="ds-class">.active</span>.</p>
+          <p className="ds-note">Specimen <strong>live</strong> — clique une case, elle bascule. Segment à deux cases, une seule active : la case active prend le fond primary plein, le survol d&apos;une case inactive teinte en <span className="ds-token-chip">--primary-5</span>. Grille et liste sont mutuellement exclusives — pas de radio, juste deux boutons dont l&apos;un porte <span className="ds-class">.active</span>.</p>
           <div className="ds-token-block">
             <div className="ds-token-name">Container</div>
             <p>Rangée flex, height 40, <code>outline: 1.5px</code> <span className="ds-token-chip">--border-subtle</span>, radius 8, <code>overflow: hidden</code> (les coins des cases suivent). Un seul contour extérieur, pas de bordure par case.</p>

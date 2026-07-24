@@ -100,15 +100,15 @@ export default function TypographyPage() {
         <div className="ds-card-head">Responsive — fixed vs fluid</div>
         <div className="ds-card-body col">
           <p className="ds-note">
-            The scale above is the <strong>desktop reference</strong>. Almost every tier is <strong>fixed</strong> — its value holds at every viewport. Only two things shift below <span className="ds-token-chip">600px</span> :
+            The scale above is the <strong>desktop reference</strong>. Almost every tier is <strong>fixed</strong> — its value holds at every viewport. Only two things shift below <code>600px</code> :
           </p>
           <div className="ds-token-block">
             <div className="ds-token-name">Page title — fluid</div>
-            <p><span className="ds-class">.page-title</span> drops from <strong>48px → 40px</strong> at ≤600px. Line-height (1) and tracking (−0.03em) are unchanged — only the size scales down so the largest title never crowds a phone screen.</p>
+            <p><span className="ds-class">.page-title</span> drops from <code>48px → 40px</code> at <code>≤600px</code>. Line-height (<code>1</code>) and tracking (<code>−0.03em</code>) are unchanged — only the size scales down so the largest title never crowds a phone screen.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Form controls — anti-zoom</div>
-            <p>Inputs, textareas and selects jump to <strong>16px</strong> at ≤600px. Not an aesthetic choice : below 16px iOS Safari auto-zooms on focus, so this is the floor that prevents it.</p>
+            <p>Inputs, textareas and selects jump to <code>16px</code> at <code>≤600px</code>. Not an aesthetic choice : below <code>16px</code> iOS Safari auto-zooms on focus, so this is the floor that prevents it.</p>
           </div>
         </div>
       </div>
@@ -119,20 +119,20 @@ export default function TypographyPage() {
         <div className="ds-card-body col">
           <p className="ds-note">Leading opens up as text gets smaller and lines get longer — tight for display, generous for long-form reading.</p>
           <div className="ds-token-block">
-            <div className="ds-token-name">Display &amp; titles · 1 – 1.2</div>
-            <p>Large type needs little leading — the glyphs already carry the vertical rhythm. <span className="ds-class">.page-title</span> = 1, <span className="ds-class">.panel-title</span> = 1.2.</p>
+            <div className="ds-token-name">Display &amp; titles · <code>1 – 1.2</code></div>
+            <p>Large type needs little leading — the glyphs already carry the vertical rhythm. <span className="ds-class">.page-title</span> = <code>1</code>, <span className="ds-class">.panel-title</span> = <code>1.2</code>.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Sub-titles · 1.3 – 1.35</div>
-            <p>Onboarding hero (1.3) and featured content (1.35) — a touch more air as the type shrinks.</p>
+            <div className="ds-token-name">Sub-titles · <code>1.3 – 1.35</code></div>
+            <p>Onboarding hero (<code>1.3</code>) and featured content (<code>1.35</code>) — a touch more air as the type shrinks.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">UI &amp; content · 1.5</div>
+            <div className="ds-token-name">UI &amp; content · <code>1.5</code></div>
             <p>The default reading rhythm for body copy and interface text.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Long-form prose · 1.7 – 1.8</div>
-            <p>Notes, synopses and multi-line descriptions get the loosest leading for sustained reading (<span className="ds-class">.ds-note</span> = 1.7).</p>
+            <div className="ds-token-name">Long-form prose · <code>1.7 – 1.8</code></div>
+            <p>Notes, synopses and multi-line descriptions get the loosest leading for sustained reading (<span className="ds-class">.ds-note</span> = <code>1.7</code>).</p>
           </div>
         </div>
       </div>
@@ -143,16 +143,16 @@ export default function TypographyPage() {
         <div className="ds-card-body col">
           <p className="ds-note">Size drives tracking : tighten large type, open up small caps, leave body text alone.</p>
           <div className="ds-token-block">
-            <div className="ds-token-name">Titles · −0.03 to −0.02em</div>
-            <p>Large display type is tightened so letters don&apos;t drift apart : <strong>−0.03em</strong> on the 48px page title, <strong>−0.02em</strong> on 20–28px titles.</p>
+            <div className="ds-token-name">Titles · <code>−0.03 to −0.02em</code></div>
+            <p>Large display type is tightened so letters don&apos;t drift apart : <code>−0.03em</code> on the <code>48px</code> page title, <code>−0.02em</code> on <code>20–28px</code> titles.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Body &amp; UI · 0</div>
+            <div className="ds-token-name">Body &amp; UI · <code>0</code></div>
             <p>Content, metadata and interactive text use the font&apos;s natural spacing — no adjustment.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Uppercase eyebrow · +0.08em</div>
-            <p>Capitals read cramped by default, so eyebrows are opened up : <span className="ds-class">.panel-section-eyebrow</span> at <strong>+0.08em</strong>.</p>
+            <div className="ds-token-name">Uppercase eyebrow · <code>+0.08em</code></div>
+            <p>Capitals read cramped by default, so eyebrows are opened up : <span className="ds-class">.panel-section-eyebrow</span> at <code>+0.08em</code>.</p>
           </div>
         </div>
       </div>

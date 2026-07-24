@@ -79,14 +79,14 @@ export default function ColorsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note"><span className="ds-token-chip">--primary-N</span> · anchor (<span className="ds-token-chip">--primary-50</span>) = <span className="ds-token-chip">--accent</span> (#4959E6)</p>
+          <p className="ds-note"><span className="ds-token-chip">--primary-N</span> · anchor (<span className="ds-token-chip">--primary-50</span>) = <span className="ds-token-chip">--accent</span> (<code>#4959E6</code>)</p>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (#FAFAFF)</div>
-            <p>ultra-subtle tint used for card hover states (.quote-card, .book-card, .now-reading-card, .list-row, .list-table thead tr). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (.book-chip-interactive at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
+            <div className="ds-token-name"><span className="ds-token-chip">--primary-3</span> (<code>#FAFAFF</code>)</div>
+            <p>ultra-subtle tint used for card hover states (<span className="ds-class">.quote-card</span>, <span className="ds-class">.book-card</span>, <span className="ds-class">.now-reading-card</span>, <span className="ds-class">.list-row</span>, <span className="ds-class">.list-table thead tr</span>). One tier below <span className="ds-token-chip">--primary-5</span> so secondary tinted buttons inside (<span className="ds-class">.book-chip-interactive</span> at <span className="ds-token-chip">--primary-5</span>) stay visible without blending into the hovered card.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Dark mode override</div>
-            <p><span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--primary-5</span> and <span className="ds-token-chip">--primary-10</span> resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <span className="ds-token-chip">--card</span> #1E1E1E to preserve visual rendering: <span className="ds-token-chip">--primary-3</span>=#222432 (card hover), <span className="ds-token-chip">--primary-5</span>=#232536 (button bg), <span className="ds-token-chip">--primary-10</span>=#272B4A (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <span className="ds-class">.list-row</span> hover (parent <span className="ds-class">.books-list</span> on <span className="ds-token-chip">--card</span>) looked different from <span className="ds-class">.now-reading-card</span> hover (no parent bg, mixed with <span className="ds-token-chip">--bg</span>).</p>
+            <p><span className="ds-token-chip">--primary-3</span>, <span className="ds-token-chip">--primary-5</span> and <span className="ds-token-chip">--primary-10</span> resolve to <strong>solid colors</strong> in dark theme (not rgba). Computed over the dominant card baseline <span className="ds-token-chip">--card</span> <code>#1E1E1E</code> to preserve visual rendering: <span className="ds-token-chip">--primary-3</span> = <code>#222432</code> (card hover), <span className="ds-token-chip">--primary-5</span> = <code>#232536</code> (button bg), <span className="ds-token-chip">--primary-10</span> = <code>#272B4A</code> (button hover stronger). Solid (vs rgba) so render is identical regardless of actual parent baseline — fixes the historical inconsistency where <span className="ds-class">.list-row</span> hover (parent <span className="ds-class">.books-list</span> on <span className="ds-token-chip">--card</span>) looked different from <span className="ds-class">.now-reading-card</span> hover (no parent bg, mixed with <span className="ds-token-chip">--bg</span>).</p>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default function ColorsPage() {
             />
           ))}
           </div>
-          <p className="ds-note"><span className="ds-token-chip">--dark-N</span> · base #0D0F1A · only the steps actually used in the codebase</p>
+          <p className="ds-note"><span className="ds-token-chip">--dark-N</span> · base <code>#0D0F1A</code> · only the steps actually used in the codebase</p>
         </div>
       </div>
 
@@ -125,7 +125,7 @@ export default function ColorsPage() {
             />
           ))}
           </div>
-          <p className="ds-note"><span className="ds-token-chip">--light-N</span> · base #F5F6FF · only the steps actually used in the codebase</p>
+          <p className="ds-note"><span className="ds-token-chip">--light-N</span> · base <code>#F5F6FF</code> · only the steps actually used in the codebase</p>
         </div>
       </div>
 

@@ -1019,6 +1019,7 @@ a.sidebar-item { text-decoration: none; }
    (--cols3 : rangées de tuiles égales · --auto : previews larges auto-adaptées). */
 .ds-tile-grid { display: grid; gap: 20px; width: 100%; align-items: start; }
 .ds-tile-grid--cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ds-tile-grid--cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .ds-tile-grid--auto  { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 @media (max-width: 600px) {
   .ds-tile-grid--cols3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

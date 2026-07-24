@@ -3,6 +3,7 @@ import { useState } from "react";
 import Wordmark from "@/components/brand/Wordmark";
 import SymbolMark from "@/components/brand/SymbolMark";
 import LogoLockup from "@/components/brand/LogoLockup";
+import LogoConstruction from "../_components/LogoConstruction";
 import DSSection from "../_components/DSSection";
 
 export default function LogoPage() {
@@ -182,11 +183,11 @@ export default function LogoPage() {
       <div className="ds-card">
         <div className="ds-card-head">Construction — grille</div>
         <div className="ds-card-body col">
-          <div className="ds-tile-grid ds-tile-grid--cols3">
+          <div className="ds-tile-grid ds-tile-grid--cols2">
             {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (
               <div key={kind} className="lockup-card">
                 <span className="panel-section-eyebrow">{label}</span>
-                <img src={`/brand/logo-construction-${kind}.svg`} alt={`Grille de construction Readr — ${label}`} className="lockup-preview" />
+                <LogoConstruction variant={kind} />
               </div>
             ))}
           </div>

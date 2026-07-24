@@ -48,8 +48,8 @@ export default function BookChipPage() {
   return (
     <DSSection
       id="book-chip"
-      title="Book Chip"
-      sub="Bloc de référence d'un livre — vignette de couverture + titre + auteur. Quatre modes selon les props passées."
+      title="Book Row"
+      sub="Ligne de référence d'un livre (media object) — vignette de couverture + titre + auteur. Quatre modes selon les props passées. Classe et source historiquement nommées .book-chip / BookChip.js."
     >
       {/* ─────────── 1. STATES — chip interactif ─────────── */}
       <div className="ds-card">

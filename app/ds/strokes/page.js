@@ -1,10 +1,10 @@
 import DSSection from "../_components/DSSection";
 
 const SAMPLES = [
-  { sample: { borderRadius: 6, background: "var(--card)", border: "1.5px solid var(--border-subtle)" }, label: "Component · 1.5px var(--border-subtle)" },
-  { sample: { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)", background: "transparent" }, label: "Divider · 1px var(--border-subtle)" },
-  { sample: { borderRadius: 6, background: "var(--card)", border: "2px solid var(--border)" }, label: "Spinner ring · 2px solid var(--border)" },
-  { sample: { borderRadius: 6, background: "var(--card)", border: "2px dashed var(--border)" }, label: "Dropzone · 2px dashed var(--border)" },
+  { sample: { borderRadius: 6, background: "var(--card)", border: "1.5px solid var(--border-subtle)" }, label: "Component frame" },
+  { sample: { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)", background: "transparent" }, label: "Divider" },
+  { sample: { borderRadius: 6, background: "var(--card)", border: "2px solid var(--border)" }, label: "Spinner ring" },
+  { sample: { borderRadius: 6, background: "var(--card)", border: "2px dashed var(--border)" }, label: "Dropzone" },
 ];
 
 export default function StrokesPage() {
@@ -16,20 +16,20 @@ export default function StrokesPage() {
         <div className="ds-card-head">Application rules</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Component strokes · 1.5px solid var(--border-subtle)</div>
-            <p>Buttons, inputs, cards, containers — default frame stroke across the app.</p>
+            <div className="ds-token-name">Component frame</div>
+            <p><code>1.5px solid</code> <span className="ds-token-chip">--border-subtle</span> — default frame stroke on buttons, inputs, cards and containers across the app.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Dividers · 1px solid var(--border-subtle)</div>
-            <p>Row separators, section lines — thinner than component strokes.</p>
+            <div className="ds-token-name">Divider</div>
+            <p><code>1px solid</code> <span className="ds-token-chip">--border-subtle</span> — row separators and section lines, thinner than component frames.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Spinner ring · 2px solid var(--border)</div>
-            <p>Single usage — <span className="ds-class">.panel-spinner</span> loading ring needs stronger contrast.</p>
+            <div className="ds-token-name">Spinner ring</div>
+            <p><code>2px solid</code> <span className="ds-token-chip">--border</span> — single usage, <span className="ds-class">.panel-spinner</span>; the loading ring needs stronger contrast.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Dropzone · 2px dashed var(--border)</div>
-            <p>Single usage — <span className="ds-class">.import-dropzone</span> dashed border for import file/photo zones.</p>
+            <div className="ds-token-name">Dropzone</div>
+            <p><code>2px dashed</code> <span className="ds-token-chip">--border</span> — single usage, <span className="ds-class">.import-dropzone</span>; dashed border for import file/photo zones.</p>
           </div>
         </div>
       </div>

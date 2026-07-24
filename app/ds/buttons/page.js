@@ -28,12 +28,12 @@ const ANATOMY = [
 const SIZES = [["btn-xs", "XS"], ["btn-sm", "SM"], ["btn-md", "MD"], ["btn-lg", "LG"], ["btn-xl", "XL"]];
 
 const MAPPING = [
-  ["Primary CTA", "btn-primary btn-md", [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"]],
-  ["Outline (default)", "btn-outline btn-md", [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".col-delete-btn"]],
-  ["Icon toggle", "btn-icon btn-md", [".view-btn", ".col-emoji-btn"]],
-  ["Text link (inline, not dimensional)", "btn-link / btn-link--critical", [".btn-link · 14/600 · hover --primary-60 + underline", ".btn-link--critical · destructive variant", ".footer-link · 11/500 (footer-specific)", ".quote-see-more · 14/600 (quote/cast expand-collapse)"]],
-  ["Sidebar (on dark bg)", "(contextual)", [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"]],
-  ["AI action", "btn-ai btn-md", [".panel-cast-action (Generate state)"]],
+  { role: "Primary CTA", canon: "btn-primary btn-md", consumers: [".add-btn", ".empty-cta", ".panel-quotes-add", ".panel-move-btn"] },
+  { role: "Outline (default)", canon: "btn-outline btn-md", consumers: [".edit-btn", ".dropdown-btn", ".modal-cancel", ".panel-delete-btn", ".import-change-file", ".col-delete-btn"] },
+  { role: "Icon toggle", canon: "btn-icon btn-md", consumers: [".view-btn", ".col-emoji-btn"] },
+  { role: "Text link", canon: "btn-link / btn-link--critical", consumers: [[".btn-link", "inline action"], [".btn-link--critical", "destructive"], [".footer-link", "footer-specific"], [".quote-see-more", "expand / collapse"]] },
+  { role: "Sidebar (on dark bg)", canon: "(contextual)", consumers: [".sel-btn", ".sel-confirm", ".sel-cancel", ".sel-select-all"] },
+  { role: "AI action", canon: "btn-ai btn-md", consumers: [[".panel-cast-action", "Generate state"]] },
 ];
 
 const PlusIcon = ({ strokeWidth = 2.2 }) => (
@@ -115,7 +115,7 @@ export default function ButtonsPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
-              <button className="btn btn-solid btn-md">
+              <button className="btn btn-primary btn-solid btn-md">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
               </button>
             </div>
@@ -123,13 +123,13 @@ export default function ButtonsPage() {
               <button className="btn btn-primary btn-md"><span>Text only</span></button>
             </div>
             <div className="ds-state-sample">
-              <button className="btn btn-secondary btn-md">
+              <button className="btn btn-primary btn-md">
                 <PlusIcon strokeWidth={2} />
                 <span>Icon left</span>
               </button>
             </div>
             <div className="ds-state-sample">
-              <button className="btn btn-outline btn-md">
+              <button className="btn btn-primary btn-md">
                 <span>Icon right</span>
                 <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
               </button>
@@ -270,10 +270,19 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Usage · reference</div>
         <div className="ds-card-body col">
-          {MAPPING.map(([role, canon, classes]) => (
+          {MAPPING.map(({ role, canon, consumers }) => (
             <div key={role} className="ds-token-block">
-              <div className="ds-token-name">{role} · {canon}</div>
-              <p>{classes.map((c, i) => <span key={c}>{i > 0 ? " · " : ""}<code>{c}</code></span>)}</p>
+              <div className="ds-token-name">{role}</div>
+              <p>
+                <span className="ds-class">{canon}</span> →{consumers.map((c) => {
+                  const [cls, desc] = Array.isArray(c) ? c : [c, null];
+                  return (
+                    <span key={cls}>
+                      <span className="ds-class">{cls}</span>{desc ? ` (${desc})` : ""}
+                    </span>
+                  );
+                })}
+              </p>
             </div>
           ))}
         </div>

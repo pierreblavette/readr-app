@@ -24,6 +24,17 @@ export default function DSLayout({ children }) {
   // Le layout ne remonte pas entre pages sœurs → fermer le drawer à la navigation.
   useEffect(() => { setMobileSidebarOpen(false); }, [pathname]);
 
+  // Soft-nav d'une page longue (ex. Typography) vers une courte (ex. Spacing) :
+  // sur certains navigateurs le document garde un scrollHeight périmé un frame après
+  // le swap React → la page neuve paraît figée/non-scrollable jusqu'à un repaint (la
+  // famille « se répare au hover »). On force scroll-en-haut + un reflow au frame
+  // suivant pour recalculer la hauteur contre le nouveau contenu. Scoppé au /ds.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const raf = requestAnimationFrame(() => { void document.body.offsetHeight; });
+    return () => cancelAnimationFrame(raf);
+  }, [pathname]);
+
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
 
   return (

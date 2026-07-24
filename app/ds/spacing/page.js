@@ -40,18 +40,18 @@ export default function SpacingPage() {
         <div className="ds-card-head">Page rhythm — applied scale</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.main-wrap</span> · 64px</div>
+            <div className="ds-token-name"><span className="ds-cn">.main-wrap</span> · <code>64px</code></div>
             <p>Top-level page blocks — separates page-title, search-row, content section.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.dictionary-wrap</span> · 64px</div>
+            <div className="ds-token-name"><span className="ds-cn">.dictionary-wrap</span> · <code>64px</code></div>
             <p>Mirrors <span className="ds-class">.main-wrap</span> — between lookup form and saved section.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.books-section</span> / <span className="ds-cn">.quotes-section</span> / <span className="ds-cn">.dictionary-saved-section</span> · 16px</div>
+            <div className="ds-token-name"><span className="ds-cn">.books-section</span> / <span className="ds-cn">.quotes-section</span> / <span className="ds-cn">.dictionary-saved-section</span> · <code>16px</code></div>
             <p>Internal sub-header (eyebrow / result-line) → content list.</p>
           </div>
-          <p className="ds-note">Two-tier rhythm : <strong>64px</strong> between major page blocks, <strong>16px</strong> inside a section. Keeps breathing at the top while densifying list content.</p>
+          <p className="ds-note">Two-tier rhythm : <code>64px</code> between major page blocks, <code>16px</code> inside a section. Keeps breathing at the top while densifying list content.</p>
         </div>
       </div>
 

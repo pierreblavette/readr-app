@@ -32,16 +32,16 @@ export default function CellRowPage() {
         <div className="ds-card-head">Modifiers</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.cell-row</span> · display: flex · align-items: center · gap: 8 · min-width: 0</div>
-            <p>Always pair with a size modifier.</p>
+            <div className="ds-token-name"><span className="ds-cn">.cell-row</span></div>
+            <p><code>display: flex</code> · <code>align-items: center</code> · <code>gap: 8</code> · <code>min-width: 0</code>. Always pair with a size modifier.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">--xs / --sm / --md / --lg · min-height: 20 / 24 / 32 / 40</div>
-            <p>Use <code>min-height</code> (not fixed) so multi-line content can grow.</p>
+            <div className="ds-token-name">Size modifiers</div>
+            <p><span className="ds-cn">--xs</span> / <span className="ds-cn">--sm</span> / <span className="ds-cn">--md</span> / <span className="ds-cn">--lg</span> set <code>min-height</code> to <code>20</code> / <code>24</code> / <code>32</code> / <code>40</code>. Use <code>min-height</code> (not fixed) so multi-line content can grow.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">--between · justify-content: space-between</div>
-            <p>For label-left / meta-right rows.</p>
+            <div className="ds-token-name">Alignment modifier</div>
+            <p><span className="ds-cn">--between</span> sets <code>justify-content: space-between</code> — for label-left / meta-right rows.</p>
           </div>
         </div>
       </div>
@@ -51,24 +51,24 @@ export default function CellRowPage() {
         <div className="ds-card-head">Applied — current usage</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.overview-hero-label-row</span> · --sm + --between</div>
-            <p>Overview tab → 3 hero cards (Books finished / Quotes / Words saved).</p>
+            <div className="ds-token-name"><span className="ds-cn">.overview-hero-label-row</span></div>
+            <p><span className="ds-cn">--sm</span> + <span className="ds-cn">--between</span> — Overview tab → 3 hero cards (Books finished / Quotes / Words saved).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.modal-toggle-row</span> · --lg</div>
-            <p>AddModal → Manual / Photo tab → "Mark as reading" checkbox.</p>
+            <div className="ds-token-name"><span className="ds-cn">.modal-toggle-row</span></div>
+            <p><span className="ds-cn">--lg</span> — AddModal → Manual / Photo tab → &quot;Mark as reading&quot; checkbox.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.search-row</span> · --lg + --between</div>
-            <p>Search bars across My Library / Wishlist / Quotes / Dictionary / Collections (5 callsites).</p>
+            <div className="ds-token-name"><span className="ds-cn">.search-row</span></div>
+            <p><span className="ds-cn">--lg</span> + <span className="ds-cn">--between</span> — search bars across My Library / Wishlist / Quotes / Dictionary / Collections (5 callsites).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.sidebar-appearance-row</span> · --lg</div>
-            <p>Sidebar bottom → Appearance label + theme toggle.</p>
+            <div className="ds-token-name"><span className="ds-cn">.sidebar-appearance-row</span></div>
+            <p><span className="ds-cn">--lg</span> — sidebar bottom → Appearance label + theme toggle.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.overview-goal-progress-row</span> · --md + --between</div>
-            <p>Overview → Reading goal card → "3 / 24 books · 13%" line (overrides align-items: baseline locally).</p>
+            <div className="ds-token-name"><span className="ds-cn">.overview-goal-progress-row</span></div>
+            <p><span className="ds-cn">--md</span> + <span className="ds-cn">--between</span> — Overview → Reading goal card → &quot;3 / 24 books · 13%&quot; line (overrides <code>align-items: baseline</code> locally).</p>
           </div>
           <p className="ds-note">Local overrides (e.g. <span className="ds-class">.modal-toggle-row</span> keeps <code>gap: 10</code> for checkbox breathing room) are fine — primitive sets the stable axes (height, align, display), local class tunes nuances.</p>
         </div>
