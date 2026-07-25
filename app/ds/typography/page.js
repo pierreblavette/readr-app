@@ -45,16 +45,37 @@ export default function TypographyPage() {
   return (
     <DSSection id="typography" title="Typography" sub="One typeface — Plus Jakarta Sans — its scale, weights and responsive behaviour.">
 
-      {/* 1 — TYPEFACE */}
+      {/* 1 — HERO : usage réel (gauche) + identité de la fonte (droite) */}
       <div className="ds-card">
         <div className="ds-card-head">Typeface — Plus Jakarta Sans</div>
         <div className="ds-card-body col">
-          <div className="type-specimen">
-            <div className="type-specimen-hero">Aa</div>
-            <div className="type-specimen-pangram">The quick brown fox jumps over the lazy dog — 0123456789</div>
+          <div className="ds-preview-board">
+            <div className="ds-preview ds-type-preview">
+              <div className="ds-type-context">
+                <span className="panel-section-eyebrow">Now reading</span>
+                <h3 className="panel-title">The Left Hand of Darkness</h3>
+                <div className="panel-byline">
+                  <div className="panel-author">Ursula K. Le Guin</div>
+                  <div className="panel-meta">1969 · 304 pages · Science fiction</div>
+                </div>
+                <p className="panel-synopsis">A lone human envoy is sent to Gethen, a frozen world whose inhabitants can change their sex — testing everything he thought he knew about loyalty, love and betrayal.</p>
+              </div>
+              <div className="ds-type-idcard">
+                <div className="ds-type-idcard-id">
+                  <div className="ds-type-idcard-aa">Aa</div>
+                  <div className="ds-type-idcard-name">Plus Jakarta Sans</div>
+                  <div className="ds-type-idcard-pangram">The quick brown fox jumps over the lazy dog 0123456789</div>
+                </div>
+                <div className="ds-type-idcard-specs">
+                  <div className="ds-type-idcard-spec"><span>Weights</span><span className="ds-type-idcard-spec-val">400 – 800 · 5</span></div>
+                  <div className="ds-type-idcard-spec"><span>Sizes</span><span className="ds-type-idcard-spec-val">10 – 48px · 12</span></div>
+                  <div className="ds-type-idcard-spec"><span>Token</span><span className="ds-token-chip">--font-jakarta</span></div>
+                </div>
+              </div>
+            </div>
           </div>
           <p className="ds-note">
-            A single typeface across the whole app — UI and marketing alike. One family loaded means visual coherence and a lighter font payload. Loaded via <code>next/font</code> (self-hosted, subsetted, no FOUT), exposed as <span className="ds-token-chip">--font-jakarta</span>. Fallback stack : <code>-apple-system, BlinkMacSystemFont, sans-serif</code>.
+            À gauche, la hiérarchie sur un en-tête de <span className="ds-class">.book-panel</span> réel : eyebrow <span className="ds-class">.panel-section-eyebrow</span> (11/700) → titre <span className="ds-class">.panel-title</span> (28/700) → auteur <span className="ds-class">.panel-author</span> (15/500) → méta <span className="ds-class">.panel-meta</span> (14/500) → synopsis <span className="ds-class">.panel-synopsis</span> (16/500, lh 1.8). Une seule police — la hiérarchie tient par <strong>taille + graisse + couleur</strong>. Chargée via <code>next/font</code> (self-hosted, subsettée, no FOUT), exposée en <span className="ds-token-chip">--font-jakarta</span> ; fallback <code>-apple-system, BlinkMacSystemFont, sans-serif</code>.
           </p>
         </div>
       </div>

@@ -13,12 +13,15 @@ export default function LogoPage() {
   return (
     <DSSection id="logo" title="Logo" sub="The Readr logo — wordmark, symbol, and their usage rules.">
       <div className="ds-card">
-        <div className="ds-card-head">Contextes d'utilisation</div>
+        <div className="ds-card-head">Wordmark — standalone</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","#0F0F0F"],["logo-bg-dark","#FFFFFF"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
-              <div key={i} className={`logo-bg ${cls}`}>
-                <Wordmark className="logo-wordmark" style={{ color: col }} />
+            {[["logo-bg-page","#0F0F0F","Light"],["logo-bg-dark","#FFFFFF","Dark"],["logo-bg-accent","#FFFFFF","Accent"]].map(([cls,col,label]) => (
+              <div key={cls} className="lockup-card">
+                <span className="panel-section-eyebrow">{label}</span>
+                <div className={`logo-bg ${cls}`}>
+                  <Wordmark className="logo-wordmark" style={{ color: col }} />
+                </div>
               </div>
             ))}
           </div>
@@ -36,9 +39,12 @@ export default function LogoPage() {
         <div className="ds-card-head">Symbol — standalone</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","var(--primary-50)"],["logo-bg-dark","var(--primary-50)"],["logo-bg-accent","#FFFFFF"]].map(([cls,col],i) => (
-              <div key={i} className={`logo-bg ${cls}`}>
-                <SymbolMark className="logo-symbol" style={{ color: col }} />
+            {[["logo-bg-page","var(--primary-50)","Light"],["logo-bg-dark","var(--primary-50)","Dark"],["logo-bg-accent","#FFFFFF","Accent"]].map(([cls,col,label]) => (
+              <div key={cls} className="lockup-card">
+                <span className="panel-section-eyebrow">{label}</span>
+                <div className={`logo-bg ${cls}`}>
+                  <SymbolMark className="logo-symbol" style={{ color: col }} />
+                </div>
               </div>
             ))}
           </div>
@@ -181,7 +187,7 @@ export default function LogoPage() {
         </div>
       </div>
       <div className="ds-card">
-        <div className="ds-card-head">Construction — grille</div>
+        <div className="ds-card-head">Construction — grid</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols2">
             {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (

@@ -53,11 +53,21 @@ export default function ColorsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Text</div>
         <div className="ds-card-body col">
-          <div className="ds-swatch-grid">
-            <Swatch bg="var(--text)" title="Default" token="--text" light="#222" dark="#F0F0F0" />
-            <Swatch bg="var(--text-2)" title="Secondary" token="--text-2" light="#555" dark="#909090" />
-            <Swatch bg="var(--text-3)" title="Muted" token="--text-3" light="#777" dark="#555" />
-          </div>
+          {[
+            ["--text", "Default", "#222", "#F0F0F0"],
+            ["--text-2", "Secondary", "#555", "#909090"],
+            ["--text-3", "Muted", "#777", "#555"],
+          ].map(([token, name, light, dark]) => (
+            <div key={token} className="type-sample">
+              <div className="type-sample-preview">
+                <div style={{ fontSize: 18, fontWeight: 600, color: `var(${token})` }}>{name} — The quick brown fox jumps over</div>
+              </div>
+              <div className="type-sample-meta"><span className="ds-token-chip">{token}</span> {light} · {dark}</div>
+            </div>
+          ))}
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Trois niveaux de texte — même taille et graisse, seule la couleur varie. <span className="ds-token-chip">--text</span> titres &amp; contenu fort · <span className="ds-token-chip">--text-2</span> secondaire (auteur, méta) · <span className="ds-token-chip">--text-3</span> muté (hints, labels). La couleur seule est le signal le plus faible — jamais pour porter une hiérarchie à elle seule.</p>
         </div>
       </div>
 

@@ -546,6 +546,27 @@ a.sidebar-item { text-decoration: none; }
 .type-specimen-hero { font-size: 88px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--text); }
 .type-specimen-pangram { font-size: 18px; font-weight: 400; line-height: 1.6; color: var(--text-2); }
 
+/* Type preview — hero de la page Typography, posé dans la scène bleue .ds-preview
+   (mêmes padding/fond que la Preview des Components). Deux blocs : USAGE réel
+   (en-tête de BookPanel, classes app authentiques) | IDENTITÉ de la fonte. */
+.ds-type-preview { gap: 24px; flex-wrap: wrap; align-items: stretch; }
+.ds-type-context { display: flex; flex-direction: column; gap: 24px; flex: 1 1 360px; padding: 24px; background: var(--card); border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left; }
+/* Restaure les vraies métriques du synopsis : .ds-card-body.col p (0,2,1) les
+   écraserait sinon (15/--text/1.7). Préfixe .ds-card-body → 0,3,0, gagne. */
+.ds-card-body .ds-type-context .panel-synopsis { font-size: 16px; font-weight: 500; color: var(--text-2); line-height: 1.8; margin: 0; }
+
+/* Gap-driven, zéro margin : space-between colle le groupe identité en haut et les
+   specs en bas (cartes à hauteur égale), les gaps portent tout l'espacement. */
+.ds-type-idcard { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; flex: 1 1 220px; padding: 24px; background: var(--card); border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left; }
+.ds-type-idcard-id { display: flex; flex-direction: column; gap: 8px; }
+.ds-type-idcard-aa { font-size: 72px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--text); }
+.ds-type-idcard-name { font-size: 18px; font-weight: 700; color: var(--text); }
+.ds-type-idcard-pangram { font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--text-3); }
+.ds-type-idcard-specs { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-subtle); padding-top: 14px; }
+.ds-type-idcard-spec { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+.ds-type-idcard-spec > span:first-child { color: var(--text-2); }
+.ds-type-idcard-spec-val { color: var(--text); font-weight: 600; }
+
 /* ─── SPACING / SPEC ROWS ─── */
 /* Même contrat que .type-sample : le modèle (.ds-card-body > *) pose padding 20,
  * divider inset et gap 20 ; la row n'assume que le flex + l'alignement vertical.
