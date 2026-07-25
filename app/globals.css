@@ -71,6 +71,7 @@
   --transition:            background 0.25s, color 0.25s, border-color 0.25s;
   --shadow-md:             0 4px 16px rgba(73,89,230,0.12);
   --shadow-lg:             0 4px 20px rgba(73,89,230,0.18), 0 1px 6px rgba(73,89,230,0.10);
+  --shadow-xl:             0 8px 40px rgba(73,89,230,0.16), 0 2px 12px rgba(73,89,230,0.08);
   /* Neutral palette — tinted primary (only the tints actually used) */
   --dark-70:     rgba(13,15,26,0.70);
   --dark-80:     rgba(13,15,26,0.80);
@@ -143,6 +144,7 @@
   --ai-to:                 #7B89F8;
   --ghost-hover:           rgba(73,89,230,0.20);
   --shadow-lg:             0 6px 28px rgba(73,89,230,0.40);
+  --shadow-xl:             0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30);
   /* Solid dark equivalents of light tints — computed over card baseline #1E1E1E
      (the dominant baseline: cards, books-list, modals all sit on var(--card)).
      Solid (not rgba) so render is identical regardless of actual parent baseline. */

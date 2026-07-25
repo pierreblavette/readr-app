@@ -436,8 +436,8 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
         {activeTab === 'file' && (
           <div className="import-tab-pane">
             {previewBooks.length === 0 ? (
-              <div
-                className="import-dropzone"
+              <GradientDropzone
+                solid
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add('dragover'); }}
                 onDragLeave={e => e.currentTarget.classList.remove('dragover')}
@@ -451,7 +451,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
                   <div className="import-dropzone-title">Drop a file or click to browse</div>
                   <div className="import-dropzone-sub">JSON (Readr) · CSV (Goodreads)</div>
                 </div>
-              </div>
+              </GradientDropzone>
             ) : (
               <button className="import-change-file" onClick={() => fileInputRef.current?.click()}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
