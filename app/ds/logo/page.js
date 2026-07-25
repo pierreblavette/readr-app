@@ -114,7 +114,7 @@ export default function LogoPage() {
               <span>Replay</span>
             </button>
           </div>
-          <div className="ds-note">Les 3 traits se tracent dans l&apos;ordre de construction (couche haute + pointe, crochet du R, couche basse), stagger 0.2s, draw 0.5s. Deux calques echo à 20% précèdent le trait plein de 0.2s chacun. Le symbole est donc plein à 1.3s. Le wordmark étant vectorisé, il ne se trace pas : il enchaîne en fondu de 0.5s à partir de 1.4s, soit une respiration de 0.1s après le dernier trait. Total ≈ 1.9s. Le tracé plein est l&apos;état CSS par défaut — l&apos;animation pose l&apos;état vide, jamais l&apos;inverse, donc une animation qui ne joue pas laisse le logo visible. En <code>prefers-reduced-motion</code>, tout est affiché plein et les calques echo sont retirés.</div>
+          <div className="ds-note">Les 3 traits se tracent dans l&apos;ordre de construction (couche haute + pointe, crochet du R, couche basse), stagger 0.2s, draw 0.5s. Deux calques echo à 20% précèdent le trait plein de 0.2s chacun. Le symbole est donc plein à 1.3s. Le wordmark étant vectorisé, il ne se trace pas : ses 5 lettres arrivent en cascade depuis la droite (translateX 48→0 + fondu, ease-out), décalées de 0.1s, la 1re à 0.5s — elles apparaissent donc pendant que le symbole finit de se tracer. Total ≈ 1.6s. Le tracé plein est l&apos;état CSS par défaut — l&apos;animation pose l&apos;état vide, jamais l&apos;inverse, donc une animation qui ne joue pas laisse le logo visible. En <code>prefers-reduced-motion</code>, tout est affiché plein et les calques echo sont retirés.</div>
         </div>
       </div>
       <div className="ds-card">
