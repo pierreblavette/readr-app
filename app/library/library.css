@@ -810,7 +810,9 @@
   position: absolute; top: calc(100% + 6px); right: 0;
   background: var(--bg); border: 1.5px solid var(--border-subtle);
   border-radius: 10px; padding: 4px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  /* Ombre bleue iso Modal (rgba primary-50), à la géométrie serrée du menu :
+     même teinte + opacités que .modal (0.16 / 0.08), blur/offset réduits. */
+  box-shadow: 0 4px 16px rgba(73,89,230,0.16), 0 2px 8px rgba(73,89,230,0.08);
   z-index: 200; width: fit-content;
   animation: dropdownIn 0.12s cubic-bezier(0.16,1,0.3,1);
 }
@@ -2782,11 +2784,11 @@
 .modal-toggle-input:focus-visible ~ .modal-toggle-check {
   box-shadow: 0 0 0 2px var(--primary-50);
 }
-.modal-toggle-row:hover:not(.is-disabled) .modal-toggle-check {
+.modal-toggle-row:hover:not(.is-disabled):not(.is-readonly) .modal-toggle-check {
   border-color: var(--primary-50);
   background: var(--primary-5);
 }
-[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled) .modal-toggle-check {
+[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled):not(.is-readonly) .modal-toggle-check {
   border-color: var(--primary-50);
   background: var(--primary-5);
 }
@@ -2795,7 +2797,7 @@
   background: var(--primary-50);
   border-color: transparent;
 }
-.modal-toggle-row:hover:not(.is-disabled) .modal-toggle-input:checked ~ .modal-toggle-check {
+.modal-toggle-row:hover:not(.is-disabled):not(.is-readonly) .modal-toggle-input:checked ~ .modal-toggle-check {
   background: var(--primary-60);
   border-color: transparent;
 }
@@ -2803,7 +2805,7 @@
   background: var(--primary-40);
   border-color: transparent;
 }
-[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled) .modal-toggle-input:checked ~ .modal-toggle-check {
+[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled):not(.is-readonly) .modal-toggle-input:checked ~ .modal-toggle-check {
   background: var(--primary-50);
   border-color: transparent;
 }
@@ -2825,6 +2827,17 @@
 }
 [data-theme="dark"] .modal-toggle-input:indeterminate ~ .modal-toggle-check {
   background: var(--primary-40);
+}
+/* Hover sur indeterminate : miroir du checked (bg --primary-60/50) — sans cette
+   règle, le hover générique repasse le carré en --primary-5 clair et le tiret
+   blanc devient invisible. */
+.modal-toggle-row:hover:not(.is-disabled):not(.is-readonly) .modal-toggle-input:indeterminate ~ .modal-toggle-check {
+  background: var(--primary-60);
+  border-color: transparent;
+}
+[data-theme="dark"] .modal-toggle-row:hover:not(.is-disabled):not(.is-readonly) .modal-toggle-input:indeterminate ~ .modal-toggle-check {
+  background: var(--primary-50);
+  border-color: transparent;
 }
 /* Read-only : non éditable, mais PAS grisé comme disabled — pleine opacité,
    contour neutre, aucune réaction au survol. La coche s'affiche en gris. */
