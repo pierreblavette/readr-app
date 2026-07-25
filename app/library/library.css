@@ -6171,17 +6171,19 @@ button.book-chip {
 
 .brand-draw-echo { opacity: 0.2; }
 
-/* Wordmark is outlined (fill), so it can't be drawn — it fades in once the
-   symbol is fully traced. The symbol lands at 1.3s (see SymbolStrokes), so the
-   0.1s gap here is deliberate : the text must read as a beat after the mark,
-   never over its last frame. Bump this delay if the stagger there changes. */
-.brand-draw-wordmark {
+/* Wordmark is outlined (fill), so it can't be drawn — instead its 5 letters cascade
+   in from the right, each sliding + fading, staggered 0.1s (Figma 2026-07 refresh :
+   x 75→0 + opacity 0→1, ease-out). The first lands as the symbol strokes finish
+   (delays are inline per letter, see LogoLockup). The letters overshoot the tight
+   804×148 viewBox during the slide, so the animated SVG must not clip them. */
+.brand-draw { overflow: visible; }
+.brand-draw-letter {
   opacity: 1;
-  animation: brandWordmarkIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 1.4s both;
+  animation: brandLetterIn 0.7s cubic-bezier(0, 0, 0.25, 1) both;
 }
-@keyframes brandWordmarkIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@keyframes brandLetterIn {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6190,7 +6192,7 @@ button.book-chip {
     stroke-dasharray: none;
     stroke-dashoffset: 0;
   }
-  .brand-draw-wordmark { animation: none; opacity: 1; }
+  .brand-draw-letter { animation: none; opacity: 1; transform: none; }
   /* Ghost layers only read as a trail while drawing — they sit exactly under the
      opaque stroke, so hide them outright rather than stack them for nothing. */
   .brand-draw-echo { display: none; }

@@ -3,7 +3,14 @@ import {
   LOCKUP_SYMBOL_TRANSFORM,
   LOCKUP_VIEWBOX,
   LOCKUP_WORDMARK_PATH,
+  LOCKUP_WORDMARK_LETTERS,
 } from "./symbolGeometry";
+
+// The wordmark isn't drawn (it's filled) — when animated, its letters cascade in
+// from the right. First letter lands as the symbol strokes finish, each next 0.1s
+// after (Figma 2026-07). Per-letter delay is inline ; the keyframe lives in library.css.
+const LETTER_DELAY = 0.5;
+const LETTER_STAGGER = 0.1;
 
 // Horizontal lockup : symbol (primary-50 by default) + wordmark (currentColor).
 // Symbol and wordmark are height-aligned by design — both span the full 148.
@@ -33,11 +40,20 @@ export default function LogoLockup({
         echo={echo}
         transform={LOCKUP_SYMBOL_TRANSFORM}
       />
-      <path
-        className={animated ? "brand-draw-wordmark" : undefined}
-        d={LOCKUP_WORDMARK_PATH}
-        fill="currentColor"
-      />
+      {animated ? (
+        LOCKUP_WORDMARK_LETTERS.map((d, i) => (
+          <path
+            key={i}
+            className="brand-draw-letter"
+            d={d}
+            fill="currentColor"
+            fillRule="evenodd"
+            style={{ animationDelay: `${(LETTER_DELAY + i * LETTER_STAGGER).toFixed(2)}s` }}
+          />
+        ))
+      ) : (
+        <path d={LOCKUP_WORDMARK_PATH} fill="currentColor" />
+      )}
     </svg>
   );
 }
