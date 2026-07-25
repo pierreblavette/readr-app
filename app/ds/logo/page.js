@@ -4,7 +4,15 @@ import Wordmark from "@/components/brand/Wordmark";
 import SymbolMark from "@/components/brand/SymbolMark";
 import LogoLockup from "@/components/brand/LogoLockup";
 import LogoConstruction from "../_components/LogoConstruction";
+import Redline from "../_components/Redline";
 import DSSection from "../_components/DSSection";
+
+const SIZES = [
+  [40, "Display / splash screen"],
+  [28, "Page header"],
+  [17, "Sidebar — reference size"],
+  [12, "Footer / minimum size"],
+];
 
 export default function LogoPage() {
   // Bumping this remounts the brand marks, which restarts their CSS draw-on.
@@ -110,16 +118,40 @@ export default function LogoPage() {
         </div>
       </div>
       <div className="ds-card">
+        <div className="ds-card-head">Construction — grid</div>
+        <div className="ds-card-body col">
+          <div className="ds-tile-grid ds-tile-grid--cols2">
+            {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (
+              <div key={kind} className="lockup-card">
+                <span className="panel-section-eyebrow">{label}</span>
+                <LogoConstruction variant={kind} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <div className="logo-spec-row">
+            {[["Unité","x = d, le glyphe du wordmark (102 × 148)"],["Lockup","180 + 102 + 522 = 804 × 148"],["Gap symbole ↔ texte","1× d couché (102)"],["Cadre","au plus près du 16:9"]].map(([l,v]) => (
+              <div key={l} className="logo-spec-item">
+                <span className="logo-spec-label">{l}</span>
+                <span className="logo-spec-val">{v}</span>
+              </div>
+            ))}
+          </div>
+          <p className="ds-note">L&apos;unité <strong>x</strong> est le « d » du wordmark (102 × 148) — repris en filigrane à 25 % dans les cases de mesure. Symbole et wordmark s&apos;alignent sur une même hauteur de <strong>1x</strong> (148), séparés par l&apos;unité couchée — 1× d, soit sa largeur (102) : le lockup mesure donc 180 + 102 + 522 = <strong>804 × 148</strong>. La largeur totale n&apos;a pas de règle stricte — viser un cadre au plus près du <strong>16:9</strong>. Le dégagement à réserver <em>autour</em> du logo ne se lit pas sur ces planches : voir <strong>Clear space</strong>.</p>
+        </div>
+      </div>
+      <div className="ds-card">
         <div className="ds-card-head">App icon — squircle masters</div>
         <div className="ds-card-body col">
-          <div className="ds-tile-grid ds-tile-grid--auto">
-            <div className="app-icon-card">
-              <span className="panel-section-eyebrow">Favicon</span>
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
               <img src="/brand/app-icon-master.svg" alt="Favicon master" className="app-icon-preview" />
+              <span className="panel-section-eyebrow">Favicon</span>
             </div>
-            <div className="app-icon-card">
-              <span className="panel-section-eyebrow">App icon iOS</span>
+            <div className="ds-state-sample">
               <img src="/brand/app-icon-ios.svg" alt="App icon iOS" className="app-icon-preview" />
+              <span className="panel-section-eyebrow">App icon iOS</span>
             </div>
           </div>
         </div>
@@ -145,13 +177,13 @@ export default function LogoPage() {
       <div className="ds-card">
         <div className="ds-card-head">Maskable Android — shapes</div>
         <div className="ds-card-body col">
-          <div className="maskable-shapes-row">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {[["circle","Circle"],["squircle","Squircle"],["rounded","Rounded"],["square","Square"]].map(([shape,label]) => (
-              <div key={shape} className="maskable-shape-card">
-                <span className="panel-section-eyebrow">{label}</span>
+              <div key={shape} className="ds-state-sample">
                 <div className={`maskable-shape maskable-shape--${shape}`}>
                   <img src="/brand/maskable-master.svg" alt="" className="maskable-shape-img" />
                 </div>
+                <span className="panel-section-eyebrow">{label}</span>
               </div>
             ))}
           </div>
@@ -161,8 +193,10 @@ export default function LogoPage() {
       <div className="ds-card">
         <div className="ds-card-head">Splash screen — iOS launch</div>
         <div className="ds-card-body col">
-          <div className="splash-preview-row">
-            <img src="/splash/iphone-16-pro.png" alt="iOS splash screen" className="splash-preview" />
+          <div className="ds-preview-board">
+            <div className="ds-preview">
+              <img src="/splash/iphone-16-pro.png" alt="iOS splash screen" className="splash-preview" />
+            </div>
           </div>
           <div className="ds-note">Symbole bleu <code>#4959E6</code> centré (42% de la hauteur) sur fond <code>#FEFEFF</code>, footer « Données stockées localement · v1.0 » en bas. Affiché par iOS au lancement de la PWA standalone (avant le chargement du webview).</div>
           <div className="logo-spec-row">
@@ -178,36 +212,24 @@ export default function LogoPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizes</div>
         <div className="ds-card-body col">
-          {[[40,"display / splash screen"],[28,"page header"],[17,"sidebar (reference size)"],[12,"footer / minimum size"]].map(([sz, use]) => (
-            <div key={sz} className="type-sample">
-              <Wordmark className="logo-wordmark" style={{ height: sz, color: "var(--text)" }} />
-              <div className="type-sample-meta">{sz}px · {use}</div>
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+            {SIZES.map(([sz]) => (
+              <div key={sz} className="ds-state-sample">
+                <Redline tone="blue" noGaps>
+                  <LogoLockup className="logo" style={{ height: sz, color: "var(--text)" }} />
+                </Redline>
+                <span className="panel-section-eyebrow">{sz}px</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          {SIZES.map(([sz, use]) => (
+            <div key={sz} className="ds-token-block">
+              <div className="ds-token-name">{sz}px</div>
+              <p>{use}.</p>
             </div>
           ))}
-        </div>
-      </div>
-      <div className="ds-card">
-        <div className="ds-card-head">Construction — grid</div>
-        <div className="ds-card-body col">
-          <div className="ds-tile-grid ds-tile-grid--cols2">
-            {[["lockup","Symbol & Text"],["wordmark","Text only"]].map(([kind,label]) => (
-              <div key={kind} className="lockup-card">
-                <span className="panel-section-eyebrow">{label}</span>
-                <LogoConstruction variant={kind} />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="ds-card-body col">
-          <div className="logo-spec-row">
-            {[["Unité","x = d, le glyphe du wordmark (102 × 148)"],["Lockup","180 + 102 + 522 = 804 × 148"],["Gap symbole ↔ texte","1× d couché (102)"],["Cadre","au plus près du 16:9"]].map(([l,v]) => (
-              <div key={l} className="logo-spec-item">
-                <span className="logo-spec-label">{l}</span>
-                <span className="logo-spec-val">{v}</span>
-              </div>
-            ))}
-          </div>
-          <p className="ds-note">L&apos;unité <strong>x</strong> est le « d » du wordmark (102 × 148) — repris en filigrane à 25 % dans les cases de mesure. Symbole et wordmark s&apos;alignent sur une même hauteur de <strong>1x</strong> (148), séparés par l&apos;unité couchée — 1× d, soit sa largeur (102) : le lockup mesure donc 180 + 102 + 522 = <strong>804 × 148</strong>. La largeur totale n&apos;a pas de règle stricte — viser un cadre au plus près du <strong>16:9</strong>. Le dégagement à réserver <em>autour</em> du logo ne se lit pas sur ces planches : voir <strong>Clear space</strong>.</p>
         </div>
       </div>
       <div className="ds-card">

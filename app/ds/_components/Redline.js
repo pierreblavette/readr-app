@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false, tone = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -198,7 +198,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
   }
 
   return (
-    <div className={`ds-redline${keepShape ? " ds-redline--keep" : ""}`}>
+    <div className={`ds-redline${keepShape ? " ds-redline--keep" : ""}${tone ? ` ds-redline--${tone}` : ""}`}>
       <div className="ds-redline-target" ref={ref} style={{ borderRadius: m ? m.rootRadius : undefined }}>
         {children}
         {m && (
