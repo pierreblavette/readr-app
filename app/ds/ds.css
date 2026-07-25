@@ -226,6 +226,9 @@ a.sidebar-item { text-decoration: none; }
    spécificité égale le `position: absolute` de .dropdown-menu gagnerait à
    l'ordre source (même piège que .sidebar-section-head--no-action). */
 .dropdown-menu.ds-menu-static { position: static; margin: 0; }
+/* Kebab : déclencheur + menu assemblés en colonne, gap 6 = l'offset réel du menu
+   sous le trigger. */
+.ds-kebab-open { display: inline-flex; flex-direction: column; gap: 6px; align-items: flex-start; }
 
 /* ─── REDLINE (spec annotée) ───
  * Planche de cotes façon redline Figma : bandes de padding/gap + cadre d'icône
@@ -255,6 +258,10 @@ a.sidebar-item { text-decoration: none; }
   --rl-fill: rgba(229, 50, 110, 0.14);
   padding: 48px;
   width: 100%;
+  /* Centre le specimen : le target est inline-flex (inline-level) → text-align center
+     le centre SANS transformer .ds-redline en flex (ce qui distordait le target :
+     menu rétréci/décalé, cellules désalignées). Le target remet text-align:left. */
+  text-align: center;
   /* Fond teinté (primary-5) : la scène se distingue du fond de carte. Le specimen
      est posé sur une surface blanche (.ds-redline-target) pour ressortir même
      s'il est transparent (item, trigger). */
@@ -263,7 +270,7 @@ a.sidebar-item { text-decoration: none; }
 /* Le specimen d'une planche est un spécimen figé, pas une démo : pointer-events
    none coupe hover/press pour que le fond ne change pas sous la souris pendant
    la lecture des cotes. La mesure (getComputedStyle/rects) n'en dépend pas. */
-.ds-redline-target { position: relative; display: inline-flex; pointer-events: none; background: var(--card); }
+.ds-redline-target { position: relative; display: inline-flex; text-align: left; pointer-events: none; background: var(--card); }
 /* Le composant coté seul (jamais les annotations, qui sont en absolute).
    Anatomy UNIFORME : le specimen racine est présenté sans border, sans radius,
    sans ombre, sur le mat blanc du target — les bandes de padding sont alors
@@ -271,8 +278,11 @@ a.sidebar-item { text-decoration: none; }
    forme réelle (radius, border, ombre) est documentée dans les token-blocks.
    Les boîtes cotées par boxSelector (le cœur de l'anatomy : vignette, carré de
    case…) ne sont PAS concernées — elles sont descendantes, pas racine. */
-.ds-redline-target > :not([class^="ds-redline-"]) {
-  position: relative; z-index: 1;
+.ds-redline-target > :not([class^="ds-redline-"]) { position: relative; z-index: 1; }
+/* Le strip visuel (border/radius/ombre/bg) n'a de sens que s'il y a du padding à
+   montrer flush. keepShape le désactive (ex. view toggle : pas de padding, mais un
+   radius/contour signifiants). */
+.ds-redline:not(.ds-redline--keep) .ds-redline-target > :not([class^="ds-redline-"]) {
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -287,6 +297,13 @@ a.sidebar-item { text-decoration: none; }
   position: absolute; z-index: 2;
   background: var(--rl-fill); pointer-events: none;
 }
+/* Trait de séparation entre deux cellules empilées jointives (cellSeparators). */
+.ds-redline-sep { position: absolute; z-index: 3; height: 0; border-top: 1px solid var(--rl); pointer-events: none; }
+/* Trait rouge foncé sur le pourtour des bandes — délimite chaque spacing (façon Mews).
+   Scopé aux planches d'ORGANISME (grands paddings) via `--lined` : sur un petit padding
+   (dropdown 4px, boutons) une bordure 1px de chaque côté écraserait la bande en
+   double-trait (2px de fond). */
+.ds-redline-board--lined .ds-redline-band { border: 1px solid var(--rl); }
 .ds-redline-iconframe {
   position: absolute; z-index: 3;
   border: 1px dashed var(--rl); pointer-events: none;
@@ -312,7 +329,7 @@ a.sidebar-item { text-decoration: none; }
   display: flex; align-items: center; gap: 4px;
   pointer-events: none;
 }
-.ds-redline-vlead { border-top: 1px dashed var(--rl); width: 14px; }
+.ds-redline-vlead { border-top: 1px dashed var(--rl); width: var(--vlead, 14px); }
 /* Cote haute (boîte d'icône) : nombre puis trait qui redescend vers le cadre. */
 .ds-redline-icallout {
   position: absolute; bottom: 100%; left: 50%;
@@ -409,7 +426,7 @@ a.sidebar-item { text-decoration: none; }
   align-self: flex-start;
   width: fit-content;
   height: 24px;
-  padding: 0 8px;
+  padding: 0 4px;
   border-radius: var(--radius-sm);
   background: var(--primary-5);
   color: var(--primary-60);
@@ -429,7 +446,7 @@ a.sidebar-item { text-decoration: none; }
   align-self: flex-start;
   width: fit-content;
   height: 24px;
-  padding: 0 8px;
+  padding: 0 4px;
   border-radius: var(--radius-sm);
   background: var(--bg3);
   color: var(--text);
@@ -445,7 +462,7 @@ a.sidebar-item { text-decoration: none; }
    table avec son gap, chips standalone en flex-start dans un token-block) ne sont
    pas en <p> → gardent leur espacement propre. */
 .ds-card-body p .ds-token-chip,
-.ds-card-body p .ds-class { margin: 0 6px; }
+.ds-card-body p .ds-class { margin: 0 4px; }
 /* Pastille de classe standalone (sous le texte d'un token-block) : léger retrait
    du texte au-dessus, en plus du gap du bloc. */
 .ds-token-block > .ds-class { margin-top: 4px; }
@@ -655,6 +672,10 @@ a.sidebar-item { text-decoration: none; }
 .modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; }
 [data-theme="dark"] .modal-field-input.is-hover { border-color: var(--primary-50) !important; background: var(--primary-3) !important; }
 [data-theme="dark"] .modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+/* Idem pour .modal-field > input (champ AddModal Title, support de l'autocomplete) :
+   l'autocomplete n'apparaît qu'au focus, donc la doc force cet état. */
+.modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; outline: none; }
+[data-theme="dark"] .modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
 
 /* ─── TEXT INPUT — éléments PROPOSÉS (doc /ds uniquement, pas encore dans
    library.css). Le vocabulaire couleur de validation existe déjà (--destructive,
@@ -673,21 +694,78 @@ a.sidebar-item { text-decoration: none; }
 /* Texte d'aide neutre sous le champ (« helper text ») — distinct du message
    d'erreur .modal-error : guidance permanente, pas conditionnelle. */
 .modal-field-hint { font-size: 13px; font-weight: 500; color: var(--text-2); line-height: 1.4; }
-/* Pile d'anatomie visuelle (label / field / helper) — reproduit l'espacement RÉEL
-   de .modal-field (gap 8, hauteurs natives des parties) ; chaque partie est reliée
-   à son marqueur numéroté par une ligne, couleur du marqueur (primary-50). Pas de
-   scène teintée ni de radius : le fond primary-5 est réservé à l'anatomie qui cote
-   un padding (.ds-redline). La pile vit sur le fond de carte, comme les states.
-   Marqueur en position absolue → n'inflige pas sa hauteur aux lignes de texte, le
-   rythme du composant reste exact. Doc /ds uniquement. */
-.ds-anatomy { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 420px; }
-.ds-anatomy-row { display: flex; align-items: center; gap: 12px; }
-/* Container marqueur + ligne : la ligne pointe vers l'élément, séparée de lui par
-   le gap 12 de la rangée. */
-.ds-anatomy-lead { display: flex; align-items: center; flex-shrink: 0; }
-.ds-anatomy-marker { width: 22px; height: 22px; border-radius: 50%; background: var(--primary-50); color: #fff; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ds-anatomy-line { width: 28px; height: 1.5px; background: var(--primary-50); }
-.ds-anatomy-row > :last-child { flex: 1 1 auto; min-width: 0; }
+
+/* ── Anatomie numérotée d'un organisme (Pattern, façon Mews) : specimen réel au
+   centre, numéros dans les gouttières + traits de rappel vers chaque partie (posés
+   par AnnoScene, mesurés au runtime). La scène prend 100% de la largeur, sans fond
+   ni radius (le modal porte déjà bg/ombre/radius) ; le padding généreux (spécificité
+   0,2,0 pour battre le modèle 0,1,1) réserve les gouttières haut/bas/côtés. */
+/* Board = enfant direct de .ds-card-body → prend le padding 20 du modèle (comme
+   .ds-redline-board). width:100% car .ds-card-body.col n'étire pas ses enfants
+   (sinon board/scène/modal rétrécissent au contenu). La scène dedans = boîte bleue
+   --primary-5 (comme .ds-redline) + padding 60 (iso Preview) → 20 + 60. Pas de radius. */
+.ds-anno-board { width: 100%; }
+.ds-anno-scene {
+  position: relative; display: flex; justify-content: center; align-items: center;
+  width: 100%; padding: 60px; background: var(--primary-5);
+}
+/* Badge AU-DESSUS des traits (z 8 > lignes z 7) : le trait s'arrête visuellement
+   sous la pastille au lieu de la surimprimer. */
+.ds-anno-badge {
+  position: absolute; z-index: 8; transform: translate(-50%, -50%);
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--primary-50); color: #fff;
+  font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; pointer-events: none;
+}
+/* Traits AU-DESSUS du modal (z-index 7 > modal) pour rejoindre l'arête de la partie
+   visée sans passer derrière la coquille. */
+.ds-anno-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 7; }
+.ds-anno-lines line { stroke: var(--primary-50); stroke-width: 1; }
+
+/* Schéma d'anatomie : PAS d'UI réelle — la coquille (.modal) reste réelle (bg, ombre,
+   radius) mais son contenu est représenté par des blocs à fond + bord pointillé bleu
+   (façon Mews), plus lisible qu'un vrai form pour lire la structure. */
+.ds-schema-title { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; color: var(--text); }
+.ds-schema-block { height: 52px; border-radius: 8px; background: var(--primary-5); border: 1.5px dashed var(--primary-50); }
+/* Organisme dropdown = trigger + menu empilés (align gauche, comme en usage). */
+.ds-anno-dropdown { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+/* Organisme autocomplete : le champ + sa liste absolue. Hauteur réservée (la liste
+   ne pousse pas le flux) pour que les bounds de l'organisme couvrent aussi la liste. */
+.ds-anno-autocomplete { position: relative; width: 340px; height: 224px; }
+.ds-anno-autocomplete .modal-field { width: 100%; }
+/* Le fond --bg3 de la piste segmented-pills se confond avec le bleu de la scène :
+   exceptionnellement, sur les scènes bleues du /ds (Preview, Anatomy, planches
+   Redline de Spacing/Sizing), on la pose en --card pour la démarquer. Doc /ds. */
+.ds-preview .overview-activity-pills,
+.ds-anno-scene .overview-activity-pills,
+.ds-redline .overview-activity-pills,
+.ds-preview .overview-cloud-chip,
+.ds-anno-scene .overview-cloud-chip,
+.ds-preview .book-chip,
+.ds-anno-scene .book-chip { background: var(--card); }
+/* Dans une planche Redline, le mat blanc cacherait un track blanc → on le rend
+   transparent (le track porte sa propre forme via keepShape) pour qu'il ressorte
+   sur le bleu de la scène. Scopé aux planches contenant un track de pills. */
+.ds-redline-target:has(> .overview-activity-pills) { background: transparent; }
+.ds-schema-close {
+  position: absolute; top: 16px; right: 16px; width: 40px; height: 40px;
+  border-radius: 8px; border: 1.5px solid var(--border-subtle);
+  display: flex; align-items: center; justify-content: center; color: var(--text);
+}
+.ds-schema-close svg { width: 20px; height: 20px; }
+
+/* Table descriptive : # étroite, cellules alignées en haut (descriptions multi-lignes). */
+.ds-anno-table td { vertical-align: top; }
+.ds-anno-table td:first-child { color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+/* Colonne Opt. : min-width pour ne pas coller au bord droit ; un check si optionnel. */
+.ds-anno-table td:last-child,
+.ds-anno-table th:last-child { min-width: 96px; text-align: center; color: var(--text-3); white-space: nowrap; }
+/* Indicateur « optionnel » = Badge sm texte du DS (.now-reading-date--sm, « Yes »). */
+/* Pastilles INLINE dans une cellule de table (comme en <p>) : marge horizontale
+   pour respirer entre le texte et les parenthèses (sinon collées, cf. capture). */
+.ds-anno-table td .ds-class,
+.ds-anno-table td .ds-token-chip { margin: 0 4px; }
 
 /* ─── CLOUD CHIP ─── état forcé pour la doc (mirror de .overview-cloud-chip:hover,
    bg --primary-10 dans les deux thèmes). */
@@ -1036,6 +1114,13 @@ a.sidebar-item { text-decoration: none; }
    padding 20 du modèle .ds-card-body (sinon il écraserait le padding propre de
    .modal, cf. piège .ds-sample-row) ; il neutralise juste l'anim d'entrée.
    --scroll borne la hauteur pour démontrer les actions sticky. */
+/* Box Preview d'un Pattern (organisme volumineux : modal, panel…). Même traitement
+   que la scène d'anatomy : board = 20 du modèle (enfant direct, width:100% car
+   .ds-card-body.col n'étire pas), la box .ds-preview = boîte bleue --primary-5 +
+   padding 60 → 20 + 60. Base desktop 60, à réduire par breakpoint en mobile. */
+.ds-preview-board { width: 100%; }
+.ds-preview { width: 100%; padding: 60px; background: var(--primary-5); display: flex; justify-content: center; }
+
 .ds-modal-stage { display: flex; justify-content: center; width: 100%; }
 .ds-modal-stage .modal { animation: none !important; margin: 0; width: 100%; max-width: 560px; }
 .ds-modal-stage--scroll .modal { max-height: 320px; }

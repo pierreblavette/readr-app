@@ -1,5 +1,17 @@
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
+
+// Décomposition numérotée du modal : chaque numéro dans sa gouttière, trait vers la
+// partie visée. AnnoScene mesure les positions au runtime.
+const MODAL_ANNOS = [
+  { n: 1, side: "top" },
+  { n: 2, side: "left", target: ".ds-schema-title" },
+  { n: 3, side: "left", target: ".ds-schema-input" },
+  { n: 4, side: "bottom", target: ".ds-schema-footer" },
+  { n: 5, side: "right", target: ".ds-schema-close" },
+  { n: 6, side: "corner" },
+];
 
 const CloseIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -18,7 +30,8 @@ export default function ModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
-          <div className="ds-modal-stage">
+          <div className="ds-preview-board">
+          <div className="ds-modal-stage ds-preview">
             <div className="modal">
               <button type="button" className="modal-close" aria-label="Close"><CloseIcon /></button>
               <div className="modal-title">Add a quote</div>
@@ -34,76 +47,84 @@ export default function ModalPage() {
               </div>
             </div>
           </div>
+          </div>
           <p className="ds-note">La coquille montrée en flux (pas d&apos;overlay ni d&apos;anim d&apos;entrée). En usage réel elle est centrée sur un <span className="ds-class">.modal-overlay</span> fixe qui verrouille le fond. Structure canonique : titre → contenu (form ou tabs) → actions. Aucune marge entre les blocs — c&apos;est le <code>gap</code> de la coquille qui rythme.</p>
         </div>
       </div>
 
       {/* ─────────── 2. ANATOMY — cotes de padding & spacing (Redline) + parties ─────────── */}
+      {/* ── 2a. ANATOMY — décomposition numérotée sur l'organisme réel ── */}
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
-
-        {/* Cotes de padding & gaps mesurées : coquille (haut/côtés + gap blocs) + footer */}
         <div className="ds-card-body col">
-          <div className="ds-redline-board">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline>
-                <div className="modal" style={{ width: 380, animation: "none" }}>
-                  <div className="modal-title" style={{ margin: 0 }}>Add a quote</div>
-                  <form className="modal-form">
-                    <div className="modal-fields">
-                      <div className="modal-field"><label>Quote</label><input placeholder="—" readOnly /></div>
-                    </div>
-                  </form>
-                </div>
-              </Redline>
+          <div className="ds-anno-board">
+          <AnnoScene annos={MODAL_ANNOS}>
+            <div className="modal ds-anno-organism" style={{ maxWidth: 560, width: "100%", paddingBottom: 24, animation: "none" }}>
+              <div className="ds-schema-close" aria-hidden="true"><CloseIcon /></div>
+              <div className="ds-schema-title">Title</div>
+              <div className="ds-schema-block ds-schema-input" />
+              <div className="ds-schema-block ds-schema-footer" />
             </div>
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline noGaps>
-                <div className="modal-actions" style={{ margin: 0, width: 380 }}>
-                  <button type="button" className="btn btn-outline btn-md">Cancel</button>
-                  <button type="button" className="btn btn-primary btn-md">Save</button>
-                </div>
-              </Redline>
-            </div>
+          </AnnoScene>
           </div>
-          <p className="ds-note">Coquille : padding <strong>haut 32</strong>, <strong>côtés 24</strong>, bas 0 (le footer porte le sien) ; l&apos;espacement entre blocs = <code>gap: 32</code> (coté entre title et body). Footer <span className="ds-class">.modal-actions</span> : <strong>18</strong> vertical, <strong>24</strong> horizontal. Les <strong>stries horizontales</strong> cotent les paddings/gaps verticaux, les <strong>verticales</strong> les horizontaux — mesurées à l&apos;exécution.</p>
         </div>
+      </div>
 
+      {/* ── 2b. ELEMENTS — table descriptive des parties numérotées ── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Elements</div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.modal</span></td><td>Coquille centrée : bg <span className="ds-token-chip">--card</span>, ombre, radius 8, <code>flex</code> colonne <code>gap: 32</code>.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.modal-title</span></td><td>Titre du dialog — <code>28 / 800 / −0.02em</code>, sans marge.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.modal-form</span></td><td>Corps : champs (<span className="ds-class">.modal-fields</span>, <code>gap: 24</code>) ou onglets (<span className="ds-class">.modal-tabs-section</span>). Submit hors form, lié par <code>form=&quot;…&quot;</code>.</td><td>—</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.modal-actions</span></td><td>Footer sticky en bas, boutons <span className="ds-class">.btn</span> en <code>space-between</code>.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+              <tr className="table-row"><td>5</td><td><span className="ds-class">.modal-close</span></td><td>Bouton X 40×40, <code>absolute</code> (top / right 16).</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+              <tr className="table-row"><td>6</td><td><span className="ds-class">.modal-overlay</span></td><td>Backdrop <code>fixed</code>, padding <code>40 24</code> — centre la coquille et capte le clic-hors.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ── 2c. SPACING — cotes de padding & gaps mesurées (modal complet) ── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline padSelector=".modal-actions">
+                <div className="modal" style={{ width: 440, animation: "none" }}>
+                  <div className="modal-title" style={{ margin: 0 }}>Add a quote</div>
+                  <div className="ds-schema-block" aria-hidden="true" />
+                  <div className="modal-actions">
+                    <button type="button" className="btn btn-outline btn-md">Cancel</button>
+                    <button type="button" className="btn btn-primary btn-md">Save</button>
+                  </div>
+                </div>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Modal complet coté d&apos;un seul bloc : coquille padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0, le footer porte le sien), espacement entre blocs <code>gap: 32</code>. Le <strong>body</strong> est une <strong>zone bleue</strong> — contenu variable (champs, onglets, message…). Footer <span className="ds-class">.modal-actions</span> : padding interne <strong>18</strong> vertical / <strong>24</strong> horizontal. Stries horizontales = mesures verticales, stries verticales = horizontales — mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2b. SIZING — largeur / hauteur par breakpoint ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Overlay</div>
-            <p>Backdrop <code>position: fixed</code>, padding <code>40 24</code>, voile clair. Centre la coquille et capte le clic-hors pour fermer.</p>
-            <span className="ds-class">.modal-overlay</span>
+            <div className="ds-token-name">Width — desktop</div>
+            <p><code>max-width: 630</code> · <code>width: 100%</code>. Une largeur <strong>unique</strong> — pas d&apos;échelle S / M / L : un modal Readr porte un form court, une seule taille suffit.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Shell</div>
-            <p><code>max-width: 630</code>, padding <code>32 24 0</code>, <code>flex</code> colonne <code>gap: 32</code>. C&apos;est le gap qui espace titre / contenu / actions — <strong>zéro marge</strong> sur les enfants.</p>
-            <span className="ds-class">.modal</span>
+            <div className="ds-token-name">Width — mobile</div>
+            <p>La coquille suit la largeur disponible, bornée par le padding <code>24</code> de l&apos;<span className="ds-class">.modal-overlay</span> → ≈ <code>viewport − 48</code>.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Close</div>
-            <p>Bouton X en <code>position: absolute</code> (<code>top: 16 · right: 16</code>), 40×40, svg 24. Hors du flux pour ne pas décaler le titre.</p>
-            <span className="ds-class">.modal-close</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Title</div>
-            <p>Titre <code>28 / 800 / −0.02em</code>, sans marge (l&apos;espacement vient du gap de la coquille).</p>
-            <span className="ds-class">.modal-title</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Form + fields</div>
-            <p>Le <code>&lt;form&gt;</code> enveloppe <strong>les champs seuls</strong> (<span className="ds-class">.modal-fields</span>, <code>flex</code> colonne <code>gap: 24</code>) ; chaque paire label + input = <span className="ds-class">.modal-field</span> (<code>gap: 8</code>, label <code>13 / 500</code> <span className="ds-token-chip">--text-2</span>). Le bouton submit est <strong>hors</strong> du form (dans les actions) et le référence par <code>form=&quot;…&quot;</code>.</p>
-            <span className="ds-class">.modal-form</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Tabs section</div>
-            <p>Alternative au form : onglets + contenu de l&apos;onglet actif (<code>flex</code> colonne <code>gap: 20</code>). Présente seulement quand le modal a des onglets (Add a book).</p>
-            <span className="ds-class">.modal-tabs-section</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Actions</div>
-            <p>Rangée de boutons, <strong>sœur du form</strong> (pas dedans). <code>flex</code> space-between, <code>margin: 0 -24px</code> (rejoint les bords), padding <code>18 24</code>, <strong><code>position: sticky; bottom: 0</code></strong>, <code>border-top: 1px</code> <span className="ds-token-chip">--border-subtle</span>, <code>z-index: 1</code>. Les boutons sont canoniques : <span className="ds-class">.btn</span> <span className="ds-class">.btn-outline</span> <span className="ds-class">.btn-md</span> (Cancel) + <span className="ds-class">.btn-primary</span> (submit) — pas de classe de bouton dédiée au modal.</p>
-            <span className="ds-class">.modal-actions</span>
+            <div className="ds-token-name">Height</div>
+            <p>S&apos;adapte au contenu, plafonnée à <code>calc(100vh − 80px)</code> (le padding vertical <code>40</code> de l&apos;overlay, haut + bas) puis <code>overflow-y: auto</code> — le corps scrolle, les actions restent sticky.</p>
           </div>
         </div>
       </div>
@@ -112,7 +133,8 @@ export default function ModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Behavior · sticky actions on scroll</div>
         <div className="ds-card-body col">
-          <div className="ds-modal-stage ds-modal-stage--scroll">
+          <div className="ds-preview-board">
+          <div className="ds-modal-stage ds-modal-stage--scroll ds-preview">
             <div className="modal">
               <div className="modal-title">Long form</div>
               <form className="modal-form">
@@ -127,6 +149,7 @@ export default function ModalPage() {
                 <button type="button" className="btn btn-primary btn-md">Save</button>
               </div>
             </div>
+          </div>
           </div>
           <p className="ds-note">Scrolle le form à l&apos;intérieur : <span className="ds-class">.modal-actions</span> reste épinglée en bas via <code>position: sticky; bottom: 0</code>, fond <code>inherit</code> + <code>border-top</code> <span className="ds-token-chip">--border-subtle</span>. Actif sur tout modal dont le contenu peut déborder (Add a book avec liste de scan, Mark as finished…).</p>
         </div>

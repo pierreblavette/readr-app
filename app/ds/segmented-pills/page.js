@@ -1,13 +1,23 @@
+"use client";
+import { useState } from "react";
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
 
 // Segment assemblé — une piste, N pills, une seule .is-active.
-function Segment({ size = "", active = "All", items = ["All", "Books", "Quotes"] }) {
+function Segment({ size = "", active = "All", items = ["All", "Books", "Quotes"], onSelect, className = "" }) {
   const s = size ? " is-" + size : "";
   return (
-    <div className={`overview-activity-pills${s}`} role="tablist">
+    <div className={`overview-activity-pills${s}${className ? " " + className : ""}`} role="tablist">
       {items.map((label) => (
-        <button key={label} type="button" role="tab" aria-selected={active === label} className={`overview-activity-pill${s}${active === label ? " is-active" : ""}`}>
+        <button
+          key={label}
+          type="button"
+          role="tab"
+          aria-selected={active === label}
+          onClick={onSelect ? () => onSelect(label) : undefined}
+          className={`overview-activity-pill${s}${active === label ? " is-active" : ""}`}
+        >
           {label}
         </button>
       ))}
@@ -28,63 +38,95 @@ const SIZES = [
   ["lg", "48px · padding 0 20 · font 14 · track 5"],
 ];
 
+// Décomposition numérotée : piste (1) + pill (2) + pill active (3).
+const ANNOS = [
+  { n: 1, side: "top", target: ".overview-activity-pills" },
+  { n: 2, side: "bottom", target: ".overview-activity-pill:not(.is-active)" },
+  { n: 3, side: "bottom", target: ".overview-activity-pill.is-active" },
+];
+
 export default function SegmentedPillsPage() {
+  const [active, setActive] = useState("All");
   return (
     <DSSection
       id="segmented-pills"
       title="Segmented Pills"
       sub="Sélecteur segmenté — plusieurs valeurs sur une piste en pilule, une seule active. Utilisé pour basculer une vue (All / Books / Quotes / Words) ou une plage (Week / Month)."
     >
-      {/* ─────────── 1. STATES — une pill ─────────── */}
+      {/* ─────────── 1. PREVIEW — segment live ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">States</div>
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <Segment active={active} onSelect={setActive} size="md" />
+          </div>
+          </div>
+          <p className="ds-note">Specimen <strong>live</strong> — clique une pill, elle devient active. Une seule <span className="ds-class">.is-active</span> à la fois ; la piste ne gère pas l&apos;exclusivité, c&apos;est le consommateur.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2. ANATOMY — décomposition numérotée (UI réelle) ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={ANNOS}>
+            <div className="overview-activity-pills is-md ds-anno-organism" role="tablist">
+              <button type="button" className="overview-activity-pill is-md is-active">All</button>
+              <button type="button" className="overview-activity-pill is-md">Books</button>
+              <button type="button" className="overview-activity-pill is-md">Quotes</button>
+            </div>
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.overview-activity-pills</span></td><td>Piste : <code>inline-flex</code>, gap 4, padding 4 (md), fond <span className="ds-token-chip">--bg3</span>, radius 999 (pill). Le padding enferme les pills dans la gouttière.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.overview-activity-pill</span></td><td>Segment : <code>&lt;button&gt;</code>, radius 999, fond transparent au repos, libellé seul. Ici en <strong>md</strong> (40 · padding 0 16 · font 14) — échelle complète en Sizing.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.is-active</span></td><td>Segment actif : fond <span className="ds-token-chip">--primary-50</span> plein, texte blanc. Pas d&apos;indicateur qui glisse — chaque pill porte son propre fond.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─────────── 3. SPACING — piste + gaps ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline keepShape>
+                <Segment size="md" />
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Bandes de bord = padding <strong>4</strong> de la piste (md) ; <strong>gaps 4</strong> mesurés entre les pills (micro-gap DS). Le fond <span className="ds-token-chip">--bg3</span> et le radius pill sont conservés (<code>keepShape</code>) : la forme de la piste compte, il n&apos;y a pas de padding large à montrer flush. Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4. STATES — une pill ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">States · pill</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             {STATES.map(([label, mod]) => (
               <div key={label} className="ds-state-sample">
-                <button type="button" className={`overview-activity-pill${mod ? " " + mod : ""}`}>{label}</button>
+                <button type="button" className={`overview-activity-pill is-md${mod ? " " + mod : ""}`}>{label}</button>
               </div>
             ))}
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Repos : texte <span className="ds-token-chip">--text-2</span>, fond transparent. Survol non-actif : texte <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-10</span>. Active : fond <span className="ds-token-chip">--primary-50</span> plein + texte blanc. Une seule pill porte <span className="ds-class">.is-active</span> à la fois — la piste ne gère pas l&apos;exclusivité, c&apos;est le consommateur.</p>
+          <p className="ds-note">Repos : texte <span className="ds-token-chip">--text-2</span>, fond transparent. Survol non-actif : texte <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-10</span>. Active : fond <span className="ds-token-chip">--primary-50</span> plein + texte blanc.</p>
         </div>
       </div>
 
-      {/* ─────────── 2. ANATOMY — le segment assemblé ─────────── */}
+      {/* ─────────── 5. SIZING — xs / sm / md / lg ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
-        <div className="ds-card-body col">
-          <div className="ds-redline-board">
-            <Redline>
-              <Segment />
-            </Redline>
-          </div>
-          <p className="ds-note">Bandes = padding <strong>3</strong> de la piste ; gaps <strong>4</strong> mesurés entre les pills. Le fond <span className="ds-token-chip">--bg3</span> et le radius pill de la piste sont retirés du schéma (règle d&apos;anatomy), documentés ci-dessous.</p>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Track</div>
-            <p>Piste <code>inline-flex</code>, gap 4, padding 3, fond <span className="ds-token-chip">--bg3</span>, radius 999 (pill). Le padding enferme les pills dans la gouttière — l&apos;active affleure le bord intérieur sans toucher le contour.</p>
-            <span className="ds-class">.overview-activity-pills</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Pill</div>
-            <p>height 32, padding 0 12, font 13/600, radius 999, fond transparent au repos. Chaque segment est un <code>&lt;button&gt;</code> ; le libellé seul, pas d&apos;icône.</p>
-            <span className="ds-class">.overview-activity-pill</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Active</div>
-            <p>Fond <span className="ds-token-chip">--primary-50</span>, texte blanc. Pas d&apos;indicateur qui glisse : chaque pill porte son propre fond, l&apos;active est celle qui a la classe — plus simple qu&apos;un thumb animé, et robuste si le nombre de segments change.</p>
-            <span className="ds-class">.is-active</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ─────────── 3. VARIANTS · sizes ─────────── */}
-      <div className="ds-card">
-        <div className="ds-card-head">Variants · sizes</div>
+        <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {SIZES.map(([size]) => (
@@ -95,27 +137,26 @@ export default function SegmentedPillsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <div className="ds-redline-board">
+          <div className="ds-redline-board ds-redline-board--lined">
             {SIZES.map(([size]) => (
               <div key={size} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-                <Redline><Segment size={size} /></Redline>
+                <Redline keepShape><Segment size={size} /></Redline>
               </div>
             ))}
           </div>
-          <p className="ds-note">Une planche par taille — hauteur de pill 24 → 32 → 40 → 48 (step 8), gap constant <strong>4</strong> (micro-gap DS). Le padding de piste (bandes de bord) fait 2 / 3 / 4 / 5 : un réglage à la main, <strong>pas</strong> une valeur du barème — il suit grossièrement la pill sans règle propre. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Une planche par taille — hauteur de pill 24 → 32 → 40 → 48 (step 8), gap constant <strong>4</strong> (micro-gap DS). Le padding de piste fait 2 / 3 / 4 / 5 : un réglage à la main, <strong>pas</strong> une valeur du barème.</p>
         </div>
         <div className="ds-card-body col">
           {SIZES.map(([size, spec]) => (
             <div key={size} className="ds-token-block">
-              <div className="ds-token-name">{size.toUpperCase()}</div>
+              <div className="ds-token-name">{size.toUpperCase()} · <span className="ds-cn">.is-{size}</span></div>
               <p>{spec}.</p>
-              <span className="ds-class">.is-{size}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ─────────── 4. USAGE ─────────── */}
+      {/* ─────────── 6. USAGE ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">

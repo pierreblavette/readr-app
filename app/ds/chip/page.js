@@ -1,5 +1,6 @@
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
 
 // Jeu de genres pour le nuage — count décroissant (l'ordre réel des consommateurs).
 const GENRES = [
@@ -21,11 +22,76 @@ function Chip({ name, count, cls = "" }) {
   );
 }
 
+// Décomposition numérotée : pill (1) + label (2) + count badge (3).
+const ANNOS = [
+  { n: 1, side: "top", target: ".overview-cloud-chip" },
+  { n: 2, side: "bottom", target: ".overview-cloud-chip-name" },
+  { n: 3, side: "bottom", target: ".overview-cloud-chip-count" },
+];
+
 export default function CloudChipPage() {
   return (
     <DSSection id="chip" title="Chip" sub="Pill filtrante — nom + badge count. Utilisée par Top Genres et Top Authors (Overview) comme raccourcis de filtre cliquables ; le container .overview-cloud les enveloppe en flex-wrap.">
 
-      {/* ─────────── 1. STATES ─────────── */}
+      {/* ─────────── 1. PREVIEW ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <Chip name="Fiction" count={12} />
+          </div>
+          </div>
+          <p className="ds-note">Pill cliquable = <strong>nom + badge count</strong>. Un <code>&lt;button&gt;</code> qui route vers My Library avec le filtre correspondant pré-appliqué (genre ou auteur).</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2. ANATOMY — décomposition numérotée ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={ANNOS}>
+            <div className="ds-anno-organism">
+              <button type="button" className="overview-cloud-chip">
+                <span className="overview-cloud-chip-name">Fiction</span>
+                <span className="overview-cloud-chip-count">12</span>
+              </button>
+            </div>
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.overview-cloud-chip</span></td><td>Pill : <code>&lt;button&gt;</code>, height 36, padding <code>0 8 0 16</code> (asym), radius 999, bg <span className="ds-token-chip">--bg3</span>, font 14/600, gap 8.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.overview-cloud-chip-name</span></td><td>Label : <code>line-height: 1</code> — pas d&apos;espace vertical superflu, la hauteur vient du chip.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.overview-cloud-chip-count</span></td><td>Count : height 20, min-width 20 (rond à un chiffre), padding 0 8, radius 999, bg <span className="ds-token-chip">--primary-50</span>, texte <span className="ds-token-chip">#FFFFFF</span>, font 11/600, <code>tabular-nums</code>, <code>flex-shrink: 0</code>.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─────────── 3. SPACING — padding asym + gap + count ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".overview-cloud-chip-count">
+                <button type="button" className="overview-cloud-chip">
+                  <span className="overview-cloud-chip-name">Fiction</span>
+                  <span className="overview-cloud-chip-count">12</span>
+                </button>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Padding <strong>asymétrique</strong> — <strong>16</strong> à gauche (texte), <strong>8</strong> à droite : le badge count apporte déjà sa masse visuelle à droite, un 16 y creuserait un vide. <strong>Gap 8</strong> entre nom et badge ; badge coté en boîte (20 · pill). Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4. STATES ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
@@ -42,42 +108,7 @@ export default function CloudChipPage() {
         </div>
       </div>
 
-      {/* ─────────── 2. ANATOMY ─────────── */}
-      <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
-        <div className="ds-card-body col">
-          <div className="ds-redline-board">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".overview-cloud-chip-count">
-                <button type="button" className="overview-cloud-chip">
-                  <span className="overview-cloud-chip-name">Fiction</span>
-                  <span className="overview-cloud-chip-count">12</span>
-                </button>
-              </Redline>
-            </div>
-          </div>
-          <p className="ds-note">Padding <strong>asymétrique</strong> — 16 à gauche (texte), 8 à droite : le badge count apporte déjà sa propre masse visuelle à droite, un 16 y creuserait un vide. Gap 8 entre nom et badge, mesuré à l&apos;exécution.</p>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Pill (button)</div>
-            <p>height 36 · padding 0 8 0 16 · radius 999 · bg <span className="ds-token-chip">--bg3</span> (dark <span className="ds-token-chip">--bg-elevated</span>) · text <span className="ds-token-chip">--text</span> · font 14 / 600 · gap 8.</p>
-            <span className="ds-class">.overview-cloud-chip</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Label</div>
-            <p><code>line-height: 1</code> — pas d&apos;espace vertical superflu, la hauteur vient du chip.</p>
-            <span className="ds-class">.overview-cloud-chip-name</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Count badge</div>
-            <p>height 20 · min-width 20 (reste rond à un chiffre) · padding 0 8 · radius 999 · bg <span className="ds-token-chip">--primary-50</span> · text <span className="ds-token-chip">#FFFFFF</span> · font 11 / 600 · <code>tabular-nums</code> · <code>flex-shrink: 0</code>.</p>
-            <span className="ds-class">.overview-cloud-chip-count</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ─────────── 3. USAGE ─────────── */}
+      {/* ─────────── 5. USAGE ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">

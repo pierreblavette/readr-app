@@ -1,5 +1,6 @@
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
 
 const StarIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="is-filled">
@@ -44,6 +45,14 @@ const Chevron = () => (
   </svg>
 );
 
+// Décomposition numérotée : container (1) + cover (2) + name (3) + chevron (4).
+const ANNOS = [
+  { n: 1, side: "top", target: ".book-chip" },
+  { n: 2, side: "bottom", target: ".book-chip-cover" },
+  { n: 3, side: "bottom", target: ".book-chip-name" },
+  { n: 4, side: "right", target: ".book-chip-chevron" },
+];
+
 export default function BookChipPage() {
   return (
     <DSSection
@@ -51,9 +60,72 @@ export default function BookChipPage() {
       title="Book Row"
       sub="Ligne de référence d'un livre (media object) — vignette de couverture + titre + auteur. Quatre modes selon les props passées. Classe et source historiquement nommées .book-chip / BookChip.js."
     >
-      {/* ─────────── 1. STATES — chip interactif ─────────── */}
+      {/* ─────────── 1. PREVIEW — la ligne canonique (interactif) ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">States</div>
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
+              <Cover from="#4959E6" to="#00A699" letter="D" />
+              <Body title="Dune" author="Frank Herbert" rating={5} />
+              <Chevron />
+            </button>
+          </div>
+          </div>
+          <p className="ds-note">Media object : <strong>vignette + titre + auteur</strong>, note optionnelle sous le nom. Ici en mode <strong>interactif</strong> (<code>&lt;button&gt;</code> + chevron). Quatre modes selon les props — cf. Variants.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2. ANATOMY — décomposition numérotée ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={ANNOS}>
+            <button type="button" className="book-chip book-chip-interactive ds-anno-organism" style={{ width: 300 }}>
+              <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
+              <Body title="Tropique du Cancer" author="Henry Miller" />
+              <Chevron />
+            </button>
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.book-chip</span></td><td>Container : flex, gap 12, padding 12 uniforme, bg <span className="ds-token-chip">--bg3</span>, radius 8 — padding canonique partagé avec <span className="ds-class">.collection-chip</span>.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.book-chip-cover</span></td><td>Vignette : 32×44 (ratio couverture), radius 4, <code>overflow: hidden</code>, sans ombre. Sans image → <span className="ds-class">.book-chip-cover-placeholder</span> (dégradé + initiale 16/700).</td><td>—</td></tr>
+              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-chip-body</span></td><td>Corps : <code>flex: 1</code> + <code>min-width: 0</code> (sans lui, un titre long déborderait au lieu de s&apos;ellipser). Gap 4 entre nom et étoiles.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.book-chip-name</span></td><td>Nom : titre 15/600 + auteur 13/500 <span className="ds-token-chip">--text-2</span>, gap 2, <code>ellipsis</code> 1 ligne. Toujours présent — garde titre/auteur serrés quand les étoiles s&apos;ajoutent.</td><td>—</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.book-chip-chevron</span></td><td>Chevron : 16×16, <code>align-self: center</code>, <code>margin-left: 4</code>. Seule marque visible qu&apos;une ligne est cliquable.</td><td><span className="now-reading-date now-reading-date--sm">Interactive</span></td></tr>
+              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-chip-remove</span></td><td>Croix : 28×28, radius 6, svg 14, hover bg <span className="ds-token-chip">--primary-10</span>. Cible 28px acceptable car la ligne n&apos;est pas cliquable dans ce mode.</td><td><span className="now-reading-date now-reading-date--sm">With remove</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─────────── 3. SPACING — padding + gaps + vignette ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <Redline boxSelector=".book-chip-cover">
+              <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
+                <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
+                <Body title="Tropique du Cancer" author="Henry Miller" />
+                <Chevron />
+              </button>
+            </Redline>
+          </div>
+          <p className="ds-note">Padding <strong>12</strong> uniforme (4 côtés), gap <strong>12</strong> vignette → corps, <strong>4</strong> corps → chevron (<code>margin-left</code>). Vignette <strong>32×44</strong> (radius 4) cotée en boîte. Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4. STATES — interactif ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">States · interactive</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
@@ -87,61 +159,11 @@ export default function BookChipPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Réservé au mode <strong>interactif</strong> (<code>&lt;button&gt;</code>) : le chip ne réagit qu&apos;au fond. Survol et press partagent <span className="ds-token-chip">--primary-10</span> — donc <strong>Hover et Active sont visuellement identiques</strong>, aucun lift ni ombre. Le focus clavier pose un anneau <span className="ds-token-chip">--primary-50</span> (<code>:focus-visible</code>). Les modes Display / With remove, non cliquables, n&apos;ont aucun de ces états.</p>
+          <p className="ds-note">Réservé au mode <strong>interactif</strong> (<code>&lt;button&gt;</code>) : la ligne ne réagit qu&apos;au fond. Survol et press partagent <span className="ds-token-chip">--primary-10</span> — donc <strong>Hover et Active sont visuellement identiques</strong>, aucun lift ni ombre. Le focus clavier pose un anneau <span className="ds-token-chip">--primary-50</span> (<code>:focus-visible</code>). Les modes Display / With remove, non cliquables, n&apos;ont aucun de ces états.</p>
         </div>
       </div>
 
-      {/* ─────────── 2. ANATOMY ─────────── */}
-      <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
-        <div className="ds-card-body col">
-          {/* Planche cotée au runtime — boxSelector cadre la vignette (32×44 · r4) ;
-              padding 12, gaps et hauteur mesurés. */}
-          <div className="ds-redline-board">
-            <Redline boxSelector=".book-chip-cover">
-              <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
-                <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
-                <Body title="Tropique du Cancer" author="Henry Miller" />
-                <Chevron />
-              </button>
-            </Redline>
-          </div>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Container</div>
-            <p>Flex, gap 12, padding 12 uniforme, bg <span className="ds-token-chip">--bg3</span>, radius 8 — le padding canonique d&apos;un conteneur chip, partagé avec <span className="ds-class">.book-chip-interactive</span> et <span className="ds-class">.collection-chip</span>. La variante <span className="ds-class">.collection-chip</span> le passe en asymétrique 12/16 pour compenser le chevron à droite.</p>
-            <span className="ds-class">.book-chip</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Cover</div>
-            <p>32×44 (ratio de couverture), radius 4, <code>overflow: hidden</code>, sans ombre portée. Sans image : <span className="ds-class">.book-chip-cover-placeholder</span> — dégradé + initiale 16/700 blanc.</p>
-            <span className="ds-class">.book-chip-cover</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Body</div>
-            <p><code>flex: 1</code> et surtout <code>min-width: 0</code> — sans lui un titre long refuserait de se compresser et ferait déborder le chip au lieu de s&apos;ellipser. Gap 4 entre le nom et les étoiles.</p>
-            <span className="ds-class">.book-chip-body</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Name</div>
-            <p>Toujours présent, même sans note : c&apos;est lui qui garde titre et auteur serrés (gap 2) quand les étoiles s&apos;ajoutent au gap 4 du body. Titre 15/600, auteur 13/500 <span className="ds-token-chip">--text-2</span>, les deux en <code>ellipsis</code> sur une ligne.</p>
-            <span className="ds-class">.book-chip-name</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Chevron</div>
-            <p>16×16, <code>align-self: center</code>, <code>margin-left: 4</code>. Il ne s&apos;affiche qu&apos;en mode interactif : le chevron est la seule marque visible qu&apos;un chip est cliquable, le fond ne change qu&apos;au survol.</p>
-            <span className="ds-class">.book-chip-chevron</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Remove</div>
-            <p>28×28, radius 6, svg 14. Hover bg <span className="ds-token-chip">--primary-10</span>. Cible de 28px seulement — acceptable parce que le chip lui-même n&apos;est pas cliquable dans ce mode, il n&apos;y a donc pas de risque de toucher l&apos;un pour l&apos;autre.</p>
-            <span className="ds-class">.book-chip-remove</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ─────────── 3. VARIANTS · modes ─────────── */}
+      {/* ─────────── 5. VARIANTS · modes ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · modes</div>
         <div className="ds-card-body col">
@@ -200,17 +222,17 @@ export default function BookChipPage() {
         </div>
       </div>
 
-      {/* ─────────── 4. USAGE — surcharges contextuelles + source ─────────── */}
+      {/* ─────────── 6. USAGE — surcharges contextuelles + source ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Base surface · QuotePanel, AddQuoteModal</div>
-            <p>Fond <span className="ds-token-chip">--bg3</span>, hover <span className="ds-token-chip">--primary-10</span>. Le chip est posé sur une surface neutre, il doit se détacher.</p>
+            <p>Fond <span className="ds-token-chip">--bg3</span>, hover <span className="ds-token-chip">--primary-10</span>. La ligne est posée sur une surface neutre, elle doit se détacher.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Flattened in <span className="ds-cn">.quote-card</span></div>
-            <p>Fond transparent et padding 0 : à l&apos;intérieur d&apos;une carte de citation le chip n&apos;est pas cliquable, il se lit comme une ligne d&apos;attribution et non comme une cellule actionnable. Un fond y ferait une boîte dans une boîte.</p>
+            <p>Fond transparent et padding 0 : à l&apos;intérieur d&apos;une carte de citation la ligne n&apos;est pas cliquable, elle se lit comme une attribution et non comme une cellule actionnable. Un fond y ferait une boîte dans une boîte.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Collection chip · padding asymétrique</div>

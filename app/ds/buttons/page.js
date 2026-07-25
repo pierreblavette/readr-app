@@ -1,5 +1,6 @@
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
 
 const VARIANTS = [
   { name: "Primary", variant: "btn-primary" },
@@ -42,14 +43,76 @@ const PlusIcon = ({ strokeWidth = 2.2 }) => (
   </svg>
 );
 
+// Décomposition numérotée : bouton (1) + icône (2) + libellé (3).
+const ANNOS = [
+  { n: 1, side: "top", target: ".btn" },
+  { n: 2, side: "bottom", target: ".btn svg" },
+  { n: 3, side: "bottom", target: ".btn span" },
+];
+
 export default function ButtonsPage() {
   return (
     <DSSection id="buttons" title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all.">
 
-      {/* ─────────── 1. VARIANTS & STATES — l'ancre : ce qui existe + comment ça réagit ─────────── */}
+      {/* ─────────── 1. PREVIEW — le bouton canonique (primary MD) ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <button className="btn btn-primary btn-md"><PlusIcon strokeWidth={2} /><span>Add book</span></button>
+          </div>
+          </div>
+          <p className="ds-note">Le bouton canonique : <span className="ds-class">.btn</span> + variante + taille. Ici <strong>primary · md</strong> — la combinaison par défaut de l&apos;app. Font 600 sur tous. Icône optionnelle à gauche du <code>&lt;span&gt;</code>.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2. ANATOMY — décomposition numérotée ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={ANNOS}>
+            <div className="ds-anno-organism">
+              <button className="btn btn-primary btn-md"><PlusIcon strokeWidth={2} /><span>Add book</span></button>
+            </div>
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.btn</span></td><td>Socle : <code>inline-flex</code>, centré, radius + hauteur + font posés par la variante et la taille (<span className="ds-class">.btn-primary</span> <span className="ds-class">.btn-md</span>). Font-weight 600.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><code>svg</code></td><td>Icône : boîte réservée (glyph + cadre 2px, 16 en md). Premier <em>ou</em> dernier enfant → déclenche le padding asymétrique via <code>:has()</code>.</td><td><span className="now-reading-date now-reading-date--sm">Opt</span></td></tr>
+              <tr className="table-row"><td>3</td><td><code>&lt;span&gt;</code></td><td>Libellé : <strong>toujours</strong> enveloppé — sans lui, un nœud texte nu ferait de l&apos;icône à la fois premier ET dernier enfant, cassant la détection <code>:has()</code>.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─────────── 3. SPACING — doctrine du padding (à MD) ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row">
+              <Redline>
+                <button className="btn btn-outline btn-md"><span>Text only</span></button>
+              </Redline>
+              <Redline>
+                <button className="btn btn-outline btn-md"><PlusIcon strokeWidth={2} /><span>Icon left</span></button>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">À MD : padding symétrique <strong>0 20</strong> (gauche), radius <strong>8</strong>, gap <strong>8</strong>. Avec une icône (droite), le côté icône tombe à <strong>12</strong> (<code>base − 8</code>) : l&apos;icône apporte déjà sa masse à ce bord, un 20 y creuserait un vide. Détection <strong>auto</strong> via <code>:has()</code> — aucune classe en plus. Cotes mesurées à l&apos;exécution ; l&apos;échelle complète des paddings est en Sizing.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4. STATES — variantes × états ─────────── */}
       {VARIANTS.map(({ name, variant }) => (
         <div key={name} className="ds-card">
-          <div className="ds-card-head">{name} · states</div>
+          <div className="ds-card-head">States · {name}</div>
           <div className="ds-card-body col">
             <div className="ds-states-grid ds-states-grid--boxed">
               {STATES.map(([state, mod]) => (
@@ -64,9 +127,9 @@ export default function ButtonsPage() {
         </div>
       ))}
 
-      {/* ─────────── 2. SIZES & ANATOMY — la gamme de tailles montrée UNE fois (cotes + specs) ─────────── */}
+      {/* ─────────── 5. SIZING — XS → XL (cotes + specs) ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Anatomy &amp; sizes</div>
+        <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
             {SIZES.map(([cls, label]) => (
@@ -77,7 +140,7 @@ export default function ButtonsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <div className="ds-redline-board">
+          <div className="ds-redline-board ds-redline-board--lined">
             {SIZES.map(([cls]) => (
               <div key={cls} className="ds-redline-row">
                 <Redline>
@@ -92,7 +155,7 @@ export default function ButtonsPage() {
               </div>
             ))}
           </div>
-          <p className="ds-note">Cotes <strong>mesurées à l&apos;exécution</strong> sur le bouton réel (padding calculé, gap flex réel, boîte SVG), jamais écrites en dur : le schéma suit le CSS. La boîte d&apos;icône cotée est la boîte réservée (glyph + cadre 2px, ex. 16 + 4 = 20 en md), pas le glyph. Colonne gauche : padding symétrique. Colonne droite : padding asymétrique auto (<code>:has()</code>), côté icône réduit de 8, côté texte de 4.</p>
+          <p className="ds-note">Cotes <strong>mesurées à l&apos;exécution</strong> sur le bouton réel, jamais écrites en dur : le schéma suit le CSS. La boîte d&apos;icône cotée est la boîte réservée (glyph + cadre 2px, ex. 16 + 4 = 20 en md), pas le glyph. Colonne gauche : padding symétrique. Colonne droite : padding asymétrique auto (<code>:has()</code>) — le ratio (<code>base − 8</code>) tient à toutes les tailles.</p>
         </div>
         <div className="ds-card-body col">
           {ANATOMY.map(([sz, h, p, r, f, g, io]) => (
@@ -109,7 +172,7 @@ export default function ButtonsPage() {
         </div>
       </div>
 
-      {/* ─────────── 3. ICONS & COMPOSITION — icon-only + doctrine du padding asymétrique (à MD) ─────────── */}
+      {/* ─────────── 6. VARIANTS · composition (icônes) ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · icons &amp; composition</div>
         <div className="ds-card-body col">
@@ -161,7 +224,7 @@ export default function ButtonsPage() {
         </div>
       </div>
 
-      {/* ─────────── 4. VARIANTES SPÉCIALES — AI action, text link, count badge (à MD, tailles couvertes en §2) ─────────── */}
+      {/* ─────────── 7. VARIANTS · AI action ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · AI action</div>
         <div className="ds-card-body col">
@@ -197,11 +260,12 @@ export default function ButtonsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Icon · sizes · usage</div>
-            <p>Pair with <span className="ds-class">.import-tab-ai-icon</span> 16×16 sparkle SVG. Sizes : SM / MD (default) / LG (échelle standard, cf. §Sizes). Reserved for AI-generated actions. First app usage : <span className="ds-class">.panel-cast-action</span> in BookPanel (Now Reading) — the &quot;Generate cast&quot; / &quot;Regenerate&quot; call to the Gemini cast endpoint.</p>
+            <p>Pair with <span className="ds-class">.import-tab-ai-icon</span> 16×16 sparkle SVG. Sizes : SM / MD (default) / LG (échelle standard, cf. §Sizing). Reserved for AI-generated actions. First app usage : <span className="ds-class">.panel-cast-action</span> in BookPanel (Now Reading) — the &quot;Generate cast&quot; / &quot;Regenerate&quot; call to the Gemini cast endpoint.</p>
           </div>
         </div>
       </div>
 
+      {/* ─────────── 8. VARIANTS · text link ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · text link</div>
         <div className="ds-card-body col">
@@ -234,6 +298,7 @@ export default function ButtonsPage() {
         </div>
       </div>
 
+      {/* ─────────── 9. VARIANTS · count badge ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · count badge</div>
         <div className="ds-card-body col">
@@ -266,7 +331,7 @@ export default function ButtonsPage() {
         </div>
       </div>
 
-      {/* ─────────── 5. REFERENCE — mapping canonique → classes nommées ─────────── */}
+      {/* ─────────── 10. USAGE · reference — mapping canonique → classes nommées ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage · reference</div>
         <div className="ds-card-body col">

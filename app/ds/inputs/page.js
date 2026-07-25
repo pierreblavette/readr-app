@@ -1,9 +1,8 @@
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
 
-// Default / Hover / Focus / Disabled — les 4 états réels du champ dans library.css.
-// Hover/Focus posés en classe forcée (mirror), Disabled en vrai attribut. Le label
-// de chaque cellule nomme l'état ET démontre la présence du <label> du champ.
+// Default / Hover / Focus / Disabled — les 4 états réels du champ (mirror is-* / attr).
 const STATES = [
   ["Default", "", false],
   ["Hover", "is-hover", false],
@@ -17,6 +16,27 @@ const SIZES = [
   ["Medium", "", "40", "0 14", "15"],
   ["Large", "modal-field-input--lg", "48", "0 16", "16"],
 ];
+
+// Décomposition numérotée : le champ (1 = container) + ses parties (2/3/4).
+const ANNOS = [
+  { n: 1, side: "right", target: ".modal-field" },
+  { n: 2, side: "left", target: ".modal-field-label" },
+  { n: 3, side: "left", target: ".modal-field-input" },
+  { n: 4, side: "left", target: ".modal-field-hint" },
+];
+
+// Champ canonique (label + field + helper), réutilisé Preview / Anatomy. Input en
+// focus : sur le fond bleu de la scène, la bordure --primary-50 + l'anneau le
+// démarquent (au repos le bg --bg3 + bord transparent se confondent avec le bleu).
+function Field() {
+  return (
+    <div className="modal-field" style={{ width: "100%" }}>
+      <label className="modal-field-label">Title</label>
+      <input type="text" className="modal-field-input is-focus" defaultValue="Normal People" readOnly style={{ width: "100%" }} />
+      <span className="modal-field-hint">10 or 13 digits, dashes optional.</span>
+    </div>
+  );
+}
 
 const SearchIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -38,7 +58,67 @@ export default function InputsPage() {
   return (
     <DSSection id="inputs" title="Text Input" sub="Champs de saisie (library.css). Socle unique — height 40, radius 8, border 1.5, font 15/600 — décliné en text field, search (pill + icône) et textarea. Label, message et validation partagés.">
 
-      {/* ─────────── 1. STATES — l'ancre : le champ canonique, son label et ses 4 réactions ─────────── */}
+      {/* ─────────── 1. PREVIEW — le champ canonique ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <div style={{ width: 340 }}><Field /></div>
+          </div>
+          </div>
+          <p className="ds-note">Un champ = <strong>label + field + helper</strong>. Le label est toujours présent et discret ; le placeholder ne le remplace jamais. Bordure <strong>transparente au repos</strong> qui se colore au hover/focus — le champ ne saute pas de taille.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2. ANATOMY — décomposition numérotée (UI réelle) ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={ANNOS}>
+            <div className="ds-anno-organism" style={{ width: 340 }}><Field /></div>
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.modal-field</span></td><td>Conteneur : <code>flex</code> colonne, <strong>gap 8</strong> constant entre label / field / helper.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.modal-field-label</span></td><td>Libellé : 13/500 <span className="ds-token-chip">--text-2</span>, toujours visible.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.modal-field-input</span></td><td>Champ : height 40, radius 8, border 1.5 <span className="ds-token-chip">transparent</span>, bg <span className="ds-token-chip">--bg3</span>, font 15/600, padding <code>0 14</code>.</td><td>—</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.modal-field-hint</span></td><td>Helper : guidance <em>permanente</em> 13/500 <span className="ds-token-chip">--text-2</span> — remplacé par un message d&apos;erreur/warning quand la validation échoue (jamais les deux).</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─────────── 3. SPACING — gaps du champ + padding du field ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <div className="modal-field" style={{ width: 300 }}>
+                  <label className="modal-field-label">Title</label>
+                  <input type="text" className="modal-field-input" defaultValue="Normal People" readOnly style={{ width: "100%" }} />
+                  <span className="modal-field-hint">Helper text.</span>
+                </div>
+              </Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <input type="text" className="modal-field-input" defaultValue="Field padding" readOnly style={{ width: 260 }} />
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Champ : <strong>gap 8</strong> constant (label → field → helper). Field : padding <strong>0 14</strong> (md), height 40. Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4. STATES — le champ et ses 4 réactions ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
@@ -61,36 +141,15 @@ export default function InputsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Un champ = <strong>label + field</strong>. Le label (<span className="ds-class">.modal-field-label</span>, 13/500 <span className="ds-token-chip">--text-2</span>) est toujours présent et discret ; le placeholder ne le remplace jamais (il disparaît à la saisie). Bordure <strong>transparente au repos</strong> qui se colore au hover/focus : le champ ne saute pas de taille en changeant d&apos;état. Disabled : texte <span className="ds-token-chip">--text-2</span>, <code>cursor: not-allowed</code>.</p>
+          <p className="ds-note">Bordure transparente au repos, colorée au hover/focus. Hover : bg <span className="ds-token-chip">--primary-5</span> + bord <span className="ds-token-chip">--primary-50</span>. Focus : idem + anneau <code>0 0 0 3px</code> <span className="ds-token-chip">--primary-20</span> (dark <code>rgba(73,89,230,0.4)</code>). Disabled : texte <span className="ds-token-chip">--text-2</span>, <code>cursor: not-allowed</code>.</p>
         </div>
       </div>
 
-      {/* ─────────── 2. ANATOMY & SIZES — pile visuelle + cotes mesurées par taille ─────────── */}
+      {/* ─────────── 5. SIZING — échelle sm / md / lg ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Anatomy &amp; sizes</div>
-
-        {/* Pile visuelle : label / field / helper, marqueurs numérotés */}
+        <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-anatomy">
-            <div className="ds-anatomy-row">
-              <span className="ds-anatomy-lead"><span className="ds-anatomy-marker">1</span><span className="ds-anatomy-line" /></span>
-              <label className="modal-field-label">Title</label>
-            </div>
-            <div className="ds-anatomy-row">
-              <span className="ds-anatomy-lead"><span className="ds-anatomy-marker">2</span><span className="ds-anatomy-line" /></span>
-              <input type="text" className="modal-field-input" defaultValue="Normal People" readOnly style={{ width: "100%" }} />
-            </div>
-            <div className="ds-anatomy-row">
-              <span className="ds-anatomy-lead"><span className="ds-anatomy-marker">3</span><span className="ds-anatomy-line" /></span>
-              <span className="modal-field-hint">10 or 13 digits, dashes optional.</span>
-            </div>
-          </div>
-          <p className="ds-note"><strong>1</strong> Label <span className="ds-class">.modal-field-label</span> · <strong>2</strong> Field <span className="ds-class">.modal-field-input</span> · <strong>3</strong> Helper text <span className="ds-class">.modal-field-hint</span> — remplacé par un message d&apos;erreur/warning quand la validation échoue (jamais les deux à la fois). Gap vertical constant = 8 (<span className="ds-class">.modal-field</span>).</p>
-        </div>
-
-        {/* Cotes mesurées, une planche par taille (sm / md / lg) */}
-        <div className="ds-card-body col">
-          <div className="ds-redline-board">
+          <div className="ds-redline-board ds-redline-board--lined">
             {SIZES.map(([name, mod]) => (
               <div key={name} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
                 <Redline>
@@ -99,30 +158,19 @@ export default function InputsPage() {
               </div>
             ))}
           </div>
-          <p className="ds-note">Une planche par taille — cotes <strong>mesurées à l&apos;exécution</strong> sur le champ réel, le schéma suit library.css.</p>
         </div>
-
-        {/* Specs par taille + socle + hover/focus */}
         <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.modal-field-input</span> · socle</div>
-            <p>radius 8 · border 1.5 <span className="ds-token-chip">transparent</span> · bg <span className="ds-token-chip">--bg3</span> · weight 600 · text <span className="ds-token-chip">--text</span> · placeholder <span className="ds-token-chip">--text-2</span>. Hauteur par défaut (md, 40) partagée avec <code>btn-md</code>.</p>
-          </div>
           {SIZES.map(([name, mod, h, p, f]) => (
             <div key={name} className="ds-token-block">
-              <div className="ds-token-name">{name} · {h}px · {mod ? `.${mod}` : ".modal-field-input (base)"}</div>
+              <div className="ds-token-name">{name} · {h}px · <span className="ds-cn">{mod ? `.${mod}` : ".modal-field-input"}</span></div>
               <p>height {h} · padding {p} · font {f}</p>
             </div>
           ))}
-          <div className="ds-token-block">
-            <div className="ds-token-name">Hover / Focus</div>
-            <p>Hover : bg <span className="ds-token-chip">--primary-5</span> + bord <span className="ds-token-chip">--primary-50</span>. Focus : idem + anneau <code>0 0 0 3px</code> <span className="ds-token-chip">--primary-20</span>. Dark : bg <span className="ds-token-chip">--primary-3</span>, anneau <code>rgba(73,89,230,0.4)</code>.</p>
-          </div>
           <p className="ds-note"><strong>Proposition</strong> — l&apos;app n&apos;utilise aujourd&apos;hui que <code>md</code>. L&apos;échelle <code>sm / lg</code> (<span className="ds-class">.modal-field-input--sm</span> / <span className="ds-class">--lg</span>) au pas 8 comme les boutons n&apos;est pas encore câblée dans library.css.</p>
         </div>
       </div>
 
-      {/* ─────────── 4. VALIDATION — error / warning / read-only + messages ─────────── */}
+      {/* ─────────── 6. VARIANTS · validation ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · validation</div>
         <div className="ds-card-body col">
@@ -173,11 +221,11 @@ export default function InputsPage() {
             <div className="ds-token-name">Helper text vs erreur</div>
             <p>Le helper (<span className="ds-class">.modal-field-hint</span>) est une guidance <em>permanente</em>. Le message d&apos;erreur est <em>conditionnel</em> et le remplace quand la validation échoue — jamais les deux à la fois.</p>
           </div>
-          <p className="ds-note"><strong>Proposition</strong> — le vocabulaire couleur existe déjà, seul l&apos;habillage du bord et le câblage validation manquent dans library.css. Aujourd&apos;hui l&apos;app affiche les erreurs de champ via <span className="ds-class">.modal-error</span> (13/<span className="ds-token-chip">--destructive</span>, sans bord rouge).</p>
+          <p className="ds-note"><strong>Proposition</strong> — le vocabulaire couleur existe déjà, seul l&apos;habillage du bord et le câblage validation manquent dans library.css. Aujourd&apos;hui l&apos;app affiche les erreurs via <span className="ds-class">.modal-error</span> (13/<span className="ds-token-chip">--destructive</span>, sans bord rouge).</p>
         </div>
       </div>
 
-      {/* ─────────── 5. TEXTAREA — champ multi-lignes ─────────── */}
+      {/* ─────────── 7. VARIANTS · textarea ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · textarea</div>
         <div className="ds-card-body col">
@@ -191,16 +239,16 @@ export default function InputsPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name"><span className="ds-cn">.quote-textarea</span></div>
-            <p>Socle du text field décliné multi-lignes : <code>width: 100%</code> · padding <strong>12 14</strong> (vertical rétabli, le champ n&apos;est plus centré sur une ligne) · radius 8 · border 1.5 <span className="ds-token-chip">transparent</span> · bg <span className="ds-token-chip">--bg3</span> · font 15 / 600 · <code>line-height: 1.6</code> · <code>resize: vertical</code>.</p>
+            <p>Socle du text field décliné multi-lignes : <code>width: 100%</code> · padding <strong>12 14</strong> (vertical rétabli) · radius 8 · border 1.5 <span className="ds-token-chip">transparent</span> · bg <span className="ds-token-chip">--bg3</span> · font 15 / 600 · <code>line-height: 1.6</code> · <code>resize: vertical</code>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">États</div>
-            <p>Hover / focus identiques au text field (bg <span className="ds-token-chip">--primary-5</span>, bord <span className="ds-token-chip">--primary-50</span>, anneau <span className="ds-token-chip">--primary-20</span>). Un seul comportement pour tous les champs. Seul champ multi-lignes de l&apos;app (QuoteModal / BookPanel).</p>
+            <p>Hover / focus identiques au text field (bg <span className="ds-token-chip">--primary-5</span>, bord <span className="ds-token-chip">--primary-50</span>, anneau <span className="ds-token-chip">--primary-20</span>). Seul champ multi-lignes de l&apos;app (QuoteModal / BookPanel).</p>
           </div>
         </div>
       </div>
 
-      {/* ─────────── 6. SEARCH — pill + icône + clear (composition) ─────────── */}
+      {/* ─────────── 8. VARIANTS · search ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · search</div>
         <div className="ds-card-body col">
@@ -222,19 +270,15 @@ export default function InputsPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Forme</div>
-            <p>Même socle que le text field (height 40, font 15/600) mais <strong>pill</strong> (radius 32) + <code>width: 100%</code>. Bord au repos <span className="ds-token-chip">--border-subtle</span> (visible, contrairement au champ modal transparent) car il vit sur fond de page, pas dans une carte.</p>
+            <p>Même socle que le text field (height 40, font 15/600) mais <strong>pill</strong> (radius 32) + <code>width: 100%</code>. Bord au repos <span className="ds-token-chip">--border-subtle</span> (visible, contrairement au champ modal transparent) car il vit sur fond de page.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Icône · <span className="ds-cn">.search-box</span> svg</div>
-            <p>Loupe 15×15 <span className="ds-token-chip">--text-2</span>, absolue à <code>left: 14</code>, <code>pointer-events: none</code>. Padding gauche du champ = 38 pour la dégager. Le trait passe à <code>1.5</code> au hover/focus du box.</p>
+            <p>Loupe 15×15 <span className="ds-token-chip">--text-2</span>, absolue à <code>left: 14</code>, <code>pointer-events: none</code>. Padding gauche du champ = 38 pour la dégager. Le trait passe à <code>1.5</code> au hover/focus.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Clear · <span className="ds-cn">.search-clear</span></div>
-            <p>Pastille ronde 18×18 <span className="ds-token-chip">--text-3</span> (hover <span className="ds-token-chip">--text-2</span>), croix 10×10, absolue à <code>right: 10</code>. Masquée par défaut, <span className="ds-class">.visible</span> quand le champ est rempli. Padding droit du champ = 34 pour la loger.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Label</div>
-            <p>Présent comme partout, mais <strong>visuellement masqué</strong> dans les toolbars réelles (icône loupe + placeholder le portent) : on garde alors un <code>aria-label</code> pour les lecteurs d&apos;écran. Le label n&apos;est jamais absent, seulement caché quand le contexte le rend redondant.</p>
+            <p>Pastille ronde 18×18 <span className="ds-token-chip">--text-3</span> (hover <span className="ds-token-chip">--text-2</span>), croix 10×10, absolue à <code>right: 10</code>. Masquée par défaut, <span className="ds-class">.visible</span> quand le champ est rempli. Padding droit = 34.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Variante · <span className="ds-cn">.authors-search-input</span></div>
@@ -243,17 +287,17 @@ export default function InputsPage() {
         </div>
       </div>
 
-      {/* ─────────── 7. CONTENT — règles de rédaction (label / placeholder / message) ─────────── */}
+      {/* ─────────── 9. USAGE · content ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage · content</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Label</div>
-            <p>Court, en <em>title case</em> léger, sans deux-points. Décrit la donnée attendue (« Title », « Author »), pas une action. Toujours visible — un label masqué casse la lecture au scan d&apos;un formulaire.</p>
+            <p>Court, en <em>title case</em> léger, sans deux-points. Décrit la donnée attendue (« Title », « Author »), pas une action. Toujours visible.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Placeholder</div>
-            <p>Un <em>exemple</em> de format (« e.g. 978-0-571-33465-0 »), jamais une consigne ni un substitut de label. Il disparaît à la saisie, donc n&apos;y mettre aucune info nécessaire.</p>
+            <p>Un <em>exemple</em> de format (« e.g. 978-0-571-33465-0 »), jamais une consigne ni un substitut de label. Il disparaît à la saisie.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Message d&apos;erreur</div>
@@ -262,25 +306,24 @@ export default function InputsPage() {
         </div>
       </div>
 
-      {/* ─────────── 8. REFERENCE — mapping canonique → classes nommées ─────────── */}
+      {/* ─────────── 10. USAGE · reference ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage · reference</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Text field · <span className="ds-cn">.modal-field-input</span></div>
-            <p><code>.modal-field input</code> · <span className="ds-class">.scan-manual-input</span> · <span className="ds-class">.col-name-input</span> · <span className="ds-class">.quote-link-select-input</span> — mêmes cotes, contextes différents (AddModal, scan ISBN, nom de collection).</p>
+            <div className="ds-token-name">Text field</div>
+            <p><span className="ds-class">.modal-field input</span> · <span className="ds-class">.scan-manual-input</span> · <span className="ds-class">.col-name-input</span> · <span className="ds-class">.quote-link-select-input</span> — mêmes cotes, contextes différents (AddModal, scan ISBN, nom de collection).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Search · <span className="ds-cn">.search-input</span></div>
+            <div className="ds-token-name">Search</div>
             <p><span className="ds-class">.search-box</span> (Library, Wishlist, Dictionary) · <span className="ds-class">.authors-search-input</span> (menu Authors, variante radius 8).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Message · <span className="ds-cn">.modal-error</span> (actuel) → <span className="ds-cn">.modal-field-message</span> (proposé)</div>
-            <p>Erreurs de champ affichées via <span className="ds-class">.modal-error</span>. Message riche avec icône : réutiliser <span className="ds-class">.modal-toggle-message</span> jusqu&apos;à généralisation.</p>
+            <div className="ds-token-name">Message</div>
+            <p>Erreurs de champ affichées via <span className="ds-class">.modal-error</span>. Message riche avec icône : réutiliser <span className="ds-class">.modal-toggle-message</span> jusqu&apos;à généralisation en <span className="ds-class">.modal-field-message</span>.</p>
           </div>
         </div>
       </div>
-
     </DSSection>
   );
 }

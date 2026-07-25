@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -100,25 +100,61 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
         }
       }
 
+      // Padding VERTICAL d'un descendant désigné (opt-in) — ex. le footer d'un modal
+      // dans une planche du modal complet. On ne cote QUE le vertical : l'horizontal
+      // d'un footer/section reprend en général le padding latéral de la coquille
+      // (redondant). Bandes bornées à la boîte de l'enfant (pas pleine largeur), cotées
+      // à droite avec un trait rallongé pour sortir du specimen.
+      const childVbands = [];
+      if (padSelector) {
+        const pel = el.querySelector(padSelector);
+        if (pel) {
+          const pr = pel.getBoundingClientRect();
+          const pcs = getComputedStyle(pel);
+          const pt2 = parseFloat(pcs.paddingTop) || 0, pb2 = parseFloat(pcs.paddingBottom) || 0;
+          const bt2 = parseFloat(pcs.borderTopWidth) || 0, bbw2 = parseFloat(pcs.borderBottomWidth) || 0;
+          const cL = pr.left - br.left, cT = pr.top - br.top, cW = pr.width, cH = pr.height;
+          if (pt2) childVbands.push({ left: cL, width: cW, top: cT + bt2, height: pt2, value: Math.round(pt2), right: cL + cW });
+          if (pb2) childVbands.push({ left: cL, width: cW, top: cT + cH - bbw2 - pb2, height: pb2, value: Math.round(pb2), right: cL + cW });
+        }
+      }
+
+      // Séparateurs de cellules (opt-in) : deux enfants empilés qui se TOUCHENT
+      // (gap 0, ex. items d'un menu) n'ont pas de bande de gap — on trace un trait
+      // rouge à leur frontière pour les démarquer.
+      const separators = [];
+      if (cellSeparators) {
+        for (let i = 0; i < kids.length - 1; i++) {
+          const a = kids[i].getBoundingClientRect();
+          const b = kids[i + 1].getBoundingClientRect();
+          if (Math.abs(b.top - a.bottom) < 1.5 && Math.abs(b.left - a.left) < 1.5) {
+            separators.push({ top: a.bottom - br.top, left: a.left - br.left, width: a.width });
+          }
+        }
+      }
+
       // Radius du specimen : sert à clipper les bandes (sinon elles débordent aux
       // coins arrondis) et à arrondir le mat blanc du target.
       const rootRadius = parseFloat(cs.borderTopLeftRadius) || 0;
 
-      setM({ w, h: Math.round(h), bands, vbands, icons, box, rootRadius });
+      setM({ w, h: Math.round(h), bands, vbands, childVbands, separators, icons, box, rootRadius });
     };
 
     measure();
-    // En navigation client (soft nav), le layout n'est pas toujours stabilisé au
-    // moment du useLayoutEffect : la 1re mesure capture une largeur transitoire et,
-    // comme la taille ne rebouge plus, le ResizeObserver ne refire pas. On re-mesure
-    // donc après le prochain paint (double rAF) — au hard refresh c'était déjà bon,
-    // ici ça aligne le cas soft-nav.
+    // En navigation client (soft nav), le layout se stabilise parfois APRÈS le
+    // useLayoutEffect ET après le double rAF (centrage text-align, largeur inline,
+    // bordures --lined…), et le ResizeObserver ne refire pas si la TAILLE ne rebouge
+    // plus (seule la position a bougé) → bandes figées décalées jusqu'au refresh. On
+    // multiplie donc les re-mesures : double rAF + timeouts différés, et on observe
+    // AUSSI le target (pas seulement le specimen).
     const raf = requestAnimationFrame(() => requestAnimationFrame(measure));
+    const timers = [setTimeout(measure, 150), setTimeout(measure, 400)];
     const ro = new ResizeObserver(measure);
     ro.observe(el);
+    ro.observe(wrap);
     // Les webfonts changent la largeur du label → re-mesure une fois chargées.
     document.fonts?.ready.then(measure).catch(() => {});
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
+    return () => { cancelAnimationFrame(raf); timers.forEach(clearTimeout); ro.disconnect(); };
   }, [children]);
 
   // Cotes trop proches → on décale une ligne sur deux vers le bas pour que les
@@ -153,7 +189,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
   }
 
   return (
-    <div className="ds-redline">
+    <div className={`ds-redline${keepShape ? " ds-redline--keep" : ""}`}>
       <div className="ds-redline-target" ref={ref} style={{ borderRadius: m ? m.rootRadius : undefined }}>
         {children}
         {m && (
@@ -188,6 +224,19 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 className="ds-redline-band"
                 style={{ top: b.top, height: b.height, left: m.rootRadius, right: m.rootRadius }}
               />
+            ))}
+            {/* Bandes de padding vertical d'un descendant désigné (padSelector) :
+                bornées à la boîte de l'enfant, pas pleine largeur. */}
+            {m.childVbands.map((b, i) => (
+              <span
+                key={`cvb${i}`}
+                className="ds-redline-band"
+                style={{ top: b.top, height: b.height, left: b.left, width: b.width }}
+              />
+            ))}
+            {/* Traits de séparation entre cellules empilées jointives (cellSeparators). */}
+            {m.separators.map((s, i) => (
+              <span key={`sep${i}`} className="ds-redline-sep" style={{ top: s.top, left: s.left, width: s.width }} />
             ))}
             {m.icons.map((ic, i) => (
               <span key={`i${i}`} className="ds-redline-iconframe" style={{ left: ic.left, top: ic.top, width: ic.width, height: ic.height }}>
@@ -227,6 +276,18 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 key={`vc${i}`}
                 className="ds-redline-vcallout"
                 style={{ top: b.top + b.height / 2 }}
+              >
+                <span className="ds-redline-vlead" />
+                <span className="ds-redline-num">{b.value}</span>
+              </span>
+            ))}
+            {/* Cotes du padding vertical de l'enfant : à droite de SA boîte, trait
+                rallongé (--vlead) pour sortir du specimen jusqu'au-delà du bord droit. */}
+            {m.childVbands.map((b, i) => (
+              <span
+                key={`cvc${i}`}
+                className="ds-redline-vcallout"
+                style={{ top: b.top + b.height / 2, left: b.right, "--vlead": `${Math.max(14, m.w - b.right + 16)}px` }}
               >
                 <span className="ds-redline-vlead" />
                 <span className="ds-redline-num">{b.value}</span>

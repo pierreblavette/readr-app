@@ -1,17 +1,43 @@
+"use client";
+import { useState } from "react";
 import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
+import AnnoScene from "../_components/AnnoScene";
 
 const StarPath = () => (
   <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z" />
 );
 
-// Saisie interactive — markup identique à FinishReadingModal (boutons radio,
-// .filled jusqu'à N). Statique ici : la valeur est posée en dur pour la doc.
-function StarInput({ filled = 0 }) {
+// Saisie statique (doc) — markup identique à FinishReadingModal.
+function StarInput({ filled = 0, className = "" }) {
   return (
-    <div className="finish-stars" role="radiogroup" aria-label="Rating">
+    <div className={`finish-stars${className ? " " + className : ""}`} role="radiogroup" aria-label="Rating">
       {[1, 2, 3, 4, 5].map((n) => (
         <button key={n} type="button" role="radio" aria-checked={filled === n} className={`finish-star${n <= filled ? " filled" : ""}`}>
+          <svg viewBox="0 0 24 24" fill="currentColor"><StarPath /></svg>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Saisie live — hover pré-remplit jusqu'au curseur, clic fige (comme la modale).
+function LiveStarInput() {
+  const [value, setValue] = useState(4);
+  const [hover, setHover] = useState(0);
+  const display = hover || value;
+  return (
+    <div className="finish-stars" role="radiogroup" aria-label="Rating" onMouseLeave={() => setHover(0)}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <button
+          key={n}
+          type="button"
+          role="radio"
+          aria-checked={value === n}
+          onClick={() => setValue(n)}
+          onMouseEnter={() => setHover(n)}
+          className={`finish-star${n <= display ? " filled" : ""}`}
+        >
           <svg viewBox="0 0 24 24" fill="currentColor"><StarPath /></svg>
         </button>
       ))}
@@ -38,6 +64,13 @@ const STATES = [
   ["Set", 4],
 ];
 
+// Décomposition numérotée : groupe (1) + étoile vide (2) + étoile pleine (3).
+const ANNOS = [
+  { n: 1, side: "top", target: ".finish-stars" },
+  { n: 2, side: "bottom", target: ".finish-star:not(.filled)" },
+  { n: 3, side: "bottom", target: ".finish-star.filled" },
+];
+
 export default function RatingStarsPage() {
   return (
     <DSSection
@@ -45,7 +78,57 @@ export default function RatingStarsPage() {
       title="Rating Stars"
       sub="Note sur 5 — saisie interactive dans Finish Reading (28px, radiogroup), puis restituée en read-only ailleurs à trois tailles. Étoiles pleines en primary, vides en border."
     >
-      {/* ─────────── 1. STATES — saisie interactive ─────────── */}
+      {/* ─────────── 1. PREVIEW — saisie live ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <LiveStarInput />
+          </div>
+          </div>
+          <p className="ds-note">Specimen <strong>live</strong> — survole pour prévisualiser jusqu&apos;au curseur (aperçu <code>display = hover || value</code>), clique pour figer la note. Pleine <span className="ds-token-chip">--primary-50</span>, vide <span className="ds-token-chip">--border</span>. Pas de demi-étoile.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 2. ANATOMY — décomposition numérotée ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={ANNOS}>
+            <StarInput filled={3} className="ds-anno-organism" />
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.finish-stars</span></td><td>Groupe : rangée <code>flex</code>, gap 4, <code>role=&quot;radiogroup&quot;</code>. Sans fond ni boîte — la saisie vit déjà dans un champ de la modale.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.finish-star</span></td><td>Bouton étoile : ghost, padding 4, svg 28×28 (boîte 36), <code>role=&quot;radio&quot;</code> + <code>aria-checked</code>. Couleur vide <span className="ds-token-chip">--border</span>.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.filled</span></td><td>Étoile remplie : <span className="ds-token-chip">--primary-50</span> (<span className="ds-token-chip">--primary-40</span> dark), transition <code>color</code> 0.12s. Posée jusqu&apos;à la note (ou au survol).</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─────────── 3. SPACING — boîte tactile + gap ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".finish-star">
+                <StarInput filled={4} />
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Chaque bouton <span className="ds-class">.finish-star</span> fait <strong>36×36</strong> (svg 28 + padding 4 tout autour) — coté en boîte ; le padding porte la cible tactile au-delà du glyphe sans agrandir l&apos;étoile visible. <strong>Gap 4</strong> mesuré entre les cinq boutons. Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4. STATES — saisie interactive ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
@@ -58,36 +141,11 @@ export default function RatingStarsPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">La saisie (<span className="ds-class">.finish-stars</span>) est un <code>radiogroup</code> de cinq boutons. Au survol, les étoiles se remplissent <strong>jusqu&apos;au curseur</strong> (aperçu <code>display = hover || value</code>) ; le clic fige la note. Pleine <span className="ds-token-chip">--primary-50</span> (<span className="ds-token-chip">--primary-40</span> dark), vide <span className="ds-token-chip">--border</span>. Pas de demi-étoile.</p>
+          <p className="ds-note">Empty : toutes <span className="ds-token-chip">--border</span>. Hover : remplies <strong>jusqu&apos;au curseur</strong> (aperçu). Set : figées à la note cliquée. Un seul traitement pleine/vide pour les trois.</p>
         </div>
       </div>
 
-      {/* ─────────── 2. ANATOMY — la saisie 28px ─────────── */}
-      <div className="ds-card">
-        <div className="ds-card-head">Anatomy</div>
-        <div className="ds-card-body col">
-          <div className="ds-redline-board">
-            <Redline boxSelector=".finish-star">
-              <StarInput filled={4} />
-            </Redline>
-          </div>
-          <p className="ds-note">Gap 4 mesuré entre les cinq boutons. Chaque bouton <span className="ds-class">.finish-star</span> fait 36×36 (svg 28 + padding 4 tout autour) — le padding porte la cible tactile au-delà du glyphe, sans agrandir l&apos;étoile visible.</p>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Star group</div>
-            <p>Rangée flex, gap 4, <code>role=&quot;radiogroup&quot;</code>. Sans fond ni boîte — la saisie vit déjà dans un champ de la modale.</p>
-            <span className="ds-class">.finish-stars</span>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Star button</div>
-            <p>Bouton ghost, padding 4, svg 28×28, <code>role=&quot;radio&quot;</code> + <code>aria-checked</code>. Couleur vide <span className="ds-token-chip">--border</span> ; <span className="ds-class">.filled</span> → <span className="ds-token-chip">--primary-50</span>, transition <code>color</code> 0.12s.</p>
-            <span className="ds-class">.finish-star</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ─────────── 3. VARIANTS — affichages read-only ─────────── */}
+      {/* ─────────── 5. VARIANTS · read-only ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · read-only</div>
         <div className="ds-card-body col">
@@ -102,7 +160,7 @@ export default function RatingStarsPage() {
               <Redline><StarsDisplay variant="rating-stars-inline" filledAll /></Redline>
             </div>
           </div>
-          <p className="ds-note">De haut en bas : panel (boîte, padding 14, étoile 20), overview (sans boîte, gap 3, étoile 14), inline (gap 2, étoile 16, toujours pleine). La taille d&apos;étoile n&apos;est cotée qu&apos;une fois par planche — cinq étoiles identiques ne répètent plus leur nombre.</p>
+          <p className="ds-note">De haut en bas : panel (boîte, padding 14, étoile 20), overview (sans boîte, gap 3, étoile 14), inline (gap 2, étoile 16, toujours pleine). La taille d&apos;étoile n&apos;est cotée qu&apos;une fois par planche.</p>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
@@ -117,13 +175,13 @@ export default function RatingStarsPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Inline (menu) · svg 16 / 18</div>
-            <p><strong>Toujours pleine</strong> — couleur <span className="ds-token-chip">--primary-50</span> portée par le conteneur, pas par étoile (n&apos;affiche qu&apos;une note déjà connue). svg 16, ou 18 dans un <span className="ds-class">.dropdown-item-label</span>, gap 2.</p>
+            <p><strong>Toujours pleine</strong> — couleur <span className="ds-token-chip">--primary-50</span> portée par le conteneur, pas par étoile. svg 16, ou 18 dans un <span className="ds-class">.dropdown-item-label</span>, gap 2.</p>
             <span className="ds-class">.rating-stars-inline</span>
           </div>
         </div>
       </div>
 
-      {/* ─────────── 4. USAGE ─────────── */}
+      {/* ─────────── 6. USAGE ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
