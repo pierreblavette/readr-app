@@ -97,13 +97,13 @@ export default function SegmentedPillsPage() {
         <div className="ds-card-head">Spacing</div>
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline keepShape>
-                <Segment size="md" />
-              </Redline>
-            </div>
+            {SIZES.map(([size]) => (
+              <div key={size} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+                <Redline keepShape><Segment size={size} /></Redline>
+              </div>
+            ))}
           </div>
-          <p className="ds-note">Bandes de bord = padding <strong>4</strong> de la piste (md) ; <strong>gaps 4</strong> mesurés entre les pills (micro-gap DS). Le fond <span className="ds-token-chip">--bg3</span> et le radius pill sont conservés (<code>keepShape</code>) : la forme de la piste compte, il n&apos;y a pas de padding large à montrer flush. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Une planche par taille — <strong>gap constant 4</strong> entre les pills (micro-gap DS), hauteur de pill 24 → 32 → 40 → 48 (step 8). Le padding de piste (2 / 3 / 4 / 5) vit dans l&apos;arrondi de la pill et n&apos;est pas coté en bande (non lisible dans un coin arrondi). Fond <span className="ds-token-chip">--bg3</span> et radius pill conservés (<code>keepShape</code>). Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
@@ -115,6 +115,7 @@ export default function SegmentedPillsPage() {
             {STATES.map(([label, mod]) => (
               <div key={label} className="ds-state-sample">
                 <button type="button" className={`overview-activity-pill is-md${mod ? " " + mod : ""}`}>{label}</button>
+                <span className="ds-class">{mod === "is-active" ? ".is-active" : mod === "is-hover" ? ":hover" : ".overview-activity-pill"}</span>
               </div>
             ))}
           </div>
@@ -132,24 +133,15 @@ export default function SegmentedPillsPage() {
             {SIZES.map(([size]) => (
               <div key={size} className="ds-state-sample">
                 <Segment size={size} />
+                <span className="ds-class">.is-{size}</span>
               </div>
             ))}
           </div>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-redline-board ds-redline-board--lined">
-            {SIZES.map(([size]) => (
-              <div key={size} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-                <Redline keepShape><Segment size={size} /></Redline>
-              </div>
-            ))}
-          </div>
-          <p className="ds-note">Une planche par taille — hauteur de pill 24 → 32 → 40 → 48 (step 8), gap constant <strong>4</strong> (micro-gap DS). Le padding de piste fait 2 / 3 / 4 / 5 : un réglage à la main, <strong>pas</strong> une valeur du barème.</p>
         </div>
         <div className="ds-card-body col">
           {SIZES.map(([size, spec]) => (
             <div key={size} className="ds-token-block">
-              <div className="ds-token-name">{size.toUpperCase()} · <span className="ds-cn">.is-{size}</span></div>
+              <div className="ds-token-name">{size.toUpperCase()}</div>
               <p>{spec}.</p>
             </div>
           ))}

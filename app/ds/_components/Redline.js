@@ -33,18 +33,30 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       const pb = parseFloat(cs.paddingBottom) || 0;
       const w = br.width, h = br.height;
 
+      // Specimen en forme de pill (radius ≥ demi-hauteur, ex. piste segmented) : les
+      // bandes de padding horizontal sont insérées de rootRadius en haut/bas (pour
+      // éviter les coins arrondis) et s'effondrent alors à ~0 → un résidu 2×2px
+      // parasite avec --lined. Sur une pill, ce padding vit DANS l'arrondi et n'est
+      // pas cotable proprement : on ne pose pas ces bandes de bord (les gaps entre
+      // enfants et la hauteur restent). Sur une forme non-pill, comportement inchangé.
+      const rootRadius = parseFloat(cs.borderTopLeftRadius) || 0;
+      const isPill = rootRadius * 2 >= h - 1;
+
       // Padding horizontal (gauche/droite) → stries verticales, cotées en bas.
       const bands = [];
-      if (pl) bands.push({ left: bl, width: pl, value: Math.round(pl) });
-      if (pr) bands.push({ left: w - brw - pr, width: pr, value: Math.round(pr) });
+      if (pl && !isPill) bands.push({ left: bl, width: pl, value: Math.round(pl) });
+      if (pr && !isPill) bands.push({ left: w - brw - pr, width: pr, value: Math.round(pr) });
 
       // Padding vertical (haut/bas) → stries horizontales, cotées à droite (la
       // gauche est prise par le crochet de hauteur). Les atomes (padding 0 X) ont
       // pt/pb = 0 → aucune bande verticale, comportement inchangé ; ça n'apparaît
       // que sur les composants à padding vertical réel (modal, footer, cards).
+      // Sur une pill, les bandes de padding vertical sont insérées horizontalement
+      // de rootRadius (pour éviter les extrémités arrondies) et s'effondrent aussi →
+      // même résidu 2×2px parasite. On les saute comme les bandes horizontales.
       const vbands = [];
-      if (pt) vbands.push({ top: bt, height: pt, value: Math.round(pt) });
-      if (pb) vbands.push({ top: h - bbw - pb, height: pb, value: Math.round(pb) });
+      if (pt && !isPill) vbands.push({ top: bt, height: pt, value: Math.round(pt) });
+      if (pb && !isPill) vbands.push({ top: h - bbw - pb, height: pb, value: Math.round(pb) });
 
       // Enfants VISIBLES seulement : un input masqué (0×0, position absolue, ex.
       // la checkbox) fausserait sinon la boucle de gaps avec une bande parasite.
@@ -132,11 +144,8 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
           }
         }
       }
-
-      // Radius du specimen : sert à clipper les bandes (sinon elles débordent aux
-      // coins arrondis) et à arrondir le mat blanc du target.
-      const rootRadius = parseFloat(cs.borderTopLeftRadius) || 0;
-
+      // rootRadius (calculé plus haut) sert aussi à clipper les bandes (sinon elles
+      // débordent aux coins arrondis) et à arrondir le mat blanc du target.
       setM({ w, h: Math.round(h), bands, vbands, childVbands, separators, icons, box, rootRadius });
     };
 

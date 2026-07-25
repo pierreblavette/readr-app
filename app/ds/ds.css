@@ -150,7 +150,7 @@ a.sidebar-item { text-decoration: none; }
    une colonne échantillon + eyebrow. Gap large pour séparer les états. */
 .ds-states-grid { display: flex; flex-wrap: wrap; align-items: center; width: 100%; }
 .ds-card-body > .ds-states-grid { gap: 32px; }
-.ds-states-grid > .ds-state-sample { align-items: center; gap: 16px; }
+.ds-states-grid > .ds-state-sample { align-items: center; gap: 48px; }
 /* L'étiquette se cale à gauche de son échantillon, qui reste centré dans sa
    colonne. Un titre qui flotte au centre ne dit pas où commence ce qu'il
    nomme ; le bord gauche est le point d'ancrage de lecture. */
@@ -510,6 +510,10 @@ a.sidebar-item { text-decoration: none; }
 .palette-grid.on-dark-bg { background: #0F0F0F; padding: 16px; border-radius: var(--radius); }
 
 .ds-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; width: 100%; }
+/* Peu de tuiles (ex. 3 ombres) : colonnes égales qui remplissent toute la largeur
+   du container (auto-fit laisserait une piste 0px + son gap en fin de rangée).
+   Mobile : la règle 2-colonnes de .ds-swatch-grid reprend (ordre source). */
+.ds-swatch-grid--fill { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 /* Mobile: 2 colonnes garanties pour toutes les grilles colors
  * (le min 160 forcerait 1 col sur ~311 disponibles). */
 @media (max-width: 600px) {
@@ -744,6 +748,10 @@ a.sidebar-item { text-decoration: none; }
 .ds-anno-scene .overview-cloud-chip,
 .ds-preview .book-chip,
 .ds-anno-scene .book-chip { background: var(--card); }
+/* Checkbox : la rangée est transparente et se fond sur le bleu → surface --card
+   (padding + radius) pour la démarquer, Preview + Anatomy. */
+.ds-preview .modal-toggle-row,
+.ds-anno-scene .modal-toggle-row { background: var(--card); padding: 0 16px; border-radius: 8px; }
 /* Dans une planche Redline, le mat blanc cacherait un track blanc → on le rend
    transparent (le track porte sa propre forme via keepShape) pour qu'il ressorte
    sur le bleu de la scène. Scopé aux planches contenant un track de pills. */
@@ -1107,6 +1115,16 @@ a.sidebar-item { text-decoration: none; }
 .ds-tile-grid { display: grid; gap: 20px; width: 100%; align-items: start; }
 .ds-tile-grid--cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ds-tile-grid--cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Alignement des captions dans une grille boxée à specimens de hauteurs inégales :
+   le specimen occupe l'espace flexible centré (flex:1) → la caption est poussée en
+   bas, et le stretch du grid égalise la hauteur des cellules ⇒ captions alignées.
+   Réutilisable (Strokes in-use, Shadows in-use…). */
+.ds-specimen-cell { flex: 1; display: flex; align-items: center; justify-content: center; }
+/* Strokes « In use » — cellule haute pour laisser respirer (le menu monte haut) +
+   dropzone élargie pour soutenir la comparaison. */
+.ds-stroke-board .ds-state-sample { min-height: 300px; }
+.ds-stroke-board .import-dropzone { width: 240px; min-height: 150px; }
 
 /* Modal specimen — la vraie coquille .modal montrée en flux, sur la surface de la
    carte comme .ds-autocomplete-stage (pas de scène teintée : le composant porte

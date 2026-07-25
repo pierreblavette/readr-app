@@ -80,6 +80,7 @@ export default function BadgesPage() {
             {SIZES.map(([mod]) => (
               <div key={mod} className="ds-state-sample">
                 <span className={`now-reading-date now-reading-date--${mod}`}>{mod.toUpperCase()}</span>
+                <span className="ds-class">.now-reading-date--{mod}</span>
               </div>
             ))}
           </div>
@@ -87,7 +88,7 @@ export default function BadgesPage() {
         <div className="ds-card-body col">
           {SIZES.map(([mod, h, spec]) => (
             <div key={mod} className="ds-token-block">
-              <div className="ds-token-name">{mod.toUpperCase()} · {h}px · <span className="ds-cn">.now-reading-date--{mod}</span></div>
+              <div className="ds-token-name">{mod.toUpperCase()} · {h}px</div>
               <p>{spec}.</p>
             </div>
           ))}

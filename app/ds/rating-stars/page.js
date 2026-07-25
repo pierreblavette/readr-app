@@ -119,12 +119,19 @@ export default function RatingStarsPage() {
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".finish-star">
-                <StarInput filled={4} />
-              </Redline>
+              <Redline><StarsDisplay variant="overview-stars" value={4} /></Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline><StarsDisplay variant="rating-stars-inline" filledAll /></Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline><StarsDisplay variant="panel-rating-stars" value={4} /></Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".finish-star"><StarInput filled={4} /></Redline>
             </div>
           </div>
-          <p className="ds-note">Chaque bouton <span className="ds-class">.finish-star</span> fait <strong>36×36</strong> (svg 28 + padding 4 tout autour) — coté en boîte ; le padding porte la cible tactile au-delà du glyphe sans agrandir l&apos;étoile visible. <strong>Gap 4</strong> mesuré entre les cinq boutons. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">De la plus petite à la plus grande : <strong>read-only</strong> overview (gap 3, étoile 14) · inline (gap 2, étoile 16) · panel (boîte, padding 14, étoile 20) ; puis la <strong>saisie</strong> <span className="ds-class">.finish-star</span> <strong>36×36</strong> (svg 28 + padding 4, gap 4) — le padding porte la cible tactile sans agrandir l&apos;étoile. La taille d&apos;étoile est cotée une fois par planche. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
@@ -149,34 +156,33 @@ export default function RatingStarsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · read-only</div>
         <div className="ds-card-body col">
-          <div className="ds-redline-board">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline><StarsDisplay variant="panel-rating-stars" value={4} /></Redline>
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
+              <StarsDisplay variant="panel-rating-stars" value={4} />
+              <span className="ds-class">.panel-rating-stars</span>
             </div>
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline><StarsDisplay variant="overview-stars" value={4} /></Redline>
+            <div className="ds-state-sample">
+              <StarsDisplay variant="overview-stars" value={4} />
+              <span className="ds-class">.overview-stars</span>
             </div>
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline><StarsDisplay variant="rating-stars-inline" filledAll /></Redline>
+            <div className="ds-state-sample">
+              <StarsDisplay variant="rating-stars-inline" filledAll />
+              <span className="ds-class">.rating-stars-inline</span>
             </div>
           </div>
-          <p className="ds-note">De haut en bas : panel (boîte, padding 14, étoile 20), overview (sans boîte, gap 3, étoile 14), inline (gap 2, étoile 16, toujours pleine). La taille d&apos;étoile n&apos;est cotée qu&apos;une fois par planche.</p>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Boxed (panel) · svg 20</div>
             <p>Boîte teintée <span className="ds-token-chip">--bg3</span>, padding 12/14, radius 8, gap 4. Affichage proéminent dans BookPanel / DeleteModal.</p>
-            <span className="ds-class">.panel-rating-stars</span>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Compact (overview) · svg 14</div>
             <p>Sans boîte, gap 3, padding 4px 0. Se glisse sous le titre d&apos;un Book Chip ou dans une carte Overview. Même logique vide/pleine que la saisie.</p>
-            <span className="ds-class">.overview-stars</span>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Inline (menu) · svg 16 / 18</div>
             <p><strong>Toujours pleine</strong> — couleur <span className="ds-token-chip">--primary-50</span> portée par le conteneur, pas par étoile. svg 16, ou 18 dans un <span className="ds-class">.dropdown-item-label</span>, gap 2.</p>
-            <span className="ds-class">.rating-stars-inline</span>
           </div>
         </div>
       </div>

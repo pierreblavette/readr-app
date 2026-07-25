@@ -18,11 +18,11 @@ function Trigger({ open = false }) {
 }
 
 const ITEM_STATES = [
-  ["Default", ""],
-  ["Hover", "is-hover"],
-  ["Active", "is-active"],
-  ["Destructive", "is-destructive"],
-  ["Disabled", ""],
+  ["Default", "", ".dropdown-item"],
+  ["Hover", "is-hover", ":hover"],
+  ["Active", "is-active", ":active"],
+  ["Destructive", "is-destructive", ".is-destructive"],
+  ["Disabled", "", ":disabled"],
 ];
 
 // Décomposition numérotée : trigger (1 + parties 2/3/4) puis menu (5 + parties 6/7/8).
@@ -138,7 +138,7 @@ export default function DropdownMenuPage() {
         <div className="ds-card-head">States · item</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
-            {ITEM_STATES.map(([label, mod]) => (
+            {ITEM_STATES.map(([label, mod, cap]) => (
               <div key={label} className="ds-state-sample">
                 <button
                   type="button"
@@ -148,6 +148,7 @@ export default function DropdownMenuPage() {
                 >
                   {label}
                 </button>
+                <span className="ds-class">{cap}</span>
               </div>
             ))}
           </div>

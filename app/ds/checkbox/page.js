@@ -152,10 +152,10 @@ export default function CheckboxPage() {
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
-            <div className="ds-state-sample"><ToggleRow checked={false} label="Unselected" /></div>
-            <div className="ds-state-sample"><ToggleRow checked label="Selected" /></div>
-            <div className="ds-state-sample"><ToggleRow checked={false} focusDemo label="Focus" /></div>
-            <div className="ds-state-sample"><ToggleRow checked={false} disabled label="Disabled" /></div>
+            <div className="ds-state-sample"><ToggleRow checked={false} label="Unselected" /><span className="ds-class">.modal-toggle-row</span></div>
+            <div className="ds-state-sample"><ToggleRow checked label="Selected" /><span className="ds-class">:checked</span></div>
+            <div className="ds-state-sample"><ToggleRow checked={false} focusDemo label="Focus" /><span className="ds-class">:focus-visible</span></div>
+            <div className="ds-state-sample"><ToggleRow checked={false} disabled label="Disabled" /><span className="ds-class">.is-disabled</span></div>
           </div>
         </div>
         <div className="ds-card-body col">
@@ -168,10 +168,10 @@ export default function CheckboxPage() {
         <div className="ds-card-head">Variants · reference states</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed">
-            <div className="ds-state-sample"><ToggleRow indeterminate label="Indeterminate" /></div>
-            <div className="ds-state-sample"><ToggleRow checked readOnly label="Read-only" /></div>
-            <div className="ds-state-sample"><ToggleRow checked status="error" label="Error" message="This selection is required" /></div>
-            <div className="ds-state-sample"><ToggleRow checked status="warning" label="Warning" message="Double-check this choice" /></div>
+            <div className="ds-state-sample"><ToggleRow indeterminate label="Indeterminate" /><span className="ds-class">:indeterminate</span></div>
+            <div className="ds-state-sample"><ToggleRow checked readOnly label="Read-only" /><span className="ds-class">.is-readonly</span></div>
+            <div className="ds-state-sample"><ToggleRow checked status="error" label="Error" message="This selection is required" /><span className="ds-class">.has-error</span></div>
+            <div className="ds-state-sample"><ToggleRow checked status="warning" label="Warning" message="Double-check this choice" /><span className="ds-class">.is-warning</span></div>
           </div>
         </div>
         <div className="ds-card-body col">
@@ -187,6 +187,7 @@ export default function CheckboxPage() {
             {[["Default", ""], ["Hover", "is-hover"], ["Selected", "is-selected"]].map(([label, mod]) => (
               <div key={label} className="ds-state-sample">
                 <span className={`row-checkbox${mod ? " " + mod : ""}`}><CheckIcon /></span>
+                <span className="ds-class">{mod ? "." + mod : ".row-checkbox"}</span>
               </div>
             ))}
           </div>

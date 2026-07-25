@@ -4,10 +4,10 @@ import AnnoScene from "../_components/AnnoScene";
 
 // Default / Hover / Focus / Disabled — les 4 états réels du champ (mirror is-* / attr).
 const STATES = [
-  ["Default", "", false],
-  ["Hover", "is-hover", false],
-  ["Focus", "is-focus", false],
-  ["Disabled", "", true],
+  ["Default", "", false, ".modal-field-input"],
+  ["Hover", "is-hover", false, ":hover"],
+  ["Focus", "is-focus", false, ":focus"],
+  ["Disabled", "", true, ":disabled"],
 ];
 
 // sm 32 / md 40 (actuel) / lg 48 — proposition (voir ds.css). Pas 8, comme les boutons.
@@ -108,13 +108,15 @@ export default function InputsPage() {
                 </div>
               </Redline>
             </div>
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline>
-                <input type="text" className="modal-field-input" defaultValue="Field padding" readOnly style={{ width: 260 }} />
-              </Redline>
-            </div>
+            {SIZES.map(([name, mod]) => (
+              <div key={name} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+                <Redline>
+                  <input type="text" className={`modal-field-input${mod ? " " + mod : ""}`} defaultValue={name} readOnly style={{ width: 260 }} />
+                </Redline>
+              </div>
+            ))}
           </div>
-          <p className="ds-note">Champ : <strong>gap 8</strong> constant (label → field → helper). Field : padding <strong>0 14</strong> (md), height 40. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Champ : <strong>gap 8</strong> constant (label → field → helper). Field : padding <strong>0 12 / 0 14 / 0 16</strong> (sm / md / lg), height <strong>32 / 40 / 48</strong>. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
@@ -123,7 +125,7 @@ export default function InputsPage() {
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
-            {STATES.map(([state, mod, disabled]) => (
+            {STATES.map(([state, mod, disabled, cap]) => (
               <div key={state} className="ds-state-sample">
                 <div className="modal-field" style={{ width: "100%" }}>
                   <label className="modal-field-label">{state}</label>
@@ -136,6 +138,7 @@ export default function InputsPage() {
                     style={{ width: "100%" }}
                   />
                 </div>
+                <span className="ds-class">{cap}</span>
               </div>
             ))}
           </div>
@@ -149,12 +152,14 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-redline-board ds-redline-board--lined">
+          <div className="ds-states-grid ds-states-grid--boxed">
             {SIZES.map(([name, mod]) => (
-              <div key={name} className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-                <Redline>
-                  <input type="text" className={`modal-field-input${mod ? " " + mod : ""}`} defaultValue={name} readOnly style={{ width: 240 }} />
-                </Redline>
+              <div key={name} className="ds-state-sample">
+                <div className="modal-field" style={{ width: "100%" }}>
+                  <label className="modal-field-label">Title</label>
+                  <input type="text" className={`modal-field-input${mod ? " " + mod : ""}`} defaultValue={name} readOnly style={{ width: "100%" }} />
+                </div>
+                <span className="ds-class">{mod ? `.${mod}` : ".modal-field-input"}</span>
               </div>
             ))}
           </div>
@@ -162,11 +167,11 @@ export default function InputsPage() {
         <div className="ds-card-body col">
           {SIZES.map(([name, mod, h, p, f]) => (
             <div key={name} className="ds-token-block">
-              <div className="ds-token-name">{name} · {h}px · <span className="ds-cn">{mod ? `.${mod}` : ".modal-field-input"}</span></div>
+              <div className="ds-token-name">{name} · {h}px</div>
               <p>height {h} · padding {p} · font {f}</p>
             </div>
           ))}
-          <p className="ds-note"><strong>Proposition</strong> — l&apos;app n&apos;utilise aujourd&apos;hui que <code>md</code>. L&apos;échelle <code>sm / lg</code> (<span className="ds-class">.modal-field-input--sm</span> / <span className="ds-class">--lg</span>) au pas 8 comme les boutons n&apos;est pas encore câblée dans library.css.</p>
+          <p className="ds-note">L&apos;app n&apos;utilise aujourd&apos;hui que <code>md</code> ; l&apos;échelle <code>sm / lg</code> (pas 8, iso boutons) est désormais <strong>disponible</strong> dans library.css.</p>
         </div>
       </div>
 
@@ -183,6 +188,7 @@ export default function InputsPage() {
                 </div>
                 <span className="modal-toggle-message is-error"><ErrorIcon /> Title is required.</span>
               </div>
+              <span className="ds-class">.is-invalid</span>
             </div>
             <div className="ds-state-sample">
               <div className="modal-toggle-field" style={{ width: "100%" }}>
@@ -192,12 +198,14 @@ export default function InputsPage() {
                 </div>
                 <span className="modal-toggle-message is-warning"><WarnIcon /> ISBN looks incomplete.</span>
               </div>
+              <span className="ds-class">.is-warn</span>
             </div>
             <div className="ds-state-sample">
               <div className="modal-field" style={{ width: "100%" }}>
                 <label className="modal-field-label">Read-only</label>
                 <input type="text" className="modal-field-input is-readonly" defaultValue="Sally Rooney" readOnly style={{ width: "100%" }} />
               </div>
+              <span className="ds-class">.is-readonly</span>
             </div>
             <div className="ds-state-sample">
               <div className="modal-field" style={{ width: "100%" }}>
@@ -205,6 +213,7 @@ export default function InputsPage() {
                 <input type="text" className="modal-field-input" defaultValue="" placeholder="e.g. 978-0-571-33465-0" readOnly style={{ width: "100%" }} />
                 <span className="modal-field-hint">10 or 13 digits, dashes optional.</span>
               </div>
+              <span className="ds-class">.modal-field-hint</span>
             </div>
           </div>
         </div>
@@ -229,16 +238,19 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · textarea</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
-            <div className="modal-field" style={{ width: "100%", maxWidth: 420 }}>
-              <label className="modal-field-label">Quote</label>
-              <textarea className="quote-textarea" rows={3} readOnly defaultValue={"« The world was ending and there was nothing to be done about it. »"} style={{ width: "100%" }} />
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
+              <div className="modal-field" style={{ width: "100%", maxWidth: 420 }}>
+                <label className="modal-field-label">Quote</label>
+                <textarea className="quote-textarea" rows={3} readOnly defaultValue={"« The world was ending and there was nothing to be done about it. »"} style={{ width: "100%" }} />
+              </div>
+              <span className="ds-class">.quote-textarea</span>
             </div>
           </div>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.quote-textarea</span></div>
+            <div className="ds-token-name">Base</div>
             <p>Socle du text field décliné multi-lignes : <code>width: 100%</code> · padding <strong>12 14</strong> (vertical rétabli) · radius 8 · border 1.5 <span className="ds-token-chip">transparent</span> · bg <span className="ds-token-chip">--bg3</span> · font 15 / 600 · <code>line-height: 1.6</code> · <code>resize: vertical</code>.</p>
           </div>
           <div className="ds-token-block">

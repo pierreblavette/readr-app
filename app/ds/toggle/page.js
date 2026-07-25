@@ -157,6 +157,29 @@ export default function TogglePage() {
         </div>
       </div>
 
+      {/* ══════════ VARIANTS · TYPES ══════════ */}
+      <div className="ds-card">
+        <div className="ds-card-head">Variants · types</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn" aria-label="Theme"><span className="toggle-thumb"><SunIcon /></span></button>
+              <span className="ds-class">.theme-btn</span>
+            </div>
+            <div className="ds-state-sample">
+              <div className="view-btns" role="tablist">
+                <button type="button" className="view-btn active" aria-label="Grid"><GridIcon /></button>
+                <button type="button" className="view-btn" aria-label="List"><ListIcon /></button>
+              </div>
+              <span className="ds-class">.view-btns</span>
+            </div>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Deux types de bascule. <strong>Theme</strong> — slider animé à pastille (un thumb qui glisse), on/off. <strong>View</strong> — segment à deux cases jointives, une seule active.</p>
+        </div>
+      </div>
+
       {/* ══════════ USAGE ══════════ */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>

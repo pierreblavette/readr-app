@@ -121,11 +121,13 @@ export default function BookCardKebabPage() {
               <button type="button" className="col-card-kebab" aria-haspopup="menu" aria-expanded="false" aria-label="More actions">
                 <KebabIcon />
               </button>
+              <span className="ds-class">[aria-expanded=&quot;false&quot;]</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="col-card-kebab" aria-haspopup="menu" aria-expanded="true" aria-label="More actions">
                 <KebabIcon />
               </button>
+              <span className="ds-class">[aria-expanded=&quot;true&quot;]</span>
             </div>
           </div>
         </div>

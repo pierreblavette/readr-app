@@ -111,15 +111,47 @@ export default function BookChipPage() {
         <div className="ds-card-head">Spacing</div>
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
-            <Redline boxSelector=".book-chip-cover">
-              <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
-                <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
-                <Body title="Tropique du Cancer" author="Henry Miller" />
-                <Chevron />
-              </button>
-            </Redline>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".book-chip-cover">
+                <div className="book-chip" style={{ width: 300 }}>
+                  <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
+                  <Body title="Display" author="Henry Miller" />
+                </div>
+              </Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".book-chip-cover">
+                <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
+                  <Cover from="#9EEB97" to="#4959E6" letter="1" />
+                  <Body title="Interactive" author="George Orwell" />
+                  <Chevron />
+                </button>
+              </Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".book-chip-cover">
+                <div className="book-chip" style={{ width: 300 }}>
+                  <Cover from="#FE7E4E" to="#FFCEE3" letter="B" />
+                  <Body title="With remove" author="Stephen Hawking" />
+                  <button type="button" className="book-chip-remove" aria-label="Remove">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+              </Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline boxSelector=".book-chip-cover">
+                <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
+                  <Cover from="#4959E6" to="#00A699" letter="D" />
+                  <Body title="Rating" author="Frank Herbert" rating={5} />
+                  <Chevron />
+                </button>
+              </Redline>
+            </div>
           </div>
-          <p className="ds-note">Padding <strong>12</strong> uniforme (4 côtés), gap <strong>12</strong> vignette → corps, <strong>4</strong> corps → chevron (<code>margin-left</code>). Vignette <strong>32×44</strong> (radius 4) cotée en boîte. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Une planche par mode. Base : padding <strong>12</strong> uniforme (4 côtés), gap <strong>12</strong> vignette → corps, vignette <strong>32×44</strong> (r4) cotée en boîte. <strong>Interactive</strong> ajoute le chevron (gap 4, <code>margin-left</code>). <strong>With remove</strong> remplace le chevron par la croix 28×28. <strong>Rating</strong> passe en <code>align-items: flex-start</code> (vignette calée en haut). Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
@@ -134,6 +166,7 @@ export default function BookChipPage() {
                 <Body title="Default" author="--bg3" />
                 <Chevron />
               </button>
+              <span className="ds-class">.book-chip-interactive</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="book-chip book-chip-interactive is-hover" style={{ width: 260 }}>
@@ -141,6 +174,7 @@ export default function BookChipPage() {
                 <Body title="Hover" author="--primary-10" />
                 <Chevron />
               </button>
+              <span className="ds-class">:hover</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="book-chip book-chip-interactive is-active" style={{ width: 260 }}>
@@ -148,6 +182,7 @@ export default function BookChipPage() {
                 <Body title="Active" author="--primary-10" />
                 <Chevron />
               </button>
+              <span className="ds-class">:active</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="book-chip book-chip-interactive is-focus" style={{ width: 260 }}>
@@ -155,6 +190,7 @@ export default function BookChipPage() {
                 <Body title="Focus" author="ring --primary-50" />
                 <Chevron />
               </button>
+              <span className="ds-class">:focus-visible</span>
             </div>
           </div>
         </div>
@@ -173,6 +209,7 @@ export default function BookChipPage() {
                 <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
                 <Body title="Tropique du Cancer" author="Henry Miller" />
               </div>
+              <span className="ds-class">.book-chip</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
@@ -180,6 +217,7 @@ export default function BookChipPage() {
                 <Body title="1984" author="George Orwell" />
                 <Chevron />
               </button>
+              <span className="ds-class">.book-chip-interactive</span>
             </div>
             <div className="ds-state-sample">
               <div className="book-chip" style={{ width: 260 }}>
@@ -191,6 +229,7 @@ export default function BookChipPage() {
                   </svg>
                 </button>
               </div>
+              <span className="ds-class">.book-chip-remove</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="book-chip book-chip-interactive" style={{ width: 260 }}>
@@ -198,6 +237,7 @@ export default function BookChipPage() {
                 <Body title="Dune" author="Frank Herbert" rating={5} />
                 <Chevron />
               </button>
+              <span className="ds-class">.overview-stars</span>
             </div>
           </div>
         </div>

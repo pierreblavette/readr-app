@@ -96,16 +96,21 @@ export default function ButtonsPage() {
         <div className="ds-card-head">Spacing</div>
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
-            <div className="ds-redline-row">
-              <Redline>
-                <button className="btn btn-outline btn-md"><span>Text only</span></button>
-              </Redline>
-              <Redline>
-                <button className="btn btn-outline btn-md"><PlusIcon strokeWidth={2} /><span>Icon left</span></button>
-              </Redline>
-            </div>
+            {SIZES.map(([cls]) => (
+              <div key={cls} className="ds-redline-row">
+                <Redline>
+                  <button className={`btn btn-outline ${cls}`}><span>Common button</span></button>
+                </Redline>
+                <Redline>
+                  <button className={`btn btn-outline ${cls}`}>
+                    <PlusIcon strokeWidth={2} />
+                    <span>Common button</span>
+                  </button>
+                </Redline>
+              </div>
+            ))}
           </div>
-          <p className="ds-note">À MD : padding symétrique <strong>0 20</strong> (gauche), radius <strong>8</strong>, gap <strong>8</strong>. Avec une icône (droite), le côté icône tombe à <strong>12</strong> (<code>base − 8</code>) : l&apos;icône apporte déjà sa masse à ce bord, un 20 y creuserait un vide. Détection <strong>auto</strong> via <code>:has()</code> — aucune classe en plus. Cotes mesurées à l&apos;exécution ; l&apos;échelle complète des paddings est en Sizing.</p>
+          <p className="ds-note">Colonne gauche : padding <strong>symétrique</strong> (0 12 → 0 28 selon la taille), radius 8, gap 8. Colonne droite : padding <strong>asymétrique</strong> auto via <code>:has()</code> — le côté icône tombe de <strong>8</strong> (<code>base − 8</code>), l&apos;icône apportant déjà sa masse à ce bord ; le ratio tient à toutes les tailles, aucune classe en plus. La boîte d&apos;icône cotée = boîte réservée (glyph + cadre 2px, ex. 16 + 4 = 20 en md), pas le glyph. Cotes mesurées à l&apos;exécution, jamais en dur.</p>
         </div>
       </div>
 
@@ -135,27 +140,10 @@ export default function ButtonsPage() {
             {SIZES.map(([cls, label]) => (
               <div key={cls} className="ds-state-sample">
                 <button className={`btn btn-primary ${cls}`}><span>{label}</span></button>
+                <span className="ds-class">.{cls}</span>
               </div>
             ))}
           </div>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-redline-board ds-redline-board--lined">
-            {SIZES.map(([cls]) => (
-              <div key={cls} className="ds-redline-row">
-                <Redline>
-                  <button className={`btn btn-outline ${cls}`}><span>Common button</span></button>
-                </Redline>
-                <Redline>
-                  <button className={`btn btn-outline ${cls}`}>
-                    <PlusIcon strokeWidth={2} />
-                    <span>Common button</span>
-                  </button>
-                </Redline>
-              </div>
-            ))}
-          </div>
-          <p className="ds-note">Cotes <strong>mesurées à l&apos;exécution</strong> sur le bouton réel, jamais écrites en dur : le schéma suit le CSS. La boîte d&apos;icône cotée est la boîte réservée (glyph + cadre 2px, ex. 16 + 4 = 20 en md), pas le glyph. Colonne gauche : padding symétrique. Colonne droite : padding asymétrique auto (<code>:has()</code>) — le ratio (<code>base − 8</code>) tient à toutes les tailles.</p>
         </div>
         <div className="ds-card-body col">
           {ANATOMY.map(([sz, h, p, r, f, g, io]) => (
@@ -242,6 +230,7 @@ export default function ButtonsPage() {
                 </svg>
                 <span>Generate</span>
               </button>
+              <span className="ds-class">.btn-ai</span>
             </div>
           </div>
         </div>
@@ -272,19 +261,21 @@ export default function ButtonsPage() {
           <div className="ds-states-grid ds-states-grid--boxed">
             <div className="ds-state-sample">
               <button type="button" className="btn-link">Remove goal</button>
+              <span className="ds-class">.btn-link</span>
             </div>
             <div className="ds-state-sample">
               <button type="button" className="btn-link btn-link--critical">Remove goal</button>
+              <span className="ds-class">.btn-link--critical</span>
             </div>
           </div>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.btn-link</span></div>
+            <div className="ds-token-name">Default</div>
             <p>Inline text action — 14 / 600 · <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span> + underline · no padding, no border, no fixed height. Used for low-key actions inside forms or cards (e.g. &quot;Remove goal&quot; in ReadingGoalModal).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name"><span className="ds-cn">.btn-link--critical</span></div>
+            <div className="ds-token-name">Critical</div>
             <p><span className="ds-token-chip">--destructive</span> color · same typography and behavior. For destructive inline actions.</p>
           </div>
           <div className="ds-token-block">
@@ -308,6 +299,7 @@ export default function ButtonsPage() {
                 <span>Confirm</span>
                 <span className="filters-confirm-count">12</span>
               </button>
+              <span className="ds-class">.filters-confirm-count</span>
             </div>
           </div>
         </div>

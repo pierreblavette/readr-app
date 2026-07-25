@@ -99,6 +99,7 @@ export default function CloudChipPage() {
             {STATES.map(([state, mod]) => (
               <div key={state} className="ds-state-sample">
                 <Chip name={state} count={12} cls={mod} />
+                <span className="ds-class">{mod ? ":hover" : ".overview-cloud-chip"}</span>
               </div>
             ))}
           </div>
