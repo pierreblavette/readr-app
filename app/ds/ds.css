@@ -1095,9 +1095,11 @@ a.sidebar-item { text-decoration: none; }
  * + flex-shrink: 0, so long mono strings (eg. "1.43rem · 20px · 800") would
  * overflow horizontally. Stacking preview + meta is cleaner than wrapping. */
 @media (max-width: 600px) {
-  /* Buttons states cards (5 variants × 5 states) — 2 cols mobile so each
-   * state block stays readable instead of compressing to 5-in-a-row. */
-  .ds-states-grid {
+  /* Grids NON-boxées uniquement : 2 cols mobile. Les boards --boxed sont régis par
+   * le repli ≤760 (minmax(0,1fr) + :has(:only-child) 1-col + dividers) — ce vieux
+   * !important repeat(2,1fr) écrasait sinon le minmax (débordement) ET le centrage
+   * du board à cellule unique (cf. Focus ring décentré). */
+  .ds-states-grid:not(.ds-states-grid--boxed) {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 16px !important;
