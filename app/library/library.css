@@ -114,7 +114,7 @@
   padding-top: env(safe-area-inset-top);
 }
 
-.toolbar-inner .logo { height: 15px; }
+.toolbar-inner .logo { height: 16px; }
 .toolbar-inner {
   max-width: 1280px;
   margin: 0 auto;
@@ -135,7 +135,7 @@
 
 /* Logo — wordmark SVG (Proxima Sera Semibold outlined). Sized via height; width: auto preserves 3.86:1 ratio. Color inherits via currentColor. overflow:visible fixes Safari clipping anti-aliasing edges where path touches viewBox bounds. */
 /* No height here on purpose : every context sets its own (.sidebar-logo 16,
-   .toolbar-inner 15, .logo-bg clamp). A base height would only ever be dead
+   .toolbar-inner 16, .logo-bg clamp). A base height would only ever be dead
    weight — and misleading, since it never won over those. */
 .logo {
   display: block;
