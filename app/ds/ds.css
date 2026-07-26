@@ -1327,11 +1327,6 @@ a.sidebar-item { text-decoration: none; }
  * sidebar sur tablette (zéro prod). Réplique minimale des règles mobiles de
  * library.css ; le .toolbar-inner desktop (flex 60px) reste valide tel quel.
  * Drawer capé à 320px (80vw ferait 768px à 960). */
-/* Padding horizontal du contenu /ds : fluide au lieu du saut 40→16 de l'app à 768px
-   (trop serré maintenant que le /ds est pleine largeur ≤960). clamp = 40 en desktop,
-   ~38 à 960, plancher 24 sur petit écran. Scopé .ds-root → l'app garde son 16px. */
-.ds-root .main-wrap { padding-left: clamp(24px, 4vw, 40px); padding-right: clamp(24px, 4vw, 40px); }
-
 @media (max-width: 960px) {
   .ds-root .sidebar {
     position: fixed; top: 0; left: 0;
