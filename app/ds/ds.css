@@ -213,20 +213,27 @@ a.sidebar-item { text-decoration: none; }
      (board impair) → son arête HAUTE. Gauche + haut tracés → grille complète à 4.
    Double classe (0,4,0) bat la base border-left (0,3,0). :not(:only-child) épargne le
    board à cellule unique (specimen isolé, pas de rangée à fermer). */
-.ds-states-grid--boxed.ds-states-grid--cols-2 {
-  grid-auto-flow: row;
-  /* minmax(0,…) (au lieu de 1fr=minmax(auto,1fr)) : sinon un specimen ou une pastille
-     large force la colonne au min-content et la board déborde. Ici la colonne rétrécit,
-     le specimen se centre/rogne DANS sa cellule au lieu de couper le board au bord. */
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+/* --cols-2 ne s'active QU'À PARTIR de ≤1080 : au-dessus (grand écran), le board
+   reste sur UNE ligne (grid-auto-flow: column de base + divider vertical border-left
+   ligne 232). Sans ce media, --cols-2 forçait 2 colonnes à TOUTES les résolutions —
+   d'où les boards Sizing en 2×1 sur 27" au lieu d'une rangée. Le 2-col ne sert qu'à
+   éviter le débordement quand la place manque (mid), pas sur desktop large. */
+@media (max-width: 1080px) {
+  .ds-states-grid--boxed.ds-states-grid--cols-2 {
+    grid-auto-flow: row;
+    /* minmax(0,…) (au lieu de 1fr=minmax(auto,1fr)) : sinon un specimen ou une pastille
+       large force la colonne au min-content et la board déborde. Ici la colonne rétrécit,
+       le specimen se centre/rogne DANS sa cellule au lieu de couper le board au bord. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Board à cellule unique : ne pas scinder en 2 colonnes (la cellule irait en col 1,
+     décentrée) → 1 colonne pleine largeur, specimen recentré. */
+  .ds-states-grid--boxed.ds-states-grid--cols-2:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample + .ds-state-sample { border-left: none; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(odd):not(:only-child) { border-right: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
 }
-/* Board à cellule unique : ne pas scinder en 2 colonnes (la cellule irait en col 1,
-   décentrée) → 1 colonne pleine largeur, specimen recentré. */
-.ds-states-grid--boxed.ds-states-grid--cols-2:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
-.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample + .ds-state-sample { border-left: none; }
-.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(odd):not(:only-child) { border-right: 1px solid var(--border-subtle); }
-.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
-.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
 /* Desktop rangée unique (board non --cols-2 au-dessus de 760px) : divider vertical
    = border-left entre cellules adjacentes. */
 .ds-states-grid--boxed > .ds-state-sample + .ds-state-sample {
