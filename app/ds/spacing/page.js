@@ -13,9 +13,9 @@ const SCALE = [
   [20, "1.428rem", "Padding boutons MD"],
   [24, "1.714rem", "Padding boutons LG, modal"],
   [32, "2.286rem", "Margin sections"],
-  [40, "2.857rem", "Padding pages, rythme majeur"],
+  [40, "2.857rem", "Padding pages"],
   [48, "3.428rem", "Espacement sections"],
-  [64, "4.571rem", "Respiration en tête (padding-top max)"],
+  [64, "4.571rem", "Espacement majeur"],
 ];
 
 // Bloc-témoin d'une maquette de rythme (les cotes tombent sur les gaps entre eux).
@@ -48,7 +48,7 @@ export default function SpacingPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline showHeight={false}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 40, width: 300 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 64, width: 300 }}>
                   <Block label="Page title" />
                   <Block label="Search row" />
                   <Block label="Content section" />
@@ -65,7 +65,7 @@ export default function SpacingPage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Rythme à <strong>deux niveaux</strong> : <strong>40</strong> entre les grands blocs de page (planche du haut), <strong>16</strong> à l&apos;intérieur d&apos;une section (planche du bas). Respiration en tête de page, densité dans les listes. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Rythme à <strong>deux niveaux</strong> : <strong>64</strong> entre les grands blocs de page (planche du haut), <strong>16</strong> à l&apos;intérieur d&apos;une section (planche du bas). Respiration en tête de page, densité dans les listes. Cotes mesurées à l&apos;exécution. Sous 600px, le majeur se resserre à <strong>40</strong>.</p>
         </div>
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
@@ -92,7 +92,7 @@ export default function SpacingPage() {
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Blocs de page · <code>40px</code></div>
+            <div className="ds-token-name">Blocs de page · <code>64px</code> <span style={{ color: "var(--text-3)", fontWeight: 500 }}>(40 sous 600)</span></div>
             <p>Sépare les blocs de haut niveau — page-title, search-row, content section. <span className="ds-class">.dictionary-wrap</span> le reprend (formulaire → section sauvegardée).</p>
             <span className="ds-class">.main-wrap</span>
           </div>
