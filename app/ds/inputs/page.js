@@ -388,7 +388,7 @@ export default function InputsPage() {
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".search-clear">
+              <Redline boxSelector=".search-clear" hInsets={{ icon: ":scope > svg", padded: ".search-input", control: ".search-clear" }}>
                 <div className="search-box" style={{ width: 300, flex: "none" }}>
                   <SearchIcon />
                   <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
@@ -398,13 +398,8 @@ export default function InputsPage() {
                 </div>
               </Redline>
             </div>
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline>
-                <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly style={{ width: 260, flex: "none", minWidth: 0 }} />
-              </Redline>
-            </div>
           </div>
-          <p className="ds-note">Planche 1 : coquille height <strong>40</strong>, pill radius 32 — loupe <code>left 14</code> (15×15), clear <span className="ds-class">.search-clear</span> <code>right 10</code> (<strong>18×18</strong>, pill). Planche 2 : le champ réserve <strong>38</strong> à gauche / <strong>34</strong> à droite pour dégager loupe et clear. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Coquille height <strong>40</strong>, pill radius 32. Loupe (15×15) : <strong>14</strong> du bord gauche, <strong>9</strong> jusqu&apos;au texte. Clear <span className="ds-class">.search-clear</span> (<strong>18×18</strong>, pill) : <strong>6</strong> depuis le texte, <strong>10</strong> du bord droit. Le padding de l&apos;input (<code>0 38 / 34</code>) = ces segments cumulés. Cotes mesurées à l&apos;exécution.</p>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">

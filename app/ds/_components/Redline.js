@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false, tone = null }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -134,6 +134,32 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
           const cL = pr.left - br.left, cT = pr.top - br.top, cW = pr.width, cH = pr.height;
           if (pt2) childVbands.push({ left: cL, width: cW, top: cT + bt2, height: pt2, value: Math.round(pt2), right: cL + cW });
           if (pb2) childVbands.push({ left: cL, width: cW, top: cT + cH - bbw2 - pb2, height: pb2, value: Math.round(pb2), right: cL + cW });
+        }
+      }
+
+      // Insets horizontaux d'un composant à adornements ABSOLUS (search-box : loupe +
+      // clear en position absolue, le padding vit sur l'input). Le gap flex ne les
+      // mesure pas → on cote les 4 segments contre les bords de la boîte et le bord de
+      // contenu du champ `padded` : [bord→icône] [icône→texte] [texte→contrôle]
+      // [contrôle→bord]. Bandes pleine hauteur (strong) pour tenir sur la pill.
+      if (hInsets) {
+        const iconEl = el.querySelector(hInsets.icon);
+        const ctrlEl = el.querySelector(hInsets.control);
+        const padEl = el.querySelector(hInsets.padded);
+        if (iconEl && ctrlEl && padEl) {
+          const ir = iconEl.getBoundingClientRect();
+          const cr = ctrlEl.getBoundingClientRect();
+          const pcs2 = getComputedStyle(padEl);
+          const prr = padEl.getBoundingClientRect();
+          const cStart = prr.left + (parseFloat(pcs2.paddingLeft) || 0) - br.left;
+          const cEnd = prr.right - (parseFloat(pcs2.paddingRight) || 0) - br.left;
+          const iL = ir.left - br.left, iR = ir.right - br.left;
+          const cL2 = cr.left - br.left, cR2 = cr.right - br.left;
+          const seg = (from, to) => { const wdt = to - from; if (wdt > 0.5) bands.push({ left: from, width: wdt, value: Math.round(wdt), strong: true }); };
+          seg(bl, iL);       // bord gauche → loupe
+          seg(iR, cStart);   // loupe → texte
+          seg(cEnd, cL2);    // texte → clear
+          seg(cR2, w - brw); // clear → bord droit
         }
       }
 
