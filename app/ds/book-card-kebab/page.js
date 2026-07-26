@@ -32,6 +32,28 @@ function Menu({ items }) {
   );
 }
 
+// Renderer flexible pour les menus par carte (items explicites : chaque carte a son
+// jeu, l'auto-append Share/Delete ne colle qu'à book/quote). divider = séparateur.
+const DIV = { divider: true };
+function MenuFull({ items }) {
+  return (
+    <div className="dropdown-menu dropdown-menu--portal ds-menu-static" role="menu">
+      {items.map((it, i) => it.divider
+        ? <div key={i} className="dropdown-divider" role="separator" />
+        : <button key={i} type="button" className={`dropdown-item${it.destructive ? " is-destructive" : ""}`}>{it.label}</button>
+      )}
+    </div>
+  );
+}
+
+// Le menu réel ouvert par le kebab de chaque type de carte (dans l'ordre affiché).
+const CARD_MENUS = [
+  ["Book", [{ label: "Mark as finished" }, { label: "Add a quote" }, { label: "Cancel reading" }, { label: "Share" }, DIV, { label: "Delete", destructive: true }]],
+  ["Quote", [{ label: "Edit review" }, { label: "Add to favorites" }, { label: "Share" }, DIV, { label: "Delete", destructive: true }]],
+  ["Dictionary", [{ label: "Delete", destructive: true }]],
+  ["Collection", [{ label: "Rename" }, DIV, { label: "Delete", destructive: true }]],
+];
+
 // Déclencheur + menu assemblés (le résultat réel d'un clic sur le kebab).
 function KebabOpen({ items, className = "" }) {
   return (
@@ -56,8 +78,8 @@ export default function BookCardKebabPage() {
   return (
     <DSSection
       id="book-card-kebab"
-      title="Book Card Kebab"
-      sub="Déclencheur trois points des cartes de livre — ouvre un menu contextuel dont les items dépendent de l'état du livre."
+      title="Kebab"
+      sub="Déclencheur trois points partagé par les cartes — book, quote, dictionary, collection. Un clic ouvre un menu contextuel dont les items dépendent de la carte et de son état."
     >
       {/* ─────────── 1. PREVIEW — trigger + menu assemblés ─────────── */}
       <div className="ds-card">
@@ -92,7 +114,7 @@ export default function BookCardKebabPage() {
             <tbody className="table-body">
               <tr className="table-row"><td>1</td><td><span className="ds-class">.col-card-kebab</span></td><td>Déclencheur : 40×40, radius 8, svg 18 (trois points de 2px). Fond transparent → teinté à l&apos;ouverture, porté par <code>[aria-expanded=&quot;true&quot;]</code>, pas une classe.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.dropdown-menu</span></td><td>Menu ouvert : conteneur porté (<span className="ds-class">.dropdown-menu--portal</span>), min-width 180, 6px sous le trigger. <strong>Anatomie complète du conteneur et des cellules → Dropdown Menu</strong> ; le Kebab n&apos;en est qu&apos;un consommateur.</td><td>—</td></tr>
-              <tr className="table-row"><td>3</td><td><span className="ds-class">.dropdown-item</span></td><td>Bloc de tête <strong>contextuel</strong> : les items changent selon l&apos;état du livre (logique produit — cf. Variants), pas du DS.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.dropdown-item</span></td><td>Bloc de tête <strong>contextuel</strong> : les items changent selon la <strong>carte</strong> (book / quote / dictionary / collection) et son état (logique produit — cf. Variants), pas du DS.</td><td>—</td></tr>
               <tr className="table-row"><td>4</td><td><span className="ds-class">.is-destructive</span></td><td>Delete : <strong>commun</strong> à tous les états, après un <span className="ds-class">.dropdown-divider</span>. Share (juste au-dessus) est également commun.</td><td>—</td></tr>
             </tbody>
           </table>
@@ -140,20 +162,39 @@ export default function BookCardKebabPage() {
         </div>
       </div>
 
-      {/* ─────────── 5. VARIANTS · menu by state ─────────── */}
+      {/* ─────────── 5. VARIANTS · menu by card ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Variants · menu by state</div>
+        <div className="ds-card-head">Variants · menu by card</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
-            {MENUS.map(([state, items]) => (
-              <div key={state} className="ds-state-sample">
-                <Menu items={items} />
+            {CARD_MENUS.map(([label, items]) => (
+              <div key={label} className="ds-state-sample">
+                <MenuFull items={items} />
+                <span className="ds-class">{label}</span>
               </div>
             ))}
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Seul le <strong>bloc de tête</strong> change selon l&apos;état du livre (Wishlist, Not started, Reading, Finished) — c&apos;est de la <strong>logique produit</strong>, pas du DS. <strong>Share</strong>, le <span className="ds-class">.dropdown-divider</span> et <strong>Delete</strong> (<span className="ds-class">.is-destructive</span>) closent chaque menu, identiques partout.</p>
+          <p className="ds-note">Le même déclencheur ouvre un menu <strong>propre à chaque carte</strong> : <strong>Book</strong> (items par état — cf. planche suivante), <strong>Quote</strong> (Edit · Favorite · Share · Delete), <strong>Dictionary</strong> (Delete seul), <strong>Collection</strong> (Rename · Delete). <strong>Delete</strong> (<span className="ds-class">.is-destructive</span>) ferme chaque menu après un <span className="ds-class">.dropdown-divider</span>. Le conteneur et les cellules sont documentés dans <strong>Dropdown Menu</strong> — le kebab n&apos;en est qu&apos;un consommateur.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 6. VARIANTS · book menu by state ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Variants · book menu by state</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+            {MENUS.map(([state, items]) => (
+              <div key={state} className="ds-state-sample">
+                <Menu items={items} />
+                <span className="ds-class">{state}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Sur une carte <strong>book</strong>, le bloc de tête change selon l&apos;état du livre (Wishlist, Not started, Reading, Finished) — <strong>logique produit</strong>, pas du DS. <strong>Share</strong>, le <span className="ds-class">.dropdown-divider</span> et <strong>Delete</strong> (<span className="ds-class">.is-destructive</span>) closent chaque menu, identiques partout.</p>
         </div>
       </div>
 
