@@ -122,7 +122,7 @@ export default function InputsPage() {
               <Redline>
                 <div className="modal-field" style={{ width: 300 }}>
                   <label className="modal-field-label">Title</label>
-                  <input type="text" className="modal-field-input" defaultValue="Normal People" readOnly style={{ width: "100%" }} />
+                  <input type="text" className="modal-field-input" defaultValue="Normal People" readOnly style={{ width: "100%", background: "var(--card)" }} />
                   <span className="modal-field-hint">Helper text.</span>
                 </div>
               </Redline>
@@ -309,7 +309,7 @@ export default function InputsPage() {
               <Redline>
                 <div className="modal-field" style={{ width: 320 }}>
                   <label className="modal-field-label">Quote</label>
-                  <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
+                  <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%", background: "var(--card)" }} />
                 </div>
               </Redline>
             </div>
@@ -388,8 +388,8 @@ export default function InputsPage() {
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline>
-                <div className="search-box" style={{ width: 300 }}>
+              <Redline boxSelector=".search-clear">
+                <div className="search-box" style={{ width: 300, flex: "none" }}>
                   <SearchIcon />
                   <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
                   <button type="button" className="search-clear visible" aria-label="Clear">
@@ -398,8 +398,13 @@ export default function InputsPage() {
                 </div>
               </Redline>
             </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly style={{ width: 260, flex: "none", minWidth: 0 }} />
+              </Redline>
+            </div>
           </div>
-          <p className="ds-note">Coquille height <strong>40</strong>, pill radius 32. Loupe absolue <code>left 14</code> (15×15) · clear absolu <code>right 10</code> (18×18). Le champ réserve <strong>38</strong> à gauche / <strong>34</strong> à droite pour les dégager. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Planche 1 : coquille height <strong>40</strong>, pill radius 32 — loupe <code>left 14</code> (15×15), clear <span className="ds-class">.search-clear</span> <code>right 10</code> (<strong>18×18</strong>, pill). Planche 2 : le champ réserve <strong>38</strong> à gauche / <strong>34</strong> à droite pour dégager loupe et clear. Cotes mesurées à l&apos;exécution.</p>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
