@@ -347,10 +347,11 @@ a.sidebar-item { text-decoration: none; }
   box-shadow: none !important;
   background: transparent !important;
 }
-/* Le pill du search (radius 32) vit sur .search-input, un PETIT-ENFANT du target
-   (target > search-box > input) → le strip racine ci-dessus ne l'atteint pas. On
-   retire son radius ici pour des coins carrés, iso les autres inputs cotés. */
-.ds-redline-target .search-input { border-radius: 0 !important; }
+/* Le pill du search (border + radius + bg) vit sur .search-input, un PETIT-ENFANT
+   du target (target > search-box > input) → le strip racine ci-dessus ne l'atteint
+   pas. On le strippe ici comme les autres inputs cotés : coins carrés, sans bord,
+   fond transparent (correct en dark, contrairement au #FFF du champ). */
+.ds-redline-target .search-input { border: none !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; }
 /* Bandes : sous le contenu (z-index 0) mais au-dessus du fond du bouton — le
    bouton lui-même n'est pas positionné, la bande le recouvre donc en teinte. */
 /* Bandes padding et gap partagent la même teinte : la cote chiffrée porte la
