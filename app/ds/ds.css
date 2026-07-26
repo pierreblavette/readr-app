@@ -1118,6 +1118,14 @@ a.sidebar-item { text-decoration: none; }
     white-space: normal;
     align-self: flex-start !important;
   }
+  /* Boards boxés : 1 colonne sur téléphone — specimens larges (lockups des Sizes,
+     book-chips…) à l'aise, plus de 2-col qui serre/déborde. Divider horizontal
+     entre cellules empilées ; reset des dividers 2-col (col1 border-right, etc.)
+     via !important — le système 2-col est réparti sur plusieurs couches (base
+     --cols-2 + repli ≤760), trop coûteux à surcharger par spécificité ici. */
+  .ds-states-grid--boxed { grid-template-columns: 1fr !important; }
+  .ds-states-grid--boxed > .ds-state-sample { border-right: none !important; border-left: none !important; border-top: none !important; border-bottom: none !important; }
+  .ds-states-grid--boxed > .ds-state-sample + .ds-state-sample { border-top: 1px solid var(--border-subtle) !important; }
 }
 [data-theme="dark"] .panel-ds-panel { background: var(--bg); }
 [data-theme="dark"] .panel-ds-content { background: var(--bg2); }
