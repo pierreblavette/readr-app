@@ -106,7 +106,7 @@ export default function ModalPage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Modal complet coté d&apos;un seul bloc : coquille padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0, le footer porte le sien), espacement entre blocs <code>gap: 32</code>. Le <strong>body</strong> est une <strong>zone bleue</strong> — contenu variable (champs, onglets, message…). Footer <span className="ds-class">.modal-actions</span> : padding interne <strong>18</strong> vertical / <strong>24</strong> horizontal. Stries horizontales = mesures verticales, stries verticales = horizontales — mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Modal complet coté d&apos;un seul bloc : coquille padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0, le footer porte le sien), espacement entre blocs <code>gap: 32</code>. Le <strong>body</strong> est une <strong>zone bleue</strong> — contenu variable (champs, onglets, message…). Footer <span className="ds-class">.modal-actions</span> : padding interne <strong>16</strong> vertical / <strong>24</strong> horizontal (32 + 16 = 48, sur la grille). Stries horizontales = mesures verticales, stries verticales = horizontales — mesurées à l&apos;exécution.</p>
         </div>
       </div>
 

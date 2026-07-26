@@ -3093,7 +3093,7 @@
   display: flex;
   justify-content: space-between;
   margin: 0 -24px;
-  padding: 18px 24px;
+  padding: 16px 24px;
   /* Sticky to bottom of the scrollable .modal so actions stay visible
    * when content (alert + list, etc.) makes the modal scroll. */
   position: sticky;
@@ -3186,7 +3186,7 @@
   display: flex;
   justify-content: space-between;
   margin: 0 -24px;
-  padding: 18px 24px;
+  padding: 16px 24px;
 }
 
 .confirm-modal-delete {
