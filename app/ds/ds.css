@@ -16,10 +16,10 @@ a.sidebar-item { text-decoration: none; }
 .ds-index-card:hover { border-color: var(--primary-50); background: var(--primary-5); }
 [data-theme="dark"] .ds-index-card:hover { background: var(--primary-3); }
 /* En multipage, la section EST la page (enfant direct de .main-wrap) : elle porte
- * le rythme vertical (gap 64, iso .main-wrap de library) et le overflow-x: clip
+ * le rythme vertical (gap 40, iso .main-wrap de library) et le overflow-x: clip
  * qui empêche les samples larges (search-box-demo 280, cell-row 320…) de forcer
  * un scroll horizontal sur mobile. */
-.ds-section { display: flex; flex-direction: column; gap: 64px; scroll-margin-top: 84px; min-width: 0; overflow-x: clip; }
+.ds-section { display: flex; flex-direction: column; gap: 40px; scroll-margin-top: 84px; min-width: 0; overflow-x: clip; }
 .ds-section-header { display: flex; flex-direction: column; gap: 20px; }
 .ds-section-body { display: flex; flex-direction: column; gap: 40px; }
 /* Iso .page-title (library.css) — en multipage chaque section EST une page,
@@ -1229,6 +1229,11 @@ a.sidebar-item { text-decoration: none; }
    padding 60 → 20 + 60. Base desktop 60, à réduire par breakpoint en mobile. */
 .ds-preview-board { width: 100%; }
 .ds-preview { width: 100%; padding: 60px; background: var(--primary-5); display: flex; justify-content: center; }
+/* Hero Typeface : 2 blocs côte à côte — sous 600 le padding 60 mange la largeur,
+   les deux cartes étouffent. On le resserre à 20 (les cartes reprennent l'air). */
+@media (max-width: 600px) {
+  .ds-preview.ds-type-preview { padding: 20px; }
+}
 
 .ds-modal-stage { display: flex; justify-content: center; width: 100%; }
 .ds-modal-stage .modal { animation: none !important; margin: 0; width: 100%; max-width: 560px; }
