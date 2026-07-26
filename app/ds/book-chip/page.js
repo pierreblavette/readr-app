@@ -163,7 +163,7 @@ export default function BookChipPage() {
       <div className="ds-card">
         <div className="ds-card-head">States · interactive</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
               <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%", maxWidth: 260 }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="D" />
@@ -207,7 +207,7 @@ export default function BookChipPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · modes</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
               <div className="book-chip" style={{ width: "100%", maxWidth: 260 }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="T" />

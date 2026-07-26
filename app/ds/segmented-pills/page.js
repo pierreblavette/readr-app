@@ -133,7 +133,7 @@ export default function SegmentedPillsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {SIZES.map(([size]) => (
               <div key={size} className="ds-state-sample">
                 <Segment size={size} />

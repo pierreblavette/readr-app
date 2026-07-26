@@ -236,6 +236,21 @@ a.sidebar-item { text-decoration: none; }
   .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
   .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
 }
+/* --hold : board qui GARDE le 2-col au-delà de 1280 (specimens larges qui se
+   tasseraient sur une ligne — book row, menus, champs). On ré-applique le 2-col
+   (grille + dividers) en @media min-width, au lieu de laisser le single-row de base
+   reprendre. Sans --hold, --cols-2 repasse en une ligne >1280 (specimens étroits). */
+@media (min-width: 1281px) {
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample + .ds-state-sample { border-left: none; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:nth-child(odd):not(:only-child) { border-right: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
+}
 /* Desktop rangée unique (board non --cols-2 au-dessus de 760px) : divider vertical
    = border-left entre cellules adjacentes. */
 .ds-states-grid--boxed > .ds-state-sample + .ds-state-sample {

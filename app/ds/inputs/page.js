@@ -143,7 +143,7 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {STATES.map(([state, mod, disabled, cap]) => (
               <div key={state} className="ds-state-sample">
                 <div className="modal-field" style={{ width: "100%" }}>
@@ -171,7 +171,7 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {SIZES.map(([name, mod]) => (
               <div key={name} className="ds-state-sample">
                 <div className="modal-field" style={{ width: "100%" }}>
@@ -198,7 +198,7 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · validation</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
               <div className="modal-toggle-field" style={{ width: "100%" }}>
                 <div className="modal-field" style={{ width: "100%" }}>
