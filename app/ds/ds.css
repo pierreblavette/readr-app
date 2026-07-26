@@ -36,6 +36,24 @@ a.sidebar-item { text-decoration: none; }
   .ds-section-title { font-size: 40px; }
   .ds-section { gap: 40px; }
 }
+/* Sous-nav sticky d'une page à variantes (Cards → Book / Quote / …) : pills qui
+   ancrent vers chaque groupe, collées en haut du viewport (sous la toolbar mobile). */
+.ds-page-subnav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  padding: 12px 0;
+  background: var(--bg-app);
+  border-bottom: 1px solid var(--border-subtle);
+}
+@media (max-width: 768px) {
+  .ds-page-subnav { top: calc(env(safe-area-inset-top) + 60px); }
+}
+/* En-tête d'un groupe de variante (Book Card, Quote Card…) — cible d'ancre de la sous-nav. */
+.ds-variant-head { scroll-margin-top: 88px; display: flex; flex-direction: column; gap: 4px; }
+.ds-variant-head-title { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--text); }
+.ds-variant-head-sub { font-size: 15px; color: var(--text-2); max-width: 70ch; }
+@media (max-width: 768px) { .ds-variant-head { scroll-margin-top: 148px; } }
 /* Top-level group (Foundations / Components / Patterns / Reference) — wraps
    the group title + its sections. Internal gap 64 (tighter than the 96 inter-
    group gap of .ds-content) so the group reads as a cohesive cluster. */
@@ -789,6 +807,11 @@ a.sidebar-item { text-decoration: none; }
    planche States — reproduit .book-card:hover réel (bord + fond, sans lift ni ombre). */
 .ds-section .book-card { animation: none; }
 .book-card.is-hover { border-color: var(--primary-50); background: var(--primary-3); }
+/* Idem pour la Quote Card (specimens page Cards) : anim d'entrée coupée + mirror
+   hover forcé pour la planche States (bord + fond + divider, sans lift). */
+.ds-section .quote-card { animation: none; }
+.quote-card.is-hover { border-color: var(--primary-50); background: var(--primary-3); }
+.quote-card.is-hover .quote-card-divider { background: var(--primary-10); }
 
 /* États forcés d'un item de menu pour la doc — mirror de .dropdown-item:hover /
    :active de library.css (hover bg --primary-5 + color --primary-50 ; active
