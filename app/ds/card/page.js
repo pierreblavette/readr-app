@@ -1,5 +1,6 @@
 import DSSection from "../_components/DSSection";
 import AnnoScene from "../_components/AnnoScene";
+import Redline from "../_components/Redline";
 
 const ANNOS = [
   { n: 1, side: "right", target: ".book-card" },
@@ -77,7 +78,29 @@ export default function CardPage() {
         </div>
       </div>
 
-      {/* 3 — CARD LANGUAGE (la primitive de famille) */}
+      {/* 3 — SPACING — padding du corps + gaps (Redline) */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <div className="book-body" style={{ width: 300 }}>
+                  <div className="book-body-info">
+                    <div className="book-title">Normal People</div>
+                    <div className="book-author">Sally Rooney</div>
+                    <div className="book-meta"><span>Fiction</span><span className="book-meta-sep" aria-hidden="true">·</span><span>2018</span></div>
+                  </div>
+                  <button type="button" className="col-card-kebab" aria-label="More"><KebabDots /></button>
+                </div>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Le cover est <strong>flush</strong> (aucun padding sur <span className="ds-class">.book-card</span>). Tout le spacing vit dans le corps : <span className="ds-class">.book-body</span> padding <strong>8 8 16 16</strong> (asym — moins à droite pour dégager le kebab), gap <strong>12</strong> info→kebab. À l&apos;intérieur, <span className="ds-class">.book-body-info</span> empile titre / auteur / méta avec un gap <strong>4</strong> (+ padding-top 8). Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* 4 — CARD LANGUAGE (la primitive de famille) */}
       <div className="ds-card">
         <div className="ds-card-head">Card language</div>
         <div className="ds-card-body col">
