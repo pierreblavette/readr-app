@@ -213,12 +213,14 @@ a.sidebar-item { text-decoration: none; }
      (board impair) → son arête HAUTE. Gauche + haut tracés → grille complète à 4.
    Double classe (0,4,0) bat la base border-left (0,3,0). :not(:only-child) épargne le
    board à cellule unique (specimen isolé, pas de rangée à fermer). */
-/* --cols-2 ne s'active QU'À PARTIR de ≤1080 : au-dessus (grand écran), le board
-   reste sur UNE ligne (grid-auto-flow: column de base + divider vertical border-left
-   ligne 232). Sans ce media, --cols-2 forçait 2 colonnes à TOUTES les résolutions —
-   d'où les boards Sizing en 2×1 sur 27" au lieu d'une rangée. Le 2-col ne sert qu'à
-   éviter le débordement quand la place manque (mid), pas sur desktop large. */
-@media (max-width: 1080px) {
+/* --cols-2 ne s'active QU'À PARTIR de ≤1280 (= max-width de .main-wrap) : au-dessus
+   (grand écran), le board reste sur UNE ligne (grid-auto-flow: column de base +
+   divider vertical border-left ligne 232). Sans ce media, --cols-2 forçait 2 colonnes
+   à TOUTES les résolutions — d'où les boards Sizing en 2×1 sur 27" au lieu d'une
+   rangée. Le 2-col ne sert qu'à éviter le tassement quand la place manque, pas sur
+   desktop large. Breakpoint 1280 (pas 1080) : le sidebar /ds mange 260px, le contenu
+   à 1080 était encore trop étroit pour respirer sur une ligne. */
+@media (max-width: 1280px) {
   .ds-states-grid--boxed.ds-states-grid--cols-2 {
     grid-auto-flow: row;
     /* minmax(0,…) (au lieu de 1fr=minmax(auto,1fr)) : sinon un specimen ou une pastille
