@@ -1213,6 +1213,14 @@ a.sidebar-item { text-decoration: none; }
    bas, et le stretch du grid égalise la hauteur des cellules ⇒ captions alignées.
    Réutilisable (Strokes in-use, Shadows in-use…). */
 .ds-specimen-cell { flex: 1; display: flex; align-items: center; justify-content: center; }
+/* .dropdown-btn sur /ds = specimens de doc : library les collapse en icône seule
+   à ≤1080 (règle destinée à la vraie barre de filtres de l'app). Sur /ds on veut
+   la forme pleine (icône + label + chevron) à tout breakpoint → on neutralise. */
+@media (max-width: 1080px) {
+  .ds-root .dropdown-btn { width: auto; padding: 0 20px; justify-content: normal; }
+  .ds-root .dropdown-btn .dropdown-btn-label,
+  .ds-root .dropdown-btn .dropdown-btn-chevron { display: block; }
+}
 /* Strokes « In use » — cellule haute pour laisser respirer (le menu monte haut) +
    dropzone élargie pour soutenir la comparaison. */
 .ds-stroke-board .ds-state-sample { min-height: 300px; }
