@@ -261,7 +261,12 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 64px;
+}
+/* Rythme majeur 64 sur desktop → resserré à 40 sous 600 (téléphone) : le module
+   de page s'aligne alors sur le padding de repos, plus dense sur petit écran. */
+@media (max-width: 600px) {
+  .main-wrap { gap: 40px; }
 }
 
 .page-title {
@@ -4377,7 +4382,8 @@
 [data-theme="dark"] .col-name-input:focus { border-color: var(--primary-50); box-shadow: 0 0 0 3px rgba(73,89,230,0.4); }
 
 /* ─── DICTIONARY ─── */
-.dictionary-wrap { display: flex; flex-direction: column; gap: 40px; }
+.dictionary-wrap { display: flex; flex-direction: column; gap: 64px; }
+@media (max-width: 600px) { .dictionary-wrap { gap: 40px; } }
 .dictionary-form {
   display: flex;
   align-items: center;
