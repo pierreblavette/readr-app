@@ -1213,6 +1213,14 @@ a.sidebar-item { text-decoration: none; }
    bas, et le stretch du grid égalise la hauteur des cellules ⇒ captions alignées.
    Réutilisable (Strokes in-use, Shadows in-use…). */
 .ds-specimen-cell { flex: 1; display: flex; align-items: center; justify-content: center; }
+/* Specimen .filters-row : sous 1080 les .dropdown-btn passent en icône seule
+   (règle globale library). Le bouton reset (.btn-md) n'a pas ce collapse — on
+   l'aligne ici (scopé /ds) : label masqué, carré 40px, icône seule. !important
+   neutralise le padding asym :has() de .btn-md (l'icône reste first-child). */
+@media (max-width: 1080px) {
+  .filters-row .filters-reset-btn { width: 40px; padding: 0 !important; justify-content: center; }
+  .filters-row .filters-reset-label { display: none; }
+}
 /* Strokes « In use » — cellule haute pour laisser respirer (le menu monte haut) +
    dropzone élargie pour soutenir la comparaison. */
 .ds-stroke-board .ds-state-sample { min-height: 300px; }

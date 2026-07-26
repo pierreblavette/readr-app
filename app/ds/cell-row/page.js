@@ -134,7 +134,10 @@ export default function CellRowPage() {
                     <span className="dropdown-btn-label">Status</span>
                     <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
                   </button>
-                  <button type="button" className="btn btn-md btn-secondary filters-reset-btn">Clear filters</button>
+                  <button type="button" className="btn btn-md btn-secondary filters-reset-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                    <span className="filters-reset-label">Clear filters</span>
+                  </button>
                 </div>
               </div>
               <span className="ds-class">.filters-row</span>
