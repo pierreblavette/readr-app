@@ -43,6 +43,10 @@ a.sidebar-item { text-decoration: none; }
 .sidebar-item-chevron.is-open { transform: rotate(0); }
 .sidebar-item.is-current .sidebar-label { color: var(--primary-50); }
 [data-theme="dark"] .sidebar-item.is-current .sidebar-label { color: var(--primary-40); }
+/* Chevron : suit le texte de l'item — blanc sur l'actif plein, primary sur is-current. */
+.sidebar-item.active .sidebar-item-chevron { color: #FFFFFF; }
+.sidebar-item.is-current .sidebar-item-chevron { color: var(--primary-50); }
+[data-theme="dark"] .sidebar-item.is-current .sidebar-item-chevron { color: var(--primary-40); }
 .sidebar-subnav { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 6px; }
 /* Sous-item : MÊME apparence que .sidebar-item (height 40, font 15/600, actif plein
    primary-50 blanc) — seule différence, l'indentation à gauche. */
