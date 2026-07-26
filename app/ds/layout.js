@@ -39,7 +39,7 @@ export default function DSLayout({ children }) {
 
   return (
     <DSThemeContext.Provider value={{ theme, setTheme }}>
-      <div className="app-root">
+      <div className="app-root ds-root">
         <div className="page-shell">
           {mobileSidebarOpen && (
             <div className="sidebar-overlay" onClick={() => setMobileSidebarOpen(false)} />

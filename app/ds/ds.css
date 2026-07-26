@@ -1297,3 +1297,24 @@ a.sidebar-item { text-decoration: none; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
+
+/* ─── /ds : sidebar masquée plus tôt que l'app (≤960 vs ≤768) ─────────────────
+ * Les specimens du /ds ont besoin de la pleine largeur dans le mid-range : entre
+ * ~768 et ~1100px, la sidebar (~250px) écrase le contenu et tasse les boards. On
+ * bascule donc la sidebar en drawer dès 960px, SCOPÉ à .ds-root → l'app garde sa
+ * sidebar sur tablette (zéro prod). Réplique minimale des règles mobiles de
+ * library.css ; le .toolbar-inner desktop (flex 60px) reste valide tel quel.
+ * Drawer capé à 320px (80vw ferait 768px à 960). */
+@media (max-width: 960px) {
+  .ds-root .sidebar {
+    position: fixed; top: 0; left: 0;
+    transform: translateX(-100%); width: 80vw; max-width: 320px;
+    box-shadow: none; z-index: 330; pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: env(safe-area-inset-bottom);
+  }
+  .ds-root .sidebar.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); pointer-events: auto; }
+  .ds-root .sidebar-overlay { display: block; z-index: 329; }
+  .ds-root .toolbar-mobile-only { display: block; }
+  .ds-root .sidebar-bottom { display: none; }
+}
