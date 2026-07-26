@@ -54,7 +54,7 @@ const QUOTE = "The world was ending and there was nothing to be done about it.";
 
 function QuoteCardSpec({ className = "", saved = false }) {
   return (
-    <div className={`quote-card ${className}`.trim()} style={{ width: 320 }}>
+    <div className={`quote-card ${className}`.trim()} style={{ width: 400 }}>
       <div className="quote-card-body">
         <div className="quote-card-text-wrap">
           <div className="quote-card-text">
@@ -84,7 +84,8 @@ export default function CardPage() {
       <PageSubnav items={SUBNAV} />
 
       {/* ══════════ FOUNDATION ══════════ */}
-      <div id="card-foundation" className="ds-variant-head">
+      <div id="card-foundation" className="ds-card-group">
+      <div className="ds-variant-head">
         <div className="ds-variant-head-title">Foundation</div>
         <p className="ds-variant-head-sub">Le langage partagé par toutes les cartes, et la famille au complet.</p>
       </div>
@@ -118,8 +119,11 @@ export default function CardPage() {
         </div>
       </div>
 
+      </div>
+
       {/* ══════════ BOOK CARD ══════════ */}
-      <div id="book-card" className="ds-variant-head">
+      <div id="book-card" className="ds-card-group">
+      <div className="ds-variant-head">
         <div className="ds-variant-head-title">Book Card</div>
         <p className="ds-variant-head-sub">La carte de la grille Library — cover + titre + auteur + méta + kebab.</p>
       </div>
@@ -224,8 +228,11 @@ export default function CardPage() {
         </div>
       </div>
 
+      </div>
+
       {/* ══════════ QUOTE CARD ══════════ */}
-      <div id="quote-card" className="ds-variant-head">
+      <div id="quote-card" className="ds-card-group">
+      <div className="ds-variant-head">
         <div className="ds-variant-head-title">Quote Card</div>
         <p className="ds-variant-head-sub">La carte d&apos;une citation — texte + actions (love / kebab) + livre source.</p>
       </div>
@@ -303,6 +310,7 @@ export default function CardPage() {
         <div className="ds-card-body col">
           <p className="ds-note">Même hover que la famille (bord <span className="ds-token-chip">--primary-50</span>, sans lift). Le bouton <strong>love</strong> bascule en <span className="ds-class">.is-saved</span> (bookmark plein) — l&apos;état « aimé » de la citation. Le divider passe en <span className="ds-token-chip">--primary-10</span> au hover de la carte.</p>
         </div>
+      </div>
       </div>
 
     </DSSection>
