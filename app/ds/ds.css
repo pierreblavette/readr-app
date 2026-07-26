@@ -305,6 +305,11 @@ a.sidebar-item { text-decoration: none; }
      le centre SANS transformer .ds-redline en flex (ce qui distordait le target :
      menu rétréci/décalé, cellules désalignées). Le target remet text-align:left. */
   text-align: center;
+  /* Conteneur de requête : permet à un specimen large (modal) de se borner à la
+     largeur DISPONIBLE ici (100cqw) plutôt qu'à sa taille propre. Sans effet sur les
+     autres specimens (ils n'utilisent pas cqw). Largeur déjà fixée par la cellule
+     (width:100%), donc la containment inline-size ne change pas le layout. */
+  container-type: inline-size;
   /* Fond teinté (primary-5) : la scène se distingue du fond de carte. Le specimen
      est posé sur une surface blanche (.ds-redline-target) pour ressortir même
      s'il est transparent (item, trigger). */
@@ -317,7 +322,14 @@ a.sidebar-item { text-decoration: none; }
 /* Le specimen d'une planche est un spécimen figé, pas une démo : pointer-events
    none coupe hover/press pour que le fond ne change pas sous la souris pendant
    la lecture des cotes. La mesure (getComputedStyle/rects) n'en dépend pas. */
-.ds-redline-target { position: relative; display: inline-flex; text-align: left; pointer-events: none; background: var(--card); }
+.ds-redline-target { position: relative; display: inline-flex; max-width: 100%; text-align: left; pointer-events: none; background: var(--card); }
+/* Specimen large en largeur fixe (ex. modal 440) : sur petite cellule il débordait
+   et se faisait couper. On borne sa largeur à l'espace DISPONIBLE via 100cqw (largeur
+   de contenu de .ds-redline, rendu conteneur de requête). Pas en % du target : lui est
+   inline-flex, dimensionné AU specimen → une largeur en % serait circulaire et
+   s'effondrerait au min-content sur grand écran (le modal tombait à ~255). min() garde
+   440 tant qu'il y a la place, rétrécit sinon ; centrage (text-align) et cotes préservés. */
+.ds-redline-target > .modal { width: min(440px, 100cqw) !important; }
 /* Le composant coté seul (jamais les annotations, qui sont en absolute).
    Anatomy UNIFORME : le specimen racine est présenté sans border, sans radius,
    sans ombre, sur le mat blanc du target — les bandes de padding sont alors
