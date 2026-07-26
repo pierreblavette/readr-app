@@ -84,7 +84,7 @@ export default function CardPage() {
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline padSelector=".book-body-info">
+              <Redline contentTopLine=".book-body-info">
                 <div className="book-body" style={{ width: 300 }}>
                   <div className="book-body-info">
                     <div className="book-title">Normal People</div>

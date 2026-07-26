@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -169,6 +169,19 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
           if (Math.abs(b.top - a.bottom) < 1.5 && Math.abs(b.left - a.left) < 1.5) {
             separators.push({ top: a.bottom - br.top, left: a.left - br.left, width: a.width });
           }
+        }
+      }
+
+      // Ligne de contenu (opt-in) : au lieu d'une bande de padding + cote chiffrée
+      // (padSelector), juste un trait rouge au HAUT DU CONTENU d'un descendant (après
+      // son padding-top) — marque où le contenu commence, sans callout. La valeur du
+      // padding vit dans la note. Ex. le padding-top de .book-body-info sur une card.
+      if (contentTopLine) {
+        const cle = el.querySelector(contentTopLine);
+        if (cle) {
+          const r = cle.getBoundingClientRect();
+          const pt = parseFloat(getComputedStyle(cle).paddingTop) || 0;
+          separators.push({ top: r.top - br.top + pt, left: r.left - br.left, width: r.width });
         }
       }
       // rootRadius (calculé plus haut) sert aussi à clipper les bandes (sinon elles
