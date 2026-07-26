@@ -16,6 +16,16 @@ export default function DSLayout({ children }) {
   const [theme, setTheme] = useState("light");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const pathname = usePathname();
+  // Groupes de nav dépliés (Cards…) : état PERSISTANT, indépendant de la route. Ouvert
+  // d'entrée si on arrive sur une page du groupe (deep-link), sinon replié.
+  const [openGroups, setOpenGroups] = useState(() => {
+    const init = {};
+    for (const [id, kids] of Object.entries(NAV_CHILDREN)) {
+      if (kids.some((c) => c.href === pathname)) init[id] = true;
+    }
+    return init;
+  });
+  const toggleGroup = (id) => setOpenGroups((g) => ({ ...g, [id]: !g[id] }));
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -23,6 +33,15 @@ export default function DSLayout({ children }) {
 
   // Le layout ne remonte pas entre pages sœurs → fermer le drawer à la navigation.
   useEffect(() => { setMobileSidebarOpen(false); }, [pathname]);
+
+  // Arriver sur une page d'un groupe (ex. /ds/card/book) l'OUVRE ; on ne le referme
+  // jamais automatiquement — il reste ouvert si on clique un autre onglet, et ne se
+  // ferme qu'au re-clic sur le parent (toggleGroup).
+  useEffect(() => {
+    for (const [id, kids] of Object.entries(NAV_CHILDREN)) {
+      if (kids.some((c) => c.href === pathname)) setOpenGroups((g) => (g[id] ? g : { ...g, [id]: true }));
+    }
+  }, [pathname]);
 
   // Soft-nav d'une page longue (ex. Typography) vers une courte (ex. Spacing) :
   // sur certains navigateurs le document garde un scrollHeight périmé un frame après
@@ -61,13 +80,19 @@ export default function DSLayout({ children }) {
                     // quand on est sur l'une d'elles (chevron ouvert).
                     if (children) {
                       const onGroup = children.some((c) => pathname === c.href);
+                      const isOpen = !!openGroups[id];
                       return (
                         <div key={id} className="sidebar-nav-group">
-                          <Link href={children[0].href} className={`sidebar-item${onGroup ? " is-expanded" : ""}`}>
+                          <button
+                            type="button"
+                            onClick={() => toggleGroup(id)}
+                            aria-expanded={isOpen}
+                            className={`sidebar-item${onGroup ? " is-current" : ""}`}
+                          >
                             <span className="sidebar-label">{NAV_LABELS[id]}</span>
-                            <svg className={`sidebar-item-chevron${onGroup ? " is-open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
-                          </Link>
-                          {onGroup && (
+                            <svg className={`sidebar-item-chevron${isOpen ? " is-open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+                          </button>
+                          {isOpen && (
                             <div className="sidebar-subnav">
                               {children.map((c) => (
                                 <Link key={c.href} href={c.href} className={`sidebar-subitem${pathname === c.href ? " active" : ""}`}>{c.label}</Link>

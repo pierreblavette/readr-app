@@ -41,13 +41,17 @@ a.sidebar-item { text-decoration: none; }
 .sidebar-nav-group { display: flex; flex-direction: column; }
 .sidebar-item-chevron { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-3); transform: rotate(-90deg); transition: transform 0.2s ease; }
 .sidebar-item-chevron.is-open { transform: rotate(0); }
+.sidebar-item.is-current .sidebar-label { color: var(--primary-50); }
+[data-theme="dark"] .sidebar-item.is-current .sidebar-label { color: var(--primary-40); }
 .sidebar-subnav { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 6px; }
+/* Sous-item : MÊME taille que .sidebar-item (height 40, font 15/600), juste indenté
+   et actif plus léger (primary-5 au lieu du plein primary-50 des items de tête). */
 .sidebar-subitem {
   display: flex; align-items: center;
-  height: 34px;
+  height: 40px;
   padding: 0 12px 0 32px;
   border-radius: 8px;
-  font-size: 14px; font-weight: 600;
+  font-size: 15px; font-weight: 600;
   color: var(--text-2);
   text-decoration: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
