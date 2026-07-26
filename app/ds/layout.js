@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Wordmark from "@/components/brand/Wordmark";
-import { NAV, NAV_LABELS, sectionsOf } from "./_lib/nav";
+import { NAV, NAV_LABELS, NAV_CHILDREN, sectionsOf } from "./_lib/nav";
 import { DSThemeContext } from "./_components/ThemeContext";
 import ChipCopy from "./_components/ChipCopy";
 
@@ -56,6 +56,27 @@ export default function DSLayout({ children }) {
                     <span className="sidebar-section-label">{section}</span>
                   </div>
                   {sectionsOf(section).map((id) => {
+                    const children = NAV_CHILDREN[id];
+                    // Item à sous-pages (Cards) : parent + variantes indentées, dépliées
+                    // quand on est sur l'une d'elles (chevron ouvert).
+                    if (children) {
+                      const onGroup = children.some((c) => pathname === c.href);
+                      return (
+                        <div key={id} className="sidebar-nav-group">
+                          <Link href={children[0].href} className={`sidebar-item${onGroup ? " is-expanded" : ""}`}>
+                            <span className="sidebar-label">{NAV_LABELS[id]}</span>
+                            <svg className={`sidebar-item-chevron${onGroup ? " is-open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+                          </Link>
+                          {onGroup && (
+                            <div className="sidebar-subnav">
+                              {children.map((c) => (
+                                <Link key={c.href} href={c.href} className={`sidebar-subitem${pathname === c.href ? " active" : ""}`}>{c.label}</Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
                     const href = `/ds/${id}`;
                     const active = pathname === href;
                     return (

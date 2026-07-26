@@ -20,6 +20,16 @@ export const NAV = {
 // lecteur peut deviner, et il évite que l'ordre dérive au fil des migrations.
 const ALPHA_GROUPS = ["Components", "Patterns"];
 
+// Items à sous-pages : un composant-famille (ex. Cards) déplie ses variantes dans la
+// sidebar quand on est sur l'une d'elles. Le parent pointe sur la 1re (Foundation).
+export const NAV_CHILDREN = {
+  card: [
+    { label: "Foundation", href: "/ds/card" },
+    { label: "Book Card", href: "/ds/card/book" },
+    { label: "Quote Card", href: "/ds/card/quote" },
+  ],
+};
+
 // Point d'entrée unique des consommateurs (sidebar + landing) : le tri vit ici,
 // pas dupliqué dans chaque vue. Tri sur le LABEL affiché, pas sur le slug —
 // c'est ce que le lecteur voit ("Book Card Kebab" avant "Book Chip").
