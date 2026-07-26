@@ -123,22 +123,12 @@ export default function CellRowPage() {
             </div>
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <div className="cell-row cell-row--lg filters-row" style={{ width: "100%" }}>
-                  <button type="button" className="btn btn-md btn-outline">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h12M3 12h9M3 18h6" /></svg>
-                    <span>Sort</span>
-                  </button>
-                  <button type="button" className="btn btn-md btn-outline">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z" /></svg>
-                    <span>Status</span>
-                  </button>
-                  <button type="button" className="btn btn-md btn-secondary filters-reset-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
-                    <span>Clear filters</span>
-                  </button>
-                </div>
+                <button type="button" className="btn btn-md btn-outline">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z" /></svg>
+                  <span>Filters</span>
+                </button>
               </div>
-              <span className="ds-class">.filters-row</span>
+              <span className="ds-class">.btn-outline</span>
             </div>
           </div>
         </div>
