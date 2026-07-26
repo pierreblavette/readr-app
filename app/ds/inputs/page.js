@@ -262,7 +262,7 @@ export default function InputsPage() {
             <div style={{ width: 360 }}>
               <div className="modal-field" style={{ width: "100%" }}>
                 <label className="modal-field-label">Quote</label>
-                <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
+                <textarea className="quote-textarea is-focus" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
               </div>
             </div>
           </div>
@@ -279,7 +279,7 @@ export default function InputsPage() {
             <div className="ds-anno-organism" style={{ width: 360 }}>
               <div className="modal-field" style={{ width: "100%" }}>
                 <label className="modal-field-label">Quote</label>
-                <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
+                <textarea className="quote-textarea is-focus" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
               </div>
             </div>
           </AnnoScene>

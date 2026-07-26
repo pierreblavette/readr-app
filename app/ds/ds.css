@@ -778,6 +778,10 @@ a.sidebar-item { text-decoration: none; }
    l'autocomplete n'apparaît qu'au focus, donc la doc force cet état. */
 .modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; outline: none; }
 [data-theme="dark"] .modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+/* Mirror focus de la textarea (comme l'input : la doc force l'état sur la scène bleue
+   pour qu'il ressorte). Dark : bord + anneau, pas de bg (iso .quote-textarea:focus). */
+.quote-textarea.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; }
+[data-theme="dark"] .quote-textarea.is-focus { border-color: var(--primary-50) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
 
 /* ─── TEXT INPUT — éléments PROPOSÉS (doc /ds uniquement, pas encore dans
    library.css). Le vocabulaire couleur de validation existe déjà (--destructive,
