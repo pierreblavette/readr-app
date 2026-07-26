@@ -18,14 +18,14 @@ export default function DSLayout({ children }) {
   const pathname = usePathname();
   // Groupes de nav dépliés (Cards…) : état PERSISTANT, indépendant de la route. Ouvert
   // d'entrée si on arrive sur une page du groupe (deep-link), sinon replié.
+  const inGroup = (id, kids) => `/ds/${id}` === pathname || kids.some((c) => c.href === pathname);
   const [openGroups, setOpenGroups] = useState(() => {
     const init = {};
     for (const [id, kids] of Object.entries(NAV_CHILDREN)) {
-      if (kids.some((c) => c.href === pathname)) init[id] = true;
+      if (inGroup(id, kids)) init[id] = true;
     }
     return init;
   });
-  const toggleGroup = (id) => setOpenGroups((g) => ({ ...g, [id]: !g[id] }));
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -34,13 +34,14 @@ export default function DSLayout({ children }) {
   // Le layout ne remonte pas entre pages sœurs → fermer le drawer à la navigation.
   useEffect(() => { setMobileSidebarOpen(false); }, [pathname]);
 
-  // Arriver sur une page d'un groupe (ex. /ds/card/book) l'OUVRE ; on ne le referme
-  // jamais automatiquement — il reste ouvert si on clique un autre onglet, et ne se
-  // ferme qu'au re-clic sur le parent (toggleGroup).
+  // Arriver sur une page d'un groupe (racine /ds/card OU un enfant) l'OUVRE ; on ne le
+  // referme jamais automatiquement — il reste ouvert si on clique un autre onglet, et ne
+  // se ferme qu'au re-clic sur le parent alors qu'on est déjà sur sa racine.
   useEffect(() => {
     for (const [id, kids] of Object.entries(NAV_CHILDREN)) {
-      if (kids.some((c) => c.href === pathname)) setOpenGroups((g) => (g[id] ? g : { ...g, [id]: true }));
+      if (inGroup(id, kids)) setOpenGroups((g) => (g[id] ? g : { ...g, [id]: true }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Soft-nav d'une page longue (ex. Typography) vers une courte (ex. Spacing) :
@@ -79,19 +80,26 @@ export default function DSLayout({ children }) {
                     // Item à sous-pages (Cards) : parent + variantes indentées, dépliées
                     // quand on est sur l'une d'elles (chevron ouvert).
                     if (children) {
-                      const onGroup = children.some((c) => pathname === c.href);
+                      const groupHref = `/ds/${id}`;
+                      const onRoot = pathname === groupHref;
+                      const onGroup = onRoot || children.some((c) => pathname === c.href);
                       const isOpen = !!openGroups[id];
                       return (
                         <div key={id} className="sidebar-nav-group">
-                          <button
-                            type="button"
-                            onClick={() => toggleGroup(id)}
+                          <Link
+                            href={groupHref}
+                            onClick={(e) => {
+                              // Déjà sur la racine (Foundation) ET déplié → replie ;
+                              // sinon on va sur la racine + on déplie.
+                              if (onRoot && isOpen) { e.preventDefault(); setOpenGroups((g) => ({ ...g, [id]: false })); }
+                              else setOpenGroups((g) => ({ ...g, [id]: true }));
+                            }}
                             aria-expanded={isOpen}
-                            className={`sidebar-item${onGroup ? " is-current" : ""}`}
+                            className={`sidebar-item${onRoot ? " active" : onGroup ? " is-current" : ""}`}
                           >
                             <span className="sidebar-label">{NAV_LABELS[id]}</span>
                             <svg className={`sidebar-item-chevron${isOpen ? " is-open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
-                          </button>
+                          </Link>
                           {isOpen && (
                             <div className="sidebar-subnav">
                               {children.map((c) => (

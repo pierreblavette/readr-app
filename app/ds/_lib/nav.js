@@ -22,9 +22,10 @@ const ALPHA_GROUPS = ["Components", "Patterns"];
 
 // Items à sous-pages : un composant-famille (ex. Cards) déplie ses variantes dans la
 // sidebar quand on est sur l'une d'elles. Le parent pointe sur la 1re (Foundation).
+// Le parent (ex. « Cards » → /ds/card) EST sa page racine (Foundation/overview) ; les
+// enfants sont les variantes spécifiques. Clic sur le parent = va à la racine + déplie.
 export const NAV_CHILDREN = {
   card: [
-    { label: "Foundation", href: "/ds/card" },
     { label: "Book Card", href: "/ds/card/book" },
     { label: "Quote Card", href: "/ds/card/quote" },
   ],

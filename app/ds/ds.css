@@ -44,22 +44,21 @@ a.sidebar-item { text-decoration: none; }
 .sidebar-item.is-current .sidebar-label { color: var(--primary-50); }
 [data-theme="dark"] .sidebar-item.is-current .sidebar-label { color: var(--primary-40); }
 .sidebar-subnav { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 6px; }
-/* Sous-item : MÊME taille que .sidebar-item (height 40, font 15/600), juste indenté
-   et actif plus léger (primary-5 au lieu du plein primary-50 des items de tête). */
+/* Sous-item : MÊME apparence que .sidebar-item (height 40, font 15/600, actif plein
+   primary-50 blanc) — seule différence, l'indentation à gauche. */
 .sidebar-subitem {
   display: flex; align-items: center;
   height: 40px;
   padding: 0 12px 0 32px;
   border-radius: 8px;
   font-size: 15px; font-weight: 600;
-  color: var(--text-2);
+  color: var(--text);
   text-decoration: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .sidebar-subitem:hover { background: var(--primary-5); color: var(--primary-50); }
-.sidebar-subitem.active { background: var(--primary-5); color: var(--primary-50); }
-[data-theme="dark"] .sidebar-subitem:hover,
-[data-theme="dark"] .sidebar-subitem.active { background: var(--primary-3); color: var(--primary-40); }
+[data-theme="dark"] .sidebar-subitem:hover { background: var(--primary-3); color: var(--primary-40); }
+.sidebar-subitem.active { background: var(--primary-50); color: #FFFFFF; }
 /* Top-level group (Foundations / Components / Patterns / Reference) — wraps
    the group title + its sections. Internal gap 64 (tighter than the 96 inter-
    group gap of .ds-content) so the group reads as a cohesive cluster. */
