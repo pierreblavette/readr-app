@@ -76,7 +76,7 @@ export default function BadgesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {SIZES.map(([mod]) => (
               <div key={mod} className="ds-state-sample">
                 <span className={`now-reading-date now-reading-date--${mod}`}>{mod.toUpperCase()}</span>

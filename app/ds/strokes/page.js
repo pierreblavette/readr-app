@@ -43,16 +43,20 @@ export default function StrokesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Strokes</div>
         <div className="ds-card-body col">
-          {STROKES.map(({ name, css, token, cls, use, style }) => (
-            <div key={name} className="spacing-row">
-              <div style={{ width: 64, height: 40, flexShrink: 0, ...style }} />
-              <span className="spacing-label">{name}</span>
-              <span className="type-sample-meta">
-                <code>{css}</code> <span className="ds-token-chip">{token}</span>
-                {cls && <> · <span className="ds-class">{cls}</span></>} — {use}
-              </span>
-            </div>
-          ))}
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-stroke-tokens">
+            {STROKES.map(({ name, css, token, cls, use, style }) => (
+              <div key={name} className="ds-state-sample">
+                <div className="ds-stroke-swatch" style={style} />
+                <div className="ds-stroke-info">
+                  <div className="ds-stroke-name">{name}</div>
+                  <div className="ds-stroke-meta">
+                    <code>{css}</code> <span className="ds-token-chip">{token}</span>
+                    {cls && <> · <span className="ds-class">{cls}</span></>} — {use}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

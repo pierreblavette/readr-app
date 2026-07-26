@@ -38,15 +38,28 @@ export default function AnnoScene({ annos, children }) {
         const tTop = tr.top - sr.top, tBottom = tr.bottom - sr.top;
         const tLeft = tr.left - sr.left, tRight = tr.right - sr.left;
 
-        // Pastille calée sur le bord du modal (proche) ; le trait rejoint l'arête de
-        // la PARTIE visée (pas le bord générique du modal) — dessiné au-dessus.
-        let badge, line = null;
-        if (a.side === "left") { badge = { x: mLeft - GAP, y: tcy }; line = { x1: mLeft - GAP, y1: tcy, x2: tLeft, y2: tcy }; }
-        else if (a.side === "right") { badge = { x: mRight + GAP, y: tcy }; line = { x1: mRight + GAP, y1: tcy, x2: tRight, y2: tcy }; }
-        else if (a.side === "top") { badge = { x: tcx, y: mTop - GAP }; line = { x1: tcx, y1: mTop - GAP, x2: tcx, y2: tTop }; }
-        else if (a.side === "bottom") { badge = { x: tcx, y: mBottom + GAP }; line = { x1: tcx, y1: mBottom + GAP, x2: tcx, y2: tBottom }; }
-        else { badge = { x: sr.width - CORNER, y: sr.height - CORNER }; } // corner — pas de trait
-        return { n: a.n, badge, line };
+        // Pastille calée sur le bord de l'organisme, puis BORNÉE dans la scène (rayon
+        // ~13) : sur un écran étroit où l'organisme (largeur fixe) approche le bord,
+        // la pastille se colle au bord interne au lieu de déborder sur le fond blanc.
+        // Le trait rejoint l'arête de la PARTIE visée depuis la pastille bornée.
+        const R = 13;
+        if (a.side === "left" || a.side === "right" || a.side === "top" || a.side === "bottom") {
+          let badge;
+          if (a.side === "left") badge = { x: mLeft - GAP, y: tcy };
+          else if (a.side === "right") badge = { x: mRight + GAP, y: tcy };
+          else if (a.side === "top") badge = { x: tcx, y: mTop - GAP };
+          else badge = { x: tcx, y: mBottom + GAP };
+          badge.x = Math.min(Math.max(badge.x, R), sr.width - R);
+          badge.y = Math.min(Math.max(badge.y, R), sr.height - R);
+          let line;
+          if (a.side === "left") line = { x1: badge.x, y1: tcy, x2: tLeft, y2: tcy };
+          else if (a.side === "right") line = { x1: badge.x, y1: tcy, x2: tRight, y2: tcy };
+          else if (a.side === "top") line = { x1: tcx, y1: badge.y, x2: tcx, y2: tTop };
+          else line = { x1: tcx, y1: badge.y, x2: tcx, y2: tBottom };
+          return { n: a.n, badge, line };
+        }
+        // corner (overlay/scène) — pastille au coin, pas de trait
+        return { n: a.n, badge: { x: sr.width - CORNER, y: sr.height - CORNER }, line: null };
       });
       setItems(out);
     };

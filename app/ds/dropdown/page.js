@@ -137,7 +137,7 @@ export default function DropdownMenuPage() {
       <div className="ds-card">
         <div className="ds-card-head">States · item</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {ITEM_STATES.map(([label, mod, cap]) => (
               <div key={label} className="ds-state-sample">
                 <button

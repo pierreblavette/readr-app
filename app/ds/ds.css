@@ -137,7 +137,7 @@ a.sidebar-item { text-decoration: none; }
 .ds-card-body.col > .ds-action-block::before { content: none; }
 /* Micro-groupe (titre + valeur/texte serrés) : gap 8, pas l'espacement
    inter-blocs de 20. Même valeur que les autres paires label+valeur du DS. */
-.ds-card-body > .ds-token-block { gap: 8px; }
+.ds-card-body > .ds-token-block { gap: 16px; }
 /* Rangée d'échantillons atomiques (boutons, badges, chips…). INDISPENSABLE pour
    les sections Components : le modèle ci-dessus a une spécificité (0,1,1) qui
    écraserait le padding/gap propre d'un `.btn-md` (0,1,0) placé en enfant direct
@@ -150,7 +150,7 @@ a.sidebar-item { text-decoration: none; }
    une colonne échantillon + eyebrow. Gap large pour séparer les états. */
 .ds-states-grid { display: flex; flex-wrap: wrap; align-items: center; width: 100%; }
 .ds-card-body > .ds-states-grid { gap: 32px; }
-.ds-states-grid > .ds-state-sample { align-items: center; gap: 48px; }
+.ds-states-grid > .ds-state-sample { align-items: center; gap: 32px; }
 /* L'étiquette se cale à gauche de son échantillon, qui reste centré dans sa
    colonne. Un titre qui flotte au centre ne dit pas où commence ce qu'il
    nomme ; le bord gauche est le point d'ancrage de lecture. */
@@ -167,7 +167,9 @@ a.sidebar-item { text-decoration: none; }
 .ds-states-grid--boxed {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  /* minmax(0,…) : sans ça un specimen large force la colonne au min-content et la
+     board déborde (coupe la dernière cellule au bord de la carte). */
+  grid-auto-columns: minmax(0, 1fr);
   /* Cellules étirées (annule le align-items:center hérité de .ds-states-grid) :
      sinon elles se dimensionnent au contenu et leurs bordures se désalignent
      quand un specimen est plus haut qu'un autre. Le centrage du specimen est
@@ -185,7 +187,7 @@ a.sidebar-item { text-decoration: none; }
   justify-content: center;
   /* Cellule labellisée (App icon, Maskable) : eyebrow au-dessus du specimen. Sans
      effet sur les cellules à enfant unique (Checkbox/Buttons States). */
-  gap: 20px;
+  gap: 32px;
 }
 /* Le specimen se recentre même s'il porte son propre align-self (ex. .btn-link
    est en flex-start pour son usage réel sous un champ) : align-self sur l'enfant
@@ -195,32 +197,53 @@ a.sidebar-item { text-decoration: none; }
    centré (annule le flex-start de .ds-states-grid > … > .panel-section-eyebrow,
    même spécificité 0,3,0 → gagne par l'ordre source). */
 .ds-states-grid--boxed > .ds-state-sample > .panel-section-eyebrow { align-self: center; }
-/* Specimens larges (ex. book-chip 260px) : une rangée unique de N déborderait.
-   Board 2 colonnes qui wrappent, dividers sur les deux axes. Le border-left vient
-   de la règle de base ci-dessus, retiré pour la 1re colonne ; border-top ajouté
-   sauf 1re rangée. Placé APRÈS --boxed pour gagner sur l'ordre source. */
+/* Board 2 colonnes (--cols-2 explicite pour specimens larges, ou repli mobile plus
+   bas). Un SEUL système de dividers, pour que tout s'aligne au pixel :
+   Chaque divider est tracé TOUJOURS du même côté, sinon on obtient une marche d'1px
+   (mélanger border-left col 2 / border-right col 1 décalait les verticaux ; mélanger
+   border-top rangée 2 / border-bottom rangée 1 décalait l'horizontal).
+   - VERTICAL = border-right sur la col 1 (cellules impaires) — même piste de colonne
+     partout → aligné. La cellule orpheline d'un board impair porte le sien → ferme sa
+     rangée à droite (= arête GAUCHE de la cellule fantôme).
+   - HORIZONTAL = border-bottom sur la rangée du DESSUS (toute cellule qui a une rangée
+     en dessous, réelle OU fantôme) → même arête des deux côtés, pas de marche.
+     :not(:nth-last-child(-n+2)) = cellules avec une rangée pleine dessous ;
+     :nth-last-child(2):nth-child(even) = la col 2 au-dessus de la cellule fantôme
+     (board impair) → son arête HAUTE. Gauche + haut tracés → grille complète à 4.
+   Double classe (0,4,0) bat la base border-left (0,3,0). :not(:only-child) épargne le
+   board à cellule unique (specimen isolé, pas de rangée à fermer). */
 .ds-states-grid--boxed.ds-states-grid--cols-2 {
   grid-auto-flow: row;
-  grid-template-columns: repeat(2, 1fr);
+  /* minmax(0,…) (au lieu de 1fr=minmax(auto,1fr)) : sinon un specimen ou une pastille
+     large force la colonne au min-content et la board déborde. Ici la colonne rétrécit,
+     le specimen se centre/rogne DANS sa cellule au lieu de couper le board au bord. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-/* Double classe → (0,4,0), bat sans ambiguïté la règle de base border-left
-   (0,3,0). Col 1 (cellules impaires) perd le divider gauche ; les rangées 2+
-   (cellules 3,4,…) gagnent le divider haut. Le border-left des cellules paires
-   reste hérité de la règle de base. */
-.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(2n + 1) { border-left: none; }
-.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(n + 3) { border-top: 1px solid var(--border-subtle); }
+/* Board à cellule unique : ne pas scinder en 2 colonnes (la cellule irait en col 1,
+   décentrée) → 1 colonne pleine largeur, specimen recentré. */
+.ds-states-grid--boxed.ds-states-grid--cols-2:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample + .ds-state-sample { border-left: none; }
+.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-child(odd):not(:only-child) { border-right: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
+/* Desktop rangée unique (board non --cols-2 au-dessus de 760px) : divider vertical
+   = border-left entre cellules adjacentes. */
 .ds-states-grid--boxed > .ds-state-sample + .ds-state-sample {
   border-left: 1px solid var(--border-subtle);
 }
 @media (max-width: 760px) {
-  /* Repli : 2 colonnes qui wrappent → dividers sur les deux axes. */
+  /* Repli : tout board boxé passe en 2 colonnes → même système que --cols-2. */
   .ds-states-grid--boxed {
     grid-auto-flow: row;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .ds-states-grid--boxed > .ds-state-sample { border-top: 1px solid var(--border-subtle); }
-  .ds-states-grid--boxed > .ds-state-sample:nth-child(-n + 2) { border-top: none; }
-  .ds-states-grid--boxed > .ds-state-sample:nth-child(2n + 1) { border-left: none; }
+  /* Board à cellule unique : 1 colonne pleine largeur (sinon la cellule seule se
+     cale en col 1, décentrée). */
+  .ds-states-grid--boxed:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed > .ds-state-sample + .ds-state-sample { border-left: none; }
+  .ds-states-grid--boxed > .ds-state-sample:nth-child(odd):not(:only-child) { border-right: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
 }
 /* Force le halo :focus-visible pour l'échantillon statique — le vrai état ne
    s'obtient qu'au clavier et ne se figerait pas dans une grille. Valeurs miroir
@@ -232,7 +255,11 @@ a.sidebar-item { text-decoration: none; }
    Double classe obligatoire : ds.css est importé AVANT library.css, donc à
    spécificité égale le `position: absolute` de .dropdown-menu gagnerait à
    l'ordre source (même piège que .sidebar-section-head--no-action). */
-.dropdown-menu.ds-menu-static { position: static; margin: 0; }
+/* z-index:auto en plus de position:static — sinon le z-index 1000 de --portal, sur
+   un menu qui est un FLEX ITEM (parent inline-flex, ex .ds-kebab-open), crée un
+   contexte d'empilement même en static et fait flotter le specimen au-dessus de la
+   nav mobile (z 330). */
+.dropdown-menu.ds-menu-static { position: static; margin: 0; z-index: auto; }
 /* Kebab : déclencheur + menu assemblés en colonne, gap 6 = l'offset réel du menu
    sous le trigger. */
 .ds-kebab-open { display: inline-flex; flex-direction: column; gap: 6px; align-items: flex-start; }
@@ -257,6 +284,14 @@ a.sidebar-item { text-decoration: none; }
    la grille de cotes se lit comme un tableau, pas comme une pile. */
 .ds-redline-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
 .ds-redline-row + .ds-redline-row { border-top: 1px solid var(--border-subtle); }
+/* Sous ~1000px (sidebar visible + contenu étroit, ou petit écran), les 2 planches
+   d'une rangée ne tiennent plus côte à côte (gros specimens) → on les empile ; le
+   divider vertical entre elles devient horizontal. Les rangées à planche UNIQUE
+   (grid-template-columns inline « 1fr », spécificité inline) ne sont pas concernées. */
+@media (max-width: 1000px) {
+  .ds-redline-row { grid-template-columns: 1fr; }
+  .ds-redline-row > .ds-redline + .ds-redline { border-left: none; border-top: 1px solid var(--border-subtle); }
+}
 /* Ciblage explicite plutôt que `* + *` : le stroke vertical n'appartient qu'à
    la 2e colonne cotée, il ne doit pas se poser sur un éventuel autre frère. */
 .ds-redline-row > .ds-redline + .ds-redline { border-left: 1px solid var(--border-subtle); }
@@ -585,6 +620,24 @@ a.sidebar-item { text-decoration: none; }
 .spacing-row { display: flex; align-items: center; width: 100%; }
 .spacing-block { background: var(--accent-bg); flex-shrink: 0; height: 20px; }
 .spacing-label { font-size: 15px; font-weight: 700; color: var(--text); min-width: 40px; }
+
+/* Section Strokes en board boxé (iso « States · interactive ») : chaque stroke dans
+   sa cellule, contenu EMPILÉ à gauche (swatch → nom → spec/description qui wrappe).
+   Remplace la rangée horizontale qui débordait en nowrap. Annule le centrage des
+   cellules boxées (specimen centré) au profit d'un empilement à gauche lisible. */
+/* minmax(0,1fr) (au lieu du 1fr=minmax(auto,1fr) par défaut) : sans ça les pastilles
+   token + mots mono forcent la colonne au min-content → la board déborde sur petit
+   écran. Avec minmax(0,…) la colonne rétrécit, le contenu wrappe dans la cellule.
+   !important + double classe pour battre le repeat(2,1fr)!important du 2-col mobile. */
+.ds-stroke-tokens.ds-states-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.ds-stroke-tokens.ds-states-grid--boxed > .ds-state-sample { align-items: flex-start; justify-content: flex-start; gap: 32px; }
+.ds-stroke-tokens.ds-states-grid--boxed > .ds-state-sample > * { align-self: flex-start; }
+.ds-stroke-swatch { width: 64px; height: 40px; flex-shrink: 0; }
+/* Groupe nom + spec/description ; gap 16 (titre → détail). Le gap de cellule (32)
+   sépare le swatch de ce bloc, aligné sur les autres cellules boxées. */
+.ds-stroke-info { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ds-stroke-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.ds-stroke-meta { font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); line-height: 1.6; }
 
 /* ─── BUTTONS ─── */
 .btn {

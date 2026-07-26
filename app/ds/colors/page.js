@@ -51,6 +51,19 @@ export default function ColorsPage() {
       </div>
 
       <div className="ds-card">
+        <div className="ds-card-head">Critical</div>
+        <div className="ds-card-body col">
+          <div className="ds-swatch-grid">
+            <Swatch bg="var(--destructive)" title="Destructive" token="--destructive" light="#E63946" dark="#FF6B6B" />
+            <Swatch bg="var(--destructive-hover)" title="Destructive Hover" token="--destructive-hover" light="#C42432" dark="#E63946" />
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Rouge destructif — actions irréversibles et états d&apos;erreur. <span className="ds-token-chip">--destructive</span> porte le texte / l&apos;icône : item de menu « supprimer » (<span className="ds-class">.dropdown-item.is-destructive</span>), message d&apos;erreur (<span className="ds-class">.modal-error</span>), bord de champ invalide. <span className="ds-token-chip">--destructive-hover</span> = le fond plein au survol du bouton de suppression (<span className="ds-class">.confirm-modal-delete</span>). En dark le rouge s&apos;éclaircit (<code>#FF6B6B</code>) pour tenir le contraste sur fond sombre. Pas encore de token de fond dédié (contrairement à <span className="ds-token-chip">--accent-bg</span> / <span className="ds-token-chip">--teal-bg</span>) — les tuiles destructives posent un rgba ad hoc.</p>
+        </div>
+      </div>
+
+      <div className="ds-card">
         <div className="ds-card-head">Text</div>
         <div className="ds-card-body col">
           {[

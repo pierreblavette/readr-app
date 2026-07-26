@@ -125,7 +125,7 @@ export default function ShadowsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Border Radius · in use</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
                 <button type="button" className="btn btn-outline btn-md"><span>Button</span></button>

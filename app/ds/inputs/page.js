@@ -152,7 +152,7 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {SIZES.map(([name, mod]) => (
               <div key={name} className="ds-state-sample">
                 <div className="modal-field" style={{ width: "100%" }}>

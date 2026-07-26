@@ -139,7 +139,7 @@ export default function RatingStarsPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {STATES.map(([label, n]) => (
               <div key={label} className="ds-state-sample">
                 <StarInput filled={n} />
@@ -156,7 +156,7 @@ export default function RatingStarsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · read-only</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <StarsDisplay variant="panel-rating-stars" value={4} />
               <span className="ds-class">.panel-rating-stars</span>

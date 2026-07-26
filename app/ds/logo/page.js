@@ -177,7 +177,7 @@ export default function LogoPage() {
       <div className="ds-card">
         <div className="ds-card-head">Maskable Android — shapes</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {[["circle","Circle"],["squircle","Squircle"],["rounded","Rounded"],["square","Square"]].map(([shape,label]) => (
               <div key={shape} className="ds-state-sample">
                 <div className={`maskable-shape maskable-shape--${shape}`}>

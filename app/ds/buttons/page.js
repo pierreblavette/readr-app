@@ -119,7 +119,7 @@ export default function ButtonsPage() {
         <div key={name} className="ds-card">
           <div className="ds-card-head">States · {name}</div>
           <div className="ds-card-body col">
-            <div className="ds-states-grid ds-states-grid--boxed">
+            <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
               {STATES.map(([state, mod]) => (
                 <div key={state} className="ds-state-sample">
                   <button className={`btn ${variant} btn-md${mod ? " " + mod : ""}`} disabled={state === "Disabled"}>
@@ -136,7 +136,7 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {SIZES.map(([cls, label]) => (
               <div key={cls} className="ds-state-sample">
                 <button className={`btn btn-primary ${cls}`}><span>{label}</span></button>
@@ -164,7 +164,7 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · icons &amp; composition</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <button className="btn btn-primary btn-solid btn-md">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
@@ -216,7 +216,7 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · AI action</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <button className="btn btn-ai btn-md" style={{ display: "flex", alignItems: "center", gap: 7 }}>
                 <svg className="import-tab-ai-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -258,7 +258,7 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · text link</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <button type="button" className="btn-link">Remove goal</button>
               <span className="ds-class">.btn-link</span>
@@ -293,7 +293,7 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · count badge</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <button type="button" className="btn btn-md btn-primary filters-panel-confirm">
                 <span>Confirm</span>
