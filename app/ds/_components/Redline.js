@@ -69,11 +69,6 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       // ça couvre aussi les cas où un enfant porte sa propre marge. noGaps : à
       // couper quand l'espacement est un space-between/auto (footer d'actions) —
       // la distance mesurée n'est pas un gap fixe et n'a rien à coter.
-      // Élément désigné par padSelector (footer coté à part) : on skippe la bande de
-      // gap qui le PRÉCÈDE — sinon son bord bas colle au bord haut de la childVband de
-      // padding du footer (1px d'écart), doublon de bordures rouges en mode --lined
-      // (le footer est déjà délimité par son border-top + sa bande de padding, et le
-      // gap garde sa cote sur la paire précédente, ex. title→body).
       const pelEl = padSelector ? el.querySelector(padSelector) : null;
       if (!noGaps) {
         for (let i = 0; i < kids.length - 1; i++) {
@@ -85,7 +80,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
           // (colonne : modal title/body/footer, cards) → gap vertical (strie
           // horizontale), coté à droite comme les paddings verticaux.
           if (hgap > 0.5) bands.push({ left: a.right - br.left, width: hgap, value: Math.round(hgap), strong: true });
-          else if (vgap > 0.5 && kids[i + 1] !== pelEl) vbands.push({ top: a.bottom - br.top, height: vgap, value: Math.round(vgap) });
+          else if (vgap > 0.5) vbands.push({ top: a.bottom - br.top, height: vgap, value: Math.round(vgap) });
         }
       }
 

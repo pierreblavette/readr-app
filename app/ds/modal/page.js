@@ -98,7 +98,7 @@ export default function ModalPage() {
                 <div className="modal" style={{ width: 440, animation: "none" }}>
                   <div className="modal-title" style={{ margin: 0 }}>Add a quote</div>
                   <div className="ds-schema-block" aria-hidden="true" />
-                  <div className="modal-actions">
+                  <div className="modal-actions" style={{ borderTop: "none" }}>
                     <button type="button" className="btn btn-outline btn-md">Cancel</button>
                     <button type="button" className="btn btn-primary btn-md">Save</button>
                   </div>
