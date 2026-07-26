@@ -852,6 +852,12 @@ a.sidebar-item { text-decoration: none; }
 /* Table descriptive : # étroite, cellules alignées en haut (descriptions multi-lignes). */
 .ds-anno-table td { vertical-align: top; }
 .ds-anno-table td:first-child { color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+/* Colonne Rôle (3e) : min-width pour garder du texte lisible sur petit écran —
+   le tableau scrolle en horizontal (.ds-card-body overflow-x: auto), donc l'air
+   donné ici pousse le scroll au lieu d'écraser la colonne. Sans effet en desktop
+   (Rôle y est déjà large, flexible). */
+.ds-anno-table td:nth-child(3),
+.ds-anno-table th:nth-child(3) { min-width: 340px; }
 /* Colonne Opt. : min-width pour ne pas coller au bord droit ; un check si optionnel. */
 .ds-anno-table td:last-child,
 .ds-anno-table th:last-child { min-width: 96px; text-align: center; color: var(--text-3); white-space: nowrap; }
