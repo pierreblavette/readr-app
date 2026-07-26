@@ -123,12 +123,12 @@ export default function CellRowPage() {
             </div>
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <button type="button" className="btn btn-md btn-outline">
+                <button type="button" className="btn btn-md btn-primary">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z" /></svg>
                   <span>Filters</span>
                 </button>
               </div>
-              <span className="ds-class">.btn-outline</span>
+              <span className="ds-class">.btn-primary</span>
             </div>
           </div>
         </div>
