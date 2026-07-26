@@ -336,7 +336,7 @@ export default function InputsPage() {
                 <label className="modal-field-label">Search</label>
                 <div className="search-box" style={{ width: "100%", minWidth: 0 }}>
                   <SearchIcon />
-                  <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
+                  <input type="text" className="search-input is-focus" defaultValue="Sally Rooney" readOnly />
                   <button type="button" className="search-clear visible" aria-label="Clear">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
                   </button>
@@ -357,7 +357,7 @@ export default function InputsPage() {
             <div className="ds-anno-organism" style={{ width: 340 }}>
               <div className="search-box" style={{ width: "100%", minWidth: 0 }}>
                 <SearchIcon />
-                <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
+                <input type="text" className="search-input is-focus" defaultValue="Sally Rooney" readOnly />
                 <button type="button" className="search-clear visible" aria-label="Clear">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
                 </button>
