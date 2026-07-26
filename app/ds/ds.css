@@ -761,6 +761,11 @@ a.sidebar-item { text-decoration: none; }
 /* Pas d'animation d'apparition dans la doc : plusieurs chips qui fadeUp au mount
    distraient. Neutralisé uniquement sous /ds (la prod garde son animation). */
 .ds-section .book-chip { animation: none; }
+/* Book Card specimens : couper l'anim d'entrée (fadeUp). Mirror hover forcé pour la
+   planche States — reproduit .book-card:hover réel (lift inclus, cf. note
+   d'harmonisation de la page Cards). */
+.ds-section .book-card { animation: none; }
+.book-card.is-hover { transform: translateY(-2px); border-color: var(--primary-50); background: var(--primary-3); box-shadow: var(--shadow-md); }
 
 /* États forcés d'un item de menu pour la doc — mirror de .dropdown-item:hover /
    :active de library.css (hover bg --primary-5 + color --primary-50 ; active

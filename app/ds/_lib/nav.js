@@ -4,7 +4,7 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "checkbox", "chip", "dropdown", "inputs", "rating-stars", "segmented-pills", "toggle"],
+  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "inputs", "rating-stars", "segmented-pills", "toggle"],
   // Patterns = assemblages de composants + logique + layout (input + liste flottante
   // + async + clavier pour Autocomplete). Pas des briques uniques → groupe à part.
   Patterns: ["autocomplete", "modal"],
@@ -37,7 +37,7 @@ export const NAV_LABELS = {
   "checkbox": "Checkbox", "autocomplete": "Autocomplete", "lang-switcher": "Language Switcher",
   "rating-stars": "Rating Stars", "row-checkbox": "Row Checkbox",
   "theme-toggle": "Theme Toggle", "toggle": "Toggle", "book-chip": "Book Row", "chip": "Chip", "book-card-kebab": "Book Card Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
-  "card": "Book Card", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
+  "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "List View", "sidebar": "Sidebar", "panel": "Side Panel", "quote-panel": "Quote Panel",
   "filters-panel": "Filters Panel", "filters-row": "Filters Row",
   "modal": "Modal", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Weekly Activity", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer",
