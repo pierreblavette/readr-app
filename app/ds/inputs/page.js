@@ -25,6 +25,21 @@ const ANNOS = [
   { n: 4, side: "left", target: ".modal-field-hint" },
 ];
 
+const TEXTAREA_ANNOS = [
+  { n: 1, side: "right", target: ".modal-field" },
+  { n: 2, side: "left", target: ".modal-field-label" },
+  { n: 3, side: "left", target: ".quote-textarea" },
+];
+
+const SEARCH_ANNOS = [
+  { n: 1, side: "top", target: ".search-box" },
+  { n: 2, side: "left", target: ".search-box > svg" },
+  { n: 3, side: "bottom", target: ".search-input" },
+  { n: 4, side: "right", target: ".search-clear" },
+];
+
+const QUOTE = "« The world was ending and there was nothing to be done about it. »";
+
 // Champ canonique (label + field + helper), réutilisé Preview / Anatomy. Input en
 // focus : sur le fond bleu de la scène, la bordure --primary-50 + l'anneau le
 // démarquent (au repos le bg --bg3 + bord transparent se confondent avec le bleu).
@@ -238,42 +253,109 @@ export default function InputsPage() {
         </div>
       </div>
 
-      {/* ─────────── 7. VARIANTS · textarea ─────────── */}
+      {/* ─────────── 7. VARIANTS · textarea — preview / anatomy / spacing ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Variants · textarea</div>
+        <div className="ds-card-head">Textarea · preview</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
-            <div className="ds-state-sample">
-              <div className="modal-field" style={{ width: "100%", maxWidth: 420 }}>
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <div style={{ width: 360 }}>
+              <div className="modal-field" style={{ width: "100%" }}>
                 <label className="modal-field-label">Quote</label>
-                <textarea className="quote-textarea" rows={3} readOnly defaultValue={"« The world was ending and there was nothing to be done about it. »"} style={{ width: "100%" }} />
+                <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
               </div>
-              <span className="ds-class">.quote-textarea</span>
             </div>
           </div>
-        </div>
-        <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Base</div>
-            <p>Socle du text field décliné multi-lignes : <code>width: 100%</code> · padding <strong>12 14</strong> (vertical rétabli) · radius 8 · border 1.5 <span className="ds-token-chip">transparent</span> · bg <span className="ds-token-chip">--bg3</span> · font 15 / 600 · <code>line-height: 1.6</code> · <code>resize: vertical</code>.</p>
           </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">États</div>
-            <p>Hover / focus identiques au text field (bg <span className="ds-token-chip">--primary-5</span>, bord <span className="ds-token-chip">--primary-50</span>, anneau <span className="ds-token-chip">--primary-20</span>). Seul champ multi-lignes de l&apos;app (QuoteModal / BookPanel).</p>
+          <p className="ds-note">Le socle du text field décliné <strong>multi-lignes</strong> — seul champ à padding vertical (le texte respire sur plusieurs lignes) et <code>resize: vertical</code>. Utilisé en QuoteModal / BookPanel.</p>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Textarea · anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={TEXTAREA_ANNOS}>
+            <div className="ds-anno-organism" style={{ width: 360 }}>
+              <div className="modal-field" style={{ width: "100%" }}>
+                <label className="modal-field-label">Quote</label>
+                <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
+              </div>
+            </div>
+          </AnnoScene>
           </div>
         </div>
       </div>
 
-      {/* ─────────── 8. VARIANTS · search ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Variants · search</div>
+        <div className="ds-card-head">Textarea · elements</div>
         <div className="ds-card-body col">
-          <div className="ds-sample-row">
-            {/* Wrapper neutre (pas .modal-field) : sa règle « .modal-field input »
-                écraserait le padding 0 38 du .search-input et masquerait la loupe. */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
-              <label className="modal-field-label">Search</label>
-              <div className="search-box" style={{ flex: "1 1 auto", minWidth: 0 }}>
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.modal-field</span></td><td>Conteneur : <code>flex</code> colonne, <strong>gap 8</strong> entre label et champ — identique au text field.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.modal-field-label</span></td><td>Libellé : 13/500 <span className="ds-token-chip">--text-2</span>, toujours visible.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.quote-textarea</span></td><td>Champ multi-lignes : padding <strong>12 14</strong> (vertical rétabli vs <code>0 14</code>), <code>line-height: 1.6</code>, <code>resize: vertical</code>, radius 8, border 1.5 <span className="ds-token-chip">transparent</span>, bg <span className="ds-token-chip">--bg3</span>, font 15/600.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Textarea · spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <div className="modal-field" style={{ width: 320 }}>
+                  <label className="modal-field-label">Quote</label>
+                  <textarea className="quote-textarea" rows={3} readOnly defaultValue={QUOTE} style={{ width: "100%" }} />
+                </div>
+              </Redline>
+            </div>
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <textarea className="quote-textarea" rows={2} readOnly defaultValue="Padding 12 14" style={{ width: 260 }} />
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Champ : <strong>gap 8</strong> (label → textarea). Textarea : padding <strong>12 14</strong> (vertical rétabli vs le <code>0 14</code> du text field), <code>line-height: 1.6</code>. Hover / focus identiques au text field (bg <span className="ds-token-chip">--primary-5</span>, bord <span className="ds-token-chip">--primary-50</span>, anneau <span className="ds-token-chip">--primary-20</span>). Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 8. VARIANTS · search — preview / anatomy / spacing ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Search · preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview">
+            <div style={{ width: 360 }}>
+              {/* Wrapper neutre (pas .modal-field) : sa règle « .modal-field input »
+                  écraserait le padding 0 38 du .search-input et masquerait la loupe. */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
+                <label className="modal-field-label">Search</label>
+                <div className="search-box" style={{ width: "100%", minWidth: 0 }}>
+                  <SearchIcon />
+                  <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
+                  <button type="button" className="search-clear visible" aria-label="Clear">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <p className="ds-note">Même socle que le text field (height 40, font 15/600) en <strong>pill</strong> (radius 32), loupe à gauche et bouton clear à droite. Vit sur fond de page — bord visible au repos. Library, Wishlist, Dictionary.</p>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Search · anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+          <AnnoScene annos={SEARCH_ANNOS}>
+            <div className="ds-anno-organism" style={{ width: 340 }}>
+              <div className="search-box" style={{ width: "100%", minWidth: 0 }}>
                 <SearchIcon />
                 <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
                 <button type="button" className="search-clear visible" aria-label="Clear">
@@ -281,21 +363,45 @@ export default function InputsPage() {
                 </button>
               </div>
             </div>
+          </AnnoScene>
           </div>
         </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Search · elements</div>
         <div className="ds-card-body col">
-          <div className="ds-token-block">
-            <div className="ds-token-name">Forme</div>
-            <p>Même socle que le text field (height 40, font 15/600) mais <strong>pill</strong> (radius 32) + <code>width: 100%</code>. Bord au repos <span className="ds-token-chip">--border-subtle</span> (visible, contrairement au champ modal transparent) car il vit sur fond de page.</p>
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.search-box</span></td><td>Coquille <strong>pill</strong> : height 40, radius 32, border 1.5 <span className="ds-token-chip">--border-subtle</span> (visible — vit sur fond de page), <code>position: relative</code> pour les éléments absolus.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.search-box svg</span></td><td>Loupe 15×15 <span className="ds-token-chip">--text-2</span>, absolue à <code>left: 14</code>, <code>pointer-events: none</code>. Le trait passe à <code>1.5</code> au hover/focus.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.search-input</span></td><td>Champ transparent : padding <strong>0 38</strong> (gauche, dégage la loupe) / <strong>34</strong> (droite, dégage le clear), font 15/600.</td><td>—</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.search-clear</span></td><td>Pastille ronde 18×18 <span className="ds-token-chip">--text-3</span> (hover <span className="ds-token-chip">--text-2</span>), croix 10×10, absolue à <code>right: 10</code>. <span className="ds-class">.visible</span> quand le champ est rempli.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Search · spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <div className="search-box" style={{ width: 300 }}>
+                  <SearchIcon />
+                  <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
+                  <button type="button" className="search-clear visible" aria-label="Clear">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+                  </button>
+                </div>
+              </Redline>
+            </div>
           </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Icône · <span className="ds-cn">.search-box</span> svg</div>
-            <p>Loupe 15×15 <span className="ds-token-chip">--text-2</span>, absolue à <code>left: 14</code>, <code>pointer-events: none</code>. Padding gauche du champ = 38 pour la dégager. Le trait passe à <code>1.5</code> au hover/focus.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Clear · <span className="ds-cn">.search-clear</span></div>
-            <p>Pastille ronde 18×18 <span className="ds-token-chip">--text-3</span> (hover <span className="ds-token-chip">--text-2</span>), croix 10×10, absolue à <code>right: 10</code>. Masquée par défaut, <span className="ds-class">.visible</span> quand le champ est rempli. Padding droit = 34.</p>
-          </div>
+          <p className="ds-note">Coquille height <strong>40</strong>, pill radius 32. Loupe absolue <code>left 14</code> (15×15) · clear absolu <code>right 10</code> (18×18). Le champ réserve <strong>38</strong> à gauche / <strong>34</strong> à droite pour les dégager. Cotes mesurées à l&apos;exécution.</p>
+        </div>
+        <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Variante · <span className="ds-cn">.authors-search-input</span></div>
             <p>Même graphie d&apos;icône (38/34) mais radius 8 et bg <span className="ds-token-chip">--bg3</span> au lieu du pill blanc — variante « encastrée » pour l&apos;en-tête du menu Authors.</p>
