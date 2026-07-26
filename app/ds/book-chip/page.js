@@ -91,6 +91,10 @@ export default function BookChipPage() {
           </AnnoScene>
           </div>
         </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Elements</div>
         <div className="ds-card-body col">
           <table className="token-table ds-anno-table">
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
