@@ -35,7 +35,7 @@ function BookCardSpec({ className = "" }) {
 
 export default function CardPage() {
   return (
-    <DSSection id="card" title="Cards" sub="Famille de surfaces de contenu — même langage (surface --card, radius 8, bord 1.5, élévation au hover), décliné par contexte. Book Card en tête ; Quote / Collection / Overview partagent la primitive et suivront.">
+    <DSSection id="card" title="Cards" sub="Famille de surfaces de contenu — même langage (surface --card, radius 8, bord 1.5, bord primary au hover), décliné par contexte. Book Card en tête ; Quote / Collection / Overview partagent la primitive et suivront.">
 
       {/* 1 — PREVIEW */}
       <div className="ds-card">
@@ -46,7 +46,7 @@ export default function CardPage() {
             <BookCardSpec />
           </div>
           </div>
-          <p className="ds-note">Le <strong>Book Card</strong> — la carte de la grille Library : cover + titre + auteur + méta + kebab. Toutes les cartes de l&apos;app partagent son langage (surface <span className="ds-token-chip">--card</span>, radius 8, bord 1.5, élévation au hover).</p>
+          <p className="ds-note">Le <strong>Book Card</strong> — la carte de la grille Library : cover + titre + auteur + méta + kebab. Toutes les cartes de l&apos;app partagent son langage (surface <span className="ds-token-chip">--card</span>, radius 8, bord 1.5, bord primary au hover).</p>
         </div>
       </div>
 
@@ -86,8 +86,8 @@ export default function CardPage() {
             <p>Fond <span className="ds-token-chip">--card</span> · radius <strong>8</strong> (<span className="ds-token-chip">--radius</span>) · bord <strong>1.5</strong> <span className="ds-token-chip">--border-subtle</span>. Le socle commun à <em>toutes</em> les cartes.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Hover — élévation</div>
-            <p>Bord <span className="ds-token-chip">--primary-50</span> + <span className="ds-token-chip">--shadow-md</span>. <strong>À harmoniser</strong> : le Book Card ajoute aujourd&apos;hui un <em>lift</em> (<code>transform: translateY(-2px)</code> + ombre) qui déroge à la doctrine « hover = bord / fond / couleur, jamais translate ni shadow-lift ». Règle unique à appliquer à toutes les cartes une fois la famille intégrée.</p>
+            <div className="ds-token-name">Hover</div>
+            <p>Bord <span className="ds-token-chip">--primary-50</span> + léger fond <span className="ds-token-chip">--primary-3</span>. <strong>Pas de lift</strong> : ni <code>translateY</code> ni ombre — conforme à la doctrine « hover = bord / fond / couleur seulement ». Règle unifiée sur toute la famille de cartes.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Selected — <span className="ds-cn">.selected</span></div>
@@ -116,7 +116,7 @@ export default function CardPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Repos : bord <span className="ds-token-chip">--border-subtle</span>. Hover : bord <span className="ds-token-chip">--primary-50</span> + <span className="ds-token-chip">--shadow-md</span> (+ lift, cf. note). Selected (edit mode) : bord + fond <span className="ds-token-chip">--primary-5</span> + anneau <span className="ds-token-chip">--primary-20</span>.</p>
+          <p className="ds-note">Repos : bord <span className="ds-token-chip">--border-subtle</span>. Hover : bord <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-3</span> (pas de lift ni d&apos;ombre). Selected (edit mode) : bord + fond <span className="ds-token-chip">--primary-5</span> + anneau <span className="ds-token-chip">--primary-20</span>.</p>
         </div>
       </div>
 

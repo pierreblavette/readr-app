@@ -931,7 +931,6 @@
 .now-reading-card:hover {
   border-color: var(--primary-50);
   background: var(--primary-3);
-  box-shadow: var(--shadow-md);
 }
 [data-theme="dark"] .now-reading-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
 .now-reading-card:has(.dropdown-menu) { z-index: 10; }
@@ -1086,10 +1085,8 @@
 }
 
 .book-card:hover {
-  transform: translateY(-2px);
   border-color: var(--primary-50);
   background: var(--primary-3);
-  box-shadow: var(--shadow-md);
 }
 
 [data-theme="dark"] .book-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
@@ -1594,10 +1591,8 @@
   font-family: var(--font-jakarta), sans-serif;
 }
 .col-card:hover {
-  transform: translateY(-2px);
   border-color: var(--primary-50);
   background: var(--primary-3);
-  box-shadow: var(--shadow-md);
 }
 [data-theme="dark"] .col-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
 .col-card.selected {
@@ -4685,9 +4680,7 @@
    The bg hover is scoped to the head — the only clickable element —
    so the body stays neutral when the card is expanded. */
 .dictionary-saved-card:hover {
-  transform: translateY(-2px);
   border-color: var(--primary-50);
-  box-shadow: var(--shadow-md);
 }
 [data-theme="dark"] .dictionary-saved-card:hover {
   border-color: var(--primary-50);
@@ -4804,10 +4797,8 @@
   transition: background 0.15s;
 }
 .quote-card:hover {
-  transform: translateY(-2px);
   border-color: var(--primary-50);
   background: var(--primary-3);
-  box-shadow: var(--shadow-md);
 }
 .quote-card:hover .quote-card-divider { background: var(--primary-10); }
 [data-theme="dark"] .quote-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
@@ -5288,7 +5279,6 @@ button.book-chip {
 .overview-hero-card:hover:not(:disabled) {
   border-color: var(--primary-50);
   background: var(--primary-3);
-  box-shadow: var(--shadow-md);
 }
 [data-theme="dark"] .overview-hero-card:hover:not(:disabled) { border-color: var(--primary-50); background: var(--primary-3); }
 .overview-hero-card:focus-visible {
