@@ -82,7 +82,6 @@ export default function DSLayout({ children }) {
                     if (children) {
                       const groupHref = `/ds/${id}`;
                       const onRoot = pathname === groupHref;
-                      const onGroup = onRoot || children.some((c) => pathname === c.href);
                       const isOpen = !!openGroups[id];
                       return (
                         <div key={id} className="sidebar-nav-group">
@@ -95,7 +94,7 @@ export default function DSLayout({ children }) {
                               else setOpenGroups((g) => ({ ...g, [id]: true }));
                             }}
                             aria-expanded={isOpen}
-                            className={`sidebar-item${onRoot ? " active" : onGroup ? " is-current" : ""}`}
+                            className={`sidebar-item${onRoot ? " active" : ""}`}
                           >
                             <span className="sidebar-label">{NAV_LABELS[id]}</span>
                             <svg className={`sidebar-item-chevron${isOpen ? " is-open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>

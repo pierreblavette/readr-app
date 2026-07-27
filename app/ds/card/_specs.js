@@ -66,3 +66,39 @@ export function QuoteCardSpec({ className = "", saved = false }) {
     </div>
   );
 }
+
+// ─── DICTIONARY CARD ───
+export const DICT_ANNOS = [
+  { n: 1, side: "right", target: ".dictionary-saved-card" },
+  { n: 2, side: "left", target: ".dictionary-saved-head" },
+  { n: 3, side: "right", target: ".col-card-kebab" },
+  { n: 4, side: "left", target: ".dictionary-saved-body" },
+];
+
+export function DictionaryCardSpec({ className = "", expanded = false, fluid = false }) {
+  return (
+    <div className={`dictionary-saved-card${expanded ? " expanded" : ""} ${className}`.trim()} style={fluid ? { width: "100%" } : { width: 400 }}>
+      <div className="dictionary-saved-head" role="button" tabIndex={0} aria-expanded={expanded}>
+        <span className="dictionary-saved-toggle">
+          <svg className={`dictionary-chevron${expanded ? " open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+          <span className="dictionary-saved-word">Voiture</span>
+        </span>
+        <button type="button" className="col-card-kebab" aria-label="More"><KebabDots /></button>
+      </div>
+      {expanded && (
+        <div className="dictionary-saved-body">
+          <div className="dictionary-definition">
+            <span className="dictionary-pos">nom féminin</span>
+            <p className="dictionary-meaning">Véhicule à roues mû par un moteur, destiné au transport de personnes ou de marchandises.</p>
+            <div className="dictionary-example">
+              <span className="dictionary-example-label">Exemple</span>
+              <p className="dictionary-example-text">Ils ont acheté une nouvelle voiture électrique le mois dernier.</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

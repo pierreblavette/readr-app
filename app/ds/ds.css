@@ -41,12 +41,10 @@ a.sidebar-item { text-decoration: none; }
 .sidebar-nav-group { display: flex; flex-direction: column; }
 .sidebar-item-chevron { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-3); transform: rotate(-90deg); transition: transform 0.2s ease; }
 .sidebar-item-chevron.is-open { transform: rotate(0); }
-.sidebar-item.is-current .sidebar-label { color: var(--primary-50); }
-[data-theme="dark"] .sidebar-item.is-current .sidebar-label { color: var(--primary-40); }
-/* Chevron : suit le texte de l'item — blanc sur l'actif plein, primary sur is-current. */
+/* Chevron : blanc quand le parent est actif plein (sur sa racine). Sur une page
+   enfant, le parent reste en repos — c'est le sous-item sélectionné qui porte l'état,
+   pas d'état intermédiaire « current » sur le parent. */
 .sidebar-item.active .sidebar-item-chevron { color: #FFFFFF; }
-.sidebar-item.is-current .sidebar-item-chevron { color: var(--primary-50); }
-[data-theme="dark"] .sidebar-item.is-current .sidebar-item-chevron { color: var(--primary-40); }
 .sidebar-subnav { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 6px; }
 /* Sous-item : MÊME apparence que .sidebar-item (height 40, font 15/600, actif plein
    primary-50 blanc) — seule différence, l'indentation à gauche. */
@@ -297,6 +295,32 @@ a.sidebar-item { text-decoration: none; }
   .ds-states-grid--boxed > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
   .ds-states-grid--boxed > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
 }
+/* --cols-1 : board vertical, un état par rangée pleine largeur. Pour des specimens
+   larges à hauteurs très inégales (Dictionary Card : replié ~40px vs déplié ~200px) —
+   les tasser en 2 colonnes rogne le specimen dans sa cellule ET crée une cellule
+   fantôme (nombre impair). Une colonne = chaque état respire, centré, et la lecture
+   suit l'histoire repos→hover→déplié. Dividers HORIZONTAUX seulement ; on neutralise
+   tous les verticaux hérités (base + replis @media) — d'où la spécificité 0,4,0 et le
+   placement APRÈS les blocs @media pour l'emporter à égalité. */
+.ds-states-grid--boxed.ds-states-grid--cols-1 { grid-auto-flow: row; grid-template-columns: 1fr; }
+.ds-states-grid--boxed.ds-states-grid--cols-1 > .ds-state-sample + .ds-state-sample { border-left: none; }
+.ds-states-grid--boxed.ds-states-grid--cols-1 > .ds-state-sample:nth-child(odd) { border-right: none; }
+.ds-states-grid--boxed.ds-states-grid--cols-1 > .ds-state-sample:not(:last-child) { border-bottom: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed.ds-states-grid--cols-1 > .ds-state-sample:last-child { border-bottom: none; }
+/* --cols-5 / --cols-3 : boards à colonnes plus nombreuses (planches de petits specimens,
+   ex. Empty State · Icon set). Mêmes conventions de dividers que --cols-2 : VERTICAL =
+   border-right sur les colonnes non-dernières (piste unique alignée) après reset du
+   border-left hérité ; HORIZONTAL = border-bottom sur toute cellule ayant une rangée
+   pleine en dessous. Toujours-actives (pas media) : le nombre de colonnes est piloté par
+   ResizeObserver côté page (largeur RÉELLE, pas le viewport que la sidebar fausse). */
+.ds-states-grid--boxed.ds-states-grid--cols-5 { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.ds-states-grid--boxed.ds-states-grid--cols-5 > .ds-state-sample + .ds-state-sample { border-left: none; }
+.ds-states-grid--boxed.ds-states-grid--cols-5 > .ds-state-sample:not(:nth-child(5n)) { border-right: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed.ds-states-grid--cols-5 > .ds-state-sample:not(:nth-last-child(-n + 5)) { border-bottom: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ds-states-grid--boxed.ds-states-grid--cols-3 > .ds-state-sample + .ds-state-sample { border-left: none; }
+.ds-states-grid--boxed.ds-states-grid--cols-3 > .ds-state-sample:not(:nth-child(3n)) { border-right: 1px solid var(--border-subtle); }
+.ds-states-grid--boxed.ds-states-grid--cols-3 > .ds-state-sample:not(:nth-last-child(-n + 3)) { border-bottom: 1px solid var(--border-subtle); }
 /* Force le halo :focus-visible pour l'échantillon statique — le vrai état ne
    s'obtient qu'au clavier et ne se figerait pas dans une grille. Valeurs miroir
    de la règle .modal-toggle-input:focus-visible ~ .modal-toggle-check. */
@@ -347,6 +371,11 @@ a.sidebar-item { text-decoration: none; }
 /* Ciblage explicite plutôt que `* + *` : le stroke vertical n'appartient qu'à
    la 2e colonne cotée, il ne doit pas se poser sur un éventuel autre frère. */
 .ds-redline-row > .ds-redline + .ds-redline { border-left: 1px solid var(--border-subtle); }
+/* Board « fill » (ex. Footer) : le specimen est une barre horizontale qui doit
+   occuper la largeur de la scène, pas se contenter de sa largeur de contenu
+   (inline-flex → content-sized). On étire le target à 100% — sans toucher son
+   display inline-flex (alignement interne) ni le padding scène (marges conservées). */
+.ds-redline-row--fill .ds-redline-target { width: 100%; }
 .ds-redline {
   --rl: #E5326E;
   --rl-fill: rgba(229, 50, 110, 0.14);
@@ -374,13 +403,14 @@ a.sidebar-item { text-decoration: none; }
    none coupe hover/press pour que le fond ne change pas sous la souris pendant
    la lecture des cotes. La mesure (getComputedStyle/rects) n'en dépend pas. */
 .ds-redline-target { position: relative; display: inline-flex; max-width: 100%; text-align: left; pointer-events: none; background: var(--card); }
-/* Specimen large en largeur fixe (ex. modal 440) : sur petite cellule il débordait
+/* Specimen large en largeur fixe (ex. modal 620) : sur petite cellule il débordait
    et se faisait couper. On borne sa largeur à l'espace DISPONIBLE via 100cqw (largeur
    de contenu de .ds-redline, rendu conteneur de requête). Pas en % du target : lui est
    inline-flex, dimensionné AU specimen → une largeur en % serait circulaire et
    s'effondrerait au min-content sur grand écran (le modal tombait à ~255). min() garde
-   440 tant qu'il y a la place, rétrécit sinon ; centrage (text-align) et cotes préservés. */
-.ds-redline-target > .modal { width: min(440px, 100cqw) !important; }
+   620 tant qu'il y a la place, rétrécit sinon ; centrage (text-align) et cotes préservés. */
+.ds-redline-target > .modal,
+.ds-redline-target > .confirm-modal { width: min(620px, 100cqw) !important; }
 /* Le composant coté seul (jamais les annotations, qui sont en absolute).
    Anatomy UNIFORME : le specimen racine est présenté sans border, sans radius,
    sans ombre, sur le mat blanc du target — les bandes de padding sont alors
@@ -403,6 +433,11 @@ a.sidebar-item { text-decoration: none; }
    pas. On le strippe ici comme les autres inputs cotés : coins carrés, sans bord,
    fond transparent (correct en dark, contrairement au #FFF du champ). */
 .ds-redline-target .search-input { border: none !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; }
+/* Idem pour un trigger .dropdown-btn coté comme ITEM d'une row (Filters Row · Spacing) :
+   petit-enfant du target (target > filters-row > dropdown-wrap > dropdown-btn), donc hors
+   portée du strip racine. On retire bord/radius/ombre/fond pour que les bandes de gap
+   ressortent proprement — le chrome du bouton vit sur la page Dropdown. */
+.ds-redline:not(.ds-redline--keep) .ds-redline-target .dropdown-btn { border: none !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; }
 /* Bandes : sous le contenu (z-index 0) mais au-dessus du fond du bouton — le
    bouton lui-même n'est pas positionné, la bande le recouvre donc en teinte. */
 /* Bandes padding et gap partagent la même teinte : la cote chiffrée porte la
@@ -489,9 +524,20 @@ a.sidebar-item { text-decoration: none; }
 .ds-card-body.center { align-items: center; }
 .ds-card-foot {
   padding: 12px 20px;
-  font-size: 14px;
-  color: var(--text-3);
-  border-top: 1px solid var(--border-subtle);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  position: relative;
+}
+/* Divider inset de 20 (aligné sur le padding du contenu), comme les séparateurs de
+   section (.ds-card-body + .ds-card-body::before) — pas un border-top pleine largeur,
+   qui rompait le modèle unifié du DS. Absolu → hors flux, ne gêne pas .ds-card-foot--tokens. */
+.ds-card-foot::before {
+  content: "";
+  position: absolute;
+  inset: 0 20px auto 20px;
+  height: 1px;
+  background: var(--border-subtle);
 }
 /* Sample with an eyebrow label above (Default / Focus / Active / etc.) */
 .ds-state-sample {
@@ -821,6 +867,12 @@ a.sidebar-item { text-decoration: none; }
 .ds-section .quote-card { animation: none; }
 .quote-card.is-hover { border-color: var(--primary-50); background: var(--primary-3); }
 .quote-card.is-hover .quote-card-divider { background: var(--primary-10); }
+/* Idem Dictionary Card : anim d'entrée coupée + mirror hover pour la planche States.
+   Le hover réel ne touche QUE le bord de la carte + le fond de l'en-tête (le corps
+   reste neutre) — on reproduit exactement ça, pas de lift. */
+.ds-section .dictionary-saved-card { animation: none; }
+.dictionary-saved-card.is-hover { border-color: var(--primary-50); }
+.dictionary-saved-card.is-hover .dictionary-saved-head { background: var(--primary-10); }
 
 /* États forcés d'un item de menu pour la doc — mirror de .dropdown-item:hover /
    :active de library.css (hover bg --primary-5 + color --primary-50 ; active
@@ -920,6 +972,13 @@ a.sidebar-item { text-decoration: none; }
 .ds-anno-scene .overview-cloud-chip,
 .ds-preview .book-chip,
 .ds-anno-scene .book-chip { background: var(--card); }
+/* …mais une book-chip DANS une modale (surface --card blanche) doit garder son --bg3
+   réel : le forçage --card ci-dessus la rendrait invisible (card sur card). Il ne vaut
+   que pour une chip posée à même la scène bleue. Spécificité (0,3,0) > (0,2,0). */
+.ds-preview .modal .book-chip,
+.ds-preview .confirm-modal .book-chip,
+.ds-anno-scene .modal .book-chip,
+.ds-anno-scene .confirm-modal .book-chip { background: var(--bg3); }
 /* Checkbox : la rangée est transparente et se fond sur le bleu → surface --card
    (padding + radius) pour la démarquer, Preview + Anatomy. */
 .ds-preview .modal-toggle-row,
@@ -1330,6 +1389,49 @@ a.sidebar-item { text-decoration: none; }
    padding 60 → 20 + 60. Base desktop 60, à réduire par breakpoint en mobile. */
 .ds-preview-board { width: 100%; }
 .ds-preview { width: 100%; padding: 60px; background: var(--primary-5); display: flex; justify-content: center; }
+/* .ds-preview.col : empile les specimens verticalement (ex. Dictionary Card replié
+   au-dessus de déplié) au lieu de la rangée centrée par défaut. Le gap vit inline
+   (il varie selon la page), la direction et le centrage transversal vivent ici. */
+.ds-preview.col { flex-direction: column; align-items: center; }
+/* Preview Bento (page Cards) : Quote + Dictionary partagent une colonne qui, posée à
+   côté de la Book Card, forme un bloc bento aux hauts breakpoints. flex-wrap plutôt
+   qu'un @media : côte à côte quand la largeur le permet (large), empilé sinon — la
+   largeur du contenu décide, pas un breakpoint magique. */
+.ds-card-bento { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; justify-content: center; }
+.ds-card-bento-col { display: flex; flex-direction: column; gap: 24px; }
+/* Specimen PLEINE LARGEUR (ex. Footer) : on garde la scène bleue au-dessus/en dessous
+   (padding vertical) mais on retire le padding horizontal → le composant va edge-to-edge.
+   Preview et Anatomy partagent le même traitement. */
+.ds-preview.ds-preview--full { padding-left: 0; padding-right: 0; }
+.ds-anno-board--full .ds-anno-scene { padding-left: 0; padding-right: 0; }
+/* Scènes « footer » : padding latéral 48 = celui de .ds-redline, pour que la base
+   de calcul du 80% soit identique dans Preview / Anatomy / Spacing → specimens de
+   largeur strictement égale à toute largeur de colonne (pas de fixe vs %). */
+.ds-preview.ds-scene--footer { padding-left: 48px; padding-right: 48px; }
+.ds-anno-board--footer .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
+/* Filters Row · doc : le fold des triggers est piloté par des @media VIEWPORT (le vrai
+   comportement, documenté en Behavior). Pour montrer le CLUSTER COMPLET dans Preview
+   quel que soit le viewport, on force tous les triggers inline et on masque le trigger
+   mobile. Scopé au specimen /ds — la prod garde son fold. */
+.ds-filters-row--all > * { display: inline-flex !important; }
+.ds-filters-row--all > .filters-mobile-trigger { display: none !important; }
+/* Centre le cluster dans le container /ds (la vraie row est alignée à gauche). */
+.filters-row.ds-filters-row--center { justify-content: center; }
+/* Cellule du tableau de fold (Filters Row · Behavior) : les vrais triggers inline,
+   en ligne, sans wrap — le tableau scrolle en horizontal pour les rangées larges. */
+.ds-fold-cell { display: inline-flex; gap: 8px; align-items: center; white-space: nowrap; }
+.ds-fold-cell .filters-mobile-trigger { display: inline-flex; }
+/* Filters Panel affiché en statique dans la doc : la vraie primitive .book-panel est
+   fixed / slide-in (transform translateX). On neutralise le positionnement pour la
+   montrer en flux, sans toucher l'apparence (surface, bordure, padding interne). */
+.ds-panel-static.book-panel {
+  position: relative; inset: auto; height: auto; width: 460px; max-width: 100%;
+  transform: none; transition: none; z-index: auto; overflow: visible;
+  border: 1px solid var(--border-subtle); border-radius: 8px; box-shadow: var(--shadow-lg);
+  padding-top: 0; padding-bottom: 0;
+}
+/* Padding interne réel conservé (96/32/72) — Preview/Anatomy cohérents avec les cotes
+   de Spacing. On ne neutralise QUE le positionnement fixed, pas les métriques. */
 /* Hero Typeface : 2 blocs côte à côte — sous 600 le padding 60 mange la largeur,
    les deux cartes étouffent. On le resserre à 20 (les cartes reprennent l'air). */
 @media (max-width: 600px) {

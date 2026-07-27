@@ -27,7 +27,7 @@ export default function EmptyState({ tab, search, t, onAdd, noMatch }) {
   );
 }
 
-function LibraryIcon() {
+export function LibraryIcon() {
   return (
     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
       <path d="M14 8H51C47 11 47 17 51 20H14C10.6863 20 8 17.3137 8 14C8 10.6863 10.6863 8 14 8Z" fill="var(--illus-bg-2)" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>
@@ -184,7 +184,7 @@ export function OverviewIcon() {
   );
 }
 
-function WishlistIcon() {
+export function WishlistIcon() {
   return (
     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
       <path d="M14 40H51C47 43 47 49 51 52H14C10.6863 52 8 49.3137 8 46C8 42.6863 10.6863 40 14 40Z" fill="var(--illus-bg-2)" stroke="var(--illus-stroke)" strokeLinecap="round" strokeLinejoin="round"/>

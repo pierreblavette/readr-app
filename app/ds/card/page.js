@@ -1,21 +1,26 @@
 import DSSection from "../_components/DSSection";
-import { BookCardSpec, QuoteCardSpec } from "./_specs";
+import { BookCardSpec, QuoteCardSpec, DictionaryCardSpec } from "./_specs";
 
 export default function CardFoundationPage() {
   return (
-    <DSSection id="card" title="Cards" sub="Famille de surfaces de contenu — même langage (surface --card, radius 8, bord 1.5, bord primary au hover), décliné par carte. Book Card et Quote Card documentées ; Collection / Overview partagent la primitive et suivront.">
+    <DSSection id="card" title="Cards" sub="Famille de surfaces de contenu — même langage (radius 8, bord 1.5, bord primary au hover), décliné par carte. Book, Quote et Dictionary Card documentées ; Collection / Overview partagent la primitive et suivront.">
 
       {/* 1 — PREVIEW — la famille */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview" style={{ gap: 40, flexWrap: "wrap" }}>
-            <BookCardSpec />
-            <QuoteCardSpec />
+          <div className="ds-preview">
+            <div className="ds-card-bento">
+              <BookCardSpec />
+              <div className="ds-card-bento-col">
+                <QuoteCardSpec />
+                <DictionaryCardSpec />
+              </div>
+            </div>
           </div>
           </div>
-          <p className="ds-note">Deux applications d&apos;un même socle : <strong>Book Card</strong> (cover en tête) et <strong>Quote Card</strong> (flex colonne). Même surface, radius, bord et hover — seul le contenu diffère. Chaque carte a sa page (sous-nav « Cards » de la sidebar).</p>
+          <p className="ds-note">Trois applications d&apos;un même socle : <strong>Book Card</strong> (cover en tête), <strong>Quote Card</strong> (flex colonne) et <strong>Dictionary Card</strong> (accordéon). Même radius, bord et hover — seul le contenu diffère. Aux hauts breakpoints, Quote et Dictionary partagent une colonne qui, à côté de la Book Card, compose un bloc bento ; sur écran étroit, tout s&apos;empile. Chaque carte a sa page (sous-nav « Cards » de la sidebar).</p>
         </div>
       </div>
 

@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, gapSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -81,6 +81,28 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
           // horizontale), coté à droite comme les paddings verticaux.
           if (hgap > 0.5) bands.push({ left: a.right - br.left, width: hgap, value: Math.round(hgap), strong: true });
           else if (vgap > 0.5) vbands.push({ top: a.bottom - br.top, height: vgap, value: Math.round(vgap) });
+        }
+      }
+
+      // Gaps d'un conteneur IMBRIQUÉ désigné (opt-in) — le Redline ne cote sinon que
+      // les enfants DIRECTS de la racine. Ex. une section (gap entre eyebrow et le bloc
+      // de rows) ET les rows à l'intérieur (leur propre gap) sur une seule planche : on
+      // désigne .filters-panel-rows via gapSelector pour ajouter ses gaps internes.
+      if (gapSelector && !noGaps) {
+        const gEl = el.querySelector(gapSelector);
+        if (gEl) {
+          const gkids = [...gEl.children].filter((k) => {
+            const r = k.getBoundingClientRect();
+            return r.width > 0.5 && r.height > 0.5;
+          });
+          for (let i = 0; i < gkids.length - 1; i++) {
+            const a = gkids[i].getBoundingClientRect();
+            const b = gkids[i + 1].getBoundingClientRect();
+            const hgap = b.left - a.right;
+            const vgap = b.top - a.bottom;
+            if (hgap > 0.5) bands.push({ left: a.right - br.left, width: hgap, value: Math.round(hgap), strong: true });
+            else if (vgap > 0.5) vbands.push({ top: a.bottom - br.top, height: vgap, value: Math.round(vgap) });
+          }
         }
       }
 

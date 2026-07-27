@@ -4,10 +4,10 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "inputs", "rating-stars", "segmented-pills", "toggle"],
+  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "rating-stars", "segmented-pills", "toggle"],
   // Patterns = assemblages de composants + logique + layout (input + liste flottante
   // + async + clavier pour Autocomplete). Pas des briques uniques → groupe à part.
-  Patterns: ["autocomplete", "modal"],
+  Patterns: ["autocomplete", "filters", "modal"],
   // Reference = pages utilitaires (mapping tokens, outils de dev). Ordre déclaré,
   // hors ALPHA_GROUPS : ce n'est pas un inventaire d'atomes.
   Reference: ["dev-tools"],
@@ -28,6 +28,15 @@ export const NAV_CHILDREN = {
   card: [
     { label: "Book Card", href: "/ds/card/book" },
     { label: "Quote Card", href: "/ds/card/quote" },
+    { label: "Dictionary Card", href: "/ds/card/dictionary" },
+  ],
+  modal: [
+    { label: "Form Modal", href: "/ds/modal/form" },
+    { label: "Delete Modal", href: "/ds/modal/delete" },
+  ],
+  filters: [
+    { label: "Filters Row", href: "/ds/filters/row" },
+    { label: "Filters Panel", href: "/ds/filters/panel" },
   ],
 };
 
@@ -50,7 +59,7 @@ export const NAV_LABELS = {
   "theme-toggle": "Theme Toggle", "toggle": "Toggle", "book-chip": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "List View", "sidebar": "Sidebar", "panel": "Side Panel", "quote-panel": "Quote Panel",
-  "filters-panel": "Filters Panel", "filters-row": "Filters Row",
-  "modal": "Modal", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Weekly Activity", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer",
+  "filters": "Filters", "filters-panel": "Filters Panel", "filters-row": "Filters Row",
+  "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Weekly Activity", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer",
   "token-usage": "Token Usage", "dev-tools": "Dev Tools",
 };
