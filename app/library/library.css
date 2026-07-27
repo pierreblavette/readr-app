@@ -3276,6 +3276,14 @@
 .footer-link-text { display: inline; }
 .footer-link-icon { display: none; }
 
+/* Sous 812px, la section profil descend sur sa propre ligne (flex-wrap de l'inner) :
+   on la passe pleine largeur + space-between pour scinder ses 2 groupes — copyright
+   + portfolio à gauche, Design system + LinkedIn à droite. Au-dessus, elle reste
+   compacte à droite dans le space-between des 3 sections. */
+@media (max-width: 812px) {
+  .footer-links-desktop { width: 100%; justify-content: space-between; }
+}
+
 /* ─── PANEL OVERLAY ─── */
 .panel-overlay {
   position: fixed;
