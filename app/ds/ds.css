@@ -1427,6 +1427,15 @@ a.sidebar-item { text-decoration: none; }
    largeur strictement égale à toute largeur de colonne (pas de fixe vs %). */
 .ds-preview.ds-scene--footer { padding-left: 48px; padding-right: 48px; }
 .ds-anno-board--footer .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
+/* Sidebar en doc : la vraie est position:sticky, height 100dvh, z-index 300. On
+   neutralise pour l'afficher en flux (hauteur = son contenu), apparence intacte. */
+.ds-sidebar-static.sidebar { position: relative; top: auto; height: auto; max-height: none; z-index: auto; }
+/* Deux coquilles Sidebar côte à côte : specimens hauts et étroits, leurs cotes se
+   serrent vite → on les empile plus tôt que le défaut (≤1200 au lieu de ≤1000). */
+@media (max-width: 1200px) {
+  .ds-redline-row--stack { grid-template-columns: 1fr; }
+  .ds-redline-row--stack > .ds-redline + .ds-redline { border-left: none; border-top: 1px solid var(--border-subtle); }
+}
 /* Scènes « list » : même gabarit que le Footer (padding latéral 48, specimen 100%) —
    le composant est large (table pleine largeur), on l'aligne sur ce standard. */
 .ds-preview.ds-scene--list { padding-left: 48px; padding-right: 48px; }
