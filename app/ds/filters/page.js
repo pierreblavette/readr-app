@@ -5,7 +5,7 @@ export default function FiltersFoundationPage() {
   return (
     <DSSection
       id="filters"
-      title="Filters"
+      title="Filtering"
       sub="Système de filtrage de la bibliothèque — cinq dimensions, trois types de trigger, application immédiate. Deux expressions responsive du même modèle : Filters Row (desktop, cluster inline) et Filters Panel (mobile, slide-in). Documentées en pages dédiées."
     >
 

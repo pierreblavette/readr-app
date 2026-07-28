@@ -979,6 +979,16 @@ a.sidebar-item { text-decoration: none; }
 .ds-preview .confirm-modal .book-chip,
 .ds-anno-scene .modal .book-chip,
 .ds-anno-scene .confirm-modal .book-chip { background: var(--bg3); }
+/* Idem pour une collection-chip DANS un .book-panel (Side Panel) : la surface du
+   panel est --bg (blanche), le forçage --card la rendrait invisible (card sur bg).
+   On restaure son --bg3 réel — même piège, même remède que la modale. (0,3,0). */
+.ds-preview .book-panel .book-chip,
+.ds-anno-scene .book-panel .book-chip { background: var(--bg3); }
+/* …mais le forçage --bg3 (0,3,0) écrase le :hover interactif (0,2,0) → la chip
+   cliquable n'avait plus de feedback. On restaure le hover réel (--primary-10) à
+   specificité supérieure (0,4,0). Preview + Anatomy. */
+.ds-preview .book-panel .book-chip-interactive:hover,
+.ds-anno-scene .book-panel .book-chip-interactive:hover { background: var(--primary-10); }
 /* Checkbox : la rangée est transparente et se fond sur le bleu → surface --card
    (padding + radius) pour la démarquer, Preview + Anatomy. */
 .ds-preview .modal-toggle-row,

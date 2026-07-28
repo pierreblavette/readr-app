@@ -84,13 +84,15 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
         }
       }
 
-      // Gaps d'un conteneur IMBRIQUÉ désigné (opt-in) — le Redline ne cote sinon que
-      // les enfants DIRECTS de la racine. Ex. une section (gap entre eyebrow et le bloc
-      // de rows) ET les rows à l'intérieur (leur propre gap) sur une seule planche : on
-      // désigne .filters-panel-rows via gapSelector pour ajouter ses gaps internes.
+      // Gaps de conteneur(s) IMBRIQUÉ(s) désigné(s) (opt-in) — le Redline ne cote sinon
+      // que les enfants DIRECTS de la racine. gapSelector accepte un sélecteur OU un
+      // tableau, pour coter plusieurs niveaux d'un coup (ex. .panel-quotes cote le gap
+      // 24 racine, puis .panel-quotes-content ajoute le 16 et .panel-quotes-list le 10).
       if (gapSelector && !noGaps) {
-        const gEl = el.querySelector(gapSelector);
-        if (gEl) {
+        const gSels = Array.isArray(gapSelector) ? gapSelector : [gapSelector];
+        gSels.forEach((sel) => {
+          const gEl = el.querySelector(sel);
+          if (!gEl) return;
           const gkids = [...gEl.children].filter((k) => {
             const r = k.getBoundingClientRect();
             return r.width > 0.5 && r.height > 0.5;
@@ -103,7 +105,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
             if (hgap > 0.5) bands.push({ left: a.right - br.left, width: hgap, value: Math.round(hgap), strong: true });
             else if (vgap > 0.5) vbands.push({ top: a.bottom - br.top, height: vgap, value: Math.round(vgap) });
           }
-        }
+        });
       }
 
       // Cadre d'icône : offsetWidth inclut le padding 2px (box-sizing:content-box)
