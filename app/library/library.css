@@ -1809,6 +1809,10 @@
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
+/* La coquille reçoit le focus programmatique à l'ouverture (useModalA11y, autoFocus
+   false) pour donner le contexte au lecteur d'écran. tabIndex=-1 : l'utilisateur n'y
+   navigue jamais au clavier → pas d'anneau visible (sinon il entoure tout le panneau). */
+.book-panel:focus { outline: none; }
 .book-panel .panel-scroll-fade {
   position: sticky;
   bottom: 0;

@@ -13,7 +13,7 @@ function formatDate(ts, lang) {
 }
 
 export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onShared, onToggleSave, onOpenBook, lang, t }) {
-  const panelRef = useModalA11y(!!quote, onClose);
+  const panelRef = useModalA11y(!!quote, onClose, { autoFocus: false });
 
   async function handleShare() {
     if (!quote) return;

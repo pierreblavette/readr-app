@@ -29,7 +29,7 @@ function StarsDisplay({ value }) {
 export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onCancelReading, onEditFinished, onRemoveFinished, onShared, onOpenCollection, onAddToCollection, readingCount, maxReading, quotes, collections = [], lang, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
-  const panelRef = useModalA11y(!!book, onClose);
+  const panelRef = useModalA11y(!!book, onClose, { autoFocus: false });
 
   async function handleShare() {
     const text = t.shareText ? t.shareText(book.title, book.author) : `"${book.title}"\n${book.author}`;
