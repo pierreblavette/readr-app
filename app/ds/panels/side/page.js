@@ -1,6 +1,6 @@
-import DSSection from "../_components/DSSection";
-import AnnoScene from "../_components/AnnoScene";
-import Redline from "../_components/Redline";
+import DSSection from "../../_components/DSSection";
+import AnnoScene from "../../_components/AnnoScene";
+import Redline from "../../_components/Redline";
 import { SidePanelSpec, AiSparkle } from "./_specs";
 
 // Anatomie : un badge par partie visible. La coquille .book-panel et .panel-inner
@@ -253,20 +253,8 @@ export default function SidePanelPage() {
         <div className="ds-card-head">Behavior</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Accessibility — <span className="ds-cn">useModalA11y</span></div>
-            <p><code>Escape</code> ferme, le focus part sur la coquille à l&apos;ouverture et <strong>revient sur le déclencheur</strong> à la fermeture, piégé à l&apos;intérieur. <code>role=&quot;dialog&quot;</code> + <code>aria-modal</code>. Même hook que les modales — voir <span className="ds-class">A11y modal/dropdown</span>.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Scroll-lock</div>
-            <p>À l&apos;ouverture, le body passe en <code>position: fixed</code> (offset <code>top: −scrollY</code>) — le fond ne scrolle plus derrière le panneau. Position restaurée dans le <em>cleanup</em> à la fermeture (jamais dans un <code>else</code>, bug connu).</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Entry motion — slide-in</div>
-            <p><code>transform: translateX(100% → 0)</code> sur la classe <span className="ds-class">.open</span>, <code>0.55s cubic-bezier(0.16, 1, 0.3, 1)</code> — la courbe canonique. Ici <code>transition</code> (pas <code>animation</code>) car piloté par un toggle d&apos;état. Voir <strong>Motion</strong>.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Scroll-fade &amp; safe-area</div>
-            <p><span className="ds-class">.panel-scroll-fade</span> : dégradé <code>sticky</code> en bas, <code>pointer-events: none</code> — signale que le contenu déborde. La coquille porte aussi <code>padding: env(safe-area-inset-*)</code> pour tenir le contenu hors du notch / home indicator en PWA standalone iOS.</p>
+            <div className="ds-token-name">Coquille partagée — <span className="ds-cn">.book-panel</span></div>
+            <p>a11y (<span className="ds-class">useModalA11y</span> : <code>Escape</code> + focus trap + restauration), scroll-lock du body, motion slide-in (<code>translateX</code> <code>0.55s cubic-bezier(0.16, 1, 0.3, 1)</code>), scroll-fade et safe-area insets sont portés par la primitive commune — documentés une seule fois dans <a href="/ds/panels"><strong>Panels</strong></a>. Rien de propre au Side Panel ici.</p>
           </div>
         </div>
       </div>
@@ -280,8 +268,8 @@ export default function SidePanelPage() {
             <p>Le contenu s&apos;adapte à l&apos;onglet et au statut du livre. <strong>To read</strong> : bouton <em>Start reading</em>. <strong>Reading</strong> : <em>Finish</em> / <em>Cancel</em> + <span className="ds-class">Character Cast</span> (AI). <strong>Finished</strong> : pill <em>Finished</em>, section note + rating, <span className="ds-class">Book Quiz</span> (AI). <strong>Wishlist</strong> : <em>Find online</em> (Amazon / Fnac) + <em>Move to Library</em>, pas de Quotes. Collections, About et Delete sont communs.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Primitive partagée — <span className="ds-cn">.book-panel</span></div>
-            <p>Le même montage slide-in porte <a href="/ds/filters/panel"><strong>Filters Panel</strong></a>, Quote Panel et les List Panels (Word / Book / Collection). Coquille, overlay, a11y et scroll-lock communs — futur regroupement en famille <strong>Panels</strong>.</p>
+            <div className="ds-token-name">Famille Panels</div>
+            <p>Membre de la famille <a href="/ds/panels"><strong>Panels</strong></a> (primitive <span className="ds-class">.book-panel</span>) avec <a href="/ds/panels/quote"><strong>Quote Panel</strong></a> ; le même montage slide-in porte aussi <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> et les List Panels (Word / Book / Collection).</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Consumer</div>
