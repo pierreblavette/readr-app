@@ -1427,6 +1427,36 @@ a.sidebar-item { text-decoration: none; }
    largeur strictement égale à toute largeur de colonne (pas de fixe vs %). */
 .ds-preview.ds-scene--footer { padding-left: 48px; padding-right: 48px; }
 .ds-anno-board--footer .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
+/* Scènes « list » : même gabarit que le Footer (padding latéral 48, specimen 100%) —
+   le composant est large (table pleine largeur), on l'aligne sur ce standard. */
+.ds-preview.ds-scene--list { padding-left: 48px; padding-right: 48px; }
+.ds-anno-board--list .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
+/* Doc : la vraie table est table-layout:fixed (title/author 30%, genre 20%, Year=auto).
+   Dans une scène plus étroite que la zone liste de l'app, ce « reste » de Year tombe à 0
+   et se coupe. On passe le specimen (.ds-list-spec, porté par ListViewSpec/ListRowSample)
+   en CONTENT-SIZING — colonnes ajustées au contenu, rien ne s'écrase, dans n'importe quel
+   conteneur (Preview, Anatomy, States). Scope unique = pas de triplication. */
+.books-list.ds-list-spec { width: fit-content; max-width: 100%; }
+.ds-list-spec .list-table { table-layout: auto; width: auto; }
+.ds-list-spec .list-table th, .ds-list-spec .list-table td { width: auto; max-width: none; overflow: visible; }
+/* En prod, des @media VIEWPORT cachent Year (769-1280px) puis Author (≤768px). Le
+   specimen doit montrer la table COMPLÈTE → on force les colonnes meta visibles
+   (spécificité (0,3,1) pour battre la media query ; repli documenté en Behavior). */
+.ds-list-spec .list-table th.list-cell-meta,
+.ds-list-spec .list-table td.list-cell-meta { display: table-cell; }
+/* num : padding latéral 0 (centrée sur 64px en prod) → largeur pour aérer le numéro. */
+.ds-list-spec .list-table .list-cell-num { width: 48px; }
+/* action : position:sticky en prod la sort du calcul de largeur → statique en doc. */
+.ds-list-spec .list-table .list-cell-action { position: static; }
+/* Specimens statiques : pas de fade-up de rangée. */
+.ds-list-spec .list-row { animation: none; }
+/* States : rangées d'état empilées sur fond BLANC (comme le board boxé des autres pages),
+   chaque échantillon en bloc pleine largeur (padding 32, contenu centré), séparés par un
+   filet horizontal. Label centré dessous (override du .ds-class align-self:flex-start). */
+.ds-list-states { display: flex; flex-direction: column; align-self: stretch; }
+.ds-list-state { display: flex; flex-direction: column; align-items: center; gap: 32px; padding: 32px; width: 100%; box-sizing: border-box; }
+.ds-list-state:not(:first-child) { border-top: 1px solid var(--border-subtle); }
+.ds-list-state > .ds-class { align-self: center; }
 /* Filters Row · doc : le fold des triggers est piloté par des @media VIEWPORT (le vrai
    comportement, documenté en Behavior). Pour montrer le CLUSTER COMPLET dans Preview
    quel que soit le viewport, on force tous les triggers inline et on masque le trigger
