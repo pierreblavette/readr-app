@@ -989,6 +989,14 @@ a.sidebar-item { text-decoration: none; }
    specificité supérieure (0,4,0). Preview + Anatomy. */
 .ds-preview .book-panel .book-chip-interactive:hover,
 .ds-anno-scene .book-panel .book-chip-interactive:hover { background: var(--primary-10); }
+/* Planches « Sections · rythme interne » (Redline, mat blanc) : les encarts --bg3
+   (rating-stars, finished-note, quote-item) sont muddy sur le mat → on les passe en
+   --card pour un schéma net (leur contenu + les bandes rouges les délimitent).
+   Classes panel-spécifiques → n'affectent aucune autre planche. La book-chip est
+   passée en blanc en inline sur sa planche (elle est le sujet ailleurs, ex. Book Row). */
+.ds-redline .panel-rating-stars,
+.ds-redline .panel-finished-note,
+.ds-redline .panel-quote-item { background: var(--card); }
 /* Checkbox : la rangée est transparente et se fond sur le bleu → surface --card
    (padding + radius) pour la démarquer, Preview + Anatomy. */
 .ds-preview .modal-toggle-row,
