@@ -1,12 +1,12 @@
 import DSSection from "../_components/DSSection";
-import { SidePanelSpec } from "./side/_specs";
+import { BookPanelSpec } from "./book/_specs";
 
 export default function PanelsFoundationPage() {
   return (
     <DSSection
       id="panels"
-      title="Panels"
-      sub="Famille de panneaux slide-in — même primitive .book-panel : une coquille dockée au bord droit (width 540) qui recouvre l'app, avec un socle commun (surface, padding, sections, a11y, scroll-lock, motion). Deux membres documentés en pages dédiées : Side Panel (le livre) et Quote Panel (la citation)."
+      title="Side Panels"
+      sub="Famille de panneaux slide-in — même primitive .book-panel : une coquille dockée au bord droit (width 540) qui recouvre l'app, avec un socle commun (surface, padding, sections, a11y, scroll-lock, motion). Deux membres documentés en pages dédiées : Book Panel (le livre) et Quote Panel (la citation)."
     >
 
       {/* 1 — PREVIEW — la coquille de référence */}
@@ -15,10 +15,10 @@ export default function PanelsFoundationPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
             <div className="ds-preview">
-              <SidePanelSpec compact />
+              <BookPanelSpec compact />
             </div>
           </div>
-          <p className="ds-note">La coquille de référence (ici <a href="/ds/panels/side"><strong>Side Panel</strong></a> en aperçu) : <span className="ds-class">.panel-inner</span> empile cover / sections séparées par des <span className="ds-class">.panel-divider</span>, chacune en tête d&apos;un <span className="ds-class">.panel-section-eyebrow</span>. Le contenu change d&apos;un membre à l&apos;autre ; le socle est commun. Présentée en carte détachée (radius 8 + ombre) — en prod <code>fixed</code>, dockée au bord droit, radius 0, slide-in.</p>
+          <p className="ds-note">La coquille de référence (ici <a href="/ds/panels/book"><strong>Book Panel</strong></a> en aperçu) : <span className="ds-class">.panel-inner</span> empile cover / sections séparées par des <span className="ds-class">.panel-divider</span>, chacune en tête d&apos;un <span className="ds-class">.panel-section-eyebrow</span>. Le contenu change d&apos;un membre à l&apos;autre ; le socle est commun. Présentée en carte détachée (radius 8 + ombre) — en prod <code>fixed</code>, dockée au bord droit, radius 0, slide-in.</p>
         </div>
       </div>
 
@@ -74,7 +74,7 @@ export default function PanelsFoundationPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Deux membres, deux contenus</div>
-            <p><a href="/ds/panels/side"><strong>Side Panel</strong></a> — le <strong>livre</strong> : cover + info + actions primaires, puis Collections, Finished, Cast / Quiz (AI), About, Quotes. <a href="/ds/panels/quote"><strong>Quote Panel</strong></a> — la <strong>citation</strong> : texte + date, actions (Edit · Loved · Share), livre d&apos;origine (Book Row).</p>
+            <p><a href="/ds/panels/book"><strong>Book Panel</strong></a> — le <strong>livre</strong> : cover + info + actions primaires, puis Collections, Finished, Cast / Quiz (AI), About, Quotes. <a href="/ds/panels/quote"><strong>Quote Panel</strong></a> — la <strong>citation</strong> : texte + date, actions (Edit · Loved · Share), livre d&apos;origine (Book Row).</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Même primitive, ailleurs</div>

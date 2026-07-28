@@ -39,7 +39,7 @@ export const NAV_CHILDREN = {
     { label: "Filters Panel", href: "/ds/filters/panel" },
   ],
   panels: [
-    { label: "Side Panel", href: "/ds/panels/side" },
+    { label: "Book Panel", href: "/ds/panels/book" },
     { label: "Quote Panel", href: "/ds/panels/quote" },
   ],
 };
@@ -62,7 +62,7 @@ export const NAV_LABELS = {
   "rating-stars": "Rating Stars", "row-checkbox": "Row Checkbox",
   "theme-toggle": "Theme Toggle", "toggle": "Toggle", "book-chip": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
-  "list": "List View", "sidebar": "Sidebar", "panels": "Panels", "panel": "Side Panel", "quote-panel": "Quote Panel",
+  "list": "List View", "sidebar": "Sidebar", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",
   "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Weekly Activity", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer",
   "token-usage": "Token Usage", "dev-tools": "Dev Tools",

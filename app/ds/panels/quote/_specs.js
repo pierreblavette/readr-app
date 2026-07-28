@@ -1,6 +1,6 @@
 // Spec de la page Quote Panel. Markup reproduit à l'identique de QuotePanel.js —
 // réutilise la primitive .book-panel (coquille, a11y, scroll-lock, slide-in) comme
-// Side Panel. .ds-panel-static neutralise le positionnement fixed pour la doc.
+// Book Panel. .ds-panel-static neutralise le positionnement fixed pour la doc.
 
 const CloseIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">

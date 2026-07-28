@@ -1,4 +1,4 @@
-// Spec de la page Side Panel. Markup reproduit à l'identique de BookPanel.js : les
+// Spec de la page Book Panel. Markup reproduit à l'identique de BookPanel.js : les
 // classes de library.css font le rendu, aucune donnée figée ne diverge de la prod.
 // État montré = un livre OWNED + FINISHED, le plus riche du composant (cover, header
 // + pill Finished + Share, Collections, Finished rating/note, About, Quotes, Delete).
@@ -84,7 +84,7 @@ function QuizSection() {
 // avec Filters Panel) neutralise le positionnement fixed/slide-in pour l'afficher en flux.
 // compact : Preview allégée — ne garde que Cover + panel-info-header + divider + About
 // (le composite complet reste pour l'Anatomy).
-export function SidePanelSpec({ className = "", compact = false }) {
+export function BookPanelSpec({ className = "", compact = false }) {
   return (
     <div className={`book-panel ds-panel-static ${className}`.trim()} role="dialog" aria-modal="true" aria-label="Book details">
       <div className="panel-inner">

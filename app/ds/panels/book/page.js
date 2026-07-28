@@ -1,7 +1,7 @@
 import DSSection from "../../_components/DSSection";
 import AnnoScene from "../../_components/AnnoScene";
 import Redline from "../../_components/Redline";
-import { SidePanelSpec, AiSparkle } from "./_specs";
+import { BookPanelSpec, AiSparkle } from "./_specs";
 
 // Anatomie : un badge par partie visible. La coquille .book-panel et .panel-inner
 // = lignes « · » dans Elements (la Preview les montre déjà), les sections empilées
@@ -38,8 +38,8 @@ function Stars({ value = 4 }) {
 export default function SidePanelPage() {
   return (
     <DSSection
-      id="panel"
-      title="Side Panel"
+      id="book"
+      title="Book Panel"
       sub="Panneau de détail d'un livre — slide-in depuis le bord droit (width 540) qui recouvre l'app. Cover + info + actions primaires, puis des sections empilées (Collections, Finished, About, Quotes…) séparées par des dividers. Réutilise la primitive .book-panel (a11y, scroll-lock, motion), partagée avec Filters Panel, Quote Panel et les List Panels."
     >
 
@@ -49,7 +49,7 @@ export default function SidePanelPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
             <div className="ds-preview">
-              <SidePanelSpec compact />
+              <BookPanelSpec compact />
             </div>
           </div>
           <p className="ds-note"><strong>Aperçu compact</strong> — cover, header (titre, auteur, meta, pill <em>Finished</em> + Share) et une section (About). Le panel complet empile bien plus de sections selon l&apos;onglet et le statut — Collections, <em>Finished</em>, <em>Cast</em> / <em>Quiz</em> (AI), Quotes, Delete : voir <strong>Anatomy</strong> et <strong>Usage</strong>. En usage réel la coquille est <code>fixed</code> et glisse depuis la droite (neutralisé pour la doc ; présentée en carte détachée, radius 8 + ombre, comme <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> — en prod dockée au bord, radius 0).</p>
@@ -62,7 +62,7 @@ export default function SidePanelPage() {
         <div className="ds-card-body col">
           <div className="ds-anno-board">
             <AnnoScene annos={ANNOS}>
-              <SidePanelSpec className="ds-anno-organism" />
+              <BookPanelSpec className="ds-anno-organism" />
             </AnnoScene>
           </div>
         </div>
@@ -254,7 +254,7 @@ export default function SidePanelPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Coquille partagée — <span className="ds-cn">.book-panel</span></div>
-            <p>a11y (<span className="ds-class">useModalA11y</span> : <code>Escape</code> + focus trap + restauration), scroll-lock du body, motion slide-in (<code>translateX</code> <code>0.55s cubic-bezier(0.16, 1, 0.3, 1)</code>), scroll-fade et safe-area insets sont portés par la primitive commune — documentés une seule fois dans <a href="/ds/panels"><strong>Panels</strong></a>. Rien de propre au Side Panel ici.</p>
+            <p>a11y (<span className="ds-class">useModalA11y</span> : <code>Escape</code> + focus trap + restauration), scroll-lock du body, motion slide-in (<code>translateX</code> <code>0.55s cubic-bezier(0.16, 1, 0.3, 1)</code>), scroll-fade et safe-area insets sont portés par la primitive commune — documentés une seule fois dans <a href="/ds/panels"><strong>Side Panels</strong></a>. Rien de propre au Book Panel ici.</p>
           </div>
         </div>
       </div>
@@ -269,7 +269,7 @@ export default function SidePanelPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Famille Panels</div>
-            <p>Membre de la famille <a href="/ds/panels"><strong>Panels</strong></a> (primitive <span className="ds-class">.book-panel</span>) avec <a href="/ds/panels/quote"><strong>Quote Panel</strong></a> ; le même montage slide-in porte aussi <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> et les List Panels (Word / Book / Collection).</p>
+            <p>Membre de la famille <a href="/ds/panels"><strong>Side Panels</strong></a> (primitive <span className="ds-class">.book-panel</span>) avec <a href="/ds/panels/quote"><strong>Quote Panel</strong></a> ; le même montage slide-in porte aussi <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> et les List Panels (Word / Book / Collection).</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Consumer</div>

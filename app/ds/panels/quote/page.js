@@ -14,9 +14,9 @@ const ANNOS = [
 export default function QuotePanelPage() {
   return (
     <DSSection
-      id="quote-panel"
+      id="quote"
       title="Quote Panel"
-      sub="Panneau de détail d'une citation — même coquille slide-in que Side Panel (primitive .book-panel), sans cover. La citation en tête (guillemets accent + date), ses actions (Edit · Loved · Share), le livre d'origine (Book Row), puis Delete."
+      sub="Panneau de détail d'une citation — même coquille slide-in que Book Panel (primitive .book-panel), sans cover. La citation en tête (guillemets accent + date), ses actions (Edit · Loved · Share), le livre d'origine (Book Row), puis Delete."
     >
 
       {/* 1 — PREVIEW */}
@@ -28,7 +28,7 @@ export default function QuotePanelPage() {
               <QuotePanelSpec />
             </div>
           </div>
-          <p className="ds-note">Une citation enregistrée : le texte entre <span className="ds-class">.quote-mark</span> (accent), sa date, la rangée d&apos;actions (<em>Edit</em> · <em>Loved</em> actif · <em>Share</em>), le livre d&apos;origine en <a href="/ds/book-chip"><strong>Book Row</strong></a>, et <em>Delete</em>. Même coquille détachée (radius 8 + ombre) que <a href="/ds/panels/side"><strong>Side Panel</strong></a> ; en prod <code>fixed</code>, dockée au bord droit, slide-in.</p>
+          <p className="ds-note">Une citation enregistrée : le texte entre <span className="ds-class">.quote-mark</span> (accent), sa date, la rangée d&apos;actions (<em>Edit</em> · <em>Loved</em> actif · <em>Share</em>), le livre d&apos;origine en <a href="/ds/book-chip"><strong>Book Row</strong></a>, et <em>Delete</em>. Même coquille détachée (radius 8 + ombre) que <a href="/ds/panels/book"><strong>Book Panel</strong></a> ; en prod <code>fixed</code>, dockée au bord droit, slide-in.</p>
         </div>
       </div>
 
@@ -51,7 +51,7 @@ export default function QuotePanelPage() {
           <table className="token-table ds-anno-table">
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
-              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-panel</span> / <span className="ds-class">.panel-inner</span></td><td>Coquille slide-in partagée avec <a href="/ds/panels/side"><strong>Side Panel</strong></a> : <code>fixed</code> bord droit, <strong>540</strong>, padding <strong>96 / 32 / 72</strong>, gap <strong>40</strong>. Voir Side Panel pour le langage complet.</td><td>—</td></tr>
+              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-panel</span> / <span className="ds-class">.panel-inner</span></td><td>Coquille slide-in partagée avec <a href="/ds/panels/book"><strong>Book Panel</strong></a> : <code>fixed</code> bord droit, <strong>540</strong>, padding <strong>96 / 32 / 72</strong>, gap <strong>40</strong>. Voir Book Panel pour le langage complet.</td><td>—</td></tr>
               <tr className="table-row"><td>1</td><td><span className="ds-class">.panel-close</span></td><td>Fermer : <strong>44×44</strong> absolu haut-droite.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.quote-panel-content</span></td><td>La citation : <span className="ds-class">.quote-panel-text</span> (<code>16 / 500</code>, <code>line-height 1.7</code> <span className="ds-token-chip">--text-2</span>) encadrée de <span className="ds-class">.quote-mark</span> (<span className="ds-token-chip">--accent</span>), + <span className="ds-class">.quote-panel-date</span> (<code>13 / 500</code> <span className="ds-token-chip">--text-3</span>).</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.panel-actions</span></td><td>Rangée d&apos;actions : groupe <em>Edit</em> (<span className="ds-class">.panel-move-btn</span>) + <em>Loved</em> (<span className="ds-class">.panel-header-like</span>, <span className="ds-class">.is-active</span> quand aimé) à gauche, <em>Share</em> à droite (<code>space-between</code>).</td><td>—</td></tr>
@@ -144,7 +144,7 @@ export default function QuotePanelPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Primitive partagée — <span className="ds-cn">.book-panel</span></div>
-            <p>Coquille partagée <span className="ds-class">.book-panel</span> : slide-in <code>translateX</code> <code>0.55s cubic-bezier(0.16, 1, 0.3, 1)</code>, <span className="ds-class">useModalA11y</span> (<code>Escape</code> + focus trap + restauration), scroll-lock du body, safe-area insets — documentés une fois dans <a href="/ds/panels"><strong>Panels</strong></a>.</p>
+            <p>Coquille partagée <span className="ds-class">.book-panel</span> : slide-in <code>translateX</code> <code>0.55s cubic-bezier(0.16, 1, 0.3, 1)</code>, <span className="ds-class">useModalA11y</span> (<code>Escape</code> + focus trap + restauration), scroll-lock du body, safe-area insets — documentés une fois dans <a href="/ds/panels"><strong>Side Panels</strong></a>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Loved — toggle <span className="ds-cn">.is-active</span></div>
@@ -159,11 +159,11 @@ export default function QuotePanelPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Famille Panels</div>
-            <p>Membre de la famille <a href="/ds/panels"><strong>Panels</strong></a> — contrepartie « citation » de <a href="/ds/panels/side"><strong>Side Panel</strong></a> (le livre), même primitive <span className="ds-class">.book-panel</span>, partagée aussi avec <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> et les List Panels.</p>
+            <p>Membre de la famille <a href="/ds/panels"><strong>Side Panels</strong></a> — contrepartie « citation » de <a href="/ds/panels/book"><strong>Book Panel</strong></a> (le livre), même primitive <span className="ds-class">.book-panel</span>, partagée aussi avec <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> et les List Panels.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Consumer</div>
-            <p><code>QuotePanel</code>, ouvert au clic sur une citation (vue Quotes, listes de citations de l&apos;Overview). <code>onEdit</code>, <code>onToggleSave</code>, <code>onOpenBook</code>, <code>onDelete</code> remontent au parent ; <span className="ds-class">.book-chip</span> ouvre le <a href="/ds/panels/side"><strong>Side Panel</strong></a> du livre.</p>
+            <p><code>QuotePanel</code>, ouvert au clic sur une citation (vue Quotes, listes de citations de l&apos;Overview). <code>onEdit</code>, <code>onToggleSave</code>, <code>onOpenBook</code>, <code>onDelete</code> remontent au parent ; <span className="ds-class">.book-chip</span> ouvre le <a href="/ds/panels/book"><strong>Book Panel</strong></a> du livre.</p>
           </div>
         </div>
       </div>
