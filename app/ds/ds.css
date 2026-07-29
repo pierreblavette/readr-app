@@ -988,6 +988,11 @@ a.sidebar-item { text-decoration: none; }
 .ds-anno-scene .overview-cloud-chip,
 .ds-preview .book-chip,
 .ds-anno-scene .book-chip { background: var(--card); }
+/* …mais les pills DANS le card Weekly Activity (surface --card blanche) gardent leur
+   --bg3 réel : le forçage --card ci-dessus les rendrait invisibles (card sur card),
+   comme la book-chip en modale. Ne vaut que hors du card (page Segmented Pills). */
+.ds-preview .overview-activity .overview-activity-pills,
+.ds-anno-scene .overview-activity .overview-activity-pills { background: var(--bg3); }
 /* …mais une book-chip DANS une modale (surface --card blanche) doit garder son --bg3
    réel : le forçage --card ci-dessus la rendrait invisible (card sur card). Il ne vaut
    que pour une chip posée à même la scène bleue. Spécificité (0,3,0) > (0,2,0). */
@@ -1029,7 +1034,10 @@ a.sidebar-item { text-decoration: none; }
 .ds-schema-close svg { width: 20px; height: 20px; }
 
 /* Table descriptive : # étroite, cellules alignées en haut (descriptions multi-lignes). */
-.ds-anno-table td { vertical-align: top; }
+/* line-height 24 = hauteur des pastilles (.ds-class / .ds-token-chip) : sinon la
+   line-height héritée (21 = 14×1.5) est < 24, la pastille dépasse et gonfle SA ligne,
+   créant un écart inégal entre lignes d'une cellule multi-lignes. À 24 elles rentrent. */
+.ds-anno-table td { vertical-align: top; line-height: 24px; }
 .ds-anno-table td:first-child { color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
 /* Colonne Rôle (3e) : min-width pour garder du texte lisible sur petit écran —
    le tableau scrolle en horizontal (.ds-card-body overflow-x: auto), donc l'air
