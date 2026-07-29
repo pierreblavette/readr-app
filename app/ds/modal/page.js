@@ -6,7 +6,7 @@ export default function ModalFoundationPage() {
     <DSSection
       id="modal"
       title="Modals"
-      sub="Famille de coquilles modales — même socle (overlay centré, surface --card, radius 8, padding 32/24/0, gap 32, shadow-xl) et même cycle de vie (a11y, scroll-lock, motion), décliné par usage. Form Modal (saisie) et Delete Modal (confirmation) documentées en pages dédiées."
+      sub="Famille de coquilles modales — même socle (overlay centré, surface --card, radius 8, padding 32/24/0, gap 32, shadow-xl) et même cycle de vie (a11y, scroll-lock, motion), décliné par usage. Form Modal (saisie), Delete Modal (confirmation) et Finish Reading Modal documentées en pages dédiées."
     >
 
       {/* 1 — PREVIEW — la famille */}

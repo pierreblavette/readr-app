@@ -67,6 +67,49 @@ export function QuoteCardSpec({ className = "", saved = false }) {
   );
 }
 
+// ─── NOW READING CARD ───
+// Icône kebab HORIZONTALE (3 points côte à côte, stroke) — propre à Now Reading,
+// distincte du KebabDots vertical plein des autres cartes.
+const NowReadingKebab = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" />
+  </svg>
+);
+
+export const NOW_READING_ANNOS = [
+  { n: 1, side: "left", target: ".now-reading-date" },
+  { n: 2, side: "left", target: ".now-reading-cover" },
+  { n: 3, side: "right", target: ".now-reading-text" },
+  { n: 4, side: "right", target: ".now-reading-menu-btn" },
+];
+
+// hideMenu : retire le kebab (absolu) pour le Spacing — sinon le gap racine
+// body↔menu produit une bande parasite ~8px.
+export function NowReadingCardSpec({ className = "", hideMenu = false }) {
+  return (
+    <div className={`now-reading-card ${className}`.trim()} role="button" tabIndex={-1} style={{ width: 340 }}>
+      <div className="now-reading-body">
+        <span className="now-reading-date">Started Apr 28</span>
+        <div className="now-reading-row">
+          <div className="now-reading-cover now-reading-cover-empty" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>
+            <span className="now-reading-cover-letter">A</span>
+          </div>
+          <div className="now-reading-text">
+            <div className="now-reading-title">A Brief History of Time</div>
+            <div className="now-reading-author">Stephen Hawking</div>
+            <div className="book-meta"><span>Science</span><span className="book-meta-sep" aria-hidden="true">·</span><span>1988</span></div>
+          </div>
+        </div>
+      </div>
+      {!hideMenu && (
+        <div className="now-reading-menu">
+          <button type="button" className="now-reading-menu-btn" aria-label="More actions"><NowReadingKebab /></button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── DICTIONARY CARD ───
 export const DICT_ANNOS = [
   { n: 1, side: "right", target: ".dictionary-saved-card" },

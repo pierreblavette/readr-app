@@ -3,7 +3,7 @@ import { BookCardSpec, QuoteCardSpec, DictionaryCardSpec } from "./_specs";
 
 export default function CardFoundationPage() {
   return (
-    <DSSection id="card" title="Cards" sub="Famille de surfaces de contenu — même langage (radius 8, bord 1.5, bord primary au hover), décliné par carte. Book, Quote et Dictionary Card documentées ; Collection / Overview partagent la primitive et suivront.">
+    <DSSection id="card" title="Cards" sub="Famille de surfaces de contenu — même langage (radius 8, bord 1.5, bord primary au hover), décliné par carte. Book, Now Reading, Quote et Dictionary Card documentées ; Collection / Overview partagent la primitive et suivront.">
 
       {/* 1 — PREVIEW — la famille */}
       <div className="ds-card">

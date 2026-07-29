@@ -321,6 +321,19 @@ a.sidebar-item { text-decoration: none; }
 .ds-states-grid--boxed.ds-states-grid--cols-3 > .ds-state-sample + .ds-state-sample { border-left: none; }
 .ds-states-grid--boxed.ds-states-grid--cols-3 > .ds-state-sample:not(:nth-child(3n)) { border-right: 1px solid var(--border-subtle); }
 .ds-states-grid--boxed.ds-states-grid--cols-3 > .ds-state-sample:not(:nth-last-child(-n + 3)) { border-bottom: 1px solid var(--border-subtle); }
+/* --stack-1240 : specimens larges qui tiennent côte à côte au-dessus de 1240 (base
+   boxed = rangée unique, divider vertical border-left) mais se tassent en dessous
+   (ex. Now Reading Card, 340px) → 1 colonne pleine largeur ≤1240, dividers en
+   horizontal. Placé après tous les blocs (base + replis @media) pour gagner à
+   égalité de spécificité (0,3,1) — neutralise border-left ET le border-right hérité
+   du repli ≤760. */
+@media (max-width: 1240px) {
+  .ds-states-grid--boxed.ds-states-grid--stack-1240 { grid-auto-flow: row; grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--stack-1240 > .ds-state-sample + .ds-state-sample { border-left: none; }
+  .ds-states-grid--boxed.ds-states-grid--stack-1240 > .ds-state-sample:nth-child(odd) { border-right: none; }
+  .ds-states-grid--boxed.ds-states-grid--stack-1240 > .ds-state-sample:not(:last-child) { border-bottom: 1px solid var(--border-subtle); }
+  .ds-states-grid--boxed.ds-states-grid--stack-1240 > .ds-state-sample:last-child { border-bottom: none; }
+}
 /* Force le halo :focus-visible pour l'échantillon statique — le vrai état ne
    s'obtient qu'au clavier et ne se figerait pas dans une grille. Valeurs miroir
    de la règle .modal-toggle-input:focus-visible ~ .modal-toggle-check. */
@@ -814,6 +827,9 @@ a.sidebar-item { text-decoration: none; }
 .btn-square svg { width: 16px; height: 16px; pointer-events: none; }
 
 /* Hover/active/focus state simulation */
+/* Cartes : forcer l'état hover dans les boards States (le :hover réel n'est pas
+   déclenchable en statique). Reproduit .now-reading-card:hover (bord + fond, sans ombre). */
+.now-reading-card.is-hover { border-color: var(--primary-50); background: var(--primary-3); }
 .btn-primary.is-hover   { background: var(--primary-60) !important; }
 .btn-secondary.is-hover { background: var(--primary-10) !important; }
 .btn-ghost.is-hover     { background: var(--primary-5) !important; color: var(--primary-60) !important; }
@@ -1435,6 +1451,17 @@ a.sidebar-item { text-decoration: none; }
    Sur /ds elle est à nu sur la page et couvrait la sidebar drawer (330) + la toolbar
    mobile (400). On la ramène SOUS le chrome DS tout en restant au-dessus du contenu. */
 .ds-root .autocomplete-list { z-index: 300; }
+/* Toast posé statiquement dans un board de doc : neutralise position:fixed + reveal
+   (opacity 0 + translateY) + pointer-events off. z-index:auto car .toast (z 2000) est
+   un flex-item → l'honore même en static et couvrirait le chrome DS. (0,2,0) bat la
+   base .toast (0,1,0) ; la spec ne porte pas .toast-visible (0,2,0, gagnerait via library.css). */
+.toast.ds-toast-static {
+  position: static;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: auto;
+}
 /* Deux coquilles Sidebar côte à côte : specimens hauts et étroits, leurs cotes se
    serrent vite → on les empile plus tôt que le défaut (≤1200 au lieu de ≤1000). */
 @media (max-width: 1200px) {

@@ -39,6 +39,54 @@ export function FormModalSpec({ style }) {
   );
 }
 
+// ─── FINISH READING MODAL (.modal.finish-modal) ───
+// Variante Form Modal : même coquille .modal, corps = BookChip + rating + note.
+const StarPath = () => <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z" />;
+
+// value : nb d'étoiles pleines (0–5). Boutons radio, svg 28.
+export function FinishStars({ value = 0 }) {
+  return (
+    <div className="finish-stars" role="radiogroup" aria-label="Rating">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <button key={n} type="button" role="radio" aria-checked={value === n} className={`finish-star${value >= n ? " filled" : ""}`}>
+          <svg viewBox="0 0 24 24" fill="currentColor"><StarPath /></svg>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function FinishModalSpec({ style, rating = 4, className = "" }) {
+  return (
+    <div className={`modal finish-modal ${className}`.trim()} style={{ animation: "none", ...style }}>
+      <button type="button" className="modal-close" aria-label="Close"><CloseIcon /></button>
+      <div className="modal-title">Finish reading</div>
+      <form className="modal-form">
+        <div className="modal-fields">
+          <div className="finish-modal-chip">
+            <div className="book-chip">
+              <div className="book-chip-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
+              <div className="book-chip-body"><div className="book-chip-name"><div className="book-chip-title">A Brief History of Time</div><div className="book-chip-author">Stephen Hawking</div></div></div>
+            </div>
+          </div>
+          <div className="modal-field">
+            <label className="modal-field-label">Rating</label>
+            <FinishStars value={rating} />
+          </div>
+          <div className="modal-field">
+            <label className="modal-field-label">Note</label>
+            <textarea className="quote-textarea" placeholder="What did you think of it?" rows={3} readOnly />
+          </div>
+        </div>
+      </form>
+      <div className="modal-actions">
+        <button type="button" className="btn btn-outline btn-md">Cancel</button>
+        <button type="button" className="btn btn-primary btn-md">Save</button>
+      </div>
+    </div>
+  );
+}
+
 // ─── DELETE MODAL (.confirm-modal) ───
 // Confirmation destructive : titre → message + body addon (selon target.type) → actions.
 // Cancel = .btn.btn-outline.btn-md (comme en prod, PAS .modal-cancel qui n'existe pas).

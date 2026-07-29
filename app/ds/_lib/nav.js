@@ -4,7 +4,7 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "panels", "rating-stars", "segmented-pills", "sidebar", "toggle"],
+  Components: ["badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "panels", "rating-stars", "segmented-pills", "sidebar", "toast", "toggle"],
   // Patterns = assemblages de composants + logique + layout (input + liste flottante
   // + async + clavier pour Autocomplete ; sélection + barre d'action pour Editing).
   // Pas des briques uniques → groupe à part.
@@ -28,12 +28,14 @@ const ALPHA_GROUPS = ["Components", "Patterns"];
 export const NAV_CHILDREN = {
   card: [
     { label: "Book Card", href: "/ds/card/book" },
-    { label: "Quote Card", href: "/ds/card/quote" },
     { label: "Dictionary Card", href: "/ds/card/dictionary" },
+    { label: "Now Reading", href: "/ds/card/now-reading" },
+    { label: "Quote Card", href: "/ds/card/quote" },
   ],
   modal: [
-    { label: "Form Modal", href: "/ds/modal/form" },
     { label: "Delete Modal", href: "/ds/modal/delete" },
+    { label: "Finish Reading Modal", href: "/ds/modal/finish-reading" },
+    { label: "Form Modal", href: "/ds/modal/form" },
   ],
   filters: [
     { label: "Filters Row", href: "/ds/filters/row" },
