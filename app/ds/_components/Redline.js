@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, gapSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, boxPadSelector = null, gapSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -156,6 +156,30 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
         }
       }
 
+      // Padding COMPLET (4 côtés) d'un/de descendant(s) désigné(s) — boxPadSelector (opt-in,
+      // string ou tableau). Pour une modale dont le padding vit sur un conteneur INTERNE et
+      // non sur la coquille (ex. Onboarding : .ob-modal sans padding propre, tout est sur
+      // .ob-body et .ob-footer). Top/bottom → childVbands (cotés à droite) ; left/right →
+      // childBands (bandes bornées à la boîte, cotées EN BAS). N'affecte que les specimens
+      // qui passent boxPadSelector — zéro impact sur padSelector (vertical seul).
+      const childBands = [];
+      if (boxPadSelector) {
+        const bpSels = Array.isArray(boxPadSelector) ? boxPadSelector : [boxPadSelector];
+        bpSels.forEach((sel) => {
+          const bpEl = el.querySelector(sel);
+          if (!bpEl) return;
+          const r = bpEl.getBoundingClientRect();
+          const cs2 = getComputedStyle(bpEl);
+          const pt3 = parseFloat(cs2.paddingTop) || 0, pb3 = parseFloat(cs2.paddingBottom) || 0;
+          const pl3 = parseFloat(cs2.paddingLeft) || 0, pr3 = parseFloat(cs2.paddingRight) || 0;
+          const cL = r.left - br.left, cT = r.top - br.top, cW = r.width, cH = r.height;
+          if (pt3) childVbands.push({ left: cL, width: cW, top: cT, height: pt3, value: Math.round(pt3), right: cL + cW });
+          if (pb3) childVbands.push({ left: cL, width: cW, top: cT + cH - pb3, height: pb3, value: Math.round(pb3), right: cL + cW });
+          if (pl3) childBands.push({ left: cL, width: pl3, top: cT, height: cH, value: Math.round(pl3), bottom: cT + cH });
+          if (pr3) childBands.push({ left: cL + cW - pr3, width: pr3, top: cT, height: cH, value: Math.round(pr3), bottom: cT + cH });
+        });
+      }
+
       // Insets horizontaux d'un composant à adornements ABSOLUS (search-box : loupe +
       // clear en position absolue, le padding vit sur l'input). Le gap flex ne les
       // mesure pas → on cote les 4 segments contre les bords de la boîte et le bord de
@@ -210,7 +234,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       }
       // rootRadius (calculé plus haut) sert aussi à clipper les bandes (sinon elles
       // débordent aux coins arrondis) et à arrondir le mat blanc du target.
-      setM({ w, h: Math.round(h), bands, vbands, childVbands, separators, icons, box, rootRadius });
+      setM({ w, h: Math.round(h), bands, vbands, childVbands, childBands, separators, icons, box, rootRadius });
     };
 
     measure();
@@ -368,6 +392,22 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 style={{ top: b.top + b.height / 2, left: b.right, "--vlead": `${Math.max(14, m.w - b.right + 16)}px` }}
               >
                 <span className="ds-redline-vlead" />
+                <span className="ds-redline-num">{b.value}</span>
+              </span>
+            ))}
+            {/* Padding horizontal d'un descendant désigné (boxPadSelector) : bandes
+                bornées à la boîte de l'enfant, cotées EN BAS (à SA base, pas celle du
+                specimen) via un top inline qui écrase le top:100% de .ds-redline-callout. */}
+            {m.childBands?.map((b, i) => (
+              <span key={`chb${i}`} className="ds-redline-band" style={{ left: b.left, width: b.width, top: b.top, height: b.height }} />
+            ))}
+            {m.childBands?.map((b, i) => (
+              <span
+                key={`chc${i}`}
+                className="ds-redline-callout"
+                style={{ left: b.left + b.width / 2, top: b.bottom, "--lead": "14px" }}
+              >
+                <span className="ds-redline-lead" />
                 <span className="ds-redline-num">{b.value}</span>
               </span>
             ))}

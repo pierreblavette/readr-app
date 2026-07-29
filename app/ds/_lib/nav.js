@@ -4,11 +4,11 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "panels", "rating-stars", "segmented-pills", "sidebar", "toast", "toggle"],
-  // Patterns = assemblages de composants + logique + layout (input + liste flottante
-  // + async + clavier pour Autocomplete ; sélection + barre d'action pour Editing).
-  // Pas des briques uniques → groupe à part.
-  Patterns: ["autocomplete", "editing", "filters", "modal"],
+  Components: ["autocomplete", "badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "modal", "panels", "rating-stars", "segmented-pills", "sidebar", "toast", "toggle"],
+  // Patterns = explication d'un FONCTIONNEMENT UX (un flux, un comportement), pas un
+  // composant. Ex. Editing (sélection + bulk), Filtering, Onboarding (accueil). Un
+  // composant, même très intriqué (Modals, Autocomplete), reste dans Components.
+  Patterns: ["editing", "filters", "onboarding"],
   // Reference = pages utilitaires (mapping tokens, outils de dev). Ordre déclaré,
   // hors ALPHA_GROUPS : ce n'est pas un inventaire d'atomes.
   Reference: ["dev-tools"],
