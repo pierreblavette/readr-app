@@ -284,8 +284,13 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 style={{
                   left: b.left,
                   width: b.width,
-                  top: b.strong ? 0 : m.rootRadius,
-                  bottom: b.strong ? 0 : m.rootRadius,
+                  // Bandes de gap (strong) : pleine hauteur. Bandes de padding : insérées
+                  // du rayon pour ne pas mordre les coins arrondis — SAUF en keepShape, où
+                  // le specimen garde son vrai rayon mais où l'inset (proportionnellement
+                  // gros sur un composant bas, ex. la Bulk bar h64/r8) rend les bandes
+                  // visiblement courtes. keepShape = pleine hauteur, comme le régime strippé.
+                  top: (b.strong || keepShape) ? 0 : m.rootRadius,
+                  bottom: (b.strong || keepShape) ? 0 : m.rootRadius,
                 }}
               />
             ))}
@@ -295,7 +300,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
               <span
                 key={`vb${i}`}
                 className="ds-redline-band"
-                style={{ top: b.top, height: b.height, left: m.rootRadius, right: m.rootRadius }}
+                style={{ top: b.top, height: b.height, left: keepShape ? 0 : m.rootRadius, right: keepShape ? 0 : m.rootRadius }}
               />
             ))}
             {/* Bandes de padding vertical d'un descendant désigné (padSelector) :

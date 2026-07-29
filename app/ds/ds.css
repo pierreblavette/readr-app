@@ -1430,6 +1430,11 @@ a.sidebar-item { text-decoration: none; }
 /* Sidebar en doc : la vraie est position:sticky, height 100dvh, z-index 300. On
    neutralise pour l'afficher en flux (hauteur = son contenu), apparence intacte. */
 .ds-sidebar-static.sidebar { position: relative; top: auto; height: auto; max-height: none; z-index: auto; }
+/* Autocomplete en doc : la liste flottante (.autocomplete-list, z-index 700) vit en
+   prod DANS une modale (contexte d'empilement isolé) → jamais au-dessus du chrome.
+   Sur /ds elle est à nu sur la page et couvrait la sidebar drawer (330) + la toolbar
+   mobile (400). On la ramène SOUS le chrome DS tout en restant au-dessus du contenu. */
+.ds-root .autocomplete-list { z-index: 300; }
 /* Deux coquilles Sidebar côte à côte : specimens hauts et étroits, leurs cotes se
    serrent vite → on les empile plus tôt que le défaut (≤1200 au lieu de ≤1000). */
 @media (max-width: 1200px) {
@@ -1459,6 +1464,63 @@ a.sidebar-item { text-decoration: none; }
 .ds-list-spec .list-table .list-cell-action { position: static; }
 /* Specimens statiques : pas de fade-up de rangée. */
 .ds-list-spec .list-row { animation: none; }
+
+/* Editing/Bulk — SelectionBar posée statiquement dans un board de doc. On
+   neutralise le position:fixed + le reveal (opacity 0 + translateY) + le
+   pointer-events off de l'état masqué. Sélecteur .selection-bar.ds-… (0,2,0)
+   pour battre la base .selection-bar (0,1,0) quel que soit l'ordre d'import —
+   et la spec ne porte PAS .visible (0,2,0, gagnerait sur nous via library.css).
+   min-width:0 (vs 605 en prod) pour se caler sur le contenu sans déborder. */
+.selection-bar.ds-selection-bar-static {
+  position: static;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+  bottom: auto;
+  left: auto;
+  min-width: 0;
+  max-width: 100%;
+  /* La barre est un flex-item (de .ds-preview / .ds-redline-target) → elle honore
+     z-index MÊME en position:static (le flex crée un stacking context). Son z-index:500
+     de prod la faisait donc passer au-dessus du chrome DS (sidebar drawer 330, toolbar
+     400). On repasse en auto : elle peint en flux normal, sous le chrome. */
+  z-index: auto;
+  /* Format horizontal RÉ-IMPOSÉ : le @media prod (≤600px viewport) empile la barre,
+     mais ici c'est le conteneur (ResizeObserver → .is-compact) qui pilote, pas le
+     viewport. Ces règles (0,2,0) battent le @media (0,1,0) quel que soit l'ordre
+     d'import → la barre reste horizontale tant que .is-compact n'est pas posée. */
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 12px 12px 24px;
+  width: auto;
+}
+.ds-selection-bar-static .sel-actions { flex-direction: row; align-items: center; gap: 8px; width: auto; }
+.ds-selection-bar-static .sel-btn { width: auto; }
+.ds-selection-bar-static .selection-count { text-align: left; margin: 0; }
+
+/* Format compact piloté par le CONTENEUR (ResizeObserver dans SelectionBarSpec), pas
+   le viewport — réplique le mobile prod (empilé, boutons pleine largeur). (0,3,0) bat
+   le ré-impose horizontal ci-dessus (0,2,0). max-width borne la pile sur un board large. */
+.ds-selection-bar-static.is-compact { flex-direction: column; align-items: stretch; gap: 16px; padding: 12px; width: 100%; }
+.ds-selection-bar-static.is-compact .sel-actions { flex-direction: column; align-items: stretch; gap: 8px; width: 100%; }
+.ds-selection-bar-static.is-compact .sel-btn { width: 100%; justify-content: center; }
+.ds-selection-bar-static.is-compact .selection-count { text-align: center; margin: 8px 0; }
+/* Dans un Redline, le parent .ds-redline-target est inline-flex (il épouse son
+   contenu) → width:100% serait circulaire et la barre resterait à sa taille propre.
+   On la cale sur la largeur du board via 100cqw (.ds-redline porte container-type:
+   inline-size), comme le specimen modal. Mais 100cqw = largeur CONTENT-BOX du
+   .ds-redline (hors ses 48px de padding) → sur une barre compacte étroite ces 48px
+   paraissent énormes. On élargit de 2×(48−16) pour mordre le padding et retrouver un
+   inset prod-like ~16px du bord ; marges négatives symétriques (les cotes, enfants
+   du target, suivent). */
+.ds-redline .ds-selection-bar-static.is-compact { width: 100cqw; }
+/* La barre compacte remplit le content-box du .ds-redline (100cqw), plafonné par le
+   max-width:100% du target (règle cœur, partagée avec le modal). On donne à ce board
+   un padding latéral canonique 60 (échelle 16/24/40/60) : assez large pour que les
+   cotes (crochet de hauteur à gauche, vcallouts à droite) respirent dans la scène,
+   sans jamais en sortir. Vertical gardé à 48 pour les cotes haut/bas. Scopé à ce board. */
+.ds-redline-board--roomy .ds-redline { padding-left: 60px; padding-right: 60px; }
 /* States : rangées d'état empilées sur fond BLANC (comme le board boxé des autres pages),
    chaque échantillon en bloc pleine largeur (padding 32, contenu centré), séparés par un
    filet horizontal. Label centré dessous (override du .ds-class align-self:flex-start). */

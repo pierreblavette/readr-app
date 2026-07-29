@@ -1,6 +1,6 @@
-import DSSection from "../_components/DSSection";
-import Redline from "../_components/Redline";
-import AnnoScene from "../_components/AnnoScene";
+import DSSection from "../../_components/DSSection";
+import Redline from "../../_components/Redline";
+import AnnoScene from "../../_components/AnnoScene";
 
 const KebabIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -77,9 +77,9 @@ const ANNOS = [
 export default function BookCardKebabPage() {
   return (
     <DSSection
-      id="book-card-kebab"
+      id="kebab"
       title="Kebab"
-      sub="Déclencheur trois points partagé par les cartes — book, quote, dictionary, collection. Un clic ouvre un menu contextuel dont les items dépendent de la carte et de son état."
+      sub="Édition d'un item unique. Déclencheur trois points partagé par les cartes — book, quote, dictionary, collection. Un clic ouvre un menu contextuel dont les items dépendent de la carte et de son état. Le pendant multi-sélection est Bulk."
     >
       {/* ─────────── 1. PREVIEW — trigger + menu assemblés ─────────── */}
       <div className="ds-card">

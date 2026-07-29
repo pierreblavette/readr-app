@@ -4,10 +4,11 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["badges", "book-card-kebab", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "panels", "rating-stars", "segmented-pills", "sidebar", "toggle"],
+  Components: ["badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "panels", "rating-stars", "segmented-pills", "sidebar", "toggle"],
   // Patterns = assemblages de composants + logique + layout (input + liste flottante
-  // + async + clavier pour Autocomplete). Pas des briques uniques → groupe à part.
-  Patterns: ["autocomplete", "filters", "modal"],
+  // + async + clavier pour Autocomplete ; sélection + barre d'action pour Editing).
+  // Pas des briques uniques → groupe à part.
+  Patterns: ["autocomplete", "editing", "filters", "modal"],
   // Reference = pages utilitaires (mapping tokens, outils de dev). Ordre déclaré,
   // hors ALPHA_GROUPS : ce n'est pas un inventaire d'atomes.
   Reference: ["dev-tools"],
@@ -42,6 +43,10 @@ export const NAV_CHILDREN = {
     { label: "Book Panel", href: "/ds/panels/book" },
     { label: "Quote Panel", href: "/ds/panels/quote" },
   ],
+  editing: [
+    { label: "Kebab", href: "/ds/editing/kebab" },
+    { label: "Bulk", href: "/ds/editing/bulk" },
+  ],
 };
 
 // Point d'entrée unique des consommateurs (sidebar + landing) : le tri vit ici,
@@ -64,6 +69,7 @@ export const NAV_LABELS = {
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "List View", "sidebar": "Side Menu", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",
+  "editing": "Editing", "kebab": "Kebab", "bulk": "Bulk",
   "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Weekly Activity", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer",
   "token-usage": "Token Usage", "dev-tools": "Dev Tools",
 };
