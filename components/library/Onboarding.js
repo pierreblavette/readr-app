@@ -248,12 +248,11 @@ export default function Onboarding({ open, onClose, t }) {
               {!isLast && <button className="ob-skip" onClick={onClose}>{t.obSkip}</button>}
             </div>
             <div className="ob-footer-right">
-              <button
-                className="ob-prev"
-                onClick={prev}
-                style={{ visibility: slide === 0 ? 'hidden' : 'visible' }}>
-                {t.obPrevious}
-              </button>
+              {slide > 0 && (
+                <button className="ob-prev" onClick={prev}>
+                  {t.obPrevious}
+                </button>
+              )}
               <button className="ob-next" onClick={next}>
                 {isLast ? t.obGetStarted : t.obNext}
               </button>

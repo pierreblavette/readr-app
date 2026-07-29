@@ -3951,7 +3951,7 @@
 .ob-modal {
   background: var(--card);
   border-radius: 16px;
-  width: 100%; max-width: 640px;
+  width: 100%; max-width: 630px;
   margin: 0 24px;
   display: flex; flex-direction: column; align-items: center;
   box-shadow: var(--shadow-lg);
@@ -3962,7 +3962,10 @@
 }
 .ob-body {
   width: 100%;
-  padding: 48px 32px 32px;
+  /* Format modal canonique : haut 32 / côtés 24 (iso .modal padding 32/24/0), bas 32
+     = rythme vers le footer (iso le gap 32 des modales). Remplace l'ancien 48/32/32
+     pour aligner les côtés avec le footer (24) et n'avoir qu'un seul format. */
+  padding: 32px 24px;
   display: flex; flex-direction: column; align-items: center; text-align: center;
 }
 .ob-slides { width: 100%; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 40px; }
@@ -3991,7 +3994,9 @@
 }
 .ob-footer {
   width: 100%;
-  padding: 18px;
+  /* Padding canonique du footer de modale (iso .modal-actions / .confirm-modal-actions)
+     16 vertical / 24 horizontal — remplace l'ancien 18 hors échelle. */
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
