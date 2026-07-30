@@ -1819,3 +1819,22 @@ a.sidebar-item { text-decoration: none; }
   display: flex; align-items: center; justify-content: center;
 }
 .ds-overlays-slot-label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+
+/* ─── /ds : page Iconography ──────────────────────────────────────────────────
+ * Icônes UI (line, currentColor) + pictos (illustrations multi-tons --illus). */
+.ds-icon { width: 24px; height: 24px; color: var(--text); flex-shrink: 0; }
+.ds-icon-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; width: 100%; }
+@media (max-width: 760px) { .ds-icon-grid { grid-template-columns: repeat(3, 1fr); } }
+.ds-icon-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 20px 8px; border-radius: 10px; background: var(--card);
+}
+.ds-icon-name { font-size: 12px; font-weight: 500; color: var(--text-2); text-align: center; }
+.ds-icon-size { display: flex; align-items: center; justify-content: center; color: var(--text); }
+.ds-icon-size .ds-icon { width: 100%; height: 100%; }
+
+.ds-illus-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: 100%; }
+@media (max-width: 600px) { .ds-illus-grid { grid-template-columns: repeat(2, 1fr); } }
+.ds-illus-swatch { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ds-illus-chip { height: 56px; border-radius: 8px; border: 1px solid var(--border-subtle); }

@@ -3,7 +3,7 @@
 // migration : n'y lister que les sections dont la route existe déjà, pour ne
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
-  Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
+  Foundations: ["logo", "colors", "typography", "iconography", "spacing", "cell-row", "shadows", "strokes"],
   Components: ["autocomplete", "badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "dropzone", "empty", "footer", "inputs", "list", "message-box", "modal", "panels", "rating-stars", "segmented-pills", "sidebar", "spinner", "toast", "toggle", "weekly-activity"],
   // Patterns = explication d'un FONCTIONNEMENT UX (un flux, un comportement), pas un
   // composant. Ex. Editing (sélection + bulk), Filtering, Onboarding (accueil). Un
@@ -66,7 +66,7 @@ export function sectionsOf(group) {
 }
 
 export const NAV_LABELS = {
-  "logo": "Logo", "colors": "Colors", "typography": "Typography",
+  "logo": "Logo", "colors": "Colors", "typography": "Typography", "iconography": "Iconography",
   "spacing": "Spacing", "cell-row": "Cell Row", "shadows": "Shadows & Radius", "strokes": "Strokes & Borders",
   "buttons": "Buttons", "dropdown": "Dropdown Menu",
   "inputs": "Text Input", "view-toggle": "View Toggle", "badges": "Badges",

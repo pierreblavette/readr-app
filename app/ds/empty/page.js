@@ -1,14 +1,7 @@
-"use client";
-import { useState, useRef, useEffect } from "react";
 import DSSection from "../_components/DSSection";
 import AnnoScene from "../_components/AnnoScene";
 import Redline from "../_components/Redline";
-import NoMatchesIcon from "@/components/library/NoMatchesIcon";
-import {
-  LibraryIcon, WishlistIcon, OverviewIcon,
-  OverviewGenresIcon, OverviewAuthorsIcon, OverviewLovedIcon,
-  OverviewQuotesIcon, OverviewStreakIcon, OverviewGoalIcon,
-} from "@/components/library/EmptyState";
+import { LibraryIcon, OverviewGenresIcon, OverviewGoalIcon } from "@/components/library/EmptyState";
 
 const EMPTY_ANNOS = [
   { n: 1, side: "right", target: ".empty" },
@@ -32,40 +25,8 @@ function FullEmpty({ padding }) {
   );
 }
 
-const ICON_SET = [
-  [LibraryIcon, "Library"],
-  [WishlistIcon, "Wishlist"],
-  [OverviewQuotesIcon, "Quotes"],
-  [OverviewGenresIcon, "Genres"],
-  [OverviewAuthorsIcon, "Authors"],
-  [OverviewLovedIcon, "Most loved"],
-  [OverviewGoalIcon, "Reading goal"],
-  [OverviewStreakIcon, "Streak"],
-  [OverviewIcon, "Overview"],
-  [NoMatchesIcon, "No matches"],
-];
-
-// Colonnes du board Icon set pilotées par la largeur RÉELLE de la grille (ResizeObserver),
-// pas le viewport (la sidebar /ds le fausse). Défaut = 2 col (le plus contraint) avant 1re
-// mesure → jamais de débordement au 1er paint. On bascule les modifiers du board canonique.
-function useBoardCols() {
-  const ref = useRef(null);
-  const [mod, setMod] = useState("ds-states-grid--cols-2 ds-states-grid--hold");
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([e]) => {
-      const w = e.contentRect.width;
-      setMod(w >= 800 ? "ds-states-grid--cols-5" : w >= 480 ? "ds-states-grid--cols-3" : "ds-states-grid--cols-2 ds-states-grid--hold");
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  return [ref, mod];
-}
 
 export default function EmptyStatePage() {
-  const [iconBoardRef, iconBoardMod] = useBoardCols();
   return (
     <DSSection
       id="empty"
@@ -106,7 +67,7 @@ export default function EmptyStatePage() {
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
               <tr className="table-row"><td>1</td><td><span className="ds-class">.empty</span></td><td>Coquille : <code>flex</code> colonne, <code>align-items: center</code>, <code>text-align: center</code>, gap <strong>24</strong>, padding <strong>80 20</strong>. <code>grid-column: 1 / -1</code> pour occuper toute la grille parente.</td><td>—</td></tr>
-              <tr className="table-row"><td>2</td><td><span className="ds-class">.empty-icon</span></td><td>Illustration <strong>96×96</strong> (viewBox 60), remplie de tokens <span className="ds-token-chip">--illus-*</span>. Une par contexte — voir <strong>Icon set</strong>.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.empty-icon</span></td><td>Illustration <strong>96×96</strong> (viewBox 60), remplie de tokens <span className="ds-token-chip">--illus-*</span>. Une par contexte — le jeu complet est dans <strong>Iconography</strong>.</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.empty-title</span></td><td>Titre <code>18 / 700</code> <span className="ds-token-chip">--text</span>. Dans <span className="ds-class">.empty-text</span> (colonne, gap <strong>4</strong>).</td><td>—</td></tr>
               <tr className="table-row"><td>4</td><td><span className="ds-class">.empty-sub</span></td><td>Sous-texte <code>16 / 500</code> <span className="ds-token-chip">--text-2</span>, <code>max-width: 480</code> — la ligne reste lisible, ne s&apos;étire pas.</td><td>—</td></tr>
               <tr className="table-row"><td>5</td><td><span className="ds-class">.empty-cta</span></td><td>Bouton d&apos;action plein <span className="ds-token-chip">--primary-50</span> (40 de haut). Présent seulement si une action fait avancer (Add a book / a wish). Passif sinon.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
@@ -173,29 +134,17 @@ export default function EmptyStatePage() {
         </div>
       </div>
 
-      {/* 6 — ICON SET */}
-      <div className="ds-card">
-        <div className="ds-card-head">Icon set · illustrations (viewBox 60, tokens --illus-*)</div>
-        <div className="ds-card-body col">
-          <div ref={iconBoardRef} className={`ds-states-grid ds-states-grid--boxed ${iconBoardMod}`}>
-            {ICON_SET.map(([Icon, label]) => (
-              <div key={label} className="ds-state-sample">
-                <Icon />
-                <span className="panel-section-eyebrow">{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="ds-card-foot">Composants réels importés de <code>EmptyState.js</code> — même illustration à toutes les échelles (96 pleine page, 72 / 60 en mini). Les couleurs viennent des tokens <span className="ds-token-chip">--illus-*</span>, thème-aware.</div>
-      </div>
-
-      {/* 7 — USAGE */}
+      {/* 6 — USAGE */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Deux échelles, un langage</div>
             <p><strong>Pleine page</strong> — quand toute une vue est vide (Library, Wishlist, Dictionary, résultat de recherche vide via <span className="ds-class">NoMatchesIcon</span>). <strong>Mini</strong> — quand une carte d&apos;un dashboard rempli est vide (7 cartes Overview). Même icône, même structure texte, échelle adaptée au contenant.</p>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Illustrations</div>
+            <p>Le <strong>jeu complet</strong> des pictos (viewBox 60, tokens <span className="ds-token-chip">--illus-*</span>, theme-aware) est documenté une seule fois dans <strong>Iconography</strong> (Foundations). Cette page-ci documente le <em>pattern</em> — anatomy, échelles, contenu — pas l&apos;inventaire.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">CTA seulement si ça débloque</div>
