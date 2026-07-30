@@ -6,7 +6,7 @@ import CollectionCoverGrid from "./CollectionCoverGrid";
 import NoMatchesIcon from "./NoMatchesIcon";
 import ExportMenu from "./ExportMenu";
 
-function CollectionsIcon() {
+export function CollectionsIcon() {
   return (
     <svg className="empty-icon" viewBox="0 0 60 60" fill="none">
       <path d="M7 52C7 53.1046 7.89543 54 9 54H51C52.1046 54 53 53.1046 53 52V8C53 6.89543 52.1046 6 51 6H9C7.89543 6 7 6.89543 7 8V52Z" fill="var(--illus-bg-2)"/>
