@@ -28,7 +28,7 @@ export default function FiltersPanelPage() {
             <FiltersPanelSpec />
           </div>
           </div>
-          <p className="ds-note">Le panneau montré en flux (position <code>fixed</code> / slide-in neutralisée pour la doc). En usage réel il glisse depuis la droite sur un <span className="ds-class">.panel-overlay</span>, ouvert par le bouton « Filter » de la <a href="/ds/filters/row"><strong>Filters Row</strong></a>. Il ne montre que les filtres <strong>pas déjà inline</strong> (les <code>promotedFilters</code> sont sautés).</p>
+          <p className="ds-note">Le panneau montré en flux (position <code>fixed</code> / slide-in neutralisée pour la doc). En usage réel il glisse depuis la droite sur un <span className="ds-class">.panel-overlay</span>, ouvert par le bouton « Filter » de la <a href="/design-system/filters/row"><strong>Filters Row</strong></a>. Il ne montre que les filtres <strong>pas déjà inline</strong> (les <code>promotedFilters</code> sont sautés).</p>
         </div>
       </div>
 
@@ -151,7 +151,7 @@ export default function FiltersPanelPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Sœur desktop</div>
-            <p>Contrepartie de la <a href="/ds/filters/row"><strong>Filters Row</strong></a> : les triggers qui se replient au fil des breakpoints atterrissent ici, en sections. Ensemble ils forment le système <strong>Filters</strong>.</p>
+            <p>Contrepartie de la <a href="/design-system/filters/row"><strong>Filters Row</strong></a> : les triggers qui se replient au fil des breakpoints atterrissent ici, en sections. Ensemble ils forment le système <strong>Filters</strong>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Consumers</div>

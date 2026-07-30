@@ -34,7 +34,7 @@ export default function ListViewPage() {
               <ListViewSpec />
             </div>
           </div>
-          <p className="ds-note">Mode consultation : colonne <strong>#</strong> (index), <strong>Title</strong> (triée), <strong>Author</strong>, <strong>Genre</strong>, <strong>Year</strong>, et un <span className="ds-class">.col-card-kebab</span> par rangée. Clic sur un en-tête trie la colonne ; clic sur une rangée ouvre le <a href="/ds/panels/book"><strong>Book Panel</strong></a>. En mode édition, la 1re colonne devient une case à cocher (voir <strong>States</strong>).</p>
+          <p className="ds-note">Mode consultation : colonne <strong>#</strong> (index), <strong>Title</strong> (triée), <strong>Author</strong>, <strong>Genre</strong>, <strong>Year</strong>, et un <span className="ds-class">.col-card-kebab</span> par rangée. Clic sur un en-tête trie la colonne ; clic sur une rangée ouvre le <a href="/design-system/panels/book"><strong>Book Panel</strong></a>. En mode édition, la 1re colonne devient une case à cocher (voir <strong>States</strong>).</p>
         </div>
       </div>
 
@@ -145,7 +145,7 @@ export default function ListViewPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Alternative — grille</div>
-            <p>La même donnée en grille = <a href="/ds/card/book"><strong>Book Card</strong></a>. On bascule liste ↔ grille via le <span className="ds-class">View Toggle</span>.</p>
+            <p>La même donnée en grille = <a href="/design-system/card/book"><strong>Book Card</strong></a>. On bascule liste ↔ grille via le <span className="ds-class">View Toggle</span>.</p>
           </div>
         </div>
       </div>

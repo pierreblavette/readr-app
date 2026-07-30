@@ -114,7 +114,7 @@ export default function NowReadingCardPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Famille visuelle</div>
-            <p>Même langage que la <a href="/ds/card/book"><strong>Book Card</strong></a> (radius, bord, hover, <code>fadeUp</code>) — layout <strong>horizontal</strong> pour se distinguer de la grille Library en dessous sans la concurrencer. Le badge primary plein ancre le statut « lecture active ».</p>
+            <p>Même langage que la <a href="/design-system/card/book"><strong>Book Card</strong></a> (radius, bord, hover, <code>fadeUp</code>) — layout <strong>horizontal</strong> pour se distinguer de la grille Library en dessous sans la concurrencer. Le badge primary plein ancre le statut « lecture active ».</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Ordre</div>

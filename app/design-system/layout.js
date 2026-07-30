@@ -18,7 +18,7 @@ export default function DSLayout({ children }) {
   const pathname = usePathname();
   // Groupes de nav dépliés (Cards…) : état PERSISTANT, indépendant de la route. Ouvert
   // d'entrée si on arrive sur une page du groupe (deep-link), sinon replié.
-  const inGroup = (id, kids) => `/ds/${id}` === pathname || kids.some((c) => c.href === pathname);
+  const inGroup = (id, kids) => `/design-system/${id}` === pathname || kids.some((c) => c.href === pathname);
   const [openGroups, setOpenGroups] = useState(() => {
     const init = {};
     for (const [id, kids] of Object.entries(NAV_CHILDREN)) {
@@ -34,7 +34,7 @@ export default function DSLayout({ children }) {
   // Le layout ne remonte pas entre pages sœurs → fermer le drawer à la navigation.
   useEffect(() => { setMobileSidebarOpen(false); }, [pathname]);
 
-  // Arriver sur une page d'un groupe (racine /ds/card OU un enfant) l'OUVRE ; on ne le
+  // Arriver sur une page d'un groupe (racine /design-system/card OU un enfant) l'OUVRE ; on ne le
   // referme jamais automatiquement — il reste ouvert si on clique un autre onglet, et ne
   // se ferme qu'au re-clic sur le parent alors qu'on est déjà sur sa racine.
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function DSLayout({ children }) {
           {/* SIDEBAR */}
           <aside className={`sidebar${mobileSidebarOpen ? ' mobile-open' : ''}`}>
             <div className="sidebar-logo">
-              <Link href="/ds" aria-label="Design System"><Wordmark className="logo" /></Link>
+              <Link href="/design-system" aria-label="Design System"><Wordmark className="logo" /></Link>
             </div>
             <nav className="sidebar-nav">
               {Object.keys(NAV).map((section) => (
@@ -80,7 +80,7 @@ export default function DSLayout({ children }) {
                     // Item à sous-pages (Cards) : parent + variantes indentées, dépliées
                     // quand on est sur l'une d'elles (chevron ouvert).
                     if (children) {
-                      const groupHref = `/ds/${id}`;
+                      const groupHref = `/design-system/${id}`;
                       const onRoot = pathname === groupHref;
                       const isOpen = !!openGroups[id];
                       return (
@@ -109,7 +109,7 @@ export default function DSLayout({ children }) {
                         </div>
                       );
                     }
-                    const href = `/ds/${id}`;
+                    const href = `/design-system/${id}`;
                     const active = pathname === href;
                     return (
                       <Link key={id} href={href} className={`sidebar-item${active ? " active" : ""}`}>

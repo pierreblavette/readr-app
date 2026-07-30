@@ -30,7 +30,7 @@ export default function FinishReadingModalPage() {
               <FinishModalSpec style={MODAL_STYLE} rating={4} />
             </div>
           </div>
-          <p className="ds-note">La coquille <span className="ds-class">.modal</span> (titre → form → actions), avec un corps propre à la fin de lecture : <strong>BookChip</strong> du livre concerné, <strong>rating</strong> en étoiles, <strong>note</strong> libre. Montrée en flux (pas d&apos;overlay ni d&apos;anim). Tout le langage de coquille vit dans <a href="/ds/modal/form"><strong>Form Modal</strong></a>.</p>
+          <p className="ds-note">La coquille <span className="ds-class">.modal</span> (titre → form → actions), avec un corps propre à la fin de lecture : <strong>BookChip</strong> du livre concerné, <strong>rating</strong> en étoiles, <strong>note</strong> libre. Montrée en flux (pas d&apos;overlay ni d&apos;anim). Tout le langage de coquille vit dans <a href="/design-system/modal/form"><strong>Form Modal</strong></a>.</p>
         </div>
       </div>
 
@@ -52,7 +52,7 @@ export default function FinishReadingModalPage() {
           <table className="token-table ds-anno-table">
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
-              <tr className="table-row"><td>·</td><td><span className="ds-class">.modal.finish-modal</span></td><td>Coquille — <strong>aucune règle propre</strong> : toute la taille (max-width, padding 32/24/0, <code>gap: 32</code>) est héritée de <span className="ds-class">.modal</span>. Voir <a href="/ds/modal/form"><strong>Form Modal</strong></a>.</td><td>—</td></tr>
+              <tr className="table-row"><td>·</td><td><span className="ds-class">.modal.finish-modal</span></td><td>Coquille — <strong>aucune règle propre</strong> : toute la taille (max-width, padding 32/24/0, <code>gap: 32</code>) est héritée de <span className="ds-class">.modal</span>. Voir <a href="/design-system/modal/form"><strong>Form Modal</strong></a>.</td><td>—</td></tr>
               <tr className="table-row"><td>1</td><td><span className="ds-class">.finish-modal-chip</span></td><td>Wrapper du <span className="ds-class">Book Row</span> (BookChip) du livre concerné. Purement d&apos;espacement — rythmé par le <code>gap: 24</code> de <span className="ds-class">.modal-fields</span>.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.finish-stars</span></td><td>Rating : 5 <span className="ds-class">.finish-star</span> (svg <strong>28</strong>) en <code>role=radiogroup</code>, gap 4. Étoile <span className="ds-token-chip">--border</span> par défaut → <span className="ds-token-chip">--primary-50</span> en <span className="ds-class">.filled</span> (ou survol ≤ index).</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.quote-textarea</span></td><td>Commentaire — même champ partagé qu&apos;AddQuoteModal : fond <span className="ds-token-chip">--bg3</span>, glow primary au focus. <code>maxLength 500</code>, facultatif.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
@@ -74,7 +74,7 @@ export default function FinishReadingModalPage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Même métrique que la coquille <a href="/ds/modal/form"><strong>Form Modal</strong></a> : padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0), <code>gap: 32</code> entre titre → form → actions. À l&apos;intérieur du corps <span className="ds-class">.modal-form</span>, le <span className="ds-class">.modal-fields</span> empile chip → rating → note à <code>gap: 24</code>. Footer <span className="ds-class">.modal-actions</span> : padding <strong>16 / 24</strong>, débordé de <strong>−24</strong> latéraux pour aller flush aux bords. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Même métrique que la coquille <a href="/design-system/modal/form"><strong>Form Modal</strong></a> : padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0), <code>gap: 32</code> entre titre → form → actions. À l&apos;intérieur du corps <span className="ds-class">.modal-form</span>, le <span className="ds-class">.modal-fields</span> empile chip → rating → note à <code>gap: 24</code>. Footer <span className="ds-class">.modal-actions</span> : padding <strong>16 / 24</strong>, débordé de <strong>−24</strong> latéraux pour aller flush aux bords. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
@@ -112,11 +112,11 @@ export default function FinishReadingModalPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Après sauvegarde</div>
-            <p>Les métadonnées apparaissent en section dédiée du <a href="/ds/panels/book"><strong>Book Panel</strong></a> (date, rating lecture seule, note). <strong>Remove</strong> y ouvre la <a href="/ds/modal/delete"><strong>Delete Modal</strong></a> (<code>type=removeFinished</code>) — conserve <code>finishedAt</code>, n&apos;efface que rating + note. Détail sur ces deux pages.</p>
+            <p>Les métadonnées apparaissent en section dédiée du <a href="/design-system/panels/book"><strong>Book Panel</strong></a> (date, rating lecture seule, note). <strong>Remove</strong> y ouvre la <a href="/design-system/modal/delete"><strong>Delete Modal</strong></a> (<code>type=removeFinished</code>) — conserve <code>finishedAt</code>, n&apos;efface que rating + note. Détail sur ces deux pages.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Coquille &amp; cycle de vie</div>
-            <p>Coquille, sizing et footer sticky = <a href="/ds/modal/form"><strong>Form Modal</strong></a>. A11y (focus trap, Escape, restauration), scroll-lock et motion d&apos;entrée sont communs à la famille — voir <a href="/ds/modal"><strong>Modals</strong></a>.</p>
+            <p>Coquille, sizing et footer sticky = <a href="/design-system/modal/form"><strong>Form Modal</strong></a>. A11y (focus trap, Escape, restauration), scroll-lock et motion d&apos;entrée sont communs à la famille — voir <a href="/design-system/modal"><strong>Modals</strong></a>.</p>
           </div>
         </div>
       </div>

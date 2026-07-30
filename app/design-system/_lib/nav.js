@@ -23,36 +23,36 @@ const ALPHA_GROUPS = ["Components", "Patterns"];
 
 // Items à sous-pages : un composant-famille (ex. Cards) déplie ses variantes dans la
 // sidebar quand on est sur l'une d'elles. Le parent pointe sur la 1re (Foundation).
-// Le parent (ex. « Cards » → /ds/card) EST sa page racine (Foundation/overview) ; les
+// Le parent (ex. « Cards » → /design-system/card) EST sa page racine (Foundation/overview) ; les
 // enfants sont les variantes spécifiques. Clic sur le parent = va à la racine + déplie.
 export const NAV_CHILDREN = {
   buttons: [
-    { label: "Dropdown Button", href: "/ds/buttons/dropdown-button" },
-    { label: "Link", href: "/ds/buttons/link" },
-    { label: "Select", href: "/ds/buttons/select" },
+    { label: "Dropdown Button", href: "/design-system/buttons/dropdown-button" },
+    { label: "Link", href: "/design-system/buttons/link" },
+    { label: "Select", href: "/design-system/buttons/select" },
   ],
   card: [
-    { label: "Book Card", href: "/ds/card/book" },
-    { label: "Dictionary Card", href: "/ds/card/dictionary" },
-    { label: "Now Reading", href: "/ds/card/now-reading" },
-    { label: "Quote Card", href: "/ds/card/quote" },
+    { label: "Book Card", href: "/design-system/card/book" },
+    { label: "Dictionary Card", href: "/design-system/card/dictionary" },
+    { label: "Now Reading", href: "/design-system/card/now-reading" },
+    { label: "Quote Card", href: "/design-system/card/quote" },
   ],
   modal: [
-    { label: "Delete Modal", href: "/ds/modal/delete" },
-    { label: "Finish Reading Modal", href: "/ds/modal/finish-reading" },
-    { label: "Form Modal", href: "/ds/modal/form" },
+    { label: "Delete Modal", href: "/design-system/modal/delete" },
+    { label: "Finish Reading Modal", href: "/design-system/modal/finish-reading" },
+    { label: "Form Modal", href: "/design-system/modal/form" },
   ],
   filters: [
-    { label: "Filters Row", href: "/ds/filters/row" },
-    { label: "Filters Panel", href: "/ds/filters/panel" },
+    { label: "Filters Row", href: "/design-system/filters/row" },
+    { label: "Filters Panel", href: "/design-system/filters/panel" },
   ],
   panels: [
-    { label: "Book Panel", href: "/ds/panels/book" },
-    { label: "Quote Panel", href: "/ds/panels/quote" },
+    { label: "Book Panel", href: "/design-system/panels/book" },
+    { label: "Quote Panel", href: "/design-system/panels/quote" },
   ],
   editing: [
-    { label: "Kebab", href: "/ds/editing/kebab" },
-    { label: "Bulk", href: "/ds/editing/bulk" },
+    { label: "Kebab", href: "/design-system/editing/kebab" },
+    { label: "Bulk", href: "/design-system/editing/bulk" },
   ],
 };
 

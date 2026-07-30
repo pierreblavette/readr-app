@@ -18,7 +18,7 @@ export default function PanelsFoundationPage() {
               <BookPanelSpec compact />
             </div>
           </div>
-          <p className="ds-note">La coquille de référence (ici <a href="/ds/panels/book"><strong>Book Panel</strong></a> en aperçu) : <span className="ds-class">.panel-inner</span> empile cover / sections séparées par des <span className="ds-class">.panel-divider</span>, chacune en tête d&apos;un <span className="ds-class">.panel-section-eyebrow</span>. Le contenu change d&apos;un membre à l&apos;autre ; le socle est commun. Présentée en carte détachée (radius 8 + ombre) — en prod <code>fixed</code>, dockée au bord droit, radius 0, slide-in.</p>
+          <p className="ds-note">La coquille de référence (ici <a href="/design-system/panels/book"><strong>Book Panel</strong></a> en aperçu) : <span className="ds-class">.panel-inner</span> empile cover / sections séparées par des <span className="ds-class">.panel-divider</span>, chacune en tête d&apos;un <span className="ds-class">.panel-section-eyebrow</span>. Le contenu change d&apos;un membre à l&apos;autre ; le socle est commun. Présentée en carte détachée (radius 8 + ombre) — en prod <code>fixed</code>, dockée au bord droit, radius 0, slide-in.</p>
         </div>
       </div>
 
@@ -74,11 +74,11 @@ export default function PanelsFoundationPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Deux membres, deux contenus</div>
-            <p><a href="/ds/panels/book"><strong>Book Panel</strong></a> — le <strong>livre</strong> : cover + info + actions primaires, puis Collections, Finished, Cast / Quiz (AI), About, Quotes. <a href="/ds/panels/quote"><strong>Quote Panel</strong></a> — la <strong>citation</strong> : texte + date, actions (Edit · Loved · Share), livre d&apos;origine (Book Row).</p>
+            <p><a href="/design-system/panels/book"><strong>Book Panel</strong></a> — le <strong>livre</strong> : cover + info + actions primaires, puis Collections, Finished, Cast / Quiz (AI), About, Quotes. <a href="/design-system/panels/quote"><strong>Quote Panel</strong></a> — la <strong>citation</strong> : texte + date, actions (Edit · Loved · Share), livre d&apos;origine (Book Row).</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Même primitive, ailleurs</div>
-            <p>Le montage <span className="ds-class">.book-panel</span> (slide-in, overlay, a11y, scroll-lock) porte aussi <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> et les List Panels (Word / Book / Collection) — rangés par feature, mais bâtis sur le même socle.</p>
+            <p>Le montage <span className="ds-class">.book-panel</span> (slide-in, overlay, a11y, scroll-lock) porte aussi <a href="/design-system/filters/panel"><strong>Filters Panel</strong></a> et les List Panels (Word / Book / Collection) — rangés par feature, mais bâtis sur le même socle.</p>
           </div>
         </div>
       </div>

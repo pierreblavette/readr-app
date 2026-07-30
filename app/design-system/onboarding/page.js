@@ -112,7 +112,7 @@ export default function OnboardingPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Motion</div>
-            <p>Backdrop <code>overlayIn 0.4s ease-out</code> ; coquille <code>modalIn 0.8s</code> sur la courbe canonique <code>cubic-bezier(0.16, 1, 0.3, 1)</code> (expo-out) — commune à <a href="/ds/modal"><strong>Modals</strong></a>.</p>
+            <p>Backdrop <code>overlayIn 0.4s ease-out</code> ; coquille <code>modalIn 0.8s</code> sur la courbe canonique <code>cubic-bezier(0.16, 1, 0.3, 1)</code> (expo-out) — commune à <a href="/design-system/modal"><strong>Modals</strong></a>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Accessibility &amp; responsive</div>
@@ -127,7 +127,7 @@ export default function OnboardingPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Déclenchement</div>
-            <p>Affichée à la <strong>première visite</strong> (flag localStorage), et <strong>ré-ouvrable</strong> depuis le <a href="/ds/footer"><strong>Footer</strong></a> (« How it works »). Un seul consumer : <code>Onboarding.js</code>, monté au niveau layout.</p>
+            <p>Affichée à la <strong>première visite</strong> (flag localStorage), et <strong>ré-ouvrable</strong> depuis le <a href="/design-system/footer"><strong>Footer</strong></a> (« How it works »). Un seul consumer : <code>Onboarding.js</code>, monté au niveau layout.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Contenu &amp; i18n</div>

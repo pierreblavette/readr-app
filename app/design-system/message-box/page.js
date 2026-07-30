@@ -117,7 +117,7 @@ export default function MessageBoxPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Contexte — corps de modale</div>
-            <p>Toujours dans le corps d&apos;une <a href="/ds/modal"><strong>modale</strong></a> (surface <span className="ds-token-chip">--card</span>), au-dessus ou sous les champs. Consumers : <code>AddModal</code> (limite de lecture, scan échoué), <code>AddBooksToCollectionModal</code>…</p>
+            <p>Toujours dans le corps d&apos;une <a href="/design-system/modal"><strong>modale</strong></a> (surface <span className="ds-token-chip">--card</span>), au-dessus ou sous les champs. Consumers : <code>AddModal</code> (limite de lecture, scan échoué), <code>AddBooksToCollectionModal</code>…</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Accessibility</div>

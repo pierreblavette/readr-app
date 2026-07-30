@@ -112,7 +112,7 @@ export default function FiltersRowPage() {
           </table>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">À chaque palier qui rétrécit, le <strong>filtre suivant</strong> (ordre de priorité) quitte la rangée et rejoint le bouton <strong>Filter</strong> — dont le badge compte les filtres passés au <a href="/ds/filters/panel"><strong>Filters Panel</strong></a>. <strong>Sort reste toujours inline.</strong> <code>SearchBar</code> réplique ces breakpoints via <span className="ds-class">useMediaQuery</span> pour que le panel saute les filtres déjà inline — pas de doublon.</p>
+          <p className="ds-note">À chaque palier qui rétrécit, le <strong>filtre suivant</strong> (ordre de priorité) quitte la rangée et rejoint le bouton <strong>Filter</strong> — dont le badge compte les filtres passés au <a href="/design-system/filters/panel"><strong>Filters Panel</strong></a>. <strong>Sort reste toujours inline.</strong> <code>SearchBar</code> réplique ces breakpoints via <span className="ds-class">useMediaQuery</span> pour que le panel saute les filtres déjà inline — pas de doublon.</p>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ export default function FiltersRowPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Sœur mobile</div>
-            <p>La contrepartie mobile est le <a href="/ds/filters/panel"><strong>Filters Panel</strong></a> (slide-in <span className="ds-class">.book-panel</span> qui déplie les dimensions repliées). Consumers : <code>SearchBar</code> (Library / Wishlist), <code>CollectionDetailView</code>.</p>
+            <p>La contrepartie mobile est le <a href="/design-system/filters/panel"><strong>Filters Panel</strong></a> (slide-in <span className="ds-class">.book-panel</span> qui déplie les dimensions repliées). Consumers : <code>SearchBar</code> (Library / Wishlist), <code>CollectionDetailView</code>.</p>
           </div>
         </div>
       </div>
