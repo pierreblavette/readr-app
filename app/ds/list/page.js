@@ -21,7 +21,7 @@ export default function ListViewPage() {
   return (
     <DSSection
       id="list"
-      title="List View"
+      title="Table"
       sub="Affichage tabulaire de la bibliothèque — la primitive .list-table (table-layout fixed) : un header trié, des rangées .list-row de 60px, cinq types de cellule (num, title, meta, tag, action). Socle partagé par les listes de livres, le Dictionnaire, les Collections."
     >
 

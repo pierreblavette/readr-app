@@ -15,21 +15,48 @@ function ActionMenu({ width, extra = "" }) {
   );
 }
 
+// Ligne de filtre (case + label + compteur) — partagée par filter-dropdown et authors-dropdown.
+function FilterRow({ label, count, selected }) {
+  return (
+    <div className="filter-row" role="checkbox" aria-checked={selected} tabIndex={0}>
+      <span className={`row-checkbox${selected ? " is-selected" : ""}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+      </span>
+      <span className="dropdown-item-label">{label}</span>
+      <span className="dropdown-item-count-wrap"><span className="dropdown-item-count sidebar-badge">{count}</span></span>
+    </div>
+  );
+}
+
 // Menu filtre (.filter-dropdown) : lignes cases à cocher + compteur. Statique (doc).
 const FILTER_ROWS = [["Fiction", 42, true], ["Fantasy", 18, false], ["History", 7, true]];
 function FilterMenu() {
   return (
     <div className="dropdown-menu filter-dropdown ds-menu-static" role="listbox" style={{ minWidth: 240 }}>
       <div className="filter-section">
-        {FILTER_ROWS.map(([g, c, sel]) => (
-          <div key={g} className="filter-row" role="checkbox" aria-checked={sel} tabIndex={0}>
-            <span className={`row-checkbox${sel ? " is-selected" : ""}`}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-            </span>
-            <span className="dropdown-item-label">{g}</span>
-            <span className="dropdown-item-count-wrap"><span className="dropdown-item-count sidebar-badge">{c}</span></span>
-          </div>
-        ))}
+        {FILTER_ROWS.map(([g, c, sel]) => <FilterRow key={g} label={g} count={c} selected={sel} />)}
+      </div>
+    </div>
+  );
+}
+
+// Menu filtre RECHERCHABLE (.authors-dropdown, sur .filter-dropdown) : search épinglée +
+// liste scrollable + footer Reset. La variante filtre la plus élaborée. Statique (doc).
+const AUTHOR_ROWS = [["George Orwell", 4, true], ["Jane Austen", 2, false], ["Leo Tolstoy", 1, true]];
+function AuthorsMenu() {
+  return (
+    <div className="dropdown-menu filter-dropdown authors-dropdown ds-menu-static" role="listbox" style={{ width: 300 }}>
+      <div className="authors-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" className="authors-search-input" placeholder="e.g. F. Scott Fitzgerald" readOnly />
+      </div>
+      <div className="authors-list">
+        {AUTHOR_ROWS.map(([name, c, sel]) => <FilterRow key={name} label={name} count={c} selected={sel} />)}
+      </div>
+      <div className="authors-footer">
+        <button type="button" className="btn btn-md btn-secondary">Reset</button>
       </div>
     </div>
   );
@@ -56,7 +83,7 @@ export default function DropdownMenuPage() {
     <DSSection
       id="dropdown"
       title="Dropdown Menu"
-      sub="Liste flottante .dropdown-menu ouverte par un déclencheur (un bouton — kebab, dropdown button, filter button — voir Buttons). Trois types selon le contenu : menu d'actions, sa variante portalisée, et le menu filtre à cases. Primitive partagée : Book Card Kebab, Export / Sort Menu, Filtering."
+      sub="Liste flottante .dropdown-menu ouverte par un déclencheur (un bouton — kebab, dropdown button, filter button — voir Buttons). Quatre types selon le contenu : menu d'actions, sa variante portalisée, le filtre à cases, et le filtre recherchable (Authors). Primitive partagée : Book Card Kebab, Export / Sort Menu, Filtering."
     >
       {/* ─────────── 1. PREVIEW — le menu d'actions canonique ─────────── */}
       <div className="ds-card">
@@ -71,29 +98,7 @@ export default function DropdownMenuPage() {
         </div>
       </div>
 
-      {/* ─────────── 2. TYPES — les 3 variantes de .dropdown-menu ─────────── */}
-      <div className="ds-card">
-        <div className="ds-card-head">Types</div>
-        <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
-            <div className="ds-state-sample">
-              <ActionMenu />
-              <span className="ds-class">.dropdown-menu</span>
-            </div>
-            <div className="ds-state-sample">
-              <ActionMenu width={180} extra="dropdown-menu--portal" />
-              <span className="ds-class">.dropdown-menu--portal</span>
-            </div>
-            <div className="ds-state-sample">
-              <FilterMenu />
-              <span className="ds-class">.filter-dropdown</span>
-            </div>
-          </div>
-          <p className="ds-note"><strong>Menu d&apos;actions</strong> <span className="ds-class">.dropdown-menu</span> — items cliquables, largeur <code>fit-content</code> (Kebab, Export, Sort). <strong>Portalisé</strong> <span className="ds-class">.dropdown-menu--portal</span> — même peau, monté sur <code>body</code> en <code>fixed</code> (échappe au clipping) + gabarit <code>min-width: 180</code>. <strong>Filtre</strong> <span className="ds-class">.filter-dropdown</span> — <code>role="listbox"</code>, lignes <span className="ds-class">.filter-row</span> à case + compteur, multi-sélection, <code>min-width: 240</code> + scroll (Genres, Authors). Un même conteneur, trois contenus.</p>
-        </div>
-      </div>
-
-      {/* ─────────── 3. ANATOMY — décomposition numérotée (le menu) ─────────── */}
+      {/* ─────────── 2. ANATOMY — décomposition numérotée (le menu) ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
@@ -112,7 +117,7 @@ export default function DropdownMenuPage() {
         </div>
       </div>
 
-      {/* ─────────── 4. ELEMENTS — table des parties ─────────── */}
+      {/* ─────────── 3. ELEMENTS — table des parties ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Elements</div>
         <div className="ds-card-body col">
@@ -129,7 +134,7 @@ export default function DropdownMenuPage() {
         </div>
       </div>
 
-      {/* ─────────── 5. SPACING — item + conteneur ─────────── */}
+      {/* ─────────── 4. SPACING — item + conteneur ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Spacing</div>
         <div className="ds-card-body col">
@@ -153,7 +158,7 @@ export default function DropdownMenuPage() {
         </div>
       </div>
 
-      {/* ─────────── 6. STATES — item ─────────── */}
+      {/* ─────────── 5. STATES — item ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">States · item</div>
         <div className="ds-card-body col">
@@ -178,18 +183,44 @@ export default function DropdownMenuPage() {
         </div>
       </div>
 
-      {/* ─────────── 7. SIZING ─────────── */}
+      {/* ─────────── 6. SIZING ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Menu width</div>
-            <p><span className="ds-class">.dropdown-menu</span> <code>width: fit-content</code> — s&apos;ajuste à son item le plus large, <strong>pas</strong> aligné sur le trigger. <span className="ds-class">.dropdown-menu--portal</span> ajoute <code>min-width: 180</code>. <span className="ds-class">.filter-dropdown</span> <code>min-width: 240</code>. L&apos;item est <code>width: 100%</code> dans son menu.</p>
+            <p><span className="ds-class">.dropdown-menu</span> <code>width: fit-content</code> — s&apos;ajuste à son item le plus large, <strong>pas</strong> aligné sur le trigger. <span className="ds-class">.dropdown-menu--portal</span> ajoute <code>min-width: 180</code>. <span className="ds-class">.filter-dropdown</span> <code>min-width: 240</code>, <span className="ds-class">.authors-dropdown</span> <code>width: 300</code>. L&apos;item est <code>width: 100%</code> dans son menu.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Height</div>
             <p>Somme des items (40 chacun) + padding 4 + dividers. Pas de <code>max-height</code> sur un menu d&apos;actions ; le <span className="ds-class">.filter-dropdown</span> plafonne à <code>max-height: 60vh</code> puis scrolle.</p>
           </div>
+        </div>
+      </div>
+
+      {/* ─────────── 7. VARIANTS · types de menu ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Variants</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+            <div className="ds-state-sample">
+              <ActionMenu />
+              <span className="ds-class">.dropdown-menu</span>
+            </div>
+            <div className="ds-state-sample">
+              <ActionMenu width={180} extra="dropdown-menu--portal" />
+              <span className="ds-class">.dropdown-menu--portal</span>
+            </div>
+            <div className="ds-state-sample">
+              <FilterMenu />
+              <span className="ds-class">.filter-dropdown</span>
+            </div>
+            <div className="ds-state-sample">
+              <AuthorsMenu />
+              <span className="ds-class">.authors-dropdown</span>
+            </div>
+          </div>
+          <p className="ds-note"><strong>Menu d&apos;actions</strong> <span className="ds-class">.dropdown-menu</span> — items cliquables, largeur <code>fit-content</code> (Kebab, Export, Sort). <strong>Portalisé</strong> <span className="ds-class">.dropdown-menu--portal</span> — même peau, monté sur <code>body</code> en <code>fixed</code> (échappe au clipping) + gabarit <code>min-width: 180</code>. <strong>Filtre</strong> <span className="ds-class">.filter-dropdown</span> — <code>role="listbox"</code>, lignes <span className="ds-class">.filter-row</span> à case + compteur, multi-sélection, <code>min-width: 240</code> (Genres). <strong>Filtre recherchable</strong> <span className="ds-class">.authors-dropdown</span> — variante du <span className="ds-class">.filter-dropdown</span> : <span className="ds-class">.authors-search</span> épinglée + <span className="ds-class">.authors-list</span> scrollable + <span className="ds-class">.authors-footer</span> (Reset), <code>width: 300</code> (Authors). Un même conteneur, quatre contenus.</p>
         </div>
       </div>
 
@@ -199,7 +230,7 @@ export default function DropdownMenuPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Le déclencheur décide du type</div>
-            <p>Le menu n&apos;existe jamais seul : un <strong>bouton</strong> l&apos;ouvre (voir <strong>Buttons</strong>). Un <strong>kebab</strong> ou un <strong>dropdown button</strong> ouvre un menu d&apos;<strong>actions</strong> ; un <strong>filter button</strong> (Genres, Authors) ouvre un <span className="ds-class">.filter-dropdown</span> à <strong>cases</strong>. Un bouton filtre n&apos;ouvre jamais un menu d&apos;actions, et inversement.</p>
+            <p>Le menu n&apos;existe jamais seul : un <strong>bouton</strong> l&apos;ouvre (voir <strong>Buttons</strong>). Un <strong>kebab</strong> ou un <strong>dropdown button</strong> ouvre un menu d&apos;<strong>actions</strong> ; un <strong>filter button</strong> ouvre un menu à <strong>cases</strong> — <span className="ds-class">.filter-dropdown</span> (Genres) ou sa variante recherchable <span className="ds-class">.authors-dropdown</span> (Authors). Un bouton filtre n&apos;ouvre jamais un menu d&apos;actions, et inversement.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Toggle</div>
@@ -222,7 +253,7 @@ export default function DropdownMenuPage() {
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Consumers</div>
-            <p>Le déclencheur, le positionnement et le contenu dépendent du contexte : <strong>Book Card Kebab</strong> (trois points), <strong>Export Menu</strong>, <strong>Sort Menu</strong> (menus d&apos;actions), <strong>Filtering</strong> (Genres / Authors, <span className="ds-class">.filter-dropdown</span>). Tous montent le même <span className="ds-class">.dropdown-menu</span> ; seuls le trigger et le contenu changent.</p>
+            <p>Le déclencheur, le positionnement et le contenu dépendent du contexte : <strong>Book Card Kebab</strong> (trois points), <strong>Export Menu</strong>, <strong>Sort Menu</strong> (menus d&apos;actions), <strong>Filtering</strong> (Genres <span className="ds-class">.filter-dropdown</span>, Authors <span className="ds-class">.authors-dropdown</span>). Tous montent le même <span className="ds-class">.dropdown-menu</span> ; seuls le trigger et le contenu changent.</p>
           </div>
         </div>
       </div>

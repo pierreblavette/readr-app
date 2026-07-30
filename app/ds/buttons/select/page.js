@@ -60,9 +60,71 @@ export default function SelectPage() {
         </div>
       </div>
 
-      {/* 2 — TYPES */}
+      {/* 2 — ANATOMY */}
       <div className="ds-card">
-        <div className="ds-card-head">Types</div>
+        <div className="ds-card-head">Anatomy · filter trigger</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board">
+            <AnnoScene annos={ANNOS}>
+              <div className="ds-anno-organism">
+                <SelectBtn label="Genres" count={2} mod="is-active" />
+              </div>
+            </AnnoScene>
+          </div>
+        </div>
+      </div>
+
+      {/* 3 — ELEMENTS */}
+      <div className="ds-card">
+        <div className="ds-card-head">Elements</div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.dropdown-btn</span></td><td>Peau du trigger (voir <strong>Dropdown Button</strong>). <span className="ds-class">.sort-menu-btn</span> l&apos;affine (<code>margin-left: 0</code>, repli icon-only ≤1080).</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.sort-menu-btn-label</span></td><td>Valeur courante — le libellé du filtre / tri sélectionné.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.filter-badge</span></td><td>Compteur de multi-sélection : pill 18px, 11/700 blanc sur <span className="ds-token-chip">--primary-50</span>, radius 999, <code>margin-left: 4</code>. Masqué à 0.</td><td><span className="now-reading-date now-reading-date--sm">Opt</span></td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.dropdown-btn-chevron</span></td><td>Chevron de fin (svg 16), pivote à l&apos;ouverture.</td><td>—</td></tr>
+              <tr className="table-row"><td>5</td><td><span className="ds-class">.quote-link-select-input</span></td><td>Combobox : <span className="ds-class">.modal-field-input</span> + padding droit <code>38</code> (place au chevron). <code>role="combobox"</code>.</td><td><span className="now-reading-date now-reading-date--sm">Opt</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 4 — SPACING */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline><SelectBtn label="Genres" count={2} mod="is-active" /></Redline>
+            </div>
+          </div>
+          <p className="ds-note">Même socle que <strong>Dropdown Button</strong> — h40, padding base <strong>0 20</strong>, chevron −8 à droite. Le <span className="ds-class">.filter-badge</span> ajoute <code>margin-left: 4</code> après le label. Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
+      {/* 5 — STATES */}
+      <div className="ds-card">
+        <div className="ds-card-head">States</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3">
+            {STATES.map(([label, val, count, mod, cap]) => (
+              <div key={label} className="ds-state-sample">
+                <SelectBtn label={val} count={count} mod={mod} disabled={label === "Disabled"} />
+                <span className="ds-class">{cap}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Default — outline neutre, aucune valeur posée · <span className="ds-class">.is-active</span> — un filtre / une valeur s&apos;applique : border + texte <span className="ds-token-chip">--primary-50</span>, fond <span className="ds-token-chip">--primary-5</span>, badge visible · Disabled opacité 0.4. À l&apos;ouverture, le chevron pivote de 180°.</p>
+        </div>
+      </div>
+
+      {/* 6 — VARIANTS · sort trigger / combobox */}
+      <div className="ds-card">
+        <div className="ds-card-head">Variants</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
@@ -84,68 +146,6 @@ export default function SelectPage() {
             <div className="ds-token-name">Combobox in-form</div>
             <p><span className="ds-class">.quote-link-select</span> — un champ de saisie (<span className="ds-class">.quote-link-select-input</span> sur <span className="ds-class">.modal-field-input</span>) + chevron, qui filtre une <span className="ds-class">.autocomplete-list</span> (<code>role="listbox"</code>) au focus. Le <strong>seul vrai select in-form</strong> : lier un livre à une citation (AddQuoteModal).</p>
           </div>
-        </div>
-      </div>
-
-      {/* 3 — ANATOMY */}
-      <div className="ds-card">
-        <div className="ds-card-head">Anatomy · filter trigger</div>
-        <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
-              <div className="ds-anno-organism">
-                <SelectBtn label="Genres" count={2} mod="is-active" />
-              </div>
-            </AnnoScene>
-          </div>
-        </div>
-      </div>
-
-      {/* 4 — ELEMENTS */}
-      <div className="ds-card">
-        <div className="ds-card-head">Elements</div>
-        <div className="ds-card-body col">
-          <table className="token-table ds-anno-table">
-            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
-            <tbody className="table-body">
-              <tr className="table-row"><td>1</td><td><span className="ds-class">.dropdown-btn</span></td><td>Peau du trigger (voir <strong>Dropdown Button</strong>). <span className="ds-class">.sort-menu-btn</span> l&apos;affine (<code>margin-left: 0</code>, repli icon-only ≤1080).</td><td>—</td></tr>
-              <tr className="table-row"><td>2</td><td><span className="ds-class">.sort-menu-btn-label</span></td><td>Valeur courante — le libellé du filtre / tri sélectionné.</td><td>—</td></tr>
-              <tr className="table-row"><td>3</td><td><span className="ds-class">.filter-badge</span></td><td>Compteur de multi-sélection : pill 18px, 11/700 blanc sur <span className="ds-token-chip">--primary-50</span>, radius 999, <code>margin-left: 4</code>. Masqué à 0.</td><td><span className="now-reading-date now-reading-date--sm">Opt</span></td></tr>
-              <tr className="table-row"><td>4</td><td><span className="ds-class">.dropdown-btn-chevron</span></td><td>Chevron de fin (svg 16), pivote à l&apos;ouverture.</td><td>—</td></tr>
-              <tr className="table-row"><td>5</td><td><span className="ds-class">.quote-link-select-input</span></td><td>Combobox : <span className="ds-class">.modal-field-input</span> + padding droit <code>38</code> (place au chevron). <code>role="combobox"</code>.</td><td><span className="now-reading-date now-reading-date--sm">Opt</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* 5 — SPACING */}
-      <div className="ds-card">
-        <div className="ds-card-head">Spacing</div>
-        <div className="ds-card-body col">
-          <div className="ds-redline-board ds-redline-board--lined">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline><SelectBtn label="Genres" count={2} mod="is-active" /></Redline>
-            </div>
-          </div>
-          <p className="ds-note">Même socle que <strong>Dropdown Button</strong> — h40, padding base <strong>0 20</strong>, chevron −8 à droite. Le <span className="ds-class">.filter-badge</span> ajoute <code>margin-left: 4</code> après le label. Cotes mesurées à l&apos;exécution.</p>
-        </div>
-      </div>
-
-      {/* 6 — STATES */}
-      <div className="ds-card">
-        <div className="ds-card-head">States</div>
-        <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3">
-            {STATES.map(([label, val, count, mod, cap]) => (
-              <div key={label} className="ds-state-sample">
-                <SelectBtn label={val} count={count} mod={mod} disabled={label === "Disabled"} />
-                <span className="ds-class">{cap}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="ds-card-body col">
-          <p className="ds-note">Default — outline neutre, aucune valeur posée · <span className="ds-class">.is-active</span> — un filtre / une valeur s&apos;applique : border + texte <span className="ds-token-chip">--primary-50</span>, fond <span className="ds-token-chip">--primary-5</span>, badge visible · Disabled opacité 0.4. À l&apos;ouverture, le chevron pivote de 180°.</p>
         </div>
       </div>
 
