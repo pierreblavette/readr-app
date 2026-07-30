@@ -276,6 +276,18 @@ a.sidebar-item { text-decoration: none; }
   .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:not(:nth-last-child(-n + 2)) { border-bottom: 1px solid var(--border-subtle); }
   .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--border-subtle); }
 }
+/* Sous 1240px (valeur canonique, iso --stack-1240), un board --hold (specimens larges :
+   book-row, menus, dropzones, traits) devient trop serré en 2 colonnes → 1 colonne
+   pleine largeur. !important + spécificité (0,3,0) pour battre à la fois le repeat(2)
+   !important de .ds-stroke-tokens et les bordures 2-col du repli ≤1280 (0,5,0). */
+@media (max-width: 1240px) {
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold {
+    grid-auto-flow: row !important; grid-template-columns: 1fr !important;
+  }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample { border-left: none !important; border-right: none !important; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:not(:last-child) { border-bottom: 1px solid var(--border-subtle) !important; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:last-child { border-bottom: none !important; }
+}
 /* Desktop rangée unique (board non --cols-2 au-dessus de 760px) : divider vertical
    = border-left entre cellules adjacentes. */
 .ds-states-grid--boxed > .ds-state-sample + .ds-state-sample {
@@ -1779,3 +1791,31 @@ a.sidebar-item { text-decoration: none; }
 .ds-root .import-preview { width: 100%; }
 .ds-root .import-preview-header,
 .ds-root .import-preview-list { max-width: 480px; }
+
+/* Overlays › Preview : le SUJET est le scrim (le voile qui estompe le contenu),
+   pas le composant posé dessus. Contenu factice derrière + scrim (blur+tint) +
+   placeholder générique de surface. */
+.ds-overlays-scene {
+  position: relative; width: 100%; min-height: 420px;
+  border-radius: 10px; overflow: hidden; background: var(--bg);
+}
+.ds-overlays-behind {
+  position: absolute; inset: 0; padding: 28px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.ds-overlays-behind-title { width: 180px; height: 24px; border-radius: 6px; background: var(--bg3); }
+.ds-overlays-behind-row { width: 100%; height: 64px; border-radius: 10px; background: var(--bg3); }
+.ds-overlays-scrim {
+  position: absolute; inset: 0;
+  background: rgba(30, 38, 120, 0.12);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+}
+[data-theme="dark"] .ds-overlays-scrim { background: rgba(0, 0, 0, 0.55); }
+.ds-overlays-slot {
+  width: min(340px, 62%); height: 190px;
+  border-radius: 12px; background: var(--card);
+  box-shadow: var(--shadow-xl);
+  display: flex; align-items: center; justify-content: center;
+}
+.ds-overlays-slot-label { font-size: 13px; font-weight: 600; color: var(--text); }

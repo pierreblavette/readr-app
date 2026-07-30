@@ -35,6 +35,15 @@ const STROKES = [
   },
 ];
 
+// Même primitive (hairline 1px --border-subtle), quatre contextes — seuls margin,
+// largeur et transition changent. Consolidés ici plutôt qu'une classe générique.
+const DIVIDERS = [
+  { name: "dropdown-divider", ctx: "menus — margin 4px 8px (inset), groupe les items par bloc logique" },
+  { name: "panel-divider", ctx: "side panels — width 100%, flex-shrink 0 (ne se comprime pas)" },
+  { name: "quote-card-divider", ctx: "quote card — transition, passe à --primary-10 au survol de la carte" },
+  { name: "overview-activity-divider", ctx: "carte d'activité — sépare head / chart / legend" },
+];
+
 export default function StrokesPage() {
   return (
     <DSSection id="strokes" title="Strokes & Borders" sub="Canonical rules for borders across components, cards, inputs and dividers.">
@@ -43,7 +52,7 @@ export default function StrokesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Strokes</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-stroke-tokens">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold ds-stroke-tokens">
             {STROKES.map(({ name, css, token, cls, use, style }) => (
               <div key={name} className="ds-state-sample">
                 <div className="ds-stroke-swatch" style={style} />
@@ -64,7 +73,7 @@ export default function StrokesPage() {
       <div className="ds-card">
         <div className="ds-card-head">In use</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-stroke-board">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold ds-stroke-board">
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
                 <button type="button" className="btn btn-outline btn-md"><span>Outline button</span></button>
@@ -110,7 +119,35 @@ export default function StrokesPage() {
         </div>
       </div>
 
-      {/* 3 — NOTES */}
+      {/* 3 — DIVIDERS : le hairline 1px, quatre contextes nommés */}
+      <div className="ds-card">
+        <div className="ds-card-head">Dividers</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+            {DIVIDERS.map(({ name }) => (
+              <div key={name} className="ds-state-sample">
+                <div style={{ width: 240 }}><div className={name} /></div>
+                <span className="ds-class">.{name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <div className="ds-token-block">
+            <div className="ds-token-name">Un seul trait, quatre contextes</div>
+            <p>Tous sont le <strong>même hairline</strong> — <code>height: 1px</code>, <span className="ds-token-chip">--border-subtle</span>. Seul l&apos;habillage contextuel diffère :</p>
+          </div>
+          {DIVIDERS.map(({ name, ctx }) => (
+            <div key={name} className="ds-token-block">
+              <div className="ds-token-name"><span className="ds-cn">.{name}</span></div>
+              <p>{ctx}.</p>
+            </div>
+          ))}
+          <p className="ds-note">Pas de classe <span className="ds-class">.divider</span> générique : chaque contexte porte sa contrainte de layout (inset, largeur, transition). Le point commun — la couleur et l&apos;épaisseur — vit dans le token <span className="ds-token-chip">--border-subtle</span>, pas dans une classe partagée.</p>
+        </div>
+      </div>
+
+      {/* 4 — NOTES */}
       <div className="ds-card">
         <div className="ds-card-head">Notes</div>
         <div className="ds-card-body col">

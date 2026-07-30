@@ -28,7 +28,30 @@ export default function OverlaysPage() {
       sub="Toute surface qui se pose AU-DESSUS du contenu — menu, barre flottante, panneau, dialogue, toast. Chacune a sa page ; ici on documente le système qui les gouverne : la modalité (bloque ou non le contenu), l'échelle de couches, et les comportements partagés — scrim, scroll-lock, focus, dismissal, motion."
     >
 
-      {/* 1 — OVERVIEW */}
+      {/* 1 — PREVIEW : le scrim est le sujet, pas le composant posé dessus */}
+      <div className="ds-card">
+        <div className="ds-card-head">Preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+            <div className="ds-overlays-scene">
+              <div className="ds-overlays-behind" aria-hidden="true">
+                <div className="ds-overlays-behind-title" />
+                <div className="ds-overlays-behind-row" />
+                <div className="ds-overlays-behind-row" />
+                <div className="ds-overlays-behind-row" />
+              </div>
+              <div className="ds-overlays-scrim">
+                <div className="ds-overlays-slot" aria-hidden="true">
+                  <span className="ds-overlays-slot-label">Overlay surface</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="ds-note">Le sujet, c&apos;est le <strong>scrim</strong> — le voile posé sur le contenu, qui l&apos;<strong>estompe</strong> et le rend inerte le temps de l&apos;interaction (<span className="ds-token-chip">rgba(30,38,120,0.12)</span> + <code>backdrop-filter: blur(8px)</code>). Le placeholder au centre représente <em>n&apos;importe quelle</em> surface qui s&apos;y pose — modal, panel, toast. Chacune a sa page ; ici on documente ce qui les gouverne toutes.</p>
+        </div>
+      </div>
+
+      {/* 2 — OVERVIEW */}
       <div className="ds-card">
         <div className="ds-card-head">Overview</div>
         <div className="ds-card-body col">
@@ -59,7 +82,7 @@ export default function OverlaysPage() {
         </div>
       </div>
 
-      {/* 2 — MODALITY */}
+      {/* 3 — MODALITY */}
       <div className="ds-card">
         <div className="ds-card-head">Modality</div>
         <div className="ds-card-body col">
@@ -75,7 +98,7 @@ export default function OverlaysPage() {
         </div>
       </div>
 
-      {/* 3 — LAYERING */}
+      {/* 4 — LAYERING */}
       <div className="ds-card">
         <div className="ds-card-head">Layering</div>
         <div className="ds-card-body col">
@@ -101,7 +124,7 @@ export default function OverlaysPage() {
         </div>
       </div>
 
-      {/* 4 — BEHAVIOR */}
+      {/* 5 — BEHAVIOR */}
       <div className="ds-card">
         <div className="ds-card-head">Behavior · partagé</div>
         <div className="ds-card-body col">
@@ -128,7 +151,7 @@ export default function OverlaysPage() {
         </div>
       </div>
 
-      {/* 5 — COMPARISON */}
+      {/* 6 — COMPARISON */}
       <div className="ds-card">
         <div className="ds-card-head">Comparison</div>
         <div className="ds-card-body col">
@@ -153,7 +176,7 @@ export default function OverlaysPage() {
         </div>
       </div>
 
-      {/* 6 — USAGE */}
+      {/* 7 — USAGE */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
