@@ -32,33 +32,33 @@
 :root {
   /* shadcn compat */
   --background:            #FEFEFF;
-  --foreground:            #222222;
+  --foreground:            #1F1F1F;
   --card:                  #FFFFFF;
   --primary:               #4959E6;
   --primary-foreground:    #FFFFFF;
   --secondary:             #F0F2FF;
   --secondary-foreground:  #4959E6;
-  --muted:                 #F7F7F7;
-  --muted-foreground:      #777777;
+  --muted:                 #F5F5F5;
+  --muted-foreground:      #808080;
   --accent:                #4959E6;
   --destructive:           #E63946;
   --destructive-hover:     #C42432;
   --border:                #E0E0E0;
-  --border-subtle:         #EFEFEF;
+  --border-subtle:         #EBEBEB;
   --input:                 #E0E0E0;
   --ring:                  #4959E6;
   --radius:                8px;
   /* Original readr palette */
   --bg:                    #FEFEFF;
   --bg2:                   #FEFEFF;
-  --bg3:                   #F7F7F7;
-  --bg-elevated:           #F7F7F7;
+  --bg3:                   #F5F5F5;
+  --bg-elevated:           #F5F5F5;
   --bg-app:                rgba(73,89,230,0.015);
   --bg-head:               rgba(73,89,230,0.04);
   --height-head:           40px;
-  --text:                  #222222;
-  --text-2:                #555555;
-  --text-3:                #777777;
+  --text:                  #1F1F1F;
+  --text-2:                #666666;
+  --text-3:                #808080;
   --nav:                   rgba(255,255,255,0.90);
   --accent-bg:             rgba(73,89,230,0.08);
   --teal:                  #00A699;
@@ -109,20 +109,20 @@
 [data-theme="dark"] {
   /* shadcn compat */
   --background:            #0F0F0F;
-  --foreground:            #F0F0F0;
+  --foreground:            #F5F5F5;
   --card:                  #1E1E1E;
   --primary:               #7B89F8;
   --primary-foreground:    #0F0F0F;
   --secondary:             #1A1A2E;
   --secondary-foreground:  #7B89F8;
   --muted:                 #1A1A1A;
-  --muted-foreground:      #909090;
+  --muted-foreground:      #808080;
   --accent:                #7B89F8;
   --destructive:           #FF6B6B;
   --destructive-hover:     #E63946;
-  --border:                #2E2E2E;
-  --border-subtle:         #2E2E2E;
-  --input:                 #2E2E2E;
+  --border:                #333333;
+  --border-subtle:         #333333;
+  --input:                 #333333;
   --ring:                  #7B89F8;
   /* Original readr palette */
   --bg:                    #0F0F0F;
@@ -131,8 +131,8 @@
   --bg-elevated:           #262626;
   --bg-app:                #0F0F0F;
   --bg-head:               #1A1A1A;
-  --text:                  #F0F0F0;
-  --text-2:                #909090;
+  --text:                  #F5F5F5;
+  --text-2:                #808080;
   --text-3:                #808080;
   --nav:                   rgba(15,15,15,0.96);
   --accent-bg:             rgba(123,137,248,0.12);
