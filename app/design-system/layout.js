@@ -75,6 +75,11 @@ export default function DSLayout({ children }) {
                   <div className="sidebar-section-head sidebar-section-head--no-action">
                     <span className="sidebar-section-label">{section}</span>
                   </div>
+                  {section === "Foundations" && (
+                    <Link href="/design-system" className={`sidebar-item${pathname === "/design-system" ? " active" : ""}`}>
+                      <span className="sidebar-label">Welcome</span>
+                    </Link>
+                  )}
                   {sectionsOf(section).map((id) => {
                     const children = NAV_CHILDREN[id];
                     // Item à sous-pages (Cards) : parent + variantes indentées, dépliées

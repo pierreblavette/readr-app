@@ -5,6 +5,11 @@ import {
   OverviewLovedIcon, OverviewQuotesIcon, OverviewStreakIcon, OverviewGoalIcon, OverviewIcon,
 } from "@/components/library/EmptyState";
 import NoMatchesIcon from "@/components/library/NoMatchesIcon";
+import { DictionaryEmptyIcon } from "@/components/library/DictionaryView";
+import { QuotesEmptyIcon } from "@/components/library/QuotesView";
+import { CollectionsIcon } from "@/components/library/CollectionsView";
+import { CollectionDetailEmptyIcon } from "@/components/library/CollectionDetailView";
+import { ReadrIcon, TrackingIcon, ScanIcon, QuoteIcon, WordsIcon, DataControlIcon } from "@/components/library/Onboarding";
 
 // Icône UI : line, viewBox 24, currentColor. sw = épaisseur de trait (défaut 2).
 function Icon({ children, sw = 2 }) {
@@ -46,17 +51,33 @@ const STROKE_ICONS = {
   1.5: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></>,
 };
 
-const PICTOS = [
+// Pictos d'empty state — tabs (Library, Wishlist, Dictionary, Quotes, Collections,
+// Collection vide, No matches) + modules Overview (Genres, Authors…).
+const EMPTY_STATES = [
   [LibraryIcon, "Library"],
   [WishlistIcon, "Wishlist"],
+  [DictionaryEmptyIcon, "Dictionary"],
+  [QuotesEmptyIcon, "Quotes"],
+  [CollectionsIcon, "Collections"],
+  [CollectionDetailEmptyIcon, "Collection (empty)"],
+  [NoMatchesIcon, "No matches"],
   [OverviewGenresIcon, "Genres"],
   [OverviewAuthorsIcon, "Authors"],
   [OverviewLovedIcon, "Most loved"],
-  [OverviewQuotesIcon, "Quotes"],
+  [OverviewQuotesIcon, "Fav. quotes"],
   [OverviewStreakIcon, "Streak"],
   [OverviewGoalIcon, "Goal"],
   [OverviewIcon, "Overview"],
-  [NoMatchesIcon, "No matches"],
+];
+
+// Pictos d'onboarding — mêmes tokens --illus, contexte slides (pas un empty state).
+const ONBOARDING = [
+  [ReadrIcon, "Readr"],
+  [TrackingIcon, "Tracking"],
+  [ScanIcon, "Scan"],
+  [QuoteIcon, "Quote"],
+  [WordsIcon, "Words"],
+  [DataControlIcon, "Data control"],
 ];
 
 const ILLUS = [
@@ -71,17 +92,16 @@ export default function IconographyPage() {
       title="Iconography"
       sub="Deux familles. Les icônes UI — line, viewBox 24, currentColor, theme-aware — pour l'action et la navigation. Les pictos — illustrations multi-tons pilotées par les tokens --illus, theme-aware — pour les empty states."
     >
-      {/* 1 — PREVIEW : le set d'icônes UI */}
+      {/* 1 — PREVIEW : le set d'icônes UI (tuiles à plat, icônes primary-70) */}
       <div className="ds-card">
         <div className="ds-card-head">Preview · icons</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
             <div className="ds-preview">
-              <div className="ds-icon-grid">
+              <div className="ds-icon-grid ds-icon-grid--preview">
                 {ICONS.map(({ name, d }) => (
                   <div key={name} className="ds-icon-tile">
                     <Icon>{d}</Icon>
-                    <span className="ds-icon-name">{name}</span>
                   </div>
                 ))}
               </div>
@@ -137,12 +157,19 @@ export default function IconographyPage() {
 
       {/* 4 — PICTOS · illustrations */}
       <div className="ds-card">
-        <div className="ds-card-head">Pictos · illustrations</div>
+        <div className="ds-card-head">Pictos · empty states</div>
         <div className="ds-card-body col">
-          <IllustrationBoard items={PICTOS.map(([C, label]) => [<C key={label} />, label])} />
+          <IllustrationBoard items={EMPTY_STATES.map(([C, label]) => [<C key={label} />, label])} />
+          <p className="ds-note">Illustrations <strong>multi-tons</strong> (<code>viewBox 0 0 60 60</code>, classe <span className="ds-class">.empty-icon</span>, tokens <span className="ds-token-chip">--illus-*</span>), réservées aux <strong>empty states</strong> — onglet vide, aucun résultat, module Overview sans données. Plus chaleureuses qu&apos;une icône line, elles n&apos;apparaissent jamais dans un contrôle interactif. Chaque picto est le <strong>composant réel</strong> de l&apos;app, pas une reproduction.</p>
         </div>
+      </div>
+
+      {/* 5 — PICTOS · onboarding */}
+      <div className="ds-card">
+        <div className="ds-card-head">Pictos · onboarding</div>
         <div className="ds-card-body col">
-          <p className="ds-note">Des illustrations <strong>multi-tons</strong> (<code>viewBox 0 0 60 60</code>, classe <span className="ds-class">.empty-icon</span>), réservées aux <strong>empty states</strong> — bibliothèque vide, aucun résultat, module Overview sans données. Plus chaleureuses qu&apos;une icône line, elles n&apos;apparaissent jamais dans un contrôle interactif.</p>
+          <IllustrationBoard items={ONBOARDING.map(([C, label]) => [<C key={label} />, label])} />
+          <p className="ds-note">Même famille <span className="ds-token-chip">--illus-*</span>, mais contexte <strong>slides d&apos;onboarding</strong> (pas un empty state). Composants réels exportés par <span className="ds-class">Onboarding.js</span>.</p>
         </div>
       </div>
 

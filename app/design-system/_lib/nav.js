@@ -26,6 +26,10 @@ const ALPHA_GROUPS = ["Components", "Patterns"];
 // Le parent (ex. « Cards » → /design-system/card) EST sa page racine (Foundation/overview) ; les
 // enfants sont les variantes spécifiques. Clic sur le parent = va à la racine + déplie.
 export const NAV_CHILDREN = {
+  colors: [
+    { label: "Web", href: "/design-system/colors/web" },
+    { label: "Figma", href: "/design-system/colors/figma" },
+  ],
   buttons: [
     { label: "Dropdown Button", href: "/design-system/buttons/dropdown-button" },
     { label: "Link", href: "/design-system/buttons/link" },
@@ -77,6 +81,6 @@ export const NAV_LABELS = {
   "list": "Table", "sidebar": "Side Menu", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",
   "editing": "Editing", "kebab": "Kebab", "bulk": "Bulk", "overlays": "Overlays",
-  "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Data Visualization", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer", "spinner": "Spinner", "dropzone": "Dropzone",
+  "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Box Message", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Data Visualization", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer", "spinner": "Spinner", "dropzone": "Dropzone",
   "token-usage": "Token Usage", "dev-tools": "Dev Tools",
 };

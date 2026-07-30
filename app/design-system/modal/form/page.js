@@ -271,7 +271,7 @@ export default function FormModalPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Contained pieces</div>
-            <p>À l&apos;intérieur du corps : <strong>Message Box</strong> (<span className="ds-class">.modal-info-box</span>), <strong>Upload Box</strong> (dropzone Photo / File), le groupe <span className="ds-class">.modal-toggle-group</span> (case « Mark as reading »). Documentés sur leurs pages.</p>
+            <p>À l&apos;intérieur du corps : <strong>Box Message</strong> (<span className="ds-class">.modal-info-box</span>), <strong>Upload Box</strong> (dropzone Photo / File), le groupe <span className="ds-class">.modal-toggle-group</span> (case « Mark as reading »). Documentés sur leurs pages.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Sibling · Delete Modal</div>
