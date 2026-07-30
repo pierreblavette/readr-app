@@ -1770,3 +1770,12 @@ a.sidebar-item { text-decoration: none; }
 .ds-overlay-table { min-width: 640px; }
 .ds-overlay-table td { line-height: 24px; white-space: nowrap; vertical-align: middle; color: var(--text-2); }
 .ds-overlay-table td:first-child { white-space: normal; }
+
+
+/* ─── /ds : page Dropzone ─────────────────────────────────────────────────────
+ * .import-preview hugge son contenu dans .ds-card-body.col (align-items:flex-start)
+ * → fill container. Header + liste plafonnés pour rester lisibles hors modale
+ * (en prod ils sont bornés par la largeur de la modale ~566). */
+.ds-root .import-preview { width: 100%; }
+.ds-root .import-preview-header,
+.ds-root .import-preview-list { max-width: 480px; }

@@ -4,7 +4,7 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["autocomplete", "badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "empty", "footer", "inputs", "list", "message-box", "modal", "panels", "rating-stars", "segmented-pills", "sidebar", "spinner", "toast", "toggle", "weekly-activity"],
+  Components: ["autocomplete", "badges", "book-chip", "buttons", "card", "checkbox", "chip", "dropdown", "dropzone", "empty", "footer", "inputs", "list", "message-box", "modal", "panels", "rating-stars", "segmented-pills", "sidebar", "spinner", "toast", "toggle", "weekly-activity"],
   // Patterns = explication d'un FONCTIONNEMENT UX (un flux, un comportement), pas un
   // composant. Ex. Editing (sélection + bulk), Filtering, Onboarding (accueil). Un
   // composant, même très intriqué (Modals, Autocomplete), reste dans Components.
@@ -77,6 +77,6 @@ export const NAV_LABELS = {
   "list": "Table", "sidebar": "Side Menu", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",
   "editing": "Editing", "kebab": "Kebab", "bulk": "Bulk", "overlays": "Overlays",
-  "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Data Visualization", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer", "spinner": "Spinner",
+  "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Data Visualization", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer", "spinner": "Spinner", "dropzone": "Dropzone",
   "token-usage": "Token Usage", "dev-tools": "Dev Tools",
 };
