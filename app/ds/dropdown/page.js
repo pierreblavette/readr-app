@@ -2,18 +2,36 @@ import DSSection from "../_components/DSSection";
 import Redline from "../_components/Redline";
 import AnnoScene from "../_components/AnnoScene";
 
-// Déclencheur canonique : bouton outline .dropdown-btn (icône + label + chevron).
-function Trigger({ open = false }) {
+// Menu d'actions canonique (.dropdown-menu) : items + divider + destructif.
+function ActionMenu({ width, extra = "" }) {
   return (
-    <button type="button" className="dropdown-btn" aria-haspopup="menu" aria-expanded={open}>
-      <svg className="dropdown-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-      </svg>
-      <span className="dropdown-btn-label">Actions</span>
-      <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={open ? { transform: "rotate(180deg)" } : undefined}>
-        <path d="M6 9l6 6 6-6" />
-      </svg>
-    </button>
+    <div className={`dropdown-menu ds-menu-static ${extra}`.trim()} role="menu" style={width ? { width } : undefined}>
+      <button type="button" className="dropdown-item">Mark as finished</button>
+      <button type="button" className="dropdown-item">Add a quote</button>
+      <button type="button" className="dropdown-item">Share</button>
+      <div className="dropdown-divider" role="separator" />
+      <button type="button" className="dropdown-item is-destructive">Delete</button>
+    </div>
+  );
+}
+
+// Menu filtre (.filter-dropdown) : lignes cases à cocher + compteur. Statique (doc).
+const FILTER_ROWS = [["Fiction", 42, true], ["Fantasy", 18, false], ["History", 7, true]];
+function FilterMenu() {
+  return (
+    <div className="dropdown-menu filter-dropdown ds-menu-static" role="listbox" style={{ minWidth: 240 }}>
+      <div className="filter-section">
+        {FILTER_ROWS.map(([g, c, sel]) => (
+          <div key={g} className="filter-row" role="checkbox" aria-checked={sel} tabIndex={0}>
+            <span className={`row-checkbox${sel ? " is-selected" : ""}`}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+            </span>
+            <span className="dropdown-item-label">{g}</span>
+            <span className="dropdown-item-count-wrap"><span className="dropdown-item-count sidebar-badge">{c}</span></span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -25,16 +43,12 @@ const ITEM_STATES = [
   ["Disabled", "", ":disabled"],
 ];
 
-// Décomposition numérotée : trigger (1 + parties 2/3/4) puis menu (5 + parties 6/7/8).
+// Décomposition numérotée : le menu seul (le déclencheur est un bouton — voir Buttons).
 const ANNOS = [
-  { n: 1, side: "left", target: ".dropdown-btn" },
-  { n: 2, side: "top", target: ".dropdown-btn-icon" },
-  { n: 3, side: "top", target: ".dropdown-btn-label" },
-  { n: 4, side: "top", target: ".dropdown-btn-chevron" },
-  { n: 5, side: "left", target: ".dropdown-menu" },
-  { n: 6, side: "right", target: ".dropdown-item" },
-  { n: 7, side: "right", target: ".dropdown-divider" },
-  { n: 8, side: "right", target: ".dropdown-item.is-destructive" },
+  { n: 1, side: "left", target: ".dropdown-menu" },
+  { n: 2, side: "right", target: ".dropdown-item" },
+  { n: 3, side: "right", target: ".dropdown-divider" },
+  { n: 4, side: "right", target: ".dropdown-item.is-destructive" },
 ];
 
 export default function DropdownMenuPage() {
@@ -42,78 +56,84 @@ export default function DropdownMenuPage() {
     <DSSection
       id="dropdown"
       title="Dropdown Menu"
-      sub="Déclencheur .dropdown-btn + liste flottante .dropdown-menu. Un clic sur le bouton ouvre/ferme le menu ; le chevron pivote. Primitive partagée : Book Card Kebab, Export Menu, Sort Menu et Filters s'appuient dessus."
+      sub="Liste flottante .dropdown-menu ouverte par un déclencheur (un bouton — kebab, dropdown button, filter button — voir Buttons). Trois types selon le contenu : menu d'actions, sa variante portalisée, et le menu filtre à cases. Primitive partagée : Book Card Kebab, Export / Sort Menu, Filtering."
     >
-      {/* ─────────── 1. PREVIEW — trigger + menu assemblés ─────────── */}
+      {/* ─────────── 1. PREVIEW — le menu d'actions canonique ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
-            <div className="ds-anno-dropdown">
-              <Trigger open />
-              <div className="dropdown-menu dropdown-menu--portal ds-menu-static" role="menu">
-                <button type="button" className="dropdown-item">Mark as finished</button>
-                <button type="button" className="dropdown-item">Add a quote</button>
-                <button type="button" className="dropdown-item">Share</button>
-                <div className="dropdown-divider" role="separator" />
-                <button type="button" className="dropdown-item is-destructive">Delete</button>
-              </div>
+            <div className="ds-preview">
+              <ActionMenu />
             </div>
           </div>
-          </div>
-          <p className="ds-note">Le déclencheur ouvre le menu, positionné juste dessous. Rendu <code>position: static</code> pour la doc ; en usage réel le menu est portalisé (voir Behavior).</p>
+          <p className="ds-note">La surface flottante, ouverte sous son déclencheur. Le <strong>déclencheur</strong> — un bouton (kebab, dropdown button, filter button) — vit dans <strong>Buttons</strong> ; c&apos;est <em>lui</em> qui décide du type de menu. Rendu <code>position: static</code> pour la doc (en usage réel, portalisé — voir Behavior).</p>
         </div>
       </div>
 
-      {/* ─────────── 2. ANATOMY — décomposition numérotée (trigger + menu) ─────────── */}
+      {/* ─────────── 2. TYPES — les 3 variantes de .dropdown-menu ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Types</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+            <div className="ds-state-sample">
+              <ActionMenu />
+              <span className="ds-class">.dropdown-menu</span>
+            </div>
+            <div className="ds-state-sample">
+              <ActionMenu width={180} extra="dropdown-menu--portal" />
+              <span className="ds-class">.dropdown-menu--portal</span>
+            </div>
+            <div className="ds-state-sample">
+              <FilterMenu />
+              <span className="ds-class">.filter-dropdown</span>
+            </div>
+          </div>
+          <p className="ds-note"><strong>Menu d&apos;actions</strong> <span className="ds-class">.dropdown-menu</span> — items cliquables, largeur <code>fit-content</code> (Kebab, Export, Sort). <strong>Portalisé</strong> <span className="ds-class">.dropdown-menu--portal</span> — même peau, monté sur <code>body</code> en <code>fixed</code> (échappe au clipping) + gabarit <code>min-width: 180</code>. <strong>Filtre</strong> <span className="ds-class">.filter-dropdown</span> — <code>role="listbox"</code>, lignes <span className="ds-class">.filter-row</span> à case + compteur, multi-sélection, <code>min-width: 240</code> + scroll (Genres, Authors). Un même conteneur, trois contenus.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 3. ANATOMY — décomposition numérotée (le menu) ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
           <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
-            <div className="ds-anno-dropdown ds-anno-organism">
-              <Trigger open />
-              <div className="dropdown-menu ds-menu-static" role="menu" style={{ width: 340 }}>
-                <button type="button" className="dropdown-item">Label</button>
-                <button type="button" className="dropdown-item">Label</button>
-                <div className="dropdown-divider" role="separator" />
-                <button type="button" className="dropdown-item is-destructive">Destructive</button>
+            <AnnoScene annos={ANNOS}>
+              <div className="ds-anno-organism">
+                <div className="dropdown-menu ds-menu-static" role="menu" style={{ width: 340 }}>
+                  <button type="button" className="dropdown-item">Label</button>
+                  <button type="button" className="dropdown-item">Label</button>
+                  <div className="dropdown-divider" role="separator" />
+                  <button type="button" className="dropdown-item is-destructive">Destructive</button>
+                </div>
               </div>
-            </div>
-          </AnnoScene>
+            </AnnoScene>
           </div>
         </div>
       </div>
 
-      {/* ─────────── 3. ELEMENTS — table des parties ─────────── */}
+      {/* ─────────── 4. ELEMENTS — table des parties ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Elements</div>
         <div className="ds-card-body col">
           <table className="token-table ds-anno-table">
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
-              <tr className="table-row"><td>1</td><td><span className="ds-class">.dropdown-btn</span></td><td>Déclencheur : bouton <strong>Outline</strong> qui ouvre/ferme le menu (voir <strong>Buttons</strong>). <code>aria-haspopup</code> + <code>aria-expanded</code>.</td><td>—</td></tr>
-              <tr className="table-row"><td>2</td><td><span className="ds-class">.dropdown-btn-icon</span></td><td>Icône de tête (svg 16) — padding gauche réduit de 4 (asymétrie icône).</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
-              <tr className="table-row"><td>3</td><td><span className="ds-class">.dropdown-btn-label</span></td><td>Libellé du bouton, 15/600.</td><td>—</td></tr>
-              <tr className="table-row"><td>4</td><td><span className="ds-class">.dropdown-btn-chevron</span></td><td>Chevron de fin — <code>rotate(180deg)</code> à l&apos;ouverture. Gouttière droite réduite de 8.</td><td>—</td></tr>
-              <tr className="table-row"><td>5</td><td><span className="ds-class">.dropdown-menu</span></td><td>Conteneur flottant : padding <code>4</code>, radius 10, border 1.5 <span className="ds-token-chip">--border-subtle</span>, ombre, <code>width: fit-content</code>.</td><td>—</td></tr>
-              <tr className="table-row"><td>6</td><td><span className="ds-class">.dropdown-item</span></td><td>Action : height 40, padding <code>0 12</code>, font 15/500 <span className="ds-token-chip">--text</span>, <code>width: 100%</code>. Icône svg 16 + gap 12 optionnelle.</td><td>—</td></tr>
-              <tr className="table-row"><td>7</td><td><span className="ds-class">.dropdown-divider</span></td><td>Séparateur : 1px <span className="ds-token-chip">--border-subtle</span>, <code>margin: 4px 8px</code>. Regroupe les items par bloc logique.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
-              <tr className="table-row"><td>8</td><td><span className="ds-class">.is-destructive</span></td><td>Variante destructive d&apos;un item : texte <span className="ds-token-chip">--destructive</span>, hover fond rouge 0.08.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.dropdown-menu</span></td><td>Conteneur flottant : padding <code>4</code>, radius 10, border 1.5 <span className="ds-token-chip">--border-subtle</span>, ombre, <code>width: fit-content</code>.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.dropdown-item</span></td><td>Action : height 40, padding <code>0 12</code>, radius 6, font 15/500 <span className="ds-token-chip">--text</span>, <code>width: 100%</code>. Icône svg 16 + gap 12 optionnelle.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.dropdown-divider</span></td><td>Séparateur : 1px <span className="ds-token-chip">--border-subtle</span>, <code>margin: 4px 8px</code>. Regroupe les items par bloc logique.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.is-destructive</span></td><td>Variante destructive d&apos;un item : texte <span className="ds-token-chip">--destructive</span>, hover fond rouge 0.08.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+              <tr className="table-row"><td>5</td><td><span className="ds-class">.filter-row</span></td><td>Ligne du <span className="ds-class">.filter-dropdown</span> : <span className="ds-class">.row-checkbox</span> + <span className="ds-class">.dropdown-item-label</span> + compteur. <code>role="checkbox"</code>, multi-sélection.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* ─────────── 4. SPACING — trigger + item + conteneur ─────────── */}
+      {/* ─────────── 5. SPACING — item + conteneur ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Spacing</div>
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline><Trigger /></Redline>
-            </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline>
                 <button type="button" className="dropdown-item" style={{ width: 260 }}>Mark as finished</button>
@@ -129,11 +149,11 @@ export default function DropdownMenuPage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Trigger <span className="ds-class">.dropdown-btn</span> : gouttières asymétriques (icône −4 à gauche, chevron −8 à droite). Item : padding <strong>0 12</strong>, hauteur 40. Conteneur : padding <strong>4</strong> sur les 4 côtés. <strong>Contrat des listes flottantes 10 / 4 / 6</strong> : menu radius 10 · padding 4 · item radius 6 (= 10 − 4, rayons imbriqués). Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Item : padding <strong>0 12</strong>, hauteur 40. Conteneur : padding <strong>4</strong> sur les 4 côtés. <strong>Contrat des listes flottantes 10 / 4 / 6</strong> : menu radius 10 · padding 4 · item radius 6 (= 10 − 4, rayons imbriqués). Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
-      {/* ─────────── 5. STATES — item + note trigger ─────────── */}
+      {/* ─────────── 6. STATES — item ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">States · item</div>
         <div className="ds-card-body col">
@@ -154,36 +174,40 @@ export default function DropdownMenuPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Item — Hover <span className="ds-token-chip">--primary-5</span> + texte <span className="ds-token-chip">--primary-50</span> · Active <span className="ds-token-chip">--primary-10</span> · Destructive texte <span className="ds-token-chip">--destructive</span> · Disabled opacité 0.4, <strong>visible</strong>. Trigger <span className="ds-class">.dropdown-btn</span> — suit les états du bouton <strong>Outline</strong> ; ouvert, le chevron pivote de 180°.</p>
+          <p className="ds-note">Item — Hover <span className="ds-token-chip">--primary-5</span> + texte <span className="ds-token-chip">--primary-50</span> · Active <span className="ds-token-chip">--primary-10</span> · Destructive texte <span className="ds-token-chip">--destructive</span> · Disabled opacité 0.4, <strong>visible</strong>.</p>
         </div>
       </div>
 
-      {/* ─────────── 6. SIZING ─────────── */}
+      {/* ─────────── 7. SIZING ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Sizing</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Menu width</div>
-            <p><code>width: fit-content</code> — le menu s&apos;ajuste à son item le plus large ; en usage portal, un <strong>gabarit minimal 180</strong>. L&apos;item est <code>width: 100%</code> dans son menu. Le menu n&apos;est <strong>pas</strong> aligné sur la largeur du trigger.</p>
+            <p><span className="ds-class">.dropdown-menu</span> <code>width: fit-content</code> — s&apos;ajuste à son item le plus large, <strong>pas</strong> aligné sur le trigger. <span className="ds-class">.dropdown-menu--portal</span> ajoute <code>min-width: 180</code>. <span className="ds-class">.filter-dropdown</span> <code>min-width: 240</code>. L&apos;item est <code>width: 100%</code> dans son menu.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Height</div>
-            <p>Somme des items (40 chacun) + padding 4 + dividers. Pas de <code>max-height</code> par défaut.</p>
+            <p>Somme des items (40 chacun) + padding 4 + dividers. Pas de <code>max-height</code> sur un menu d&apos;actions ; le <span className="ds-class">.filter-dropdown</span> plafonne à <code>max-height: 60vh</code> puis scrolle.</p>
           </div>
         </div>
       </div>
 
-      {/* ─────────── 7. BEHAVIOR ─────────── */}
+      {/* ─────────── 8. BEHAVIOR ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Behavior</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
+            <div className="ds-token-name">Le déclencheur décide du type</div>
+            <p>Le menu n&apos;existe jamais seul : un <strong>bouton</strong> l&apos;ouvre (voir <strong>Buttons</strong>). Un <strong>kebab</strong> ou un <strong>dropdown button</strong> ouvre un menu d&apos;<strong>actions</strong> ; un <strong>filter button</strong> (Genres, Authors) ouvre un <span className="ds-class">.filter-dropdown</span> à <strong>cases</strong>. Un bouton filtre n&apos;ouvre jamais un menu d&apos;actions, et inversement.</p>
+          </div>
+          <div className="ds-token-block">
             <div className="ds-token-name">Toggle</div>
-            <p>Clic sur <span className="ds-class">.dropdown-btn</span> → ouvre/ferme le menu ; le chevron pivote de 180°. <code>aria-expanded</code> reflète l&apos;état, clic-hors et Escape ferment.</p>
+            <p>Clic sur le déclencheur → ouvre/ferme ; <code>aria-expanded</code> reflète l&apos;état, clic-hors et <strong>Escape</strong> ferment. Le chevron du bouton pivote de 180°.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Portal</div>
-            <p>En usage réel, le menu est portalisé sur <code>document.body</code> (<code>position: fixed</code>) et positionné sous son déclencheur — évite le clipping par un parent <code>overflow</code>. Rendu <code>static</code> ici pour la doc. Voir <strong>Book Card Kebab</strong>.</p>
+            <p>En usage réel, le menu est portalisé sur <code>document.body</code> (<code>position: fixed</code>, <span className="ds-class">.dropdown-menu--portal</span>, <code>z-index: 1000</code>) et positionné sous son déclencheur — évite le clipping par un parent <code>overflow</code>. Rendu <code>static</code> ici pour la doc. Voir <strong>Book Card Kebab</strong>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Disabled item &amp; nested radii</div>
@@ -192,13 +216,13 @@ export default function DropdownMenuPage() {
         </div>
       </div>
 
-      {/* ─────────── 8. USAGE ─────────── */}
+      {/* ─────────── 9. USAGE ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Usage</div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
             <div className="ds-token-name">Consumers</div>
-            <p>Le déclencheur, le positionnement et les items dépendent du contexte : <strong>Book Card Kebab</strong> (trois points au lieu du <span className="ds-class">.dropdown-btn</span>), <strong>Export Menu</strong>, <strong>Sort Menu</strong>, <strong>Filters</strong>. Tous montent le même <span className="ds-class">.dropdown-menu</span> / <span className="ds-class">.dropdown-item</span> ; seuls le trigger et la liste d&apos;actions changent.</p>
+            <p>Le déclencheur, le positionnement et le contenu dépendent du contexte : <strong>Book Card Kebab</strong> (trois points), <strong>Export Menu</strong>, <strong>Sort Menu</strong> (menus d&apos;actions), <strong>Filtering</strong> (Genres / Authors, <span className="ds-class">.filter-dropdown</span>). Tous montent le même <span className="ds-class">.dropdown-menu</span> ; seuls le trigger et le contenu changent.</p>
           </div>
         </div>
       </div>

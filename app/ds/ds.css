@@ -844,6 +844,13 @@ a.sidebar-item { text-decoration: none; }
 .btn-solid.is-active    { background: var(--primary-20) !important; }
 .btn-critical.is-active { background: #B91C1C !important; }
 .btn.is-focus           { outline: 2px solid var(--primary-50); outline-offset: 2px; }
+/* Link : états forcés pour le board States de la page Buttons › Link (mirror des
+   :hover / :focus-visible réels — non déclenchables en statique). */
+.btn-link.is-hover      { color: var(--primary-60); text-decoration: underline; }
+.btn-link.is-focus      { box-shadow: 0 0 0 2px var(--primary-50); border-radius: 4px; }
+/* Dropdown / Select trigger : hover forcé pour les boards States (mirror du
+   .dropdown-btn:hover réel). .is-active existe déjà en prod (filtre appliqué). */
+.dropdown-btn.is-hover  { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
@@ -1696,3 +1703,70 @@ a.sidebar-item { text-decoration: none; }
   .ds-root .toolbar-mobile-only { display: block; }
   .ds-root .sidebar-bottom { display: none; }
 }
+
+
+/* ─── /ds : page Overlays (méta-pattern) ─────────────────────────────────────
+ * Visuels propres à la page Overlays. 100% scopé /ds (zéro prod).
+ * - buckets : les deux familles de modalité côte à côte
+ * - layer-stack : l'échelle z-index en escalier (offset porté inline par rang)
+ * - overlay-table : comparatif large, scroll-x sous contrainte
+ */
+.ds-overlay-buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 720px) { .ds-overlay-buckets { grid-template-columns: 1fr; } }
+.ds-overlay-bucket {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+}
+.ds-overlay-bucket p { font-size: 14px; line-height: 1.6; color: var(--text-2); }
+.ds-overlay-bucket .ds-sample-row { gap: 8px; }
+
+/* Échelle de couches en escalier (marginLeft inline par rang) */
+/* width:100% OBLIGATOIRE : .ds-card-body.col est align-items:flex-start, donc un
+   enfant flex se réduit à son contenu (ici la layer la plus large) au lieu de
+   remplir le container. Sans ça le stack hugge son contenu (~585 au lieu de 1091). */
+.ds-layer-stack { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.ds-layer {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  max-width: 100%;
+}
+.ds-layer.is-chrome { background: transparent; border-style: dashed; opacity: 0.65; }
+.ds-layer-z {
+  flex-shrink: 0; min-width: 44px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 13px; font-weight: 700; color: var(--primary-50);
+}
+.ds-layer.is-chrome .ds-layer-z { color: var(--text-3); }
+.ds-layer-label { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; }
+.ds-layer-cls {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px; color: var(--text-2); white-space: nowrap;
+}
+.ds-layer-mod {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--text-3); white-space: nowrap;
+}
+/* L'escalier (marginLeft croissant + contenu nowrap) ne loge plus sous ~820px :
+   la largeur dispo (container − marginLeft) tombe sous le min-content de la rangée
+   la plus large → débordement/clip. On aplatit alors en FILL CONTAINER : pleine
+   largeur, aucun décalage. Le .ds-class (cls mono) ne se masque qu'en dernier
+   recours (≤520), quand même la rangée pleine largeur devient serrée. */
+@media (max-width: 820px) {
+  .ds-layer { margin-left: 0 !important; width: 100%; }
+}
+@media (max-width: 520px) {
+  .ds-layer-cls { display: none; }
+}
+
+/* Comparatif large : scroll horizontal sous contrainte (pas de casse de page) */
+.ds-overlay-table-wrap { width: 100%; overflow-x: auto; }
+.ds-overlay-table { min-width: 640px; }
+.ds-overlay-table td { line-height: 24px; white-space: nowrap; vertical-align: middle; color: var(--text-2); }
+.ds-overlay-table td:first-child { white-space: normal; }

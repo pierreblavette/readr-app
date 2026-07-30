@@ -8,7 +8,7 @@ export const NAV = {
   // Patterns = explication d'un FONCTIONNEMENT UX (un flux, un comportement), pas un
   // composant. Ex. Editing (sélection + bulk), Filtering, Onboarding (accueil). Un
   // composant, même très intriqué (Modals, Autocomplete), reste dans Components.
-  Patterns: ["editing", "filters", "onboarding"],
+  Patterns: ["editing", "filters", "onboarding", "overlays"],
   // Reference = pages utilitaires (mapping tokens, outils de dev). Ordre déclaré,
   // hors ALPHA_GROUPS : ce n'est pas un inventaire d'atomes.
   Reference: ["dev-tools"],
@@ -26,6 +26,11 @@ const ALPHA_GROUPS = ["Components", "Patterns"];
 // Le parent (ex. « Cards » → /ds/card) EST sa page racine (Foundation/overview) ; les
 // enfants sont les variantes spécifiques. Clic sur le parent = va à la racine + déplie.
 export const NAV_CHILDREN = {
+  buttons: [
+    { label: "Dropdown Button", href: "/ds/buttons/dropdown-button" },
+    { label: "Link", href: "/ds/buttons/link" },
+    { label: "Select", href: "/ds/buttons/select" },
+  ],
   card: [
     { label: "Book Card", href: "/ds/card/book" },
     { label: "Dictionary Card", href: "/ds/card/dictionary" },
@@ -71,7 +76,7 @@ export const NAV_LABELS = {
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "List View", "sidebar": "Side Menu", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",
-  "editing": "Editing", "kebab": "Kebab", "bulk": "Bulk",
+  "editing": "Editing", "kebab": "Kebab", "bulk": "Bulk", "overlays": "Overlays",
   "modal": "Modals", "delete-modal": "Delete Modal", "message-box": "Message Box", "upload-box": "Upload Box", "selection-bar": "Selection Bar", "toast": "Toast", "empty": "Empty State", "now-reading": "Now Reading", "weekly-activity": "Data Visualization", "finish-reading": "Finish Reading Modal", "onboarding": "Onboarding", "footer": "Footer",
   "token-usage": "Token Usage", "dev-tools": "Dev Tools",
 };

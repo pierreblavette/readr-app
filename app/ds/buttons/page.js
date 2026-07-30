@@ -52,7 +52,7 @@ const ANNOS = [
 
 export default function ButtonsPage() {
   return (
-    <DSSection id="buttons" title="Buttons" sub="Canonical .btn.btn-* system + named component classes (library.css). Font-weight 600 across all.">
+    <DSSection id="buttons" title="Buttons" sub="Le système générique .btn.btn-* : variants, tailles, composition d'icônes, variantes AI / count / ghost. Font 600 partout. Racine d'une famille — les types à comportement propre ont leur page : Dropdown Button, Select, Link.">
 
       {/* ─────────── 1. PREVIEW — le bouton canonique (primary MD) ─────────── */}
       <div className="ds-card">
@@ -258,37 +258,28 @@ export default function ButtonsPage() {
         </div>
       </div>
 
-      {/* ─────────── 8. VARIANTS · text link ─────────── */}
+      {/* ─────────── 8. VARIANTS · ghost nav (col-back-btn) ─────────── */}
       <div className="ds-card">
-        <div className="ds-card-head">Variants · text link</div>
+        <div className="ds-card-head">Variants · ghost nav</div>
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
-              <button type="button" className="btn-link">Remove goal</button>
-              <span className="ds-class">.btn-link</span>
-            </div>
-            <div className="ds-state-sample">
-              <button type="button" className="btn-link btn-link--critical">Remove goal</button>
-              <span className="ds-class">.btn-link--critical</span>
+              <button type="button" className="col-back-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+                Collections
+              </button>
+              <span className="ds-class">.col-back-btn</span>
             </div>
           </div>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Default</div>
-            <p>Inline text action — 14 / 600 · <span className="ds-token-chip">--primary-50</span> · hover <span className="ds-token-chip">--primary-60</span> + underline · no padding, no border, no fixed height. Used for low-key actions inside forms or cards (e.g. &quot;Remove goal&quot; in ReadingGoalModal).</p>
+            <div className="ds-token-name">Retour de vue</div>
+            <p>Bouton <strong>ghost</strong> à l&apos;échelle sm : h32, padding <code>0 12 0 8</code> (icône −8 à gauche), radius 7, sans bordure ni fond, texte <span className="ds-token-chip">--text-2</span> 13/600, hover fond <span className="ds-token-chip">--primary-5</span> + texte <span className="ds-token-chip">--primary-50</span>. Un seul consommateur : le retour de CollectionDetailView.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Critical</div>
-            <p><span className="ds-token-chip">--destructive</span> color · same typography and behavior. For destructive inline actions.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Form coupling · :has()</div>
-            <p><code>.modal-form:has(.btn-link) {`{ gap: 12px }`}</code> — auto-tightens the form gap (24 → 12) when a btn-link is present, so the link sits close to the field above.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Focus</div>
-            <p>2px <span className="ds-token-chip">--primary-50</span> ring via <code>box-shadow</code> (or <span className="ds-token-chip">--destructive</span> for the critical variant), radius 4. No default outline.</p>
+            <div className="ds-token-name">Dette · classe parallèle</div>
+            <p><span className="ds-class">.col-back-btn</span> est un quasi-doublon de <span className="ds-class">.btn.btn-ghost.btn-sm</span> (icône-gauche + chevron) — seules diffèrent la font (13 vs 12), le radius (7) et la couleur (<span className="ds-token-chip">--text-2</span>). <strong>Candidat à fusionner</strong> dans <span className="ds-class">.btn-ghost btn-sm</span> le jour d&apos;un passage prod, plutôt que de maintenir une classe à part.</p>
           </div>
         </div>
       </div>
@@ -346,6 +337,18 @@ export default function ButtonsPage() {
               </p>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* ─────────── 11. FAMILY ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Family</div>
+        <div className="ds-card-body col">
+          <div className="ds-token-block">
+            <div className="ds-token-name">Types à comportement propre</div>
+            <p><span className="ds-class">.dropdown-btn</span> — <strong>Dropdown Button</strong> : déclenche un menu d&apos;actions. <span className="ds-class">.sort-menu-btn</span> / <span className="ds-class">.quote-link-select</span> — <strong>Select</strong> : choisit / filtre une valeur. <span className="ds-class">.btn-link</span> — <strong>Link</strong> : action texte inline. Chacun a sa page.</p>
+          </div>
+          <p className="ds-note">Cette page reste le <strong>socle générique</strong> <span className="ds-class">.btn</span> — les variantes qui n&apos;ont pas de comportement propre (AI, count badge, ghost nav) y restent documentées comme variantes, pas comme membres de famille.</p>
         </div>
       </div>
 
