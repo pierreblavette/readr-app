@@ -72,6 +72,9 @@
   --shadow-md:             0 4px 16px rgba(73,89,230,0.12);
   --shadow-lg:             0 4px 20px rgba(73,89,230,0.18), 0 1px 6px rgba(73,89,230,0.10);
   --shadow-xl:             0 8px 40px rgba(73,89,230,0.16), 0 2px 12px rgba(73,89,230,0.08);
+  /* Overlay neutre : pour les surfaces flottantes au-dessus d'un contenu quelconque
+     (toast, selection bar) — noir neutre, plus de présence que les shadows bleues. */
+  --shadow-overlay:        0 8px 32px rgba(0,0,0,0.25);
   /* Neutral palette — tinted primary (only the tints actually used) */
   --dark-70:     rgba(13,15,26,0.70);
   --dark-80:     rgba(13,15,26,0.80);

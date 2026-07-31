@@ -4,6 +4,7 @@ const SHADOWS = [
   { token: "--shadow-md", use: "Cartes au hover (élévation légère)" },
   { token: "--shadow-lg", use: "Surfaces flottantes — dropdown, autocomplete, sidebar mobile" },
   { token: "--shadow-xl", use: "Modales (.modal, .confirm-modal) — l'élévation la plus large" },
+  { token: "--shadow-overlay", use: "Flottants neutres — toast, selection bar (noir, sur contenu quelconque)" },
 ];
 
 const RADII = [
@@ -48,8 +49,9 @@ export default function ShadowsPage() {
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Trois niveaux, primary-tinted</div>
-            <p>Toutes les ombres d&apos;élévation sont <strong>teintées primary</strong> (<span className="ds-token-chip">--primary-50</span>) en light plutôt que noires : une ombre légèrement bleue s&apos;accorde à la marque au lieu de « salir » l&apos;interface. <span className="ds-token-chip">--shadow-md</span> (subtil, cartes) · <span className="ds-token-chip">--shadow-lg</span> (surfaces flottantes : dropdown, autocomplete) · <span className="ds-token-chip">--shadow-xl</span> (modales, la plus large). Échelle complète, plus d&apos;ombre inline.</p>
+            <div className="ds-token-name">Trois niveaux tintés + un overlay neutre</div>
+            <p>Les ombres d&apos;<strong>élévation de surface</strong> sont <strong>teintées primary</strong> (<span className="ds-token-chip">--primary-50</span>) en light plutôt que noires : une ombre légèrement bleue s&apos;accorde à la marque au lieu de « salir » l&apos;interface. <span className="ds-token-chip">--shadow-md</span> (subtil, cartes) · <span className="ds-token-chip">--shadow-lg</span> (surfaces flottantes : dropdown, autocomplete) · <span className="ds-token-chip">--shadow-xl</span> (modales, la plus large).</p>
+            <p><strong>Exception assumée</strong> : <span className="ds-token-chip">--shadow-overlay</span> est volontairement <strong>noir neutre</strong>. Il sert aux flottants posés sur un <em>contenu quelconque</em> (<span className="ds-class">.toast</span>, <span className="ds-class">.selection-bar</span>) où une ombre bleue manquerait de présence. Avant, ces deux-là hardcodaient chacun leur ombre — le token les unifie.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Dark — noir neutre sur les grandes surfaces</div>
@@ -73,10 +75,19 @@ export default function ShadowsPage() {
               <div className="ds-specimen-cell"><MiniMenu /></div>
               <span className="ds-token-chip">--shadow-lg</span>
             </div>
+            <div className="ds-state-sample">
+              <div className="ds-specimen-cell">
+                <div className="toast toast-visible" style={{ position: "static", transform: "none" }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                  <span>Book added to your library.</span>
+                </div>
+              </div>
+              <span className="ds-token-chip">--shadow-overlay</span>
+            </div>
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">À gauche, une <strong>carte au hover</strong> (<span className="ds-token-chip">--shadow-md</span>). À droite, un <span className="ds-class">.dropdown-menu</span> réel, surface flottante (<span className="ds-token-chip">--shadow-lg</span>). L&apos;ombre bleue se lit sur le fond clair.</p>
+          <p className="ds-note">Une <strong>carte au hover</strong> (<span className="ds-token-chip">--shadow-md</span>) ; un <span className="ds-class">.dropdown-menu</span> réel, surface flottante (<span className="ds-token-chip">--shadow-lg</span>) — ombres <strong>bleues</strong> qui se lisent sur fond clair. Puis un <span className="ds-class">.toast</span> réel (<span className="ds-token-chip">--shadow-overlay</span>) : ombre <strong>noire neutre</strong>, car il flotte au-dessus d&apos;un contenu quelconque et a besoin de plus de présence.</p>
         </div>
       </div>
 
