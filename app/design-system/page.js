@@ -1,7 +1,64 @@
+import { existsSync } from "fs";
+import { join } from "path";
 import Link from "next/link";
 import { NAV, NAV_LABELS, sectionsOf } from "./_lib/nav";
 import { MessageBox } from "./message-box/_specs";
 import LogoLockup from "@/components/brand/LogoLockup";
+
+// Covers déposés dans _covers/{foundations,components,patterns}/ (mix .svg + .jpg),
+// copiés dans public/ds-covers/ et servis en <img> statique (data-URI éviterait mais
+// gonflerait le HTML). Map : id de card → chemin relatif dans _covers (garde existsSync
+// + basename de l'URL /ds-covers/). Après mise à jour d'un cover, re-copier vers public.
+const COVERS = {
+  // Foundations (svg)
+  logo: "foundations/cover-logo.svg",
+  colors: "foundations/cover-color.svg",
+  typography: "foundations/cover-typography.svg",
+  iconography: "foundations/cover-icon.svg",
+  spacing: "foundations/cover-spacing.svg",
+  "cell-row": "foundations/cover-cell.svg",
+  shadows: "foundations/cover-radius.svg",
+  strokes: "foundations/cover-strokes.svg",
+  // Components (jpg)
+  autocomplete: "components/cover-autocomplete.jpg",
+  badges: "components/cover-badge.jpg",
+  "book-chip": "components/cover-book-row.jpg",
+  buttons: "components/cover-box-buttons.jpg",
+  card: "components/cover-box-cards.jpg",
+  checkbox: "components/cover-checkbox.jpg",
+  chip: "components/cover-chip.jpg",
+  dropdown: "components/cover-dropdown-menu.jpg",
+  dropzone: "components/cover-dropzone.jpg",
+  empty: "components/cover-empty-state.jpg",
+  footer: "components/cover-footer.jpg",
+  inputs: "components/cover-text-input.jpg",
+  list: "components/cover-table.jpg",
+  "message-box": "components/cover-box-message.jpg",
+  modal: "components/cover-modals.jpg",
+  panels: "components/cover-side-panel.jpg",
+  "rating-stars": "components/cover-ratings.jpg",
+  "segmented-pills": "components/cover-segmented-pills.jpg",
+  sidebar: "components/cover-side-menu.jpg",
+  spinner: "components/cover-side-spinner.jpg",
+  toast: "components/cover-toast.jpg",
+  toggle: "components/cover-toggle.jpg",
+  "weekly-activity": "components/cover-data.jpg",
+  // Patterns (mix)
+  editing: "patterns/cover-editing.jpg",
+  filters: "patterns/cover-filtering.jpg",
+  onboarding: "patterns/cover-on-boarding.jpg",
+  overlays: "patterns/cover-overlay.svg",
+};
+
+function coverFor(id) {
+  const rel = COVERS[id];
+  if (!rel) return null;
+  const file = rel.split("/").pop();
+  // On garde sur la copie servie (public/ds-covers) : c'est elle qui est commitée.
+  // _covers/ = source d'auteur locale (git-ignorée), re-copiée vers public à chaque MAJ.
+  if (!existsSync(join(process.cwd(), "public/ds-covers", file))) return null;
+  return `/ds-covers/${file}`;
+}
 
 // Landing « Welcome » du Design System (/design-system) — hero + principes +
 // sommaire navigable (cards à vignette). NAV grandit, le sommaire suit.
@@ -105,12 +162,17 @@ export default function WelcomePage() {
               {GROUP_SUB[group] && <p className="dsw-group-sub">{GROUP_SUB[group]}</p>}
             </div>
             <div className="dsw-cards-grid">
-              {sectionsOf(group).map((id) => (
-                <Link key={id} href={`/design-system/${id}`} className="ds-index-card">
-                  <span className="ds-index-thumb"><Thumb id={id} /></span>
-                  <span className="ds-index-label">{NAV_LABELS[id]}</span>
-                </Link>
-              ))}
+              {sectionsOf(group).map((id) => {
+                const cover = coverFor(id);
+                return (
+                  <Link key={id} href={`/design-system/${id}`} className="ds-index-card">
+                    <span className={`ds-index-thumb${cover ? " ds-index-thumb--cover" : ""}`}>
+                      {cover ? <img className="ds-cover" src={cover} alt="" /> : <Thumb id={id} />}
+                    </span>
+                    <span className="ds-index-label">{NAV_LABELS[id]}</span>
+                  </Link>
+                );
+              })}
             </div>
           </section>
         ))}

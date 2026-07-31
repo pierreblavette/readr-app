@@ -63,3 +63,7 @@ ds-tablet-*.png
 
 # Skills context (local)
 .impeccable.md
+
+# Covers : source d'auteur locale + exports PNG jetables (les covers servis sont dans public/ds-covers)
+app/design-system/_covers/
+app/design-system/_cover-exports/
