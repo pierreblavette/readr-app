@@ -70,7 +70,7 @@ export default function LogoPage() {
         <div className="ds-card-head">Lockup — Symbol &amp; Text</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","#0D0F1A",undefined,"Light"],["logo-bg-dark","#FFFFFF",undefined,"Dark"],["logo-bg-accent","#FFFFFF","#FFFFFF","Accent"]].map(([cls,col,symbolColor,label]) => (
+            {[["logo-bg-page","var(--dark-100)",undefined,"Light"],["logo-bg-dark","#FFFFFF",undefined,"Dark"],["logo-bg-accent","#FFFFFF","#FFFFFF","Accent"]].map(([cls,col,symbolColor,label]) => (
               <div key={cls} className="lockup-card">
                 <span className="panel-section-eyebrow">{label}</span>
                 <div className={`logo-bg ${cls}`}>
@@ -98,7 +98,7 @@ export default function LogoPage() {
           <div className="ds-state-sample">
             <span className="panel-section-eyebrow">Symbol &amp; Text</span>
             <div className="ds-tile-grid ds-tile-grid--cols3">
-              {[["logo-bg-page","#0D0F1A",undefined,undefined],["logo-bg-dark","#FFFFFF",undefined,undefined],["logo-bg-accent","#FFFFFF",["#FFFFFF","#FFFFFF"],"#FFFFFF"]].map(([cls,col,echo,symbolColor],i) => (
+              {[["logo-bg-page","var(--dark-100)",undefined,undefined],["logo-bg-dark","#FFFFFF",undefined,undefined],["logo-bg-accent","#FFFFFF",["#FFFFFF","#FFFFFF"],"#FFFFFF"]].map(([cls,col,echo,symbolColor],i) => (
                 <div key={i} className={`logo-bg ${cls}`}>
                   <LogoLockup key={replayLogo} animated echo={echo} symbolColor={symbolColor} className="logo" style={{ color: col }} />
                 </div>
@@ -281,9 +281,9 @@ export default function LogoPage() {
               { bg: "#FEFEFF",  fg: "#0F0F0F", ok: true,  label: "Surface light" },
               { bg: "#0F0F0F",  fg: "#FFFFFF", ok: true,  label: "Surface dark" },
               { bg: "var(--primary-50)", fg: "#FFFFFF", ok: true,  label: "Primary brand" },
-              { bg: "#F7F7F7",  fg: "#C8C8C8", ok: false, label: "Trop faible contraste" },
+              { bg: "#F5F5F5",  fg: "#E0E0E0", ok: false, label: "Trop faible contraste" },
               { bg: "var(--primary-50)", fg: "#0F0F0F", ok: false, label: "Conflit brand + dark" },
-              { bg: "linear-gradient(135deg, var(--primary-50) 0%, #F59E0B 100%)", fg: "#FFFFFF", ok: false, label: "Fond complexe / dégradé" },
+              { bg: "linear-gradient(135deg, var(--primary-50) 0%, #E63946 100%)", fg: "#FFFFFF", ok: false, label: "Fond complexe / dégradé" },
             ].map((c, i) => (
               <div key={i} className="logo-contrast-item">
                 <div className="logo-bg" style={{ background: c.bg }}>

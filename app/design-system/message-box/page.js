@@ -3,12 +3,11 @@ import AnnoScene from "../_components/AnnoScene";
 import Redline from "../_components/Redline";
 import { MessageBox } from "./_specs";
 
-// Surface blanche = contexte réel des message boxes (corps de modale). Sur la scène
-// bleue, le ton info (--primary-5) se fondrait ; ici il ressort comme les autres.
+// Simple pile verticale des message boxes — pas de faux cadre (bg/border/radius/padding) :
+// les encarts s'affichent directement sur la scène.
 const SURFACE = {
   display: "flex", flexDirection: "column", gap: 12,
-  width: "100%", maxWidth: 460, padding: 24,
-  background: "var(--card)", border: "1px solid var(--border-subtle)", borderRadius: 8,
+  width: "100%", maxWidth: 460,
 };
 
 const ANNOS = [
@@ -49,7 +48,7 @@ export default function MessageBoxPage() {
         <div className="ds-card-body col">
           <div className="ds-anno-board">
             <AnnoScene annos={ANNOS}>
-              <div className="ds-anno-organism" style={{ ...SURFACE, maxWidth: 420, padding: 28 }}>
+              <div className="ds-anno-organism" style={{ ...SURFACE, maxWidth: 420 }}>
                 <MessageBox tone="info">Your data stays on this device.</MessageBox>
               </div>
             </AnnoScene>
