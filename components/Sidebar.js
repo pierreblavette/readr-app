@@ -31,20 +31,22 @@ export default function Sidebar({
         <div className="sidebar-logo">
           {collapsed ? (
             <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" onClick={onToggleCollapse} aria-label="Expand sidebar">
+              {/* arrow-right-from-line (lucide) — déplier vers la droite */}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 12H3"/>
-                <path d="m11 18 6-6-6-6"/>
-                <path d="M21 5v14"/>
+                <line x1="21" x2="7" y1="12" y2="12"/>
+                <polyline points="15 18 21 12 15 6"/>
+                <path d="M3 5v14"/>
               </svg>
             </button>
           ) : (
             <>
               <LogoLockup className="logo" />
               <button className="sidebar-logo-collapse sidebar-logo-collapse--arrow" onClick={onToggleCollapse} aria-label="Collapse sidebar">
+                {/* arrow-left-from-line (lucide) — replier vers la gauche */}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 19V5"/>
-                  <path d="m12 19-7-7 7-7"/>
-                  <path d="M19 12H5"/>
+                  <line x1="3" x2="17" y1="12" y2="12"/>
+                  <polyline points="9 6 3 12 9 18"/>
+                  <path d="M21 19V5"/>
                 </svg>
               </button>
             </>

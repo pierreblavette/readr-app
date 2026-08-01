@@ -345,9 +345,17 @@
 }
 .dropdown-btn.filters-mobile-trigger { display: none; }
 @media (max-width: 1280px) {
-  .dropdown-btn.filters-mobile-trigger { display: inline-flex; }
+  /* Le trigger mobile apparaît en ICON-ONLY (40×40, sans label « Filter ») dès qu'il
+     entre — cohérent avec les autres dropdown-btn qui se replient en icône. Le nom
+     accessible reste porté par l'aria-label du bouton (SearchBar / CollectionDetail). */
+  .dropdown-btn.filters-mobile-trigger { display: inline-flex; width: 40px; padding: 0; justify-content: center; }
+  .filters-mobile-trigger .dropdown-btn-label { display: none; }
   .filters-row > .quotes-toggle { display: none; }
 }
+/* Actif (au moins un filtre passé au panel) : le badge s'ajoute à l'icône → le bouton
+   n'est plus carré 40 (le badge débordait) mais s'élargit (width auto), padding 12 de
+   chaque côté pour loger icône + badge. */
+.dropdown-btn.filters-mobile-trigger.is-active { width: auto; padding: 0 12px 0 12px; }
 @media (max-width: 1080px) {
   .filters-row > .genres-menu { display: none; }
 }
@@ -358,8 +366,7 @@
   .filters-row > .filters-reading { display: none; }
 }
 /* ≤480 (standard mobile portrait) : Authors goes to the filter panel.
-   filters-mobile-trigger garde icon + label à <600 — pas de collapse
-   icon-only (label "Filter" / "Filtrer" reste lisible). */
+   (Le trigger mobile est icon-only à toutes ces résolutions, cf. bloc ≤1280.) */
 @media (max-width: 480px) {
   .filters-row > .authors-menu { display: none; }
 }
@@ -3796,8 +3803,8 @@
   /* sort-menu-btn keeps label + chevron at ≤1080 — re-show the chevron */
   .sort-menu-btn .dropdown-btn-chevron { display: inline-block; }
   .sort-menu-btn { width: auto; padding: 0 12px 0 16px; justify-content: flex-start; }
-  .filters-mobile-trigger { width: auto; padding: 0 16px 0 12px; justify-content: flex-start; }
-  .filters-mobile-trigger .dropdown-btn-label { display: inline-flex; }
+  /* .filters-mobile-trigger : reste icon-only (40×40) via la règle générique + le bloc
+     ≤1280 — plus de ré-affichage du label ici. */
   .search-row { flex-direction: column; align-items: stretch; gap: 16px; }
   .search-box { min-width: 0; flex: none; width: 100%; }
   .counter-actions { width: 100%; }
@@ -4609,6 +4616,12 @@
   justify-content: flex-end;
   align-items: center;
 }
+/* Filter-row (Filters Panel) : le label prend l'espace dispo (fluide) au lieu de la
+   largeur fixe 130px héritée des menus dropdown (où elle aligne les compteurs). Le
+   compteur reste calé à droite (le label flex:1 le pousse au bord, count-wrap ne
+   grossit plus). Scopé à .filter-row → les menus dropdown gardent leur 130px. */
+.filter-row .dropdown-item-label { width: auto; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.filter-row .dropdown-item-count-wrap { flex: 0 0 auto; }
 
 
 .dropdown-btn.dropdown-btn--icon {
