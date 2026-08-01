@@ -33,7 +33,7 @@ export default function FiltersPanelPage() {
       </div>
 
       {/* 2 — ANATOMY */}
-      <div className="ds-card">
+      <div className="ds-card ds-mobile-hidden">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
           <div className="ds-anno-board">
@@ -88,7 +88,7 @@ export default function FiltersPanelPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline gapSelector=".filters-panel-wrap">
-                <div className="panel-inner" style={{ position: "relative", width: 420, alignItems: "stretch", paddingBottom: 0, gap: 0 }}>
+                <div className="panel-inner" style={{ position: "relative", width: "var(--spec-w, 420px)", alignItems: "stretch", paddingBottom: 0, gap: 0 }}>
                   <div className="filters-panel-wrap">
                     <div className="filters-panel-header"><span className="filters-panel-count">42 of 128 books</span></div>
                     <FilterSection label="Reading status">
@@ -110,7 +110,7 @@ export default function FiltersPanelPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline gapSelector=".filters-panel-rows">
-                <div className="panel-section filters-panel-section" style={{ width: 320 }}>
+                <div className="panel-section filters-panel-section" style={{ width: "var(--spec-w, 320px)" }}>
                   <span className="panel-section-eyebrow">Reading status</span>
                   <div className="filters-panel-rows">
                     <FilterRow role="radio" checked label="Any" count={128} />

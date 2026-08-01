@@ -1,7 +1,8 @@
 import DSSection from "../../_components/DSSection";
 import AnnoScene from "../../_components/AnnoScene";
 import Redline from "../../_components/Redline";
-import { Trigger, QuotesToggle, MobileTrigger, FiltersRowSpec } from "../_specs";
+import { Trigger, QuotesToggle, QuotesLines, MobileTrigger, FiltersRowSpec } from "../_specs";
+import FiltersRowFit from "../_FiltersRowFit";
 
 const ANNOS = [
   { n: 1, side: "top", target: ".filters-row" },
@@ -17,7 +18,7 @@ function FoldCell({ labels, quotes, filter }) {
         <Trigger key={l} label={l} wrap={i === 0 ? "sort-menu filters-sort" : "sort-menu"} />
       ))}
       {quotes && <QuotesToggle />}
-      {filter ? <MobileTrigger count={filter} /> : null}
+      {filter ? <MobileTrigger count={0} /> : null}
     </div>
   );
 }
@@ -38,10 +39,10 @@ export default function FiltersRowPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview">
-            <FiltersRowSpec className="ds-filters-row--center" />
+            <FiltersRowFit className="ds-filters-row--center" />
           </div>
           </div>
-          <p className="ds-note">Le cluster complet (état desktop large), sous la barre de recherche dans <span className="ds-class">.search-bar-wrap</span>. Chaque trigger réutilise la brique <span className="ds-class">Dropdown</span> ; un filtre actif passe en <span className="ds-class">.is-active</span> (bord + fond <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-5</span>).</p>
+          <p className="ds-note">Le cluster <strong>responsive</strong> (redimensionne la fenêtre pour voir les triggers se replier progressivement dans le bouton <strong>Filter</strong>), sous la barre de recherche dans <span className="ds-class">.search-bar-wrap</span>. Chaque trigger réutilise la brique <span className="ds-class">Dropdown</span> ; un filtre actif passe en <span className="ds-class">.is-active</span> (bord + fond <span className="ds-token-chip">--primary-50</span> / <span className="ds-token-chip">--primary-5</span>).</p>
         </div>
       </div>
 
@@ -49,11 +50,9 @@ export default function FiltersRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
+          <div className="ds-anno-board ds-anno-board--filters-row">
           <AnnoScene annos={ANNOS}>
-            <div className="ds-anno-organism">
-              <FiltersRowSpec />
-            </div>
+            <FiltersRowFit className="ds-anno-organism ds-filters-row--center" />
           </AnnoScene>
           </div>
         </div>
@@ -83,10 +82,14 @@ export default function FiltersRowPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline>
-                <div className="cell-row cell-row--lg filters-row ds-filters-row--all" style={{ flexWrap: "nowrap", width: "fit-content" }}>
+                <div className="cell-row cell-row--lg filters-row" style={{ flexWrap: "nowrap", width: "fit-content" }}>
                   <Trigger label="Date added" wrap="sort-menu filters-sort" />
                   <Trigger label="Rating" wrap="sort-menu filters-rating" />
                   <QuotesToggle />
+                  <button type="button" className="dropdown-btn filters-mobile-trigger">
+                    <QuotesLines className="dropdown-btn-icon" />
+                    <span className="dropdown-btn-label">Filter</span>
+                  </button>
                 </div>
               </Redline>
             </div>
@@ -112,7 +115,7 @@ export default function FiltersRowPage() {
           </table>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">À chaque palier qui rétrécit, le <strong>filtre suivant</strong> (ordre de priorité) quitte la rangée et rejoint le bouton <strong>Filter</strong> — dont le badge compte les filtres passés au <a href="/design-system/filters/panel"><strong>Filters Panel</strong></a>. <strong>Sort reste toujours inline.</strong> <code>SearchBar</code> réplique ces breakpoints via <span className="ds-class">useMediaQuery</span> pour que le panel saute les filtres déjà inline — pas de doublon.</p>
+          <p className="ds-note">À chaque palier qui rétrécit, le <strong>filtre suivant</strong> (ordre de priorité) quitte la rangée et rejoint le bouton <strong>Filter</strong>, qui donne accès aux filtres repliés dans le <a href="/design-system/filters/panel"><strong>Filters Panel</strong></a>. <strong>Sort reste toujours inline.</strong> <code>SearchBar</code> réplique ces breakpoints via <span className="ds-class">useMediaQuery</span> pour que le panel saute les filtres déjà inline — pas de doublon.</p>
         </div>
       </div>
 

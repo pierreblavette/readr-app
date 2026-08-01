@@ -317,12 +317,8 @@ img.ds-cover { object-fit: cover; }
    centré (annule le flex-start de .ds-states-grid > … > .panel-section-eyebrow,
    même spécificité 0,3,0 → gagne par l'ordre source). */
 .ds-states-grid--boxed > .ds-state-sample > .panel-section-eyebrow { align-self: center; }
-/* Cellules plus serrées sur téléphone : padding vertical 20 (au lieu de 32), aligné
-   sur le rythme mobile du DS. Le board est déjà en 1-col ici (règle ≤600 plus bas),
-   donc l'espacement vertical vit entièrement dans la cellule → homogène à 20. */
-@media (max-width: 600px) {
-  .ds-states-grid--boxed > .ds-state-sample { padding-block: 20px; }
-}
+/* padding-block 32 à tous les breakpoints (y compris ≤600, board en 1-col) : le
+   contenu respire de manière homogène, la cellule pilote seule l'espacement vertical. */
 /* Rangée orpheline (dernière cellule seule sur une rangée 2-col, board impair) : elle
    remplit la rangée (grid-column: 1/-1) pour ne pas laisser de case vide grise. Scopé
    aux blocs 2-col ci-dessous — en rangée unique, 1/-1 étirerait la cellule sur toute la ligne. */
@@ -1312,6 +1308,12 @@ img.ds-cover { object-fit: cover; }
   pointer-events: auto;
   box-shadow: none;
   width: 260px;
+  /* Neutralise le z-index 330 hérité de library (@media ≤768 .sidebar). Le specimen
+   * est un flex item de .ds-preview → un z-index numérique s'y applique MÊME en
+   * position static et crée un contexte d'empilement à 330, à égalité avec le drawer
+   * DS mobile (fixed, 330) → le specimen passait AU-DESSUS du menu ouvert. z-index
+   * auto = pas de contexte → il reste dans le flux, sous le drawer. (0,3,0 gagne.) */
+  z-index: auto;
 }
 .ds-card-body .sidebar.collapsed { width: 60px; }
 /* Mobile: hide la version Collapsed (peu représentative + économise le scroll)
@@ -1357,6 +1359,16 @@ img.ds-cover { object-fit: cover; }
   .ds-states-grid--boxed.ds-states-grid--cols-3,
   .ds-states-grid--boxed.ds-states-grid--cols-5,
   .ds-states-grid--boxed { grid-template-columns: 1fr; }
+  /* Contrat opt-in « specimen fill » : un specimen à largeur fixe/plafonnée
+     (ex. Book Row Preview 300 / States·Variants max 260) lit sa largeur via
+     var(--spec-w) / son plafond via var(--spec-max). Le conteneur bascule ces
+     vars à 100% / none sous 600 → le specimen remplit la cellule 1-col. Sans
+     opt-in (specimen sans ces vars) : aucun effet. Zéro !important, réutilisable. */
+  .ds-preview, .ds-state-sample { --spec-w: 100%; --spec-max: none; }
+  /* Cellules sur téléphone : padding vertical 32 conservé, horizontal 0 → le specimen
+     « fill » s'étend bord à bord dans la cellule. La base .ds-state-sample est définie
+     plus HAUT (l.305) → cet override gagne par l'ordre source. */
+  .ds-states-grid--boxed > .ds-state-sample { padding-inline: 0; }
 }
 [data-theme="dark"] .panel-ds-panel { background: var(--bg); }
 [data-theme="dark"] .panel-ds-content { background: var(--bg2); }
@@ -1447,9 +1459,13 @@ img.ds-cover { object-fit: cover; }
    à ≤1080 (règle destinée à la vraie barre de filtres de l'app). Sur /ds on veut
    la forme pleine (icône + label + chevron) à tout breakpoint → on neutralise. */
 @media (max-width: 1080px) {
-  .ds-root .dropdown-btn { width: auto; padding: 0 20px; justify-content: normal; }
-  .ds-root .dropdown-btn .dropdown-btn-label,
-  .ds-root .dropdown-btn .dropdown-btn-chevron { display: block; }
+  /* :not(.filters-mobile-trigger):not(.dropdown-btn--icon) — ces deux-là sont ICON-ONLY
+     (40×40) et ne doivent PAS être neutralisés : sinon le width:auto + padding 20 les
+     étire (trigger Filter, QuotesToggle). Seuls les dropdown-btn « pleins » (label +
+     chevron) gardent leur forme complète pour la doc. */
+  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon) { width: auto; padding: 0 20px; justify-content: normal; }
+  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon) .dropdown-btn-label,
+  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon) .dropdown-btn-chevron { display: block; }
 }
 /* Strokes « In use » — cellule haute pour laisser respirer (le menu monte haut) +
    dropzone élargie pour soutenir la comparaison. */
@@ -1468,6 +1484,10 @@ img.ds-cover { object-fit: cover; }
    padding 60 → 20 + 60. Base desktop 60, à réduire par breakpoint en mobile. */
 .ds-preview-board { width: 100%; }
 .ds-preview { width: 100%; padding: 60px; background: var(--primary-5); display: flex; justify-content: center; }
+/* Padding resserré sur téléphone (desktop garde 60). Placé APRÈS la base ci-dessus :
+   @media n'ajoute pas de spécificité, donc l'override doit être postérieur en source
+   pour l'emporter — sinon la base 60 (plus bas dans le fichier) gagnait. */
+@media (max-width: 600px) { .ds-preview { padding: 20px; } }
 /* .ds-preview.col : empile les specimens verticalement (ex. Dictionary Card replié
    au-dessus de déplié) au lieu de la rangée centrée par défaut. Le gap vit inline
    (il varie selon la page), la direction et le centrage transversal vivent ici. */
@@ -1491,6 +1511,32 @@ img.ds-cover { object-fit: cover; }
 /* Sidebar en doc : la vraie est position:sticky, height 100dvh, z-index 300. On
    neutralise pour l'afficher en flux (hauteur = son contenu), apparence intacte. */
 .ds-sidebar-static.sidebar { position: relative; top: auto; height: auto; max-height: none; z-index: auto; }
+/* Coquille en mobile : le specimen OUVERT (260 en prod) devient FLUIDE — son target
+   s'étire à 100% et la colonne remplit la scène au lieu de rester à 260 centré, ce
+   qui laisse le padding 48 de droite libre pour les cotes 12/40 (plus de clip). Le
+   replié garde 60. Scopé au Redline via :has → Preview/States non affectés. */
+@media (max-width: 600px) {
+  .ds-redline-target:has(> .ds-sidebar-static.sidebar:not(.collapsed)) { width: 100%; max-width: 100%; }
+  .ds-redline-target > .ds-sidebar-static.sidebar:not(.collapsed) { width: 100%; }
+  /* Preview : la version repliée montrée à côté de l'étendue ne tient plus (260 + 20
+     + 60 déborde). On la masque en mobile — l'étendue seule suffit. Sélecteur 0,2,0
+     (via .ds-preview) car ds.css est importé AVANT library.css : un simple
+     .ds-preview-collapsed (0,1,0) perdait contre .sidebar{display:flex} de library. */
+  .ds-preview .ds-preview-collapsed { display: none; }
+  /* Specimens Redline à largeur FIXE inline (Filters Panel · Spacing : panel-inner 420,
+     section 320) : même bug que la coquille — sur petite scène ils se compressent et
+     les cotes verticales débordent. Ils lisent leur largeur via var(--spec-w) → on étire
+     le target et bascule la var à 100% : le specimen remplit la scène, cotes à l'aise. */
+  .ds-redline-target:has(> .panel-inner),
+  .ds-redline-target:has(> .filters-panel-section) { width: 100%; max-width: 100%; --spec-w: 100%; }
+  /* Utilitaire : masque une section entière (card) sur téléphone — ex. Anatomy du
+     Filters Panel, trop large/peu lisible en mobile. .ds-root pour battre .ds-card. */
+  .ds-root .ds-mobile-hidden { display: none; }
+  /* Filters Panel · Preview + Spacing : footer (Confirm/Clear) masqué en mobile.
+     Scopé aux contextes doc (.ds-preview / .ds-redline-target), pas la prod. */
+  .ds-preview .filters-panel-footer,
+  .ds-redline-target .filters-panel-footer { display: none; }
+}
 /* Autocomplete en doc : la liste flottante (.autocomplete-list, z-index 700) vit en
    prod DANS une modale (contexte d'empilement isolé) → jamais au-dessus du chrome.
    Sur /ds elle est à nu sur la page et couvrait la sidebar drawer (330) + la toolbar
@@ -1517,6 +1563,25 @@ img.ds-cover { object-fit: cover; }
    le composant est large (table pleine largeur), on l'aligne sur ce standard. */
 .ds-preview.ds-scene--list { padding-left: 48px; padding-right: 48px; }
 .ds-anno-board--list .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
+/* Filters Row · Anatomy : exceptionnellement 40 de padding LATÉRAL en mobile (au lieu
+   de 60) pour que le fold — Date added (.sort-menu-btn) + le trigger Filter — tienne
+   sur UNE seule ligne au lieu de wrapper. Vertical gardé à 60. Scopé, ≤600 uniquement. */
+@media (max-width: 600px) {
+  .ds-anno-board--filters-row .ds-anno-scene { padding: 60px 40px; }
+}
+/* Onboarding · Anatomy en mobile : le modal (card blanc) comprime le contenu sur écran
+   étroit. On retire son fond + ombre et le padding 32/24 du body → illustration et texte
+   s'étendent sur toute la largeur de la scène. Le footer (nav Skip/Next) est masqué —
+   son annotation #4 disparaît proprement (cible cachée). Scopé à l'anatomy. */
+@media (max-width: 600px) {
+  .ds-anno-scene .ob-modal { background: transparent; box-shadow: none; }
+  .ds-anno-scene .ob-body { padding: 0; }
+  /* Footer de nav masqué en mobile — Preview, Anatomy et Spacing (dans le Spacing sa
+     cote de padding 16/24 disparaît avec lui). */
+  .ds-anno-scene .ob-footer,
+  .ds-preview .ob-footer,
+  .ds-redline-target .ob-footer { display: none; }
+}
 /* Doc : la vraie table est table-layout:fixed (title/author 30%, genre 20%, Year=auto).
    Dans une scène plus étroite que la zone liste de l'app, ce « reste » de Year tombe à 0
    et se coupe. On passe le specimen (.ds-list-spec, porté par ListViewSpec/ListRowSample)
@@ -1536,6 +1601,22 @@ img.ds-cover { object-fit: cover; }
 .ds-list-spec .list-table .list-cell-action { position: static; }
 /* Specimens statiques : pas de fade-up de rangée. */
 .ds-list-spec .list-row { animation: none; }
+
+/* Mobile : sur les specimens marqués .ds-list-mobile (ex. Bulk Preview), la liste
+ * adopte sa VRAIE version mobile plutôt que la table complète figée par .ds-list-spec :
+ * on rend la table pleine largeur (table-layout fixed) et on lève le forçage des
+ * colonnes meta → le @media prod (≤768, qui masque aussi .list-cell-tag) reprend la
+ * main. Résultat = num + titre + action, comme la Library réelle. Scopé (ne touche pas
+ * la page List View qui doit montrer toutes les colonnes). Spécificités > overrides desktop. */
+@media (max-width: 600px) {
+  .ds-list-mobile.books-list.ds-list-spec { width: 100%; max-width: 100%; }
+  .ds-list-mobile.ds-list-spec .list-table { table-layout: fixed; width: 100%; }
+  .ds-list-mobile.ds-list-spec .list-table th.list-cell-meta,
+  .ds-list-mobile.ds-list-spec .list-table td.list-cell-meta { display: none; }
+  .ds-list-mobile.ds-list-spec .list-table .list-cell-num { width: 40px; }
+  /* Scène list : padding latéral aligné sur le Preview mobile (20 au lieu de 48). */
+  .ds-preview.ds-scene--list { padding-left: 20px; padding-right: 20px; }
+}
 
 /* Editing/Bulk — SelectionBar posée statiquement dans un board de doc. On
    neutralise le position:fixed + le reveal (opacity 0 + translateY) + le
@@ -1608,6 +1689,13 @@ img.ds-cover { object-fit: cover; }
 .ds-filters-row--all > .filters-mobile-trigger { display: none !important; }
 /* Centre le cluster dans le container /ds (la vraie row est alignée à gauche). */
 .filters-row.ds-filters-row--center { justify-content: center; }
+/* Fold basé sur l'ESPACE (FiltersRowFit + ResizeObserver) : une seule ligne (nowrap),
+   le JS pilote l'affichage inline des triggers. Le bouton Filter reste icon-only 40×40
+   quel que soit le viewport (indépendant des @media prod). Largeur 100% = l'espace
+   dispo mesuré est celui de la box Preview. */
+.ds-filters-fit { flex-wrap: nowrap; width: 100%; }
+.ds-filters-fit .filters-mobile-trigger { width: 40px; padding: 0; justify-content: center; }
+.ds-filters-fit .filters-mobile-trigger .dropdown-btn-label { display: none; }
 /* Cellule du tableau de fold (Filters Row · Behavior) : les vrais triggers inline,
    en ligne, sans wrap — le tableau scrolle en horizontal pour les rangées larges. */
 .ds-fold-cell { display: inline-flex; gap: 8px; align-items: center; white-space: nowrap; }

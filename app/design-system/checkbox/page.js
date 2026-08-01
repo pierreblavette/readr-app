@@ -90,6 +90,7 @@ const ANNOS = [
 
 export default function CheckboxPage() {
   const [checked, setChecked] = useState(true);
+  const [checked2, setChecked2] = useState(false);
   return (
     <DSSection
       id="checkbox"
@@ -102,7 +103,10 @@ export default function CheckboxPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview">
-            <div style={{ width: 300 }}><ToggleRow checked={checked} onChange={setChecked} label="Mark as reading" /></div>
+            <div style={{ width: 300, display: "flex", flexDirection: "column", gap: 20 }}>
+              <ToggleRow checked={checked} onChange={setChecked} label="Mark as reading" />
+              <ToggleRow checked={checked2} onChange={setChecked2} label="Add to wishlist" />
+            </div>
           </div>
           </div>
           <p className="ds-note">Specimen <strong>live</strong> — clique la rangée (pas seulement le carré) pour basculer. <strong>Toute la rangée</strong> est cliquable : c&apos;est le <code>&lt;label&gt;</code> qui porte la classe, cible 40px de haut sur toute la largeur.</p>

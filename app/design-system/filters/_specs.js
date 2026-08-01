@@ -44,15 +44,30 @@ export const MobileTrigger = ({ count = 3 }) => (
 );
 
 // Cluster complet, ordre de priorité : Sort → Authors → Reading → Rating → Genres → Quotes.
-export function FiltersRowSpec({ className = "" }) {
+// fold : mode responsive RÉEL (comme la prod) — on retire le forçage .ds-filters-row--all
+// et on ajoute le trigger mobile ; les @media viewport de library replient alors
+// progressivement les triggers (≤1280 quotes → ≤480 authors) dans .filters-mobile-trigger.
+// Défaut (fold=false) = cluster complet figé pour la doc (page Filters Row).
+export function FiltersRowSpec({ className = "", fold = false }) {
+  const cls = fold
+    ? `cell-row cell-row--lg filters-row ${className}`
+    : `cell-row cell-row--lg filters-row ds-filters-row--all ${className}`;
   return (
-    <div className={`cell-row cell-row--lg filters-row ds-filters-row--all ${className}`.trim()}>
+    <div className={cls.trim()}>
       <Trigger label="Date added" wrap="sort-menu filters-sort" />
       <Trigger label="Authors" wrap="authors-menu" />
       <Trigger label="Reading status" wrap="sort-menu filters-reading" />
       <Trigger label="Rating" wrap="sort-menu filters-rating" />
       <Trigger label="Genres" wrap="genres-menu" />
       <QuotesToggle />
+      {/* Trigger mobile SANS style display inline (contrairement à <MobileTrigger/>) :
+          c'est le @media de library qui le montre (≤1280) / cache (≥1281). */}
+      {fold && (
+        <button type="button" className="dropdown-btn filters-mobile-trigger">
+          <QuotesLines className="dropdown-btn-icon" />
+          <span className="dropdown-btn-label">Filter</span>
+        </button>
+      )}
     </div>
   );
 }

@@ -32,7 +32,7 @@ export default function BulkPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
             <div className="ds-preview ds-scene--list" style={{ flexDirection: "column", gap: 32, alignItems: "center" }}>
-              <ListViewSpec editMode selected={[0, 2]} />
+              <ListViewSpec editMode selected={[0, 2]} className="ds-list-mobile" />
               <SelectionBarSpec count={2} total={3} responsive />
             </div>
           </div>

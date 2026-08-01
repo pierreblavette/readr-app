@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Wordmark from "@/components/brand/Wordmark";
+import LogoLockup from "@/components/brand/LogoLockup";
 import { NAV, NAV_LABELS, NAV_CHILDREN, sectionsOf } from "./_lib/nav";
 import { DSThemeContext } from "./_components/ThemeContext";
 import ChipCopy from "./_components/ChipCopy";
@@ -67,7 +68,7 @@ export default function DSLayout({ children }) {
           {/* SIDEBAR */}
           <aside className={`sidebar${mobileSidebarOpen ? ' mobile-open' : ''}`}>
             <div className="sidebar-logo">
-              <Link href="/design-system" aria-label="Design System"><Wordmark className="logo" /></Link>
+              <Link href="/design-system" aria-label="Design System"><LogoLockup className="logo" /></Link>
             </div>
             <nav className="sidebar-nav">
               {Object.keys(NAV).map((section) => (

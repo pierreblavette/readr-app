@@ -1,5 +1,5 @@
 import DSSection from "../_components/DSSection";
-import { FiltersRowSpec } from "./_specs";
+import FiltersRowFit from "./_FiltersRowFit";
 
 export default function FiltersFoundationPage() {
   return (
@@ -15,7 +15,7 @@ export default function FiltersFoundationPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview">
-            <FiltersRowSpec className="ds-filters-row--center" />
+            <FiltersRowFit className="ds-filters-row--center" />
           </div>
           </div>
           <p className="ds-note">La <strong>Filters Row</strong> — l&apos;expression desktop. Les mêmes filtres se replient dans le <strong>Filters Panel</strong> (slide-in) quand la place manque. Un même modèle, deux surfaces.</p>

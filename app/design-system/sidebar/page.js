@@ -51,8 +51,9 @@ export default function SidebarPage() {
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview">
+            <div className="ds-preview" style={{ gap: 20, alignItems: "flex-start" }}>
               <SidebarSpec active="owned" />
+              <SidebarSpec collapsed className="ds-preview-collapsed" style={{ alignSelf: "stretch" }} />
             </div>
           </div>
           <p className="ds-note">La colonne étendue, <strong>Library</strong> actif (fond <span className="ds-token-chip">--primary-50</span> saturé, texte + badge blancs). Les sections sont séparées par un gap <strong>24</strong> ; dans une section, les items à gap <strong>4</strong>. En prod <code>position: sticky</code>, <code>height: 100dvh</code> (neutralisé pour la doc).</p>

@@ -32,6 +32,15 @@ export default function AnnoScene({ annos, children }) {
 
       const out = annos.map((a) => {
         const t = a.target ? scene.querySelector(a.target) : organism;
+        // Cible désignée absente ou MASQUÉE (ex. un trigger replié par @media dans un
+        // specimen responsive) → on retire l'annotation plutôt que de poser un badge
+        // orphelin à l'origine de la scène (rect 0×0). Sans cible désignée (organisme
+        // entier), comportement inchangé.
+        if (a.target) {
+          if (!t) return null;
+          const probe = t.getBoundingClientRect();
+          if (probe.width < 0.5 && probe.height < 0.5) return null;
+        }
         const tr = (t || organism).getBoundingClientRect();
         const tcy = tr.top + tr.height / 2 - sr.top;
         const tcx = tr.left + tr.width / 2 - sr.left;
@@ -60,7 +69,7 @@ export default function AnnoScene({ annos, children }) {
         }
         // corner (overlay/scène) — pastille au coin, pas de trait
         return { n: a.n, badge: { x: sr.width - CORNER, y: sr.height - CORNER }, line: null };
-      });
+      }).filter(Boolean);
       setItems(out);
     };
 
