@@ -30,7 +30,7 @@ export default function FinishReadingModalPage() {
               <FinishModalSpec style={MODAL_STYLE} rating={4} />
             </div>
           </div>
-          <p className="ds-note">La coquille <span className="ds-class">.modal</span> (titre → form → actions), avec un corps propre à la fin de lecture : <strong>BookChip</strong> du livre concerné, <strong>rating</strong> en étoiles, <strong>note</strong> libre. Montrée en flux (pas d&apos;overlay ni d&apos;anim). Tout le langage de coquille vit dans <a href="/design-system/modal/form"><strong>Form Modal</strong></a>.</p>
+          <p className="ds-note">La coquille <span className="ds-class">.modal</span> (titre → form → actions), avec un corps propre à la fin de lecture : <strong>BookRow</strong> du livre concerné, <strong>rating</strong> en étoiles, <strong>note</strong> libre. Montrée en flux (pas d&apos;overlay ni d&apos;anim). Tout le langage de coquille vit dans <a href="/design-system/modal/form"><strong>Form Modal</strong></a>.</p>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function FinishReadingModalPage() {
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
               <tr className="table-row"><td>·</td><td><span className="ds-class">.modal.finish-modal</span></td><td>Coquille — <strong>aucune règle propre</strong> : toute la taille (max-width, padding 32/24/0, <code>gap: 32</code>) est héritée de <span className="ds-class">.modal</span>. Voir <a href="/design-system/modal/form"><strong>Form Modal</strong></a>.</td><td>—</td></tr>
-              <tr className="table-row"><td>1</td><td><span className="ds-class">.finish-modal-chip</span></td><td>Wrapper du <span className="ds-class">Book Row</span> (BookChip) du livre concerné. Purement d&apos;espacement — rythmé par le <code>gap: 24</code> de <span className="ds-class">.modal-fields</span>.</td><td>—</td></tr>
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.finish-modal-chip</span></td><td>Wrapper du <span className="ds-class">Book Row</span> (BookRow) du livre concerné. Purement d&apos;espacement — rythmé par le <code>gap: 24</code> de <span className="ds-class">.modal-fields</span>.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.finish-stars</span></td><td>Rating : 5 <span className="ds-class">.finish-star</span> (svg <strong>28</strong>) en <code>role=radiogroup</code>, gap 4. Étoile <span className="ds-token-chip">--border</span> par défaut → <span className="ds-token-chip">--primary-50</span> en <span className="ds-class">.filled</span> (ou survol ≤ index).</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.quote-textarea</span></td><td>Commentaire — même champ partagé qu&apos;AddQuoteModal : fond <span className="ds-token-chip">--bg3</span>, glow primary au focus. <code>maxLength 500</code>, facultatif.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
               <tr className="table-row"><td>4</td><td><span className="ds-class">.modal-actions</span></td><td>Footer : Cancel (<span className="ds-class">.btn-outline</span>) + Save (<span className="ds-class">.btn-primary</span>). Submit hors <code>&lt;form&gt;</code>, lié par <code>form=&quot;finish-reading-form&quot;</code> (Enter-to-submit préservé).</td><td>—</td></tr>

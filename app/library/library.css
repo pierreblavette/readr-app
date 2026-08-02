@@ -942,7 +942,7 @@
 [data-theme="dark"] .now-reading-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
 .now-reading-card:has(.dropdown-menu) { z-index: 10; }
 
-/* Overview context — UI state iso .book-chip-interactive
+/* Overview context — UI state iso .book-row-interactive
  * (bg3 light / #262626 dark resting, primary-5 / primary-10 hover,
  * no border, no transform, no shadow). Neutral gray surface = interactive
  * content tile (vs primary-5 surfaces = button/control affordance). */
@@ -2799,7 +2799,7 @@
 }
 [data-theme="dark"] .modal-toggle-check { border-color: var(--light-20); }
 /* Focus clavier : l'input réel est masqué, l'anneau se pose donc sur le carré
-   visible. Même halo que .book-chip-interactive / .book-chip-remove. */
+   visible. Même halo que .book-row-interactive / .book-row-remove. */
 .modal-toggle-input:focus-visible ~ .modal-toggle-check {
   box-shadow: 0 0 0 2px var(--primary-50);
 }
@@ -4984,45 +4984,45 @@
 [data-theme="dark"] .quote-link-select:hover .quote-link-select-chevron,
 [data-theme="dark"] .quote-link-select.open .quote-link-select-chevron { color: var(--primary-40); }
 
-.book-chip {
+.book-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px; /* canonique conteneur chip (cf. .book-chip-interactive, .collection-chip) */
+  padding: 12px; /* canonique conteneur chip (cf. .book-row-interactive, .collection-chip) */
   background: var(--bg3);
   border-radius: 8px;
   animation: fadeUp 0.2s ease both;
 }
-button.book-chip {
+button.book-row {
   width: 100%;
   border: none;
   font-family: inherit;
   color: inherit;
   text-align: left;
 }
-.book-chip-interactive {
+.book-row-interactive {
   cursor: pointer;
   transition: background 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
 /* Collection variant — asymmetric padding (16/12) since chevron is right-aligned */
 .collection-chip { padding: 12px 12px 12px 16px; }
-.book-chip-interactive:hover,
-.book-chip-interactive:active { background: var(--primary-10); }
-[data-theme="dark"] .book-chip-interactive { background: var(--bg-elevated); }
-[data-theme="dark"] .book-chip-interactive:hover,
-[data-theme="dark"] .book-chip-interactive:active { background: var(--primary-10); }
+.book-row-interactive:hover,
+.book-row-interactive:active { background: var(--primary-10); }
+[data-theme="dark"] .book-row-interactive { background: var(--bg-elevated); }
+[data-theme="dark"] .book-row-interactive:hover,
+[data-theme="dark"] .book-row-interactive:active { background: var(--primary-10); }
 
 /* Quote-card context — book chip is non-interactive inside the card,
    rendered flat (transparent bg + no padding) so it reads as a label
    row, not as a clickable cell. */
-.quote-card .book-chip { background: transparent; padding: 0; }
+.quote-card .book-row { background: transparent; padding: 0; }
 
-.book-chip-interactive:focus-visible {
+.book-row-interactive:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
 }
-.book-chip-chevron {
+.book-row-chevron {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
@@ -5032,12 +5032,12 @@ button.book-chip {
   align-self: center;
   transition: color 0.18s ease;
 }
-.book-chip-interactive:hover .book-chip-chevron,
-.book-chip-interactive:focus-visible .book-chip-chevron { color: var(--primary-50); }
-[data-theme="dark"] .book-chip-interactive:hover .book-chip-chevron,
-[data-theme="dark"] .book-chip-interactive:focus-visible .book-chip-chevron { color: var(--primary-40); }
+.book-row-interactive:hover .book-row-chevron,
+.book-row-interactive:focus-visible .book-row-chevron { color: var(--primary-50); }
+[data-theme="dark"] .book-row-interactive:hover .book-row-chevron,
+[data-theme="dark"] .book-row-interactive:focus-visible .book-row-chevron { color: var(--primary-40); }
 
-.book-chip-cover {
+.book-row-cover {
   width: 32px;
   height: 44px;
   border-radius: 4px;
@@ -5051,25 +5051,25 @@ button.book-chip {
   font-size: 16px;
   letter-spacing: 0.02em;
 }
-.book-chip-cover img {
+.book-row-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.book-chip-body {
+.book-row-body {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.book-chip-name {
+.book-row-name {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.book-chip-title {
+.book-row-title {
   font-weight: 600;
   font-size: 15px;
   color: var(--text);
@@ -5077,7 +5077,7 @@ button.book-chip {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.book-chip-author {
+.book-row-author {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-2);
@@ -5085,7 +5085,7 @@ button.book-chip {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.book-chip-remove {
+.book-row-remove {
   flex-shrink: 0;
   width: 28px;
   height: 28px;
@@ -5099,13 +5099,13 @@ button.book-chip {
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
-.book-chip-remove:hover { background: var(--primary-10); color: var(--primary-50); }
-[data-theme="dark"] .book-chip-remove:hover { background: var(--primary-10); color: var(--primary-40); }
-.book-chip-remove:focus-visible {
+.book-row-remove:hover { background: var(--primary-10); color: var(--primary-50); }
+[data-theme="dark"] .book-row-remove:hover { background: var(--primary-10); color: var(--primary-40); }
+.book-row-remove:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--primary-50);
 }
-.book-chip-remove svg { width: 14px; height: 14px; }
+.book-row-remove svg { width: 14px; height: 14px; }
 
 .quote-scanning {
   display: flex;
@@ -6088,7 +6088,7 @@ button.book-chip {
 .overview-loved-more { align-self: flex-start; }
 .overview-loved-more .sidebar-section-chevron { color: currentColor; width: 16px; height: 16px; }
 
-/* Stars inline inside BookChip body (Most loved usage) */
+/* Stars inline inside BookRow body (Most loved usage) */
 .overview-stars {
   display: inline-flex;
   gap: 3px;
@@ -6102,8 +6102,8 @@ button.book-chip {
 }
 .overview-stars svg.is-filled { color: var(--primary-50); }
 /* When the chip has stars, pin the cover to the top. Chevron stays
- * centered via align-self (rule above on .book-chip-chevron). */
-.book-chip:has(.overview-stars) {
+ * centered via align-self (rule above on .book-row-chevron). */
+.book-row:has(.overview-stars) {
   align-items: flex-start;
 }
 
@@ -6115,7 +6115,7 @@ button.book-chip {
 }
 /* .overview-quote-card modifier — neutral bg + primary-tint on hover,
  * no transform / no shadow / no border / no entry animation.
- * Mirrors the .book-chip-interactive UI. Used in Quotes spotlight
+ * Mirrors the .book-row-interactive UI. Used in Quotes spotlight
  * (OverviewView) and QuoteListPanel. */
 .quote-card.overview-quote-card {
   background: var(--bg3);
@@ -6136,10 +6136,10 @@ button.book-chip {
 .quote-card.overview-quote-card:hover .quote-card-divider { background: rgba(0, 0, 0, 0.05); }
 [data-theme="dark"] .quote-card.overview-quote-card .quote-card-divider,
 [data-theme="dark"] .quote-card.overview-quote-card:hover .quote-card-divider { background: rgba(255, 255, 255, 0.1); }
-/* Inner BookChip is non-interactive — drop its bg so it doesn't read as
+/* Inner BookRow is non-interactive — drop its bg so it doesn't read as
  * a clickable affordance. */
-.quote-card.overview-quote-card .book-chip,
-[data-theme="dark"] .quote-card.overview-quote-card .book-chip {
+.quote-card.overview-quote-card .book-row,
+[data-theme="dark"] .quote-card.overview-quote-card .book-row {
   background: transparent;
   padding: 0;
 }

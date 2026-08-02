@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 import { useModalA11y } from "@/lib/useModalA11y";
 
 function StarRating({ value, onChange }) {
@@ -64,7 +64,7 @@ export default function FinishReadingModal({ open, book, onClose, onConfirm, t }
         <form id="finish-reading-form" className="modal-form" onSubmit={handleSubmit}>
           <div className="modal-fields">
             <div className="finish-modal-chip">
-              <BookChip book={{ title: book.title, author: book.author || '' }} />
+              <BookRow book={{ title: book.title, author: book.author || '' }} />
             </div>
 
             <div className="modal-field">

@@ -1,6 +1,6 @@
 "use client";
 import { useModalA11y } from "@/lib/useModalA11y";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 
 export default function BookListPanel({ open, onClose, title, books, onOpenBook, t }) {
   const panelRef = useModalA11y(open, onClose, { autoFocus: false });
@@ -22,7 +22,7 @@ export default function BookListPanel({ open, onClose, title, books, onOpenBook,
               <span className="panel-section-eyebrow">{title}</span>
               <div className="overview-loved-list">
                 {books.map(b => (
-                  <BookChip
+                  <BookRow
                     key={b.id}
                     book={b}
                     onClick={onOpenBook ? () => { onOpenBook(b); onClose(); } : undefined}

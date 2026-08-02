@@ -332,7 +332,7 @@ img.ds-cover { object-fit: cover; }
    garde le chrome carte (border/radius) et le padding de cellule ; on force juste la
    table à TENIR (table-layout fixed, pleine largeur du contenu) et on masque les colonnes
    meta (auteur/année) — sinon 6 colonnes dans ~380px se chevauchent. Résultat = carte
-   avec num + titre + genre + action, comme les book-chips de Book Row. */
+   avec num + titre + genre + action, comme les book-rows de Book Row. */
 .ds-states-grid--list-rows > .ds-state-sample > .books-list { align-self: stretch; }
 .ds-states-grid--list-rows .ds-list-spec .list-table { table-layout: fixed; width: 100%; }
 .ds-states-grid--list-rows .ds-list-spec .list-table th.list-cell-meta,
@@ -958,14 +958,14 @@ img.ds-cover { object-fit: cover; }
 /* États forcés du chip interactif pour la doc — mirror des vraies valeurs
    :hover / :active / :focus-visible de library.css. Survol et press partagent
    --primary-10 (aucun lift, aucune ombre) ; le focus pose l'anneau --primary-50. */
-.book-chip-interactive.is-hover,
-.book-chip-interactive.is-active { background: var(--primary-10) !important; }
-[data-theme="dark"] .book-chip-interactive.is-hover,
-[data-theme="dark"] .book-chip-interactive.is-active { background: var(--primary-10) !important; }
-.book-chip-interactive.is-focus { box-shadow: 0 0 0 2px var(--primary-50) !important; }
+.book-row-interactive.is-hover,
+.book-row-interactive.is-active { background: var(--primary-10) !important; }
+[data-theme="dark"] .book-row-interactive.is-hover,
+[data-theme="dark"] .book-row-interactive.is-active { background: var(--primary-10) !important; }
+.book-row-interactive.is-focus { box-shadow: 0 0 0 2px var(--primary-50) !important; }
 /* Pas d'animation d'apparition dans la doc : plusieurs chips qui fadeUp au mount
    distraient. Neutralisé uniquement sous /ds (la prod garde son animation). */
-.ds-section .book-chip { animation: none; }
+.ds-section .book-row { animation: none; }
 /* Book Card specimens : couper l'anim d'entrée (fadeUp). Mirror hover forcé pour la
    planche States — reproduit .book-card:hover réel (bord + fond, sans lift ni ombre). */
 .ds-section .book-card { animation: none; }
@@ -1078,34 +1078,34 @@ img.ds-cover { object-fit: cover; }
 .ds-redline .overview-activity-pills,
 .ds-preview .overview-cloud-chip,
 .ds-anno-scene .overview-cloud-chip,
-.ds-preview .book-chip,
-.ds-anno-scene .book-chip { background: var(--card); }
+.ds-preview .book-row,
+.ds-anno-scene .book-row { background: var(--card); }
 /* …mais les pills DANS le card Weekly Activity (surface --card blanche) gardent leur
    --bg3 réel : le forçage --card ci-dessus les rendrait invisibles (card sur card),
-   comme la book-chip en modale. Ne vaut que hors du card (page Segmented Pills). */
+   comme la book-row en modale. Ne vaut que hors du card (page Segmented Pills). */
 .ds-preview .overview-activity .overview-activity-pills,
 .ds-anno-scene .overview-activity .overview-activity-pills { background: var(--bg3); }
-/* …mais une book-chip DANS une modale (surface --card blanche) doit garder son --bg3
+/* …mais une book-row DANS une modale (surface --card blanche) doit garder son --bg3
    réel : le forçage --card ci-dessus la rendrait invisible (card sur card). Il ne vaut
    que pour une chip posée à même la scène bleue. Spécificité (0,3,0) > (0,2,0). */
-.ds-preview .modal .book-chip,
-.ds-preview .confirm-modal .book-chip,
-.ds-anno-scene .modal .book-chip,
-.ds-anno-scene .confirm-modal .book-chip { background: var(--bg3); }
+.ds-preview .modal .book-row,
+.ds-preview .confirm-modal .book-row,
+.ds-anno-scene .modal .book-row,
+.ds-anno-scene .confirm-modal .book-row { background: var(--bg3); }
 /* Idem pour une collection-chip DANS un .book-panel (Side Panel) : la surface du
    panel est --bg (blanche), le forçage --card la rendrait invisible (card sur bg).
    On restaure son --bg3 réel — même piège, même remède que la modale. (0,3,0). */
-.ds-preview .book-panel .book-chip,
-.ds-anno-scene .book-panel .book-chip { background: var(--bg3); }
+.ds-preview .book-panel .book-row,
+.ds-anno-scene .book-panel .book-row { background: var(--bg3); }
 /* …mais le forçage --bg3 (0,3,0) écrase le :hover interactif (0,2,0) → la chip
    cliquable n'avait plus de feedback. On restaure le hover réel (--primary-10) à
    specificité supérieure (0,4,0). Preview + Anatomy. */
-.ds-preview .book-panel .book-chip-interactive:hover,
-.ds-anno-scene .book-panel .book-chip-interactive:hover { background: var(--primary-10); }
+.ds-preview .book-panel .book-row-interactive:hover,
+.ds-anno-scene .book-panel .book-row-interactive:hover { background: var(--primary-10); }
 /* Planches « Sections · rythme interne » (Redline, mat blanc) : les encarts --bg3
    (rating-stars, finished-note, quote-item) sont muddy sur le mat → on les passe en
    --card pour un schéma net (leur contenu + les bandes rouges les délimitent).
-   Classes panel-spécifiques → n'affectent aucune autre planche. La book-chip est
+   Classes panel-spécifiques → n'affectent aucune autre planche. La book-row est
    passée en blanc en inline sur sa planche (elle est le sujet ailleurs, ex. Book Row). */
 .ds-redline .panel-rating-stars,
 .ds-redline .panel-finished-note,

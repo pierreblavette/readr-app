@@ -9,7 +9,7 @@ const SIZES = [
 
 const NOT_CANDIDATE = [
   { cls: ".now-reading-row", desc: "Height dictated by the 60×90 cover, not a fixed-height label row." },
-  { cls: ".add-to-col-row", desc: "State modifier (background / selected / disabled) on top of .book-chip, not a layout class." },
+  { cls: ".add-to-col-row", desc: "State modifier (background / selected / disabled) on top of .book-row, not a layout class." },
 ];
 
 export default function CellRowPage() {

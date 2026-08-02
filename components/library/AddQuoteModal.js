@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import GradientDropzone from "./GradientDropzone";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 import { prepareImage } from "../../lib/prepareImage";
 import { useModalA11y } from "../../lib/useModalA11y";
 
@@ -378,7 +378,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
               <div className={`modal-field quote-link-section${linkDropOpen && !selectedBook ? ' is-open' : ''}`}>
                 <label className="modal-field-label">{t.quoteLinkToBook}</label>
                 {selectedBook ? (
-                  <BookChip
+                  <BookRow
                     book={selectedBook}
                     onRemove={prefillBook && !editing ? undefined : () => setSelectedBook(null)}
                     ariaLabel={t.quoteLinkRemove}
@@ -436,7 +436,7 @@ export default function AddQuoteModal({ open, onClose, onSave, allBooks, prefill
               {prefillBook && !editing ? (
                 <div className="modal-field">
                   <label className="modal-field-label">{t.quoteLinkToBook}</label>
-                  <BookChip book={{ title: prefillBook.title, author: prefillBook.author || '' }} />
+                  <BookRow book={{ title: prefillBook.title, author: prefillBook.author || '' }} />
                 </div>
               ) : (
                 <>

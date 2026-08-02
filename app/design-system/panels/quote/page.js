@@ -28,7 +28,7 @@ export default function QuotePanelPage() {
               <QuotePanelSpec />
             </div>
           </div>
-          <p className="ds-note">Une citation enregistrée : le texte entre <span className="ds-class">.quote-mark</span> (accent), sa date, la rangée d&apos;actions (<em>Edit</em> · <em>Loved</em> actif · <em>Share</em>), le livre d&apos;origine en <a href="/design-system/book-chip"><strong>Book Row</strong></a>, et <em>Delete</em>. Même coquille détachée (radius 8 + ombre) que <a href="/design-system/panels/book"><strong>Book Panel</strong></a> ; en prod <code>fixed</code>, dockée au bord droit, slide-in.</p>
+          <p className="ds-note">Une citation enregistrée : le texte entre <span className="ds-class">.quote-mark</span> (accent), sa date, la rangée d&apos;actions (<em>Edit</em> · <em>Loved</em> actif · <em>Share</em>), le livre d&apos;origine en <a href="/design-system/book-row"><strong>Book Row</strong></a>, et <em>Delete</em>. Même coquille détachée (radius 8 + ombre) que <a href="/design-system/panels/book"><strong>Book Panel</strong></a> ; en prod <code>fixed</code>, dockée au bord droit, slide-in.</p>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export default function QuotePanelPage() {
               <tr className="table-row"><td>1</td><td><span className="ds-class">.panel-close</span></td><td>Fermer : <strong>44×44</strong> absolu haut-droite.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.quote-panel-content</span></td><td>La citation : <span className="ds-class">.quote-panel-text</span> (<code>16 / 500</code>, <code>line-height 1.7</code> <span className="ds-token-chip">--text-2</span>) encadrée de <span className="ds-class">.quote-mark</span> (<span className="ds-token-chip">--accent</span>), + <span className="ds-class">.quote-panel-date</span> (<code>13 / 500</code> <span className="ds-token-chip">--text-3</span>).</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.panel-actions</span></td><td>Rangée d&apos;actions : groupe <em>Edit</em> (<span className="ds-class">.panel-move-btn</span>) + <em>Loved</em> (<span className="ds-class">.panel-header-like</span>, <span className="ds-class">.is-active</span> quand aimé) à gauche, <em>Share</em> à droite (<code>space-between</code>).</td><td>—</td></tr>
-              <tr className="table-row"><td>4</td><td><span className="ds-class">.panel-section</span> (Book)</td><td>Livre d&apos;origine : eyebrow + <span className="ds-class">.book-chip</span> interactif (<a href="/design-system/book-chip"><strong>Book Row</strong></a>, chevron).</td><td><span className="now-reading-date now-reading-date--sm">si lié</span></td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.panel-section</span> (Book)</td><td>Livre d&apos;origine : eyebrow + <span className="ds-class">.book-row</span> interactif (<a href="/design-system/book-row"><strong>Book Row</strong></a>, chevron).</td><td><span className="now-reading-date now-reading-date--sm">si lié</span></td></tr>
               <tr className="table-row"><td>5</td><td><span className="ds-class">.panel-actions</span> (footer)</td><td><strong>Delete</strong> (<span className="ds-class">.panel-delete-btn</span>, outline destructif).</td><td>—</td></tr>
             </tbody>
           </table>
@@ -126,16 +126,16 @@ export default function QuotePanelPage() {
               <Redline>
                 <div className="panel-section" style={{ width: 360 }}>
                   <span className="panel-section-eyebrow">Book</span>
-                  <button type="button" className="book-chip book-chip-interactive" style={{ background: "var(--card)" }}>
-                    <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}><span>A</span></div>
-                    <div className="book-chip-body"><div className="book-chip-name"><div className="book-chip-title">A Brief History of Time</div><div className="book-chip-author">Stephen Hawking</div></div></div>
-                    <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+                  <button type="button" className="book-row book-row-interactive" style={{ background: "var(--card)" }}>
+                    <div className="book-row-cover book-row-cover-placeholder" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}><span>A</span></div>
+                    <div className="book-row-body"><div className="book-row-name"><div className="book-row-title">A Brief History of Time</div><div className="book-row-author">Stephen Hawking</div></div></div>
+                    <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
                   </button>
                 </div>
               </Redline>
             </div>
           </div>
-          <p className="ds-note"><strong>Book</strong> — la <span className="ds-class">.panel-section</span> : eyebrow ↔ <span className="ds-class">.book-chip</span> à gap <strong>16</strong>. La chip porte son propre padding <strong>12</strong> et gap <strong>12</strong> interne — voir <a href="/design-system/book-chip"><strong>Book Row</strong></a>. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note"><strong>Book</strong> — la <span className="ds-class">.panel-section</span> : eyebrow ↔ <span className="ds-class">.book-row</span> à gap <strong>16</strong>. La chip porte son propre padding <strong>12</strong> et gap <strong>12</strong> interne — voir <a href="/design-system/book-row"><strong>Book Row</strong></a>. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
@@ -164,7 +164,7 @@ export default function QuotePanelPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Consumer</div>
-            <p><code>QuotePanel</code>, ouvert au clic sur une citation (vue Quotes, listes de citations de l&apos;Overview). <code>onEdit</code>, <code>onToggleSave</code>, <code>onOpenBook</code>, <code>onDelete</code> remontent au parent ; <span className="ds-class">.book-chip</span> ouvre le <a href="/design-system/panels/book"><strong>Book Panel</strong></a> du livre.</p>
+            <p><code>QuotePanel</code>, ouvert au clic sur une citation (vue Quotes, listes de citations de l&apos;Overview). <code>onEdit</code>, <code>onToggleSave</code>, <code>onOpenBook</code>, <code>onDelete</code> remontent au parent ; <span className="ds-class">.book-row</span> ouvre le <a href="/design-system/panels/book"><strong>Book Panel</strong></a> du livre.</p>
           </div>
         </div>
       </div>

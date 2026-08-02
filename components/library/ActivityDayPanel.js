@@ -1,7 +1,7 @@
 "use client";
 import { Fragment, useMemo, useState } from "react";
 import { useModalA11y } from "@/lib/useModalA11y";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 import OverviewQuoteCard from "./OverviewQuoteCard";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -72,7 +72,7 @@ export default function ActivityDayPanel({
                 <span className="panel-section-eyebrow">{t.overviewActivityDayBooks}</span>
                 <div className="overview-loved-list">
                   {dayData.books.map(b => (
-                    <BookChip
+                    <BookRow
                       key={b.id}
                       book={b}
                       rating={b.rating}

@@ -26,13 +26,13 @@ export default function CollectionListPanel({ open, onClose, title, collections,
                     <button
                       key={col.id}
                       type="button"
-                      className="book-chip book-chip-interactive collection-chip"
+                      className="book-row book-row-interactive collection-chip"
                       onClick={() => { onOpenCollection?.(col); onClose(); }}>
-                      <div className="book-chip-body">
-                        <div className="book-chip-title">{col.name}</div>
-                        <div className="book-chip-author">{t.colBookCount(books.length)}</div>
+                      <div className="book-row-body">
+                        <div className="book-row-title">{col.name}</div>
+                        <div className="book-row-author">{t.colBookCount(books.length)}</div>
                       </div>
-                      <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <polyline points="9 18 15 12 9 6"/>
                       </svg>
                     </button>

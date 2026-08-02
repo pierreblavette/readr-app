@@ -163,11 +163,11 @@ export default function SidePanelPage() {
                 <div className="panel-section" style={{ width: 340 }}>
                   <span className="panel-section-eyebrow">Collections</span>
                   <div className="panel-collections">
-                    <div className="book-chip collection-chip" style={{ background: "transparent" }}>
-                      <div className="book-chip-body"><div className="book-chip-title">Science shelf</div><div className="book-chip-author">12 books</div></div>
+                    <div className="book-row collection-chip" style={{ background: "transparent" }}>
+                      <div className="book-row-body"><div className="book-row-title">Science shelf</div><div className="book-row-author">12 books</div></div>
                     </div>
-                    <div className="book-chip collection-chip" style={{ background: "transparent" }}>
-                      <div className="book-chip-body"><div className="book-chip-title">Physics</div><div className="book-chip-author">7 books</div></div>
+                    <div className="book-row collection-chip" style={{ background: "transparent" }}>
+                      <div className="book-row-body"><div className="book-row-title">Physics</div><div className="book-row-author">7 books</div></div>
                     </div>
                   </div>
                 </div>

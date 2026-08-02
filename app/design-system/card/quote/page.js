@@ -15,7 +15,7 @@ export default function QuoteCardPage() {
             <QuoteCardSpec />
           </div>
           </div>
-          <p className="ds-note">Une citation : le <strong>texte</strong> entre guillemets accent, un bouton <strong>love</strong> (bookmark) + le kebab, un divider, puis le <strong>livre source</strong> (<span className="ds-class">.book-chip</span> — voir Book Row). Même socle card, en <em>flex colonne</em> plutôt qu&apos;un cover en tête.</p>
+          <p className="ds-note">Une citation : le <strong>texte</strong> entre guillemets accent, un bouton <strong>love</strong> (bookmark) + le kebab, un divider, puis le <strong>livre source</strong> (<span className="ds-class">.book-row</span> — voir Book Row). Même socle card, en <em>flex colonne</em> plutôt qu&apos;un cover en tête.</p>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export default function QuoteCardPage() {
               <tr className="table-row"><td>1</td><td><span className="ds-class">.quote-card</span></td><td>Coquille : même langage card (<span className="ds-token-chip">--card</span>, radius 8, bord 1.5), mais <code>flex</code> colonne, padding <strong>16</strong>, gap <strong>16</strong>. <code>role=button</code>, toute la carte cliquable.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.quote-card-text</span></td><td>La citation : 16/500, <code>line-height: 1.7</code>. Guillemets <span className="ds-class">.quote-mark</span> en <span className="ds-token-chip">--accent</span> (1.4em). <span className="ds-class">.quote-see-more</span> si le texte déborde.</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.quote-card-actions</span></td><td><span className="ds-class">.quote-card-like</span> (bookmark 40×40, <span className="ds-class">.is-saved</span> le remplit) + le <span className="ds-class">Kebab</span> (Edit · Favorite · Share · Delete).</td><td>—</td></tr>
-              <tr className="table-row"><td>4</td><td><span className="ds-class">.book-chip</span></td><td>Le livre source, après un <span className="ds-class">.quote-card-divider</span> (1px <span className="ds-token-chip">--border-subtle</span>). Réutilise la primitive <span className="ds-class">Book Row</span>.</td><td>—</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.book-row</span></td><td>Le livre source, après un <span className="ds-class">.quote-card-divider</span> (1px <span className="ds-token-chip">--border-subtle</span>). Réutilise la primitive <span className="ds-class">Book Row</span>.</td><td>—</td></tr>
             </tbody>
           </table>
         </div>

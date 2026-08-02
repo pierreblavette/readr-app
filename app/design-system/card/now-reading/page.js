@@ -82,7 +82,7 @@ export default function NowReadingCardPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Repos : bord <span className="ds-token-chip">--border-subtle</span>. Hover : bord <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-3</span> — <strong>pas d&apos;ombre ni de lift</strong> (transition 0.22s). En contexte <span className="ds-class">.overview-card</span>, la carte bascule sur le registre tuile grise (<span className="ds-token-chip">--bg3</span> repos, <span className="ds-token-chip">--primary-10</span> hover, sans bord) iso <span className="ds-class">.book-chip-interactive</span>.</p>
+          <p className="ds-note">Repos : bord <span className="ds-token-chip">--border-subtle</span>. Hover : bord <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-3</span> — <strong>pas d&apos;ombre ni de lift</strong> (transition 0.22s). En contexte <span className="ds-class">.overview-card</span>, la carte bascule sur le registre tuile grise (<span className="ds-token-chip">--bg3</span> repos, <span className="ds-token-chip">--primary-10</span> hover, sans bord) iso <span className="ds-class">.book-row-interactive</span>.</p>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ export default function NowReadingCardPage() {
             <thead className="table-head"><tr><th>Action</th><th>Comportement</th></tr></thead>
             <tbody className="table-body">
               <tr className="table-row"><td><strong>Mark as finished</strong></td><td>Ouvre la <span className="ds-class">Finish Reading Modal</span>.</td></tr>
-              <tr className="table-row"><td><strong>Add a quote</strong></td><td>Ouvre <span className="ds-class">AddQuoteModal</span> pré-remplie du contexte livre (BookChip en Photo + Manual, sans champ à éditer).</td></tr>
+              <tr className="table-row"><td><strong>Add a quote</strong></td><td>Ouvre <span className="ds-class">AddQuoteModal</span> pré-remplie du contexte livre (BookRow en Photo + Manual, sans champ à éditer).</td></tr>
               <tr className="table-row"><td><strong>Cancel reading</strong></td><td>Ouvre la <span className="ds-class">Delete Modal</span> (<code>type=cancelReading</code>) — le livre reste en bibliothèque, seulement retiré de Now Reading. Confirm <strong>non destructif</strong>.</td></tr>
             </tbody>
           </table>

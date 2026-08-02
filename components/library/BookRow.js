@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "../../lib/bookUtils";
 
-export default function BookChip({ book, onRemove, onClick, ariaLabel, rating }) {
+export default function BookRow({ book, onRemove, onClick, ariaLabel, rating }) {
   const [cover, setCover] = useState(() => getCoverFromCache(book.title, book.author)?.thumb || null);
   const [c1, c2] = coverColors(book.title);
   const letter = coverLetter(book.title);
@@ -19,15 +19,15 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
   const inner = (
     <>
       <div
-        className={`book-chip-cover${cover ? '' : ' book-chip-cover-placeholder'}`}
+        className={`book-row-cover${cover ? '' : ' book-row-cover-placeholder'}`}
         style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
       >
         {cover ? <img src={cover} alt="" /> : <span>{letter}</span>}
       </div>
-      <div className="book-chip-body">
-        <div className="book-chip-name">
-          <div className="book-chip-title">{book.title}</div>
-          {book.author && <div className="book-chip-author">{book.author}</div>}
+      <div className="book-row-body">
+        <div className="book-row-name">
+          <div className="book-row-title">{book.title}</div>
+          {book.author && <div className="book-row-author">{book.author}</div>}
         </div>
         {rating > 0 && (
           <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
@@ -40,7 +40,7 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
         )}
       </div>
       {onRemove && (
-        <button type="button" className="book-chip-remove" onClick={onRemove} aria-label={ariaLabel}>
+        <button type="button" className="book-row-remove" onClick={onRemove} aria-label={ariaLabel}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
@@ -51,14 +51,14 @@ export default function BookChip({ book, onRemove, onClick, ariaLabel, rating })
 
   if (onClick) {
     return (
-      <button type="button" className="book-chip book-chip-interactive" onClick={onClick}>
+      <button type="button" className="book-row book-row-interactive" onClick={onClick}>
         {inner}
-        <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
       </button>
     );
   }
 
-  return <div className="book-chip">{inner}</div>;
+  return <div className="book-row">{inner}</div>;
 }

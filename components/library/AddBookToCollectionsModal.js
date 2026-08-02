@@ -41,19 +41,19 @@ export default function AddBookToCollectionsModal({ open, book, collections, onA
                   <button
                     key={col.id}
                     type="button"
-                    className={`book-chip book-chip-interactive collection-chip${alreadyIn ? ' is-already-in' : ''}`}
+                    className={`book-row book-row-interactive collection-chip${alreadyIn ? ' is-already-in' : ''}`}
                     disabled={alreadyIn}
                     onClick={() => handleSelect(col.id)}>
-                    <div className="book-chip-body">
-                      <div className="book-chip-title">{col.name}</div>
-                      <div className="book-chip-author">{t.colBookCount((col.bookIds || []).length)}</div>
+                    <div className="book-row-body">
+                      <div className="book-row-title">{col.name}</div>
+                      <div className="book-row-author">{t.colBookCount((col.bookIds || []).length)}</div>
                     </div>
                     {alreadyIn ? (
-                      <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>
                     ) : (
-                      <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <polyline points="9 18 15 12 9 6"/>
                       </svg>
                     )}

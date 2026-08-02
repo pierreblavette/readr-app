@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 import { useModalA11y } from "@/lib/useModalA11y";
 
 function QuotePreview({ text, t }) {
@@ -111,15 +111,15 @@ export default function DeleteModal({ target, onClose, onConfirm, t }) {
           <div className="confirm-modal-sub">{msg}</div>
           {(isSingleBook || isColRemove) && target.title && (
             <div className="confirm-modal-chip">
-              <BookChip book={{ title: target.title, author: target.author || '' }} />
+              <BookRow book={{ title: target.title, author: target.author || '' }} />
             </div>
           )}
           {isCollection && target.title && (
             <div className="confirm-modal-chip">
-              <div className="book-chip">
-                <div className="book-chip-body">
-                  <div className="book-chip-title">{target.title}</div>
-                  <div className="book-chip-author">{t.colBookCount(target.count || 0)}</div>
+              <div className="book-row">
+                <div className="book-row-body">
+                  <div className="book-row-title">{target.title}</div>
+                  <div className="book-row-author">{t.colBookCount(target.count || 0)}</div>
                 </div>
               </div>
             </div>

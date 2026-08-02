@@ -16,7 +16,7 @@ const ShareIcon = () => (
   </svg>
 );
 const ChevronIcon = () => (
-  <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <polyline points="9 18 15 12 9 6" />
   </svg>
 );
@@ -121,10 +121,10 @@ export function BookPanelSpec({ className = "", compact = false }) {
               <div className="panel-section">
                 <span className="panel-section-eyebrow">Collections</span>
                 <div className="panel-collections">
-                  <button type="button" className="book-chip book-chip-interactive collection-chip">
-                    <div className="book-chip-body">
-                      <div className="book-chip-title">Science shelf</div>
-                      <div className="book-chip-author">12 books</div>
+                  <button type="button" className="book-row book-row-interactive collection-chip">
+                    <div className="book-row-body">
+                      <div className="book-row-title">Science shelf</div>
+                      <div className="book-row-author">12 books</div>
                     </div>
                     <ChevronIcon />
                   </button>

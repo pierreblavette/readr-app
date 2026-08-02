@@ -19,7 +19,7 @@ const BookmarkIcon = ({ filled }) => (
   </svg>
 );
 const ChevronIcon = () => (
-  <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <polyline points="9 18 15 12 9 6" />
   </svg>
 );
@@ -61,16 +61,16 @@ export function QuotePanelSpec({ className = "", saved = true }) {
           </div>
         </div>
 
-        {/* Book — la citation appartient à un livre (BookChip / Book Row) */}
+        {/* Book — la citation appartient à un livre (BookRow / Book Row) */}
         <div className="panel-divider" />
         <div className="panel-section">
           <span className="panel-section-eyebrow">Book</span>
-          <button type="button" className="book-chip book-chip-interactive">
-            <div className="book-chip-cover book-chip-cover-placeholder" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}><span>A</span></div>
-            <div className="book-chip-body">
-              <div className="book-chip-name">
-                <div className="book-chip-title">A Brief History of Time</div>
-                <div className="book-chip-author">Stephen Hawking</div>
+          <button type="button" className="book-row book-row-interactive">
+            <div className="book-row-cover book-row-cover-placeholder" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}><span>A</span></div>
+            <div className="book-row-body">
+              <div className="book-row-name">
+                <div className="book-row-title">A Brief History of Time</div>
+                <div className="book-row-author">Stephen Hawking</div>
               </div>
             </div>
             <ChevronIcon />

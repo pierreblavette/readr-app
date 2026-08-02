@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import ExportMenu from "@/components/library/ExportMenu";
 import SortMenu from "@/components/library/SortMenu";
-import BookChip from "@/components/library/BookChip";
+import BookRow from "@/components/library/BookRow";
 import NoMatchesIcon from "@/components/library/NoMatchesIcon";
 
 // Illustration multi-tons de l'empty state Quotes (tokens --illus, viewBox 60).
@@ -315,7 +315,7 @@ function QuoteCard({ quote, book, onEdit, onDelete, onShared, onToggleSave, onOp
         </div>
       </div>
       <div className="quote-card-divider" />
-      <BookChip
+      <BookRow
         book={book || { title: quote.bookTitle || '', author: quote.bookAuthor || '' }}
       />
     </div>

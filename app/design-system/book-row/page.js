@@ -13,7 +13,7 @@ const StarIcon = () => (
 function Cover({ from, to, letter }) {
   return (
     <div
-      className="book-chip-cover book-chip-cover-placeholder"
+      className="book-row-cover book-row-cover-placeholder"
       style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
     >
       <span>{letter}</span>
@@ -21,14 +21,14 @@ function Cover({ from, to, letter }) {
   );
 }
 
-// Corps identique à BookChip.js : title + author TOUJOURS enveloppés dans
-// .book-chip-name, les étoiles en second enfant de .book-chip-body.
+// Corps identique à BookRow.js : title + author TOUJOURS enveloppés dans
+// .book-row-name, les étoiles en second enfant de .book-row-body.
 function Body({ title, author, rating }) {
   return (
-    <div className="book-chip-body">
-      <div className="book-chip-name">
-        <div className="book-chip-title">{title}</div>
-        {author && <div className="book-chip-author">{author}</div>}
+    <div className="book-row-body">
+      <div className="book-row-name">
+        <div className="book-row-title">{title}</div>
+        {author && <div className="book-row-author">{author}</div>}
       </div>
       {rating > 0 && (
         <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
@@ -40,23 +40,23 @@ function Body({ title, author, rating }) {
 }
 
 const Chevron = () => (
-  <svg className="book-chip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <polyline points="9 18 15 12 9 6" />
   </svg>
 );
 
 // Décomposition numérotée : container (1) + cover (2) + name (3) + chevron (4).
 const ANNOS = [
-  { n: 1, side: "top", target: ".book-chip" },
-  { n: 2, side: "bottom", target: ".book-chip-cover" },
-  { n: 3, side: "bottom", target: ".book-chip-name" },
-  { n: 4, side: "right", target: ".book-chip-chevron" },
+  { n: 1, side: "top", target: ".book-row" },
+  { n: 2, side: "bottom", target: ".book-row-cover" },
+  { n: 3, side: "bottom", target: ".book-row-name" },
+  { n: 4, side: "right", target: ".book-row-chevron" },
 ];
 
-export default function BookChipPage() {
+export default function BookRowPage() {
   return (
     <DSSection
-      id="book-chip"
+      id="book-row"
       title="Book Row"
       sub="La ligne qui référence un livre : sa vignette, son titre, son auteur. Utilisée partout où un livre doit être cité de façon compacte."
     >
@@ -66,7 +66,7 @@ export default function BookChipPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview">
-            <button type="button" className="book-chip book-chip-interactive" style={{ width: "var(--spec-w, 300px)" }}>
+            <button type="button" className="book-row book-row-interactive" style={{ width: "var(--spec-w, 300px)" }}>
               <Cover from="#4959E6" to="#00A699" letter="D" />
               <Body title="Dune" author="Frank Herbert" rating={5} />
               <Chevron />
@@ -83,7 +83,7 @@ export default function BookChipPage() {
         <div className="ds-card-body col">
           <div className="ds-anno-board">
           <AnnoScene annos={ANNOS}>
-            <button type="button" className="book-chip book-chip-interactive ds-anno-organism" style={{ width: 300 }}>
+            <button type="button" className="book-row book-row-interactive ds-anno-organism" style={{ width: 300 }}>
               <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
               <Body title="Tropique du Cancer" author="Henry Miller" />
               <Chevron />
@@ -99,12 +99,12 @@ export default function BookChipPage() {
           <table className="token-table ds-anno-table">
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
-              <tr className="table-row"><td>1</td><td><span className="ds-class">.book-chip</span></td><td>Container : flex, gap 12, padding 12 uniforme, bg <span className="ds-token-chip">--bg3</span>, radius 8 — padding canonique partagé avec <span className="ds-class">.collection-chip</span>.</td><td>—</td></tr>
-              <tr className="table-row"><td>2</td><td><span className="ds-class">.book-chip-cover</span></td><td>Vignette : 32×44 (ratio couverture), radius 4, <code>overflow: hidden</code>, sans ombre. Sans image → <span className="ds-class">.book-chip-cover-placeholder</span> (dégradé + initiale 16/700).</td><td>—</td></tr>
-              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-chip-body</span></td><td>Corps : <code>flex: 1</code> + <code>min-width: 0</code> (sans lui, un titre long déborderait au lieu de s&apos;ellipser). Gap 4 entre nom et étoiles.</td><td>—</td></tr>
-              <tr className="table-row"><td>3</td><td><span className="ds-class">.book-chip-name</span></td><td>Nom : titre 15/600 + auteur 13/500 <span className="ds-token-chip">--text-2</span>, gap 2, <code>ellipsis</code> 1 ligne. Toujours présent — garde titre/auteur serrés quand les étoiles s&apos;ajoutent.</td><td>—</td></tr>
-              <tr className="table-row"><td>4</td><td><span className="ds-class">.book-chip-chevron</span></td><td>Chevron : 16×16, <code>align-self: center</code>, <code>margin-left: 4</code>. Seule marque visible qu&apos;une ligne est cliquable.</td><td><span className="now-reading-date now-reading-date--sm">Interactive</span></td></tr>
-              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-chip-remove</span></td><td>Croix : 28×28, radius 6, svg 14, hover bg <span className="ds-token-chip">--primary-10</span>. Cible 28px acceptable car la ligne n&apos;est pas cliquable dans ce mode.</td><td><span className="now-reading-date now-reading-date--sm">With remove</span></td></tr>
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.book-row</span></td><td>Container : flex, gap 12, padding 12 uniforme, bg <span className="ds-token-chip">--bg3</span>, radius 8 — padding canonique partagé avec <span className="ds-class">.collection-chip</span>.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.book-row-cover</span></td><td>Vignette : 32×44 (ratio couverture), radius 4, <code>overflow: hidden</code>, sans ombre. Sans image → <span className="ds-class">.book-row-cover-placeholder</span> (dégradé + initiale 16/700).</td><td>—</td></tr>
+              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-row-body</span></td><td>Corps : <code>flex: 1</code> + <code>min-width: 0</code> (sans lui, un titre long déborderait au lieu de s&apos;ellipser). Gap 4 entre nom et étoiles.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.book-row-name</span></td><td>Nom : titre 15/600 + auteur 13/500 <span className="ds-token-chip">--text-2</span>, gap 2, <code>ellipsis</code> 1 ligne. Toujours présent — garde titre/auteur serrés quand les étoiles s&apos;ajoutent.</td><td>—</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.book-row-chevron</span></td><td>Chevron : 16×16, <code>align-self: center</code>, <code>margin-left: 4</code>. Seule marque visible qu&apos;une ligne est cliquable.</td><td><span className="now-reading-date now-reading-date--sm">Interactive</span></td></tr>
+              <tr className="table-row"><td>·</td><td><span className="ds-class">.book-row-remove</span></td><td>Croix : 28×28, radius 6, svg 14, hover bg <span className="ds-token-chip">--primary-10</span>. Cible 28px acceptable car la ligne n&apos;est pas cliquable dans ce mode.</td><td><span className="now-reading-date now-reading-date--sm">With remove</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -116,16 +116,16 @@ export default function BookChipPage() {
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".book-chip-cover">
-                <div className="book-chip" style={{ width: 300 }}>
+              <Redline boxSelector=".book-row-cover">
+                <div className="book-row" style={{ width: 300 }}>
                   <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
                   <Body title="Display" author="Henry Miller" />
                 </div>
               </Redline>
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".book-chip-cover">
-                <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
+              <Redline boxSelector=".book-row-cover">
+                <button type="button" className="book-row book-row-interactive" style={{ width: 300 }}>
                   <Cover from="#9EEB97" to="#4959E6" letter="1" />
                   <Body title="Interactive" author="George Orwell" />
                   <Chevron />
@@ -133,11 +133,11 @@ export default function BookChipPage() {
               </Redline>
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".book-chip-cover">
-                <div className="book-chip" style={{ width: 300 }}>
+              <Redline boxSelector=".book-row-cover">
+                <div className="book-row" style={{ width: 300 }}>
                   <Cover from="#FE7E4E" to="#FFCEE3" letter="B" />
                   <Body title="With remove" author="Stephen Hawking" />
-                  <button type="button" className="book-chip-remove" aria-label="Remove">
+                  <button type="button" className="book-row-remove" aria-label="Remove">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                       <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
@@ -146,8 +146,8 @@ export default function BookChipPage() {
               </Redline>
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".book-chip-cover">
-                <button type="button" className="book-chip book-chip-interactive" style={{ width: 300 }}>
+              <Redline boxSelector=".book-row-cover">
+                <button type="button" className="book-row book-row-interactive" style={{ width: 300 }}>
                   <Cover from="#4959E6" to="#00A699" letter="D" />
                   <Body title="Rating" author="Frank Herbert" rating={5} />
                   <Chevron />
@@ -165,15 +165,15 @@ export default function BookChipPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
-              <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="D" />
                 <Body title="Default" author="--bg3" />
                 <Chevron />
               </button>
-              <span className="ds-class">.book-chip-interactive</span>
+              <span className="ds-class">.book-row-interactive</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-chip book-chip-interactive is-hover" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive is-hover" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#9EEB97" to="#4959E6" letter="H" />
                 <Body title="Hover" author="--primary-10" />
                 <Chevron />
@@ -181,7 +181,7 @@ export default function BookChipPage() {
               <span className="ds-class">:hover</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-chip book-chip-interactive is-active" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive is-active" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#FE7E4E" to="#FFCEE3" letter="A" />
                 <Body title="Active" author="--primary-10" />
                 <Chevron />
@@ -189,7 +189,7 @@ export default function BookChipPage() {
               <span className="ds-class">:active</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-chip book-chip-interactive is-focus" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive is-focus" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#4959E6" to="#00A699" letter="F" />
                 <Body title="Focus" author="ring --primary-50" />
                 <Chevron />
@@ -209,34 +209,34 @@ export default function BookChipPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
-              <div className="book-chip" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <div className="book-row" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
                 <Body title="Tropique du Cancer" author="Henry Miller" />
               </div>
-              <span className="ds-class">.book-chip</span>
+              <span className="ds-class">.book-row</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#9EEB97" to="#4959E6" letter="1" />
                 <Body title="1984" author="George Orwell" />
                 <Chevron />
               </button>
-              <span className="ds-class">.book-chip-interactive</span>
+              <span className="ds-class">.book-row-interactive</span>
             </div>
             <div className="ds-state-sample">
-              <div className="book-chip" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <div className="book-row" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#FE7E4E" to="#FFCEE3" letter="B" />
                 <Body title="A Brief History of Time" author="Stephen Hawking" />
-                <button type="button" className="book-chip-remove" aria-label="Remove">
+                <button type="button" className="book-row-remove" aria-label="Remove">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 </button>
               </div>
-              <span className="ds-class">.book-chip-remove</span>
+              <span className="ds-class">.book-row-remove</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-chip book-chip-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
                 <Cover from="#4959E6" to="#00A699" letter="D" />
                 <Body title="Dune" author="Frank Herbert" rating={5} />
                 <Chevron />
@@ -285,11 +285,11 @@ export default function BookChipPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">With stars · alignement haut</div>
-            <p><code>.book-chip:has(.overview-stars)</code> passe en <code>align-items: flex-start</code> : la vignette se cale en haut au lieu de flotter au centre d&apos;un bloc devenu plus haut. Le chevron garde son <code>align-self: center</code>.</p>
+            <p><code>.book-row:has(.overview-stars)</code> passe en <code>align-items: flex-start</code> : la vignette se cale en haut au lieu de flotter au centre d&apos;un bloc devenu plus haut. Le chevron garde son <code>align-self: center</code>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Source</div>
-            <p><code>BookChip.js</code>. La couverture est résolue par titre/auteur avec cache local, et retombe sur le dégradé + initiale si aucune image n&apos;est trouvée.</p>
+            <p><code>BookRow.js</code>. La couverture est résolue par titre/auteur avec cache local, et retombe sur le dégradé + initiale si aucune image n&apos;est trouvée.</p>
           </div>
         </div>
       </div>

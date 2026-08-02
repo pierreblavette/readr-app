@@ -1,5 +1,5 @@
 "use client";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 
 export default function OverviewQuoteCard({ quote, book, onOpen, t }) {
   function activate() { onOpen?.(quote); }
@@ -27,7 +27,7 @@ export default function OverviewQuoteCard({ quote, book, onOpen, t }) {
       {(book || quote.bookTitle) && (
         <>
           <div className="quote-card-divider" />
-          <BookChip book={chipBook} />
+          <BookRow book={chipBook} />
         </>
       )}
     </div>

@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useStats } from "@/lib/useStats";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 import ReadingGoalModal from "./ReadingGoalModal";
 import BookListPanel from "./BookListPanel";
 import QuoteListPanel from "./QuoteListPanel";
@@ -491,7 +491,7 @@ function MostLovedCard({ books, onOpenBook, onSeeMore, t }) {
       </div>
       <div className="overview-loved-list">
         {books.slice(0, 3).map(b => (
-          <BookChip
+          <BookRow
             key={b.id}
             book={b}
             onClick={onOpenBook ? () => onOpenBook(b) : undefined}

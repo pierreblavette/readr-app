@@ -52,7 +52,7 @@ export default function DeleteModalPage() {
             <ConfirmModalSpec variant={variant} style={{ maxWidth: 620, width: "100%" }} />
           </div>
           </div>
-          <p className="ds-note">Un seul composant, quatre corps ici (10 en prod). Le <strong>titre</strong> et le <strong>message</strong> sont résolus par <code>target.type</code> ; le corps ajoute un aperçu de la cible : <strong>BookChip</strong> (livre), <strong>citation</strong> tronquée, <strong>rien</strong> (bulk / mot), ou <strong>rating + note</strong> (finished). Montré en flux, sans overlay.</p>
+          <p className="ds-note">Un seul composant, quatre corps ici (10 en prod). Le <strong>titre</strong> et le <strong>message</strong> sont résolus par <code>target.type</code> ; le corps ajoute un aperçu de la cible : <strong>BookRow</strong> (livre), <strong>citation</strong> tronquée, <strong>rien</strong> (bulk / mot), ou <strong>rating + note</strong> (finished). Montré en flux, sans overlay.</p>
         </div>
       </div>
 
@@ -78,7 +78,7 @@ export default function DeleteModalPage() {
               <tr className="table-row"><td>1</td><td><span className="ds-class">.confirm-modal</span></td><td>Coquille sœur de <span className="ds-class">.modal</span> : même surface / radius / padding 32/24/0 / gap 32 / shadow, <code>role=&quot;alertdialog&quot;</code>. Voir <strong>Modals</strong>.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.confirm-modal-title</span></td><td>Question courte — <code>28 / 800 / −0.02em</code>. « Remove this book? »</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.confirm-modal-sub</span></td><td>Message — <code>16 / 500</code> <span className="ds-token-chip">--text-2</span>. Ce qui sera supprimé, et ce qui reste. Dans un <span className="ds-class">.modal-fields</span> avec le corps.</td><td>—</td></tr>
-              <tr className="table-row"><td>4</td><td>Body addon</td><td>Aperçu de la cible selon <code>type</code> : <span className="ds-class">.confirm-modal-chip</span> (BookChip), <span className="ds-class">.confirm-modal-quote-wrap</span> (citation, line-clamp 3), <span className="ds-class">.panel-finished-field</span> ×2 (rating + note). Absent pour les bulk.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
+              <tr className="table-row"><td>4</td><td>Body addon</td><td>Aperçu de la cible selon <code>type</code> : <span className="ds-class">.confirm-modal-chip</span> (BookRow), <span className="ds-class">.confirm-modal-quote-wrap</span> (citation, line-clamp 3), <span className="ds-class">.panel-finished-field</span> ×2 (rating + note). Absent pour les bulk.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
               <tr className="table-row"><td>5</td><td><span className="ds-class">.confirm-modal-actions</span></td><td><code>space-between</code>, <code>margin 0 −24</code> / padding 16 24. Cancel = <span className="ds-class">.btn.btn-outline.btn-md</span> ; confirm = <span className="ds-class">.confirm-modal-delete</span> (voir Dispatch).</td><td>—</td></tr>
             </tbody>
           </table>
@@ -133,7 +133,7 @@ export default function DeleteModalPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Même titre + actions ; le <span className="ds-class">.modal-fields</span> porte le message (<span className="ds-class">.confirm-modal-sub</span>) puis un aperçu de la cible selon <code>target.type</code> : <strong>BookChip</strong> (livre), <strong>citation</strong> tronquée, <strong>rating + note</strong> (finished), ou <strong>rien</strong> (bulk / mot — le message suffit). Le mapping complet est dans <strong>Dispatch</strong>.</p>
+          <p className="ds-note">Même titre + actions ; le <span className="ds-class">.modal-fields</span> porte le message (<span className="ds-class">.confirm-modal-sub</span>) puis un aperçu de la cible selon <code>target.type</code> : <strong>BookRow</strong> (livre), <strong>citation</strong> tronquée, <strong>rating + note</strong> (finished), ou <strong>rien</strong> (bulk / mot — le message suffit). Le mapping complet est dans <strong>Dispatch</strong>.</p>
         </div>
       </div>
 

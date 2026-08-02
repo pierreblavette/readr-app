@@ -24,9 +24,9 @@ export function FormModalSpec({ style, className = "" }) {
           </div>
           <div className="modal-field">
             <label className="modal-field-label">Link to book</label>
-            <div className="book-chip">
-              <div className="book-chip-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
-              <div className="book-chip-body"><div className="book-chip-name"><div className="book-chip-title">Anna Karenina</div><div className="book-chip-author">Leo Tolstoy</div></div></div>
+            <div className="book-row">
+              <div className="book-row-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
+              <div className="book-row-body"><div className="book-row-name"><div className="book-row-title">Anna Karenina</div><div className="book-row-author">Leo Tolstoy</div></div></div>
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@ export function FormModalSpec({ style, className = "" }) {
 }
 
 // ─── FINISH READING MODAL (.modal.finish-modal) ───
-// Variante Form Modal : même coquille .modal, corps = BookChip + rating + note.
+// Variante Form Modal : même coquille .modal, corps = BookRow + rating + note.
 const StarPath = () => <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z" />;
 
 // value : nb d'étoiles pleines (0–5). Boutons radio, svg 28.
@@ -64,9 +64,9 @@ export function FinishModalSpec({ style, rating = 4, className = "" }) {
       <form className="modal-form">
         <div className="modal-fields">
           <div className="finish-modal-chip">
-            <div className="book-chip">
-              <div className="book-chip-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
-              <div className="book-chip-body"><div className="book-chip-name"><div className="book-chip-title">A Brief History of Time</div><div className="book-chip-author">Stephen Hawking</div></div></div>
+            <div className="book-row">
+              <div className="book-row-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
+              <div className="book-row-body"><div className="book-row-name"><div className="book-row-title">A Brief History of Time</div><div className="book-row-author">Stephen Hawking</div></div></div>
             </div>
           </div>
           <div className="modal-field">
@@ -118,9 +118,9 @@ export function ConfirmBodySpec({ variant = "book" }) {
       <div className="confirm-modal-sub">{v.sub}</div>
       {variant === "book" && (
         <div className="confirm-modal-chip">
-          <div className="book-chip">
-            <div className="book-chip-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
-            <div className="book-chip-body"><div className="book-chip-name"><div className="book-chip-title">A Brief History of Time</div><div className="book-chip-author">Stephen Hawking</div></div></div>
+          <div className="book-row">
+            <div className="book-row-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }}>A</div>
+            <div className="book-row-body"><div className="book-row-name"><div className="book-row-title">A Brief History of Time</div><div className="book-row-author">Stephen Hawking</div></div></div>
           </div>
         </div>
       )}

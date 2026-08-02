@@ -75,20 +75,20 @@ export default function SpacingPage() {
               </Redline>
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".book-chip-cover">
-                <div className="book-chip" style={{ width: 300 }}>
-                  <div className="book-chip-cover" style={{ background: "var(--primary-30)" }}>D</div>
-                  <div className="book-chip-body">
-                    <div className="book-chip-name">
-                      <div className="book-chip-title">Dune</div>
-                      <div className="book-chip-author">Frank Herbert</div>
+              <Redline boxSelector=".book-row-cover">
+                <div className="book-row" style={{ width: 300 }}>
+                  <div className="book-row-cover" style={{ background: "var(--primary-30)" }}>D</div>
+                  <div className="book-row-body">
+                    <div className="book-row-name">
+                      <div className="book-row-title">Dune</div>
+                      <div className="book-row-author">Frank Herbert</div>
                     </div>
                   </div>
                 </div>
               </Redline>
             </div>
           </div>
-          <p className="ds-note"><strong>In use</strong> — le barème sur de vrais composants : bouton MD padding <strong>0 20</strong> (<span className="ds-class">.btn-md</span>) ; book row padding <strong>12</strong> · gap <strong>12</strong> vignette→corps (<span className="ds-class">.book-chip</span>). Mêmes valeurs que l&apos;échelle ci-dessus.</p>
+          <p className="ds-note"><strong>In use</strong> — le barème sur de vrais composants : bouton MD padding <strong>0 20</strong> (<span className="ds-class">.btn-md</span>) ; book row padding <strong>12</strong> · gap <strong>12</strong> vignette→corps (<span className="ds-class">.book-row</span>). Mêmes valeurs que l&apos;échelle ci-dessus.</p>
         </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">

@@ -37,7 +37,7 @@ export const QUOTE_ANNOS = [
   { n: 1, side: "right", target: ".quote-card" },
   { n: 2, side: "left", target: ".quote-card-text" },
   { n: 3, side: "right", target: ".quote-card-actions" },
-  { n: 4, side: "left", target: ".book-chip" },
+  { n: 4, side: "left", target: ".book-row" },
 ];
 
 export const QUOTE = "The world was ending and there was nothing to be done about it.";
@@ -59,9 +59,9 @@ export function QuoteCardSpec({ className = "", saved = false }) {
         </div>
       </div>
       <div className="quote-card-divider" />
-      <div className="book-chip">
-        <div className="book-chip-cover" style={{ background: "var(--primary-30)" }}>D</div>
-        <div className="book-chip-body"><div className="book-chip-name"><div className="book-chip-title">Dune</div><div className="book-chip-author">Frank Herbert</div></div></div>
+      <div className="book-row">
+        <div className="book-row-cover" style={{ background: "var(--primary-30)" }}>D</div>
+        <div className="book-row-body"><div className="book-row-name"><div className="book-row-title">Dune</div><div className="book-row-author">Frank Herbert</div></div></div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import BookChip from "./BookChip";
+import BookRow from "./BookRow";
 import { useModalA11y } from "../../lib/useModalA11y";
 
 function formatDate(ts, lang) {
@@ -105,7 +105,7 @@ export default function QuotePanel({ quote, book, onClose, onEdit, onDelete, onS
               <div className="panel-divider" />
               <div className="panel-section">
                 <span className="panel-section-eyebrow">{t.quoteBookSection}</span>
-                <BookChip
+                <BookRow
                   book={book || { title: quote.bookTitle, author: quote.bookAuthor || '' }}
                   onClick={onOpenBook ? () => { if (book) onOpenBook(book); } : undefined}
                 />
