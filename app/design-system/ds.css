@@ -61,9 +61,11 @@ img.ds-cover { object-fit: cover; }
 /* Fill : l'asset remplit le cadre (padding 20 de .ds-index-thumb) — width + height. */
 .dsw-vig--swatches { gap: 0; border-radius: 8px; overflow: hidden; width: 100%; height: 100%; }
 .dsw-vig--swatches span { flex: 1; height: 100%; display: block; }
-/* Pills : ellipses colorées verticales (le token), sans bordure — style « color system ». */
-.dsw-vig--pills { gap: 14px; width: 100%; height: 100%; align-items: center; justify-content: center; }
-.dsw-pill { width: 9px; height: 62%; border-radius: 999px; display: block; }
+/* Symbole seul centré (carte Figma) — SVG sorti du flux (absolute) pour que le
+   thumb garde son aspect-ratio 16/9 au lieu de grandir sur le min-content du
+   symbole portrait. margin négatif = hauteur en % de la hauteur PLEINE du thumb. */
+.dsw-vig--symbol { position: relative; margin: -20px; width: calc(100% + 40px); height: calc(100% + 40px); }
+.dsw-vig--symbol svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); height: 40%; width: auto; display: block; }
 /* Logo : lockup Symbol & Text (light) — symbole primary-50 + wordmark currentColor
    (--text, theme-aware). Le viewBox large remplit la largeur, hauteur auto → respecte
    le 16:9 sans le casser. */

@@ -28,21 +28,23 @@ export default function ColorsPage() {
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
             <Link href="/design-system/colors/web" className="ds-index-card">
-              <span className="ds-index-thumb">
-                <span className="dsw-vig dsw-vig--pills" aria-hidden="true">
-                  {["--text-3", "--primary-30", "--primary-50", "--primary-70", "--ai-from", "--destructive", "--teal", "--primary-90"].map((t) => (
-                    <span key={t} className="dsw-pill" style={{ background: `var(${t})` }} />
-                  ))}
-                </span>
+              {/* Même cover que la card Colors de la page Welcome (foundations/cover-color.svg). */}
+              <span className="ds-index-thumb ds-index-thumb--cover">
+                <img className="ds-cover" src="/ds-covers/cover-color.svg" alt="" />
               </span>
               <span className="ds-index-label">Web — tokens CSS (live)</span>
             </Link>
             <Link href="/design-system/colors/figma" className="ds-index-card">
               <span className="ds-index-thumb">
-                <span className="dsw-vig dsw-vig--pills" aria-hidden="true">
-                  {["--primary-10", "--primary-20", "--primary-40", "--primary-50", "--primary-60", "--primary-80", "--illus-stroke", "--teal"].map((t) => (
-                    <span key={t} className="dsw-pill" style={{ background: `var(${t})` }} />
-                  ))}
+                <span className="dsw-vig dsw-vig--symbol" aria-hidden="true">
+                  {/* Symbole seul (sans le fond) — viewBox cadré sur la bbox des glyphes. */}
+                  <svg viewBox="312 340 400 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M312 840C312 784.772 356.772 740 412 740H512V840C512 895.228 467.228 940 412 940C356.772 940 312 895.228 312 840Z" fill="#24CB71" />
+                    <path d="M512 340V540H612C667.228 540 712 495.228 712 440C712 384.772 667.228 340 612 340H512Z" fill="#FF7237" />
+                    <path d="M611.167 740C666.395 740 711.167 695.228 711.167 640C711.167 584.772 666.395 540 611.167 540C555.939 540 511.167 584.772 511.167 640C511.167 695.228 555.939 740 611.167 740Z" fill="#00B6FF" />
+                    <path d="M312 440C312 495.228 356.772 540 412 540H512V340H412C356.772 340 312 384.772 312 440Z" fill="#FF3737" />
+                    <path d="M312 640C312 695.228 356.772 740 412 740H512V540H412C356.772 540 312 584.772 312 640Z" fill="#874FFF" />
+                  </svg>
                 </span>
               </span>
               <span className="ds-index-label">Figma — variables (structure + mapping)</span>
