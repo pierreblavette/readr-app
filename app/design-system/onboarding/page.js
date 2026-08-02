@@ -19,7 +19,7 @@ export default function OnboardingPage() {
     <DSSection
       id="onboarding"
       title="Onboarding"
-      sub="Modale de 6 slides montrée à la première visite, ré-ouvrable depuis le footer. Chaque slide associe une illustration à un titre en verbe et une phrase. Coquille propre (.ob-modal), distincte des Modals form/confirm."
+      sub="La fenêtre d'accueil de la première visite : six écrans qui présentent l'app, ré-ouvrables depuis le pied de page."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">

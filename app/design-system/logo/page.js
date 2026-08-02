@@ -19,7 +19,7 @@ export default function LogoPage() {
   const [replayLogo, setReplayLogo] = useState(0);
 
   return (
-    <DSSection id="logo" title="Logo" sub="The Readr logo — wordmark, symbol, and their usage rules.">
+    <DSSection id="logo" title="Logo" sub="The Readr logo — wordmark, symbol, and the rules for using them.">
       <div className="ds-card">
         <div className="ds-card-head">Wordmark — standalone</div>
         <div className="ds-card-body col">

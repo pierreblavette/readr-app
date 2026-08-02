@@ -71,14 +71,14 @@ const WarnIcon = () => (
 
 export default function InputsPage() {
   return (
-    <DSSection id="inputs" title="Text Input" sub="Champs de saisie (library.css). Socle unique — height 40, radius 8, border 1.5, font 15/600 — décliné en text field, search (pill + icône) et textarea. Label, message et validation partagés.">
+    <DSSection id="inputs" title="Text Input" sub="Les champs de saisie de l'app : un même socle décliné en champ texte, recherche et zone de texte, avec label, message et validation.">
 
       {/* ─────────── 1. PREVIEW — le champ canonique ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <div style={{ width: 340 }}><Field /></div>
           </div>
           </div>
@@ -258,7 +258,7 @@ export default function InputsPage() {
         <div className="ds-card-head">Textarea · preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <div style={{ width: 360 }}>
               <div className="modal-field" style={{ width: "100%" }}>
                 <label className="modal-field-label">Quote</label>
@@ -328,7 +328,7 @@ export default function InputsPage() {
         <div className="ds-card-head">Search · preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <div style={{ width: 360 }}>
               {/* Wrapper neutre (pas .modal-field) : sa règle « .modal-field input »
                   écraserait le padding 0 38 du .search-input et masquerait la loupe. */}

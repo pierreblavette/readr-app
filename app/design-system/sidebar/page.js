@@ -43,7 +43,7 @@ export default function SidebarPage() {
     <DSSection
       id="sidebar"
       title="Side Menu"
-      sub="Navigation principale de l'app — colonne 260px sticky. Logo + collapse en tête, nav scrollable (sections Overview / Shelves / Notes / Collections, items icône + label + badge), appearance en pied. Deux largeurs : étendue (260) et repliée (60, icônes seules)."
+      sub="La navigation principale de l'app : atteindre les sections et régler l'apparence, toujours à portée sur la gauche."
     >
 
       {/* 1 — PREVIEW */}
@@ -64,8 +64,8 @@ export default function SidebarPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
               <div className="ds-anno-organism" style={{ width: 260 }}><SidebarSpec active="owned" /></div>
             </AnnoScene>
           </div>

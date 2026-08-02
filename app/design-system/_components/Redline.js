@@ -11,7 +11,7 @@ import { useLayoutEffect, useRef, useState } from "react";
  *
  * Usage : <Redline>{<button className="btn btn-outline btn-md">…</button>}</Redline>
  */
-export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, boxPadSelector = null, gapSelector = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
+export default function Redline({ children, showHeight = true, boxSelector = null, noGaps = false, padSelector = null, boxPadSelector = null, gapSelector = null, gapBand = null, cellSeparators = false, keepShape = false, tone = null, hInsets = null, contentTopLine = null }) {
   const ref = useRef(null);
   const [m, setM] = useState(null);
 
@@ -180,6 +180,27 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
         });
       }
 
+      // bandSelector : marque le BOX complet d'un/de descendant(s) d'une bande de highlight,
+      // SANS aucune cote (ni vcallout ni num) — juste pour signaler une zone/un groupe
+      // (ex. .modal-fields regroupant message + chip). Opt-in, string ou tableau.
+      const plainBands = [];
+      // gapBand : marque l'ESPACE entre deux éléments (bas de A → haut de B) d'une bande,
+      // SANS cote — pour signaler un gap précis (ex. entre .confirm-modal-sub et
+      // .confirm-modal-chip). Accepte une paire [selA, selB] ou un tableau de paires.
+      if (gapBand) {
+        const pairs = Array.isArray(gapBand[0]) ? gapBand : [gapBand];
+        pairs.forEach((pair) => {
+          const a = el.querySelector(pair[0]), b = el.querySelector(pair[1]);
+          if (!a || !b) return;
+          const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+          const top = ra.bottom - br.top, bottom = rb.top - br.top;
+          if (bottom - top < 0.5) return;
+          const left = Math.min(ra.left, rb.left) - br.left;
+          const right = Math.max(ra.right, rb.right) - br.left;
+          plainBands.push({ left, top, width: right - left, height: bottom - top });
+        });
+      }
+
       // Insets horizontaux d'un composant à adornements ABSOLUS (search-box : loupe +
       // clear en position absolue, le padding vit sur l'input). Le gap flex ne les
       // mesure pas → on cote les 4 segments contre les bords de la boîte et le bord de
@@ -234,7 +255,7 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
       }
       // rootRadius (calculé plus haut) sert aussi à clipper les bandes (sinon elles
       // débordent aux coins arrondis) et à arrondir le mat blanc du target.
-      setM({ w, h: Math.round(h), bands, vbands, childVbands, childBands, separators, icons, box, rootRadius });
+      setM({ w, h: Math.round(h), bands, vbands, childVbands, childBands, plainBands, separators, icons, box, rootRadius });
     };
 
     measure();
@@ -336,6 +357,12 @@ export default function Redline({ children, showHeight = true, boxSelector = nul
                 style={{ top: b.top, height: b.height, left: b.left, width: b.width }}
               />
             ))}
+            {/* gapBand : deux traits horizontaux délimitant l'espace entre deux éléments
+                (haut + bas du gap), SANS cote ni bande pleine. */}
+            {m.plainBands?.flatMap((b, i) => [
+              <span key={`pbt${i}`} className="ds-redline-sep" style={{ left: b.left, top: b.top, width: b.width }} />,
+              <span key={`pbb${i}`} className="ds-redline-sep" style={{ left: b.left, top: b.top + b.height, width: b.width }} />,
+            ])}
             {/* Traits de séparation entre cellules empilées jointives (cellSeparators). */}
             {m.separators.map((s, i) => (
               <span key={`sep${i}`} className="ds-redline-sep" style={{ top: s.top, left: s.left, width: s.width }} />

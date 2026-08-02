@@ -79,7 +79,7 @@ export default function BookCardKebabPage() {
     <DSSection
       id="kebab"
       title="Kebab"
-      sub="Édition d'un item unique. Déclencheur trois points partagé par les cartes — book, quote, dictionary, collection. Un clic ouvre un menu contextuel dont les items dépendent de la carte et de son état. Le pendant multi-sélection est Bulk."
+      sub="Le menu à trois points sur chaque carte : un clic ouvre les actions possibles pour cet élément. Le pendant pour plusieurs éléments est la sélection."
     >
       {/* ─────────── 1. PREVIEW — trigger + menu assemblés ─────────── */}
       <div className="ds-card">

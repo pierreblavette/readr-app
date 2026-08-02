@@ -51,14 +51,14 @@ export default function SegmentedPillsPage() {
     <DSSection
       id="segmented-pills"
       title="Segmented Pills"
-      sub="Sélecteur segmenté — plusieurs valeurs sur une piste en pilule, une seule active. Utilisé pour basculer une vue (All / Books / Quotes / Words) ou une plage (Week / Month)."
+      sub="Un sélecteur segmenté : plusieurs valeurs sur une même piste, une seule active. Pour basculer une vue ou une plage."
     >
       {/* ─────────── 1. PREVIEW — segment live ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <Segment active={active} onSelect={setActive} size="md" />
           </div>
           </div>

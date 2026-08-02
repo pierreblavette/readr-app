@@ -6,7 +6,7 @@ import DSSection from "../_components/DSSection";
 // Figma (variables, structure + mapping de noms).
 export default function ColorsPage() {
   return (
-    <DSSection id="colors" title="Colors" sub="Le système couleur de Readr vit dans deux mondes non synchronisés — le code et Figma. Chaque page documente l'un d'eux.">
+    <DSSection id="colors" title="Colors" sub="Le système de couleurs de Readr vit dans deux mondes non synchronisés — le code et Figma. Chaque page en documente un.">
 
       <div className="ds-card">
         <div className="ds-card-head">Deux sources, un système</div>

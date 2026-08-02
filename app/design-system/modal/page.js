@@ -1,12 +1,27 @@
 import DSSection from "../_components/DSSection";
-import { FormModalSpec } from "./_specs";
+import AnnoScene from "../_components/AnnoScene";
+import { FormModalSpec, CloseIcon } from "./_specs";
+
+// Gabarit de largeur des specimens de modal (max 620, fluide en dessous).
+const MODAL_STYLE = { maxWidth: 620, width: "100%" };
+
+// Anatomie du SQUELETTE partagé (schéma abstrait) : overlay → titre → body variable →
+// footer → close. Les anatomies concrètes (UI réelle) vivent sur les pages dédiées.
+const SHELL_ANNOS = [
+  { n: 1, side: "top" },
+  { n: 2, side: "left", target: ".ds-schema-title" },
+  { n: 3, side: "left", target: ".ds-schema-input" },
+  { n: 4, side: "bottom", target: ".ds-schema-footer" },
+  { n: 5, side: "right", target: ".ds-schema-close" },
+  { n: 6, side: "corner" },
+];
 
 export default function ModalFoundationPage() {
   return (
     <DSSection
       id="modal"
       title="Modals"
-      sub="Famille de coquilles modales — même socle (overlay centré, surface --card, radius 8, padding 32/24/0, gap 32, shadow-xl) et même cycle de vie (a11y, scroll-lock, motion), décliné par usage. Form Modal (saisie), Delete Modal (confirmation) et Finish Reading Modal documentées en pages dédiées."
+      sub="La famille des fenêtres modales : un même socle et un même cycle de vie, décliné par usage — saisie, confirmation, fin de lecture."
     >
 
       {/* 1 — PREVIEW — la famille */}
@@ -22,7 +37,38 @@ export default function ModalFoundationPage() {
         </div>
       </div>
 
-      {/* 2 — SHELL LANGUAGE (la primitive partagée) */}
+      {/* 2 — ANATOMY — le squelette partagé (schéma abstrait) */}
+      <div className="ds-card">
+        <div className="ds-card-head">Anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={SHELL_ANNOS} stack>
+            <div className="modal ds-anno-organism" style={{ ...MODAL_STYLE, paddingBottom: 24, animation: "none" }}>
+              <div className="ds-schema-close" aria-hidden="true"><CloseIcon /></div>
+              <div className="ds-schema-title">Title</div>
+              <div className="ds-schema-block ds-schema-input" />
+              <div className="ds-schema-block ds-schema-footer" />
+            </div>
+          </AnnoScene>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.modal-overlay</span></td><td>Backdrop <code>fixed</code> : centre la coquille, verrouille le fond, capte le clic-hors.</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.modal-title</span></td><td>Titre du dialog (<code>28 / 800</code>), première position, cible du <code>aria-labelledby</code>.</td></tr>
+              <tr className="table-row"><td>3</td><td>Body <em>(zone variable)</em></td><td>Contenu propre à chaque modal — champs, onglets d&apos;import, message, rating… rythmé par le <code>gap: 32</code> de la coquille.</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.modal-actions</span></td><td>Footer d&apos;actions, <code>sticky</code> en bas, boutons en <code>space-between</code>.</td></tr>
+              <tr className="table-row"><td>5</td><td><span className="ds-class">.modal-close</span></td><td>Bouton X <strong>40×40</strong>, absolu (<code>top / right 16</code>).</td></tr>
+              <tr className="table-row"><td>6</td><td>Overlay / scrim</td><td>La couche qui gère scroll-lock et dismissal — voir <strong>Behavior</strong>.</td></tr>
+            </tbody>
+          </table>
+          <p className="ds-note">Schéma <strong>abstrait</strong> du squelette commun à toutes les modales — la zone de <strong>body</strong> (3) est volontairement générique (pointillés), chaque modal la remplit à sa façon. Les anatomies <strong>concrètes</strong> (UI réelle) vivent sur les pages dédiées <strong>Form</strong> / <strong>Delete</strong> / <strong>Finish Reading</strong>.</p>
+        </div>
+      </div>
+
+      {/* 3 — SHELL LANGUAGE (la primitive partagée) */}
       <div className="ds-card">
         <div className="ds-card-head">Shell language</div>
         <div className="ds-card-body col">

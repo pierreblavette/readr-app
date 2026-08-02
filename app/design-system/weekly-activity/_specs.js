@@ -226,7 +226,7 @@ export function WeeklyActivityAnatomy({ desktopAnnos, mobileAnnos, threshold = 8
   return (
     <div ref={ref}>
       {compact ? (
-        <AnnoScene annos={mobileAnnos}>
+        <AnnoScene annos={mobileAnnos} stack>
           <WeeklyActivitySpec metric="all" view="week" compact className="ds-anno-organism" style={{ width: "100%", maxWidth: 780 }} />
         </AnnoScene>
       ) : (

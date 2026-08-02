@@ -90,7 +90,7 @@ export default function IconographyPage() {
     <DSSection
       id="iconography"
       title="Iconography"
-      sub="Deux familles. Les icônes UI — line, viewBox 24, currentColor, theme-aware — pour l'action et la navigation. Les pictos — illustrations multi-tons pilotées par les tokens --illus, theme-aware — pour les empty states."
+      sub="Les deux familles d'icônes de Readr : les icônes d'interface, pour agir et naviguer ; les illustrations, pour habiller les écrans vides."
     >
       {/* 1 — PREVIEW : le set d'icônes UI (tuiles à plat, icônes primary-70) */}
       <div className="ds-card">

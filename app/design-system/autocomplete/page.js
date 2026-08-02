@@ -48,7 +48,7 @@ export default function AutocompletePage() {
     <DSSection
       id="autocomplete"
       title="Autocomplete"
-      sub="Liste de suggestions sous le champ Title de l'AddModal, alimentée par l'API de recherche. N'apparaît qu'au focus de l'input."
+      sub="La liste de suggestions qui apparaît sous le champ titre quand on cherche un livre à ajouter."
     >
       {/* ─────────── 1. PREVIEW — champ focus + liste ─────────── */}
       <div className="ds-card">

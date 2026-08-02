@@ -11,9 +11,9 @@ export const CloseIcon = () => (
 // ─── FORM MODAL (.modal) ───
 // Coquille de saisie : titre → form (champs/tabs) → actions. Submit hors <form>,
 // lié par form="…" en prod ; ici en lecture seule pour la doc.
-export function FormModalSpec({ style }) {
+export function FormModalSpec({ style, className = "" }) {
   return (
-    <div className="modal" style={{ animation: "none", ...style }}>
+    <div className={`modal ${className}`.trim()} style={{ animation: "none", ...style }}>
       <button type="button" className="modal-close" aria-label="Close"><CloseIcon /></button>
       <div className="modal-title">Add a quote</div>
       <form className="modal-form">

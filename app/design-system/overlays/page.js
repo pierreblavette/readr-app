@@ -25,7 +25,7 @@ export default function OverlaysPage() {
     <DSSection
       id="overlays"
       title="Overlays"
-      sub="Toute surface qui se pose AU-DESSUS du contenu — menu, barre flottante, panneau, dialogue, toast. Chacune a sa page ; ici on documente le système qui les gouverne : la modalité (bloque ou non le contenu), l'échelle de couches, et les comportements partagés — scrim, scroll-lock, focus, dismissal, motion."
+      sub="Tout ce qui se pose au-dessus du contenu : menu, panneau, dialogue, toast. Chacun a sa page ; ici on documente ce qui les gouverne — l'ordre des couches et les comportements partagés."
     >
 
       {/* 1 — PREVIEW : le scrim est le sujet, pas le composant posé dessus */}

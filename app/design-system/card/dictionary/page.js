@@ -5,7 +5,7 @@ import { DictionaryCardSpec, DICT_ANNOS, KebabDots } from "../_specs";
 
 export default function DictionaryCardPage() {
   return (
-    <DSSection id="card-dictionary" title="Dictionary Card" sub="La carte d'un mot sauvegardé — un en-tête cliquable (chevron + terme + kebab) qui déplie ses définitions. Même famille card, en accordéon.">
+    <DSSection id="card-dictionary" title="Dictionary Card" sub="La carte d'un mot sauvegardé : un en-tête qu'on déplie pour lire ses définitions. Une carte en accordéon.">
 
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
@@ -23,8 +23,8 @@ export default function DictionaryCardPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={DICT_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={DICT_ANNOS} stack>
             <div className="ds-anno-organism"><DictionaryCardSpec expanded /></div>
           </AnnoScene>
           </div>
@@ -52,7 +52,7 @@ export default function DictionaryCardPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline>
-                <div className="dictionary-saved-head" style={{ width: 400 }}>
+                <div className="dictionary-saved-head" style={{ width: "var(--spec-w, 400px)" }}>
                   <span className="dictionary-saved-toggle">
                     <svg className="dictionary-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
                     <span className="dictionary-saved-word">Voiture</span>
@@ -67,7 +67,7 @@ export default function DictionaryCardPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline>
-                <div className="dictionary-saved-body" style={{ width: 400 }}>
+                <div className="dictionary-saved-body" style={{ width: "var(--spec-w, 400px)" }}>
                   <div className="dictionary-definition">
                     <span className="dictionary-pos">nom féminin</span>
                     <p className="dictionary-meaning">Véhicule à roues mû par un moteur.</p>
@@ -90,7 +90,7 @@ export default function DictionaryCardPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline padSelector=".dictionary-example">
-                <div className="dictionary-definition" style={{ width: 368 }}>
+                <div className="dictionary-definition" style={{ width: "var(--spec-w, 368px)" }}>
                   <span className="dictionary-pos">nom féminin</span>
                   <p className="dictionary-meaning">Véhicule à roues mû par un moteur, destiné au transport de personnes.</p>
                   <div className="dictionary-example">

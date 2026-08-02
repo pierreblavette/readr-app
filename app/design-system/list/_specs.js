@@ -32,9 +32,9 @@ const COLS = [
 
 // Une rangée seule (mini-table sans header) dans un état donné — pour la carte States.
 // hover : simule le :hover (bg --primary-3) que la doc statique ne peut pas déclencher.
-export function ListRowSample({ editMode = false, selected = false, hover = false }) {
+export function ListRowSample({ editMode = false, selected = false, hover = false, className = "" }) {
   return (
-    <div className="books-list ds-list-spec">
+    <div className={`books-list ds-list-spec ${className}`.trim()}>
       <table className="list-table">
         <tbody>
           <tr className={`list-row${selected ? " selected" : ""}`} style={hover ? { background: "var(--primary-3)" } : undefined}>

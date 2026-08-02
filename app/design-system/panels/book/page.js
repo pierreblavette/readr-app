@@ -40,7 +40,7 @@ export default function SidePanelPage() {
     <DSSection
       id="book"
       title="Book Panel"
-      sub="Panneau de détail d'un livre — slide-in depuis le bord droit (width 540) qui recouvre l'app. Cover + info + actions primaires, puis des sections empilées (Collections, Finished, About, Quotes…) séparées par des dividers. Réutilise la primitive .book-panel (a11y, scroll-lock, motion), partagée avec Filters Panel, Quote Panel et les List Panels."
+      sub="La fiche complète d'un livre, qui glisse depuis la droite par-dessus l'app : couverture, infos et actions en tête, puis toutes ses sections empilées — collections, avancement, citations."
     >
 
       {/* 1 — PREVIEW */}
@@ -56,8 +56,9 @@ export default function SidePanelPage() {
         </div>
       </div>
 
-      {/* 2 — ANATOMY */}
-      <div className="ds-card">
+      {/* 2 — ANATOMY — masquée en mobile (panneau haut/dense, annotations peu lisibles
+          sur écran étroit ; la structure reste couverte par Elements + Spacing). */}
+      <div className="ds-card ds-mobile-hidden">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
           <div className="ds-anno-board">

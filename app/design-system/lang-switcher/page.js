@@ -13,7 +13,7 @@ export default function LangSwitcherPage() {
     <DSSection
       id="lang-switcher"
       title="Language Switcher"
-      sub="Bascule EN · FR du footer — deux boutons texte ghost séparés par un point médian. Pas de fond, pas de bordure : c'est de la meta discrète, pas une action de premier plan."
+      sub="Le sélecteur de langue du pied de page : EN ou FR, en deux liens discrets. De la méta, pas une action de premier plan."
     >
       {/* ─────────── 1. STATES ─────────── */}
       <div className="ds-card">

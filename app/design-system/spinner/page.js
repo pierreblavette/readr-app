@@ -15,14 +15,14 @@ export default function SpinnerPage() {
     <DSSection
       id="spinner"
       title="Spinner"
-      sub="Indicateur de chargement indéterminé. Deux formes partageant @keyframes spin (0.7s linear infinite) : l'anneau CSS .panel-spinner (bordure) et le loader SVG .panel-cast-spinner (inline, actions AI / soumission). Coupé en reduced-motion."
+      sub="L'indicateur de chargement, quand l'app attend sans savoir combien de temps. Deux formes : un anneau et un petit loader d'action."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview">
+            <div className="ds-preview ds-preview--roomy">
               <div className="panel-spinner" role="status" aria-label="Loading" />
             </div>
           </div>

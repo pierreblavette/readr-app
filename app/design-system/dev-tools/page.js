@@ -30,7 +30,7 @@ export default function DevToolsPage() {
     <DSSection
       id="dev-tools"
       title="Dev Tools"
-      sub="Local utilities for quick PWA testing — fill or wipe the localStorage layer. Not for production users."
+      sub="Local utilities for quick PWA testing — fill or wipe the local data. Not for real users."
     >
       <div className="ds-card">
         <div className="ds-card-head">Load demo data</div>

@@ -45,18 +45,18 @@ export default function SelectPage() {
     <DSSection
       id="buttons-select"
       title="Select"
-      sub="Déclencheur qui choisit / filtre une VALEUR : .dropdown-btn.sort-menu-btn (valeur courante + badge + chevron) et le combobox in-form .quote-link-select. Ouvre une listbox, pas un menu d'actions — à distinguer du Dropdown Button. Partage la peau .dropdown-btn. Fait partie de la famille Buttons."
+      sub="Le bouton qui choisit une valeur : un clic ouvre une liste d'options. À distinguer du Dropdown Button, qui ouvre un menu d'actions. Fait partie de la famille Buttons."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview">
-              <SelectBtn label="Genres" count={2} mod="is-active" />
+            <div className="ds-preview ds-preview--roomy">
+              <SelectBtn label="Genres" count={0} />
             </div>
           </div>
-          <p className="ds-note">Un <strong>select</strong> montre l&apos;état d&apos;un choix : ici deux genres actifs (<span className="ds-class">.filter-badge</span>), bouton <strong>rempli</strong> (<span className="ds-class">.is-active</span>). Le clic ouvre une <strong>listbox</strong> de valeurs, pas un menu d&apos;actions. Même peau <span className="ds-class">.dropdown-btn</span> que le Dropdown Button.</p>
+          <p className="ds-note">Un <strong>select</strong> montre la <strong>valeur courante</strong> d&apos;un choix : label + chevron, peau <span className="ds-class">.dropdown-btn.sort-menu-btn</span>. Le clic ouvre une <strong>listbox</strong> de valeurs, pas un menu d&apos;actions. Quand un filtre multi-select est posé, il passe <strong>rempli</strong> (<span className="ds-class">.is-active</span>) avec un compteur <span className="ds-class">.filter-badge</span> — voir States.</p>
         </div>
       </div>
 

@@ -58,7 +58,7 @@ export default function BookChipPage() {
     <DSSection
       id="book-chip"
       title="Book Row"
-      sub="Ligne de référence d'un livre (media object) — vignette de couverture + titre + auteur. Quatre modes selon les props passées. Classe et source historiquement nommées .book-chip / BookChip.js."
+      sub="La ligne qui référence un livre : sa vignette, son titre, son auteur. Utilisée partout où un livre doit être cité de façon compacte."
     >
       {/* ─────────── 1. PREVIEW — la ligne canonique (interactif) ─────────── */}
       <div className="ds-card">

@@ -31,14 +31,14 @@ const ANNOS = [
 
 export default function CloudChipPage() {
   return (
-    <DSSection id="chip" title="Chip" sub="Pill filtrante — nom + badge count. Utilisée par Top Genres et Top Authors (Overview) comme raccourcis de filtre cliquables ; le container .overview-cloud les enveloppe en flex-wrap.">
+    <DSSection id="chip" title="Chip" sub="Une pastille cliquable avec un compteur, utilisée comme raccourci de filtre — par exemple un genre ou un auteur sur l'accueil.">
 
       {/* ─────────── 1. PREVIEW ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <Chip name="Fiction" count={12} />
           </div>
           </div>

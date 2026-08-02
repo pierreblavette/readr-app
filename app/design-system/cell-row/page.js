@@ -14,7 +14,7 @@ const NOT_CANDIDATE = [
 
 export default function CellRowPage() {
   return (
-    <DSSection id="cell-row" title="Cell Row" sub="Reusable flex row primitive for any 'label + meta/icon' pattern with a fixed-min height. Pair with a size modifier and optionally --between for justify-content: space-between.">
+    <DSSection id="cell-row" title="Cell Row" sub="A reusable row for any 'label + meta or icon' pattern — the shared skeleton behind many list-style components.">
 
       {/* 1 — SIZES */}
       <div className="ds-card">

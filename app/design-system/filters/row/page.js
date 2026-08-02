@@ -30,7 +30,7 @@ export default function FiltersRowPage() {
     <DSSection
       id="filters-row"
       title="Filters Row"
-      sub="Cluster horizontal de triggers de filtre, sous la barre de recherche. Chaque trigger est un dropdown (Sort / Reading / Rating radio, Authors / Genres multi-select) ou un toggle icône (Books with quotes). Se replie progressivement vers le Filters Panel quand la place manque."
+      sub="La rangée de filtres sous la recherche : chaque bouton affine la liste sur un critère. Quand la place manque, les filtres se replient dans un panneau."
     >
 
       {/* 1 — PREVIEW */}
@@ -38,7 +38,7 @@ export default function FiltersRowPage() {
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <FiltersRowFit className="ds-filters-row--center" />
           </div>
           </div>

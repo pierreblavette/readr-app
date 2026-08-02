@@ -43,7 +43,7 @@ function metric({ px, rem, w, lh, ls }) {
 
 export default function TypographyPage() {
   return (
-    <DSSection id="typography" title="Typography" sub="One typeface — Plus Jakarta Sans — its scale, weights and responsive behaviour.">
+    <DSSection id="typography" title="Typography" sub="One typeface — Plus Jakarta Sans — carries all of Readr: its scale, its weights, and how it adapts across screens.">
 
       {/* 1 — HERO : usage réel (gauche) + identité de la fonte (droite) */}
       <div className="ds-card">

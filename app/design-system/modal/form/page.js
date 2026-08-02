@@ -3,13 +3,14 @@ import Redline from "../../_components/Redline";
 import AnnoScene from "../../_components/AnnoScene";
 import { CloseIcon } from "../_specs";
 
-// Décomposition numérotée : chaque numéro dans sa gouttière, trait vers la partie visée.
+// Décomposition numérotée sur la VRAIE UI (Add a book · Photo) — cohérent avec Delete /
+// Finish. Le squelette abstrait vit désormais sur la page famille Modals.
 const MODAL_ANNOS = [
   { n: 1, side: "top" },
-  { n: 2, side: "left", target: ".ds-schema-title" },
-  { n: 3, side: "left", target: ".ds-schema-input" },
-  { n: 4, side: "bottom", target: ".ds-schema-footer" },
-  { n: 5, side: "right", target: ".ds-schema-close" },
+  { n: 2, side: "left", target: ".modal-title" },
+  { n: 3, side: "left", target: ".modal-tabs-section" },
+  { n: 4, side: "bottom", target: ".modal-actions" },
+  { n: 5, side: "right", target: ".modal-close" },
   { n: 6, side: "corner" },
 ];
 
@@ -54,9 +55,9 @@ const ImportTabs = () => (
   </div>
 );
 
-function AddBookPhotoModalSpec() {
+function AddBookPhotoModalSpec({ className = "", style }) {
   return (
-    <div className="modal" style={{ ...MODAL_STYLE, animation: "none" }}>
+    <div className={`modal ${className}`.trim()} style={{ ...MODAL_STYLE, animation: "none", ...style }}>
       <button type="button" className="modal-close" aria-label="Close"><CloseIcon /></button>
       <div className="modal-title">Add a book</div>
       <div className="modal-tabs-section">
@@ -84,7 +85,7 @@ export default function FormModalPage() {
     <DSSection
       id="modal-form"
       title="Form Modal"
-      sub="La coquille de saisie — titre → form → actions. Un socle unique, un corps qui change selon l'écran : champs, onglets d'import, ou rating + note."
+      sub="La fenêtre de saisie : un titre, un formulaire, deux actions. Un même cadre pour des contenus qui changent — champs, onglets d'import, ou note de lecture."
     >
 
       {/* 1 — PREVIEW */}
@@ -104,14 +105,9 @@ export default function FormModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={MODAL_ANNOS}>
-            <div className="modal ds-anno-organism" style={{ ...MODAL_STYLE, paddingBottom: 24, animation: "none" }}>
-              <div className="ds-schema-close" aria-hidden="true"><CloseIcon /></div>
-              <div className="ds-schema-title">Title</div>
-              <div className="ds-schema-block ds-schema-input" />
-              <div className="ds-schema-block ds-schema-footer" />
-            </div>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={MODAL_ANNOS} stack>
+            <AddBookPhotoModalSpec className="ds-anno-organism" />
           </AnnoScene>
           </div>
         </div>
@@ -141,18 +137,11 @@ export default function FormModalPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline padSelector=".modal-actions">
-                <div className="modal" style={{ width: 620, animation: "none" }}>
-                  <div className="modal-title" style={{ margin: 0 }}>Add a quote</div>
-                  <div className="ds-schema-block" aria-hidden="true" />
-                  <div className="modal-actions" style={{ borderTop: "none" }}>
-                    <button type="button" className="btn btn-outline btn-md">Cancel</button>
-                    <button type="button" className="btn btn-primary btn-md">Save</button>
-                  </div>
-                </div>
+                <AddBookPhotoModalSpec className="ds-fm-spec" style={{ width: 620 }} />
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Coquille padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0, le footer porte le sien), <code>gap: 32</code> entre blocs. Le <strong>body</strong> est une <strong>zone bleue</strong> — contenu variable (champs, onglets, message…). Footer <span className="ds-class">.modal-actions</span> : padding interne <strong>16</strong> vertical / <strong>24</strong> horizontal (32 + 16 = 48, sur la grille). Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Coquille padding <strong>haut 32</strong> · <strong>côtés 24</strong> (bas 0, le footer porte le sien), <code>gap: 32</code> entre les blocs (titre → <span className="ds-class">.modal-tabs-section</span> → actions). Le corps est ici la vraie UI <strong>Add a book · Photo</strong> (même specimen que l&apos;Anatomy), mais son contenu varie selon l&apos;écran. Footer <span className="ds-class">.modal-actions</span> : padding interne <strong>16</strong> vertical / <strong>24</strong> horizontal (32 + 16 = 48, sur la grille). Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 

@@ -14,14 +14,14 @@ export default function ToastPage() {
     <DSSection
       id="toast"
       title="Toast"
-      sub="Feedback de confirmation global après une action — suppression, changement d'état, partage. Surface de la même famille que la Selection Bar (bleu plein), auto-dismiss après 3s, un seul par fois."
+      sub="Le petit message de confirmation qui apparaît après une action — suppression, changement, partage — et disparaît tout seul."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview">
+            <div className="ds-preview ds-preview--roomy">
               <ToastSpec message="Reading started" />
             </div>
           </div>

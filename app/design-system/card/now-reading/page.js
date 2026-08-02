@@ -8,7 +8,7 @@ export default function NowReadingCardPage() {
     <DSSection
       id="card-now-reading"
       title="Now Reading"
-      sub="La carte des livres en cours de lecture — épinglée en tête de l'onglet Library. Même langage que la Book Card, layout horizontal (cover + texte) pour se différencier de la grille sans la concurrencer. Badge de statut en tête, kebab d'actions rapides."
+      sub="La carte d'un livre en cours de lecture, épinglée en haut de la bibliothèque. Un format horizontal pour se distinguer de la grille sans lui voler la vedette."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
@@ -27,8 +27,8 @@ export default function NowReadingCardPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={NOW_READING_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={NOW_READING_ANNOS} stack>
               <div className="ds-anno-organism"><NowReadingCardSpec /></div>
             </AnnoScene>
           </div>

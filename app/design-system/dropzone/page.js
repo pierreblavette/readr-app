@@ -83,7 +83,7 @@ export default function DropzonePage() {
     <DSSection
       id="dropzone"
       title="Dropzone"
-      sub="Zone de dépôt à bord tireté (.import-dropzone) : glisser-déposer OU clic pour parcourir. Deux variantes — fichier (bord SVG uni, JSON/CSV) et photo (bord dégradé, import AI/OCR). Après upload, les livres parsés s'affichent en .import-preview (à retirer un à un) avant confirmation."
+      sub="La zone où déposer un fichier ou une photo pour importer des livres : glisser-déposer, ou clic pour parcourir. Deux variantes selon la source."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">

@@ -16,7 +16,7 @@ export default function QuotePanelPage() {
     <DSSection
       id="quote"
       title="Quote Panel"
-      sub="Panneau de détail d'une citation — même coquille slide-in que Book Panel (primitive .book-panel), sans cover. La citation en tête (guillemets accent + date), ses actions (Edit · Loved · Share), le livre d'origine (Book Row), puis Delete."
+      sub="La fiche détaillée d'une citation, dans un panneau qui glisse depuis la droite : la citation, ses actions, et le livre d'origine."
     >
 
       {/* 1 — PREVIEW */}
@@ -32,8 +32,9 @@ export default function QuotePanelPage() {
         </div>
       </div>
 
-      {/* 2 — ANATOMY */}
-      <div className="ds-card">
+      {/* 2 — ANATOMY — masquée en mobile (idem Book Panel : annotations peu lisibles sur
+          écran étroit ; la structure reste couverte par Elements + Spacing). */}
+      <div className="ds-card ds-mobile-hidden">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
           <div className="ds-anno-board">

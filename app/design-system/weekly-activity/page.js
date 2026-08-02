@@ -28,7 +28,7 @@ export default function WeeklyActivityPage() {
     <DSSection
       id="weekly-activity"
       title="Data Visualization"
-      sub="Le card de graphe de l'onglet Overview — visualisation de l'activité quotidienne (livres, citations, mots) sur une semaine ou un mois, avec un sélecteur de métrique, une bascule Week / Month et une navigation prev / next."
+      sub="Le graphe d'activité de l'accueil : combien de livres, de citations et de mots par jour, sur une semaine ou un mois."
     >
       {/* 1 — PREVIEW (responsive) */}
       <div className="ds-card">
@@ -47,7 +47,7 @@ export default function WeeklyActivityPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
+          <div className="ds-anno-board ds-anno-board--stack">
             <WeeklyActivityAnatomy desktopAnnos={DESKTOP_ANNOS} mobileAnnos={MOBILE_ANNOS} />
           </div>
         </div>

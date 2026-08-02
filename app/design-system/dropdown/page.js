@@ -83,7 +83,7 @@ export default function DropdownMenuPage() {
     <DSSection
       id="dropdown"
       title="Dropdown Menu"
-      sub="Liste flottante .dropdown-menu ouverte par un déclencheur (un bouton — kebab, dropdown button, filter button — voir Buttons). Quatre types selon le contenu : menu d'actions, sa variante portalisée, le filtre à cases, et le filtre recherchable (Authors). Primitive partagée : Book Card Kebab, Export / Sort Menu, Filtering."
+      sub="Le menu flottant qui s'ouvre depuis un bouton : une liste d'actions ou de filtres à choisir. Plusieurs variantes selon ce qu'il contient."
     >
       {/* ─────────── 1. PREVIEW — le menu d'actions canonique ─────────── */}
       <div className="ds-card">
@@ -105,7 +105,7 @@ export default function DropdownMenuPage() {
           <div className="ds-anno-board">
             <AnnoScene annos={ANNOS}>
               <div className="ds-anno-organism">
-                <div className="dropdown-menu ds-menu-static" role="menu" style={{ width: 340 }}>
+                <div className="dropdown-menu ds-menu-static" role="menu" style={{ width: "var(--spec-w, 340px)" }}>
                   <button type="button" className="dropdown-item">Label</button>
                   <button type="button" className="dropdown-item">Label</button>
                   <div className="dropdown-divider" role="separator" />

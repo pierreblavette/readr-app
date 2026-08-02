@@ -5,7 +5,7 @@ import { BookCardSpec, BOOK_ANNOS, KebabDots } from "../_specs";
 
 export default function BookCardPage() {
   return (
-    <DSSection id="card-book" title="Book Card" sub="La carte de la grille Library — cover + titre + auteur + méta + kebab. Applique le langage card avec un cover en tête.">
+    <DSSection id="card-book" title="Book Card" sub="La carte d'un livre dans la grille de la bibliothèque : couverture, titre, auteur et un menu d'actions.">
 
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
@@ -22,8 +22,8 @@ export default function BookCardPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={BOOK_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={BOOK_ANNOS} stack>
             <div className="ds-anno-organism"><BookCardSpec /></div>
           </AnnoScene>
           </div>

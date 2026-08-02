@@ -95,14 +95,14 @@ export default function CheckboxPage() {
     <DSSection
       id="checkbox"
       title="Checkbox"
-      sub="Case 18×18 dans une rangée cliquable de 40px de haut — input natif masqué, carré dessiné en CSS."
+      sub="La case à cocher : une petite case dans une rangée entièrement cliquable."
     >
       {/* ─────────── 1. PREVIEW — rangée live ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <div style={{ width: 300, display: "flex", flexDirection: "column", gap: 20 }}>
               <ToggleRow checked={checked} onChange={setChecked} label="Mark as reading" />
               <ToggleRow checked={checked2} onChange={setChecked2} label="Add to wishlist" />

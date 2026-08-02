@@ -70,7 +70,7 @@ export default function FooterPage() {
     <DSSection
       id="footer"
       title="Footer"
-      sub="Pied de page sous le contenu scrollable — liens produit, info données, liens externes. Trois sections en space-between qui se replient en pile sur les petits écrans."
+      sub="Le pied de page : liens vers le produit, note sur les données, liens externes. Il s'empile sur les petits écrans."
     >
 
       {/* 1 — PREVIEW */}
@@ -116,8 +116,9 @@ export default function FooterPage() {
         </div>
       </div>
 
-      {/* 4 — SPACING */}
-      <div className="ds-card">
+      {/* 4 — SPACING (desktop) — masqué en mobile : gutter 40 disproportionné sur écran
+          étroit, et la section « Responsive ≤600 » ci-dessous documente déjà le footer mobile. */}
+      <div className="ds-card ds-mobile-hidden">
         <div className="ds-card-head">Spacing</div>
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">

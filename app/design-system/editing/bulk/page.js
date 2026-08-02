@@ -24,7 +24,7 @@ export default function BulkPage() {
     <DSSection
       id="bulk"
       title="Bulk"
-      sub="Édition d'un lot d'items. On entre en mode sélection — chaque row/carte gagne une case — puis on applique une action à tous les items cochés via la barre flottante. Le pendant single-item est le Kebab."
+      sub="Modifier plusieurs éléments d'un coup : on entre en mode sélection, on coche, puis on applique une action à tous via la barre flottante. Le pendant pour un seul élément est le menu contextuel."
     >
       {/* ─────────── 1. PREVIEW — le flow in-situ ─────────── */}
       <div className="ds-card">

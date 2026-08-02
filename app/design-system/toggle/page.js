@@ -50,14 +50,14 @@ export default function TogglePage() {
     <DSSection
       id="toggle"
       title="Toggle"
-      sub="Deux bascules de l'app : le thème clair/sombre (slider animé) et la vue grille/liste (segment à deux cases). Une seule valeur active à la fois."
+      sub="Les deux interrupteurs de l'app : le thème clair/sombre et la vue grille/liste. Une seule valeur active à la fois."
     >
       {/* ══════════ THEME TOGGLE ══════════ */}
       <div className="ds-card">
         <div className="ds-card-head">Theme toggle · preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="theme-btn" aria-label="Toggle theme">
               <span className="toggle-thumb">{theme === "dark" ? <MoonIcon /> : <SunIcon />}</span>
             </button>
@@ -112,7 +112,7 @@ export default function TogglePage() {
         <div className="ds-card-head">View toggle · preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <ViewToggle view={view} setView={setView} />
           </div>
           </div>

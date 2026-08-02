@@ -21,7 +21,7 @@ export default function MessageBoxPage() {
     <DSSection
       id="message-box"
       title="Box Message"
-      sub="Encart de message inline dans les modales — une icône + un texte, quatre tons sémantiques (info, alert, success, critical). Même socle (.modal-info-box) décliné par palette ; le ton critical passe aujourd'hui par une classe parallèle."
+      sub="Un encart de message dans les modales : une icône et un texte, en quatre tons selon l'intention — information, alerte, succès, action risquée."
     >
 
       {/* 1 — PREVIEW */}

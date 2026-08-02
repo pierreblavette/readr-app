@@ -31,7 +31,7 @@ export default function EmptyStatePage() {
     <DSSection
       id="empty"
       title="Empty State"
-      sub="Layout gap-driven. Deux échelles : pleine page (icône 96, centré vertical, CTA optionnel) et mini dans une .overview-card (icône 60 horizontale passive, ou 72 verticale avec CTA)."
+      sub="Ce que voit l'utilisateur quand une liste est vide ou qu'une recherche ne donne rien : de quoi comprendre la situation et rebondir."
     >
 
       {/* 1 — PREVIEW */}

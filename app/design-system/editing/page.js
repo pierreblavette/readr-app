@@ -6,7 +6,7 @@ export default function EditingFoundationPage() {
     <DSSection
       id="editing"
       title="Editing"
-      sub="Modifier le contenu de la bibliothèque — à deux échelles. Un item unique via le Kebab (menu contextuel par carte) ; un lot d'items via le mode sélection et sa Bulk bar. Même intention — supprimer, déplacer, changer de statut — deux surfaces selon le nombre de cibles. Documentées en pages dédiées."
+      sub="Modifier le contenu de la bibliothèque, à deux échelles : un élément via son menu, ou tout un lot via le mode sélection. Documentés en pages dédiées."
     >
 
       {/* 1 — PREVIEW */}

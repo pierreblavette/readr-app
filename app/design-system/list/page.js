@@ -22,7 +22,7 @@ export default function ListViewPage() {
     <DSSection
       id="list"
       title="Table"
-      sub="Affichage tabulaire de la bibliothèque — la primitive .list-table (table-layout fixed) : un header trié, des rangées .list-row de 60px, cinq types de cellule (num, title, meta, tag, action). Socle partagé par les listes de livres, le Dictionnaire, les Collections."
+      sub="L'affichage en tableau de la bibliothèque : un en-tête triable et des rangées de livres. Le socle partagé par les listes, le dictionnaire et les collections."
     >
 
       {/* 1 — PREVIEW */}
@@ -31,7 +31,7 @@ export default function ListViewPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
             <div className="ds-preview ds-scene--list">
-              <ListViewSpec />
+              <ListViewSpec className="ds-list-mobile" />
             </div>
           </div>
           <p className="ds-note">Mode consultation : colonne <strong>#</strong> (index), <strong>Title</strong> (triée), <strong>Author</strong>, <strong>Genre</strong>, <strong>Year</strong>, et un <span className="ds-class">.col-card-kebab</span> par rangée. Clic sur un en-tête trie la colonne ; clic sur une rangée ouvre le <a href="/design-system/panels/book"><strong>Book Panel</strong></a>. En mode édition, la 1re colonne devient une case à cocher (voir <strong>States</strong>).</p>
@@ -42,9 +42,9 @@ export default function ListViewPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board ds-anno-board--list">
-            <AnnoScene annos={ANNOS}>
-              <ListViewSpec className="ds-anno-organism" />
+          <div className="ds-anno-board ds-anno-board--list ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
+              <ListViewSpec className="ds-anno-organism ds-list-mobile" />
             </AnnoScene>
           </div>
         </div>
@@ -92,10 +92,10 @@ export default function ListViewPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-list-states">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold ds-states-grid--list-rows">
             {STATES.map((s) => (
-              <div key={s.label} className="ds-list-state">
-                <ListRowSample {...s.props} />
+              <div key={s.label} className="ds-state-sample">
+                <ListRowSample {...s.props} className="ds-list-mobile" />
                 <span className="ds-class">{s.label}</span>
               </div>
             ))}

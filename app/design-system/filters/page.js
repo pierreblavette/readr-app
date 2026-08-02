@@ -6,7 +6,7 @@ export default function FiltersFoundationPage() {
     <DSSection
       id="filters"
       title="Filtering"
-      sub="Système de filtrage de la bibliothèque — cinq dimensions, trois types de trigger, application immédiate. Deux expressions responsive du même modèle : Filters Row (desktop, cluster inline) et Filters Panel (mobile, slide-in). Documentées en pages dédiées."
+      sub="Le système qui filtre la bibliothèque : plusieurs critères qu'on combine pour retrouver un livre. Il prend deux formes selon l'écran — en ligne sur desktop, en panneau sur mobile."
     >
 
       {/* 1 — PREVIEW */}
@@ -14,7 +14,7 @@ export default function FiltersFoundationPage() {
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <FiltersRowFit className="ds-filters-row--center" />
           </div>
           </div>

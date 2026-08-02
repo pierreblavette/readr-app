@@ -5,7 +5,7 @@ import DSSection from "../../_components/DSSection";
 // en live via LiveSwatch : aucune valeur hardcodée, la doc ne peut pas dériver.
 export default function ColorsWebPage() {
   return (
-    <DSSection id="colors-web" title="Colors — Web" sub="Les tokens CSS de globals.css (:root + [data-theme=dark]), rangés par rôle. Valeurs lues en direct depuis la feuille de style — bascule le thème pour voir le dark.">
+    <DSSection id="colors-web" title="Colors — Web" sub="Les couleurs telles qu'elles vivent dans le code, rangées par rôle et lues en direct — bascule le thème pour voir la version sombre.">
 
       <div className="ds-card">
         <div className="ds-card-head">Surfaces</div>

@@ -117,7 +117,7 @@ const COLOR_GROUPS = [
 
 export default function ColorsFigmaPage() {
   return (
-    <DSSection id="colors-figma" title="Colors — Figma" sub="Le système de variables du fichier Figma : deux collections en tableaux. Primitives (Name / Value) et Color (Name / Light / Dark, colonnes = primitive aliasée). Source de vérité des valeurs : le fichier Figma.">
+    <DSSection id="colors-figma" title="Colors — Figma" sub="Les couleurs telles qu'elles vivent dans Figma : deux collections de variables. Le fichier Figma est la source de vérité.">
       <style>{`
         .dsfig-sw { display:inline-block; width:18px; height:18px; border-radius:5px; border:1px solid var(--border); flex-shrink:0; vertical-align:middle; }
         .dsfig-cell { display:inline-flex; align-items:center; gap:8px; color:var(--text-2); white-space:nowrap; font-weight:600; }

@@ -52,14 +52,14 @@ const ANNOS = [
 
 export default function ButtonsPage() {
   return (
-    <DSSection id="buttons" title="Buttons" sub="Le système générique .btn.btn-* : variants, tailles, composition d'icônes, variantes AI / count / ghost. Font 600 partout. Racine d'une famille — les types à comportement propre ont leur page : Dropdown Button, Select, Link.">
+    <DSSection id="buttons" title="Buttons" sub="Le bouton, brique d'action de l'app : une base commune déclinée en styles, en tailles et avec des icônes. C'est la racine d'une famille — les boutons au comportement particulier (Dropdown, Select, Link) ont leur propre page.">
 
       {/* ─────────── 1. PREVIEW — le bouton canonique (primary MD) ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <button className="btn btn-primary btn-md"><PlusIcon strokeWidth={2} /><span>Add book</span></button>
           </div>
           </div>

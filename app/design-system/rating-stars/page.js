@@ -76,14 +76,14 @@ export default function RatingStarsPage() {
     <DSSection
       id="rating-stars"
       title="Rating Stars"
-      sub="Note sur 5 — saisie interactive dans Finish Reading (28px, radiogroup), puis restituée en read-only ailleurs à trois tailles. Étoiles pleines en primary, vides en border."
+      sub="La note sur 5 étoiles : qu'on donne à la fin d'une lecture, et qu'on retrouve affichée un peu partout ensuite."
     >
       {/* ─────────── 1. PREVIEW — saisie live ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview">
+          <div className="ds-preview ds-preview--roomy">
             <LiveStarInput />
           </div>
           </div>

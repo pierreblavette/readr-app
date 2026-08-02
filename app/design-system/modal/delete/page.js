@@ -26,19 +26,21 @@ export default function DeleteModalPage() {
     <DSSection
       id="modal-delete"
       title="Delete Modal"
-      sub="La coquille de confirmation destructive — un composant, dispatché en 10 variantes selon target.type. Titre → message → aperçu de la cible → deux boutons."
+      sub="La fenêtre qui demande confirmation avant un geste destructif : un titre, un message, un aperçu de ce qui sera touché, et deux boutons."
     >
 
       {/* 1 — PREVIEW (switcher) */}
       <div className="ds-card">
         <div className="ds-card-head">
           Preview
-          <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+          <div className="overview-activity-pills is-xs ds-head-switcher" role="tablist">
             {VARIANTS.map(([id, label]) => (
               <button
                 key={id}
                 type="button"
-                className={`btn btn-xs ${variant === id ? "btn-primary" : "btn-secondary"}`}
+                role="tab"
+                aria-selected={variant === id}
+                className={`overview-activity-pill is-xs${variant === id ? " is-active" : ""}`}
                 onClick={() => setVariant(id)}
               >{label}</button>
             ))}
@@ -58,8 +60,8 @@ export default function DeleteModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={CONFIRM_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={CONFIRM_ANNOS} stack>
             <ConfirmModalSpec variant="book" className="ds-anno-organism" style={{ maxWidth: 620, width: "100%" }} />
           </AnnoScene>
           </div>
@@ -98,7 +100,7 @@ export default function DeleteModalPage() {
 
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline padSelector=".confirm-modal-actions">
+              <Redline padSelector=".confirm-modal-actions" gapBand={[".confirm-modal-sub", ".confirm-modal-chip"]}>
                 <ConfirmModalSpec variant="book" style={{ width: 620 }} />
               </Redline>
             </div>
@@ -135,29 +137,9 @@ export default function DeleteModalPage() {
         </div>
       </div>
 
-      {/* 5 — DISPATCH (target routing) */}
-      <div className="ds-card">
-        <div className="ds-card-head">Dispatch · <code>target.type</code> → titre / message / body / confirm</div>
-        <div className="ds-card-body col">
-          <table className="token-table">
-            <thead className="table-head">
-              <tr><th>target</th><th>Body addon</th><th>Confirm</th></tr>
-            </thead>
-            <tbody className="table-body">
-              <tr className="table-row"><td className="mono">{"{ id, title, author }"} (book, no type)</td><td className="mono">.confirm-modal-chip + BookChip</td><td className="mono">.confirm-modal-delete → deleteBook</td></tr>
-              <tr className="table-row"><td className="mono">{"{ bulk, ids, count }"}</td><td className="is-empty">—</td><td className="mono">.confirm-modal-delete → deleteMany</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'quote', text }"}</td><td className="mono">.confirm-modal-quote-wrap (clamp 3 + see more)</td><td className="mono">.confirm-modal-delete → deleteQuote</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'word', title }"}</td><td className="is-empty">—</td><td className="mono">.confirm-modal-delete--soft → deleteWord</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'cancelReading', title }"}</td><td className="is-empty">—</td><td className="mono">.ob-next (bleu, non destructif) → cancelReading</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'removeFinished', rating, note }"}</td><td className="mono">.panel-finished-field ×2</td><td className="mono">.confirm-modal-delete → removeFinished</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'collection', title, count }"}</td><td className="mono">.confirm-modal-chip (chip sans cover, count = auteur)</td><td className="mono">.confirm-modal-delete → deleteCollection</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'collectionsBulk', ids, count }"}</td><td className="is-empty">—</td><td className="mono">.confirm-modal-delete → deleteCollectionsMany</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'colRemove', title, colName }"}</td><td className="mono">.confirm-modal-chip + BookChip</td><td className="mono">.confirm-modal-delete (label colRemoveConfirm)</td></tr>
-              <tr className="table-row"><td className="mono">{"{ type: 'colRemoveBulk', count, colName }"}</td><td className="is-empty">—</td><td className="mono">.confirm-modal-delete (label colRemoveConfirm)</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* 5 — DISPATCH (target routing) — désaffiché à la demande (tout breakpoint).
+          Le mapping target.type → titre / message / body / confirm reste documenté dans
+          la table Elements ; restaurer depuis git si besoin de le ré-afficher. */}
 
       {/* 6 — USAGE */}
       <div className="ds-card">

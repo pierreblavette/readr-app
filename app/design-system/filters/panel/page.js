@@ -16,7 +16,7 @@ export default function FiltersPanelPage() {
     <DSSection
       id="filters-panel"
       title="Filters Panel"
-      sub="Panneau slide-in (mobile ≤1280) qui déplie inline toutes les dimensions repliées de la Filters Row. Réutilise la primitive .book-panel ; header (résultat) → sections de filtres → footer sticky (Confirm + Clear)."
+      sub="La version mobile des filtres : un panneau qui glisse depuis la droite et déplie tous les critères qui ne tiennent plus en ligne."
     >
 
       {/* 1 — PREVIEW */}

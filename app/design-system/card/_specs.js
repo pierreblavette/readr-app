@@ -18,7 +18,7 @@ export const BOOK_ANNOS = [
 
 export function BookCardSpec({ className = "" }) {
   return (
-    <div className={`book-card ${className}`.trim()} style={{ width: 220 }}>
+    <div className={`book-card ${className}`.trim()} style={{ width: "var(--spec-w, 220px)" }}>
       <div className="book-cover" style={{ background: "linear-gradient(135deg, var(--primary-40), var(--primary-60))" }} />
       <div className="book-body">
         <div className="book-body-info">
@@ -44,7 +44,7 @@ export const QUOTE = "The world was ending and there was nothing to be done abou
 
 export function QuoteCardSpec({ className = "", saved = false }) {
   return (
-    <div className={`quote-card ${className}`.trim()} style={{ width: 400 }}>
+    <div className={`quote-card ${className}`.trim()} style={{ width: "var(--spec-w, 400px)" }}>
       <div className="quote-card-body">
         <div className="quote-card-text-wrap">
           <div className="quote-card-text">
@@ -87,7 +87,7 @@ export const NOW_READING_ANNOS = [
 // body↔menu produit une bande parasite ~8px.
 export function NowReadingCardSpec({ className = "", hideMenu = false }) {
   return (
-    <div className={`now-reading-card ${className}`.trim()} role="button" tabIndex={-1} style={{ width: 340 }}>
+    <div className={`now-reading-card ${className}`.trim()} role="button" tabIndex={-1} style={{ width: "var(--spec-w, 340px)" }}>
       <div className="now-reading-body">
         <span className="now-reading-date">Started Apr 28</span>
         <div className="now-reading-row">
@@ -120,7 +120,7 @@ export const DICT_ANNOS = [
 
 export function DictionaryCardSpec({ className = "", expanded = false, fluid = false }) {
   return (
-    <div className={`dictionary-saved-card${expanded ? " expanded" : ""} ${className}`.trim()} style={fluid ? { width: "100%" } : { width: 400 }}>
+    <div className={`dictionary-saved-card${expanded ? " expanded" : ""} ${className}`.trim()} style={fluid ? { width: "100%" } : { width: "var(--spec-w, 400px)" }}>
       <div className="dictionary-saved-head" role="button" tabIndex={0} aria-expanded={expanded}>
         <span className="dictionary-saved-toggle">
           <svg className={`dictionary-chevron${expanded ? " open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

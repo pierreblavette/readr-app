@@ -6,7 +6,7 @@ export default function PanelsFoundationPage() {
     <DSSection
       id="panels"
       title="Side Panels"
-      sub="Famille de panneaux slide-in — même primitive .book-panel : une coquille dockée au bord droit (width 540) qui recouvre l'app, avec un socle commun (surface, padding, sections, a11y, scroll-lock, motion). Deux membres documentés en pages dédiées : Book Panel (le livre) et Quote Panel (la citation)."
+      sub="La famille des panneaux qui glissent depuis la droite pour recouvrir l'app. Un même socle décliné en deux fiches : le livre et la citation."
     >
 
       {/* 1 — PREVIEW — la coquille de référence */}

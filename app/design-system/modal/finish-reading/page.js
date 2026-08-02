@@ -19,7 +19,7 @@ export default function FinishReadingModalPage() {
     <DSSection
       id="modal-finish-reading"
       title="Finish Reading Modal"
-      sub="Ouverte depuis « Mark as finished » (Book Panel ou kebab Now Reading). Enregistre une note (1–5 étoiles) + un commentaire facultatif, et se rouvre pré-remplie pour éditer un livre déjà terminé. Coquille = Form Modal ; seul le corps est spécifique."
+      sub="La fenêtre ouverte quand on termine un livre : on lui donne une note et, si on veut, un mot. Elle se rouvre pour éditer un livre déjà fini."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
@@ -38,8 +38,8 @@ export default function FinishReadingModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={FINISH_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={FINISH_ANNOS} stack>
               <FinishModalSpec className="ds-anno-organism" style={MODAL_STYLE} rating={4} />
             </AnnoScene>
           </div>

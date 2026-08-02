@@ -31,14 +31,14 @@ export default function DropdownButtonPage() {
     <DSSection
       id="buttons-dropdown-button"
       title="Dropdown Button"
-      sub="Déclencheur d'un menu d'actions : .dropdown-btn (bouton outline, icône + label + chevron). Un clic ouvre le Dropdown Menu ; le chevron pivote. Ouvre un menu d'ACTIONS — à distinguer du Select (choix d'une valeur). Fait partie de la famille Buttons."
+      sub="Le bouton qui ouvre un menu d'actions : un clic déroule les choix, le chevron pivote. À distinguer du Select, qui choisit une valeur. Fait partie de la famille Buttons."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview">
+            <div className="ds-preview ds-preview--roomy">
               <DropdownBtn />
             </div>
           </div>

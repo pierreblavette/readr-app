@@ -196,6 +196,12 @@ img.ds-cover { object-fit: cover; }
   min-height: var(--height-head, 40px);
   display: flex;
   align-items: center;
+  /* Responsive : quand un head porte un contenu à droite (ex. switcher de variantes
+     marginLeft:auto), il passe sur une 2e ligne au lieu d'écraser le tout sur une seule.
+     row-gap 8 = respiration entre label et contenu replié. Sans effet sur un head à
+     simple titre (un seul flex item = pas de wrap). */
+  flex-wrap: wrap;
+  row-gap: 8px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -204,6 +210,16 @@ img.ds-cover { object-fit: cover; }
   background: var(--bg-head);
   border-bottom: 1px solid var(--border-subtle);
   border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+}
+/* Switcher de variantes dans un head (Delete Modal) = primitive Segmented Pills
+   (.overview-activity-pills) qui gère son layout interne. .ds-head-switcher ne fait que
+   le POSITIONNER : à droite sur une ligne, replié pleine largeur sous 600 pour ne pas
+   écraser label + piste. Le head est déjà flex-wrap. */
+.ds-head-switcher { margin-left: auto; }
+@media (max-width: 600px) {
+  .ds-head-switcher { margin-left: 0; width: 100%; }
+  /* Pills réparties à parts égales sur toute la largeur (fill container). */
+  .ds-head-switcher .overview-activity-pill { flex: 1; min-width: 0; }
 }
 .ds-card-body {
   padding: 0;
@@ -309,6 +325,16 @@ img.ds-cover { object-fit: cover; }
   gap: 32px;
   background: var(--card);
 }
+/* --list-rows : states dont le specimen est une RANGÉE de table (.ds-list-spec). Layout
+   identique à Book Row · States (cellules paddées, specimen en carte bordée centré). On
+   garde le chrome carte (border/radius) et le padding de cellule ; on force juste la
+   table à TENIR (table-layout fixed, pleine largeur du contenu) et on masque les colonnes
+   meta (auteur/année) — sinon 6 colonnes dans ~380px se chevauchent. Résultat = carte
+   avec num + titre + genre + action, comme les book-chips de Book Row. */
+.ds-states-grid--list-rows > .ds-state-sample > .books-list { align-self: stretch; }
+.ds-states-grid--list-rows .ds-list-spec .list-table { table-layout: fixed; width: 100%; }
+.ds-states-grid--list-rows .ds-list-spec .list-table th.list-cell-meta,
+.ds-states-grid--list-rows .ds-list-spec .list-table td.list-cell-meta { display: none; }
 /* Le specimen se recentre même s'il porte son propre align-self (ex. .btn-link
    est en flex-start pour son usage réel sous un champ) : align-self sur l'enfant
    l'emporte sinon sur align-items de la cellule. Spécificité (0,2,0) > (0,1,0). */
@@ -376,6 +402,13 @@ img.ds-cover { object-fit: cover; }
    côté page — largeur RÉELLE, pas le viewport que la sidebar fausse). */
 .ds-states-grid--boxed.ds-states-grid--cols-5 { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* --cols-3 : 3 colonnes deviennent trop serrées avant ~720 (specimens larges type rating
+   5-étoiles ~196px) → on passe en 1 colonne sous 960 (breakpoint existant le plus proche
+   de 920). Spécificité (0,2,0) = celle de la base ci-dessus mais règle postérieure +
+   dans un @media → l'emporte. Neutralise aussi le span ≤760 (1 seule colonne = inoffensif). */
+@media (max-width: 960px) {
+  .ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: 1fr; }
+}
 /* --stack-1240 : specimens larges côte à côte >1240, empilés en 1 colonne ≤1240. */
 @media (max-width: 1240px) {
   .ds-states-grid--boxed.ds-states-grid--stack-1240 { grid-auto-flow: row; grid-template-columns: 1fr; }
@@ -1079,6 +1112,14 @@ img.ds-cover { object-fit: cover; }
    (padding + radius) pour la démarquer, Preview + Anatomy. */
 .ds-preview .modal-toggle-row,
 .ds-anno-scene .modal-toggle-row { background: var(--card); padding: 0 16px; border-radius: 8px; }
+/* Form Modal · Anatomy en UI réelle : le body à onglets (.import-tabs, width:max-content
+   ~343) déborde quand le modal est réduit (stack mobile). min-width:0 sur la chaîne flex
+   → .import-tabs-scroll (overflow-x:auto) clippe/scrolle au lieu de pousser la largeur.
+   Scopé à la scène d'anatomie (doc) — zéro impact prod. */
+.ds-anno-scene .modal-tabs-section,
+.ds-anno-scene .import-tabs-scroll,
+.ds-redline .modal-tabs-section,
+.ds-redline .import-tabs-scroll { min-width: 0; }
 /* Dans une planche Redline, le mat blanc cacherait un track blanc → on le rend
    transparent (le track porte sa propre forme via keepShape) pour qu'il ressorte
    sur le bleu de la scène. Scopé aux planches contenant un track de pills. */
@@ -1462,10 +1503,13 @@ img.ds-cover { object-fit: cover; }
   /* :not(.filters-mobile-trigger):not(.dropdown-btn--icon) — ces deux-là sont ICON-ONLY
      (40×40) et ne doivent PAS être neutralisés : sinon le width:auto + padding 20 les
      étire (trigger Filter, QuotesToggle). Seuls les dropdown-btn « pleins » (label +
-     chevron) gardent leur forme complète pour la doc. */
-  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon) { width: auto; padding: 0 20px; justify-content: normal; }
-  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon) .dropdown-btn-label,
-  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon) .dropdown-btn-chevron { display: block; }
+     chevron) gardent leur forme complète pour la doc.
+     :not(.sort-menu-btn) — library le ré-étend DÉJÀ correctement à ≤1080 (width:auto,
+     padding ASYMÉTRIQUE 0 12 0 16). Le neutraliser lui imposait 0 20 symétrique +
+     justify normal → mauvaise width (vécu sur la carte Data visualization). */
+  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon):not(.sort-menu-btn) { width: auto; padding: 0 20px; justify-content: normal; }
+  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon):not(.sort-menu-btn) .dropdown-btn-label,
+  .ds-root .dropdown-btn:not(.filters-mobile-trigger):not(.dropdown-btn--icon):not(.sort-menu-btn) .dropdown-btn-chevron { display: block; }
 }
 /* Strokes « In use » — cellule haute pour laisser respirer (le menu monte haut) +
    dropzone élargie pour soutenir la comparaison. */
@@ -1488,6 +1532,12 @@ img.ds-cover { object-fit: cover; }
    @media n'ajoute pas de spécificité, donc l'override doit être postérieur en source
    pour l'emporter — sinon la base 60 (plus bas dans le fichier) gagnait. */
 @media (max-width: 600px) { .ds-preview { padding: 20px; } }
+/* Petits composants (badges, buttons, checkbox, chip, rating, pills, spinner, text
+   input, toast, toggle, filters…) : le padding vertical 20 les tasse sur téléphone.
+   Ils ne débordent jamais en largeur — seul l'horizontal avait besoin d'être réduit.
+   Ce modifier restaure 60 en HAUT/BAS (l'horizontal reste à 20 via le shorthand ci-dessus).
+   Spécificité 0,2,0 > 0,1,0 → l'emporte quel que soit l'ordre source. */
+@media (max-width: 600px) { .ds-preview.ds-preview--roomy { padding-top: 60px; padding-bottom: 60px; } }
 /* .ds-preview.col : empile les specimens verticalement (ex. Dictionary Card replié
    au-dessus de déplié) au lieu de la rangée centrée par défaut. Le gap vit inline
    (il varie selon la page), la direction et le centrage transversal vivent ici. */
@@ -1508,6 +1558,15 @@ img.ds-cover { object-fit: cover; }
    largeur strictement égale à toute largeur de colonne (pas de fixe vs %). */
 .ds-preview.ds-scene--footer { padding-left: 48px; padding-right: 48px; }
 .ds-anno-board--footer .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
+/* Mobile : les scènes footer réduisent leurs gouttières latérales 48 → 20 (comme toute
+   Preview sous 600) sur les TROIS sections — Preview, Anatomy et le Redline/Spacing
+   (.ds-redline-row--fill, spécifique au footer) — pour garder l'ÉGALITÉ de largeur du
+   specimen footer. Placé après les règles 48 ci-dessus → l'emporte à spécificité égale. */
+@media (max-width: 600px) {
+  .ds-preview.ds-scene--footer { padding-left: 20px; padding-right: 20px; }
+  .ds-anno-board--footer .ds-anno-scene { padding-left: 20px; padding-right: 20px; }
+  .ds-redline-row--fill .ds-redline { padding-left: 20px; padding-right: 20px; }
+}
 /* Sidebar en doc : la vraie est position:sticky, height 100dvh, z-index 300. On
    neutralise pour l'afficher en flux (hauteur = son contenu), apparence intacte. */
 .ds-sidebar-static.sidebar { position: relative; top: auto; height: auto; max-height: none; z-index: auto; }
@@ -1528,7 +1587,52 @@ img.ds-cover { object-fit: cover; }
      les cotes verticales débordent. Ils lisent leur largeur via var(--spec-w) → on étire
      le target et bascule la var à 100% : le specimen remplit la scène, cotes à l'aise. */
   .ds-redline-target:has(> .panel-inner),
-  .ds-redline-target:has(> .filters-panel-section) { width: 100%; max-width: 100%; --spec-w: 100%; }
+  .ds-redline-target:has(> .filters-panel-section),
+  .ds-redline-target:has(> .dictionary-saved-head),
+  .ds-redline-target:has(> .dictionary-saved-body),
+  .ds-redline-target:has(> .dictionary-definition),
+  .ds-redline-target:has(> .now-reading-card) { width: 100%; max-width: 100%; --spec-w: 100%; }
+  /* Anatomy des cards en mobile : le specimen (largeur fixe 220–400) déborde la scène
+     et se fait clipper. On bascule --spec-w à 100% → il remplit la scène ; les gouttières
+     de 60 (padding scène) logent les pastilles/cotes latérales. */
+  .ds-anno-scene { --spec-w: 100%; }
+  /* Le wrapper .ds-anno-organism est un bloc SANS largeur → sa taille intrinsèque flex
+     est instable (une carte à row horizontale ne shrink pas jusqu'au content-box, elle
+     débordait le padding et le badge se posait sur le kebab). On lui donne une largeur
+     DÉFINIE (100% = content-box de la scène) : la carte fluide fait alors 100% de lui =
+     content-box, gouttières de 60 propres. Scopé aux organismes de cards. */
+  .ds-anno-scene .ds-anno-organism:has(> .book-card),
+  .ds-anno-scene .ds-anno-organism:has(> .quote-card),
+  .ds-anno-scene .ds-anno-organism:has(> .now-reading-card),
+  .ds-anno-scene .ds-anno-organism:has(> .dictionary-saved-card),
+  .ds-anno-scene .ds-anno-organism:has(> .dropdown-menu) { width: 100%; }
+  /* Book Card : cover ratio 2:3 → à 100% le specimen devient démesuré (cover géante).
+     On le pose à 80% (centré) partout où il est fluide — Preview, States, Anatomy.
+     Preview/States centrent déjà (flex/align center) ; en Anatomy c'est l'organisme
+     qui passe à 80%, centré par la scène (règle postérieure → écrase le 100% ci-dessus). */
+  .ds-preview:has(> .book-card),
+  .ds-state-sample:has(> .book-card) { --spec-w: 80%; }
+  .ds-anno-scene .ds-anno-organism:has(> .book-card) { width: 80%; }
+  /* Board « stack » (cards) : les pastilles passent en haut/bas (AnnoScene stack) → plus
+     besoin des gouttières latérales de 60. On réduit le padding horizontal à 20 pour que
+     la carte fluide s'élargisse (moins d'ellipsis) ; le vertical reste 60 (pastilles). */
+  .ds-anno-board--stack .ds-anno-scene { padding-left: 20px; padding-right: 20px; }
+  /* Data Visualization — specimens ISOLÉS dans .ds-state-sample (Metrics · fills et
+     Range · bars/grid). À ≤600 library bascule la VRAIE carte en « cubes » : elle masque
+     .overview-activity-fill (display:none), met le track en colonne et affiche
+     .overview-activity-cube-counter-wrap. Fidèle pour la carte (documentée dans
+     Preview/Anatomy) mais faux pour ces specimens isolés → fills disparus (Metrics) ou
+     barres écrasées + compteur superposé (Range). On force le rendu DESKTOP ici :
+     track en row/align-end, fills visibles, compteurs mobiles cachés. */
+  .ds-root .ds-state-sample .overview-activity-track { flex-direction: row; align-items: flex-end; justify-content: center; }
+  .ds-root .ds-state-sample .overview-activity-fill { display: flex; }
+  .ds-root .ds-state-sample .overview-activity-cube-counter-wrap { display: none; }
+  /* Range · Week : 7 colonnes deviennent trop étroites (~41px) sur téléphone → la barre
+     stacked s'écrase. On réduit le specimen à 2 jours côte à côte : la grille (fixe
+     repeat(7,1fr)) passe à 2 colonnes et on masque les jours 3→7. Les hauteurs restent
+     à l'échelle des 7 jours (calcul JS inchangé). Doc only. */
+  .ds-root .ds-state-sample .overview-activity-bars { grid-template-columns: repeat(2, 1fr); }
+  .ds-root .ds-state-sample .overview-activity-bars .overview-activity-col:nth-child(n+3) { display: none; }
   /* Utilitaire : masque une section entière (card) sur téléphone — ex. Anatomy du
      Filters Panel, trop large/peu lisible en mobile. .ds-root pour battre .ds-card. */
   .ds-root .ds-mobile-hidden { display: none; }
@@ -1542,6 +1646,32 @@ img.ds-cover { object-fit: cover; }
    Sur /ds elle est à nu sur la page et couvrait la sidebar drawer (330) + la toolbar
    mobile (400). On la ramène SOUS le chrome DS tout en restant au-dessus du contenu. */
 .ds-root .autocomplete-list { z-index: 300; }
+/* Delete Modal · Spacing en MOBILE : on masque visuellement le footer d'actions
+   (boutons trop serrés sur le Redline étroit) MAIS en visibility:hidden — il garde sa
+   place dans le flux, donc le gap sous .modal-fields reste mesuré et sa bande Redline
+   subsiste (display:none l'aurait supprimée). Desktop = footer visible normalement.
+   Scopé aux Redline (seul contexte /ds où .confirm-modal-actions vit dans .ds-redline
+   -target) ; Anatomy/Preview intacts. */
+/* Delete Modal · Spacing en MOBILE : footer RETIRÉ du flux (display:none) → aucun artefact,
+   la coquille se resserre. La bande de 32 sous .modal-fields (qui matérialisait le rythme
+   gap:32 avant le footer) est reproduite par un padding-bottom 32 posé sur la coquille :
+   le Redline la cote comme padding vertical — même rendu, sans élément parasite de 2px.
+   Padding propre du footer (16/24) coté dans Elements. Desktop = footer visible. */
+@media (max-width: 600px) {
+  /* padding:0 en plus de display:none → le padSelector lit un padding nul sur l'élément
+     caché et ne génère AUCUNE bande parasite (sinon il lisait 16 sur l'actions cachée et
+     posait un résidu 2×16 au coin). Desktop garde ses bandes 16/16 (actions visibles). */
+  .ds-root .ds-redline-target .confirm-modal-actions { display: none; padding: 0; }
+  .ds-root .ds-redline-target .confirm-modal { padding-bottom: 32px; }
+  /* Finish Reading · Spacing : même traitement (footer .modal-actions retiré, coquille
+     resserrée d'un padding-bottom 32 qui rend la bande sous le form). Scopé à .finish
+     -modal pour ne pas toucher les autres .modal / .modal-actions. */
+  .ds-root .ds-redline-target .finish-modal .modal-actions { display: none; padding: 0; }
+  .ds-root .ds-redline-target .finish-modal { padding-bottom: 32px; }
+  /* Form Modal · Spacing (specimen marqué .ds-fm-spec) : même traitement. */
+  .ds-root .ds-redline-target .ds-fm-spec .modal-actions { display: none; padding: 0; }
+  .ds-root .ds-redline-target .ds-fm-spec { padding-bottom: 32px; }
+}
 /* Toast posé statiquement dans un board de doc : neutralise position:fixed + reveal
    (opacity 0 + translateY) + pointer-events off. z-index:auto car .toast (z 2000) est
    un flex-item → l'honore même en static et couvrirait le chrome DS. (0,2,0) bat la

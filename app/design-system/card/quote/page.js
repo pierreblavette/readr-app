@@ -5,7 +5,7 @@ import { QuoteCardSpec, QUOTE_ANNOS } from "../_specs";
 
 export default function QuoteCardPage() {
   return (
-    <DSSection id="card-quote" title="Quote Card" sub="La carte d'une citation — texte + actions (love / kebab) + livre source. Même socle card, en flex colonne plutôt qu'un cover en tête.">
+    <DSSection id="card-quote" title="Quote Card" sub="La carte d'une citation : le texte, ses actions, et le livre d'où elle vient.">
 
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
@@ -22,8 +22,8 @@ export default function QuoteCardPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={QUOTE_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={QUOTE_ANNOS} stack>
             <div className="ds-anno-organism"><QuoteCardSpec /></div>
           </AnnoScene>
           </div>

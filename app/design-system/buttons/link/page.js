@@ -11,14 +11,14 @@ export default function ButtonLinkPage() {
     <DSSection
       id="buttons-link"
       title="Link"
-      sub="Action texte inline .btn-link — sans hauteur, bordure ni fond. Pour un geste discret dans un formulaire ou une carte (« Remove goal »). Variante critical pour le destructif. Fait partie de la famille Buttons."
+      sub="Un lien-action en texte seul, sans fond ni bordure — pour un geste discret dans un formulaire ou une carte. Fait partie de la famille Buttons."
     >
       {/* 1 — PREVIEW */}
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview">
+            <div className="ds-preview ds-preview--roomy">
               <button type="button" className="btn-link">Remove goal</button>
             </div>
           </div>
