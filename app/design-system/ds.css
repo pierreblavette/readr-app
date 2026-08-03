@@ -498,20 +498,21 @@ img.ds-cover { object-fit: cover; }
    de gauche. width:auto réduisait le bloc à son seul padding (88px) → le lockup
    débordait à droite au lieu d'être centré. Sizes only (seul tone="blue"). */
 .ds-redline--blue { --rl: var(--primary-50); --rl-fill: rgba(73, 89, 230, 0.14); background: transparent; padding: 8px 44px; }
-/* Rails haut + bas (Sizes only) : deux traits horizontaux au sommet et à la base
-   du lockup. Le symbole a la même hauteur que le 'd' du wordmark → les rails
-   matérialisent cet alignement (le crochet de hauteur le cote verticalement à
-   gauche). left/right 0 = bord à bord du target (= largeur du lockup). z-index 2
-   pour rester au-dessus du glyphe (z-index 1) → trait continu net. */
+/* Rails haut + bas (Sizes only) : deux traits horizontaux pointillés au sommet et
+   à la base du lockup. Le symbole a la même hauteur que le 'd' du wordmark → les
+   rails matérialisent cet alignement (le crochet de hauteur le cote verticalement
+   à gauche). left/right 0 = bord à bord du target (= largeur du lockup). 1px dashed
+   comme les leads du Redline. z-index 0 = DERRIÈRE le glyphe (z-index 1) → le logo
+   passe devant, le trait n'apparaît que dans les vides. */
 .ds-redline--blue .ds-redline-target::before,
 .ds-redline--blue .ds-redline-target::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  height: 1.5px;
-  background: var(--rl);
-  z-index: 2;
+  height: 0;
+  border-top: 1px dashed var(--rl);
+  z-index: 0;
 }
 .ds-redline--blue .ds-redline-target::before { top: 0; }
 .ds-redline--blue .ds-redline-target::after { bottom: 0; }
