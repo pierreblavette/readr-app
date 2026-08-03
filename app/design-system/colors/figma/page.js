@@ -38,10 +38,12 @@ const PRIM_GROUPS = [
     ["primary/dark/10","#2F3666"],["primary/dark/25","#525D9E"],["primary/dark/40","#7B89F8"],
   ]],
   ["neutral", [
-    ["neutral/white","#FFFFFF"],["neutral/off-white","#F5F6FF"],["neutral/black","#0D0F1A"],
+    ["neutral/white","#FFFFFF"],
+    ["neutral/off-white","#F5F6FF"],["neutral/off-white-90","#F5F6FFE6"],["neutral/off-white-20","#F5F6FF33"],
     ["neutral/gray-50","#F5F5F5"],["neutral/gray-100","#EBEBEB"],["neutral/gray-200","#E0E0E0"],
     ["neutral/gray-500","#808080"],["neutral/gray-600","#666666"],["neutral/gray-800","#333333"],
     ["neutral/gray-850","#262626"],["neutral/gray-900","#1F1F1F"],
+    ["neutral/black-100","#0D0F1A"],["neutral/black-80","#0D0F1ACC"],["neutral/black-70","#0D0F1AB3"],
   ]],
   ["teal / destructive / ai / page / card / surface", [
     ["teal/light","#00A699"],["teal/dark","#00C9BE"],
