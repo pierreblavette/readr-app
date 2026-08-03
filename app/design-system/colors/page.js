@@ -12,6 +12,7 @@ const MAP_ROWS = [
   ["Surfaces", [
     ["--bg", "bg/default"], ["--bg2", "bg/2"], ["--bg3", "bg/3"],
     ["--bg-elevated", "bg/elevated"], ["--card", "surface/card"],
+    ["--page-light", "page/light"],
     ["--bg-app", "bg/app"], ["--bg-head", "bg/head"], ["--nav", "bg/nav"],
   ]],
   ["Texte", [

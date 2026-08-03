@@ -81,6 +81,10 @@
   --dark-100:    #0D0F1A;
   --light-20:    rgba(245,246,255,0.20);
   --light-90:    rgba(245,246,255,0.90);
+  /* Blanc de page en primitive FIXE (non thémée, ≠ --bg qui bascule à #0F0F0F en
+     dark) — miroir CSS de la primitive Figma page/light. Pour les surfaces qui
+     doivent rester claires quel que soit le thème (ex. specimen logo /ds). */
+  --page-light:  #FEFEFF;
   /* Primary scale — light tier (--primary-3/5/10 are overridden in dark theme below to keep the
      "card hover / button tinted" pattern as solid colors instead of rgba over varying baselines) */
   --primary-3:   #FAFAFF;

@@ -1475,7 +1475,7 @@ img.ds-cover { object-fit: cover; }
 .logo-contrast-status { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; align-self: flex-start; }
 .logo-contrast-status--ok { background: var(--primary-50); color: #FFFFFF; }
 .logo-contrast-status--ko { background: var(--alert-bg); color: var(--alert); }
-.logo-bg-page    { background: #FEFEFF; border: 1px solid var(--border-subtle); }
+.logo-bg-page    { background: var(--page-light); border: 1px solid var(--border-subtle); }
 .logo-bg-dark    { background: var(--dark-100); }
 .logo-bg-accent  { background: var(--primary-50); }
 /* The single tile row of the Logo section — CSS tiles (.logo-bg) and board cards
