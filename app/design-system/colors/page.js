@@ -4,9 +4,71 @@ import DSSection from "../_components/DSSection";
 // Racine de la famille Colors. Explique le modèle à deux sources (code vs Figma,
 // non synchronisés) et renvoie vers les deux pages : Web (tokens CSS, live) et
 // Figma (variables, structure + mapping de noms).
+
+// Table de correspondance CSS → Figma. Part du token globals.css et pointe la
+// variable (ou Effect Style) Figma à binder. Miroir de la même donnée que le
+// codeSyntax WEB posé sur chaque variable côté Figma. [group, [[cssToken, figmaName]…]].
+const MAP_ROWS = [
+  ["Surfaces", [
+    ["--bg", "bg/default"], ["--bg2", "bg/2"], ["--bg3", "bg/3"],
+    ["--bg-elevated", "bg/elevated"], ["--card", "surface/card"],
+    ["--bg-app", "bg/app"], ["--bg-head", "bg/head"], ["--nav", "bg/nav"],
+  ]],
+  ["Texte", [
+    ["--text", "text/default"], ["--text-2", "text/2"], ["--text-3", "text/3"],
+  ]],
+  ["Strokes", [
+    ["--border", "border/default"], ["--border-subtle", "border/subtle"],
+  ]],
+  ["Accent & secondary", [
+    ["--primary", "accent/default"], ["--accent-bg", "accent/bg"],
+    ["--ghost-hover", "accent/ghost-hover"], ["--secondary", "secondary/default"],
+    ["--secondary-foreground", "secondary/foreground"],
+  ]],
+  ["Surfaces tintées & primary scale", [
+    ["--primary-3", "surface/1"], ["--primary-5", "surface/2"], ["--primary-10", "surface/3"],
+    ["--primary-20 … --primary-100", "primary/20 … primary/100"],
+  ]],
+  ["Critical", [
+    ["--destructive", "destructive/default"], ["--destructive-hover", "destructive/hover"],
+    ["--alert-bg", "destructive/bg"],
+  ]],
+  ["Teal", [
+    ["--teal", "teal/default"], ["--teal-bg", "teal/bg"],
+  ]],
+  ["AI", [
+    ["--ai-from", "ai/from"], ["--ai-to", "ai/to"],
+  ]],
+  ["Neutrals (overlays)", [
+    ["--dark-70", "neutral/black-70"], ["--dark-80", "neutral/black-80"],
+    ["--dark-100", "neutral/black"], ["--light-20", "neutral/off-white-20"],
+    ["--light-90", "neutral/off-white-90"],
+  ]],
+  ["Illustration", [
+    ["--illus-bg-1 … --illus-stroke", "illus/*"],
+  ]],
+  ["Ombres (Effect Styles)", [
+    ["--shadow-md", "shadow/md"], ["--shadow-lg", "shadow/lg"],
+    ["--shadow-xl", "shadow/xl"], ["--shadow-overlay", "shadow/overlay"],
+  ]],
+];
+
+// Un token unique → pastille bleue copiable (voix « token » du DS) ; une plage
+// (« a … b ») n'est pas copiable → rendue en mono neutre.
+function CssCell({ token }) {
+  return /[…\s]/.test(token)
+    ? <code className="ds-cn">{token}</code>
+    : <span className="ds-token-chip">{token}</span>;
+}
+
 export default function ColorsPage() {
   return (
     <DSSection id="colors" title="Colors" sub="Le système de couleurs de Readr vit dans deux mondes non synchronisés — le code et Figma. Chaque page en documente un.">
+      <style>{`
+        .dsmap-group { display:flex; flex-direction:column; gap:8px; }
+        .dsmap { table-layout:fixed; }
+        .dsmap th, .dsmap td { width:50%; }
+      `}</style>
 
       <div className="ds-card">
         <div className="ds-card-head">Deux sources, un système</div>
@@ -50,6 +112,29 @@ export default function ColorsPage() {
               <span className="ds-index-label">Figma — variables (structure + mapping)</span>
             </Link>
           </div>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Correspondance CSS ↔ Figma</div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Chaque token de <code>globals.css</code> et la variable (ou Effect Style) Figma à binder. Cmd+F ton token pour retrouver la variable. Dans l&apos;autre sens, chaque variable Figma affiche son token CSS (<code className="ds-cn">codeSyntax</code>) dans le panneau Variables et en Dev Mode.</p>
+          {MAP_ROWS.map(([group, rows]) => (
+            <div key={group} className="dsmap-group">
+              <span className="panel-section-eyebrow">{group}</span>
+              <table className="token-table dsmap">
+                <tbody className="table-body">
+                  {rows.map(([css, fig]) => (
+                    <tr key={css} className="table-row">
+                      <td><CssCell token={css} /></td>
+                      <td><code className="ds-cn">{fig}</code></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+          <p className="ds-note"><strong>Alias de valeur</strong> — même couleur, pas de variable Figma dédiée, binde la cible ci-contre : <code>--background</code> = <code>--bg</code> · <code>--accent</code> = <code>--ring</code> = <code>--primary</code> (<code className="ds-cn">accent/default</code>) · <code>--input</code> = <code>--border</code> (<code className="ds-cn">border/default</code>) · <code>--alert</code> = <code>--destructive</code> · <code>--primary-foreground</code> = <code className="ds-cn">neutral/white</code> · <code>--muted</code> = <code className="ds-cn">bg/3</code> · <code>--muted-foreground</code> = <code>--text-3</code>. <strong>Non-couleurs</strong> (pas de variable) : <code>--radius</code>, <code>--height-head</code>, <code>--transition</code>.</p>
         </div>
       </div>
 
