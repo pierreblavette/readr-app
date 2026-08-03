@@ -492,11 +492,12 @@ img.ds-cover { object-fit: cover; }
 /* Variante bleue (tone="blue") — cotes en primary au lieu du magenta. Utilisée
    dans un contexte qui porte déjà sa surface (cellule .ds-state-sample de Sizes) :
    scène transparente + compacte, room à gauche pour le crochet de hauteur. */
-/* Padding horizontal SYMÉTRIQUE (44 des deux côtés) : le crochet de hauteur vit
-   dans les 44 de gauche, les 44 de droite équilibrent → le lockup se centre dans
-   sa cellule (sinon le bloc est centré mais le padding-left asymétrique décale le
-   specimen à droite). Sizes only (seul consumer de tone="blue"). */
-.ds-redline--blue { --rl: var(--primary-50); --rl-fill: rgba(73, 89, 230, 0.14); background: transparent; padding: 8px 44px; width: auto; }
+/* width:100% (hérité de .ds-redline, PAS width:auto) + padding horizontal
+   SYMÉTRIQUE (44/44) : le bloc remplit la cellule et text-align:center (base)
+   centre le lockup dans le content-box. Le crochet de hauteur vit dans les 44
+   de gauche. width:auto réduisait le bloc à son seul padding (88px) → le lockup
+   débordait à droite au lieu d'être centré. Sizes only (seul tone="blue"). */
+.ds-redline--blue { --rl: var(--primary-50); --rl-fill: rgba(73, 89, 230, 0.14); background: transparent; padding: 8px 44px; }
 /* Le specimen d'une planche est un spécimen figé, pas une démo : pointer-events
    none coupe hover/press pour que le fond ne change pas sous la souris pendant
    la lecture des cotes. La mesure (getComputedStyle/rects) n'en dépend pas. */
