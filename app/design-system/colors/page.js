@@ -40,10 +40,11 @@ const MAP_ROWS = [
   ["AI", [
     ["--ai-from", "ai/from"], ["--ai-to", "ai/to"],
   ]],
-  ["Neutrals (overlays)", [
+  ["Neutrals (dark/light)", [
     ["--dark-70", "neutral/black-70"], ["--dark-80", "neutral/black-80"],
-    ["--dark-100", "neutral/black-100"], ["--light-20", "neutral/off-white-20"],
-    ["--light-90", "neutral/off-white-90"],
+    ["--dark-100", "neutral/black-100"],
+    ["--light-20", "neutral/off-white-20"], ["--light-90", "neutral/off-white-90"],
+    ["--light-100", "neutral/off-white"],
   ]],
   ["Illustration", [
     ["--illus-bg-1 … --illus-stroke", "illus/*"],

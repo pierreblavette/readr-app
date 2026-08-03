@@ -81,6 +81,7 @@
   --dark-100:    #0D0F1A;
   --light-20:    rgba(245,246,255,0.20);
   --light-90:    rgba(245,246,255,0.90);
+  --light-100:   #F5F6FF;   /* off-white opaque — pendant de --dark-100, base de la famille --light-* (≠ --white pur) */
   /* Blanc de page en primitive FIXE (non thémée, ≠ --bg qui bascule à #0F0F0F en
      dark) — miroir CSS de la primitive Figma page/light. Pour les surfaces qui
      doivent rester claires quel que soit le thème (ex. specimen logo /ds). */
