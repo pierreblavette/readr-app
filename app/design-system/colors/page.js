@@ -12,7 +12,7 @@ const MAP_ROWS = [
   ["Surfaces", [
     ["--bg", "bg/default"], ["--bg2", "bg/2"], ["--bg3", "bg/3"],
     ["--bg-elevated", "bg/elevated"], ["--card", "surface/card"],
-    ["--page-light", "page/light"],
+    ["--page-light", "page/light"], ["--page-dark", "page/dark"], ["--white", "neutral/white"],
     ["--bg-app", "bg/app"], ["--bg-head", "bg/head"], ["--nav", "bg/nav"],
   ]],
   ["Texte", [
@@ -135,7 +135,7 @@ export default function ColorsPage() {
               </table>
             </div>
           ))}
-          <p className="ds-note"><strong>Alias de valeur</strong> — même couleur, pas de variable Figma dédiée, binde la cible ci-contre : <code>--background</code> = <code>--bg</code> · <code>--accent</code> = <code>--ring</code> = <code>--primary</code> (<code className="ds-cn">accent/default</code>) · <code>--input</code> = <code>--border</code> (<code className="ds-cn">border/default</code>) · <code>--alert</code> = <code>--destructive</code> · <code>--primary-foreground</code> = <code className="ds-cn">neutral/white</code> · <code>--muted</code> = <code className="ds-cn">bg/3</code> · <code>--muted-foreground</code> = <code>--text-3</code>. <strong>Non-couleurs</strong> (pas de variable) : <code>--radius</code>, <code>--height-head</code>, <code>--transition</code>.</p>
+          <p className="ds-note"><strong>Alias de valeur</strong> — même couleur, pas de variable Figma dédiée, binde la cible ci-contre : <code>--background</code> = <code>--bg</code> · <code>--accent</code> = <code>--ring</code> = <code>--primary</code> (<code className="ds-cn">accent/default</code>) · <code>--input</code> = <code>--border</code> (<code className="ds-cn">border/default</code>) · <code>--alert</code> = <code>--destructive</code> · <code>--primary-foreground</code> = <code>--white</code> (<code className="ds-cn">neutral/white</code>) · <code>--muted</code> = <code className="ds-cn">bg/3</code> · <code>--muted-foreground</code> = <code>--text-3</code>. <strong>Non-couleurs</strong> (pas de variable) : <code>--radius</code>, <code>--height-head</code>, <code>--transition</code>.</p>
         </div>
       </div>
 

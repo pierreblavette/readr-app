@@ -1473,10 +1473,10 @@ img.ds-cover { object-fit: cover; }
    keeps its own align-self so it stays left and hugs its label. */
 .logo-contrast-item { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .logo-contrast-status { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; align-self: flex-start; }
-.logo-contrast-status--ok { background: var(--primary-50); color: #FFFFFF; }
+.logo-contrast-status--ok { background: var(--primary-50); color: var(--white); }
 .logo-contrast-status--ko { background: var(--alert-bg); color: var(--alert); }
 .logo-bg-page    { background: var(--page-light); border: 1px solid var(--border-subtle); }
-.logo-bg-dark    { background: var(--dark-100); }
+.logo-bg-dark    { background: var(--page-dark); }
 .logo-bg-accent  { background: var(--primary-50); }
 /* The single tile row of the Logo section — CSS tiles (.logo-bg) and board cards
    (.lockup-card) alike. Column count is fixed rather than auto-fit so every tile
