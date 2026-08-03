@@ -39,7 +39,7 @@ const PRIM_GROUPS = [
   ]],
   ["neutral", [
     ["neutral/white","#FFFFFF"],
-    ["neutral/light-100","#F5F6FF"],["neutral/light-90","#F5F6FFE6"],["neutral/light-20","#F5F6FF33"],
+    ["neutral/light-100","#FFFFFF"],["neutral/light-90","#FFFFFFE6"],["neutral/light-20","#FFFFFF33"],
     ["neutral/gray-50","#F5F5F5"],["neutral/gray-100","#EBEBEB"],["neutral/gray-200","#E0E0E0"],
     ["neutral/gray-500","#808080"],["neutral/gray-600","#666666"],["neutral/gray-800","#333333"],
     ["neutral/gray-850","#262626"],["neutral/gray-900","#1F1F1F"],

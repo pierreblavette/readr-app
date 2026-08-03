@@ -24,7 +24,7 @@ export default function LogoPage() {
         <div className="ds-card-head">Wordmark — standalone</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","var(--dark-100)","Light"],["logo-bg-dark","var(--white)","Dark"],["logo-bg-accent","var(--white)","Accent"]].map(([cls,col,label]) => (
+            {[["logo-bg-page","var(--dark-100)","Light"],["logo-bg-dark","var(--light-100)","Dark"],["logo-bg-accent","var(--light-100)","Accent"]].map(([cls,col,label]) => (
               <div key={cls} className="lockup-card">
                 <span className="panel-section-eyebrow">{label}</span>
                 <div className={`logo-bg ${cls}`}>
@@ -47,7 +47,7 @@ export default function LogoPage() {
         <div className="ds-card-head">Symbol — standalone</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","var(--primary-50)","Light"],["logo-bg-dark","var(--primary-50)","Dark"],["logo-bg-accent","var(--white)","Accent"]].map(([cls,col,label]) => (
+            {[["logo-bg-page","var(--primary-50)","Light"],["logo-bg-dark","var(--primary-50)","Dark"],["logo-bg-accent","var(--light-100)","Accent"]].map(([cls,col,label]) => (
               <div key={cls} className="lockup-card">
                 <span className="panel-section-eyebrow">{label}</span>
                 <div className={`logo-bg ${cls}`}>
@@ -70,7 +70,7 @@ export default function LogoPage() {
         <div className="ds-card-head">Lockup — Symbol &amp; Text</div>
         <div className="ds-card-body col">
           <div className="ds-tile-grid ds-tile-grid--cols3">
-            {[["logo-bg-page","var(--dark-100)",undefined,"Light"],["logo-bg-dark","var(--white)",undefined,"Dark"],["logo-bg-accent","var(--white)","var(--white)","Accent"]].map(([cls,col,symbolColor,label]) => (
+            {[["logo-bg-page","var(--dark-100)",undefined,"Light"],["logo-bg-dark","var(--light-100)",undefined,"Dark"],["logo-bg-accent","var(--light-100)","var(--light-100)","Accent"]].map(([cls,col,symbolColor,label]) => (
               <div key={cls} className="lockup-card">
                 <span className="panel-section-eyebrow">{label}</span>
                 <div className={`logo-bg ${cls}`}>
@@ -88,7 +88,7 @@ export default function LogoPage() {
           <div className="ds-state-sample">
             <span className="panel-section-eyebrow">Symbol</span>
             <div className="ds-tile-grid ds-tile-grid--cols3">
-              {[["logo-bg-page","var(--primary-50)",undefined],["logo-bg-dark","var(--primary-50)",undefined],["logo-bg-accent","var(--white)",["var(--white)","var(--white)"]]].map(([cls,col,echo],i) => (
+              {[["logo-bg-page","var(--primary-50)",undefined],["logo-bg-dark","var(--primary-50)",undefined],["logo-bg-accent","var(--light-100)",["var(--light-100)","var(--light-100)"]]].map(([cls,col,echo],i) => (
                 <div key={i} className={`logo-bg ${cls}`}>
                   <SymbolMark key={replayLogo} animated echo={echo} className="logo-symbol" style={{ color: col }} />
                 </div>
@@ -98,7 +98,7 @@ export default function LogoPage() {
           <div className="ds-state-sample">
             <span className="panel-section-eyebrow">Symbol &amp; Text</span>
             <div className="ds-tile-grid ds-tile-grid--cols3">
-              {[["logo-bg-page","var(--dark-100)",undefined,undefined],["logo-bg-dark","var(--white)",undefined,undefined],["logo-bg-accent","var(--white)",["var(--white)","var(--white)"],"var(--white)"]].map(([cls,col,echo,symbolColor],i) => (
+              {[["logo-bg-page","var(--dark-100)",undefined,undefined],["logo-bg-dark","var(--light-100)",undefined,undefined],["logo-bg-accent","var(--light-100)",["var(--light-100)","var(--light-100)"],"var(--light-100)"]].map(([cls,col,echo,symbolColor],i) => (
                 <div key={i} className={`logo-bg ${cls}`}>
                   <LogoLockup key={replayLogo} animated echo={echo} symbolColor={symbolColor} className="logo" style={{ color: col }} />
                 </div>
@@ -279,8 +279,8 @@ export default function LogoPage() {
           <div className="ds-tile-grid ds-tile-grid--cols3">
             {[
               { bg: "var(--page-light)", fg: "var(--dark-100)", ok: true,  label: "Surface light" },
-              { bg: "var(--page-dark)",  fg: "var(--white)",   ok: true,  label: "Surface dark" },
-              { bg: "var(--primary-50)", fg: "var(--white)",   ok: true,  label: "Primary brand" },
+              { bg: "var(--page-dark)",  fg: "var(--light-100)",   ok: true,  label: "Surface dark" },
+              { bg: "var(--primary-50)", fg: "var(--light-100)",   ok: true,  label: "Primary brand" },
               { bg: "#F5F5F5",  fg: "#E0E0E0", ok: false, label: "Trop faible contraste" },
               { bg: "var(--primary-50)", fg: "#0F0F0F", ok: false, label: "Conflit brand + dark" },
               { bg: "linear-gradient(135deg, var(--primary-50) 0%, #E63946 100%)", fg: "#FFFFFF", ok: false, label: "Fond complexe / dégradé" },
