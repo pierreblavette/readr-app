@@ -1,49 +1,7 @@
-import DSSection from "../_components/DSSection";
-import Redline from "../_components/Redline";
-import AnnoScene from "../_components/AnnoScene";
-
-const StarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className="is-filled">
-    <path d="M12 2l2.9 6.9L22 10l-5.5 4.7L18.2 22 12 18.3 5.8 22l1.7-7.3L2 10l7.1-1.1L12 2z" />
-  </svg>
-);
-
-// Placeholder de couverture : c'est la branche de repli du vrai composant
-// (dégradé issu de coverColors(title) + initiale), volontairement figée ici.
-function Cover({ from, to, letter }) {
-  return (
-    <div
-      className="book-row-cover book-row-cover-placeholder"
-      style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
-    >
-      <span>{letter}</span>
-    </div>
-  );
-}
-
-// Corps identique à BookRow.js : title + author TOUJOURS enveloppés dans
-// .book-row-name, les étoiles en second enfant de .book-row-body.
-function Body({ title, author, rating }) {
-  return (
-    <div className="book-row-body">
-      <div className="book-row-name">
-        <div className="book-row-title">{title}</div>
-        {author && <div className="book-row-author">{author}</div>}
-      </div>
-      {rating > 0 && (
-        <div className="overview-stars" aria-label={`Rating ${rating}/5`}>
-          {[1, 2, 3, 4, 5].map((n) => <StarIcon key={n} />)}
-        </div>
-      )}
-    </div>
-  );
-}
-
-const Chevron = () => (
-  <svg className="book-row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="9 18 15 12 9 6" />
-  </svg>
-);
+import DSSection from "../../_components/DSSection";
+import Redline from "../../_components/Redline";
+import AnnoScene from "../../_components/AnnoScene";
+import { Cover, BookRowBody as Body, Chevron, RemoveBtn } from "../_specs";
 
 // Décomposition numérotée : container (1) + cover (2) + name (3) + chevron (4).
 const ANNOS = [
@@ -56,7 +14,7 @@ const ANNOS = [
 export default function BookRowPage() {
   return (
     <DSSection
-      id="book-row"
+      id="rows-book"
       title="Book Row"
       sub="La ligne qui référence un livre : sa vignette, son titre, son auteur. Utilisée partout où un livre doit être cité de façon compacte."
     >
@@ -66,7 +24,7 @@ export default function BookRowPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview">
-            <button type="button" className="book-row book-row-interactive" style={{ width: "var(--spec-w, 300px)" }}>
+            <button type="button" className="book-row book-row-interactive" style={{ width: "min(402px, 100%)" }}>
               <Cover from="#4959E6" to="#00A699" letter="D" />
               <Body title="Dune" author="Frank Herbert" rating={5} />
               <Chevron />
@@ -83,7 +41,7 @@ export default function BookRowPage() {
         <div className="ds-card-body col">
           <div className="ds-anno-board">
           <AnnoScene annos={ANNOS}>
-            <button type="button" className="book-row book-row-interactive ds-anno-organism" style={{ width: 300 }}>
+            <button type="button" className="book-row book-row-interactive ds-anno-organism" style={{ width: "min(402px, 100%)" }}>
               <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
               <Body title="Tropique du Cancer" author="Henry Miller" />
               <Chevron />
@@ -117,7 +75,7 @@ export default function BookRowPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline boxSelector=".book-row-cover">
-                <div className="book-row" style={{ width: 300 }}>
+                <div className="book-row" style={{ width: 402 }}>
                   <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
                   <Body title="Display" author="Henry Miller" />
                 </div>
@@ -125,7 +83,7 @@ export default function BookRowPage() {
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline boxSelector=".book-row-cover">
-                <button type="button" className="book-row book-row-interactive" style={{ width: 300 }}>
+                <button type="button" className="book-row book-row-interactive" style={{ width: 402 }}>
                   <Cover from="#9EEB97" to="#4959E6" letter="1" />
                   <Body title="Interactive" author="George Orwell" />
                   <Chevron />
@@ -134,20 +92,16 @@ export default function BookRowPage() {
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline boxSelector=".book-row-cover">
-                <div className="book-row" style={{ width: 300 }}>
+                <div className="book-row" style={{ width: 402 }}>
                   <Cover from="#FE7E4E" to="#FFCEE3" letter="B" />
                   <Body title="With remove" author="Stephen Hawking" />
-                  <button type="button" className="book-row-remove" aria-label="Remove">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                  </button>
+                  <RemoveBtn />
                 </div>
               </Redline>
             </div>
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline boxSelector=".book-row-cover">
-                <button type="button" className="book-row book-row-interactive" style={{ width: 300 }}>
+                <button type="button" className="book-row book-row-interactive" style={{ width: 402 }}>
                   <Cover from="#4959E6" to="#00A699" letter="D" />
                   <Body title="Rating" author="Frank Herbert" rating={5} />
                   <Chevron />
@@ -165,7 +119,7 @@ export default function BookRowPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
-              <button type="button" className="book-row book-row-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="D" />
                 <Body title="Default" author="--bg3" />
                 <Chevron />
@@ -173,7 +127,7 @@ export default function BookRowPage() {
               <span className="ds-class">.book-row-interactive</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-row book-row-interactive is-hover" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive is-hover" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#9EEB97" to="#4959E6" letter="H" />
                 <Body title="Hover" author="--primary-10" />
                 <Chevron />
@@ -181,7 +135,7 @@ export default function BookRowPage() {
               <span className="ds-class">:hover</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-row book-row-interactive is-active" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive is-active" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#FE7E4E" to="#FFCEE3" letter="A" />
                 <Body title="Active" author="--primary-10" />
                 <Chevron />
@@ -189,7 +143,7 @@ export default function BookRowPage() {
               <span className="ds-class">:active</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-row book-row-interactive is-focus" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive is-focus" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#4959E6" to="#00A699" letter="F" />
                 <Body title="Focus" author="ring --primary-50" />
                 <Chevron />
@@ -209,14 +163,14 @@ export default function BookRowPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
-              <div className="book-row" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <div className="book-row" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
                 <Body title="Tropique du Cancer" author="Henry Miller" />
               </div>
               <span className="ds-class">.book-row</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-row book-row-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#9EEB97" to="#4959E6" letter="1" />
                 <Body title="1984" author="George Orwell" />
                 <Chevron />
@@ -224,19 +178,15 @@ export default function BookRowPage() {
               <span className="ds-class">.book-row-interactive</span>
             </div>
             <div className="ds-state-sample">
-              <div className="book-row" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <div className="book-row" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#FE7E4E" to="#FFCEE3" letter="B" />
                 <Body title="A Brief History of Time" author="Stephen Hawking" />
-                <button type="button" className="book-row-remove" aria-label="Remove">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
+                <RemoveBtn />
               </div>
               <span className="ds-class">.book-row-remove</span>
             </div>
             <div className="ds-state-sample">
-              <button type="button" className="book-row book-row-interactive" style={{ width: "100%", maxWidth: "var(--spec-max, 260px)" }}>
+              <button type="button" className="book-row book-row-interactive" style={{ width: "min(402px, 100%)" }}>
                 <Cover from="#4959E6" to="#00A699" letter="D" />
                 <Body title="Dune" author="Frank Herbert" rating={5} />
                 <Chevron />
@@ -280,7 +230,7 @@ export default function BookRowPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Collection chip · padding asymétrique</div>
-            <p>12 / 12 / 12 / 16 — le chevron aligné à droite tire le regard, le retrait gauche rétablit l&apos;équilibre optique. Même logique que le padding asymétrique des boutons à icône.</p>
+            <p>12 / 12 / 12 / 16 — le chevron aligné à droite tire le regard, le retrait gauche rétablit l&apos;équilibre optique. Même logique que le padding asymétrique des boutons à icône. Documentée en <strong>Collection Row</strong>.</p>
             <span className="ds-class">.collection-chip</span>
           </div>
           <div className="ds-token-block">

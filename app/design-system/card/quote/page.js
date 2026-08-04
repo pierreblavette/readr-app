@@ -62,7 +62,7 @@ export default function QuoteCardPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
             <div className="ds-state-sample">
               <QuoteCardSpec />
               <span className="ds-class">.quote-card</span>

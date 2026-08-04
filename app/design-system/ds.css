@@ -986,6 +986,13 @@ img.ds-cover { object-fit: cover; }
 [data-theme="dark"] .book-row-interactive.is-hover,
 [data-theme="dark"] .book-row-interactive.is-active { background: var(--primary-10) !important; }
 .book-row-interactive.is-focus { box-shadow: 0 0 0 2px var(--primary-50) !important; }
+/* panel-quote-item (Quote Row, variante stripped) : miroir de son :hover réel
+   (--primary-10) pour la planche States — il n'avait aucun mapping .is-hover. */
+.panel-quote-item.is-hover { background: var(--primary-10) !important; }
+[data-theme="dark"] .panel-quote-item.is-hover { background: var(--primary-10) !important; }
+/* Quiz Row · choice (question) : miroir de son :hover réel (--primary-10) pour States. */
+.panel-quiz-choice.is-hover { background: var(--primary-10) !important; }
+[data-theme="dark"] .panel-quiz-choice.is-hover { background: var(--primary-5) !important; }
 /* Pas d'animation d'apparition dans la doc : plusieurs chips qui fadeUp au mount
    distraient. Neutralisé uniquement sous /ds (la prod garde son animation). */
 .ds-section .book-row { animation: none; }
@@ -1102,7 +1109,18 @@ img.ds-cover { object-fit: cover; }
 .ds-preview .overview-cloud-chip,
 .ds-anno-scene .overview-cloud-chip,
 .ds-preview .book-row,
-.ds-anno-scene .book-row { background: var(--card); }
+.ds-anno-scene .book-row,
+/* Rows bg3 de la famille Rows (Quote, Quiz) : même piège que .book-row — leur
+   --bg3 se confond avec le bleu de la scène → --card pour les démarquer, comme
+   Book/Collection Row. Uniformise le traitement de contraste sur toutes les Rows. */
+.ds-preview .quote-card.overview-quote-card,
+.ds-anno-scene .quote-card.overview-quote-card,
+.ds-preview .panel-quote-item,
+.ds-anno-scene .panel-quote-item,
+.ds-preview .panel-quiz-review-item,
+.ds-anno-scene .panel-quiz-review-item,
+.ds-preview .panel-quiz-choice,
+.ds-anno-scene .panel-quiz-choice { background: var(--card); }
 /* …mais les pills DANS le card Weekly Activity (surface --card blanche) gardent leur
    --bg3 réel : le forçage --card ci-dessus les rendrait invisibles (card sur card),
    comme la book-row en modale. Ne vaut que hors du card (page Segmented Pills). */
@@ -1132,11 +1150,37 @@ img.ds-cover { object-fit: cover; }
    passée en blanc en inline sur sa planche (elle est le sujet ailleurs, ex. Book Row). */
 .ds-redline .panel-rating-stars,
 .ds-redline .panel-finished-note,
-.ds-redline .panel-quote-item { background: var(--card); }
+.ds-redline .panel-quote-item,
+.ds-redline .quote-card.overview-quote-card,
+.ds-redline .panel-quiz-review-item,
+.ds-redline .panel-quiz-choice { background: var(--card); }
 /* Checkbox : la rangée est transparente et se fond sur le bleu → surface --card
    (padding + radius) pour la démarquer, Preview + Anatomy. */
 .ds-preview .modal-toggle-row,
 .ds-anno-scene .modal-toggle-row { background: var(--card); padding: 0 16px; border-radius: 8px; }
+/* Now Reading Row : la row (badge date + média-object) n'a ni fond ni padding
+   propres — c'est sa carte qui les porte. En doc on la présente boxée comme les
+   autres rows via .ds-nr-box (fond --card + padding + gap badge→média). La vraie
+   carte réserve en plus un padding droit pour le kebab, non représenté ici. */
+.ds-nr-box { display: flex; flex-direction: column; gap: 16px; background: var(--bg3); padding: 16px; border-radius: 8px; }
+.ds-nr-box.is-hover { background: var(--primary-10); }
+/* Scènes bleues (Preview/Anatomy/Redline) : --card pour le contraste, comme les
+   autres rows (leur vrai --bg3 se confond avec le bleu). En States (hors scène),
+   la box garde son --bg3 réel. */
+.ds-preview .ds-nr-box, .ds-anno-scene .ds-nr-box, .ds-redline .ds-nr-box { background: var(--card); }
+/* Dictionary Row = la forme .panel-inner (WordListPanel) : .dictionary-saved-card
+   .overview-word-card — fond --bg3, PAS de bord (transparent), head = toggle seul
+   (chevron + mot, PAS de kebab). C'est la base .dictionary-saved-card bordée + kebab
+   qui est documentée dans Dictionary Card (famille Cards) — les deux ne se recoupent
+   pas. Sur les scènes bleues, forcé --card pour le contraste (0,3,0 pour battre la
+   règle prod de même poids). Corps blanc + divider = rendu réel de .overview-word-card. */
+.ds-preview .dictionary-saved-card.overview-word-card,
+.ds-anno-scene .dictionary-saved-card.overview-word-card,
+.ds-redline .dictionary-saved-card.overview-word-card { background: var(--card); }
+/* Planches Spacing body/definition (hors carte) : fond --card pour que l'encart
+   exemple (--primary-5) ressorte sur la scène bleue. */
+.ds-redline .dictionary-saved-body,
+.ds-redline .dictionary-definition { background: var(--card); border-radius: 8px; }
 /* Form Modal · Anatomy en UI réelle : le body à onglets (.import-tabs, width:max-content
    ~343) déborde quand le modal est réduit (stack mobile). min-width:0 sur la chaîne flex
    → .import-tabs-scroll (overflow-x:auto) clippe/scrolle au lieu de pousser la largeur.
@@ -1905,7 +1949,11 @@ img.ds-cover { object-fit: cover; }
 .token-table td:last-child:has(.ds-token-chip) { display: flex; flex-wrap: wrap; gap: 5px; padding: 16px 20px; }
 
 /* ─── DS CAPTION (paragraphs in .ds-card-body.col) ─── */
-.ds-card-body.col p,
+/* Caption = paragraphe de DOC dans un card body. On EXCLUT les <p> qui vivent dans
+   une scène de specimen (Preview / Anatomy / Redline / States) : ce sont du vrai
+   contenu de composant (ex. .panel-quote-text, .dictionary-meaning), ils doivent
+   garder leur propre style, pas le style caption 15/1.7. */
+.ds-card-body.col p:not(:is(.ds-preview, .ds-anno-board, .ds-anno-scene, .ds-redline, .ds-state-sample) *),
 .ds-card-body.col > p {
   font-size: 15px;
   color: var(--text);

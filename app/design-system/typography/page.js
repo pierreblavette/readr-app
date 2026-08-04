@@ -15,6 +15,7 @@ const TOKENS = [
   ] },
   { cat: "highlight", desc: "Chiffres et données mis en avant.", rows: [
     { name: "highlight.l", px: 40, mobile: 36, w: 700, lh: "1", ls: "-0.03em", uses: ".overview-hero-num · .overview-goal-num · .overview-streak-current" },
+    { name: "highlight.m", px: 24,             w: 700,           ls: "-0.02em", uses: ".panel-quiz-score (score de quiz)" },
   ] },
   { cat: "body", desc: "Texte courant et texte d'interface.", rows: [
     { name: "body.l-strong", px: 16, w: 700, lh: "1.35", uses: "featured content" },
@@ -76,7 +77,7 @@ export default function TypographyPage() {
                 </div>
                 <div className="ds-type-idcard-specs">
                   <div className="ds-type-idcard-spec"><span>Weights</span><span className="ds-type-idcard-spec-val">400 – 800 · 5</span></div>
-                  <div className="ds-type-idcard-spec"><span>Tokens</span><span className="ds-type-idcard-spec-val">13 · title → overline</span></div>
+                  <div className="ds-type-idcard-spec"><span>Tokens</span><span className="ds-type-idcard-spec-val">14 · title → overline</span></div>
                   <div className="ds-type-idcard-spec"><span>Token</span><span className="ds-token-chip">--font-jakarta</span></div>
                 </div>
               </div>
@@ -147,15 +148,11 @@ export default function TypographyPage() {
         <div className="ds-card-head">Responsive — fixed vs fluid</div>
         <div className="ds-card-body col">
           <p className="ds-note">
-            The scale above is the <strong>desktop reference</strong>. Most tiers are <strong>fixed</strong> at every viewport. A few shift below <code>600px</code> — the large display sizes ease down, the footer eases up, and form controls hit a floor :
+            The scale above is the <strong>desktop reference</strong>. Most tokens are <strong>fixed</strong> at every viewport. A few shift below <code>600px</code> — the large display sizes ease down, and form controls hit a floor :
           </p>
           <div className="ds-token-block">
             <div className="ds-token-name">Display sizes — eased down</div>
             <p>Each display role that scales down carries its <code>↘ ≤600</code> size <strong>in the scale table above</strong> — <span className="ds-class">.page-title</span> <code>48→40</code>, <span className="ds-class">.overview-hero-num</span> <code>40→36</code>. One more shift, on a role that shares its desktop tier : <span className="ds-class">.activity-day-title</span> <code>28 → 22</code>. Line-height and tracking stay put — only the size scales.</p>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Footer — eased up</div>
-            <p>The smallest text gains legibility on a phone : <span className="ds-class">.library-footer</span> and its links (<span className="ds-class">.footer-link</span>, <span className="ds-class">.lang-btn</span>) go <code>11 → 13</code> at <code>≤600px</code> — easier to read and to tap.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Form controls — anti-zoom</div>
@@ -222,7 +219,7 @@ export default function TypographyPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Stay on the scale</div>
-            <p>Only the <strong>13 tokens</strong> and 5 weights above. No off-scale sizes, no unlisted weights, and never a second typeface — Jakarta carries everything. Sole exception : the cover-placeholder letters and the quote mark are <strong>graphic glyphs</strong> sized to their box, not text tokens.</p>
+            <p>Only the <strong>14 tokens</strong> and 5 weights above. No off-scale sizes, no unlisted weights, and never a second typeface — Jakarta carries everything. Sole exception : the cover-placeholder letters and the quote mark are <strong>graphic glyphs</strong> sized to their box, not text tokens.</p>
           </div>
         </div>
       </div>

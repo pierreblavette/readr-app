@@ -4,7 +4,7 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "iconography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["autocomplete", "badges", "book-row", "buttons", "card", "checkbox", "chip", "dropdown", "dropzone", "empty", "footer", "inputs", "list", "message-box", "modal", "navigation-bar", "panels", "rating-stars", "segmented-pills", "sidebar", "spinner", "toast", "toggle", "weekly-activity"],
+  Components: ["autocomplete", "badges", "buttons", "card", "checkbox", "chip", "dropdown", "dropzone", "empty", "footer", "inputs", "list", "message-box", "modal", "navigation-bar", "panels", "rating-stars", "rows", "segmented-pills", "sidebar", "spinner", "toast", "toggle", "weekly-activity"],
   // Patterns = explication d'un FONCTIONNEMENT UX (un flux, un comportement), pas un
   // composant. Ex. Editing (sélection + bulk), Filtering, Onboarding (accueil). Un
   // composant, même très intriqué (Modals, Autocomplete), reste dans Components.
@@ -41,6 +41,14 @@ export const NAV_CHILDREN = {
     { label: "Now Reading", href: "/design-system/card/now-reading" },
     { label: "Quote Card", href: "/design-system/card/quote" },
   ],
+  rows: [
+    { label: "Book Row", href: "/design-system/rows/book" },
+    { label: "Collection Row", href: "/design-system/rows/collection" },
+    { label: "Quote Row", href: "/design-system/rows/quote" },
+    { label: "Now Reading Row", href: "/design-system/rows/now-reading" },
+    { label: "Dictionary Row", href: "/design-system/rows/dictionary" },
+    { label: "Quiz Row", href: "/design-system/rows/quiz" },
+  ],
   modal: [
     { label: "Delete Modal", href: "/design-system/modal/delete" },
     { label: "Finish Reading Modal", href: "/design-system/modal/finish-reading" },
@@ -76,7 +84,7 @@ export const NAV_LABELS = {
   "inputs": "Text Input", "view-toggle": "View Toggle", "badges": "Badges",
   "checkbox": "Checkbox", "autocomplete": "Autocomplete", "lang-switcher": "Language Switcher",
   "rating-stars": "Rating Stars", "row-checkbox": "Row Checkbox",
-  "theme-toggle": "Theme Toggle", "toggle": "Toggle", "book-row": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
+  "theme-toggle": "Theme Toggle", "toggle": "Toggle", "rows": "Rows", "book-row": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "Table", "sidebar": "Side Menu", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",

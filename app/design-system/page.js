@@ -22,7 +22,7 @@ const COVERS = {
   // Components (jpg)
   autocomplete: "components/cover-autocomplete.jpg",
   badges: "components/cover-badge.jpg",
-  "book-row": "components/cover-book-row.jpg",
+  rows: "components/cover-book-row.jpg",
   buttons: "components/cover-box-buttons.jpg",
   card: "components/cover-box-cards.jpg",
   checkbox: "components/cover-checkbox.jpg",

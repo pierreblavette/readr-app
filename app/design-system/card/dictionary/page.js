@@ -62,7 +62,7 @@ export default function DictionaryCardPage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note"><strong>En-tête</strong> — <span className="ds-class">.dictionary-saved-head</span> : padding <strong>8 8 8 16</strong> (asym, moins à droite pour tirer le kebab au bord), gap <strong>12</strong> entre le <span className="ds-class">.dictionary-saved-toggle</span> (chevron + mot) et le kebab. À l&apos;intérieur du toggle, chevron <strong>16</strong> → mot avec le même gap <strong>12</strong>. Kebab <strong>40×40</strong>.</p>
+          <p className="ds-note"><strong>En-tête</strong> — <span className="ds-class">.dictionary-saved-head</span> : padding <strong>8 / 16</strong> (16 gauche/droite, harmonisé avec toutes les heads dictionary), gap <strong>12</strong> entre le <span className="ds-class">.dictionary-saved-toggle</span> (chevron + mot) et le kebab. À l&apos;intérieur du toggle, chevron <strong>16</strong> → mot avec le même gap <strong>12</strong>. Kebab <strong>40×40</strong>.</p>
 
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
@@ -117,13 +117,13 @@ export default function DictionaryCardPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
             <div className="ds-state-sample">
-              <DictionaryCardSpec fluid />
+              <DictionaryCardSpec />
               <span className="ds-class">.dictionary-saved-card</span>
             </div>
             <div className="ds-state-sample">
-              <DictionaryCardSpec fluid className="is-hover" />
+              <DictionaryCardSpec className="is-hover" />
               <span className="ds-class">:hover</span>
             </div>
           </div>
