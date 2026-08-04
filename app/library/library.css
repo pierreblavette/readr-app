@@ -216,10 +216,6 @@
   cursor: pointer;
   position: relative;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 6px;
   transition: background 0.4s;
 }
 
@@ -234,7 +230,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #FFFFFF;
+  background: var(--light-100);
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 1;
@@ -247,7 +243,6 @@
 
 [data-theme="dark"] .toggle-thumb {
   transform: translateX(22px);
-  background: #FFFFFF;
 }
 
 /* ─── MAIN CONTENT ─── */
@@ -5387,7 +5382,8 @@ button.book-row {
 .overview-goal-num {
   font-size: 40px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  line-height: 1;
   color: var(--text);
 }
 .overview-goal-total {
@@ -5501,7 +5497,8 @@ button.book-row {
 .overview-streak-current {
   font-size: 40px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  line-height: 1;
   color: var(--text);
 }
 .overview-streak-unit {
@@ -6175,7 +6172,9 @@ button.book-row {
 @media (max-width: 600px) {
   .overview-row-2 { grid-template-columns: 1fr; }
   .overview-hero-row { grid-template-columns: 1fr; gap: 12px; }
-  .overview-hero-num { font-size: 36px; }
+  .overview-hero-num,
+  .overview-goal-num,
+  .overview-streak-current { font-size: 36px; }
   .overview-card,
   .overview-hero-card { padding: 16px; }
 }
