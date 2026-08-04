@@ -105,40 +105,42 @@ export default function TypographyPage() {
         </div>
       </div>
 
-      {/* 3 — TYPE TOKENS — une card par catégorie ; le specimen EST le nom du token,
-          rendu à sa taille. Dessous : ses consumers. À droite : les métriques. */}
+      {/* 3 — TYPE TOKENS — un tableau par catégorie : Type (le nom rendu à sa taille +
+          ses consumers) · Desktop · ≤600 · Style. Scroll horizontal pour éviter que les
+          colonnes se chevauchent sur écran étroit — on ne cache plus la colonne Style. */}
       <style>{`
-        .dstok-cols { display: grid; grid-template-columns: 60px 60px minmax(120px, auto); gap: 20px; text-align: right; align-items: center; }
-        @media (max-width: 600px) { .dstok-cols { grid-template-columns: 44px 44px; } .dstok-cols .dstok-style { display: none; } }
+        .ds-type-scroll { overflow-x: auto; width: 100%; }
+        /* Le wrapper de scroll est un <div> : il hérite du padding 20 de
+           .ds-card-body > :not(table). On le neutralise pour que la table soit
+           edge-to-edge comme une <table> directe (ses cellules portent le padding). */
+        .ds-card-body > .ds-type-scroll { padding: 0; }
+        /* table-layout fixed + 4 colonnes a largeur EGALE (25% chacune) : alignement
+           regulier entre categories. */
+        .type-token-table { width: 100%; min-width: 560px; table-layout: fixed; }
+        .type-token-table th, .type-token-table td { vertical-align: middle; white-space: nowrap; width: 25%; }
+        .type-token-table th:first-child, .type-token-table td:first-child { text-align: left; white-space: normal; padding-right: 28px; }
+        .type-token-table th:not(:first-child), .type-token-table td:not(:first-child) { text-align: right; color: var(--text-2); }
       `}</style>
-      {TOKENS.map(({ cat, desc, rows }) => (
+      {TOKENS.map(({ cat, rows }) => (
         <div key={cat} className="ds-card">
-          <div className="ds-card-head">{cat}</div>
           <div className="ds-card-body col">
-            <p className="ds-note">{desc}</p>
-            <div className="type-sample">
-              <div className="type-sample-preview" />
-              <div className="type-sample-meta dstok-cols">
-                <span className="panel-section-eyebrow">Desktop</span>
-                <span className="panel-section-eyebrow">≤600</span>
-                <span className="panel-section-eyebrow dstok-style">Weight · lh · ls</span>
-              </div>
+            <div className="ds-type-scroll">
+              <table className="token-table type-token-table">
+                <thead className="table-head">
+                  <tr><th>Type</th><th>Desktop</th><th>≤600</th><th>Weight</th></tr>
+                </thead>
+                <tbody className="table-body">
+                  {rows.map((t) => (
+                    <tr key={t.name} className="table-row">
+                      <td><span className="ds-token-chip">{t.name}</span></td>
+                      <td>{t.px}px</td>
+                      <td style={{ color: t.mobile ? undefined : "var(--text-3)" }}>{t.mobile ? `${t.mobile}px` : "—"}</td>
+                      <td>{t.w}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            {rows.map((t) => (
-              <div key={t.name} className="type-sample">
-                <div className="type-sample-preview">
-                  <div style={{ fontSize: t.px, fontWeight: t.w, lineHeight: t.lh ? Number(t.lh) : 1.2, letterSpacing: t.ls || "normal", textTransform: t.upper ? "uppercase" : "none" }}>
-                    {t.name}
-                  </div>
-                  <span className="ds-note">{t.uses}</span>
-                </div>
-                <div className="type-sample-meta dstok-cols">
-                  <span>{t.px}px</span>
-                  <span style={{ color: t.mobile ? undefined : "var(--text-3)" }}>{t.mobile ? `${t.mobile}px` : "—"}</span>
-                  <span className="dstok-style">{t.w}{t.lh ? ` · lh ${t.lh}` : ""}{t.ls ? ` · ${t.ls}` : ""}</span>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       ))}

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // var(--token) = pastille toujours juste. Bascule le thème (sidebar) → la valeur
 // affichée se met à jour (light ↔ dark). Un token composite ("--accent / --primary-50")
 // affiche un chip par nom ; la valeur lue est celle du 1er.
-export default function LiveSwatch({ bg, title, token, size = "md", anchor = false }) {
+export default function LiveSwatch({ bg, title, token, size = "md", anchor = false, checker = false }) {
   const { theme } = useTheme();
   const [value, setValue] = useState("");
   const tokens = token ? String(token).split("/").map((t) => t.trim()).filter(Boolean) : [];
@@ -25,7 +25,16 @@ export default function LiveSwatch({ bg, title, token, size = "md", anchor = fal
 
   return (
     <div className={`ds-swatch${size === "sm" ? " ds-swatch--sm" : ""}`}>
-      <div className={`ds-swatch-block${anchor ? " is-anchor" : ""}`} style={{ background: bg, borderBottom: "1px solid var(--border-subtle)" }} />
+      <div
+        className={`ds-swatch-block${anchor ? " is-anchor" : ""}`}
+        style={checker
+          // Blancs purs / rgba : damier en fond pour rendre visibles la transparence.
+          // La couleur est enveloppee en linear-gradient (une couleur ne peut pas etre un
+          // calque non-final d'un multi-background) et posee AU-DESSUS du damier. Le cadre
+          // vient de .ds-swatch (deja borde) — ici juste la bordure basse (divider bloc/info).
+          ? { background: `linear-gradient(${bg}, ${bg}), repeating-conic-gradient(var(--border-subtle) 0% 25%, transparent 0% 50%) 0 0 / 16px 16px`, borderBottom: "1px solid var(--border-subtle)" }
+          : { background: bg, borderBottom: "1px solid var(--border-subtle)" }}
+      />
       <div className="ds-swatch-info">
         {title && <div className="ds-swatch-title">{title}</div>}
         {tokens.length > 0 && (
