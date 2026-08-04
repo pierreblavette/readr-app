@@ -76,6 +76,12 @@ export default function NavigationBarPage() {
         /* Preview : 60px de padding sur les 4 côtés en mobile (le --roomy de base ne
            passe que le vertical à 60, le latéral restant à 20). Scopé à cette page. */
         @media (max-width: 600px) { .ds-preview.ds-preview--roomy { padding: 60px; } }
+        /* Scène Spacing : padding 60 (vs 48 par défaut), cohérent avec la Preview --roomy. */
+        .dsnav-spacing-board .ds-redline { padding: 60px; text-align: center; }
+        /* Même taille max que les autres cartes (402), fluide en dessous. Le target (--fill,
+           width:100%) est plafonné à 402 et centré (text-align sur .ds-redline, il est
+           inline-flex) ; le specimen le remplit → cotes alignées (specimen == target). */
+        .dsnav-spacing-board .ds-redline-target { max-width: 402px; }
       `}</style>
 
       {/* 1 — PREVIEW */}

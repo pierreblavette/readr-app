@@ -3,26 +3,32 @@ import DSSection from "../_components/DSSection";
 // Échelle typographique — valeurs réelles lues dans globals.css / library.css.
 // base : html { font-size:14px } → 1rem = 14px. On documente le rôle sémantique
 // (stable) + les métriques ; on ne mappe plus vers des composants (fragile).
-const SCALE = [
-  { group: "Display & titles", tiers: [
-    { px: 48, rem: "3.43rem", w: 700, lh: "1",    ls: "-0.03em", role: "Page title" },
-    { px: 28, rem: "2rem",    w: 700, lh: "1.2",  ls: "-0.02em", role: "Book title" },
-    { px: 20, rem: "1.43rem", w: 800, lh: "1.3",  ls: "-0.02em", role: "Hero onboarding" },
-    { px: 18, rem: "1.29rem", w: 700,                            role: "Empty state title" },
+// Type TOKENS — nommage à la Mews : catégorie.taille (+ -strong si une taille porte
+// DEUX graisses). Le nom décrit l'ÉCHELLE, jamais un composant ; chaque token liste ses
+// consumers. Le responsive vit DANS le token (↘ = descend en ≤600). 13 tokens, 5 catégories.
+const TOKENS = [
+  { cat: "title", desc: "Titres qui structurent un écran, une carte, une section.", rows: [
+    { name: "title.xl", px: 48, mobile: 40, w: 700, lh: "1",   ls: "-0.03em", uses: ".page-title" },
+    { name: "title.l",  px: 28, mobile: 22, w: 700, lh: "1.2", ls: "-0.02em", uses: ".panel-title · .activity-day-title" },
+    { name: "title.m",  px: 20,             w: 800, lh: "1.3", ls: "-0.02em", uses: "onboarding hero (exception 800)" },
+    { name: "title.s",  px: 18,             w: 700,                           uses: "empty-state title" },
   ] },
-  { group: "Body & content", tiers: [
-    { px: 16, rem: "1.14rem", w: 700, lh: "1.35",               role: "Featured content" },
-    { px: 16, rem: "1.14rem", w: 500,                           role: "Reading / content" },
-    { px: 15, rem: "1.07rem", w: 600,                           role: "Interactive" },
+  { cat: "highlight", desc: "Chiffres et données mis en avant.", rows: [
+    { name: "highlight.l", px: 40, mobile: 36, w: 700, lh: "1", ls: "-0.03em", uses: ".overview-hero-num · .overview-goal-num · .overview-streak-current" },
   ] },
-  { group: "Support & meta", tiers: [
-    { px: 14, rem: "1rem",    w: 500,                           role: "Metadata" },
-    { px: 13, rem: "0.93rem", w: 500,                           role: "Hint / label" },
-    { px: 12, rem: "0.86rem", w: 600,                           role: "Compact secondary" },
+  { cat: "body", desc: "Texte courant et texte d'interface.", rows: [
+    { name: "body.l-strong", px: 16, w: 700, lh: "1.35", uses: "featured content" },
+    { name: "body.l",        px: 16, w: 500, lh: "1.8",  uses: "lecture · .panel-synopsis" },
+    { name: "body.m-strong", px: 15, w: 600,             uses: "interactif — .btn · .search-input" },
+    { name: "body.m",        px: 15, w: 500,             uses: "auteur, metadata — .panel-author · .panel-meta" },
   ] },
-  { group: "Eyebrow & badge", tiers: [
-    { px: 11, rem: "0.79rem", w: 700, ls: "0.08em", upper: true, role: "Eyebrow" },
-    { px: 10, rem: "0.71rem", w: 600,                            role: "Badge" },
+  { cat: "label", desc: "Petits textes fonctionnels : hints, footer, badges.", rows: [
+    { name: "label.l", px: 13, w: 500, uses: "hint · footer · badge md — .now-reading-date--md" },
+    { name: "label.m", px: 12, w: 600, uses: "badge sm — .now-reading-date--sm" },
+    { name: "label.s", px: 10, w: 600, uses: "badge xs — .now-reading-date--xs" },
+  ] },
+  { cat: "overline", desc: "Capitales avec interlettrage — eyebrows.", rows: [
+    { name: "overline.m", px: 11, w: 700, ls: "0.08em", upper: true, uses: "eyebrow — .panel-section-eyebrow" },
   ] },
 ];
 
@@ -34,8 +40,10 @@ const WEIGHTS = [
   [800, "ExtraBold", "Onboarding hero only (marketing exception)"],
 ];
 
-function metric({ px, rem, w, lh, ls }) {
-  let s = `${px}px · ${rem} · ${w}`;
+function metric({ px, w, lh, ls, mobile }) {
+  let s = `${px}px`;
+  if (mobile) s += ` ↘ ${mobile} ≤600`;
+  s += ` · ${w}`;
   if (lh) s += ` · lh ${lh}`;
   if (ls) s += ` · ${ls}`;
   return s;
@@ -68,7 +76,7 @@ export default function TypographyPage() {
                 </div>
                 <div className="ds-type-idcard-specs">
                   <div className="ds-type-idcard-spec"><span>Weights</span><span className="ds-type-idcard-spec-val">400 – 800 · 5</span></div>
-                  <div className="ds-type-idcard-spec"><span>Sizes</span><span className="ds-type-idcard-spec-val">10 – 48px · 12</span></div>
+                  <div className="ds-type-idcard-spec"><span>Tokens</span><span className="ds-type-idcard-spec-val">13 · title → overline</span></div>
                   <div className="ds-type-idcard-spec"><span>Token</span><span className="ds-token-chip">--font-jakarta</span></div>
                 </div>
               </div>
@@ -96,20 +104,38 @@ export default function TypographyPage() {
         </div>
       </div>
 
-      {/* 3 — TYPE SCALE — une card par famille : la rupture visuelle vient du bg
-          des cards sur le bg de page, plus nette qu'un divider interne. */}
-      {SCALE.map(({ group, tiers }) => (
-        <div key={group} className="ds-card">
-          <div className="ds-card-head">{group}</div>
+      {/* 3 — TYPE TOKENS — une card par catégorie ; le specimen EST le nom du token,
+          rendu à sa taille. Dessous : ses consumers. À droite : les métriques. */}
+      <style>{`
+        .dstok-cols { display: grid; grid-template-columns: 60px 60px minmax(120px, auto); gap: 20px; text-align: right; align-items: center; }
+        @media (max-width: 600px) { .dstok-cols { grid-template-columns: 44px 44px; } .dstok-cols .dstok-style { display: none; } }
+      `}</style>
+      {TOKENS.map(({ cat, desc, rows }) => (
+        <div key={cat} className="ds-card">
+          <div className="ds-card-head">{cat}</div>
           <div className="ds-card-body col">
-            {tiers.map((t) => (
-              <div key={t.role + t.px + t.w} className="type-sample">
+            <p className="ds-note">{desc}</p>
+            <div className="type-sample">
+              <div className="type-sample-preview" />
+              <div className="type-sample-meta dstok-cols">
+                <span className="panel-section-eyebrow">Desktop</span>
+                <span className="panel-section-eyebrow">≤600</span>
+                <span className="panel-section-eyebrow dstok-style">Weight · lh · ls</span>
+              </div>
+            </div>
+            {rows.map((t) => (
+              <div key={t.name} className="type-sample">
                 <div className="type-sample-preview">
                   <div style={{ fontSize: t.px, fontWeight: t.w, lineHeight: t.lh ? Number(t.lh) : 1.2, letterSpacing: t.ls || "normal", textTransform: t.upper ? "uppercase" : "none" }}>
-                    {t.role}
+                    {t.name}
                   </div>
+                  <span className="ds-note">{t.uses}</span>
                 </div>
-                <div className="type-sample-meta">{metric(t)}</div>
+                <div className="type-sample-meta dstok-cols">
+                  <span>{t.px}px</span>
+                  <span style={{ color: t.mobile ? undefined : "var(--text-3)" }}>{t.mobile ? `${t.mobile}px` : "—"}</span>
+                  <span className="dstok-style">{t.w}{t.lh ? ` · lh ${t.lh}` : ""}{t.ls ? ` · ${t.ls}` : ""}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -121,11 +147,15 @@ export default function TypographyPage() {
         <div className="ds-card-head">Responsive — fixed vs fluid</div>
         <div className="ds-card-body col">
           <p className="ds-note">
-            The scale above is the <strong>desktop reference</strong>. Almost every tier is <strong>fixed</strong> — its value holds at every viewport. Only two things shift below <code>600px</code> :
+            The scale above is the <strong>desktop reference</strong>. Most tiers are <strong>fixed</strong> at every viewport. A few shift below <code>600px</code> — the large display sizes ease down, the footer eases up, and form controls hit a floor :
           </p>
           <div className="ds-token-block">
-            <div className="ds-token-name">Page title — fluid</div>
-            <p><span className="ds-class">.page-title</span> drops from <code>48px → 40px</code> at <code>≤600px</code>. Line-height (<code>1</code>) and tracking (<code>−0.03em</code>) are unchanged — only the size scales down so the largest title never crowds a phone screen.</p>
+            <div className="ds-token-name">Display sizes — eased down</div>
+            <p>Each display role that scales down carries its <code>↘ ≤600</code> size <strong>in the scale table above</strong> — <span className="ds-class">.page-title</span> <code>48→40</code>, <span className="ds-class">.overview-hero-num</span> <code>40→36</code>. One more shift, on a role that shares its desktop tier : <span className="ds-class">.activity-day-title</span> <code>28 → 22</code>. Line-height and tracking stay put — only the size scales.</p>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Footer — eased up</div>
+            <p>The smallest text gains legibility on a phone : <span className="ds-class">.library-footer</span> and its links (<span className="ds-class">.footer-link</span>, <span className="ds-class">.lang-btn</span>) go <code>11 → 13</code> at <code>≤600px</code> — easier to read and to tap.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Form controls — anti-zoom</div>
@@ -192,7 +222,7 @@ export default function TypographyPage() {
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Stay on the scale</div>
-            <p>Only the 12 tiers and 5 weights above. No off-scale sizes, no unlisted weights, and never a second typeface — Jakarta carries everything.</p>
+            <p>Only the <strong>13 tokens</strong> and 5 weights above. No off-scale sizes, no unlisted weights, and never a second typeface — Jakarta carries everything. Sole exception : the cover-placeholder letters and the quote mark are <strong>graphic glyphs</strong> sized to their box, not text tokens.</p>
           </div>
         </div>
       </div>

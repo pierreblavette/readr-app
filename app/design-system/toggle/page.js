@@ -86,7 +86,7 @@ export default function TogglePage() {
           <table className="token-table ds-anno-table">
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
-              <tr className="table-row"><td>1</td><td><span className="ds-class">.theme-btn</span></td><td>Piste : 48×26, radius 13 (pill), padding 0 6, fond <span className="ds-token-chip">--primary-10</span> → <span className="ds-token-chip">--primary-50</span> en dark. Transition <code>background</code> 0.4s.</td><td>—</td></tr>
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.theme-btn</span></td><td>Piste : 48×26, radius 13 (pill), fond <span className="ds-token-chip">--primary-10</span> → <span className="ds-token-chip">--primary-50</span> en dark. Transition <code>background</code> 0.4s.</td><td>—</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.toggle-thumb</span></td><td>Pastille 20×20 blanche, ombre douce, svg 10 <span className="ds-token-chip">--primary-40</span>. Glisse de <code>22px</code> via <code>transform</code>, courbe élastique <code>cubic-bezier(0.34, 1.56, 0.64, 1)</code> (le « clac »).</td><td>—</td></tr>
             </tbody>
           </table>
@@ -103,7 +103,7 @@ export default function TogglePage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Piste padding <strong>0 6</strong> ; thumb coté en boîte (20×20 · pill). Le déplacement <code>translateX 22</code> = largeur piste (48) − padding (12) − thumb (20) + 6, calé pour affleurer le bord droit. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Thumb coté en boîte (<strong>20×20</strong> · pill), inséré de <strong>3</strong> (top / left). Le déplacement <code>translateX 22</code> = largeur piste (48) − thumb (20) − 2×3 (insets), pour affleurer le bord droit en dark. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
