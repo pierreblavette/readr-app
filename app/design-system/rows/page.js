@@ -3,7 +3,7 @@ import { BookRowSpec, CollectionRowSpec } from "./_specs";
 
 export default function RowsFoundationPage() {
   return (
-    <DSSection id="rows" title="Rows" sub="La famille des lignes de contenu : un livre, une collection, une citation, une lecture, un mot — cités de façon compacte dans une liste ou un panel. Le pendant « liste » des Cards.">
+    <DSSection className="ds-scene-frame" id="rows" title="Rows" sub="La famille des lignes de contenu : un livre, une collection, une citation, une lecture, un mot — cités de façon compacte dans une liste ou un panel. Le pendant « liste » des Cards.">
 
       {/* 1 — PREVIEW — la famille */}
       <div className="ds-card">
@@ -11,7 +11,7 @@ export default function RowsFoundationPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview">
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "min(340px, 100%)" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "min(402px, 100%)" }}>
               <BookRowSpec />
               <CollectionRowSpec />
             </div>

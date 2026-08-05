@@ -385,10 +385,10 @@ img.ds-cover { object-fit: cover; }
   .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
   .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
-/* Sous 1240px, un board --hold (specimens larges : book-row, menus, dropzones)
+/* Sous 1400px, un board --hold (specimens larges : book-row, menus, dropzones)
    devient trop serré en 2 colonnes → 1 colonne pleine largeur. Spécificité (0,3,0) >
    le --cols-2 du repli ≤1280 (0,2,0) → gagne sans !important. */
-@media (max-width: 1240px) {
+@media (max-width: 1400px) {
   .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold { grid-auto-flow: row; grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
@@ -411,9 +411,9 @@ img.ds-cover { object-fit: cover; }
 @media (max-width: 960px) {
   .ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: 1fr; }
 }
-/* --stack-1240 : specimens larges côte à côte >1240, empilés en 1 colonne ≤1240. */
-@media (max-width: 1240px) {
-  .ds-states-grid--boxed.ds-states-grid--stack-1240 { grid-auto-flow: row; grid-template-columns: 1fr; }
+/* --stack-1400 : specimens larges côte à côte >1400, empilés en 1 colonne ≤1400. */
+@media (max-width: 1400px) {
+  .ds-states-grid--boxed.ds-states-grid--stack-1400 { grid-auto-flow: row; grid-template-columns: 1fr; }
 }
 /* Force le halo :focus-visible pour l'échantillon statique — le vrai état ne
    s'obtient qu'au clavier et ne se figerait pas dans une grille. Valeurs miroir
@@ -1098,7 +1098,7 @@ img.ds-cover { object-fit: cover; }
 .ds-anno-dropdown { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
 /* Organisme autocomplete : le champ + sa liste absolue. Hauteur réservée (la liste
    ne pousse pas le flux) pour que les bounds de l'organisme couvrent aussi la liste. */
-.ds-anno-autocomplete { position: relative; width: 340px; height: 224px; }
+.ds-anno-autocomplete { position: relative; width: min(402px, 100%); height: 224px; }
 .ds-anno-autocomplete .modal-field { width: 100%; }
 /* Le fond --bg3 de la piste segmented-pills se confond avec le bleu de la scène :
    exceptionnellement, sur les scènes bleues du /ds (Preview, Anatomy, planches
@@ -1362,7 +1362,7 @@ img.ds-cover { object-fit: cover; }
    Le composant est en position:absolute sous son champ → hors flux, la carte ne
    peut pas le mesurer. On réserve ici plutôt que de le repasser en static :
    le remettre dans le flux mentirait sur son positionnement réel. */
-.ds-autocomplete-stage { width: 360px; max-width: 100%; height: 244px; margin: 0 auto; }
+.ds-autocomplete-stage { width: min(402px, 100%); height: 244px; margin: 0 auto; }
 
 /* Le toggle thème du /ds réutilise le composant library (.theme-btn / .toggle-thumb) —
    plus de fork -ds (voir page Toggle). */
@@ -1480,6 +1480,42 @@ img.ds-cover { object-fit: cover; }
      plus HAUT (l.305) → cet override gagne par l'ordre source. */
   .ds-states-grid--boxed > .ds-state-sample { padding-inline: 0; }
 }
+
+/* ─── Contrat des scènes /ds — SOURCE UNIQUE ────────────────────────────────────
+ * Opt-in via .ds-scene-frame sur la <section> (prop `className` de DSSection). Cadre
+ * homogène pour TOUTES les scènes d'une page.
+ *   .ds-preview        ≤600 : 60 / 20   |  .ds-anno-scene   ≤600 : 60 / 20
+ *   .ds-redline        ≤600 : 60 / 48   |  .ds-state-sample partout : 60 / 20
+ * Objectif : minimiser l'écart desktop↔mobile et le nombre de règles par page.
+ * Règle transverse : TOP/BOTTOM = 60 sur toutes les scènes, quel que soit le breakpoint.
+ * .ds-state-sample (60/20) et .ds-redline (60/48) sont donc en dur aux DEUX breakpoints
+ * (hors media) — le défaut boxed 32 et le défaut Redline 48/48 étaient trop loin des 60.
+ * Leurs spéc 2-3 classes battent les défauts (l.324 / l.476) ET le padding-inline:0
+ * mobile (l.1481). Le Redline garde 48 en LATÉRAL : ses cotes/callouts débordent le
+ * target, il lui faut la marge. Preview / anno-scene ne resserrent QUE le latéral en
+ * ≤600 (leur top/bottom desktop vaut déjà 60). Le composant reste en width:min(402px,100%)
+ * (max iPhone 16 Pro, fluide en dessous). Anatomy : badges haut/bas via la prop `stack`
+ * d'AnnoScene (+ .ds-anno-board--stack), responsive et équilibrée.
+ * Étendre à une page = lui ajouter la classe. Universaliser = déplacer en défaut global. */
+.ds-scene-frame .ds-states-grid--boxed > .ds-state-sample { padding: 60px 20px; }
+.ds-scene-frame .ds-redline { padding: 60px 48px; }
+@media (max-width: 600px) {
+  .ds-scene-frame .ds-preview    { padding: 60px 20px; }
+  .ds-scene-frame .ds-anno-scene { padding: 60px 20px; }
+  /* Anatomy à badges LATÉRAUX : quand les cibles sont empilées verticalement et qu'on
+     NE PEUT PAS les rabattre en haut/bas (donc pas de mode `stack`, ex. Autocomplete /
+     liste verticale), on garde 60 en latéral pour loger les pastilles gauche/droite —
+     à 20 elles déborderaient / seraient coupées. Lien sémantique : stack ⟺ haut/bas
+     ⟺ latéral 20 ; non-stack ⟺ latéral ⟺ latéral 60. Détecté par l'absence de
+     .ds-anno-board--stack (aucune classe à ajouter par page). */
+  .ds-scene-frame .ds-anno-board:not(.ds-anno-board--stack) .ds-anno-scene { padding: 60px; }
+  /* Redline fluide (.ds-redline-row--fill, ex. barre pleine largeur de Navigation Bar) :
+     la règle globale des specimens fluides (l.1637) rabat son latéral à 20 en ≤600. Le
+     contrat impose 48 partout (spéc 3 classes pour battre l.1637) → Redline = 60/48 même
+     fluide, cohérent avec les autres pages. */
+  .ds-scene-frame .ds-redline-row--fill .ds-redline { padding-left: 48px; padding-right: 48px; }
+}
+
 [data-theme="dark"] .panel-ds-panel { background: var(--bg); }
 [data-theme="dark"] .panel-ds-content { background: var(--bg2); }
 
@@ -2096,10 +2132,11 @@ img.ds-cover { object-fit: cover; }
 /* ─── /ds : page Dropzone ─────────────────────────────────────────────────────
  * .import-preview hugge son contenu dans .ds-card-body.col (align-items:flex-start)
  * → fill container. Header + liste plafonnés pour rester lisibles hors modale
- * (en prod ils sont bornés par la largeur de la modale ~566). */
-.ds-root .import-preview { width: 100%; }
+ * (en prod ils sont bornés par la largeur de la modale ~566) puis CENTRÉS via
+ * align-items:center (sinon le bloc 480 se colle à gauche du card-body pleine largeur). */
+.ds-root .import-preview { width: 100%; align-items: center; }
 .ds-root .import-preview-header,
-.ds-root .import-preview-list { max-width: 480px; }
+.ds-root .import-preview-list { width: 100%; max-width: 480px; }
 
 /* Overlays › Preview : le SUJET est le scrim (le voile qui estompe le contenu),
    pas le composant posé dessus. Contenu factice derrière + scrim (blur+tint) +

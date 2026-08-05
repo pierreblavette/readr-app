@@ -41,6 +41,7 @@ const ANNOS = [
 export default function NowReadingRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="rows-now-reading"
       title="Now Reading Row"
       sub="La ligne d'une lecture en cours : un badge date, une grande vignette, le titre, l'auteur, le genre et l'année. La ligne de la liste « Currently reading »."
@@ -62,8 +63,8 @@ export default function NowReadingRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <NowReadingUnit className="ds-anno-organism" date="Started on Jun 12" />
           </AnnoScene>
           </div>

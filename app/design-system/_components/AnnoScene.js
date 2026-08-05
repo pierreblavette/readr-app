@@ -77,10 +77,23 @@ export default function AnnoScene({ annos, children, stack = false }) {
         // moitié haute ou basse de l'organisme → trait court, il ne traverse pas la carte.
         // Libère les gouttières latérales → la carte fluide occupe toute la largeur.
         const MIN = 30; // écart mini entre 2 pastilles d'un même bord (anti-chevauchement)
-        const orgMidY = (mTop + mBottom) / 2;
+        const H = (mBottom - mTop) || 1;
         const stackable = resolved.filter((p) => p.side !== "corner");
-        const build = stackable.map((p) => {
-          const top = p.g.tcy < orgMidY;
+        // Côté haut/bas : on respecte la géométrie quand la cible est NETTEMENT en haut
+        // (<40% de la hauteur) ou en bas (>60%). Les cibles médianes — cas d'une row d'une
+        // seule ligne où tout tombe au centre — sont réparties en ALTERNANCE par x croissant,
+        // en démarrant du bord le moins peuplé → équilibre haut/bas au lieu de tout d'un côté.
+        const marked = stackable.map((p) => {
+          const rel = (p.g.tcy - mTop) / H;
+          return { p, side: rel < 0.4 ? "top" : rel > 0.6 ? "bottom" : null };
+        });
+        let nTop = marked.filter((m) => m.side === "top").length;
+        let nBot = marked.filter((m) => m.side === "bottom").length;
+        marked.filter((m) => m.side === null)
+          .sort((a, b) => a.p.g.tcx - b.p.g.tcx)
+          .forEach((m) => { if (nTop <= nBot) { m.side = "top"; nTop++; } else { m.side = "bottom"; nBot++; } });
+        const build = marked.map(({ p, side }) => {
+          const top = side === "top";
           return { n: p.n, top, x: clampX(p.g.tcx), by: clampY(top ? mTop - GAP : mBottom + GAP), ty: top ? p.g.tTop : p.g.tBottom };
         });
         // Anti-collision : sur chaque bord, on écarte au minimum les pastilles trop proches

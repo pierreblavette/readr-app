@@ -45,6 +45,7 @@ const DEMO_TEXT = "The mystery of human existence lies not in just staying alive
 export default function QuoteRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="rows-quote"
       title="Quote Row"
       sub="Une citation citée en ligne de liste. Deux variantes selon le contexte : avec l'attribution du livre, ou nue quand le livre est déjà identifié autour."

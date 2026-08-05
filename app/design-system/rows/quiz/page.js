@@ -57,6 +57,7 @@ const CHOICE_ANNOS = [
 export default function QuizRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="rows-quiz"
       title="Quiz Row"
       sub="Les lignes du quiz d'un livre, en deux temps : la Question (un choix à sélectionner, interactif) puis le Result (le compte-rendu de la réponse, statique)."
@@ -94,8 +95,8 @@ export default function QuizRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy · choice</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={CHOICE_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={CHOICE_ANNOS} stack>
             <Choice className="ds-anno-organism" letter="B" text="1965" width="min(402px, 100%)" />
           </AnnoScene>
           </div>

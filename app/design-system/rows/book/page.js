@@ -14,6 +14,7 @@ const ANNOS = [
 export default function BookRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="rows-book"
       title="Book Row"
       sub="La ligne qui référence un livre : sa vignette, son titre, son auteur. Utilisée partout où un livre doit être cité de façon compacte."
@@ -39,8 +40,8 @@ export default function BookRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <button type="button" className="book-row book-row-interactive ds-anno-organism" style={{ width: "min(402px, 100%)" }}>
               <Cover from="#6F7CF2" to="#F67BF8" letter="T" />
               <Body title="Tropique du Cancer" author="Henry Miller" />

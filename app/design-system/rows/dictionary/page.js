@@ -53,6 +53,7 @@ const ANNOS = [
 export default function DictionaryRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="rows-dictionary"
       title="Dictionary Row"
       sub="La ligne d'un mot enregistré : un chevron, le mot, et un corps de définitions qui se déplie au clic. La forme accordéon du panel Overview (WordListPanel)."
@@ -75,8 +76,8 @@ export default function DictionaryRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <DictCard className="ds-anno-organism" word="Serendipity" />
           </AnnoScene>
           </div>

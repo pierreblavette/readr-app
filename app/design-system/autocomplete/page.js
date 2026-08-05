@@ -46,6 +46,7 @@ const ANNOS = [
 export default function AutocompletePage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="autocomplete"
       title="Autocomplete"
       sub="La liste de suggestions qui apparaît sous le champ titre quand on cherche un livre à ajouter."
@@ -131,12 +132,13 @@ export default function AutocompletePage() {
       <div className="ds-card">
         <div className="ds-card-head">States · item</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {ITEM_STATES.map(([label, mod]) => (
               <div key={label} className="ds-state-sample">
-                <div className={`autocomplete-item${mod ? " " + mod : ""}`} style={{ width: 240, position: "static" }}>
+                <div className={`autocomplete-item${mod ? " " + mod : ""}`} style={{ width: "min(402px, 100%)" }}>
                   {label}<span className="autocomplete-sep">·</span><span>George Orwell</span>
                 </div>
+                <span className="ds-class">{`.autocomplete-item${mod ? "." + mod : ""}`}</span>
               </div>
             ))}
           </div>

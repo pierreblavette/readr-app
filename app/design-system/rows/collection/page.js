@@ -31,6 +31,7 @@ const ANNOS = [
 export default function CollectionRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="rows-collection"
       title="Collection Row"
       sub="La ligne qui référence une collection : son nom et son nombre de livres. Une variante de Book Row, sans vignette et au padding asymétrique."
@@ -52,8 +53,8 @@ export default function CollectionRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <CollectionRow className="ds-anno-organism" name="Sci-fi shelf" count="12 books" width="min(402px, 100%)" />
           </AnnoScene>
           </div>

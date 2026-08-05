@@ -45,6 +45,7 @@ const ANNOS = [
 export default function NavigationBarPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="navigation-bar"
       title="Navigation Bar"
       sub="La barre fixée en haut de l'écran sur mobile — pour ouvrir le menu, revenir à l'accueil et changer de thème."
@@ -73,14 +74,12 @@ export default function NavigationBarPage() {
            et son label (la 2e/​dernière) ; padding, gap hamburger↔wordmark et hauteur restent. */
         .dsnav-spacing-board .ds-redline-band.is-gap ~ .ds-redline-band.is-gap,
         .dsnav-spacing-board .ds-redline-callout:last-of-type { display: none; }
-        /* Preview : 60px de padding sur les 4 côtés en mobile (le --roomy de base ne
-           passe que le vertical à 60, le latéral restant à 20). Scopé à cette page. */
-        @media (max-width: 600px) { .ds-preview.ds-preview--roomy { padding: 60px; } }
-        /* Scène Spacing : padding 60 (vs 48 par défaut), cohérent avec la Preview --roomy. */
-        .dsnav-spacing-board .ds-redline { padding: 60px; text-align: center; }
-        /* Même taille max que les autres cartes (402), fluide en dessous. Le target (--fill,
-           width:100%) est plafonné à 402 et centré (text-align sur .ds-redline, il est
-           inline-flex) ; le specimen le remplit → cotes alignées (specimen == target). */
+        /* Paddings des scènes : gérés par le contrat .ds-scene-frame (ds.css, « Contrat
+           des scènes »), y compris le Redline fluide (.ds-redline-row--fill) qui reste
+           en 60/48 comme partout — le contrat neutralise le rabat latéral à 20 des
+           specimens fluides (ds.css l.1637). */
+        /* Spacing : target plafonné à 402 (fluide en dessous), centré via text-align
+           (défaut de .ds-redline) — le specimen --fill le remplit, cotes alignées. */
         .dsnav-spacing-board .ds-redline-target { max-width: 402px; }
       `}</style>
 
@@ -103,8 +102,8 @@ export default function NavigationBarPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
               <div className="ds-anno-organism" style={{ width: "min(402px, 100%)" }}><ToolbarSpec /></div>
             </AnnoScene>
           </div>
