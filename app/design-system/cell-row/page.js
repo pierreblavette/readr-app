@@ -14,7 +14,7 @@ const NOT_CANDIDATE = [
 
 export default function CellRowPage() {
   return (
-    <DSSection id="cell-row" title="Cell Row" sub="A reusable row for any 'label + meta or icon' pattern — the shared skeleton behind many list-style components.">
+    <DSSection className="ds-scene-frame" id="cell-row" title="Cell Row" sub="A reusable row for any 'label + meta or icon' pattern — the shared skeleton behind many list-style components.">
 
       {/* 1 — SIZES */}
       <div className="ds-card">
@@ -23,7 +23,7 @@ export default function CellRowPage() {
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {SIZES.map(([mod, h]) => (
               <div key={mod} className="ds-state-sample">
-                <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ width: "100%", paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
+                <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ width: "min(402px, 100%)", paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>Label</span>
                   <span style={{ fontSize: 13, color: "var(--text-2)" }}>{h}px</span>
                 </div>
@@ -69,7 +69,7 @@ export default function CellRowPage() {
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <div className="cell-row cell-row--lg cell-row--between search-row" style={{ width: "100%" }}>
+                <div className="cell-row cell-row--lg cell-row--between search-row" style={{ width: "min(402px, 100%)" }}>
                   <div className="search-box">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
                     <input className="search-input" type="text" placeholder="Search books…" readOnly />
@@ -80,7 +80,7 @@ export default function CellRowPage() {
             </div>
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <div className="cell-row cell-row--lg sidebar-appearance-row" style={{ width: "100%" }}>
+                <div className="cell-row cell-row--lg sidebar-appearance-row" style={{ width: "min(402px, 100%)" }}>
                   <span className="sidebar-row-label">Appearance</span>
                   <button type="button" className="theme-btn" aria-label="Theme"><span className="toggle-thumb"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6" /></svg></span></button>
                 </div>
@@ -89,7 +89,7 @@ export default function CellRowPage() {
             </div>
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <label className="cell-row cell-row--lg modal-toggle-row" style={{ width: "100%" }}>
+                <label className="cell-row cell-row--lg modal-toggle-row" style={{ width: "min(402px, 100%)" }}>
                   <input type="checkbox" className="modal-toggle-input" defaultChecked readOnly />
                   <span className="modal-toggle-check"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5" /></svg></span>
                   <span className="modal-toggle-label">Mark as reading</span>
@@ -99,7 +99,7 @@ export default function CellRowPage() {
             </div>
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <span className="cell-row cell-row--sm cell-row--between overview-hero-label-row" style={{ width: "100%" }}>
+                <span className="cell-row cell-row--sm cell-row--between overview-hero-label-row" style={{ width: "min(402px, 100%)" }}>
                   <span className="cell-row cell-row--sm">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
                     <span className="overview-hero-label">Books finished</span>
@@ -111,7 +111,7 @@ export default function CellRowPage() {
             </div>
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
-                <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row" style={{ width: "100%" }}>
+                <div className="cell-row cell-row--md cell-row--between overview-goal-progress-row" style={{ width: "min(402px, 100%)" }}>
                   <span className="overview-goal-count">
                     <span className="overview-goal-num">3</span>
                     <span className="overview-goal-total">/ 24 books</span>
