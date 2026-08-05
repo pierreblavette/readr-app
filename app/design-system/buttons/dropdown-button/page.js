@@ -29,6 +29,7 @@ const ANNOS = [
 export default function DropdownButtonPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="buttons-dropdown-button"
       title="Dropdown Button"
       sub="Le bouton qui ouvre un menu d'actions : un clic déroule les choix, le chevron pivote. À distinguer du Select, qui choisit une valeur. Fait partie de la famille Buttons."
@@ -50,8 +51,8 @@ export default function DropdownButtonPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
               <div className="ds-anno-organism">
                 <DropdownBtn open />
               </div>

@@ -10,12 +10,16 @@ const VARIANTS = [
   { name: "Critical", variant: "btn-critical" },
 ];
 
+// [libellé, modifier de simulation, sélecteur affiché en .ds-class].
+// Le label = la VRAIE pseudo-classe qui déclenche l'état en prod (:hover/:active/:focus/
+// :disabled) ; Default = la classe de base .btn. La classe .is-* n'est qu'un hack de doc
+// pour figer l'état visuel, jamais montrée en label (convention famille Buttons).
 const STATES = [
-  ["Default", ""],
-  ["Hover", "is-hover"],
-  ["Active", "is-active"],
-  ["Focus", "is-focus"],
-  ["Disabled", ""],
+  ["Default", "", ".btn"],
+  ["Hover", "is-hover", ":hover"],
+  ["Active", "is-active", ":active"],
+  ["Focus", "is-focus", ":focus"],
+  ["Disabled", "", ":disabled"],
 ];
 
 const ANATOMY = [
@@ -52,7 +56,7 @@ const ANNOS = [
 
 export default function ButtonsPage() {
   return (
-    <DSSection id="buttons" title="Buttons" sub="Le bouton, brique d'action de l'app : une base commune déclinée en styles, en tailles et avec des icônes. C'est la racine d'une famille — les boutons au comportement particulier (Dropdown, Select, Link) ont leur propre page.">
+    <DSSection className="ds-scene-frame" id="buttons" title="Buttons" sub="Le bouton, brique d'action de l'app : une base commune déclinée en styles, en tailles et avec des icônes. C'est la racine d'une famille — les boutons au comportement particulier (Dropdown, Select, Link) ont leur propre page.">
 
       {/* ─────────── 1. PREVIEW — le bouton canonique (primary MD) ─────────── */}
       <div className="ds-card">
@@ -71,8 +75,8 @@ export default function ButtonsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <div className="ds-anno-organism">
               <button className="btn btn-primary btn-md"><PlusIcon strokeWidth={2} /><span>Add book</span></button>
             </div>
@@ -103,12 +107,12 @@ export default function ButtonsPage() {
             {SIZES.map(([cls]) => (
               <div key={cls} className="ds-redline-row">
                 <Redline>
-                  <button className={`btn btn-outline ${cls}`}><span>Common button</span></button>
+                  <button className={`btn btn-outline ${cls}`}><span>Label</span></button>
                 </Redline>
                 <Redline>
                   <button className={`btn btn-outline ${cls}`}>
                     <PlusIcon strokeWidth={2} />
-                    <span>Common button</span>
+                    <span>Label</span>
                   </button>
                 </Redline>
               </div>
@@ -124,11 +128,12 @@ export default function ButtonsPage() {
           <div className="ds-card-head">States · {name}</div>
           <div className="ds-card-body col">
             <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
-              {STATES.map(([state, mod]) => (
+              {STATES.map(([state, mod, cls]) => (
                 <div key={state} className="ds-state-sample">
                   <button className={`btn ${variant} btn-md${mod ? " " + mod : ""}`} disabled={state === "Disabled"}>
                     {state}
                   </button>
+                  <span className="ds-class">{cls}</span>
                 </div>
               ))}
             </div>
@@ -173,21 +178,25 @@ export default function ButtonsPage() {
               <button className="btn btn-primary btn-solid btn-md">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
               </button>
+              <span className="panel-section-eyebrow">Icon only</span>
             </div>
             <div className="ds-state-sample">
               <button className="btn btn-primary btn-md"><span>Text only</span></button>
+              <span className="panel-section-eyebrow">Text only</span>
             </div>
             <div className="ds-state-sample">
               <button className="btn btn-primary btn-md">
                 <PlusIcon strokeWidth={2} />
                 <span>Icon left</span>
               </button>
+              <span className="panel-section-eyebrow">Icon left</span>
             </div>
             <div className="ds-state-sample">
               <button className="btn btn-primary btn-md">
                 <span>Icon right</span>
                 <svg className="dropdown-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
               </button>
+              <span className="panel-section-eyebrow">Icon right</span>
             </div>
           </div>
         </div>

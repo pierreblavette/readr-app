@@ -7,7 +7,7 @@ import { MessageBox } from "./_specs";
 // les encarts s'affichent directement sur la scène.
 const SURFACE = {
   display: "flex", flexDirection: "column", gap: 12,
-  width: "100%", maxWidth: 460,
+  width: "min(402px, 100%)",
 };
 
 const ANNOS = [
@@ -16,9 +16,19 @@ const ANNOS = [
   { n: 3, side: "bottom", target: ".modal-info-box span" },
 ];
 
+// Les 4 tons = les variants du composant. La classe critical est .scan-alert (classe
+// parallèle, dette signalée plus bas) et non un modifier — le label le rend visible.
+const TONES = [
+  ["info", ".modal-info-box", "Your data stays on this device — nothing is uploaded."],
+  ["alert", ".modal-info-box--alert", "You've reached the limit of 3 books marked as reading."],
+  ["success", ".modal-info-box--success", "Book added to your library."],
+  ["critical", ".scan-alert", "Scan failed — couldn't read the barcode. Try again."],
+];
+
 export default function MessageBoxPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="message-box"
       title="Box Message"
       sub="Un encart de message dans les modales : une icône et un texte, en quatre tons selon l'intention — information, alerte, succès, action risquée."
@@ -46,9 +56,9 @@ export default function MessageBoxPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
-              <div className="ds-anno-organism" style={{ ...SURFACE, maxWidth: 420 }}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
+              <div className="ds-anno-organism" style={SURFACE}>
                 <MessageBox tone="info">Your data stays on this device.</MessageBox>
               </div>
             </AnnoScene>
@@ -86,27 +96,39 @@ export default function MessageBoxPage() {
         </div>
       </div>
 
-      {/* 5 — TONES */}
+      {/* 5 — VARIANTS · tone */}
       <div className="ds-card">
-        <div className="ds-card-head">Tones</div>
+        <div className="ds-card-head">Variants · tone</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+            {TONES.map(([tone, cls, sample]) => (
+              <div key={tone} className="ds-state-sample">
+                <div style={{ width: "min(402px, 100%)" }}>
+                  <MessageBox tone={tone}>{sample}</MessageBox>
+                </div>
+                <span className="ds-class">{cls}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="ds-card-body col">
           <div className="ds-token-block">
-            <div className="ds-token-name">Info — <span className="ds-cn">.modal-info-box</span></div>
+            <div className="ds-token-name">Info</div>
             <p>Ton par défaut, neutre. Fond <span className="ds-token-chip">--primary-5</span>, bord <code>rgba(73,89,230,.2)</code>, icône <span className="ds-token-chip">--primary-50</span>. Information passive (pas de <code>role</code>).</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Alert — <span className="ds-cn">.modal-info-box--alert</span></div>
+            <div className="ds-token-name">Alert</div>
             <p>Avertissement (amber). Fond <code>rgba(245,158,11,.08)</code>, icône <code>#B45309</code>. <code>role=&quot;alert&quot;</code> — ex. limite de lecture atteinte.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Success — <span className="ds-cn">.modal-info-box--success</span></div>
+            <div className="ds-token-name">Success</div>
             <p>Confirmation (vert). Fond <code>rgba(34,197,94,.08)</code>, icône <code>#16A34A</code>.</p>
           </div>
           <div className="ds-token-block">
-            <div className="ds-token-name">Critical — <span className="ds-cn">.scan-alert</span></div>
+            <div className="ds-token-name">Critical</div>
             <p>Erreur destructive (rouge). Fond <code>rgba(239,68,68,.08)</code>, icône <code>#dc2626</code>, <code>role=&quot;alert&quot;</code> — ex. échec de scan.</p>
           </div>
-          <p className="ds-note"><strong>Dette</strong> : le ton critical est une <em>classe parallèle</em> <span className="ds-class">.scan-alert</span> qui recopie <span className="ds-class">.modal-info-box</span> (mêmes padding / bord / radius / typo) au lieu d&apos;un modifier <span className="ds-class">.modal-info-box--critical</span>. Candidat à unifier (principe DS : pas de classe parallèle).</p>
+          <p className="ds-note"><strong>Dette</strong> : le ton critical est une <em>classe parallèle</em> <span className="ds-class">.scan-alert</span> qui recopie <span className="ds-class">.modal-info-box</span> (mêmes padding / bord / radius / typo) au lieu d&apos;un modifier <span className="ds-class">.modal-info-box--critical</span> — visible ci-dessus dans la grille (label non-uniforme). Candidat à unifier (principe DS : pas de classe parallèle).</p>
         </div>
       </div>
 

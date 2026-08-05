@@ -9,6 +9,7 @@ const STATES = [
 export default function ButtonLinkPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="buttons-link"
       title="Link"
       sub="Un lien-action en texte seul, sans fond ni bordure — pour un geste discret dans un formulaire ou une carte. Fait partie de la famille Buttons."

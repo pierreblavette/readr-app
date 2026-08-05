@@ -20,7 +20,7 @@ function SelectBtn({ label = "Genres", count = 0, mod = "", disabled = false }) 
 // Combobox in-form : .quote-link-select (input + chevron).
 function Combobox() {
   return (
-    <div className="quote-link-select" style={{ width: 260 }}>
+    <div className="quote-link-select" style={{ width: "min(402px, 100%)" }}>
       <input className="modal-field-input quote-link-select-input" placeholder="Link a book…" defaultValue="" readOnly />
       <svg className="quote-link-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
     </div>
@@ -43,6 +43,7 @@ const ANNOS = [
 export default function SelectPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="buttons-select"
       title="Select"
       sub="Le bouton qui choisit une valeur : un clic ouvre une liste d'options. À distinguer du Dropdown Button, qui ouvre un menu d'actions. Fait partie de la famille Buttons."
@@ -64,8 +65,8 @@ export default function SelectPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy · filter trigger</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
               <div className="ds-anno-organism">
                 <SelectBtn label="Genres" count={2} mod="is-active" />
               </div>

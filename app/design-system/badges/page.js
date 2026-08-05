@@ -14,7 +14,7 @@ const ANNOS = [{ n: 1, side: "top", target: ".now-reading-date" }];
 
 export default function BadgesPage() {
   return (
-    <DSSection id="badges" title="Badges" sub="La pastille pleine qui date le début d'une lecture. Trois tailles, une même forme.">
+    <DSSection className="ds-scene-frame" id="badges" title="Badges" sub="La pastille pleine qui date le début d'une lecture. Trois tailles, une même forme.">
 
       {/* ─────────── 1. PREVIEW — la pill par défaut (sm) ─────────── */}
       <div className="ds-card">
@@ -33,8 +33,8 @@ export default function BadgesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <div className="ds-anno-organism">
               <span className="now-reading-date now-reading-date--md">Started on May 3</span>
             </div>
