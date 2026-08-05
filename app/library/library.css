@@ -916,10 +916,17 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
+/* Passage 3 → 2 colonnes dès 1200 (au lieu de 768) : les cartes horizontales
+   respirent mieux à 2 de front sur laptop. Le single-col ≤600 (@media plus bas)
+   reste prioritaire par l'ordre source. */
+@media (max-width: 1200px) {
+  .now-reading-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+}
 .now-reading-card {
   position: relative;
-  /* matches .book-body vertical/left padding ; right reserves space for the kebab (40×40 at top-right + 8px gap) */
-  padding: 16px 56px 16px 16px;
+  /* Uniform 16 : the kebab is absolute at the top-right (badge row level) ; the media
+     row below it stays clear by vertical separation, so no right reservation is needed. */
+  padding: 16px;
   background: var(--card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius);
@@ -3707,7 +3714,6 @@
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
   .books-grid,
   .col-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .now-reading-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 
   /* Mobile toolbar (.toolbar-mobile-only) is shown in this range — push
      the panel below it. Real toolbar height = env(safe-area-inset-top) +
