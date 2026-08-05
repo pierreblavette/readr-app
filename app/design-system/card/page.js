@@ -3,7 +3,7 @@ import { BookCardSpec, QuoteCardSpec, DictionaryCardSpec } from "./_specs";
 
 export default function CardFoundationPage() {
   return (
-    <DSSection id="card" title="Cards" sub="La famille des cartes de contenu : un même langage visuel décliné pour chaque type — livre, lecture en cours, citation, mot.">
+    <DSSection className="ds-scene-frame" id="card" title="Cards" sub="La famille des cartes de contenu : un même langage visuel décliné pour chaque type — livre, lecture en cours, citation, mot.">
 
       {/* 1 — PREVIEW — la famille */}
       <div className="ds-card">

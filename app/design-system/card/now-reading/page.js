@@ -6,6 +6,7 @@ import { NowReadingCardSpec, NOW_READING_ANNOS } from "../_specs";
 export default function NowReadingCardPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="card-now-reading"
       title="Now Reading"
       sub="La carte d'un livre en cours de lecture, épinglée en haut de la bibliothèque. Un format horizontal pour se distinguer de la grille sans lui voler la vedette."
@@ -62,7 +63,7 @@ export default function NowReadingCardPage() {
               </Redline>
             </div>
           </div>
-          <p className="ds-note">Padding <strong>16 / 56 / 16 / 16</strong> — le <strong>56</strong> à droite <em>réserve</em> le kebab (40 + 8 + marge ; masqué ici pour un coting propre). Corps empilé <span className="ds-class">.now-reading-body</span> gap <strong>16</strong> (badge → row) ; la row <span className="ds-class">.now-reading-row</span> aligne cover ↔ texte à gap <strong>16</strong> ; dans <span className="ds-class">.now-reading-text</span>, titre / auteur / méta à gap <strong>6</strong>. Cover cotée en boîte (60×90 · r4). Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Padding <strong>16</strong> uniforme — le kebab (masqué ici pour un coting propre) flotte en haut-droite au niveau du badge, sans colonne réservée. Corps empilé <span className="ds-class">.now-reading-body</span> gap <strong>16</strong> (badge → row) ; la row <span className="ds-class">.now-reading-row</span> aligne cover ↔ texte à gap <strong>16</strong> ; dans <span className="ds-class">.now-reading-text</span>, titre / auteur / méta à gap <strong>6</strong>. Cover cotée en boîte (60×90 · r4). Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 

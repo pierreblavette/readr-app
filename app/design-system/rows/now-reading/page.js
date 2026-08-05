@@ -2,6 +2,13 @@ import DSSection from "../../_components/DSSection";
 import Redline from "../../_components/Redline";
 import AnnoScene from "../../_components/AnnoScene";
 
+// Kebab horizontal (3 points côte à côte, stroke) — propre à Now Reading, comme la carte.
+const NowReadingKebab = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" />
+  </svg>
+);
+
 // Média-object : cover 60×90 + texte (titre, auteur, meta). Ni fond ni padding.
 function NowReadingRow({ from, to, letter, title, author, genre, year, width, className = "" }) {
   return (
@@ -23,19 +30,25 @@ function NowReadingRow({ from, to, letter, title, author, genre, year, width, cl
 }
 
 // La row telle qu'elle vit dans sa carte : badge date + média, boxée (.ds-nr-box).
-function NowReadingUnit({ hover = false, className = "", width = "min(402px, 100%)", date = "Started on Aug 4" }) {
+function NowReadingUnit({ hover = false, className = "", width = "min(402px, 100%)", date = "Started Apr 28", hideMenu = false }) {
   return (
     <div className={`ds-nr-box${hover ? " is-hover" : ""} ${className}`.trim()} style={{ width }}>
       <span className="now-reading-date">{date}</span>
-      <NowReadingRow from="#4959E6" to="#00A699" letter="D" title="Dune" author="Frank Herbert" genre="Science-fiction" year="1965" />
+      <NowReadingRow from="var(--primary-40)" to="var(--primary-60)" letter="A" title="A Brief History of Time" author="Stephen Hawking" genre="Science" year="1988" />
+      {!hideMenu && (
+        <div className="now-reading-menu">
+          <button type="button" className="now-reading-menu-btn" aria-label="More actions"><NowReadingKebab /></button>
+        </div>
+      )}
     </div>
   );
 }
 
 const ANNOS = [
-  { n: 1, side: "top", target: ".now-reading-date" },
-  { n: 2, side: "bottom", target: ".now-reading-cover" },
+  { n: 1, side: "left", target: ".now-reading-date" },
+  { n: 2, side: "left", target: ".now-reading-cover" },
   { n: 3, side: "right", target: ".now-reading-text" },
+  { n: 4, side: "right", target: ".now-reading-menu-btn" },
 ];
 
 export default function NowReadingRowPage() {
@@ -65,7 +78,7 @@ export default function NowReadingRowPage() {
         <div className="ds-card-body col">
           <div className="ds-anno-board ds-anno-board--stack">
           <AnnoScene annos={ANNOS} stack>
-            <NowReadingUnit className="ds-anno-organism" date="Started on Jun 12" />
+            <NowReadingUnit className="ds-anno-organism" />
           </AnnoScene>
           </div>
         </div>
@@ -80,6 +93,7 @@ export default function NowReadingRowPage() {
               <tr className="table-row"><td>1</td><td><span className="ds-class">.now-reading-date</span></td><td>Badge date en tête : pill <span className="ds-token-chip">--primary-50</span>, texte <span className="ds-token-chip">--light-100</span>, 12/600. « Started on… ».</td></tr>
               <tr className="table-row"><td>2</td><td><span className="ds-class">.now-reading-cover</span></td><td>Vignette : <strong>60×90</strong>, radius 4. Sans image → <span className="ds-class">.now-reading-cover-empty</span> (dégradé + initiale 18/800).</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.now-reading-text</span></td><td>Corps : flex colonne, gap 6. Titre 16/700 · auteur 15/500 <span className="ds-token-chip">--text-2</span> · <span className="ds-class">.book-meta</span> (genre · année).</td></tr>
+              <tr className="table-row"><td>4</td><td><span className="ds-class">.now-reading-menu-btn</span></td><td>Kebab « more actions » <strong>40×40</strong>, absolu <code>top:8 right:8</code>, ghost neutre à hover teinté primary. Icône trois points horizontaux (propre à Now Reading). Porté par la carte en prod.</td></tr>
               <tr className="table-row"><td>·</td><td><span className="ds-class">.now-reading-row</span></td><td>Le média-object (cover + texte), en flex, gap <strong>16</strong>. Badge + row empilés dans <span className="ds-class">.now-reading-body</span> (gap 16).</td></tr>
             </tbody>
           </table>
@@ -92,34 +106,12 @@ export default function NowReadingRowPage() {
         <div className="ds-card-body col">
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline>
-                <NowReadingUnit width={402} />
+              <Redline boxSelector=".now-reading-cover" gapSelector={[".now-reading-row", ".now-reading-text"]}>
+                <NowReadingUnit width="var(--spec-w, 402px)" hideMenu />
               </Redline>
             </div>
           </div>
-          <p className="ds-note"><strong>Autour</strong> — padding <strong>16</strong> (porté par la carte), gap <strong>16</strong> entre le badge date et le média-object. <em>(La vraie carte réserve en plus ~56 à droite pour le kebab.)</em></p>
-
-          <div className="ds-redline-board ds-redline-board--lined">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline boxSelector=".now-reading-cover">
-                <NowReadingRow from="#4959E6" to="#00A699" letter="D" title="Dune" author="Frank Herbert" genre="Science-fiction" year="1965" width={402} />
-              </Redline>
-            </div>
-          </div>
-          <p className="ds-note"><strong>Média-object</strong> — <span className="ds-class">.now-reading-row</span> : gap <strong>16</strong> vignette → texte (contre 12 pour Book Row), vignette <strong>60×90</strong> (r4) cotée en boîte.</p>
-
-          <div className="ds-redline-board ds-redline-board--lined">
-            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
-              <Redline>
-                <div className="now-reading-text" style={{ width: 402 }}>
-                  <div className="now-reading-title">Dune</div>
-                  <div className="now-reading-author">Frank Herbert</div>
-                  <div className="book-meta"><span>Science-fiction</span><span className="book-meta-sep" aria-hidden="true">·</span><span>1965</span></div>
-                </div>
-              </Redline>
-            </div>
-          </div>
-          <p className="ds-note"><strong>Texte</strong> — <span className="ds-class">.now-reading-text</span> : gap <strong>6</strong> entre titre, auteur et <span className="ds-class">.book-meta</span>. Cotes mesurées à l&apos;exécution.</p>
+          <p className="ds-note">Padding <strong>16</strong> uniforme — le kebab (masqué ici pour un coting propre) flotte en haut-droite au niveau du badge, sans colonne réservée. Corps empilé <span className="ds-class">.now-reading-body</span> gap <strong>16</strong> (badge → row) ; la row <span className="ds-class">.now-reading-row</span> aligne cover ↔ texte à gap <strong>16</strong> ; dans <span className="ds-class">.now-reading-text</span>, titre / auteur / méta à gap <strong>6</strong>. Cover cotée en boîte (60×90 · r4). Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 

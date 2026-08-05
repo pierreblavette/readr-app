@@ -87,7 +87,7 @@ export const NOW_READING_ANNOS = [
 // body↔menu produit une bande parasite ~8px.
 export function NowReadingCardSpec({ className = "", hideMenu = false }) {
   return (
-    <div className={`now-reading-card ${className}`.trim()} role="button" tabIndex={-1} style={{ width: "var(--spec-w, 340px)" }}>
+    <div className={`now-reading-card ${className}`.trim()} role="button" tabIndex={-1} style={{ width: "var(--spec-w, 402px)" }}>
       <div className="now-reading-body">
         <span className="now-reading-date">Started Apr 28</span>
         <div className="now-reading-row">

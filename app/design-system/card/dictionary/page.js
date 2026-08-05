@@ -5,7 +5,7 @@ import { DictionaryCardSpec, DICT_ANNOS, KebabDots } from "../_specs";
 
 export default function DictionaryCardPage() {
   return (
-    <DSSection id="card-dictionary" title="Dictionary Card" sub="La carte d'un mot sauvegardé : un en-tête qu'on déplie pour lire ses définitions. Une carte en accordéon.">
+    <DSSection className="ds-scene-frame" id="card-dictionary" title="Dictionary Card" sub="La carte d'un mot sauvegardé : un en-tête qu'on déplie pour lire ses définitions. Une carte en accordéon.">
 
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>

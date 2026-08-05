@@ -1160,9 +1160,10 @@ img.ds-cover { object-fit: cover; }
 .ds-anno-scene .modal-toggle-row { background: var(--card); padding: 0 16px; border-radius: 8px; }
 /* Now Reading Row : la row (badge date + média-object) n'a ni fond ni padding
    propres — c'est sa carte qui les porte. En doc on la présente boxée comme les
-   autres rows via .ds-nr-box (fond --card + padding + gap badge→média). La vraie
-   carte réserve en plus un padding droit pour le kebab, non représenté ici. */
-.ds-nr-box { display: flex; flex-direction: column; gap: 16px; background: var(--bg3); padding: 16px; border-radius: 8px; }
+   autres rows via .ds-nr-box (fond --card + padding + gap badge→média). Comme la
+   vraie carte : position relative (ancre le kebab absolu) + padding uniforme 16
+   (le kebab est en haut-droite au niveau du badge, la ligne média reste dégagée). */
+.ds-nr-box { position: relative; display: flex; flex-direction: column; gap: 16px; background: var(--bg3); padding: 16px; border-radius: 8px; }
 .ds-nr-box.is-hover { background: var(--primary-10); }
 /* Scènes bleues (Preview/Anatomy/Redline) : --card pour le contraste, comme les
    autres rows (leur vrai --bg3 se confond avec le bleu). En States (hors scène),
@@ -1696,7 +1697,8 @@ img.ds-cover { object-fit: cover; }
   .ds-redline-target:has(> .dictionary-saved-head),
   .ds-redline-target:has(> .dictionary-saved-body),
   .ds-redline-target:has(> .dictionary-definition),
-  .ds-redline-target:has(> .now-reading-card) { width: 100%; max-width: 100%; --spec-w: 100%; }
+  .ds-redline-target:has(> .now-reading-card),
+  .ds-redline-target:has(> .ds-nr-box) { width: 100%; max-width: 100%; --spec-w: 100%; }
   /* Anatomy des cards en mobile : le specimen (largeur fixe 220–400) déborde la scène
      et se fait clipper. On bascule --spec-w à 100% → il remplit la scène ; les gouttières
      de 60 (padding scène) logent les pastilles/cotes latérales. */

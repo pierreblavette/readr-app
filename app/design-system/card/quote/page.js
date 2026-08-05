@@ -5,7 +5,7 @@ import { QuoteCardSpec, QUOTE_ANNOS } from "../_specs";
 
 export default function QuoteCardPage() {
   return (
-    <DSSection id="card-quote" title="Quote Card" sub="La carte d'une citation : le texte, ses actions, et le livre d'où elle vient.">
+    <DSSection className="ds-scene-frame" id="card-quote" title="Quote Card" sub="La carte d'une citation : le texte, ses actions, et le livre d'où elle vient.">
 
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>

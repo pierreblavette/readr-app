@@ -5,7 +5,7 @@ import { BookCardSpec, BOOK_ANNOS, KebabDots } from "../_specs";
 
 export default function BookCardPage() {
   return (
-    <DSSection id="card-book" title="Book Card" sub="La carte d'un livre dans la grille de la bibliothèque : couverture, titre, auteur et un menu d'actions.">
+    <DSSection className="ds-scene-frame" id="card-book" title="Book Card" sub="La carte d'un livre dans la grille de la bibliothèque : couverture, titre, auteur et un menu d'actions.">
 
       <div className="ds-card">
         <div className="ds-card-head">Preview</div>
