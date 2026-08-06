@@ -14,6 +14,7 @@ const ANNOS = [
 export default function QuotePanelPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="quote"
       title="Quote Panel"
       sub="La fiche détaillée d'une citation, dans un panneau qui glisse depuis la droite : la citation, ses actions, et le livre d'origine."

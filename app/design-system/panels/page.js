@@ -4,6 +4,7 @@ import { BookPanelSpec } from "./book/_specs";
 export default function PanelsFoundationPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="panels"
       title="Side Panels"
       sub="La famille des panneaux qui glissent depuis la droite pour recouvrir l'app. Un même socle décliné en deux fiches : le livre et la citation."

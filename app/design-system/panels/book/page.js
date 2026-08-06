@@ -38,6 +38,7 @@ function Stars({ value = 4 }) {
 export default function SidePanelPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="book"
       title="Book Panel"
       sub="La fiche complète d'un livre, qui glisse depuis la droite par-dessus l'app : couverture, infos et actions en tête, puis toutes ses sections empilées — collections, avancement, citations."
