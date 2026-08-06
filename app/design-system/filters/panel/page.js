@@ -14,6 +14,7 @@ const ANNOS = [
 export default function FiltersPanelPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="filters-panel"
       title="Filters Panel"
       sub="La version mobile des filtres : un panneau qui glisse depuis la droite et déplie tous les critères qui ne tiennent plus en ligne."

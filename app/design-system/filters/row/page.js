@@ -28,6 +28,7 @@ const F = ["Date added", "Authors", "Reading status", "Rating", "Genres"];
 export default function FiltersRowPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="filters-row"
       title="Filters Row"
       sub="La rangée de filtres sous la recherche : chaque bouton affine la liste sur un critère. Quand la place manque, les filtres se replient dans un panneau."

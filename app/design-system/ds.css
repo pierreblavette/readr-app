@@ -1807,7 +1807,10 @@ img.ds-cover { object-fit: cover; }
    de 60) pour que le fold — Date added (.sort-menu-btn) + le trigger Filter — tienne
    sur UNE seule ligne au lieu de wrapper. Vertical gardé à 60. Scopé, ≤600 uniquement. */
 @media (max-width: 600px) {
-  .ds-anno-board--filters-row .ds-anno-scene { padding: 60px 40px; }
+  /* Spécificité (0,4,0) — les deux classes du board chaînées + .ds-scene-frame pour
+     ÉGALER la règle non-stack du contrat (le :not(--stack) compte 1 classe) et gagner
+     par l'ordre source (cette règle est postérieure). Sinon → 60 latéral au lieu de 40. */
+  .ds-scene-frame .ds-anno-board.ds-anno-board--filters-row .ds-anno-scene { padding: 60px 40px; }
 }
 /* Onboarding · Anatomy en mobile : le modal (card blanc) comprime le contenu sur écran
    étroit. On retire son fond + ombre et le padding 32/24 du body → illustration et texte

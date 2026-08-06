@@ -4,6 +4,7 @@ import FiltersRowFit from "./_FiltersRowFit";
 export default function FiltersFoundationPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="filters"
       title="Filtering"
       sub="Le système qui filtre la bibliothèque : plusieurs critères qu'on combine pour retrouver un livre. Il prend deux formes selon l'écran — en ligne sur desktop, en panneau sur mobile."
