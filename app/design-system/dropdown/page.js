@@ -81,6 +81,7 @@ const ANNOS = [
 export default function DropdownMenuPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="dropdown"
       title="Dropdown Menu"
       sub="Le menu flottant qui s'ouvre depuis un bouton : une liste d'actions ou de filtres à choisir. Plusieurs variantes selon ce qu'il contient."
