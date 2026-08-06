@@ -26,6 +26,7 @@ const TRACK = { width: 88, height: 120, background: "var(--card)" };
 export default function WeeklyActivityPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="weekly-activity"
       title="Data Visualization"
       sub="Le graphe d'activité de l'accueil : combien de livres, de citations et de mots par jour, sur une semaine ou un mois."
