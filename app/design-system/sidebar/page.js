@@ -41,6 +41,7 @@ function ShellSchema() {
 export default function SidebarPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="sidebar"
       title="Side Menu"
       sub="La navigation principale de l'app : atteindre les sections et régler l'apparence, toujours à portée sur la gauche."
@@ -145,7 +146,7 @@ export default function SidebarPage() {
         <div className="ds-card-body col">
           {/* Étendue vs repliée — scène bleue (le fond --bg de la colonne s'y démarque), même hauteur */}
           <div className="ds-preview-board">
-            <div className="ds-preview" style={{ gap: 48, alignItems: "stretch" }}>
+            <div className="ds-preview" style={{ gap: 48, alignItems: "stretch", flexWrap: "wrap" }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
                 <SidebarSpec active="owned" />
                 <span className="ds-class" style={{ alignSelf: "center" }}>.sidebar</span>
