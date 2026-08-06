@@ -71,7 +71,7 @@ const WarnIcon = () => (
 
 export default function InputsPage() {
   return (
-    <DSSection id="inputs" title="Text Input" sub="Les champs de saisie de l'app : un même socle décliné en champ texte, recherche et zone de texte, avec label, message et validation.">
+    <DSSection className="ds-scene-frame" id="inputs" title="Text Input" sub="Les champs de saisie de l'app : un même socle décliné en champ texte, recherche et zone de texte, avec label, message et validation.">
 
       {/* ─────────── 1. PREVIEW — le champ canonique ─────────── */}
       <div className="ds-card">
@@ -146,7 +146,7 @@ export default function InputsPage() {
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {STATES.map(([state, mod, disabled, cap]) => (
               <div key={state} className="ds-state-sample">
-                <div className="modal-field" style={{ width: "100%" }}>
+                <div className="modal-field" style={{ width: "min(402px, 100%)" }}>
                   <label className="modal-field-label">{state}</label>
                   <input
                     type="text"
@@ -174,7 +174,7 @@ export default function InputsPage() {
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {SIZES.map(([name, mod]) => (
               <div key={name} className="ds-state-sample">
-                <div className="modal-field" style={{ width: "100%" }}>
+                <div className="modal-field" style={{ width: "min(402px, 100%)" }}>
                   <label className="modal-field-label">Title</label>
                   <input type="text" className={`modal-field-input${mod ? " " + mod : ""}`} defaultValue={name} readOnly style={{ width: "100%" }} />
                 </div>
@@ -200,7 +200,7 @@ export default function InputsPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
-              <div className="modal-toggle-field" style={{ width: "100%" }}>
+              <div className="modal-toggle-field" style={{ width: "min(402px, 100%)" }}>
                 <div className="modal-field" style={{ width: "100%" }}>
                   <label className="modal-field-label">Error</label>
                   <input type="text" className="modal-field-input is-invalid" defaultValue="" placeholder="Title" readOnly style={{ width: "100%" }} />
@@ -210,7 +210,7 @@ export default function InputsPage() {
               <span className="ds-class">.is-invalid</span>
             </div>
             <div className="ds-state-sample">
-              <div className="modal-toggle-field" style={{ width: "100%" }}>
+              <div className="modal-toggle-field" style={{ width: "min(402px, 100%)" }}>
                 <div className="modal-field" style={{ width: "100%" }}>
                   <label className="modal-field-label">Warning</label>
                   <input type="text" className="modal-field-input is-warn" defaultValue="978-000000000" readOnly style={{ width: "100%" }} />
@@ -220,14 +220,14 @@ export default function InputsPage() {
               <span className="ds-class">.is-warn</span>
             </div>
             <div className="ds-state-sample">
-              <div className="modal-field" style={{ width: "100%" }}>
+              <div className="modal-field" style={{ width: "min(402px, 100%)" }}>
                 <label className="modal-field-label">Read-only</label>
                 <input type="text" className="modal-field-input is-readonly" defaultValue="Sally Rooney" readOnly style={{ width: "100%" }} />
               </div>
               <span className="ds-class">.is-readonly</span>
             </div>
             <div className="ds-state-sample">
-              <div className="modal-field" style={{ width: "100%" }}>
+              <div className="modal-field" style={{ width: "min(402px, 100%)" }}>
                 <label className="modal-field-label">Helper text</label>
                 <input type="text" className="modal-field-input" defaultValue="" placeholder="e.g. 978-0-571-33465-0" readOnly style={{ width: "100%" }} />
                 <span className="modal-field-hint">10 or 13 digits, dashes optional.</span>
@@ -389,7 +389,7 @@ export default function InputsPage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline boxSelector=".search-clear" hInsets={{ icon: ":scope > svg", padded: ".search-input", control: ".search-clear" }}>
-                <div className="search-box" style={{ width: 300, flex: "none" }}>
+                <div className="search-box" style={{ width: "var(--spec-w, 300px)", flex: "none" }}>
                   <SearchIcon />
                   <input type="text" className="search-input" defaultValue="Sally Rooney" readOnly />
                   <button type="button" className="search-clear visible" aria-label="Clear">
