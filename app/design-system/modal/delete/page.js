@@ -24,6 +24,7 @@ export default function DeleteModalPage() {
   const [variant, setVariant] = useState("book");
   return (
     <DSSection
+      className="ds-scene-frame"
       id="modal-delete"
       title="Delete Modal"
       sub="La fenêtre qui demande confirmation avant un geste destructif : un titre, un message, un aperçu de ce qui sera touché, et deux boutons."

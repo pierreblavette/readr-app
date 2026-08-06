@@ -83,6 +83,7 @@ function AddBookPhotoModalSpec({ className = "", style }) {
 export default function FormModalPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="modal-form"
       title="Form Modal"
       sub="La fenêtre de saisie : un titre, un formulaire, deux actions. Un même cadre pour des contenus qui changent — champs, onglets d'import, ou note de lecture."

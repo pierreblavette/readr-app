@@ -19,6 +19,7 @@ const SHELL_ANNOS = [
 export default function ModalFoundationPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="modal"
       title="Modals"
       sub="La famille des fenêtres modales : un même socle et un même cycle de vie, décliné par usage — saisie, confirmation, fin de lecture."

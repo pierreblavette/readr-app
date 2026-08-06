@@ -17,6 +17,7 @@ const FINISH_ANNOS = [
 export default function FinishReadingModalPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="modal-finish-reading"
       title="Finish Reading Modal"
       sub="La fenêtre ouverte quand on termine un livre : on lui donne une note et, si on veut, un mot. Elle se rouvre pour éditer un livre déjà fini."
