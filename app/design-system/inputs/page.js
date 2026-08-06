@@ -90,8 +90,8 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <div className="ds-anno-organism" style={{ width: 340 }}><Field /></div>
           </AnnoScene>
           </div>
@@ -274,8 +274,8 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Textarea · anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={TEXTAREA_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={TEXTAREA_ANNOS} stack>
             <div className="ds-anno-organism" style={{ width: 360 }}>
               <div className="modal-field" style={{ width: "100%" }}>
                 <label className="modal-field-label">Quote</label>
@@ -352,8 +352,8 @@ export default function InputsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Search · anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={SEARCH_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={SEARCH_ANNOS} stack>
             <div className="ds-anno-organism" style={{ width: 340 }}>
               <div className="search-box" style={{ width: "100%", minWidth: 0 }}>
                 <SearchIcon />
