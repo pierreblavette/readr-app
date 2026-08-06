@@ -68,8 +68,8 @@ function ImportPreview() {
   );
 }
 
-// Largeur uniforme des specimens dropzone (= la plus large, la photo ; iso Preview/Anatomy).
-const DZW = { width: "100%", maxWidth: 420 };
+// Largeur uniforme des specimens dropzone : cap 402 (iPhone 16 Pro), fluide en dessous.
+const DZW = { width: "min(402px, 100%)" };
 
 const ANNOS = [
   { n: 1, side: "left", target: ".import-dropzone" },
@@ -81,6 +81,7 @@ const ANNOS = [
 export default function DropzonePage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="dropzone"
       title="Dropzone"
       sub="La zone où déposer un fichier ou une photo pour importer des livres : glisser-déposer, ou clic pour parcourir. Deux variantes selon la source."
@@ -104,7 +105,7 @@ export default function DropzonePage() {
         <div className="ds-card-body col">
           <div className="ds-anno-board">
             <AnnoScene annos={ANNOS}>
-              <div className="ds-anno-organism" style={{ width: "100%", maxWidth: 420 }}>
+              <div className="ds-anno-organism" style={{ width: "min(402px, 100%)" }}>
                 <FileDrop />
               </div>
             </AnnoScene>
@@ -136,7 +137,7 @@ export default function DropzonePage() {
           <div className="ds-redline-board ds-redline-board--lined">
             <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
               <Redline>
-                <div className="import-dropzone" style={{ minHeight: "auto", width: 420 }}>
+                <div className="import-dropzone" style={{ minHeight: "auto", width: "var(--spec-w, 402px)" }}>
                   <UploadIcon />
                   <div className="import-dropzone-text">
                     <div className="import-dropzone-title">Drop a file or click to browse</div>
@@ -205,6 +206,29 @@ export default function DropzonePage() {
         </div>
         <div className="ds-card-body col">
           <p className="ds-note">Après upload, la dropzone laisse place à la <span className="ds-class">.import-preview</span> — la liste des livres <strong>parsés</strong>, à valider avant l&apos;ajout. <span className="ds-class">.import-preview-header</span> (compteur « N books found ») + <span className="ds-class">.import-preview-list</span> scrollable (<code>max-height</code> clampée). Chaque <span className="ds-class">.import-preview-item</span> — <span className="ds-class">.import-preview-book</span> (titre 15/600) + <span className="ds-class">.import-preview-author</span> (13 <span className="ds-token-chip">--text-2</span>) + un <span className="ds-class">.import-preview-remove</span> pour l&apos;écarter. Le flux : <strong>dropzone → preview → confirm</strong>.</p>
+        </div>
+      </div>
+
+      {/* 7b — SPACING · import preview */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing · import preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline noGaps boxSelector=".import-preview-remove">
+                <div className="import-preview-item" style={{ width: "var(--spec-w, 402px)" }}>
+                  <div>
+                    <div className="import-preview-book">The Great Gatsby</div>
+                    <div className="import-preview-author">F. Scott Fitzgerald</div>
+                  </div>
+                  <button type="button" className="import-preview-remove" aria-label="Remove">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                  </button>
+                </div>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note"><strong>Item</strong> <span className="ds-class">.import-preview-item</span> : padding <strong>8 / 12</strong>, radius 8, fond <span className="ds-token-chip">--bg3</span>, <code>space-between</code> (titre/auteur ↔ croix). Titre → auteur : <strong>4</strong> (<code>margin-top</code> sur <span className="ds-class">.import-preview-author</span>). Croix <span className="ds-class">.import-preview-remove</span> <strong>32×32</strong> (svg 14, radius 7), <code>margin-left: 8</code>, cotée en boîte. Autour : les items s&apos;empilent dans <span className="ds-class">.import-preview-list</span> à gap <strong>8</strong> (padding 8, bord 1.5), et <span className="ds-class">.import-preview-header</span> est séparé de la liste par un gap <strong>8</strong>. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
