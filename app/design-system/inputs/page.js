@@ -54,7 +54,7 @@ function Field() {
 }
 
 const SearchIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
   </svg>
 );
@@ -375,7 +375,7 @@ export default function InputsPage() {
             <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
             <tbody className="table-body">
               <tr className="table-row"><td>1</td><td><span className="ds-class">.search-box</span></td><td>Coquille <strong>pill</strong> : height 40, radius 32, border 1.5 <span className="ds-token-chip">--border-subtle</span> (visible — vit sur fond de page), <code>position: relative</code> pour les éléments absolus.</td><td>—</td></tr>
-              <tr className="table-row"><td>2</td><td><span className="ds-class">.search-box svg</span></td><td>Loupe 15×15 <span className="ds-token-chip">--text-2</span>, absolue à <code>left: 14</code>, <code>pointer-events: none</code>. Le trait passe à <code>1.5</code> au hover/focus.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.search-box svg</span></td><td>Loupe 15×15 <span className="ds-token-chip">--text-2</span>, absolue à <code>left: 14</code>, <code>pointer-events: none</code>, <code>stroke-width 1.5</code> (constant — même graisse au repos et à l&apos;interaction).</td><td>—</td></tr>
               <tr className="table-row"><td>3</td><td><span className="ds-class">.search-input</span></td><td>Champ transparent : padding <strong>0 38</strong> (gauche, dégage la loupe) / <strong>34</strong> (droite, dégage le clear), font 15/600.</td><td>—</td></tr>
               <tr className="table-row"><td>4</td><td><span className="ds-class">.search-clear</span></td><td>Pastille ronde 18×18 <span className="ds-token-chip">--text-3</span> (hover <span className="ds-token-chip">--text-2</span>), croix 10×10, absolue à <code>right: 10</code>. <span className="ds-class">.visible</span> quand le champ est rempli.</td><td><span className="now-reading-date now-reading-date--sm">Yes</span></td></tr>
             </tbody>
