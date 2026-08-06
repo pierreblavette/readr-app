@@ -482,7 +482,7 @@
   width: 15px; height: 15px;
   color: var(--text-2);
   pointer-events: none;
-  stroke-width: 1.5;
+  stroke-width: 2.5;
 }
 /* Pill-shaped search input — same graphic treatment as the classic
    .search-input (15px icon, 38/34 padding, pill radius 32) but with the
@@ -651,7 +651,7 @@
   color: var(--text-2);
   pointer-events: none;
   flex-shrink: 0;
-  stroke-width: 1.5;
+  stroke-width: 2.5;
 }
 
 .search-input {
