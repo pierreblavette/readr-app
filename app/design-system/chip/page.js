@@ -31,7 +31,7 @@ const ANNOS = [
 
 export default function CloudChipPage() {
   return (
-    <DSSection id="chip" title="Chip" sub="Une pastille cliquable avec un compteur, utilisée comme raccourci de filtre — par exemple un genre ou un auteur sur l'accueil.">
+    <DSSection className="ds-scene-frame" id="chip" title="Chip" sub="Une pastille cliquable avec un compteur, utilisée comme raccourci de filtre — par exemple un genre ou un auteur sur l'accueil.">
 
       {/* ─────────── 1. PREVIEW ─────────── */}
       <div className="ds-card">
@@ -50,8 +50,8 @@ export default function CloudChipPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <div className="ds-anno-organism">
               <button type="button" className="overview-cloud-chip">
                 <span className="overview-cloud-chip-name">Fiction</span>
