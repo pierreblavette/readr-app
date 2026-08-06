@@ -13,6 +13,7 @@ function SvgSpinner({ className = "panel-cast-spinner" }) {
 export default function SpinnerPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="spinner"
       title="Spinner"
       sub="L'indicateur de chargement, quand l'app attend sans savoir combien de temps. Deux formes : un anneau et un petit loader d'action."
