@@ -332,8 +332,10 @@ img.ds-cover { object-fit: cover; }
    garde le chrome carte (border/radius) et le padding de cellule ; on force juste la
    table à TENIR (table-layout fixed, pleine largeur du contenu) et on masque les colonnes
    meta (auteur/année) — sinon 6 colonnes dans ~380px se chevauchent. Résultat = carte
-   avec num + titre + genre + action, comme les book-rows de Book Row. */
-.ds-states-grid--list-rows > .ds-state-sample > .books-list { align-self: stretch; }
+   avec num + titre + genre + action, comme les book-rows de Book Row. §3 : le specimen
+   est cappé à min(402px,100%) et centré (PAS stretch, qui le laissait remplir la cellule
+   ~850 en 1-col ≤1400) ; à ≤600 la règle .ds-list-mobile postérieure repasse à 100% = fill. */
+.ds-states-grid--list-rows > .ds-state-sample > .books-list { width: min(402px, 100%); align-self: center; }
 .ds-states-grid--list-rows .ds-list-spec .list-table { table-layout: fixed; width: 100%; }
 .ds-states-grid--list-rows .ds-list-spec .list-table th.list-cell-meta,
 .ds-states-grid--list-rows .ds-list-spec .list-table td.list-cell-meta { display: none; }
