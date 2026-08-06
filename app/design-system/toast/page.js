@@ -12,6 +12,7 @@ const ANNOS = [
 export default function ToastPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="toast"
       title="Toast"
       sub="Le petit message de confirmation qui apparaît après une action — suppression, changement, partage — et disparaît tout seul."
@@ -33,8 +34,8 @@ export default function ToastPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={ANNOS} stack>
               <ToastSpec message="Reading started" className="ds-anno-organism" />
             </AnnoScene>
           </div>
