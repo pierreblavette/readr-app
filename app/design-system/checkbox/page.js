@@ -93,6 +93,7 @@ export default function CheckboxPage() {
   const [checked2, setChecked2] = useState(false);
   return (
     <DSSection
+      className="ds-scene-frame"
       id="checkbox"
       title="Checkbox"
       sub="La case à cocher : une petite case dans une rangée entièrement cliquable."
@@ -103,7 +104,7 @@ export default function CheckboxPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview ds-preview--roomy">
-            <div style={{ width: 300, display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "fit-content" }}>
               <ToggleRow checked={checked} onChange={setChecked} label="Mark as reading" />
               <ToggleRow checked={checked2} onChange={setChecked2} label="Add to wishlist" />
             </div>
@@ -117,9 +118,9 @@ export default function CheckboxPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
-            <div className="ds-anno-organism" style={{ width: 260 }}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
+            <div className="ds-anno-organism">
               <ToggleRow checked label="Mark as reading" />
             </div>
           </AnnoScene>
