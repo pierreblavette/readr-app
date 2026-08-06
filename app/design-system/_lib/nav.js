@@ -62,6 +62,11 @@ export const NAV_CHILDREN = {
     { label: "Book Panel", href: "/design-system/panels/book" },
     { label: "Quote Panel", href: "/design-system/panels/quote" },
   ],
+  inputs: [
+    { label: "Text Field", href: "/design-system/inputs/text-field" },
+    { label: "Textarea", href: "/design-system/inputs/textarea" },
+    { label: "Search Field", href: "/design-system/inputs/search" },
+  ],
   editing: [
     { label: "Kebab", href: "/design-system/editing/kebab" },
     { label: "Bulk", href: "/design-system/editing/bulk" },
