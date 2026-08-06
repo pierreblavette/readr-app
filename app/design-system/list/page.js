@@ -20,6 +20,7 @@ const ANNOS = [
 export default function ListViewPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="list"
       title="Table"
       sub="L'affichage en tableau de la bibliothèque : un en-tête triable et des rangées de livres. Le socle partagé par les listes, le dictionnaire et les collections."
@@ -30,7 +31,7 @@ export default function ListViewPage() {
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview ds-scene--list">
+            <div className="ds-preview">
               <ListViewSpec className="ds-list-mobile" />
             </div>
           </div>
@@ -42,7 +43,7 @@ export default function ListViewPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board ds-anno-board--list ds-anno-board--stack">
+          <div className="ds-anno-board ds-anno-board--stack">
             <AnnoScene annos={ANNOS} stack>
               <ListViewSpec className="ds-anno-organism ds-list-mobile" />
             </AnnoScene>

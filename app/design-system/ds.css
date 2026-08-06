@@ -1785,10 +1785,12 @@ img.ds-cover { object-fit: cover; }
   .ds-redline-row--stack { grid-template-columns: 1fr; }
   .ds-redline-row--stack > .ds-redline + .ds-redline { border-left: none; border-top: 1px solid var(--border-subtle); }
 }
-/* Scènes « list » : même gabarit que le Footer (padding latéral 48, specimen 100%) —
-   le composant est large (table pleine largeur), on l'aligne sur ce standard. */
+/* Scène « list » (48 latéral) — encore utilisée par le seul Preview d'Editing/Bulk
+   (pas encore migré). La Table a abandonné ce gabarit custom au profit du standard
+   scene-frame (60/60→20, Anatomy stack), suite au recheck Footer : pas de règle de
+   padding par page. `.ds-anno-board--list` supprimé (n'était utilisé que par la
+   Table). À retirer entièrement quand Editing/Bulk migrera. */
 .ds-preview.ds-scene--list { padding-left: 48px; padding-right: 48px; }
-.ds-anno-board--list .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
 /* Onboarding · Anatomy en mobile : le modal (card blanc) comprime le contenu sur écran
    étroit. On retire son fond + ombre et le padding 32/24 du body → illustration et texte
    s'étendent sur toute la largeur de la scène. Le footer (nav Skip/Next) est masqué —
