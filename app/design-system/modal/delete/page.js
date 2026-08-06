@@ -116,19 +116,19 @@ export default function DeleteModalPage() {
         <div className="ds-card-body col">
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample">
-              <div style={{ width: "100%" }}><ConfirmBodySpec variant="book" /></div>
+              <div style={{ width: "min(402px, 100%)" }}><ConfirmBodySpec variant="book" /></div>
               <span className="ds-class">book · .confirm-modal-chip</span>
             </div>
             <div className="ds-state-sample">
-              <div style={{ width: "100%" }}><ConfirmBodySpec variant="quote" /></div>
+              <div style={{ width: "min(402px, 100%)" }}><ConfirmBodySpec variant="quote" /></div>
               <span className="ds-class">quote · .confirm-modal-quote-wrap</span>
             </div>
             <div className="ds-state-sample">
-              <div style={{ width: "100%" }}><ConfirmBodySpec variant="finished" /></div>
+              <div style={{ width: "min(402px, 100%)" }}><ConfirmBodySpec variant="finished" /></div>
               <span className="ds-class">finished · .panel-finished-field</span>
             </div>
             <div className="ds-state-sample">
-              <div style={{ width: "100%" }}><ConfirmBodySpec variant="bulk" /></div>
+              <div style={{ width: "min(402px, 100%)" }}><ConfirmBodySpec variant="bulk" /></div>
               <span className="ds-class">bulk · message seul</span>
             </div>
           </div>

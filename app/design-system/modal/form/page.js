@@ -153,7 +153,7 @@ export default function FormModalPage() {
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {/* Photo */}
             <div className="ds-state-sample">
-              <div className="import-tab-pane" style={{ width: "100%" }}>
+              <div className="import-tab-pane" style={{ width: "min(402px, 100%)" }}>
                 <div className="import-dropzone">
                   <AiSparkle />
                   <div className="import-dropzone-text">
@@ -166,7 +166,7 @@ export default function FormModalPage() {
             </div>
             {/* Barcode */}
             <div className="ds-state-sample">
-              <div className="import-tab-pane" style={{ width: "100%" }}>
+              <div className="import-tab-pane" style={{ width: "min(402px, 100%)" }}>
                 <div className="import-dropzone">
                   <ScanIcon />
                   <div className="import-dropzone-text">
@@ -179,7 +179,7 @@ export default function FormModalPage() {
             </div>
             {/* File */}
             <div className="ds-state-sample">
-              <div className="import-tab-pane" style={{ width: "100%" }}>
+              <div className="import-tab-pane" style={{ width: "min(402px, 100%)" }}>
                 <div className="import-dropzone">
                   <UploadIcon />
                   <div className="import-dropzone-text">
@@ -192,7 +192,7 @@ export default function FormModalPage() {
             </div>
             {/* Manual */}
             <div className="ds-state-sample">
-              <div className="modal-fields" style={{ width: "100%" }}>
+              <div className="modal-fields" style={{ width: "min(402px, 100%)" }}>
                 <div className="modal-field"><label>Title</label><input placeholder="e.g. Anna Karenina" readOnly /></div>
                 <div className="modal-field"><label>Author</label><input placeholder="e.g. Leo Tolstoy" readOnly /></div>
                 <div className="modal-field"><label>Year</label><input placeholder="e.g. 1877" readOnly /></div>
