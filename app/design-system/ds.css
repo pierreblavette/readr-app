@@ -1700,7 +1700,8 @@ img.ds-cover { object-fit: cover; }
   .ds-redline-target:has(> .now-reading-card),
   .ds-redline-target:has(> .ds-nr-box),
   .ds-redline-target:has(> .import-dropzone),
-  .ds-redline-target:has(> .import-preview-item) { width: 100%; max-width: 100%; --spec-w: 100%; }
+  .ds-redline-target:has(> .import-preview-item),
+  .ds-redline-target:has(> .empty) { width: 100%; max-width: 100%; --spec-w: 100%; }
   /* Anatomy des cards en mobile : le specimen (largeur fixe 220–400) déborde la scène
      et se fait clipper. On bascule --spec-w à 100% → il remplit la scène ; les gouttières
      de 60 (padding scène) logent les pastilles/cotes latérales. */

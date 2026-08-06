@@ -14,7 +14,7 @@ const EMPTY_ANNOS = [
 // Full-page empty (Library) — icône + texte + CTA, réutilisé en Preview / Anatomy / Spacing.
 function FullEmpty({ padding }) {
   return (
-    <div className="empty" style={padding ? { padding } : undefined}>
+    <div className="empty" style={{ width: "var(--spec-w, 402px)", ...(padding ? { padding } : null) }}>
       <LibraryIcon />
       <div className="empty-text">
         <p className="empty-title">Your library is empty</p>
@@ -29,6 +29,7 @@ function FullEmpty({ padding }) {
 export default function EmptyStatePage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="empty"
       title="Empty State"
       sub="Ce que voit l'utilisateur quand une liste est vide ou qu'une recherche ne donne rien : de quoi comprendre la situation et rebondir."
@@ -131,6 +132,27 @@ export default function EmptyStatePage() {
         </div>
         <div className="ds-card-body col">
           <p className="ds-note">La même primitive <span className="ds-class">.empty</span>, en réduction dans une carte. <strong>Horizontal</strong> (<span className="ds-class">.overview-card-empty</span> par défaut) : icône <strong>60</strong> à gauche + texte, aligné à gauche, passif — Top Genres / Authors / Most Loved / Quotes. <strong>Vertical</strong> (contexte <span className="ds-class">.overview-goal</span> / <span className="ds-class">.overview-streak</span> / <span className="ds-class">.overview-activity</span>) : icône <strong>72</strong> centrée ; Goal et Streak ajoutent un CTA (<span className="ds-class">.btn-secondary</span>) via un wrapper <span className="ds-class">.overview-card-empty-body</span>. En mobile, les 4 horizontales basculent en vertical centré.</p>
+        </div>
+      </div>
+
+      {/* 5b — SPACING · mini (overview-card) */}
+      <div className="ds-card">
+        <div className="ds-card-head">Spacing · mini (overview-card)</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline>
+                <div className="empty overview-card-empty" style={{ width: "var(--spec-w, 402px)" }}>
+                  <OverviewGenresIcon />
+                  <div className="empty-text">
+                    <p className="empty-title">No genres yet</p>
+                    <p className="empty-sub">Add books with a genre to see your top ones.</p>
+                  </div>
+                </div>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note"><strong>Horizontale</strong> <span className="ds-class">.overview-card-empty</span> : padding <strong>12 / 0</strong> (vertical seulement, la carte porte le latéral), gap <strong>16</strong> icône → texte, icône <strong>60</strong>. Le gap <strong>4</strong> titre → sous-texte est celui de <span className="ds-class">.empty-text</span>, déjà coté en Spacing. <strong>Verticale</strong> (Goal / Streak / Activity) : icône <strong>72</strong> centrée, wrapper <span className="ds-class">.overview-card-empty-body</span> (icône + texte) à gap <strong>16</strong>, puis gap <strong>20</strong> body → CTA. Cotes mesurées à l&apos;exécution.</p>
         </div>
       </div>
 
