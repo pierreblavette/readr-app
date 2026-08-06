@@ -370,7 +370,7 @@ img.ds-cover { object-fit: cover; }
   }
   /* Board à cellule unique : ne pas scinder en 2 colonnes (la cellule irait en col 1,
      décentrée) → 1 colonne pleine largeur, specimen recentré. */
-  .ds-states-grid--boxed.ds-states-grid--cols-2:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2:has(> .ds-state-sample:only-child) { grid-template-columns: minmax(0, 1fr); }
   .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 /* --hold : board qui GARDE le 2-col au-delà de 1280 (specimens larges qui se
@@ -382,19 +382,19 @@ img.ds-cover { object-fit: cover; }
     grid-auto-flow: row;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold:has(> .ds-state-sample:only-child) { grid-template-columns: minmax(0, 1fr); }
   .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 /* Sous 1400px, un board --hold (specimens larges : book-row, menus, dropzones)
    devient trop serré en 2 colonnes → 1 colonne pleine largeur. Spécificité (0,3,0) >
    le --cols-2 du repli ≤1280 (0,2,0) → gagne sans !important. */
 @media (max-width: 1400px) {
-  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold { grid-auto-flow: row; grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--cols-2.ds-states-grid--hold { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 760px) {
   /* Repli mobile : tout board boxé passe en 2 colonnes. */
   .ds-states-grid--boxed { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ds-states-grid--boxed:has(> .ds-state-sample:only-child) { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed:has(> .ds-state-sample:only-child) { grid-template-columns: minmax(0, 1fr); }
   .ds-states-grid--boxed > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 /* --cols-1 : un état par rangée pleine largeur (specimens à hauteurs très inégales,
@@ -409,11 +409,11 @@ img.ds-cover { object-fit: cover; }
    de 920). Spécificité (0,2,0) = celle de la base ci-dessus mais règle postérieure +
    dans un @media → l'emporte. Neutralise aussi le span ≤760 (1 seule colonne = inoffensif). */
 @media (max-width: 960px) {
-  .ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
 }
 /* --stack-1400 : specimens larges côte à côte >1400, empilés en 1 colonne ≤1400. */
 @media (max-width: 1400px) {
-  .ds-states-grid--boxed.ds-states-grid--stack-1400 { grid-auto-flow: row; grid-template-columns: 1fr; }
+  .ds-states-grid--boxed.ds-states-grid--stack-1400 { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
 }
 /* Force le halo :focus-visible pour l'échantillon statique — le vrai état ne
    s'obtient qu'au clavier et ne se figerait pas dans une grille. Valeurs miroir
@@ -1469,7 +1469,7 @@ img.ds-cover { object-fit: cover; }
   .ds-states-grid--boxed.ds-states-grid--cols-2,
   .ds-states-grid--boxed.ds-states-grid--cols-3,
   .ds-states-grid--boxed.ds-states-grid--cols-5,
-  .ds-states-grid--boxed { grid-template-columns: 1fr; }
+  .ds-states-grid--boxed { grid-template-columns: minmax(0, 1fr); }
   /* Contrat opt-in « specimen fill » : un specimen à largeur fixe/plafonnée
      (ex. Book Row Preview 300 / States·Variants max 260) lit sa largeur via
      var(--spec-w) / son plafond via var(--spec-max). Le conteneur bascule ces
