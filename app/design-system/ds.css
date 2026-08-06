@@ -1659,20 +1659,6 @@ img.ds-cover { object-fit: cover; }
    Preview et Anatomy partagent le même traitement. */
 .ds-preview.ds-preview--full { padding-left: 0; padding-right: 0; }
 .ds-anno-board--full .ds-anno-scene { padding-left: 0; padding-right: 0; }
-/* Scènes « footer » : padding latéral 48 = celui de .ds-redline, pour que la base
-   de calcul du 80% soit identique dans Preview / Anatomy / Spacing → specimens de
-   largeur strictement égale à toute largeur de colonne (pas de fixe vs %). */
-.ds-preview.ds-scene--footer { padding-left: 48px; padding-right: 48px; }
-.ds-anno-board--footer .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
-/* Mobile : les scènes footer réduisent leurs gouttières latérales 48 → 20 (comme toute
-   Preview sous 600) sur les TROIS sections — Preview, Anatomy et le Redline/Spacing
-   (.ds-redline-row--fill, spécifique au footer) — pour garder l'ÉGALITÉ de largeur du
-   specimen footer. Placé après les règles 48 ci-dessus → l'emporte à spécificité égale. */
-@media (max-width: 600px) {
-  .ds-preview.ds-scene--footer { padding-left: 20px; padding-right: 20px; }
-  .ds-anno-board--footer .ds-anno-scene { padding-left: 20px; padding-right: 20px; }
-  .ds-redline-row--fill .ds-redline { padding-left: 20px; padding-right: 20px; }
-}
 /* Sidebar en doc : la vraie est position:sticky, height 100dvh, z-index 300. On
    neutralise pour l'afficher en flux (hauteur = son contenu), apparence intacte. */
 .ds-sidebar-static.sidebar { position: relative; top: auto; height: auto; max-height: none; z-index: auto; }
@@ -1803,15 +1789,6 @@ img.ds-cover { object-fit: cover; }
    le composant est large (table pleine largeur), on l'aligne sur ce standard. */
 .ds-preview.ds-scene--list { padding-left: 48px; padding-right: 48px; }
 .ds-anno-board--list .ds-anno-scene { padding-left: 48px; padding-right: 48px; }
-/* Filters Row · Anatomy : exceptionnellement 40 de padding LATÉRAL en mobile (au lieu
-   de 60) pour que le fold — Date added (.sort-menu-btn) + le trigger Filter — tienne
-   sur UNE seule ligne au lieu de wrapper. Vertical gardé à 60. Scopé, ≤600 uniquement. */
-@media (max-width: 600px) {
-  /* Spécificité (0,4,0) — les deux classes du board chaînées + .ds-scene-frame pour
-     ÉGALER la règle non-stack du contrat (le :not(--stack) compte 1 classe) et gagner
-     par l'ordre source (cette règle est postérieure). Sinon → 60 latéral au lieu de 40. */
-  .ds-scene-frame .ds-anno-board.ds-anno-board--filters-row .ds-anno-scene { padding: 60px 40px; }
-}
 /* Onboarding · Anatomy en mobile : le modal (card blanc) comprime le contenu sur écran
    étroit. On retire son fond + ombre et le padding 32/24 du body → illustration et texte
    s'étendent sur toute la largeur de la scène. Le footer (nav Skip/Next) est masqué —

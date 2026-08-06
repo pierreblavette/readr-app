@@ -6,12 +6,9 @@ const LinkedInIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.554v-5.57c0-1.328-.024-3.037-1.85-3.037-1.852 0-2.136 1.445-2.136 2.94v5.667H9.356V9h3.414v1.561h.047c.476-.9 1.637-1.85 3.368-1.85 3.601 0 4.267 2.37 4.267 5.455v6.284zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
 );
 
-// Largeur commune des specimens = 100 % de la scène, comme le redline Spacing
-// (.ds-redline-row--fill → target 100%). Remplit la scène (marges 48px du padding
-// conservées, pas edge-to-edge). Les scènes Preview/Anatomy portent le même padding
-// latéral 48 que .ds-redline (classes ds-scene--footer / ds-anno-board--footer) →
-// base identique → largeurs égales. À 80 % le specimen devenait trop étroit dans la
-// bande viewport ~960-1020 (sections produit + app forcées d'empiler → 3 lignes).
+// Composant pleine largeur → specimen à 100 % de la scène. Les scènes suivent le
+// contrat standard scene-frame (preview/anatomy 60/60→20, redline 60/48) : pas de
+// gabarit latéral custom. L'Anatomy est en mode stack (badges haut/bas).
 const SPECIMEN_W = "100%";
 
 function FooterSpec({ width = "100%" }) {
@@ -59,6 +56,7 @@ const ANNOS = [
 export default function FooterPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="footer"
       title="Footer"
       sub="Le pied de page : liens vers le produit, note sur les données, liens externes. Il s'empile sur les petits écrans."
@@ -69,7 +67,7 @@ export default function FooterPage() {
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-          <div className="ds-preview ds-scene--footer">
+          <div className="ds-preview">
             <FooterSpec width={SPECIMEN_W} />
           </div>
           </div>
@@ -81,8 +79,8 @@ export default function FooterPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board ds-anno-board--footer">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <div className="ds-anno-organism" style={{ width: SPECIMEN_W }}><FooterSpec /></div>
           </AnnoScene>
           </div>

@@ -51,8 +51,8 @@ export default function FiltersRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board ds-anno-board--filters-row">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <FiltersRowFit className="ds-anno-organism ds-filters-row--center" />
           </AnnoScene>
           </div>
