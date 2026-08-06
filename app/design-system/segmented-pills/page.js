@@ -49,6 +49,7 @@ export default function SegmentedPillsPage() {
   const [active, setActive] = useState("All");
   return (
     <DSSection
+      className="ds-scene-frame"
       id="segmented-pills"
       title="Segmented Pills"
       sub="Un sélecteur segmenté : plusieurs valeurs sur une même piste, une seule active. Pour basculer une vue ou une plage."
@@ -70,8 +71,8 @@ export default function SegmentedPillsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={ANNOS} stack>
             <div className="overview-activity-pills is-md ds-anno-organism" role="tablist">
               <button type="button" className="overview-activity-pill is-md is-active">All</button>
               <button type="button" className="overview-activity-pill is-md">Books</button>
