@@ -1,6 +1,7 @@
 import DSSection from "../_components/DSSection";
 import AnnoScene from "../_components/AnnoScene";
 import Redline from "../_components/Redline";
+import IllustrationBoard from "../_components/IllustrationBoard";
 import { OnboardingModalSpec, OB_SLIDES } from "./_specs";
 
 // Largeur unique des specimens de modale (iso les pages Modals) : 620, fluide en
@@ -39,17 +40,10 @@ export default function OnboardingPage() {
       <div className="ds-card">
         <div className="ds-card-head">Icon set · 6 illustrations (120×120, viewBox 60)</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3 ds-illus-fit">
-            {OB_SLIDES.map((s, i) => {
-              const Icon = s.icon;
-              return (
-                <div key={s.key} className="ds-state-sample">
-                  <div className="ob-icon"><Icon /></div>
-                  <span className="panel-section-eyebrow">{s.key} · slide {i + 1}</span>
-                </div>
-              );
-            })}
-          </div>
+          <IllustrationBoard items={OB_SLIDES.map((s, i) => {
+            const Icon = s.icon;
+            return [<div className="ob-icon" key={s.key}><Icon /></div>, `${s.key} · slide ${i + 1}`];
+          })} />
         </div>
         <div className="ds-card-body col">
           <p className="ds-note">Six SVG illustratifs, pilotés par les tokens <span className="ds-token-chip">--illus-*</span> (bg, mid, accent, stroke) → se recolorent en light / dark sans dupliquer le markup. Réutilisés tels quels ici depuis le composant réel.</p>
