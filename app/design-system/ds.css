@@ -396,7 +396,7 @@ img.ds-cover { object-fit: cover; }
   .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold):not(.ds-states-grid--cols-3):not(.ds-states-grid--cols-5):has(> .ds-state-sample:only-child) { grid-template-columns: minmax(0, 1fr); }
   /* orpheline → pleine largeur, UNIQUEMENT en 2 colonnes */
   .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:last-child:nth-child(odd),
-  .ds-states-grid--boxed:not([class*="--cols-"]):not(.ds-states-grid--hold) > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .ds-states-grid--boxed:not([class*="--cols-"]):not(.ds-states-grid--hold):not(.ds-illus-auto) > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 /* GRILLE D'ÉTATS — repli final 1 colonne ≤600 (galeries exclues → elles restent 2-col). */
 @media (max-width: 600px) {
