@@ -160,7 +160,7 @@ export default function CheckboxPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             <div className="ds-state-sample"><ToggleRow checked={false} label="Unselected" /><span className="ds-class">.modal-toggle-row</span></div>
             <div className="ds-state-sample"><ToggleRow checked label="Selected" /><span className="ds-class">:checked</span></div>
             <div className="ds-state-sample"><ToggleRow checked={false} focusDemo label="Focus" /><span className="ds-class">:focus-visible</span></div>
@@ -192,7 +192,7 @@ export default function CheckboxPage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · row selection</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
             {[["Default", ""], ["Hover", "is-hover"], ["Selected", "is-selected"]].map(([label, mod]) => (
               <div key={label} className="ds-state-sample">
                 <span className={`row-checkbox${mod ? " " + mod : ""}`}><CheckIcon /></span>
