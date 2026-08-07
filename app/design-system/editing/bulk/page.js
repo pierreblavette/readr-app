@@ -83,18 +83,20 @@ export default function BulkPage() {
       {/* ─────────── 4. STATES — la barre selon la sélection / l'onglet ─────────── */}
       <div className="ds-card">
         <div className="ds-card-head">States · bar</div>
-        <div className="ds-card-body col" style={{ gap: 32 }}>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Aucune sélection</div>
-            <div className="ds-preview-board"><div className="ds-preview"><SelectionBarSpec count={0} total={3} responsive /></div></div>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Lot complet · Deselect all</div>
-            <div className="ds-preview-board"><div className="ds-preview"><SelectionBarSpec count={3} total={3} responsive /></div></div>
-          </div>
-          <div className="ds-token-block">
-            <div className="ds-token-name">Onglet Wishlist · action « Mark as owned »</div>
-            <div className="ds-preview-board"><div className="ds-preview"><SelectionBarSpec count={2} total={3} tab="wishlist" responsive /></div></div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+            <div className="ds-state-sample">
+              <SelectionBarSpec count={0} total={3} responsive />
+              <span className="panel-section-eyebrow">Aucune sélection</span>
+            </div>
+            <div className="ds-state-sample">
+              <SelectionBarSpec count={3} total={3} responsive />
+              <span className="panel-section-eyebrow">Lot complet · Deselect all</span>
+            </div>
+            <div className="ds-state-sample">
+              <SelectionBarSpec count={2} total={3} tab="wishlist" responsive />
+              <span className="panel-section-eyebrow">Onglet Wishlist · action « Mark as owned »</span>
+            </div>
           </div>
         </div>
         <div className="ds-card-body col">
