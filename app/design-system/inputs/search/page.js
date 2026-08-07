@@ -20,13 +20,8 @@ export default function SearchFieldPage() {
         <div className="ds-card-body col">
           <div className="ds-preview-board">
           <div className="ds-preview ds-preview--roomy">
-            <div style={{ width: 360 }}>
-              {/* Wrapper neutre (pas .modal-field) : sa règle « .modal-field input »
-                  écraserait le padding 0 38 du .search-input et masquerait la loupe. */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
-                <label className="modal-field-label">Search</label>
-                <SearchBox focus style={{ width: "100%" }} />
-              </div>
+            <div style={{ width: "min(360px, 100%)" }}>
+              <SearchBox focus style={{ width: "100%" }} />
             </div>
           </div>
           </div>
