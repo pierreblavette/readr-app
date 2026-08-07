@@ -789,7 +789,18 @@ img.ds-cover { object-fit: cover; }
 .palette-grid.on-white { background: #FFFFFF; border-radius: var(--radius); }
 .palette-grid.on-dark-bg { background: #0F0F0F; padding: 16px; border-radius: var(--radius); }
 
+/* Fluide sans dividers (chaque swatch = carte séparée) : auto-fill fait 1→N colonnes
+   selon la largeur et remplit toujours (1fr). Le cap à 5 est posé par la media plus
+   bas — l'astuce CSS pure minmax(max(…, 100%/5)) s'est révélée peu fiable ici : le %
+   se résout contre une boîte plus large que la grille en contexte flex → pistes
+   sous-remplies + 6e piste fantôme. */
 .ds-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; width: 100%; }
+/* Cap à 5 colonnes : au-delà de 1280px de viewport, la grille dépasse ~880px et une 6e
+   colonne apparaîtrait → on fige 5 colonnes égales (elles remplissent et se cappent).
+   En dessous, auto-fill réduit fluidement 5→1. --fill (grilles à 3 tuiles fixes) exclue. */
+@media (min-width: 1280px) {
+  .ds-swatch-grid:not(.ds-swatch-grid--fill) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
 /* Peu de tuiles (ex. 3 ombres) : colonnes égales qui remplissent toute la largeur
    du container (auto-fit laisserait une piste 0px + son gap en fin de rangée).
    Mobile : la règle 2-colonnes de .ds-swatch-grid reprend (ordre source). */
