@@ -179,8 +179,8 @@ export default function CheckboxPage() {
           <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample"><ToggleRow indeterminate label="Indeterminate" /><span className="ds-class">:indeterminate</span></div>
             <div className="ds-state-sample"><ToggleRow checked readOnly label="Read-only" /><span className="ds-class">.is-readonly</span></div>
-            <div className="ds-state-sample"><ToggleRow checked status="error" label="Error" message="This selection is required" /><span className="ds-class">.has-error</span></div>
-            <div className="ds-state-sample"><ToggleRow checked status="warning" label="Warning" message="Double-check this choice" /><span className="ds-class">.is-warning</span></div>
+            <div className="ds-state-sample"><ToggleRow checked status="error" label="Error" message="Label error" /><span className="ds-class">.has-error</span></div>
+            <div className="ds-state-sample"><ToggleRow checked status="warning" label="Warning" message="Label warning" /><span className="ds-class">.is-warning</span></div>
           </div>
         </div>
         <div className="ds-card-body col">
