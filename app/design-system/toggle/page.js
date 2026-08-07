@@ -48,6 +48,7 @@ export default function TogglePage() {
   const [view, setView] = useState("grid");
   return (
     <DSSection
+      className="ds-scene-frame"
       id="toggle"
       title="Toggle"
       sub="Les deux interrupteurs de l'app : le thème clair/sombre et la vue grille/liste. Une seule valeur active à la fois."
@@ -70,8 +71,8 @@ export default function TogglePage() {
       <div className="ds-card">
         <div className="ds-card-head">Theme toggle · anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={THEME_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={THEME_ANNOS} stack>
             <button type="button" className="theme-btn ds-anno-organism" aria-label="Theme">
               <span className="toggle-thumb"><SunIcon /></span>
             </button>
@@ -123,8 +124,8 @@ export default function TogglePage() {
       <div className="ds-card">
         <div className="ds-card-head">View toggle · anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-          <AnnoScene annos={VIEW_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={VIEW_ANNOS} stack>
             <div className="view-btns ds-anno-organism" role="tablist">
               <button type="button" className="view-btn active" aria-label="Grid view"><GridIcon /></button>
               <button type="button" className="view-btn" aria-label="List view"><ListIcon /></button>
