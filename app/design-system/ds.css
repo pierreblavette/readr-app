@@ -379,6 +379,15 @@ img.ds-cover { object-fit: cover; }
    :not ci-dessous. */
 .ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ds-states-grid--boxed.ds-states-grid--cols-5 { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+/* Galerie STATIQUE (sans IllustrationBoard/ResizeObserver) : opt-in .ds-illus-fit →
+   repli 1 colonne ≤600, comme tout board en mobile (et comme les galeries
+   IllustrationBoard, qui tombent aussi à 1 col via leur couplage cols=2→--hold).
+   Sans ce repli, le --cols-3 statique reste à 3 col et 3 illustrations de 120px se
+   chevauchent dans un board ~310 (cas Onboarding · Icon set). N'affecte PAS les
+   galeries IllustrationBoard (pas cette classe ; leur RO pilote déjà les colonnes). */
+@media (max-width: 600px) {
+  .ds-states-grid--boxed.ds-illus-fit { grid-template-columns: minmax(0, 1fr); }
+}
 
 /* GRILLE D'ÉTATS — petit specimen : repli 2 colonnes ≤1280 (galeries --cols-3/5 exclues). */
 @media (max-width: 1280px) {

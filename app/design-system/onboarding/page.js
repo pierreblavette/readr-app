@@ -39,7 +39,7 @@ export default function OnboardingPage() {
       <div className="ds-card">
         <div className="ds-card-head">Icon set · 6 illustrations (120×120, viewBox 60)</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3 ds-illus-fit">
             {OB_SLIDES.map((s, i) => {
               const Icon = s.icon;
               return (
