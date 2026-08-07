@@ -4,6 +4,7 @@ import { SelectionBarSpec } from "./_specs";
 export default function EditingFoundationPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="editing"
       title="Editing"
       sub="Modifier le contenu de la bibliothèque, à deux échelles : un élément via son menu, ou tout un lot via le mode sélection. Documentés en pages dédiées."

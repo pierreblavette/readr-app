@@ -77,6 +77,7 @@ const ANNOS = [
 export default function BookCardKebabPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="kebab"
       title="Kebab"
       sub="Le menu à trois points sur chaque carte : un clic ouvre les actions possibles pour cet élément. Le pendant pour plusieurs éléments est la sélection."

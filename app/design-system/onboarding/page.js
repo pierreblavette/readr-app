@@ -17,6 +17,7 @@ const OB_ANNOS = [
 export default function OnboardingPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="onboarding"
       title="Onboarding"
       sub="La fenêtre d'accueil de la première visite : six écrans qui présentent l'app, ré-ouvrables depuis le pied de page."
@@ -59,8 +60,8 @@ export default function OnboardingPage() {
       <div className="ds-card">
         <div className="ds-card-head">Anatomy</div>
         <div className="ds-card-body col">
-          <div className="ds-anno-board">
-            <AnnoScene annos={OB_ANNOS}>
+          <div className="ds-anno-board ds-anno-board--stack">
+            <AnnoScene annos={OB_ANNOS} stack>
               <OnboardingModalSpec slide={0} className="ds-anno-organism" style={MODAL_STYLE} />
             </AnnoScene>
           </div>

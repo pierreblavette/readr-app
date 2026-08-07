@@ -23,6 +23,7 @@ const LAYERS = [
 export default function OverlaysPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="overlays"
       title="Overlays"
       sub="Tout ce qui se pose au-dessus du contenu : menu, panneau, dialogue, toast. Chacun a sa page ; ici on documente ce qui les gouverne — l'ordre des couches et les comportements partagés."

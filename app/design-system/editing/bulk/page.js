@@ -22,6 +22,7 @@ const VERTICAL_ANNOS = [
 export default function BulkPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="bulk"
       title="Bulk"
       sub="Modifier plusieurs éléments d'un coup : on entre en mode sélection, on coche, puis on applique une action à tous via la barre flottante. Le pendant pour un seul élément est le menu contextuel."
@@ -31,7 +32,7 @@ export default function BulkPage() {
         <div className="ds-card-head">Preview</div>
         <div className="ds-card-body col">
           <div className="ds-preview-board">
-            <div className="ds-preview ds-scene--list" style={{ flexDirection: "column", gap: 32, alignItems: "center" }}>
+            <div className="ds-preview" style={{ flexDirection: "column", gap: 32, alignItems: "center" }}>
               <ListViewSpec editMode selected={[0, 2]} className="ds-list-mobile" />
               <SelectionBarSpec count={2} total={3} responsive />
             </div>
