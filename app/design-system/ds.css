@@ -2169,8 +2169,3 @@ img.ds-cover { object-fit: cover; }
 .ds-icon-name { font-size: 12px; font-weight: 500; color: var(--text-2); text-align: center; }
 .ds-icon-size { display: flex; align-items: center; justify-content: center; color: var(--text); }
 .ds-icon-size .ds-icon { width: 100%; height: 100%; }
-
-.ds-illus-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: 100%; }
-@media (max-width: 600px) { .ds-illus-grid { grid-template-columns: repeat(2, 1fr); } }
-.ds-illus-swatch { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.ds-illus-chip { height: 56px; border-radius: 8px; border: 1px solid var(--border-subtle); }

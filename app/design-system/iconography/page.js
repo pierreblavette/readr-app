@@ -1,5 +1,6 @@
 import DSSection from "../_components/DSSection";
 import IllustrationBoard from "../_components/IllustrationBoard";
+import LiveSwatch from "../_components/LiveSwatch";
 import {
   LibraryIcon, WishlistIcon, OverviewGenresIcon, OverviewAuthorsIcon,
   OverviewLovedIcon, OverviewQuotesIcon, OverviewStreakIcon, OverviewGoalIcon, OverviewIcon,
@@ -81,8 +82,8 @@ const ONBOARDING = [
 ];
 
 const ILLUS = [
-  "--illus-bg-1", "--illus-bg-2", "--illus-bg-3", "--illus-mid",
-  "--illus-accent-1", "--illus-accent-2", "--illus-accent-3", "--illus-stroke",
+  ["--illus-bg-1", "Background 1"], ["--illus-bg-2", "Background 2"], ["--illus-bg-3", "Background 3"], ["--illus-mid", "Mid tone"],
+  ["--illus-accent-1", "Accent 1"], ["--illus-accent-2", "Accent 2"], ["--illus-accent-3", "Accent 3"], ["--illus-stroke", "Stroke"],
 ];
 
 export default function IconographyPage() {
@@ -177,12 +178,9 @@ export default function IconographyPage() {
       <div className="ds-card">
         <div className="ds-card-head">Pictos · palette</div>
         <div className="ds-card-body col">
-          <div className="ds-illus-grid">
-            {ILLUS.map((t) => (
-              <div key={t} className="ds-illus-swatch">
-                <div className="ds-illus-chip" style={{ background: `var(${t})` }} />
-                <span className="ds-token-chip">{t}</span>
-              </div>
+          <div className="ds-swatch-grid">
+            {ILLUS.map(([t, title]) => (
+              <LiveSwatch key={t} bg={`var(${t})`} title={title} token={t} />
             ))}
           </div>
         </div>
