@@ -20,7 +20,7 @@ export default function CellRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Sizes</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             {SIZES.map(([mod, h]) => (
               <div key={mod} className="ds-state-sample">
                 <div className={`cell-row cell-row--${mod} cell-row--between`} style={{ width: "min(402px, 100%)", paddingInline: 12, background: "var(--primary-3)", borderRadius: 6 }}>
@@ -66,7 +66,7 @@ export default function CellRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">In use</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
                 <div className="cell-row cell-row--lg cell-row--between search-row" style={{ width: "min(402px, 100%)" }}>

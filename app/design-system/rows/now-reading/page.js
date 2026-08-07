@@ -119,7 +119,7 @@ export default function NowReadingRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <NowReadingUnit />
               <span className="ds-class">default</span>

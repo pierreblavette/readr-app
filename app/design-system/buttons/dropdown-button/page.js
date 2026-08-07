@@ -93,7 +93,7 @@ export default function DropdownButtonPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {STATES.map(([label, mod, cap]) => (
               <div key={label} className="ds-state-sample">
                 <DropdownBtn mod={mod} disabled={label === "Disabled"} />

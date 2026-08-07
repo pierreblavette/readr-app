@@ -83,7 +83,7 @@ export default function FinishReadingModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Rating · states</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <FinishStars value={0} />
               <span className="ds-class">value 0</span>

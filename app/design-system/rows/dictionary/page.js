@@ -161,17 +161,23 @@ export default function DictionaryRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">Behavior · expand</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <DictCard word="Collapsed" />
               <span className="ds-class">default</span>
             </div>
             <div className="ds-state-sample">
+              <DictCard word="Collapsed" className="is-hover" />
+              <span className="ds-class">:hover</span>
+            </div>
+          </div>
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+            <div className="ds-state-sample">
               <DictCard word="Expanded" open />
               <span className="ds-class">.expanded</span>
             </div>
           </div>
-          <p className="ds-note">Clic (ou Enter / Espace) → le chevron pivote à 90° et le corps se déplie sous la head. Le head garde le fond <span className="ds-token-chip">--bg3</span>, le corps passe en <span className="ds-token-chip">--card</span> avec un <strong>border-top</strong> qui le sépare. Une fois dépliée, le hover de fond de la head est retiré.</p>
+          <p className="ds-note">Repos et hover de la head comparés côte à côte : au hover, fond <span className="ds-token-chip">--primary-10</span> (sans lift). En dessous, <span className="ds-class">.expanded</span> en pleine largeur : clic (ou Enter / Espace) → le chevron pivote à 90° et le corps se déplie sous la head, en <span className="ds-token-chip">--card</span> avec un <strong>border-top</strong> qui le sépare ; le hover de la head est alors retiré.</p>
         </div>
       </div>
 

@@ -365,24 +365,33 @@ img.ds-cover { object-fit: cover; }
    minmax(0,…) partout : un specimen large rétrécit dans sa cellule au lieu de couper
    le board au bord. ── */
 
-/* ③ --cols-1 */
+/* --cols-1 : 1 colonne partout */
 .ds-states-grid--boxed.ds-states-grid--cols-1 { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
 
-/* ① petit specimen — repli en colonnes ≤1280 (défaut 2, ou --cols-N). */
+/* GALERIE d'assets — --cols-3 / --cols-5 (icônes, illustrations). Le nombre de
+   colonnes est piloté par IllustrationBoard (ResizeObserver sur la largeur RÉELLE de
+   la grille : <480→2 (+--hold), 480-800→3, ≥800→5) — plus fiable que le viewport à
+   cause de la sidebar /ds, et il calcule les cases de complément pour ce N. ds.css
+   rend donc simplement N colonnes en row-flow à TOUTE largeur ; PAS de @media de repli
+   (il entrerait en conflit avec le RO et fausserait les fillers). Bug corrigé : ces
+   classes n'étaient définies qu'en @media ≤1280 → au-delà elles héritaient du
+   grid-auto-flow: column (l.288) = 1 rangée entassée. Grilles d'états exclues via
+   :not ci-dessous. */
+.ds-states-grid--boxed.ds-states-grid--cols-3 { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ds-states-grid--boxed.ds-states-grid--cols-5 { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+/* GRILLE D'ÉTATS — petit specimen : repli 2 colonnes ≤1280 (galeries --cols-3/5 exclues). */
 @media (max-width: 1280px) {
-  .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold) { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ds-states-grid--boxed.ds-states-grid--cols-3:not(.ds-states-grid--hold) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ds-states-grid--boxed.ds-states-grid--cols-5:not(.ds-states-grid--hold) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold):not(.ds-states-grid--cols-3):not(.ds-states-grid--cols-5) { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* cellule unique → 1 colonne (pas de scission décentrée) */
-  .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold):has(> .ds-state-sample:only-child) { grid-template-columns: minmax(0, 1fr); }
-  /* orpheline → pleine largeur, UNIQUEMENT en 2 colonnes (jamais en 3/5-col) */
+  .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold):not(.ds-states-grid--cols-3):not(.ds-states-grid--cols-5):has(> .ds-state-sample:only-child) { grid-template-columns: minmax(0, 1fr); }
+  /* orpheline → pleine largeur, UNIQUEMENT en 2 colonnes */
   .ds-states-grid--boxed.ds-states-grid--cols-2 > .ds-state-sample:last-child:nth-child(odd),
   .ds-states-grid--boxed:not([class*="--cols-"]):not(.ds-states-grid--hold) > .ds-state-sample:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
-/* ① repli final 1 colonne ≤600 (spécificité 0,3,0 alignée sur le bloc ≤1280, règle
-   postérieure → l'emporte). --hold est déjà en 1 col via ≤1400. */
+/* GRILLE D'ÉTATS — repli final 1 colonne ≤600 (galeries exclues → elles restent 2-col). */
 @media (max-width: 600px) {
-  .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold) { grid-template-columns: minmax(0, 1fr); }
+  .ds-states-grid--boxed:not(.ds-states-grid--cols-1):not(.ds-states-grid--hold):not(.ds-states-grid--cols-3):not(.ds-states-grid--cols-5) { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ② --hold — grand specimen : 2 colonnes desktop, repli 1 colonne ≤1400. */
@@ -1450,8 +1459,6 @@ img.ds-cover { object-fit: cover; }
      sélecteurs (0,2,0) couvrent les --cols-N et gagnent à égalité par l'ORDRE
      source (bloc placé en dernier) — plus aucun !important. */
   .ds-states-grid--boxed.ds-states-grid--cols-2,
-  .ds-states-grid--boxed.ds-states-grid--cols-3,
-  .ds-states-grid--boxed.ds-states-grid--cols-5,
   .ds-states-grid--boxed { grid-template-columns: minmax(0, 1fr); }
   /* Contrat opt-in « specimen fill » : un specimen à largeur fixe/plafonnée
      (ex. Book Row Preview 300 / States·Variants max 260) lit sa largeur via

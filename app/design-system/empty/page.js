@@ -96,10 +96,10 @@ export default function EmptyStatePage() {
       <div className="ds-card">
         <div className="ds-card-head">Variants · mini (dans une overview-card)</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             {/* Horizontal passif */}
             <div className="ds-state-sample">
-              <div className="overview-card" style={{ width: "100%", maxWidth: 620 }}>
+              <div className="overview-card" style={{ width: "min(402px, 100%)" }}>
                 <div className="overview-card-head"><span className="panel-section-eyebrow">Top genres</span></div>
                 <div className="empty overview-card-empty">
                   <OverviewGenresIcon />
@@ -113,7 +113,7 @@ export default function EmptyStatePage() {
             </div>
             {/* Vertical + CTA */}
             <div className="ds-state-sample">
-              <div className="overview-card overview-goal" style={{ width: "100%", maxWidth: 620 }}>
+              <div className="overview-card overview-goal" style={{ width: "min(402px, 100%)" }}>
                 <div className="overview-card-head"><span className="panel-section-eyebrow">Reading goal</span></div>
                 <div className="empty overview-card-empty">
                   <div className="overview-card-empty-body">

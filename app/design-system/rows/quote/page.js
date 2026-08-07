@@ -137,7 +137,7 @@ export default function QuoteRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <PanelQuoteItem text="The unexamined life is not worth living." page="12" width="min(402px, 100%)" />
               <span className="ds-class">.panel-quote-item</span>

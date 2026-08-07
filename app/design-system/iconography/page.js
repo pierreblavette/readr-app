@@ -139,7 +139,7 @@ export default function IconographyPage() {
       <div className="ds-card">
         <div className="ds-card-head">Icons · sizing</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-3">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             {[16, 18, 24].map((s) => (
               <div key={s} className="ds-state-sample">
                 <div className="ds-icon-size" style={{ width: s, height: s }}>

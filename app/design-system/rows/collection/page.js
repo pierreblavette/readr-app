@@ -95,7 +95,7 @@ export default function CollectionRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">States</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <CollectionRow name="Default" count="8 books" width="min(402px, 100%)" />
               <span className="ds-class">.collection-chip</span>

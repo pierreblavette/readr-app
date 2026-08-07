@@ -133,7 +133,7 @@ export default function NavigationBarPage() {
       <div className="ds-card">
         <div className="ds-card-head">States · hamburger</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <div style={{ width: "min(402px, 100%)", borderRadius: 16, overflow: "hidden", border: "1px solid var(--border)" }}><ToolbarSpec /></div>
               <span className="ds-class">.toolbar-hamburger</span>

@@ -52,7 +52,7 @@ export default function StrokesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Strokes</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold ds-stroke-tokens">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold ds-stroke-tokens">
             {STROKES.map(({ name, css, token, cls, use, style }) => (
               <div key={name} className="ds-state-sample">
                 <div className="ds-stroke-swatch" style={style} />
@@ -73,7 +73,7 @@ export default function StrokesPage() {
       <div className="ds-card">
         <div className="ds-card-head">In use</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold ds-stroke-board">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold ds-stroke-board">
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
                 <button type="button" className="btn btn-outline btn-md"><span>Outline button</span></button>
@@ -123,7 +123,7 @@ export default function StrokesPage() {
       <div className="ds-card">
         <div className="ds-card-head">Dividers</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             {DIVIDERS.map(({ name }) => (
               <div key={name} className="ds-state-sample">
                 <div style={{ width: 240 }}><div className={name} /></div>

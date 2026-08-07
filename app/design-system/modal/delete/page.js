@@ -114,7 +114,7 @@ export default function DeleteModalPage() {
       <div className="ds-card">
         <div className="ds-card-head">Body · un socle, plusieurs confirmations</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2 ds-states-grid--hold">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <div style={{ width: "min(402px, 100%)" }}><ConfirmBodySpec variant="book" /></div>
               <span className="ds-class">book · .confirm-modal-chip</span>

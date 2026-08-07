@@ -156,7 +156,7 @@ export default function QuizRowPage() {
       <div className="ds-card">
         <div className="ds-card-head">States · choice</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-1">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
             <div className="ds-state-sample">
               <Choice letter="A" text="Default" width="min(402px, 100%)" />
               <span className="ds-class">.panel-quiz-choice</span>
