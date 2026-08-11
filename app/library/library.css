@@ -5187,7 +5187,7 @@ button.book-row {
   /* Courbe canonique, mais durée courte assumée (cf. doctrine) : on ouvre ce
      menu pour taper aussitôt dedans, et un slide long élargit la fenêtre où
      iOS Safari perd les touches. */
-  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; box-shadow: none; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 330; pointer-events: none; padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: env(safe-area-inset-bottom); }
+  .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); width: 80vw; max-width: 320px; box-shadow: none; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 330; pointer-events: none; padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: env(safe-area-inset-bottom); }
   .sidebar.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); pointer-events: auto; }
   .sidebar-overlay { display: block; z-index: 329; }
   .toolbar-mobile-only { display: block; }

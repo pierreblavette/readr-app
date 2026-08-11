@@ -30,6 +30,10 @@ import AddBookToCollectionsModal from "@/components/library/AddBookToCollections
 
 export default function LibraryPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  // Le collapse de la sidebar est une affordance desktop : sous le breakpoint du
+  // drawer (même media query que le CSS mobile), le menu doit toujours s'ouvrir
+  // en version étendue, quelle que soit la préférence collapsed persistée.
+  const [isMobileNav, setIsMobileNav] = useState(false);
   const [createColOpen, setCreateColOpen] = useState(false);
   const [editingCollection, setEditingCollection] = useState(null);
   const [addBooksColOpen, setAddBooksColOpen] = useState(false);
@@ -64,6 +68,16 @@ export default function LibraryPage() {
       window.scrollTo(0, parseInt(top || '0') * -1);
     };
   }, [mobileSidebarOpen]);
+
+  // Suit exactement le breakpoint du drawer (cf. .sidebar mobile dans library.css)
+  // pour que JS et CSS s'accordent sur « on est en nav mobile ».
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px), (orientation: landscape) and (max-height: 500px)');
+    const sync = () => setIsMobileNav(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
 
   // Keep <html lang> aligned with the in-app FR/EN toggle (a11y + correct
   // hyphenation / screen-reader pronunciation).
@@ -187,7 +201,7 @@ export default function LibraryPage() {
         }}
         data={data} collections={collections}
         quotes={quotes} words={words}
-        collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebarCollapsed}
+        collapsed={sidebarCollapsed && !isMobileNav} onToggleCollapse={toggleSidebarCollapsed}
         onCreateCollection={() => setCreateColOpen(true)}
         onOpenCollection={col => { setActiveCollection(col.id); }}
         onShowAllCollections={() => setActiveCollection(null)}
