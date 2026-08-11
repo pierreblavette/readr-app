@@ -101,3 +101,12 @@ Monolithe → split multipage → **Components** bouclé → **Patterns** (Editi
 | Pages du DS | `app/design-system/<slug>/page.js` (65 pages) |
 
 Le détail vivant du chantier (état d'avancement fin, pièges par page) est tenu dans la mémoire projet de l'environnement de travail ; **ce document est une photo stable**, le DS live reste la référence visuelle.
+
+## Références Notion complémentaires
+
+Deux pages Notion approfondissent ce document (à jour au moment de leur rédaction) :
+
+- **Design System — Contrat des scènes /ds** : spécification exhaustive du contrat `.ds-scene-frame` (tableau des paddings par scène, exceptions §3 de la largeur specimen, familles de grilles, liste des pages migrées).
+- **Breakpoints & Progressive Filters** : table de référence des breakpoints du projet (≤400 / ≤480 / ≤600 / ≤768 / ≤1080 / ≤1280) et mapping de promotion progressive des filtres de la Library.
+
+Toutes deux sous le hub [📚 Readr](https://www.notion.so/Readr-331637ba44a18194bacad9015aa2e91a) dans Notion.

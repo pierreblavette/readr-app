@@ -1,6 +1,8 @@
 # Readr — vue projet
 
 > Document de synthèse **auto-suffisant** : lisible sans accès au repo. Destiné à un onboarding rapide (humain ou assistant IA). Pour le détail du design system, voir [`DESIGN-SYSTEM.md`](./DESIGN-SYSTEM.md).
+>
+> **Répartition des sources** : ce repo (`docs/`) porte la **vérité technique** (stack, archi, état réel). Le [PRD Notion](https://www.notion.so/Readr-331637ba44a18194bacad9015aa2e91a) porte la **vérité produit vivante** (vision détaillée, roadmap, backlog d'idées, questions ouvertes). En cas de divergence sur un fait technique, ce document fait foi.
 
 ---
 
@@ -13,6 +15,31 @@ Positionnement clé : **local-first, sans compte**. Aucune donnée sur un serveu
 Bilingue **EN / FR** (bascule i18n dans l'app). Installable en **PWA** (offline, écran d'accueil iOS/Android).
 
 Cible mobile de référence : **iPhone 16 Pro** (largeur logique 402 px). Toute la responsivité et le design system se calibrent sur cette largeur.
+
+---
+
+## Le problème adressé
+
+Les solutions existantes (Goodreads, StoryGraph, Babelio) frottent sur plusieurs points :
+
+- interfaces surchargées, pensées réseau social avant gestion personnelle ;
+- pas de capture physique rapide (photo → livre identifié automatiquement) ;
+- données hébergées chez des tiers, sans export ni contrôle réels ;
+- pas de mode offline / local-first.
+
+Readr répond par une approche **minimaliste, local-first, et un design system maison rigoureux**.
+
+## Vision & horizons
+
+> Une bibliothèque personnelle belle, rapide et intelligente — qui fonctionne seule, et qui grandit avec toi.
+
+- **Horizon 1 — maintenant** : outil personnel, single-user, `localStorage`. C'est l'état décrit par ce document.
+- **Horizon 2 — moyen terme** : accès multi-appareils. La piste retenue est une **synchro Google Drive** (l'app lit/écrit un unique JSON dans le Drive de l'utilisateur — voir « Décisions structurantes »), pas un backend propriétaire.
+- **Horizon 3 — long terme, hypothétique** : ouverture multi-utilisateurs / SaaS. Non engagé, et subordonné à l'arbitrage auth ci-dessous.
+
+Cibles : le **lecteur exigeant** (20–50 livres/an, souvent physiques, veut tracker sans réseau social ni pub, sensible au design) et, à l'horizon SaaS, un **utilisateur cherchant une alternative privée à Goodreads**, accessible mobile + desktop.
+
+> Roadmap détaillée et backlog d'idées (Author lookup, Shelf view, Smart collections, Web Share, Quote of the day…) : maintenus **vivants dans le [PRD Notion](https://www.notion.so/Readr-331637ba44a18194bacad9015aa2e91a)**, pas ici — ce document reste une photo stable.
 
 ---
 
@@ -90,7 +117,7 @@ Ne pas confondre les deux dépôts : ce document décrit **l'app**.
 
 ## Décisions structurantes
 
-- **Pas d'auth, pas de backend de données.** Choix assumé (local-first = différenciateur ; le vibe-coding évite la dette d'un stack auth/sync/RGPD). Si le besoin de sync multi-device émerge un jour, la piste privilégiée est une **synchro Google Drive** (l'app lit/écrit un unique JSON dans le Drive de l'utilisateur — Readr ne stocke toujours rien). **Ne pas relancer le sujet auth** sans demande explicite.
+- **Pas d'auth, pas de backend de données.** Choix assumé (local-first = différenciateur ; le vibe-coding évite la dette d'un stack auth/sync/RGPD). Si le besoin de sync multi-device émerge un jour, la piste **canonique** est une **synchro Google Drive** : l'app lit/écrit un unique JSON dans le Drive de l'utilisateur, Readr ne stocke toujours rien (RGPD délégué à Google, promesse « tu possèdes tes données » préservée). L'ancienne option d'un backend propriétaire (**Cloudflare D1 + OAuth**, évoquée dans le PRD comme horizon SaaS) est **dépassée par ce choix** — à ne réévaluer que si un vrai SaaS multi-utilisateurs est priorisé. **Ne pas relancer le sujet auth** sans demande explicite.
 - **Token Worker sanctuarisé serveur.** Tout nouvel endpoint Worker doit passer par une route miroir `app/api/vision/<nom>/route.js` lisant `process.env.WORKER_TOKEN`. Ne jamais ressusciter une variable `NEXT_PUBLIC_*` pour un secret.
 - **iOS PWA ≠ Safari** — le storage d'une PWA installée est isolé de Safari (isolation Apple).
 
