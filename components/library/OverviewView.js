@@ -381,7 +381,13 @@ function StreakCard({ streak, onAddBook, t }) {
         <div className="overview-streak-meter">
           <div className="overview-streak-body">
             {showBestAsPrimary ? (
-              <span className="overview-streak-current">{t.overviewStreakBest(streak.best)}</span>
+              <>
+                <span className="overview-streak-count">
+                  <span className="overview-streak-current">{streak.best}</span>
+                  <span className="overview-streak-unit">{t.overviewStreakUnit(streak.best)}</span>
+                </span>
+                <span className="overview-streak-best">{t.overviewStreakBestLabel}</span>
+              </>
             ) : (
               <>
                 <span className="overview-streak-count">
