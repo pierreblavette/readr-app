@@ -33,6 +33,16 @@ function ViewToggle({ view, setView }) {
   );
 }
 
+function LangToggle({ lang, setLang }) {
+  return (
+    <div className="lang-toggle">
+      <button type="button" onClick={() => setLang("en")} className={`lang-btn${lang === "en" ? " active" : ""}`}>EN</button>
+      <span className="lang-sep">·</span>
+      <button type="button" onClick={() => setLang("fr")} className={`lang-btn${lang === "fr" ? " active" : ""}`}>FR</button>
+    </div>
+  );
+}
+
 const THEME_ANNOS = [
   { n: 1, side: "top", target: ".theme-btn" },        // track
   { n: 2, side: "bottom", target: ".toggle-thumb" },  // thumb
@@ -42,16 +52,22 @@ const VIEW_ANNOS = [
   { n: 2, side: "left", target: ".view-btn" },   // button
   { n: 3, side: "bottom", target: ".view-btn svg" }, // icon
 ];
+const LANG_ANNOS = [
+  { n: 1, side: "top", target: ".lang-toggle" },  // container
+  { n: 2, side: "left", target: ".lang-btn" },    // button
+  { n: 3, side: "bottom", target: ".lang-sep" },  // separator
+];
 
 export default function TogglePage() {
   const { theme, setTheme } = useTheme();
   const [view, setView] = useState("grid");
+  const [lang, setLang] = useState("en");
   return (
     <DSSection
       className="ds-scene-frame"
       id="toggle"
       title="Toggle"
-      sub="Les deux interrupteurs de l'app : le thème clair/sombre et la vue grille/liste. Une seule valeur active à la fois."
+      sub="Les trois interrupteurs de l'app : le thème clair/sombre, la vue grille/liste et la langue EN/FR. Une seule valeur active à la fois."
     >
       {/* ══════════ THEME TOGGLE ══════════ */}
       <div className="ds-card">
@@ -166,11 +182,71 @@ export default function TogglePage() {
         </div>
       </div>
 
+      {/* ══════════ LANGUAGE TOGGLE ══════════ */}
+      <div className="ds-card">
+        <div className="ds-card-head">Language toggle · preview</div>
+        <div className="ds-card-body col">
+          <div className="ds-preview-board">
+          <div className="ds-preview ds-preview--roomy">
+            <LangToggle lang={lang} setLang={setLang} />
+          </div>
+          </div>
+          <p className="ds-note">Specimen <strong>live</strong> — clique EN ou FR. Ghost pur : couleur seule, pas de fond ni de bordure. Repos <span className="ds-token-chip">--text-3</span> (weight 500) · actif <span className="ds-token-chip">--text</span> (weight 600) · survol non-actif <span className="ds-token-chip">--text-2</span>. Une seule transition sur <code>color</code> (0.15s), aucun lift. De la méta, pas une action de premier plan.</p>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Language toggle · anatomy</div>
+        <div className="ds-card-body col">
+          <div className="ds-anno-board ds-anno-board--stack">
+          <AnnoScene annos={LANG_ANNOS} stack>
+            <div className="lang-toggle ds-anno-organism">
+              <button type="button" className="lang-btn active">EN</button>
+              <span className="lang-sep">·</span>
+              <button type="button" className="lang-btn">FR</button>
+            </div>
+          </AnnoScene>
+          </div>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Language toggle · elements</div>
+        <div className="ds-card-body col">
+          <table className="token-table ds-anno-table">
+            <thead className="table-head"><tr><th>#</th><th>Element</th><th>Rôle</th><th>Opt.</th></tr></thead>
+            <tbody className="table-body">
+              <tr className="table-row"><td>1</td><td><span className="ds-class">.lang-toggle</span></td><td>Rangée flex, <code>align-items: center</code>, gap 4. Enveloppe les deux boutons et le séparateur.</td><td>—</td></tr>
+              <tr className="table-row"><td>2</td><td><span className="ds-class">.lang-btn</span></td><td>font 11 / 500, <code>letter-spacing: 0.04em</code>, padding 2px 0, couleur <span className="ds-token-chip">--text-3</span>. <span className="ds-class">.active</span> → <span className="ds-token-chip">--text</span> + weight 600. Le poids change en plus de la couleur → repère lisible même pour un daltonien.</td><td>—</td></tr>
+              <tr className="table-row"><td>3</td><td><span className="ds-class">.lang-sep</span></td><td>Point médian <code>·</code>, 11px, <span className="ds-token-chip">--text-3</span>, <code>pointer-events: none</code> — décoratif, jamais cliquable.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="ds-card">
+        <div className="ds-card-head">Language toggle · spacing</div>
+        <div className="ds-card-body col">
+          <div className="ds-redline-board ds-redline-board--lined">
+            <div className="ds-redline-row" style={{ gridTemplateColumns: "1fr" }}>
+              <Redline gapSelector={[".lang-toggle"]}>
+                <div className="lang-toggle">
+                  <button type="button" className="lang-btn active">EN</button>
+                  <span className="lang-sep">·</span>
+                  <button type="button" className="lang-btn">FR</button>
+                </div>
+              </Redline>
+            </div>
+          </div>
+          <p className="ds-note">Gap <strong>4</strong> de part et d&apos;autre du séparateur. Le bouton n&apos;a qu&apos;un padding vertical de 2 — sa cible tactile est étendue à ~44×44 en mobile via un <code>::before</code> invisible (<code>inset: -14px -10px</code>). Cotes mesurées à l&apos;exécution.</p>
+        </div>
+      </div>
+
       {/* ══════════ VARIANTS · TYPES ══════════ */}
       <div className="ds-card">
         <div className="ds-card-head">Variants · types</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <button type="button" className="theme-btn" aria-label="Theme"><span className="toggle-thumb"><SunIcon /></span></button>
               <span className="ds-class">.theme-btn</span>
@@ -182,10 +258,18 @@ export default function TogglePage() {
               </div>
               <span className="ds-class">.view-btns</span>
             </div>
+            <div className="ds-state-sample">
+              <div className="lang-toggle">
+                <button type="button" className="lang-btn active">EN</button>
+                <span className="lang-sep">·</span>
+                <button type="button" className="lang-btn">FR</button>
+              </div>
+              <span className="ds-class">.lang-toggle</span>
+            </div>
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Deux types de bascule. <strong>Theme</strong> — slider animé à pastille (un thumb qui glisse), on/off. <strong>View</strong> — segment à deux cases jointives, une seule active.</p>
+          <p className="ds-note">Trois types de bascule. <strong>Theme</strong> — slider animé à pastille (un thumb qui glisse), on/off. <strong>View</strong> — segment à deux cases jointives, une seule active. <strong>Language</strong> — deux liens texte ghost (EN/FR), la plus discrète, méta de footer.</p>
         </div>
       </div>
 
@@ -200,6 +284,10 @@ export default function TogglePage() {
           <div className="ds-token-block">
             <div className="ds-token-name">View toggle</div>
             <p>Bascule l&apos;affichage de la bibliothèque entre grille (Book Cards) et liste (List Table). Toolbar de My Library, à côté des filtres.</p>
+          </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Language toggle</div>
+            <p>Bascule <code>lang</code> entre <code>en</code> et <code>fr</code> (EN listé en premier). Section gauche du footer, à côté du wordmark — réglage rare, discret par construction. En dessous de 768px, cible tactile étendue à ~44×44. Consumer : footer de <code>library/page.js</code>.</p>
           </div>
           <div className="ds-token-block">
             <div className="ds-token-name">Toggle vs Segmented Pills</div>

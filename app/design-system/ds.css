@@ -865,19 +865,22 @@ img.ds-cover { object-fit: cover; }
    sa cellule, contenu EMPILÉ à gauche (swatch → nom → spec/description qui wrappe).
    Remplace la rangée horizontale qui débordait en nowrap. Annule le centrage des
    cellules boxées (specimen centré) au profit d'un empilement à gauche lisible. */
-/* minmax(0,1fr) (au lieu du 1fr=minmax(auto,1fr) par défaut) : sans ça les pastilles
-   token + mots mono forcent la colonne au min-content → la board déborde sur petit
-   écran. Avec minmax(0,…) la colonne rétrécit, le contenu wrappe dans la cellule.
-   !important + double classe pour battre le repeat(2,1fr)!important du 2-col mobile. */
-.ds-stroke-tokens.ds-states-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.ds-stroke-tokens.ds-states-grid--boxed > .ds-state-sample { align-items: flex-start; justify-content: flex-start; gap: 32px; }
-.ds-stroke-tokens.ds-states-grid--boxed > .ds-state-sample > * { align-self: flex-start; }
-.ds-stroke-swatch { width: 64px; height: 40px; flex-shrink: 0; }
+/* Colonnes gérées par la famille --hold (2 col >1400, 1 col ≤1400) : pas d'override
+   local. L'ancien repeat(2,1fr) forçait 2 col à toute largeur (jamais de repli). */
+.ds-stroke-tokens.ds-states-grid--boxed > .ds-state-sample { align-items: center; justify-content: center; gap: 32px; }
+.ds-stroke-tokens.ds-states-grid--boxed > .ds-state-sample > * { align-self: center; }
+.ds-stroke-swatch { width: 100%; max-width: min(402px, 100%); height: 40px; flex-shrink: 0; }
 /* Groupe nom + spec/description ; gap 16 (titre → détail). Le gap de cellule (32)
    sépare le swatch de ce bloc, aligné sur les autres cellules boxées. */
-.ds-stroke-info { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ds-stroke-info { display: flex; flex-direction: column; gap: 16px; min-width: 0; max-width: min(402px, 100%); }
 .ds-stroke-name { font-size: 15px; font-weight: 700; color: var(--text); }
 .ds-stroke-meta { font-size: 13px; font-family: 'SF Mono','Fira Code',monospace; color: var(--text); line-height: 1.6; }
+
+/* Pictos onboarding dans la galerie /ds : forcés à 96 (iso .empty-icon) pour
+   uniformiser les deux boards de pictos. La modale d'onboarding réelle les garde
+   à 120 via .ob-icon — ce cap ne touche que la doc. */
+.ds-picto-96 { display: inline-flex; width: 96px; height: 96px; }
+.ds-picto-96 > svg { width: 100%; height: 100%; }
 
 /* ─── BUTTONS ─── */
 .btn {

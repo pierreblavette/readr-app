@@ -29,7 +29,7 @@ function MiniMenu() {
 
 export default function ShadowsPage() {
   return (
-    <DSSection id="shadows" title="Shadows & Radius">
+    <DSSection className="ds-scene-frame" id="shadows" title="Shadows & Radius">
 
       {/* 1 — SHADOWS (tokens) + doctrine */}
       <div className="ds-card">
@@ -64,7 +64,7 @@ export default function ShadowsPage() {
       <div className="ds-card">
         <div className="ds-card-head">Shadows · in use</div>
         <div className="ds-card-body col">
-          <div className="ds-states-grid ds-states-grid--boxed">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
             <div className="ds-state-sample">
               <div className="ds-specimen-cell">
                 <div style={{ width: 180, height: 104, background: "var(--card)", borderRadius: 8, boxShadow: "var(--shadow-md)" }} />

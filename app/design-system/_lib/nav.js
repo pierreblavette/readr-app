@@ -87,7 +87,7 @@ export const NAV_LABELS = {
   "spacing": "Spacing", "cell-row": "Cell Row", "shadows": "Shadows & Radius", "strokes": "Strokes & Borders",
   "buttons": "Buttons", "dropdown": "Dropdown Menu",
   "inputs": "Text Input", "view-toggle": "View Toggle", "badges": "Badges",
-  "checkbox": "Checkbox", "autocomplete": "Autocomplete", "lang-switcher": "Language Switcher",
+  "checkbox": "Checkbox", "autocomplete": "Autocomplete",
   "rating-stars": "Rating Stars", "row-checkbox": "Row Checkbox",
   "theme-toggle": "Theme Toggle", "toggle": "Toggle", "rows": "Rows", "book-row": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",

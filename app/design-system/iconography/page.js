@@ -89,6 +89,7 @@ const ILLUS = [
 export default function IconographyPage() {
   return (
     <DSSection
+      className="ds-scene-frame"
       id="iconography"
       title="Iconography"
       sub="Les deux familles d'icônes de Readr : les icônes d'interface, pour agir et naviguer ; les illustrations, pour habiller les écrans vides."
@@ -169,7 +170,7 @@ export default function IconographyPage() {
       <div className="ds-card">
         <div className="ds-card-head">Pictos · onboarding</div>
         <div className="ds-card-body col">
-          <IllustrationBoard items={ONBOARDING.map(([C, label]) => [<C key={label} />, label])} />
+          <IllustrationBoard items={ONBOARDING.map(([C, label]) => [<span key={label} className="ds-picto-96"><C /></span>, label])} />
           <p className="ds-note">Même famille <span className="ds-token-chip">--illus-*</span>, mais contexte <strong>slides d&apos;onboarding</strong> (pas un empty state). Composants réels exportés par <span className="ds-class">Onboarding.js</span>.</p>
         </div>
       </div>

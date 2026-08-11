@@ -46,7 +46,7 @@ const DIVIDERS = [
 
 export default function StrokesPage() {
   return (
-    <DSSection id="strokes" title="Strokes & Borders" sub="The rules for borders across the interface — on components, cards, inputs and dividers.">
+    <DSSection className="ds-scene-frame" id="strokes" title="Strokes & Borders" sub="The rules for borders across the interface — on components, cards, inputs and dividers.">
 
       {/* 1 — STROKES : visuel + spéc dans la même rangée (iso section Radius) */}
       <div className="ds-card">

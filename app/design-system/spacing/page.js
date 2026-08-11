@@ -25,7 +25,7 @@ function Block({ label }) {
 
 export default function SpacingPage() {
   return (
-    <DSSection id="spacing" title="Spacing" sub="The 4-pixel rhythm that spaces everything in the interface — and the main values built on it.">
+    <DSSection className="ds-scene-frame" id="spacing" title="Spacing" sub="The 4-pixel rhythm that spaces everything in the interface — and the main values built on it.">
 
       {/* 1 — SCALE */}
       <div className="ds-card">
