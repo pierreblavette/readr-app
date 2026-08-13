@@ -1299,7 +1299,7 @@ img.ds-cover { object-fit: cover; }
 
 /* ─── INPUTS ─── */
 .search-box-demo { position: relative; display: flex; align-items: center; width: 280px; }
-.search-box-demo svg { position: absolute; left: 14px; width: 15px; height: 15px; color: var(--text-3); pointer-events: none; }
+.search-box-demo svg { position: absolute; left: 14px; width: 16px; height: 16px; color: var(--text-3); pointer-events: none; }
 .search-box-demo input {
   height: 40px; width: 100%; padding: 0 34px 0 38px;
   border: 1.5px solid var(--border-subtle); border-radius: 32px;

@@ -80,7 +80,10 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   return (
     <div className={`book-panel${book ? ' open' : ''}`} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true">
       {book && (
-        <div className="panel-inner">
+        <div
+          className={`panel-inner${cover ? ' panel-inner--echo' : ''}`}
+          style={cover ? { '--panel-cover': `url("${cover}")` } : undefined}
+        >
 
           {/* Close button */}
           <button className="panel-close" onClick={onClose} aria-label={t.btnClose}>
