@@ -77,12 +77,17 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   const [c1, c2] = book ? coverColors(book.title) : ['#ccc', '#aaa'];
   const letter   = book ? coverLetter(book.title) : '';
 
+  // L'écho de fond interpole la cover dans un url("…") CSS : on n'accepte qu'une
+  // URL http(s) sans caractère susceptible de casser le url() (guillemet,
+  // parenthèse, antislash, espace). Sinon pas d'écho — l'<img> reste inchangée.
+  const echoCover = cover && /^https?:\/\/[^\s"'()\\]+$/.test(cover) ? cover : null;
+
   return (
     <div className={`book-panel${book ? ' open' : ''}`} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true">
       {book && (
         <div
-          className={`panel-inner${cover ? ' panel-inner--echo' : ''}`}
-          style={cover ? { '--panel-cover': `url("${cover}")` } : undefined}
+          className={`panel-inner${echoCover ? ' panel-inner--echo' : ''}`}
+          style={echoCover ? { '--panel-cover': `url("${echoCover}")` } : undefined}
         >
 
           {/* Close button */}
