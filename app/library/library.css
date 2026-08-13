@@ -1811,6 +1811,10 @@
   transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 320;
   overflow-y: auto;
+  /* L'écho de cover (::before, transform: scale) déborde volontairement en
+     largeur pour cacher les bords du flou ; overflow-y:auto force l'axe X en
+     `auto` → scroll horizontal parasite. On clippe l'axe X (le vertical scrolle). */
+  overflow-x: hidden;
   /* PWA standalone iOS : keep inner content out of the notch + home indicator. */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
