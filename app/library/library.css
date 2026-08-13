@@ -3709,7 +3709,7 @@
   .toolbar-inner { flex: 1; min-width: 0; padding: 0; max-width: none; margin: 0; height: 60px; gap: 16px; }
   .library-footer-inner { padding-left: 20px; padding-right: 20px; }
   .books-grid,
-  .col-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .col-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
 
   /* Mobile toolbar (.toolbar-mobile-only) is shown in this range — push
      the panel below it. Real toolbar height = env(safe-area-inset-top) +
