@@ -9,6 +9,7 @@ import LogoLockup from "@/components/brand/LogoLockup";
 import { NAV, NAV_LABELS, NAV_CHILDREN, sectionsOf } from "./_lib/nav";
 import { DSThemeContext } from "./_components/ThemeContext";
 import ChipCopy from "./_components/ChipCopy";
+import PageNav from "./_components/PageNav";
 
 // Chrome partagé du Design System : sidebar + toolbar mobile + thème.
 // L'état actif de la nav vient de usePathname() (route), plus d'aucune mesure
@@ -170,6 +171,7 @@ export default function DSLayout({ children }) {
             </div>
             <div className="main-wrap">
               {children}
+              <PageNav />
             </div>
           </main>
         </div>

@@ -82,6 +82,27 @@ export function sectionsOf(group) {
   return [...ids].sort((a, b) => (NAV_LABELS[a] ?? a).localeCompare(NAV_LABELS[b] ?? b));
 }
 
+// Séquence à plat de TOUTES les pages navigables, dans l'ordre EXACT de la sidebar
+// (Welcome en tête de Foundations, puis chaque groupe ; une famille = sa racine
+// suivie de ses variantes). Sert au pager prev/next en bas de page. Le `group`
+// est l'eyebrow affiché : la section pour une page de 1er niveau, le label de la
+// famille pour une variante (ex. « Cards » pour Book Card).
+export function flatNav() {
+  const out = [];
+  for (const section of Object.keys(NAV)) {
+    if (section === "Foundations") {
+      out.push({ href: "/design-system", title: "Welcome", group: "Foundations" });
+    }
+    for (const id of sectionsOf(section)) {
+      out.push({ href: `/design-system/${id}`, title: NAV_LABELS[id] ?? id, group: section });
+      for (const c of NAV_CHILDREN[id] ?? []) {
+        out.push({ href: c.href, title: c.label, group: NAV_LABELS[id] ?? section });
+      }
+    }
+  }
+  return out;
+}
+
 export const NAV_LABELS = {
   "logo": "Logo", "colors": "Colors", "typography": "Typography", "iconography": "Iconography",
   "spacing": "Spacing", "cell-row": "Cell Row", "shadows": "Shadows & Radius", "strokes": "Strokes & Borders",
