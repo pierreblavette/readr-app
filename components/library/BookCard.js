@@ -1,14 +1,15 @@
 "use client";
 import { memo, useCallback, useEffect, useState } from "react";
-import { fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
+import { fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache, isCoverDecoded, markCoverDecoded } from "@/lib/bookUtils";
 import BookCardKebab from "./BookCardKebab";
 
 function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDelete, onStartReading, onFinishReading, onCancelReading, onAddQuoteFromBook, onEditFinished, onMoveToLibrary, onShared, readingCount, maxReading, t }) {
   // Lazy init : lit le cache singleton au 1er render → pas de flash placeholder.
   const [cover, setCover] = useState(() => getCoverFromCache(book.title, book.author)?.thumb || null);
-  // Tracke le load réel de l'<img> — shimmer visible tant que l'image n'a
-  // pas fini son fetch (HTTP cache miss au remount → re-download network).
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // Tracke le load réel de l'<img>. Init optimiste : si cette URL a déjà été
+  // décodée dans la session (autre onglet), on démarre à true → pas de re-flash
+  // du skeleton au remontage lors d'un changement d'onglet.
+  const [imageLoaded, setImageLoaded] = useState(() => isCoverDecoded(cover));
   const isSelected = selected.has(book.id);
 
   useEffect(() => {
@@ -20,8 +21,10 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
     });
   }, [book.title, book.author]);
 
-  // Reset l'état loaded quand la URL change (nouveau book ou nouvelle cover).
-  useEffect(() => { setImageLoaded(false); }, [cover]);
+  // Quand la URL change (nouveau book / nouvelle cover), l'état loaded reflète si
+  // cette nouvelle URL est déjà décodée — pas un false systématique (qui rallumerait
+  // le skeleton pour une cover déjà vue). Couvre aussi le run au mount.
+  useEffect(() => { setImageLoaded(isCoverDecoded(cover)); }, [cover]);
 
   const handleActivate = useCallback(() => {
     editMode ? onToggleSelect(book.id) : onOpen(book);
@@ -54,7 +57,12 @@ function BookCard({ book, tab, editMode, selected, onToggleSelect, onOpen, onDel
             height="148"
             loading="eager"
             decoding="sync"
-            onLoad={() => setImageLoaded(true)}
+            ref={(node) => {
+              // Image déjà complète au montage (servie depuis le cache HTTP chaud) :
+              // onLoad ne refire pas → on lit .complete en sync pour éviter un skeleton coincé.
+              if (node && node.complete && node.naturalWidth > 0) { markCoverDecoded(cover); setImageLoaded(true); }
+            }}
+            onLoad={() => { markCoverDecoded(cover); setImageLoaded(true); }}
             onError={() => setImageLoaded(true)}
             style={{ opacity: imageLoaded ? 1 : 0 }}
             className="panel-cover-img"
