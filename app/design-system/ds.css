@@ -121,7 +121,7 @@ img.ds-cover { object-fit: cover; }
 /* Chevron : blanc quand le parent est actif plein (sur sa racine). Sur une page
    enfant, le parent reste en repos — c'est le sous-item sélectionné qui porte l'état,
    pas d'état intermédiaire « current » sur le parent. */
-.sidebar-item.active .sidebar-item-chevron { color: #FFFFFF; }
+.sidebar-item.active .sidebar-item-chevron { color: var(--light-100); }
 .sidebar-subnav { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 6px; }
 /* Sous-item : MÊME apparence que .sidebar-item (height 40, font 15/600, actif plein
    primary-50 blanc) — seule différence, l'indentation à gauche. */
@@ -137,7 +137,7 @@ img.ds-cover { object-fit: cover; }
 }
 .sidebar-subitem:hover { background: var(--primary-5); color: var(--primary-50); }
 [data-theme="dark"] .sidebar-subitem:hover { background: var(--primary-3); color: var(--primary-40); }
-.sidebar-subitem.active { background: var(--primary-50); color: #FFFFFF; }
+.sidebar-subitem.active { background: var(--primary-50); color: var(--light-100); }
 /* Top-level group (Foundations / Components / Patterns / Reference) — wraps
    the group title + its sections. Internal gap 64 (tighter than the 96 inter-
    group gap of .ds-content) so the group reads as a cohesive cluster. */
@@ -890,7 +890,7 @@ img.ds-cover { object-fit: cover; }
   flex-shrink: 0;
 }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-primary { background: var(--primary-50); color: #fff; border: none; }
+.btn-primary { background: var(--primary-50); color: var(--light-100); border: none; }
 .btn-primary:hover:not(:disabled) { background: var(--primary-60); }
 .btn-primary:active:not(:disabled) { background: var(--primary-70); }
 .btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
@@ -899,7 +899,7 @@ img.ds-cover { object-fit: cover; }
 .btn-ghost { background: transparent; color: var(--dark-80); border: none; }
 .btn-ghost:hover:not(:disabled) { background: var(--primary-5); color: var(--primary-60); }
 .btn-ghost:active:not(:disabled) { background: var(--primary-10); }
-.btn-outline { background: #FFFFFF; color: var(--dark-80); border: 1.5px solid var(--border-subtle); }
+.btn-outline { background: var(--btn-bg); color: var(--dark-80); border: 1.5px solid var(--border-subtle); }
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 .btn-outline:active:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
 .btn-solid { background: var(--primary-5); color: var(--dark-80); border: none; aspect-ratio: 1; }
@@ -922,8 +922,8 @@ img.ds-cover { object-fit: cover; }
 .btn-icon.btn-md svg *  { stroke-width: 2.25; }  /* glyph 16 → 1.5 */
 .btn-solid.btn-lg svg *,
 .btn-icon.btn-lg svg *  { stroke-width: 2; }     /* glyph 18 → 1.5 */
-.btn-critical { background: #EF4444; color: #fff; border: none; }
-.btn-critical:hover:not(:disabled) { background: #DC2626; }
+.btn-critical { background: var(--destructive); color: var(--light-100); border: none; }
+.btn-critical:hover:not(:disabled) { background: var(--destructive-hover); }
 
 .btn-xs { height: 24px; padding: 0 8px;  border-radius: 6px;  font-size: 11px; gap: 4px; }
 .btn-sm { height: 32px; padding: 0 16px; border-radius: 7px;  font-size: 12px; gap: 6px; }
@@ -950,14 +950,14 @@ img.ds-cover { object-fit: cover; }
 .btn-ghost.is-hover     { background: var(--primary-5) !important; color: var(--primary-60) !important; }
 .btn-outline.is-hover   { background: var(--primary-5) !important; border-color: var(--primary-50) !important; color: var(--primary-50) !important; }
 .btn-solid.is-hover     { background: var(--primary-10) !important; }
-.btn-critical.is-hover  { background: #DC2626 !important; }
+.btn-critical.is-hover  { background: var(--destructive-hover) !important; }
 .btn.is-active          { transform: scale(0.97); }
 .btn-primary.is-active  { background: var(--primary-70) !important; }
 .btn-secondary.is-active { background: var(--primary-20) !important; color: var(--primary-70) !important; }
 .btn-ghost.is-active    { background: var(--primary-10) !important; color: var(--primary-70) !important; }
 .btn-outline.is-active  { background: var(--primary-10) !important; border-color: var(--primary-60) !important; color: var(--primary-60) !important; }
 .btn-solid.is-active    { background: var(--primary-20) !important; }
-.btn-critical.is-active { background: #B91C1C !important; }
+.btn-critical.is-active { background: var(--destructive-hover) !important; }
 .btn.is-focus           { outline: 2px solid var(--primary-50); outline-offset: 2px; }
 /* Link : états forcés pour le board States de la page Buttons › Link (mirror des
    :hover / :focus-visible réels — non déclenchables en statique). */
@@ -974,14 +974,14 @@ img.ds-cover { object-fit: cover; }
 [data-theme="dark"] .btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
 [data-theme="dark"] .btn-secondary.is-hover { background: var(--primary-10) !important; color: var(--primary-30) !important; }
 [data-theme="dark"] .btn-ghost { color: var(--light-90); }
-[data-theme="dark"] .btn-ghost:hover:not(:disabled) { background: rgba(73,89,230,0.12); color: var(--primary-40); }
-[data-theme="dark"] .btn-ghost.is-hover { background: rgba(73,89,230,0.12) !important; color: var(--primary-40) !important; }
+[data-theme="dark"] .btn-ghost:hover:not(:disabled) { background: var(--accent-bg); color: var(--primary-40); }
+[data-theme="dark"] .btn-ghost.is-hover { background: var(--accent-bg) !important; color: var(--primary-40) !important; }
 [data-theme="dark"] .btn-outline { border-color: var(--light-20); color: var(--light-90); background: transparent; }
-[data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: rgba(73,89,230,0.12); }
-[data-theme="dark"] .btn-outline.is-hover { border-color: var(--primary-40) !important; color: var(--primary-40) !important; background: rgba(73,89,230,0.12) !important; }
-[data-theme="dark"] .btn-solid { background: rgba(73,89,230,0.15); color: var(--primary-50); }
+[data-theme="dark"] .btn-outline:hover:not(:disabled) { border-color: var(--primary-40); color: var(--primary-40); background: var(--accent-bg); }
+[data-theme="dark"] .btn-outline.is-hover { border-color: var(--primary-40) !important; color: var(--primary-40) !important; background: var(--accent-bg) !important; }
+[data-theme="dark"] .btn-solid { background: var(--primary-active); color: var(--primary-50); }
 [data-theme="dark"] .btn-icon { border-color: var(--light-20); color: var(--light-70); }
-[data-theme="dark"] .btn-icon:hover:not(:disabled) { border-color: var(--primary-40); background: rgba(73,89,230,0.12); color: var(--primary-40); }
+[data-theme="dark"] .btn-icon:hover:not(:disabled) { border-color: var(--primary-40); background: var(--accent-bg); color: var(--primary-40); }
 [data-theme="dark"] .btn-ghost.is-active { color: var(--primary-50) !important; }
 [data-theme="dark"] .btn-outline.is-active { border-color: var(--primary-50) !important; color: var(--primary-50) !important; }
 
@@ -1033,31 +1033,31 @@ img.ds-cover { object-fit: cover; }
    idem + anneau --primary-20 (rgba primary dark). Le disabled se pose en vrai
    (attribut disabled), pas besoin de classe forcée. */
 .modal-field-input.is-hover { background: var(--primary-5) !important; border: 1.5px solid var(--primary-50) !important; }
-.modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; }
+.modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
 [data-theme="dark"] .modal-field-input.is-hover { border-color: var(--primary-50) !important; background: var(--primary-3) !important; }
-[data-theme="dark"] .modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+[data-theme="dark"] .modal-field-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
 /* Idem pour .modal-field > input (champ AddModal Title, support de l'autocomplete) :
    l'autocomplete n'apparaît qu'au focus, donc la doc force cet état. */
-.modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; outline: none; }
-[data-theme="dark"] .modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+.modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; outline: none; }
+[data-theme="dark"] .modal-field input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
 /* Mirror focus de la textarea (comme l'input : la doc force l'état sur la scène bleue
    pour qu'il ressorte). Dark : bord + anneau, pas de bg (iso .quote-textarea:focus). */
-.quote-textarea.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; }
-[data-theme="dark"] .quote-textarea.is-focus { border-color: var(--primary-50) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+.quote-textarea.is-focus { border-color: var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
+[data-theme="dark"] .quote-textarea.is-focus { border-color: var(--primary-50) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
 /* Mirror focus du search field (iso .search-input:focus) + loupe à 1.5 comme le
    vrai :focus-within, via :has sur la coquille. /ds seul. */
-.search-input.is-focus { border: 1.5px solid var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--primary-20) !important; outline: none; }
-[data-theme="dark"] .search-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px rgba(73,89,230,0.4) !important; }
+.search-input.is-focus { border: 1.5px solid var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; outline: none; }
+[data-theme="dark"] .search-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
 
 /* ─── TEXT INPUT — éléments PROPOSÉS (doc /ds uniquement, pas encore dans
    library.css). Le vocabulaire couleur de validation existe déjà (--destructive,
-   warning #B45309/#FBBF24, réutilisé de .modal-toggle-message) ; ne manque que son
+   warning var(--warning)/var(--warning), réutilisé de .modal-toggle-message) ; ne manque que son
    application au bord du champ + une échelle de tailles + un texte d'aide. À
    promouvoir dans library.css le jour où la validation de formulaire est câblée. */
 .modal-field-input.is-invalid { border: 1.5px solid var(--destructive) !important; background: var(--bg3) !important; }
-.modal-field-input.is-invalid.is-focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.2) !important; }
-.modal-field-input.is-warn { border: 1.5px solid #B45309 !important; }
-[data-theme="dark"] .modal-field-input.is-warn { border-color: #FBBF24 !important; }
+.modal-field-input.is-invalid.is-focus { box-shadow: 0 0 0 3px var(--alert-ring) !important; }
+.modal-field-input.is-warn { border: 1.5px solid var(--warning) !important; }
+[data-theme="dark"] .modal-field-input.is-warn { border-color: var(--warning) !important; }
 .modal-field-input.is-readonly { border-color: var(--border-subtle) !important; background: transparent !important; color: var(--text-2) !important; }
 /* Échelle de tailles proposée : sm 32 / md 40 (actuel) / lg 48 — pas 8, comme les
    boutons, pour que champ et bouton restent alignables à chaque échelle. */
@@ -1086,7 +1086,7 @@ img.ds-cover { object-fit: cover; }
 .ds-anno-badge {
   position: absolute; z-index: 8; transform: translate(-50%, -50%);
   width: 22px; height: 22px; border-radius: 50%;
-  background: var(--primary-50); color: #fff;
+  background: var(--primary-50); color: var(--light-100);
   font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; font-weight: 600;
   display: flex; align-items: center; justify-content: center; pointer-events: none;
 }
@@ -1243,7 +1243,7 @@ img.ds-cover { object-fit: cover; }
    parente `.list-table tr:hover` : border primary-50 + bg primary-5). Le selected
    se pose via la vraie classe `.is-selected`. */
 .row-checkbox.is-hover { border-color: var(--primary-50) !important; background: var(--primary-5) !important; }
-[data-theme="dark"] .row-checkbox.is-hover { border-color: var(--primary-50) !important; background: rgba(123,137,248,0.12) !important; }
+[data-theme="dark"] .row-checkbox.is-hover { border-color: var(--primary-50) !important; background: var(--accent-bg) !important; }
 
 /* ─── LANGUAGE SWITCHER ─── état forcé pour la doc (mirror de
    .lang-btn:hover:not(.active) → --text-2). */
@@ -1254,7 +1254,7 @@ img.ds-cover { object-fit: cover; }
 .view-btn-ds { width: 38px; height: 38px; border: none; background: var(--bg3); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; font-family: inherit; }
 .view-btn-ds:first-child { border-right: 1px solid var(--border); }
 .view-btn-ds:hover { background: var(--primary-10); color: var(--primary-60); }
-.view-btn-ds.active { background: var(--primary-50); color: #fff; }
+.view-btn-ds.active { background: var(--primary-50); color: var(--light-100); }
 .view-btn-ds svg { width: 15px; height: 15px; }
 
 /* ─── LANG SWITCHER ─── */
@@ -1295,7 +1295,7 @@ img.ds-cover { object-fit: cover; }
   background: var(--bg2); border-color: var(--light-20);
   box-shadow: 0 4px 20px rgba(0,0,0,0.35);
 }
-[data-theme="dark"] .dropdown-item:hover { background: rgba(73,89,230,0.12); color: var(--primary-40); }
+[data-theme="dark"] .dropdown-item:hover { background: var(--accent-bg); color: var(--primary-40); }
 
 /* ─── INPUTS ─── */
 .search-box-demo { position: relative; display: flex; align-items: center; width: 280px; }
@@ -1303,12 +1303,12 @@ img.ds-cover { object-fit: cover; }
 .search-box-demo input {
   height: 40px; width: 100%; padding: 0 34px 0 38px;
   border: 1.5px solid var(--border-subtle); border-radius: 32px;
-  background: #FFFFFF; font-family: inherit; font-size: 15px;
+  background: var(--input-bg); font-family: inherit; font-size: 15px;
   font-weight: 600; color: var(--text); outline: none; transition: all 0.2s;
 }
 .search-box-demo input::placeholder { color: var(--text-2); }
 .search-box-demo input:hover:not(:focus) { border-color: var(--primary-50); background: var(--primary-5); }
-.search-box-demo input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); outline: none; }
+.search-box-demo input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--focus-ring); outline: none; }
 
 .field-demo { display: flex; flex-direction: column; gap: 6px; width: 280px; }
 .field-demo label { font-size: 12px; font-weight: 500; color: var(--text-3); }
@@ -1320,7 +1320,7 @@ img.ds-cover { object-fit: cover; }
 }
 .field-demo input::placeholder { font-weight: 500; color: var(--text-2); }
 .field-demo input:hover:not(:focus) { background: var(--primary-5); border-color: var(--primary-50); }
-.field-demo input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--primary-20); }
+.field-demo input:focus { border-color: var(--primary-50); background: var(--primary-5); box-shadow: 0 0 0 3px var(--focus-ring); }
 
 /* ─── BOOK CARD ─── */
 .book-card-ds {
@@ -1348,7 +1348,7 @@ img.ds-cover { object-fit: cover; }
 .list-demo th { padding: 11px 16px; text-align: left; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
 .list-demo tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; cursor: pointer; }
 .list-demo tbody tr:last-child { border-bottom: none; }
-.list-demo tbody tr:hover { background: rgba(73,89,230,0.04); }
+.list-demo tbody tr:hover { background: var(--ghost-hover); }
 .list-demo td { padding: 16px; vertical-align: middle; }
 .list-title-cell { font-weight: 700; color: var(--text); }
 .list-author-cell { font-size: 14px; font-weight: 500; color: var(--text-2); }
@@ -1404,7 +1404,7 @@ img.ds-cover { object-fit: cover; }
   height: 40px; border-radius: 8px; background: var(--border); opacity: 0.4;
 }
 .panel-ds-panel {
-  width: 420px; flex-shrink: 0; background: rgba(255,255,255,0.95); border-left: 1px solid var(--border); overflow-y: auto;
+  width: 420px; flex-shrink: 0; background: var(--light-90); border-left: 1px solid var(--border); overflow-y: auto;
 }
 /* On mobile, drop the app shell preview (placeholder) and let the panel take
  * the full card width — same intent as the real Library where the panel
@@ -1543,7 +1543,7 @@ img.ds-cover { object-fit: cover; }
 .app-icon-meta { display: flex; flex-direction: column; gap: 8px; }
 .app-icon-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
 .ds-note { font-size: 15px; color: var(--text); line-height: 1.7; }
-.splash-preview { height: 440px; width: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 20px; background: #FEFEFF; }
+.splash-preview { height: 440px; width: auto; display: block; border: 1px solid var(--border-subtle); border-radius: 20px; background: var(--page-light); }
 .maskable-shape { width: 104px; height: 104px; overflow: hidden; flex-shrink: 0; }
 .maskable-shape-img { width: 100%; height: 100%; display: block; }
 /* Android adaptive-icon mask shapes (approximated). Circle is the most
@@ -2137,7 +2137,7 @@ img.ds-cover { object-fit: cover; }
 .ds-overlays-behind-row { width: 100%; height: 64px; border-radius: 10px; background: var(--bg3); }
 .ds-overlays-scrim {
   position: absolute; inset: 0;
-  background: rgba(30, 38, 120, 0.12);
+  background: var(--overlay);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
 }
@@ -2212,9 +2212,189 @@ img.ds-cover { object-fit: cover; }
 .ds-pager-btn:hover { border-color: var(--primary-50); background: var(--primary-3); }
 .ds-pager-btn:hover .ds-pager-arrow { color: var(--primary-50); }
 [data-theme="dark"] .ds-pager-btn:hover .ds-pager-arrow { color: var(--primary-40); }
-.ds-pager-btn:focus-visible { outline: none; border-color: var(--primary-50); box-shadow: 0 0 0 3px var(--primary-20); }
+.ds-pager-btn:focus-visible { outline: none; border-color: var(--primary-50); box-shadow: 0 0 0 3px var(--focus-ring); }
 .ds-pager-btn:focus-visible .ds-pager-arrow { color: var(--primary-50); }
 @media (max-width: 600px) {
   .ds-pager { flex-direction: column; }
   .ds-pager-slot { display: none; }
+}
+
+/* ─── Command Palette (Cmd/Ctrl+K) ───────────────────────────────────────────
+   Recherche des 65 pages du DS (index = flatNav). feat(ds), scopé /design-system.
+   Déclencheur en tête de sidebar + modale centrée. Réutilise les tokens DS. */
+.ds-cmdk-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 8px);
+  margin: 0 4px;
+  padding: 0 10px 0 12px;
+  height: 40px;
+  flex-shrink: 0;
+  background: var(--bg3);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-3);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.ds-cmdk-trigger:hover { border-color: var(--primary-50); background: var(--primary-5); color: var(--text-2); }
+.ds-cmdk-trigger svg { width: 16px; height: 16px; flex-shrink: 0; }
+.ds-cmdk-trigger-label { flex: 1; text-align: left; }
+.ds-cmdk-trigger-kbd { display: flex; gap: 3px; }
+.ds-cmdk-trigger-kbd kbd,
+.ds-cmdk-foot-hint kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1;
+}
+
+/* Overlay + modale */
+.ds-cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12vh 16px 16px;
+  background: rgba(17, 18, 24, 0.42);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  animation: dsCmdkFade 0.14s ease;
+}
+@keyframes dsCmdkFade { from { opacity: 0; } to { opacity: 1; } }
+.ds-cmdk {
+  width: 100%;
+  max-width: 600px;
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  animation: dsCmdkPop 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes dsCmdkPop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.ds-cmdk:focus { outline: none; }
+
+/* Header : loupe + input + close */
+.ds-cmdk-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  height: 60px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+.ds-cmdk-head > svg { width: 20px; height: 20px; color: var(--text-2); flex-shrink: 0; }
+.ds-cmdk-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text);
+  outline: none;
+}
+.ds-cmdk-input::placeholder { color: var(--text-3); }
+/* Le champ est auto-focus (type-ready) et unique dans la modale : pas de halo
+   clavier dessus. Spécificité (0,2,0) > la règle globale *:focus-visible (0,1,0),
+   qui sinon gagne par l'ordre source (library.css importé après ds.css). Le halo
+   reste sur le close et les items pour l'a11y. */
+.ds-cmdk-input:focus,
+.ds-cmdk-input:focus-visible { outline: none; }
+.ds-cmdk-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.ds-cmdk-close:hover { background: var(--ghost-hover); color: var(--text); }
+.ds-cmdk-close svg { width: 20px; height: 20px; }
+
+/* Corps : empty state ou liste de résultats */
+.ds-cmdk-body { flex: 1; min-height: 120px; overflow-y: auto; padding: 8px; }
+.ds-cmdk-empty { padding: 28px 12px; color: var(--text-2); font-size: 15px; font-weight: 500; }
+.ds-cmdk-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.ds-cmdk-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  transition: background 0.1s;
+}
+.ds-cmdk-item.is-active { background: var(--primary-5); }
+.ds-cmdk-item-group {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  min-width: 96px;
+}
+.ds-cmdk-item-title { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
+.ds-cmdk-item.is-active .ds-cmdk-item-title { color: var(--primary-50); }
+[data-theme="dark"] .ds-cmdk-item.is-active .ds-cmdk-item-title { color: var(--primary-40); }
+.ds-cmdk-mark { background: none; color: var(--primary-50); font-weight: 700; }
+[data-theme="dark"] .ds-cmdk-mark { color: var(--primary-40); }
+.ds-cmdk-item-enter { width: 16px; height: 16px; flex-shrink: 0; color: var(--primary-50); opacity: 0; align-self: center; }
+.ds-cmdk-item.is-active .ds-cmdk-item-enter { opacity: 1; }
+[data-theme="dark"] .ds-cmdk-item-enter { color: var(--primary-40); }
+
+/* Footer : hints clavier */
+.ds-cmdk-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+.ds-cmdk-foot-hint { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-3); }
+
+@media (max-width: 600px) {
+  .ds-cmdk-overlay { padding: 8vh 12px 12px; }
+  .ds-cmdk-item-group { min-width: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-cmdk-overlay, .ds-cmdk { animation: none; }
 }

@@ -65,9 +65,23 @@
   --teal-bg:               rgba(0,166,153,0.08);
   --alert:                 #E63946;
   --alert-bg:              rgba(230,57,70,0.10);
+  --warning:               #B45309;
+  --warning-bg:            rgba(245,158,11,0.08);
+  --warning-ring:          rgba(245,158,11,0.20);
+  --success:               #16A34A;
+  --success-bg:            rgba(34,197,94,0.08);
+  --success-ring:          rgba(34,197,94,0.20);
+  --alert-ring:            rgba(230,57,70,0.20);
+  --focus-ring:            var(--primary-20);
+  --overlay:               rgba(30,38,120,0.12);
+  --overlay-strong:        rgba(30,35,80,0.30);
   --ai-from:               #F67BF8;
   --ai-to:                 #4959E6;
   --ghost-hover:           rgba(73,89,230,0.05);
+  --primary-active:        rgba(73,89,230,0.12);
+  --ai-accent:             #9B5CF6;
+  --input-bg:              #FFFFFF;   /* surface des champs de saisie (search, textarea, name…) */
+  --btn-bg:                #FFFFFF;   /* surface des boutons secondaires sur fond de page */
   --transition:            background 0.25s, color 0.25s, border-color 0.25s;
   --shadow-md:             0 4px 16px rgba(73,89,230,0.12);
   --shadow-lg:             0 4px 20px rgba(73,89,230,0.18), 0 1px 6px rgba(73,89,230,0.10);
@@ -80,6 +94,12 @@
   --dark-80:     rgba(13,15,26,0.80);
   --dark-100:    #0D0F1A;
   --light-20:    rgba(255,255,255,0.20);
+  --light-10:    rgba(255,255,255,0.10);
+  --light-15:    rgba(255,255,255,0.15);
+  --light-25:    rgba(255,255,255,0.25);
+  --light-40:    rgba(255,255,255,0.40);
+  --light-50:    rgba(255,255,255,0.50);
+  --light-85:    rgba(255,255,255,0.85);
   --light-90:    rgba(255,255,255,0.90);
   --light-100:   #FFFFFF;   /* blanc pur — base opaque de la famille --light-* (fusion de l'ex --white ; off-white #F5F6FF retiré) */
   /* Blanc de page en primitive FIXE (non thémée, ≠ --bg qui bascule à #0F0F0F en
@@ -149,9 +169,23 @@
   --teal-bg:               rgba(0,201,190,0.1);
   --alert:                 #FF6B6B;
   --alert-bg:              rgba(255,107,107,0.14);
+  --warning:               #FBBF24;
+  --warning-bg:            rgba(251,191,36,0.12);
+  --warning-ring:          rgba(251,191,36,0.20);
+  --success:               #4ADE80;
+  --success-bg:            rgba(74,222,128,0.12);
+  --success-ring:          rgba(74,222,128,0.20);
+  --alert-ring:            rgba(255,107,107,0.20);
+  --focus-ring:            rgba(73,89,230,0.4);
+  --overlay:               rgba(30,38,120,0.12);
+  --overlay-strong:        rgba(30,35,80,0.30);
   --ai-from:               #F67BF8;
   --ai-to:                 #7B89F8;
   --ghost-hover:           rgba(73,89,230,0.20);
+  --primary-active:        rgba(123,137,248,0.20);
+  --ai-accent:             #C084FC;
+  --input-bg:              var(--bg3);   /* #1A1A1A — alias, préserve le rendu dark actuel */
+  --btn-bg:                var(--bg3);   /* #1A1A1A */
   --shadow-lg:             0 6px 28px rgba(73,89,230,0.40);
   --shadow-xl:             0 12px 48px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.30);
   /* Solid dark equivalents of light tints — computed over card baseline #1E1E1E
