@@ -29,6 +29,7 @@ const TOKENS = [
     { name: "label.s", px: 10, w: 600, uses: "badge xs — .now-reading-date--xs" },
   ] },
   { cat: "overline", desc: "Capitales avec interlettrage — eyebrows.", rows: [
+    { name: "overline.l", px: 13, w: 700, ls: "0.08em", upper: true, uses: "compteur de résultats — .panel-section-eyebrow.result-line" },
     { name: "overline.m", px: 11, w: 700, ls: "0.08em", upper: true, uses: "eyebrow — .panel-section-eyebrow" },
   ] },
 ];
