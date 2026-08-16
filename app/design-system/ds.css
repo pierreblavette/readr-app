@@ -1048,6 +1048,8 @@ img.ds-cover { object-fit: cover; }
    vrai :focus-within, via :has sur la coquille. /ds seul. */
 .search-input.is-focus { border: 1.5px solid var(--primary-50) !important; background: var(--primary-5) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; outline: none; }
 [data-theme="dark"] .search-input.is-focus { border-color: var(--primary-50) !important; background: var(--primary-3) !important; box-shadow: 0 0 0 3px var(--focus-ring) !important; }
+.search-input.is-hover { border: 1.5px solid var(--primary-50) !important; background: var(--primary-5) !important; }
+[data-theme="dark"] .search-input.is-hover { border-color: var(--primary-50) !important; background: var(--primary-3) !important; }
 
 /* ─── TEXT INPUT — éléments PROPOSÉS (doc /ds uniquement, pas encore dans
    library.css). Le vocabulaire couleur de validation existe déjà (--destructive,

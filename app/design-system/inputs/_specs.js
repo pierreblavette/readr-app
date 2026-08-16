@@ -34,16 +34,26 @@ export function Field() {
   );
 }
 
-// Champ de recherche (loupe + input + clear). focus = classe .is-focus (miroir /ds
-// du :focus-within, la doc n'ayant pas de vrai focus).
-export function SearchBox({ focus = false, style }) {
+// Champ de recherche (loupe + input + clear). focus/hover = classes .is-focus/.is-hover
+// (miroirs /ds du :focus-within / :hover, la doc n'ayant pas de vraie interaction).
+// empty = état au repos (placeholder, pas de clear) ; sinon rempli + clear visible.
+export function SearchBox({ focus = false, hover = false, empty = false, style }) {
+  const cls = `search-input${focus ? " is-focus" : ""}${hover ? " is-hover" : ""}`;
   return (
     <div className="search-box" style={{ minWidth: 0, ...style }}>
       <SearchIcon />
-      <input type="text" className={`search-input${focus ? " is-focus" : ""}`} defaultValue="Sally Rooney" readOnly />
-      <button type="button" className="search-clear visible" aria-label="Clear">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
-      </button>
+      <input
+        type="text"
+        className={cls}
+        defaultValue={empty ? "" : "Sally Rooney"}
+        placeholder={empty ? "Search authors, titles…" : undefined}
+        readOnly
+      />
+      {!empty && (
+        <button type="button" className="search-clear visible" aria-label="Clear">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+        </button>
+      )}
     </div>
   );
 }

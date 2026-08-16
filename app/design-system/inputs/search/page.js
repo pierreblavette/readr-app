@@ -10,6 +10,15 @@ const SEARCH_ANNOS = [
   { n: 4, side: "right", target: ".search-clear" },
 ];
 
+// Les 4 états réels du champ. Pas de Disabled : la recherche n'est jamais
+// désactivée dans l'app (aucune règle :disabled dans library.css).
+const SEARCH_STATES = [
+  { name: "Default", props: { empty: true }, cap: ".search-box" },
+  { name: "Hover", props: { empty: true, hover: true }, cap: ":hover" },
+  { name: "Focus", props: { empty: true, focus: true }, cap: ":focus" },
+  { name: "Filled", props: {}, cap: ".search-clear.visible" },
+];
+
 export default function SearchFieldPage() {
   return (
     <DSSection className="ds-scene-frame" id="inputs-search" title="Search Field" sub="Le champ de recherche : le socle du Text Field en pill, avec loupe et bouton d'effacement. Vit sur fond de page.">
@@ -77,6 +86,26 @@ export default function SearchFieldPage() {
             <div className="ds-token-name">Variante · <span className="ds-cn">.authors-search-input</span></div>
             <p>Même graphie d&apos;icône (44/34) mais radius 8 et bg <span className="ds-token-chip">--bg3</span> au lieu du pill blanc — variante « encastrée » pour l&apos;en-tête du menu Authors.</p>
           </div>
+        </div>
+      </div>
+
+      {/* 5 — STATES */}
+      <div className="ds-card">
+        <div className="ds-card-head">States</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--hold">
+            {SEARCH_STATES.map(({ name, props, cap }) => (
+              <div key={name} className="ds-state-sample">
+                <div style={{ width: "min(402px, 100%)" }}>
+                  <SearchBox {...props} style={{ width: "100%" }} />
+                </div>
+                <span className="ds-class">{cap}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <p className="ds-note">Bordure <span className="ds-token-chip">--border-subtle</span> au repos (le champ vit sur fond de page). Hover / focus : bord <span className="ds-token-chip">--primary-50</span> + fond <span className="ds-token-chip">--primary-5</span> (dark <span className="ds-token-chip">--primary-3</span>) ; focus ajoute l&apos;anneau <code>0 0 0 3px</code> <span className="ds-token-chip">--focus-ring</span>. Filled : dès qu&apos;un caractère est saisi, le bouton <span className="ds-class">.search-clear</span> apparaît (<span className="ds-class">.visible</span>). Pas d&apos;état disabled — la recherche n&apos;est jamais désactivée.</p>
         </div>
       </div>
 
