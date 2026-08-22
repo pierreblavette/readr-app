@@ -9,7 +9,7 @@ import DSSection from "../_components/DSSection";
 const TOKENS = [
   { cat: "title", desc: "Titres qui structurent un écran, une carte, une section.", rows: [
     { name: "title.xl", px: 48, mobile: 40, w: 700, lh: "1",   ls: "-0.03em", uses: ".page-title" },
-    { name: "title.l",  px: 28, mobile: 22, w: 700, lh: "1.2", ls: "-0.02em", uses: ".panel-title · .activity-day-title" },
+    { name: "title.l",  px: 28, mobile: 22, w: 700, lh: "1.5", ls: "-0.02em", uses: ".panel-title" },
     { name: "title.m",  px: 20,             w: 800, lh: "1.3", ls: "-0.02em", uses: "onboarding hero (exception 800)" },
     { name: "title.s",  px: 18,             w: 700,                           uses: "empty-state title" },
   ] },

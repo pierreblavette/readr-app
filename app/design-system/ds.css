@@ -896,9 +896,7 @@ img.ds-cover { object-fit: cover; }
 .btn-secondary { background: var(--primary-5); color: var(--primary-60); border: none; }
 .btn-secondary:hover:not(:disabled) { background: var(--primary-10); }
 .btn-secondary:active:not(:disabled) { background: var(--primary-20); color: var(--primary-70); }
-.btn-ghost { background: transparent; color: var(--dark-80); border: none; }
-.btn-ghost:hover:not(:disabled) { background: var(--primary-5); color: var(--primary-60); }
-.btn-ghost:active:not(:disabled) { background: var(--primary-10); }
+/* .btn-ghost : promu en prod (library.css). Base retirée d'ici pour éviter le doublon. */
 .btn-outline { background: var(--btn-bg); color: var(--dark-80); border: 1.5px solid var(--border-subtle); }
 .btn-outline:hover:not(:disabled) { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
 .btn-outline:active:not(:disabled) { background: var(--primary-10); border-color: var(--primary-60); color: var(--primary-60); }
@@ -922,8 +920,7 @@ img.ds-cover { object-fit: cover; }
 .btn-icon.btn-md svg *  { stroke-width: 2.25; }  /* glyph 16 → 1.5 */
 .btn-solid.btn-lg svg *,
 .btn-icon.btn-lg svg *  { stroke-width: 2; }     /* glyph 18 → 1.5 */
-.btn-critical { background: var(--destructive); color: var(--light-100); border: none; }
-.btn-critical:hover:not(:disabled) { background: var(--destructive-hover); }
+/* .btn-critical : promu en prod (library.css). Base retirée d'ici. */
 
 .btn-xs { height: 24px; padding: 0 8px;  border-radius: 6px;  font-size: 11px; gap: 4px; }
 .btn-sm { height: 32px; padding: 0 16px; border-radius: 7px;  font-size: 12px; gap: 6px; }
