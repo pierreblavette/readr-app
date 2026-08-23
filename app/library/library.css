@@ -33,11 +33,11 @@
 .btn-md { height: 40px; padding: 0 20px; border-radius: 8px; font-size: 15px; gap: 8px; }
 .btn-lg { height: 48px; padding: 0 24px; border-radius: 10px; font-size: 18px; gap: 10px; }
 .btn-xl { height: 56px; padding: 0 28px; border-radius: 12px; font-size: 20px; gap: 12px; }
-.btn-xs svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
-.btn-sm svg { width: 12px; height: 12px; padding: 2px; box-sizing: content-box; }
-.btn-md svg { width: 16px; height: 16px; padding: 2px; box-sizing: content-box; }
-.btn-lg svg { width: 18px; height: 18px; padding: 2px; box-sizing: content-box; }
-.btn-xl svg { width: 20px; height: 20px; padding: 2px; box-sizing: content-box; }
+.btn-xs svg { width: 12px; height: 12px; }
+.btn-sm svg { width: 12px; height: 12px; }
+.btn-md svg { width: 16px; height: 16px; }
+.btn-lg svg { width: 18px; height: 18px; }
+.btn-xl svg { width: 20px; height: 20px; }
 /* Chevron exception : when the trailing SVG is a chevron (right of text),
    drop the 2px frame so the visible size matches its width/height (e.g. 16
    in md instead of 20). Iso .dropdown-btn-chevron which renders 16x16. */
@@ -2617,8 +2617,6 @@
 .sel-btn svg {
   width: 16px;
   height: 16px;
-  padding: 2px;
-  box-sizing: content-box;
   flex-shrink: 0;
 }
 
@@ -3109,7 +3107,7 @@
 .modal-field input,
 .modal-field-input {
   height: 40px;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: 8px;
   border: 1.5px solid transparent;
   background: var(--bg3);
@@ -3500,7 +3498,7 @@
 .scan-manual-input {
   flex: 1;
   height: 40px;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: 8px;
   border: 1.5px solid transparent;
   background: var(--bg3);
@@ -4424,7 +4422,7 @@
 .col-name-input {
   width: 100%;
   height: 40px;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: 8px;
   border: 1.5px solid transparent;
   background: var(--bg3);
@@ -4967,7 +4965,7 @@
 
 .quote-textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px 16px;
   border-radius: 8px;
   border: 1.5px solid transparent;
   background: var(--bg3);
