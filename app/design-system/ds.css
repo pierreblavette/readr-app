@@ -977,6 +977,8 @@ img.ds-cover { object-fit: cover; }
 .panel-close.is-hover   { background: var(--ghost-hover); color: var(--primary-50); }
 [data-theme="dark"] .modal-close.is-hover,
 [data-theme="dark"] .panel-close.is-hover { color: var(--primary-40); }
+.modal-close.is-focus,
+.panel-close.is-focus   { outline: 2px solid var(--primary-50); outline-offset: 2px; }
 /* Onglet (Tabs) : hover + focus forcés pour le board States.
    Focus = miroir du *:focus-visible global (2px --primary-50, offset 2px). */
 .import-tab.is-hover    { color: var(--primary-50); }

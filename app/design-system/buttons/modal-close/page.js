@@ -30,6 +30,7 @@ const ANNOS = [
 const STATES = [
   ["Default", "", ".modal-close"],
   ["Hover", "is-hover", ":hover"],
+  ["Focus", "is-focus", ":focus-visible"],
 ];
 
 export default function ModalClosePage() {
@@ -112,7 +113,7 @@ export default function ModalClosePage() {
         </div>
         <div className="ds-card-body col">
           <p className="ds-note">Default — icône seule <span className="ds-token-chip">--text</span>, fond transparent · <span className="ds-class">:hover</span> — fond <span className="ds-token-chip">--ghost-hover</span> + icône <span className="ds-token-chip">--primary-50</span> (dark : <span className="ds-token-chip">--primary-40</span>). C&apos;est le <strong>hover ghost canonique</strong>, identique aux kebabs / like / menu — <span className="ds-class">.modal-close</span> et <span className="ds-class">.panel-close</span> convergés dessus. Transition <code>background</code> / <code>color</code> 0.15s.</p>
-          <p className="ds-note"><strong>Gap a11y</strong> : <span className="ds-class">.modal-close</span> force <code>outline: none</code> → <strong>aucun anneau de focus clavier</strong>, contrairement à tous les autres boutons (qui héritent du <code>*:focus-visible</code> global). Seul bouton de l&apos;app dans ce cas — candidat à corriger (retirer <code>outline: none</code>).</p>
+          <p className="ds-note"><span className="ds-class">:focus-visible</span> — <code>outline 2px</code> <span className="ds-token-chip">--primary-50</span> (offset 2), hérité du <code>*:focus-visible</code> global. <strong>Corrigé</strong> : le <code>outline: none</code> qui privait ce bouton de focus clavier (seul cas de l&apos;app) a été retiré — il retrouve l&apos;anneau comme tous les autres boutons.</p>
         </div>
       </div>
 
