@@ -124,6 +124,49 @@ export default function TogglePage() {
         </div>
       </div>
 
+      <div className="ds-card">
+        <div className="ds-card-head">Theme toggle · states</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn" aria-label="Default"><span className="toggle-thumb"><SunIcon /></span></button>
+              <span className="ds-class">.theme-btn</span>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn is-hover" aria-label="Hover"><span className="toggle-thumb"><SunIcon /></span></button>
+              <span className="ds-class">:hover</span>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn is-focus" aria-label="Focus"><span className="toggle-thumb"><SunIcon /></span></button>
+              <span className="ds-class">:focus-visible</span>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn" disabled aria-label="Disabled"><span className="toggle-thumb"><SunIcon /></span></button>
+              <span className="ds-class">:disabled</span>
+            </div>
+          </div>
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn is-on" aria-label="Default"><span className="toggle-thumb"><MoonIcon /></span></button>
+              <span className="ds-class">{'[data-theme="dark"]'}</span>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn is-on is-hover" aria-label="Hover"><span className="toggle-thumb"><MoonIcon /></span></button>
+              <span className="ds-class">:hover</span>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn is-on is-focus" aria-label="Focus"><span className="toggle-thumb"><MoonIcon /></span></button>
+              <span className="ds-class">:focus-visible</span>
+            </div>
+            <div className="ds-state-sample">
+              <button type="button" className="theme-btn is-on" disabled aria-label="Disabled"><span className="toggle-thumb"><MoonIcon /></span></button>
+              <span className="ds-class">:disabled</span>
+            </div>
+          </div>
+          <p className="ds-note">Deux axes, iso Figma : la valeur du toggle — <strong>Off</strong> (première rangée : piste <span className="ds-token-chip">--primary-10</span>, thumb gauche, soleil) / <strong>On, activé</strong> (seconde rangée : piste <span className="ds-token-chip">--primary-50</span>, thumb droite, lune) — croisée avec 4 états d&apos;interaction. Ici l&apos;état activé s&apos;exprime via <span className="ds-class">{'[data-theme="dark"]'}</span> (ce toggle pilote le thème), mais c&apos;est bien la valeur <em>On</em> du composant, pas un style « dark ». Hover : <span className="ds-token-chip">--primary-20</span> (off) → <span className="ds-token-chip">--primary-60</span> (on) ; focus : <code>outline 2px</code> <span className="ds-token-chip">--primary-50</span> offset 2 (règle globale) ; <span className="ds-class">:disabled</span> : <code>opacity 0.5</code>. Hover et focus sont figés en statique via un hack <code>.is-*</code> (non déclenchables hors interaction) ; disabled utilise le vrai attribut.</p>
+        </div>
+      </div>
+
       {/* ══════════ VIEW TOGGLE ══════════ */}
       <div className="ds-card">
         <div className="ds-card-head">View toggle · preview</div>

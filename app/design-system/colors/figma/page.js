@@ -68,9 +68,13 @@ const COLOR_GROUPS = [
   ]],
   ["surface", [
     ["card", "#FFFFFF", "neutral/white", "#1E1E1E", "card/dark"],
-    ["1", "#FAFAFF", "primary/3", "#1F2128", "primary/dark/3"],
-    ["2", "#F4F5FF", "primary/5", "#232536", "primary/dark/5"],
-    ["3", "#E8EAFD", "primary/10", "#2F3666", "primary/dark/10"],
+    ["primary-3", "#FAFAFF", "primary/3", "#1F2128", "primary/dark/3"],
+    ["primary-5", "#F4F5FF", "primary/5", "#232536", "primary/dark/5"],
+    ["primary-10", "#E8EAFD", "primary/10", "#2F3666", "primary/dark/10"],
+    ["input", "#FFFFFF", "neutral/white", "#1A1A1A", "surface/dark-2"],
+    ["btn", "#FFFFFF", "neutral/white", "#1A1A1A", "surface/dark-2"],
+    ["dropzone", "#FAFAFF", "primary/3", "#262626", "bg/elevated"],
+    ["dropzone-active", "#F4F5FF", "primary/5", "#2F3666", "primary/dark/10"],
   ]],
   ["text", [
     ["default", "#1F1F1F", "neutral/gray-900", "#F5F5F5", "neutral/gray-50"],

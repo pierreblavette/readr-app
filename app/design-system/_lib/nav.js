@@ -4,7 +4,7 @@
 // pas exposer de lien mort. NAV_LABELS peut rester complet dès maintenant.
 export const NAV = {
   Foundations: ["logo", "colors", "typography", "iconography", "spacing", "cell-row", "shadows", "strokes"],
-  Components: ["autocomplete", "badges", "buttons", "card", "checkbox", "chip", "dropdown", "dropzone", "empty", "footer", "inputs", "list", "message-box", "modal", "navigation-bar", "panels", "rating-stars", "rows", "segmented-pills", "sidebar", "spinner", "toast", "toggle", "weekly-activity"],
+  Components: ["autocomplete", "badges", "buttons", "card", "checkbox", "chip", "dropdown", "dropzone", "empty", "footer", "inputs", "list", "message-box", "modal", "navigation-bar", "panels", "rating-stars", "rows", "segmented-pills", "sidebar", "spinner", "tabs", "toast", "toggle", "weekly-activity"],
   // Patterns = explication d'un FONCTIONNEMENT UX (un flux, un comportement), pas un
   // composant. Ex. Editing (sélection + bulk), Filtering, Onboarding (accueil). Un
   // composant, même très intriqué (Modals, Autocomplete), reste dans Components.
@@ -33,6 +33,7 @@ export const NAV_CHILDREN = {
   buttons: [
     { label: "Dropdown Button", href: "/design-system/buttons/dropdown-button" },
     { label: "Link", href: "/design-system/buttons/link" },
+    { label: "Modal Close", href: "/design-system/buttons/modal-close" },
     { label: "Select", href: "/design-system/buttons/select" },
   ],
   card: [
@@ -110,7 +111,7 @@ export const NAV_LABELS = {
   "inputs": "Text Input", "view-toggle": "View Toggle", "badges": "Badges",
   "checkbox": "Checkbox", "autocomplete": "Autocomplete",
   "rating-stars": "Rating Stars", "row-checkbox": "Row Checkbox",
-  "theme-toggle": "Theme Toggle", "toggle": "Toggle", "rows": "Rows", "book-row": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
+  "theme-toggle": "Theme Toggle", "toggle": "Toggle", "tabs": "Tabs", "rows": "Rows", "book-row": "Book Row", "chip": "Chip", "book-card-kebab": "Kebab", "export-menu": "Export Menu", "sort-menu": "Sort Menu", "segmented-pills": "Segmented Pills",
   "card": "Cards", "quote-card": "Quote Card", "dictionary-card": "Dictionary Card",
   "list": "Table", "sidebar": "Side Menu", "panels": "Side Panels",
   "filters": "Filtering", "filters-panel": "Filters Panel", "filters-row": "Filters Row",

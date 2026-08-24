@@ -960,9 +960,28 @@ img.ds-cover { object-fit: cover; }
    :hover / :focus-visible réels — non déclenchables en statique). */
 .btn-link.is-hover      { color: var(--primary-60); text-decoration: underline; }
 .btn-link.is-focus      { box-shadow: 0 0 0 2px var(--primary-50); border-radius: 4px; }
+/* Theme toggle : états forcés pour le board States (le .theme-btn réel est couplé
+   au thème de la page — on fige position + couleurs via .is-*). */
+.theme-btn.is-on               { background: var(--primary-50); }
+.theme-btn.is-on .toggle-thumb { transform: translateX(22px); }
+.theme-btn.is-hover:not(.is-on) { background: var(--primary-20); }
+.theme-btn.is-on.is-hover      { background: var(--primary-60); }
+.theme-btn.is-focus            { outline: 2px solid var(--primary-50); outline-offset: 2px; }
 /* Dropdown / Select trigger : hover forcé pour les boards States (mirror du
    .dropdown-btn:hover réel). .is-active existe déjà en prod (filtre appliqué). */
 .dropdown-btn.is-hover  { border-color: var(--primary-50); color: var(--primary-50); background: var(--primary-5); }
+/* Focus forcé pour les boards States : miroir du *:focus-visible global. */
+.dropdown-btn.is-focus  { outline: 2px solid var(--primary-50); outline-offset: 2px; }
+/* Close buttons : hover forcé pour les boards States. */
+.modal-close.is-hover,
+.panel-close.is-hover   { background: var(--ghost-hover); color: var(--primary-50); }
+[data-theme="dark"] .modal-close.is-hover,
+[data-theme="dark"] .panel-close.is-hover { color: var(--primary-40); }
+/* Onglet (Tabs) : hover + focus forcés pour le board States.
+   Focus = miroir du *:focus-visible global (2px --primary-50, offset 2px). */
+.import-tab.is-hover    { color: var(--primary-50); }
+[data-theme="dark"] .import-tab.is-hover { color: var(--primary-40); }
+.import-tab.is-focus    { outline: 2px solid var(--primary-50); outline-offset: 2px; }
 
 [data-theme="dark"] .btn-primary { background: var(--primary-40); }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: var(--primary-50); }
@@ -1661,6 +1680,16 @@ img.ds-cover { object-fit: cover; }
    (padding vertical) mais on retire le padding horizontal → le composant va edge-to-edge.
    Preview et Anatomy partagent le même traitement. */
 .ds-preview.ds-preview--full { padding-left: 0; padding-right: 0; }
+
+/* Surface carte pour un specimen qui vit sur --card (ex. onglets d'une modale) :
+   le détache du fond de scène bleuté, fidèle à son contexte réel. */
+.ds-preview-card {
+  width: fit-content;
+  max-width: 100%;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+}
 .ds-anno-board--full .ds-anno-scene { padding-left: 0; padding-right: 0; }
 /* Sidebar en doc : la vraie est position:sticky, height 100dvh, z-index 300. On
    neutralise pour l'afficher en flux (hauteur = son contenu), apparence intacte. */

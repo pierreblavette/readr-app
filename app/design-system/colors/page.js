@@ -27,7 +27,7 @@ const MAP_ROWS = [
     ["--secondary-foreground", "secondary/foreground"],
   ]],
   ["Surfaces tintées & primary scale", [
-    ["--primary-3", "surface/1"], ["--primary-5", "surface/2"], ["--primary-10", "surface/3"],
+    ["--primary-3", "surface/primary-3"], ["--primary-5", "surface/primary-5"], ["--primary-10", "surface/primary-10"],
     ["--primary-20 … --primary-100", "primary/20 … primary/100"],
   ]],
   ["Critical", [

@@ -29,7 +29,10 @@ function Combobox() {
 
 const STATES = [
   ["Default", "Genres", 0, "", ".sort-menu-btn"],
-  ["Active", "Genres", 2, "is-active", ".is-active"],
+  ["Hover", "Genres", 0, "is-hover", ":hover"],
+  ["Focus", "Genres", 0, "is-focus", ":focus-visible"],
+  ["Active · multi", "Genres", 2, "is-active", ".is-active + .filter-badge"],
+  ["Active · mono", "Sort", 0, "is-active", ".is-active"],
   ["Disabled", "Genres", 0, "", ":disabled"],
 ];
 
@@ -119,7 +122,8 @@ export default function SelectPage() {
           </div>
         </div>
         <div className="ds-card-body col">
-          <p className="ds-note">Default — outline neutre, aucune valeur posée · <span className="ds-class">.is-active</span> — un filtre / une valeur s&apos;applique : border + texte <span className="ds-token-chip">--primary-50</span>, fond <span className="ds-token-chip">--primary-5</span>, badge visible · Disabled opacité 0.4. À l&apos;ouverture, le chevron pivote de 180°.</p>
+          <p className="ds-note">Default — outline neutre, aucune valeur posée · <span className="ds-class">:hover</span> — <strong>même remplissage que l&apos;actif</strong> (border + texte <span className="ds-token-chip">--primary-50</span>, fond <span className="ds-token-chip">--primary-5</span>) : le survol prévisualise l&apos;état rempli · Focus clavier — <code>outline 2px</code> <span className="ds-token-chip">--primary-50</span> (offset 2), hérité du <code>*:focus-visible</code> global · Disabled opacité 0.4. À l&apos;ouverture, le chevron pivote de 180°.</p>
+          <p className="ds-note"><strong>Deux formes d&apos;<span className="ds-class">.is-active</span></strong>, selon le type de select. <strong>Multi</strong> (Genres, Authors) — porte le <span className="ds-class">.filter-badge</span> (compteur de sélections). <strong>Mono</strong> (Sort) — une seule valeur, pas de badge. Même remplissage dans les deux cas ; seul le badge distingue. Le badge est optionnel, jamais intrinsèque à l&apos;état actif.</p>
         </div>
       </div>
 
