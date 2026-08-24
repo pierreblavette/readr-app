@@ -14,7 +14,7 @@ const ANNOS = [{ n: 1, side: "top", target: ".now-reading-date" }];
 
 export default function BadgesPage() {
   return (
-    <DSSection className="ds-scene-frame" id="badges" title="Badges" sub="La pastille pleine qui date le début d'une lecture. Trois tailles, une même forme.">
+    <DSSection className="ds-scene-frame" id="badges" title="Badges" sub="La pastille compacte : quatre tons sémantiques, trois tailles, une même forme.">
 
       {/* ─────────── 1. PREVIEW — la pill par défaut (sm) ─────────── */}
       <div className="ds-card">
@@ -97,6 +97,38 @@ export default function BadgesPage() {
             </div>
           ))}
           <p className="ds-note"><strong>sm</strong> par défaut (meta inline) ; <strong>md</strong> pour un callout mis en avant, <strong>xs</strong> pour une meta dense. Même anatomie aux trois tailles.</p>
+        </div>
+      </div>
+
+      {/* ─────────── 4b. TONES ─────────── */}
+      <div className="ds-card">
+        <div className="ds-card-head">Tones</div>
+        <div className="ds-card-body col">
+          <div className="ds-states-grid ds-states-grid--boxed ds-states-grid--cols-2">
+            <div className="ds-state-sample">
+              <span className="now-reading-date now-reading-date--sm">Primary</span>
+              <span className="ds-class">.now-reading-date</span>
+            </div>
+            <div className="ds-state-sample">
+              <span className="overview-goal-pace--ahead"><span className="overview-goal-pace-delta">Success</span></span>
+              <span className="ds-class">.overview-goal-pace-delta</span>
+            </div>
+            <div className="ds-state-sample">
+              <span className="overview-goal-pace--behind"><span className="overview-goal-pace-delta">Warning</span></span>
+              <span className="ds-class">.overview-goal-pace-delta</span>
+            </div>
+            <div className="ds-state-sample">
+              <span className="panel-quiz-review-badge is-incorrect">Danger</span>
+              <span className="ds-class">.panel-quiz-review-badge</span>
+            </div>
+          </div>
+        </div>
+        <div className="ds-card-body col">
+          <div className="ds-token-block">
+            <div className="ds-token-name">Quatre tons</div>
+            <p><strong>Primary</strong> solide — fond <span className="ds-token-chip">--primary-50</span>, texte blanc · <strong>Success</strong> soft — fond <span className="ds-token-chip">--success-bg</span>, texte <span className="ds-token-chip">--success</span> · <strong>Warning</strong> soft — <span className="ds-token-chip">--warning-bg</span> / <span className="ds-token-chip">--warning</span> · <strong>Danger</strong> solide — <span className="ds-token-chip">--alert</span>, texte blanc. Primary et Danger pleins (texte blanc), Success et Warning teintés (texte coloré).</p>
+          </div>
+          <p className="ds-note"><strong>Dette</strong> : ces tons sont aujourd&apos;hui des <strong>classes séparées</strong> (<span className="ds-class">.now-reading-date</span> pour la date/compteur, <span className="ds-class">.overview-goal-pace-delta</span> pour le delta de pace, <span className="ds-class">.panel-quiz-review-badge</span> pour le quiz), pas un système unifié. Le composant Figma les modélise déjà en une seule famille <strong>Tone × Size</strong> — candidat à unifier en prod sous une classe <span className="ds-class">.badge</span> à modifieurs de ton.</p>
         </div>
       </div>
 
