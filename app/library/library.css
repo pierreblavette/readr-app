@@ -235,6 +235,7 @@
 [data-theme="dark"] .theme-btn { background: var(--primary-50); }
 [data-theme="dark"] .theme-btn:hover { background: var(--primary-60); }
 .theme-btn:hover { background: var(--primary-20); opacity: 1; }
+.theme-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .toggle-thumb {
   position: absolute;
@@ -1915,11 +1916,13 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s;
   font-family: inherit;
 }
 
-.panel-close:hover { background: var(--ghost-hover); }
+/* Hover ghost canonique : fond --ghost-hover + icône --primary-50 (dark --primary-40). */
+.panel-close:hover { background: var(--ghost-hover); color: var(--primary-50); }
+[data-theme="dark"] .panel-close:hover { color: var(--primary-40); }
 .panel-close svg { width: 24px; height: 24px; }
 
 .panel-cover-wrap {
@@ -3010,20 +3013,23 @@
   font-family: inherit;
 }
 
-.modal-close:hover { background: var(--primary-5); color: var(--primary-50); }
+/* Hover ghost canonique (iso kebab / like / menu) : fond --ghost-hover +
+   icône --primary-50 (dark --primary-40). Convergé avec .panel-close. */
+.modal-close:hover { background: var(--ghost-hover); color: var(--primary-50); }
+[data-theme="dark"] .modal-close:hover { color: var(--primary-40); }
 .modal-close svg { width: 24px; height: 24px; }
 
-[data-theme="dark"] .modal-close:hover { background: var(--primary-5); color: var(--primary-40); }
-
 /* Import tabs */
-/* Outer wrapper handles horizontal scroll. The 4px bottom padding gives
-   room for the indicator that sits at bottom: -1.5px on the inner
-   .import-tabs (without it, overflow-x: auto's implicit overflow-y: auto
-   would clip / scroll the indicator vertically). */
+/* Outer wrapper handles horizontal scroll (overflow-x: auto forces overflow-y
+   to auto, pinned to hidden here). Both axes therefore clip anything bleeding
+   past the edges. The 4px padding on ALL sides gives room for the indicator at
+   bottom: -1.5px AND the 2px focus outline (offset 2px, so it reaches 4px out)
+   on every side — without it the ring is clipped on the top, and on the left /
+   right for the first / last tab. */
 .import-tabs-scroll {
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 4px;
+  padding: 4px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
 }
@@ -3033,8 +3039,7 @@
   gap: 4px;
   border-bottom: 1px solid var(--border-subtle);
   position: relative;
-  width: max-content;
-  min-width: 100%;
+  width: fit-content;
 }
 .import-tab { flex-shrink: 0; }
 .import-tab-hint {
@@ -4212,8 +4217,8 @@
   transition: background 0.15s, color 0.15s;
   font-family: var(--font-jakarta), sans-serif;
 }
-.sidebar-item:hover { background: var(--primary-5); color: var(--primary-50); }
-[data-theme="dark"] .sidebar-item:hover { background: var(--primary-3); color: var(--primary-40); }
+.sidebar-item:hover:not(.active) { background: var(--primary-5); color: var(--primary-50); }
+[data-theme="dark"] .sidebar-item:hover:not(.active) { background: var(--primary-3); color: var(--primary-40); }
 .sidebar-item.active {
   background: var(--primary-50);
   color: var(--light-100);
