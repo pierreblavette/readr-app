@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import GradientDropzone from "./GradientDropzone";
 import BarcodeScanner from "./BarcodeScanner";
+import BookMediaRow from "./BookMediaRow";
 import { prepareImage } from "../../lib/prepareImage";
 import { toTitleCase } from "../../lib/bookUtils";
 import { useModalA11y } from "../../lib/useModalA11y";
@@ -406,11 +407,13 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
                   type="button"
                   className="import-change-file"
                   onClick={() => setPreviewBooks([])}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
+                  {/* Neutral "look up again" affordance — no camera icon: barcode
+                     capture isn't available on desktop (nor via a live viewfinder on
+                     iOS), so a camera glyph here was misleading. */}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                   </svg>
-                  {t.scanNewBarcode}
+                  {t.scanLookupAnother}
                 </button>
                 <ScanPreview book={previewBooks[0]} t={t} />
               </>
@@ -577,24 +580,7 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
 function ScanPreview({ book }) {
   return (
     <div className="scan-preview">
-      <div className="scan-preview-row">
-        {book.cover ? (
-          <img src={book.cover} alt={book.title} className="scan-preview-cover" />
-        ) : (
-          <div className="scan-preview-cover scan-preview-cover-empty">
-            <span>{(book.title || '?').charAt(0).toUpperCase()}</span>
-          </div>
-        )}
-        <div className="scan-preview-info">
-          <div className="scan-preview-title">{book.title}</div>
-          <div className="scan-preview-author">{book.author || '—'}</div>
-          <div className="book-meta">
-            <span>{book.genre || 'NC'}</span>
-            <span className="book-meta-sep" aria-hidden="true">·</span>
-            <span>{book.year || 'NC'}</span>
-          </div>
-        </div>
-      </div>
+      <BookMediaRow book={book} cover={book.cover} />
       {book.description && (
         <p className="scan-preview-description">{book.description}</p>
       )}

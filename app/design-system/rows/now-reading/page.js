@@ -149,6 +149,10 @@ export default function NowReadingRowPage() {
             <div className="ds-token-name">Source</div>
             <p><code>NowReadingSection.js</code>. Cover résolue par titre/auteur, repli sur dégradé + initiale.</p>
           </div>
+          <div className="ds-token-block">
+            <div className="ds-token-name">Composant partagé · <span className="ds-cn">&lt;BookMediaRow&gt;</span></div>
+            <p>Le média-object (cover + titre / auteur / <span className="ds-class">.book-meta</span>) est extrait dans <code>BookMediaRow.js</code>, sur les classes <span className="ds-class">.now-reading-*</span>. <strong>Même composant</strong> réutilisé par le <strong>ScanPreview</strong> de la modale <em>Add a book</em> (résultat de scan code-barres) — une seule implémentation, aucune divergence possible entre les deux.</p>
+          </div>
         </div>
       </div>
     </DSSection>

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { coverColors, coverLetter, fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
+import { fetchBookCover, getCoverFromCache, setCoverInCache, loadGBCache } from "@/lib/bookUtils";
+import BookMediaRow from "./BookMediaRow";
 
 function formatDate(ts, lang) {
   if (!ts) return '';
@@ -67,9 +68,6 @@ function NowReadingMenu({ book, onFinish, onAddQuote, onCancel, t }) {
 
 function NowReadingCard({ book, onOpen, onFinish, onAddQuote, onCancel, lang, t }) {
   const [cover, setCover] = useState(() => getCoverFromCache(book.title, book.author)?.thumb || null);
-  const [c1, c2] = coverColors(book.title);
-  const letter = coverLetter(book.title);
-
   useEffect(() => {
     const cached = getCoverFromCache(book.title, book.author);
     if (cached !== undefined) { setCover(cached?.thumb || null); return; }
@@ -90,24 +88,7 @@ function NowReadingCard({ book, onOpen, onFinish, onAddQuote, onCancel, lang, t 
         {book.startedAt && (
           <span className="now-reading-date">{t.nowReadingStartedOn(formatDate(book.startedAt, lang))}</span>
         )}
-        <div className="now-reading-row">
-          <div
-            className={`now-reading-cover${cover ? '' : ' now-reading-cover-empty'}`}
-            style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
-            {cover
-              ? <img src={cover} alt={book.title} />
-              : <span className="now-reading-cover-letter">{letter}</span>}
-          </div>
-          <div className="now-reading-text">
-            <div className="now-reading-title">{book.title}</div>
-            <div className="now-reading-author">{book.author}</div>
-            <div className="book-meta">
-              <span>{book.genre || 'NC'}</span>
-              <span className="book-meta-sep" aria-hidden="true">·</span>
-              <span>{book.year || 'NC'}</span>
-            </div>
-          </div>
-        </div>
+        <BookMediaRow book={book} cover={cover} />
       </div>
       <NowReadingMenu
         book={book}
