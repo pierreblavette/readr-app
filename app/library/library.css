@@ -4022,9 +4022,10 @@
   height: 40px; padding: 0 20px; border-radius: 8px;
   background: transparent; border: none;
   font-family: inherit; font-size: 15px; font-weight: 600;
-  color: var(--text-2); cursor: pointer; transition: all 0.15s;
+  color: var(--dark-80); cursor: pointer; transition: all 0.15s;
 }
-.ob-skip:hover { background: var(--primary-5); color: var(--primary-50); }
+.ob-skip:hover { background: var(--primary-5); color: var(--primary-60); }
+.ob-skip:active { background: var(--primary-10); color: var(--primary-70); }
 .ob-prev {
   height: 40px; padding: 0 20px; border-radius: 8px;
   background: var(--primary-5); color: var(--primary-50); border: none;
@@ -4046,8 +4047,8 @@
   color: var(--primary);
 }
 [data-theme="dark"] .ob-prev:hover { background: var(--primary-active); }
-[data-theme="dark"] .ob-skip { color: var(--text-2); }
-[data-theme="dark"] .ob-skip:hover { background: var(--accent-bg); color: var(--primary); }
+[data-theme="dark"] .ob-skip { color: var(--light-85); }
+[data-theme="dark"] .ob-skip:hover { color: var(--primary-40); }
 [data-theme="dark"] .ob-dot { background: var(--border); }
 [data-theme="dark"] .ob-dot.active { background: var(--primary); }
 
