@@ -1,6 +1,6 @@
 # Readr — Design System
 
-> Document de synthèse **auto-suffisant** du refacto du design system. Carte narrative + technique. La **source visuelle** de vérité reste le DS live à `/design-system` (65 pages) ; ce document en est le plan. Pour la vue projet, voir [`PROJECT.md`](./PROJECT.md).
+> Document de synthèse **auto-suffisant** du refacto du design system. Carte narrative + technique. La **source visuelle** de vérité reste le DS live à `/design-system` (67 pages) ; ce document en est le plan. Pour la vue projet, voir [`PROJECT.md`](./PROJECT.md).
 
 ---
 
@@ -20,7 +20,7 @@ Deux principes gouvernent tout le chantier :
 La sidebar est pilotée par `app/design-system/_lib/nav.js`.
 
 - **Foundations** — les fondations. Ordre = **parcours d'apprentissage** (identité → couleur → typo → espace), volontairement **non alphabétique** : `logo, colors, typography, iconography, spacing, cell-row, shadows, strokes`.
-- **Components** — inventaire **alphabétique** d'atomes (un composant, même intriqué, reste ici) : autocomplete, badges, buttons, card, checkbox, chip, dropdown, dropzone, empty, footer, inputs, list, message-box, modal, navigation-bar, panels, rating-stars, rows, segmented-pills, sidebar, spinner, toast, toggle, weekly-activity.
+- **Components** — inventaire **alphabétique** d'atomes (un composant, même intriqué, reste ici) : autocomplete, badges, buttons, card, checkbox, chip, dropdown, dropzone, empty, footer, inputs, list, message-box, modal, navigation-bar, panels, rating-stars, rows, segmented-pills, sidebar, spinner, tabs, toast, toggle, weekly-activity.
 - **Patterns** — un **flux / comportement UX** (pas un composant) : `editing` (sélection + bulk), `filters`, `onboarding`, `overlays`.
 - **Reference** — pages utilitaires : `dev-tools` (mapping de tokens, outils).
 
@@ -98,7 +98,7 @@ Monolithe → split multipage → **Components** bouclé → **Patterns** (Editi
 | CSS scopé au DS | `app/design-system/ds.css` |
 | CSS de production (app + /ds) | `app/library/library.css` |
 | Tokens de couleur | `app/globals.css` (+ variables Figma) |
-| Pages du DS | `app/design-system/<slug>/page.js` (65 pages) |
+| Pages du DS | `app/design-system/<slug>/page.js` (67 pages) |
 
 Le détail vivant du chantier (état d'avancement fin, pièges par page) est tenu dans la mémoire projet de l'environnement de travail ; **ce document est une photo stable**, le DS live reste la référence visuelle.
 

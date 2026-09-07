@@ -64,7 +64,7 @@ Port de dev : **3000** (`npm run dev`).
 Tout vit sous `app/` (App Router Next.js) :
 
 - **`app/library/`** — le **produit réel** : bibliothèque, overview, collections, citations, dictionnaire, activité. C'est l'app que l'utilisateur voit.
-- **`app/design-system/`** — le **design system** documenté, servi à `/design-system` (voir `DESIGN-SYSTEM.md`). 65 pages. N'impacte pas le produit.
+- **`app/design-system/`** — le **design system** documenté, servi à `/design-system` (voir `DESIGN-SYSTEM.md`). 67 pages. N'impacte pas le produit.
 - **`app/api/vision/*`** — **proxies serveur** vers le Cloudflare Worker. Une route Next.js par endpoint AI (`books`, `quote`, `cast`, `quiz`, `define`, `barcode`). Leur rôle : garder le secret `WORKER_TOKEN` **côté serveur**, jamais dans le bundle navigateur.
 - **`app/sw.js` + `app/serwist/[path]/route.js`** — service worker PWA (SW servi à la demande, pas de fichier statique dans `public/`).
 - **`app/manifest.js`, `app/layout.js`** — manifest PWA + métadonnées / viewport / theme-color dynamiques.
