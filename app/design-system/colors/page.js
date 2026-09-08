@@ -1,5 +1,6 @@
 import Link from "next/link";
 import DSSection from "../_components/DSSection";
+import FigmaCard from "../_components/FigmaCard";
 
 // Racine de la famille Colors. Explique le modèle à deux sources (code vs Figma,
 // non synchronisés) et renvoie vers les deux pages : Web (tokens CSS, live) et
@@ -139,6 +140,8 @@ export default function ColorsPage() {
           <p className="ds-note"><strong>Alias de valeur</strong> — même couleur, pas de variable Figma dédiée, binde la cible ci-contre : <code>--background</code> = <code>--bg</code> · <code>--accent</code> = <code>--ring</code> = <code>--primary</code> (<code className="ds-cn">accent/default</code>) · <code>--input</code> = <code>--border</code> (<code className="ds-cn">border/default</code>) · <code>--alert</code> = <code>--destructive</code> · <code>--primary-foreground</code> = <code>--light-100</code> (blanc pur) · <code>--muted</code> = <code className="ds-cn">bg/3</code> · <code>--muted-foreground</code> = <code>--text-3</code>. <strong>Non-couleurs</strong> (pas de variable) : <code>--radius</code>, <code>--height-head</code>, <code>--transition</code>.</p>
         </div>
       </div>
+
+      <FigmaCard slug="colors" />
 
     </DSSection>
   );
