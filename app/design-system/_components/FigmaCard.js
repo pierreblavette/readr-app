@@ -28,10 +28,7 @@ export default function FigmaCard({ slug, label = "Ouvrir dans Figma" }) {
           </svg>
         </span>
       </span>
-      <span className="ds-index-label">
-        {label}
-        <span className="ds-figma-arrow" aria-hidden="true">↗</span>
-      </span>
+      <span className="ds-index-label">{label}</span>
       </a>
     </div>
   );

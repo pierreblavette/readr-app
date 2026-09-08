@@ -1,4 +1,5 @@
 import DSSection from "../_components/DSSection";
+import FigmaCard from "../_components/FigmaCard";
 
 // Échelle typographique — valeurs réelles lues dans globals.css / library.css.
 // base : html { font-size:14px } → 1rem = 14px. On documente le rôle sémantique
@@ -226,6 +227,8 @@ export default function TypographyPage() {
           </div>
         </div>
       </div>
+
+      <FigmaCard slug="typography" />
 
     </DSSection>
   );

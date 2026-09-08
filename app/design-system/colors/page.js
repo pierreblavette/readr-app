@@ -48,7 +48,10 @@ const MAP_ROWS = [
     ["--light-100", "neutral/light-100"],
   ]],
   ["Illustration", [
-    ["--illus-bg-1 … --illus-stroke", "illus/*"],
+    ["--illus-bg-1", "illus/bg-1"], ["--illus-bg-2", "illus/bg-2"], ["--illus-bg-3", "illus/bg-3"],
+    ["--illus-mid", "illus/mid"],
+    ["--illus-accent-1", "illus/accent-1"], ["--illus-accent-2", "illus/accent-2"], ["--illus-accent-3", "illus/accent-3"],
+    ["--illus-stroke", "illus/stroke"],
   ]],
   ["Ombres (Effect Styles)", [
     ["--shadow-md", "shadow/md"], ["--shadow-lg", "shadow/lg"],

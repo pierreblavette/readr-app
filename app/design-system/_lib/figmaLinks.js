@@ -13,6 +13,7 @@ const FILE = "kkuToKrC2Vk5YF2W9nXjc6";
 export const FIGMA_NODES = {
   // Foundations
   colors: "1495:2",
+  typography: "1522:2",
 
   // Components (pages Figma existantes — à brancher au fil du déploiement) :
   // buttons: "663:2", card: "876:8", rows: "875:8", modal: "716:2",
