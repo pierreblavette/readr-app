@@ -1964,6 +1964,24 @@
 .panel-main > .panel-cover-wrap {
   align-self: center;
 }
+/* Colonne cover + crédit source (Apple Books). align-items:center reprend le
+   centrage que .panel-main > .panel-cover-wrap assurait avant l'ajout du wrapper. */
+.panel-cover-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.panel-cover-credit {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.panel-cover-credit:hover { color: var(--primary-50); }
+[data-theme="dark"] .panel-cover-credit:hover { color: var(--primary-40); }
 .panel-info {
   display: flex;
   flex-direction: column;

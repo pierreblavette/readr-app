@@ -29,6 +29,9 @@ function StarsDisplay({ value }) {
 export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrary, onAddQuote, onOpenQuote, onStartReading, onFinishReading, onCancelReading, onEditFinished, onRemoveFinished, onShared, onOpenCollection, onAddToCollection, readingCount, maxReading, quotes, collections = [], lang, t }) {
   const [cover, setCover] = useState(null);
   const [synopsis, setSynopsis] = useState(null);
+  // Lien Apple Books quand la couverture provient de leur store — attribution +
+  // intention « drive to store » attendue par les conditions d'usage Apple.
+  const [appleUrl, setAppleUrl] = useState(null);
   const panelRef = useModalA11y(!!book, onClose, { autoFocus: false });
 
   async function handleShare() {
@@ -63,14 +66,17 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
     if (cached !== undefined) {
       setCover(cached?.thumb || null);
       setSynopsis(cached?.description || null);
+      setAppleUrl(cached?.appleUrl || null);
       return;
     }
     setCover(null);
     setSynopsis(null);
+    setAppleUrl(null);
     fetchBookCover(book.title, book.author, loadGBCache()).then(res => {
       setCoverInCache(book.title, book.author, res);
       setCover(res?.thumb || null);
       setSynopsis(res?.description || null);
+      setAppleUrl(res?.appleUrl || null);
     });
   }, [book]);
 
@@ -100,12 +106,23 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
 
           {/* Main — cover + info block (gap 40px between them) */}
           <div className="panel-main">
-            <div
-              className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`}
-              style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
-              {cover
-                ? <img src={cover} alt={book.title} className="panel-cover-img" />
-                : <span className="panel-cover-letter">{letter}</span>}
+            <div className="panel-cover-col">
+              <div
+                className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`}
+                style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
+                {cover
+                  ? <img src={cover} alt={book.title} className="panel-cover-img" />
+                  : <span className="panel-cover-letter">{letter}</span>}
+              </div>
+              {cover && appleUrl && (
+                <a
+                  className="panel-cover-credit"
+                  href={appleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  {t.coverViaApple || 'Cover via Apple Books'}
+                </a>
+              )}
             </div>
             <div className="panel-info">
               <div className="panel-info-header">
