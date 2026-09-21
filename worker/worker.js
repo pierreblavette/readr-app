@@ -226,15 +226,10 @@ export default {
       }
     }
 
-    // GET /cover — lookup cover by title + author.
-    // Cascade Apple Books → Google Books → OpenLibrary, réponse normalisée à la
-    // forme Google Books pour que fetchBookCover reste inchangé côté client.
-    //  - Apple Books en primary : meilleure qualité d'artwork (600x600) et
-    //    couverture des NOUVEAUTÉS ; on renvoie `storeUrl` (lien Apple Books) → le
-    //    client affiche « Cover via Apple Books » pour rester aligné avec
-    //    l'intention store des ToU Apple.
-    //  - Google Books en 2e : conditions permissives, bon fonds général.
-    //  - OpenLibrary en dernier (ouvert/CC), pour le fonds ancien.
+    // GET /cover — lookup cover by title + author. Fallback serveur Google Books
+    // → OpenLibrary (Apple Books est tenté AVANT, côté navigateur, cf.
+    // fetchBookCover : l'IP mutualisée du Worker Cloudflare est rate-limitée 429
+    // par l'API iTunes Search).
     if (request.method === 'GET' && url.pathname === '/cover') {
       try {
         const title  = (url.searchParams.get('title')  || '').trim();
@@ -243,41 +238,9 @@ export default {
           return json({ error: 'Missing title' }, 400);
         }
 
-        // 1. Apple Books (iTunes Search) en primary : meilleure qualité d'artwork
-        //    (600x600) et couverture des nouveautés. Recherche par titre + auteur
-        //    (pas d'ISBN requis) ; on renvoie `storeUrl` → le client affiche
-        //    « Cover via Apple Books » (attribution + intention store des ToU).
-        try {
-          const term  = encodeURIComponent(`${title} ${author}`.trim());
-          const itUrl = `https://itunes.apple.com/search?media=ebook&entity=ebook&limit=1&term=${term}`;
-          const itRes = await fetch(itUrl);
-          if (itRes.ok) {
-            const itData = await itRes.json();
-            const r      = itData?.results?.[0];
-            const art    = r?.artworkUrl100 || r?.artworkUrl60;
-            if (art) {
-              const hi = art.replace(/\/\d+x\d+bb\.(jpg|png|jpeg)$/i, '/600x600bb.$1');
-              return json({
-                source: 'applebooks',
-                storeUrl: r.trackViewUrl || null,
-                items: [{
-                  volumeInfo: {
-                    title: r.trackName || title,
-                    authors: r.artistName ? [r.artistName] : [],
-                    publishedDate: r.releaseDate ? String(r.releaseDate).slice(0, 4) : '',
-                    description: r.description || null,
-                    imageLinks: { thumbnail: hi },
-                    categories: r.genres || [],
-                  },
-                }],
-              });
-            }
-          }
-        } catch (e) {
-          // Fall through to Google Books.
-        }
-
-        // 2. Google Books. N'accepter que si une cover existe vraiment.
+        // 1. Google Books (primary). N'accepter que si une cover existe vraiment.
+        // NB : Apple Books est interrogé côté CLIENT (navigateur) en amont — l'API
+        // iTunes Search rate-limite (429) l'IP mutualisée du Worker Cloudflare.
         try {
           const query  = encodeURIComponent(`intitle:${title} inauthor:${author}`);
           const fields = 'items(volumeInfo(imageLinks,publishedDate,description))';
@@ -292,7 +255,7 @@ export default {
           // Fall through to OpenLibrary.
         }
 
-        // 3. OpenLibrary search (dernier recours). OL ne renvoie pas de description.
+        // 2. OpenLibrary search (dernier recours). OL ne renvoie pas de description.
         try {
           const olParams = new URLSearchParams();
           olParams.set('title', title);
@@ -328,6 +291,25 @@ export default {
         return json({ source: 'none', items: [] });
       } catch (e) {
         return json({ error: e.message || 'Cover lookup error' }, 500);
+      }
+    }
+
+    // GET /search — autocomplete free-text (tab Manual), fallback Google Books.
+    // Apple Books est interrogé AVANT côté navigateur (cf. AddModal / appleBookSearch) :
+    // l'API iTunes Search rate-limite (429) l'IP mutualisée du Worker Cloudflare.
+    if (request.method === 'GET' && url.pathname === '/search') {
+      try {
+        const q = (url.searchParams.get('q') || '').trim();
+        if (!q) return json({ source: 'none', items: [] });
+
+        const query  = encodeURIComponent(q);
+        const fields = 'items(volumeInfo(title,authors,publishedDate,description,imageLinks,categories))';
+        const gbUrl  = `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=8&fields=${fields}&key=${env.GOOGLE_BOOKS_API_KEY}`;
+        const gbRes  = await fetch(gbUrl);
+        const gbData = await gbRes.json();
+        return json({ source: 'googlebooks', ...gbData });
+      } catch (e) {
+        return json({ error: e.message || 'Search error' }, 500);
       }
     }
 

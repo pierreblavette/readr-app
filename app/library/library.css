@@ -1120,7 +1120,10 @@
 }
 
 .book-cover {
-  height: 192px;
+  /* Ratio de couverture de livre (2:3) plutôt qu'une hauteur fixe : la zone
+     épouse la proportion réelle des covers, donc object-fit:cover ne recadre
+     plus verticalement. La hauteur suit la largeur de carte. */
+  aspect-ratio: 2 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1806,16 +1809,19 @@
 /* ─── BOOK PANEL ─── */
 .book-panel {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  /* Panneau flottant : 24px de marge sur les 4 bords (desktop), coins arrondis
+     + ombre. Le slide fermé dégage aussi la marge (100% + 24). Sous 768px, le
+     drawer reprend le plein écran sous la toolbar (bloc @media plus bas). */
+  top: 24px;
+  right: 24px;
+  bottom: 24px;
   width: 540px;
-  height: 100vh;
+  height: auto;
   background: var(--bg);
-  border-left: 1px solid var(--border-subtle);
-  border-radius: 0;
-  box-shadow: none;
-  transform: translateX(100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  box-shadow: var(--shadow-xl);
+  transform: translateX(calc(100% + 24px));
   transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 320;
   overflow-y: auto;
@@ -1860,46 +1866,120 @@
   gap: 40px;
 }
 
-/* ─── Écho flouté de la cover (test) ─────────────────────────────────────────
-   Reprend la pochette du livre en fond du header, du sommet de .panel-inner
-   jusqu'à ~70% de la cover, avec un fondu doux (mask) vers le bg du panneau.
-   Hauteur proportionnelle : cover = 50% de la largeur, ratio 2/3 → 70% ≈ 48%
-   de la largeur, + le padding-top de 96px. Géométrie, pas de valeur figée. */
-.panel-inner--echo::before,
-.panel-inner--echo::after {
+/* ─── BookPanel en sections (header teinté + corps neutre) ───────────────────
+   panel-inner--sectioned : conteneur sans padding (le padding vit dans chaque
+   section). Scopé pour ne PAS toucher QuotePanel / FiltersPanel qui partagent
+   .panel-inner. */
+.panel-inner--sectioned {
+  padding: 0;
+  gap: 0;
+  align-items: stretch;
+}
+
+/* Header teinté : cover + titre + byline + actions. padding iso ex-.panel-inner.
+   overflow:hidden clippe l'écho à ce conteneur → séparation FRANCHE en bas. */
+.panel-header {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 96px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  text-align: left;
+}
+.panel-header > .panel-cover-wrap {
+  align-self: center;
+  margin-bottom: 36px; /* cover → titre = gap 24 + 36 = 60 (rythme d'origine) */
+}
+.panel-header > *:not(.panel-close) { position: relative; z-index: 1; }
+.panel-header > .panel-close { z-index: 2; }
+
+/* Corps neutre (tout le reste) : même padding que le header. */
+.panel-body {
+  padding: 96px 32px 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ─── Écho flouté de la cover, scopé au header ───────────────────────────────
+   ::before = pochette floutée ; ::after = scrim. inset:0 → remplit le header ;
+   l'overflow:hidden du header donne l'arête franche (plus de mask). */
+.panel-header--echo::before,
+.panel-header--echo::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0;
-  padding-top: calc(96px + 48%);
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 74%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 0%, #000 74%, transparent 100%);
 }
-/* Couche 1 — la pochette floutée */
-.panel-inner--echo::before {
+.panel-header--echo::before {
   background-image: var(--panel-cover);
   background-size: cover;
   background-position: center 20%;
-  filter: blur(28px) saturate(1.3);
+  filter: blur(28px) saturate(2);
   transform: scale(1.15);
   transform-origin: top center;
-  opacity: 0.55;
+  opacity: 0.8;
 }
-/* Couche 2 — scrim net (non flouté car sibling, pas enfant du filtre) :
-   lisibilité du bouton close + calme le halo. Theme-aware. */
-.panel-inner--echo::after {
-  background: rgba(235,237,255,0.30);
+.panel-header--echo::after {
+  background: rgba(235,237,255,0.1);
 }
-[data-theme="dark"] .panel-inner--echo::after {
-  background: rgba(8,10,26,0.42);
+[data-theme="dark"] .panel-header--echo::after {
+  background: rgba(8,10,26,0.5);
 }
-/* Contenu au-dessus de l'écho */
-.panel-inner--echo > .panel-main { position: relative; z-index: 1; }
-.panel-inner--echo > .panel-close { z-index: 2; }
+
+/* ─── Encre auto-contrastée du header ────────────────────────────────────────
+   is-light-bg / is-dark-bg posées par BookPanel selon la luminance du fond
+   teinté → texte + boutons + badge en noir ou blanc PUR, en opposition. */
+.panel-header.is-light-bg {
+  --ink: var(--dark-100); --ink-inverse: var(--light-100);
+  --ink-soft: rgba(0,0,0,0.62); --ink-line: rgba(0,0,0,0.28);
+}
+.panel-header.is-dark-bg {
+  --ink: var(--light-100); --ink-inverse: var(--dark-100);
+  --ink-soft: rgba(255,255,255,0.76); --ink-line: rgba(255,255,255,0.42);
+}
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-title { color: var(--ink); }
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-author,
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-meta,
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-meta span,
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-meta-sep { color: var(--ink-soft); }
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-close { color: var(--ink); }
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-close:hover { background: var(--ink-line); color: var(--ink); }
+/* Boutons outline / secondaires : contour + texte encre, fond transparent */
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-share,
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-finished,
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-actions .btn-secondary {
+  color: var(--ink);
+  border-color: var(--ink-line);
+  background: transparent;
+}
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-share:hover,
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-actions .btn-secondary:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: transparent;
+}
+/* CTA primaire (Start / Finish / Move) → pilule encre givrée : opacité 0.7 +
+   fond flou (backdrop) au repos, pleine opacité au survol. */
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-move-btn {
+  /* Pilule blanche pleine, texte sombre ; survol léger gris — via tokens. */
+  background: var(--light-100);
+  color: var(--text);
+  border-color: transparent;
+  transition: background 0.15s ease;
+}
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-move-btn:hover {
+  background: color-mix(in srgb, var(--light-100) 92%, var(--dark-100));
+}
+/* Badge « Started on… » → pilule pleine encre, texte inverse */
+.panel-header:is(.is-light-bg,.is-dark-bg) .now-reading-date {
+  background: var(--ink);
+  color: var(--ink-inverse);
+}
 
 .panel-close {
   position: absolute;
@@ -1920,9 +2000,13 @@
   font-family: inherit;
 }
 
-/* Hover ghost canonique : fond --ghost-hover + icône --primary-50 (dark --primary-40). */
-.panel-close:hover { background: var(--ghost-hover); color: var(--primary-50); }
-[data-theme="dark"] .panel-close:hover { color: var(--primary-40); }
+/* Close neutre (pas de primary) : fond gris neutre au survol, icône --text
+   dans les deux thèmes. Divergence assumée du hover ghost canonique (kebabs,
+   sidebar…) — un bouton de fermeture utilitaire ne doit pas se colorer marque. */
+.panel-close:hover { background: rgba(0, 0, 0, 0.06); color: var(--text); }
+.panel-close:active { background: rgba(0, 0, 0, 0.10); }
+[data-theme="dark"] .panel-close:hover { background: rgba(255, 255, 255, 0.09); }
+[data-theme="dark"] .panel-close:active { background: rgba(255, 255, 255, 0.14); }
 .panel-close svg { width: 24px; height: 24px; }
 
 .panel-cover-wrap {
@@ -1930,6 +2014,13 @@
   aspect-ratio: 2/3;
   border-radius: 8px;
   overflow: hidden;
+  /* Ombre portée neutre, ample : détache la cover du fond, effet livre posé.
+     Deux couches (large diffuse + proche) pour un rendu réaliste. overflow:hidden
+     ne clippe que les enfants, pas l'ombre propre de l'élément. */
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28), 0 8px 16px rgba(0, 0, 0, 0.16);
+}
+[data-theme="dark"] .panel-cover-wrap {
+  box-shadow: 0 26px 52px rgba(0, 0, 0, 0.6), 0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
 .panel-cover-wrap {
@@ -1964,24 +2055,6 @@
 .panel-main > .panel-cover-wrap {
   align-self: center;
 }
-/* Colonne cover + crédit source (Apple Books). align-items:center reprend le
-   centrage que .panel-main > .panel-cover-wrap assurait avant l'ajout du wrapper. */
-.panel-cover-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-.panel-cover-credit {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-3);
-  text-decoration: none;
-  transition: color 0.15s;
-}
-.panel-cover-credit:hover { color: var(--primary-50); }
-[data-theme="dark"] .panel-cover-credit:hover { color: var(--primary-40); }
 .panel-info {
   display: flex;
   flex-direction: column;
@@ -3362,6 +3435,10 @@
   inset: 0;
   z-index: 310;
   background: var(--overlay);
+  /* Flou d'arrière-plan façon Apple Books : le contenu derrière le panneau
+     flottant est dépoli. --overlay est très léger (12%) → le flou reste lisible. */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   animation: overlayIn 0.4s ease-out both;
 }
 /* Mobile: panel takes full width, no "outside" to click. The overlay then
@@ -3760,6 +3837,12 @@
     top: calc(env(safe-area-inset-top) + 61px);
     height: calc(100dvh - env(safe-area-inset-top) - 61px);
     padding-top: 0;
+    /* Annule le flottant desktop : drawer plein écran, collé, sans coins ni ombre. */
+    right: 0;
+    bottom: auto;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
   /* Panel already sits past the notch via top: above — don't re-add env(). */
   .panel-close { top: 16px; }

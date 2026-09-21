@@ -32,6 +32,9 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   // Lien Apple Books quand la couverture provient de leur store — attribution +
   // intention « drive to store » attendue par les conditions d'usage Apple.
   const [appleUrl, setAppleUrl] = useState(null);
+  // Tonalité du fond teinté du header ('light' | 'dark' | null) → encre auto
+  // (noir/blanc) en opposition, calculée depuis la luminance de la cover.
+  const [bgTone, setBgTone] = useState(null);
   const panelRef = useModalA11y(!!book, onClose, { autoFocus: false });
 
   async function handleShare() {
@@ -88,44 +91,85 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   // parenthèse, antislash, espace). Sinon pas d'écho — l'<img> reste inchangée.
   const echoCover = cover && /^https?:\/\/[^\s"'()\\]+$/.test(cover) ? cover : null;
 
+  // Encre du header en opposition au fond teinté : on échantillonne la cover
+  // (canvas), on composite avec l'opacité 0.8 de l'écho + le scrim + le bg du
+  // panneau (theme-aware), puis on seuil la luminance → 'light' (encre noire) /
+  // 'dark' (encre blanche). Fallback sur le dégradé placeholder si l'image est
+  // cross-origin non-CORS (canvas tainted) ou absente.
+  useEffect(() => {
+    if (!book) return;
+    let cancelled = false;
+    const attr = typeof document !== 'undefined' ? document.documentElement.getAttribute('data-theme') : null;
+    const isDark = attr === 'dark' || (!attr && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const panelBg = isDark ? [0.118, 0.118, 0.118] : [0.996, 0.996, 1];
+    const scrim = isDark ? { c: [8/255, 10/255, 26/255], a: 0.5 } : { c: [235/255, 237/255, 255/255], a: 0.1 };
+    const hexRgb = h => [parseInt(h.slice(1,3),16)/255, parseInt(h.slice(3,5),16)/255, parseInt(h.slice(5,7),16)/255];
+    // Seuil de bascule de l'encre. Plus proche de 1 → encre BLANCHE dans quasi
+    // tous les cas (seuls les fonds ~blancs repassent en encre noire) ; plus bas
+    // → davantage d'encre noire. 0.90 = « blanc partout sauf cover à fond blanc ».
+    const LIGHT_THRESHOLD = 0.90;
+    const decide = rgb => {
+      const mixed = rgb.map((c, i) => c * 0.8 + panelBg[i] * 0.2);
+      const fin = mixed.map((c, i) => c * (1 - scrim.a) + scrim.c[i] * scrim.a);
+      const lum = 0.299 * fin[0] + 0.587 * fin[1] + 0.114 * fin[2];
+      if (!cancelled) setBgTone(lum > LIGHT_THRESHOLD ? 'light' : 'dark');
+    };
+    const fromGradient = () => {
+      const [a, b] = coverColors(book.title);
+      const ra = hexRgb(a), rb = hexRgb(b);
+      decide([(ra[0]+rb[0])/2, (ra[1]+rb[1])/2, (ra[2]+rb[2])/2]);
+    };
+    if (echoCover && typeof document !== 'undefined') {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        try {
+          const w = 12, h = 18, cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          const ctx = cv.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const d = ctx.getImageData(0, 0, w, h).data;
+          let r = 0, g = 0, bl = 0, n = 0;
+          for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i+1]; bl += d[i+2]; n++; }
+          decide([r/n/255, g/n/255, bl/n/255]);
+        } catch { fromGradient(); }
+      };
+      img.onerror = () => fromGradient();
+      img.src = echoCover;
+    } else {
+      fromGradient();
+    }
+    return () => { cancelled = true; };
+  }, [book, echoCover]);
+
   return (
     <div className={`book-panel${book ? ' open' : ''}`} ref={panelRef} tabIndex={-1} role="dialog" aria-modal="true">
       {book && (
-        <div
-          className={`panel-inner${echoCover ? ' panel-inner--echo' : ''}`}
-          style={echoCover ? { '--panel-cover': `url("${echoCover}")` } : undefined}
-        >
+        <div className="panel-inner panel-inner--sectioned">
 
-          {/* Close button */}
-          <button className="panel-close" onClick={onClose} aria-label={t.btnClose}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
+          {/* Header — cover + primary metadata, posés sur l'écho teinté de la
+              cover. Le fond teinté est scopé à ce conteneur → séparation franche
+              avec le corps neutre en dessous. */}
+          <div
+            className={`panel-header${echoCover ? ' panel-header--echo' : ''}${bgTone === 'light' ? ' is-light-bg' : bgTone === 'dark' ? ' is-dark-bg' : ''}`}
+            style={echoCover ? { '--panel-cover': `url("${echoCover}")` } : undefined}
+          >
 
-          {/* Main — cover + info block (gap 40px between them) */}
-          <div className="panel-main">
-            <div className="panel-cover-col">
-              <div
-                className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`}
-                style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
-                {cover
-                  ? <img src={cover} alt={book.title} className="panel-cover-img" />
-                  : <span className="panel-cover-letter">{letter}</span>}
-              </div>
-              {cover && appleUrl && (
-                <a
-                  className="panel-cover-credit"
-                  href={appleUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  {t.coverViaApple || 'Cover via Apple Books'}
-                </a>
-              )}
+            {/* Close button */}
+            <button className="panel-close" onClick={onClose} aria-label={t.btnClose}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+
+            <div
+              className={`panel-cover-wrap${cover ? '' : ' panel-cover-empty'}`}
+              style={{ background: cover ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}>
+              {cover
+                ? <img src={cover} alt={book.title} className="panel-cover-img" />
+                : <span className="panel-cover-letter">{letter}</span>}
             </div>
-            <div className="panel-info">
-              <div className="panel-info-header">
                 <div className="panel-title">{book.title}</div>
                 <div className="panel-byline">
                   <div className="panel-author">{book.author}</div>
@@ -181,7 +225,9 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                     <span>{t.btnShare}</span>
                   </button>
                 </div>
-              </div>
+          </div>{/* end panel-header */}
+
+          <div className="panel-body">
               {tab === 'wishlist' && (
                 <>
                   <div className="panel-divider" />
@@ -208,6 +254,18 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                         </svg>
                         <span>{t.panelViewOnFnac}</span>
                       </a>
+                      {appleUrl && (
+                        <a
+                          href={appleUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-outline btn-md panel-find-online-btn">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                          </svg>
+                          <span>{t.panelViewOnAppleBooks}</span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </>
@@ -284,8 +342,6 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                 </div>
                 </>
               )}
-            </div>
-          </div>
 
           <div className="panel-divider" />
 
@@ -350,6 +406,8 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
               {t.btnDelete || 'Delete'}
             </button>
           </div>
+
+          </div>{/* end panel-body */}
 
         </div>
       )}

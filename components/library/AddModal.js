@@ -4,7 +4,7 @@ import GradientDropzone from "./GradientDropzone";
 import BarcodeScanner from "./BarcodeScanner";
 import BookMediaRow from "./BookMediaRow";
 import { prepareImage } from "../../lib/prepareImage";
-import { toTitleCase } from "../../lib/bookUtils";
+import { toTitleCase, setCoverInCache, appleBookSearch } from "../../lib/bookUtils";
 import { useModalA11y } from "../../lib/useModalA11y";
 
 const TABS = ['photo', 'scan', 'file', 'manual'];
@@ -109,22 +109,45 @@ export default function AddModal({ open, onClose, onAdd, onAddMany, tab, reading
     if (val.trim().length < 2) { setSuggestions([]); return; }
     debounceRef.current = setTimeout(async () => {
       try {
-        const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
-        const url = `${workerUrl}/books?q=${encodeURIComponent(val)}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        const items = (data.items || []).map(item => ({
-          title:  item.volumeInfo?.title  || '',
-          author: (item.volumeInfo?.authors || []).join(', '),
-          year:   item.volumeInfo?.publishedDate?.slice(0, 4) || '',
-        })).filter(b => b.title);
+        // Apple Books en premier, DIRECT depuis le navigateur (l'IP du Worker est
+        // rate-limitée par iTunes) → cover 600x600 + genre + synopsis + lien store,
+        // gardés pour pré-remplir le cache au pick.
+        let items = [];
+        try { items = await appleBookSearch(val, 8); } catch { items = []; }
+        if (!items.length) {
+          // Fallback Worker /search (Google Books).
+          const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL || 'https://readr-vision.pierreblavette.workers.dev';
+          const res = await fetch(`${workerUrl}/search?q=${encodeURIComponent(val)}`);
+          const data = await res.json();
+          items = (data.items || []).map(item => ({
+            title:    item.volumeInfo?.title  || '',
+            author:   (item.volumeInfo?.authors || []).join(', '),
+            year:     item.volumeInfo?.publishedDate?.slice(0, 4) || '',
+            genre:    (item.volumeInfo?.categories || [])[0] || '',
+            cover:    item.volumeInfo?.imageLinks?.thumbnail?.replace('http:', 'https:') || null,
+            synopsis: item.volumeInfo?.description || null,
+            appleUrl: item.appleUrl || null,
+          })).filter(b => b.title);
+        }
         setSuggestions(items);
       } catch { setSuggestions([]); }
     }, 300);
   }
 
   function pickSuggestion(s) {
-    onAdd({ title: s.title, author: s.author, year: s.year || null, genre: null }, { startReading: markAsReading });
+    // Pré-remplit le cache cover avec l'artwork Apple (+ synopsis + lien store)
+    // récupéré à la recherche → la carte/le panel affichent la cover Apple tout
+    // de suite, sans second lookup qui pourrait diverger.
+    if (s.cover) {
+      setCoverInCache(s.title, s.author, {
+        thumb: s.cover,
+        year: s.year || null,
+        description: s.synopsis || null,
+        appleUrl: s.appleUrl || null,
+        source: s.appleUrl ? 'applebooks' : null,
+      });
+    }
+    onAdd({ title: s.title, author: s.author, year: s.year || null, genre: s.genre || null }, { startReading: markAsReading });
     resetAndClose();
   }
 
