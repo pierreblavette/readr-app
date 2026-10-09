@@ -35,6 +35,8 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   // Tonalité du fond teinté du header ('light' | 'dark' | null) → encre auto
   // (noir/blanc) en opposition, calculée depuis la luminance de la cover.
   const [bgTone, setBgTone] = useState(null);
+  // Couleur dominante de la cover → aplat teinté du header (dégradé léger).
+  const [tint, setTint] = useState(null);
   const panelRef = useModalA11y(!!book, onClose, { autoFocus: false });
 
   async function handleShare() {
@@ -81,7 +83,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
       setSynopsis(res?.description || null);
       setAppleUrl(res?.appleUrl || null);
     });
-  }, [book]);
+  }, [book, lang]);
 
   const [c1, c2] = book ? coverColors(book.title) : ['#ccc', '#aaa'];
   const letter   = book ? coverLetter(book.title) : '';
@@ -91,47 +93,58 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
   // parenthèse, antislash, espace). Sinon pas d'écho — l'<img> reste inchangée.
   const echoCover = cover && /^https?:\/\/[^\s"'()\\]+$/.test(cover) ? cover : null;
 
-  // Encre du header en opposition au fond teinté : on échantillonne la cover
-  // (canvas), on composite avec l'opacité 0.8 de l'écho + le scrim + le bg du
-  // panneau (theme-aware), puis on seuil la luminance → 'light' (encre noire) /
-  // 'dark' (encre blanche). Fallback sur le dégradé placeholder si l'image est
-  // cross-origin non-CORS (canvas tainted) ou absente.
+  // Couleur DOMINANTE de la cover → aplat teinté du header (+ léger dégradé côté
+  // CSS). On en déduit aussi la tonalité (encre noire/blanche) via la luminance.
+  // Fallback sur le dégradé placeholder si l'image est cross-origin non-CORS
+  // (canvas tainted) ou absente.
   useEffect(() => {
     if (!book) return;
     let cancelled = false;
-    const attr = typeof document !== 'undefined' ? document.documentElement.getAttribute('data-theme') : null;
-    const isDark = attr === 'dark' || (!attr && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    const panelBg = isDark ? [0.118, 0.118, 0.118] : [0.996, 0.996, 1];
-    const scrim = isDark ? { c: [8/255, 10/255, 26/255], a: 0.5 } : { c: [235/255, 237/255, 255/255], a: 0.1 };
-    const hexRgb = h => [parseInt(h.slice(1,3),16)/255, parseInt(h.slice(3,5),16)/255, parseInt(h.slice(5,7),16)/255];
-    // Seuil de bascule de l'encre. Plus proche de 1 → encre BLANCHE dans quasi
-    // tous les cas (seuls les fonds ~blancs repassent en encre noire) ; plus bas
-    // → davantage d'encre noire. 0.90 = « blanc partout sauf cover à fond blanc ».
-    const LIGHT_THRESHOLD = 0.90;
-    const decide = rgb => {
-      const mixed = rgb.map((c, i) => c * 0.8 + panelBg[i] * 0.2);
-      const fin = mixed.map((c, i) => c * (1 - scrim.a) + scrim.c[i] * scrim.a);
-      const lum = 0.299 * fin[0] + 0.587 * fin[1] + 0.114 * fin[2];
-      if (!cancelled) setBgTone(lum > LIGHT_THRESHOLD ? 'light' : 'dark');
+    const toHex = (r, g, b) =>
+      '#' + [r, g, b].map(x => Math.round(Math.max(0, Math.min(255, x))).toString(16).padStart(2, '0')).join('');
+    // Luminance relative (WCAG). On choisit ensuite l'encre (noir/blanc) qui
+    // MAXIMISE le contraste avec le fond — lisible sur toute cover, sans seuil
+    // arbitraire. Croisement ~luminance 0.18 : au-dessus → encre noire, en
+    // dessous → encre blanche.
+    const relLum = (r, g, b) => {
+      const f = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+      return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+    };
+    const apply = (r, g, b) => {
+      if (cancelled) return;
+      setTint(toHex(r, g, b));
+      const L = relLum(r, g, b);
+      const cWhite = 1.05 / (L + 0.05);       // contraste avec du blanc
+      const cBlack = (L + 0.05) / 0.05;        // contraste avec du noir
+      setBgTone(cBlack >= cWhite ? 'light' : 'dark'); // 'light' = encre noire
     };
     const fromGradient = () => {
-      const [a, b] = coverColors(book.title);
-      const ra = hexRgb(a), rb = hexRgb(b);
-      decide([(ra[0]+rb[0])/2, (ra[1]+rb[1])/2, (ra[2]+rb[2])/2]);
+      const [a] = coverColors(book.title); // 1re couleur du dégradé placeholder
+      apply(parseInt(a.slice(1,3),16), parseInt(a.slice(3,5),16), parseInt(a.slice(5,7),16));
     };
     if (echoCover && typeof document !== 'undefined') {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
         try {
-          const w = 12, h = 18, cv = document.createElement('canvas');
+          const w = 24, h = 36, cv = document.createElement('canvas');
           cv.width = w; cv.height = h;
           const ctx = cv.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
           const d = ctx.getImageData(0, 0, w, h).data;
-          let r = 0, g = 0, bl = 0, n = 0;
-          for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i+1]; bl += d[i+2]; n++; }
-          decide([r/n/255, g/n/255, bl/n/255]);
+          // Dominante : quantification en cubes (>>4), on garde le bucket le plus peuplé.
+          const map = new Map();
+          for (let i = 0; i < d.length; i += 4) {
+            if (d[i+3] < 128) continue;
+            const r = d[i], g = d[i+1], b = d[i+2];
+            const key = (r >> 4) + ',' + (g >> 4) + ',' + (b >> 4);
+            const e = map.get(key) || { r: 0, g: 0, b: 0, n: 0 };
+            e.r += r; e.g += g; e.b += b; e.n++; map.set(key, e);
+          }
+          let best = null;
+          for (const e of map.values()) if (!best || e.n > best.n) best = e;
+          if (best) apply(best.r / best.n, best.g / best.n, best.b / best.n);
+          else fromGradient();
         } catch { fromGradient(); }
       };
       img.onerror = () => fromGradient();
@@ -151,8 +164,8 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
               cover. Le fond teinté est scopé à ce conteneur → séparation franche
               avec le corps neutre en dessous. */}
           <div
-            className={`panel-header${echoCover ? ' panel-header--echo' : ''}${bgTone === 'light' ? ' is-light-bg' : bgTone === 'dark' ? ' is-dark-bg' : ''}`}
-            style={echoCover ? { '--panel-cover': `url("${echoCover}")` } : undefined}
+            className={`panel-header${tint ? ' panel-header--echo' : ''}${bgTone === 'light' ? ' is-light-bg' : bgTone === 'dark' ? ' is-dark-bg' : ''}`}
+            style={tint ? { '--panel-tint': tint } : undefined}
           >
 
             {/* Close button */}
@@ -228,9 +241,17 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
           </div>{/* end panel-header */}
 
           <div className="panel-body">
+              {/* About / synopsis — première section pour tous les livres */}
+              <div className="panel-section">
+                <span className="panel-section-eyebrow">{t.aboutSectionTitle}</span>
+                {synopsis
+                  ? <div className="panel-synopsis">{synopsis}</div>
+                  : <div className="panel-empty-text">No synopsis available.</div>
+                }
+              </div>
+              <div className="panel-divider" />
               {tab === 'wishlist' && (
                 <>
-                  <div className="panel-divider" />
                   <div className="panel-section">
                     <span className="panel-section-eyebrow">{t.panelFindOnline}</span>
                     <div className="panel-find-online-list">
@@ -270,7 +291,6 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
                   </div>
                 </>
               )}
-              <div className="panel-divider" />
               <div className="panel-collections-section">
                 <div className="panel-section">
                   <span className="panel-section-eyebrow">{t.panelCollectionsSection}</span>
@@ -361,19 +381,9 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
             </>
           )}
 
-          {/* About section */}
-          <div className="panel-section">
-            <span className="panel-section-eyebrow">{t.aboutSectionTitle}</span>
-            {synopsis
-              ? <div className="panel-synopsis">{synopsis}</div>
-              : <div className="panel-empty-text">No synopsis available.</div>
-            }
-          </div>
-
           {/* Quotes section — owned books only (no sense for wishlist) */}
           {tab !== 'wishlist' && (
             <>
-              <div className="panel-divider" />
               <div className="panel-quotes">
                 <div className="panel-quotes-content">
                   <span className="panel-section-eyebrow">{t.tabQuotes || 'Quotes'}</span>
@@ -402,6 +412,7 @@ export default function BookPanel({ book, tab, onClose, onDelete, onMoveToLibrar
           {/* Footer actions — Delete only (Move to Library now lives in
               .panel-header-actions next to the other primary actions) */}
           <div className="panel-actions">
+            <span className="panel-section-eyebrow">{t.dangerZone || 'Danger zone'}</span>
             <button className="panel-delete-btn" onClick={() => { onDelete(book); onClose(); }}>
               {t.btnDelete || 'Delete'}
             </button>

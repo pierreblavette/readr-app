@@ -2,7 +2,7 @@
 import "./library.css";
 import { useState, useEffect } from "react";
 import { useLibrary, MAX_READING } from "@/lib/useLibrary";
-import { preloadKnownCovers } from "@/lib/bookUtils";
+import { preloadKnownCovers, setCoverLang } from "@/lib/bookUtils";
 import Sidebar       from "@/components/Sidebar";
 import AppToolbar    from "@/components/library/AppToolbar";
 import SearchBar     from "@/components/library/SearchBar";
@@ -113,6 +113,9 @@ export default function LibraryPage() {
     readingGoal, setReadingGoal,
     sidebarCollapsed, toggleSidebarCollapsed,
   } = lib;
+
+  // La langue de l'app pilote le store Apple + la clé de cache des covers/synopsis.
+  setCoverLang(lang);
 
   const isOverview = tab === 'overview';
   const isCollections = tab === 'collections';

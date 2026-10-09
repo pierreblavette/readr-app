@@ -263,7 +263,7 @@
 .main-wrap {
   flex: 1;
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 64px 40px 100px;
   transition: margin-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -907,7 +907,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  gap: 48px 32px;
 }
 
 /* ─── NOW READING SECTION ─── */
@@ -1084,12 +1084,10 @@
 [data-theme="dark"] .dropdown-item.is-destructive:hover { background: var(--alert-bg); }
 
 /* ─── BOOK CARD ─── */
+/* Cover-forward (façon prose.audio) : plus de fond/bordure de carte, quel que
+   soit le state. Le hover vit sur la COVER (léger voile) + titre souligné. La
+   sélection s'appuie sur la checkbox posée sur la cover. */
 .book-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1.5px solid var(--border-subtle);
-  transition: transform 0.22s ease, border-color 0.22s;
   animation: fadeUp 0.28s ease both;
   cursor: pointer;
   position: relative;
@@ -1100,23 +1098,11 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.book-card:hover {
-  border-color: var(--primary-50);
-  background: var(--primary-3);
-}
-
-[data-theme="dark"] .book-card:hover { border-color: var(--primary-50); background: var(--primary-3); }
-
-.book-card.selected {
-  border-color: var(--primary-50);
-  background: var(--primary-5);
-  box-shadow: 0 0 0 3px var(--focus-ring);
-}
-
-[data-theme="dark"] .book-card.selected {
-  border-color: var(--primary-50);
-  background: var(--primary-3);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+/* Hover : voile sur la cover + titre souligné. */
+.book-card:hover .book-cover::after { background: rgba(0, 0, 0, 0.14); }
+.book-card:hover .book-title {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .book-cover {
@@ -1132,6 +1118,52 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  /* Effet livre 3D (même langage que le book panel) : radius asymétrique
+     (reliure à gauche plus serrée) + ombre portée pour faire flotter la cover
+     hors de la carte devenue transparente. */
+  border-radius: 2px 4px 4px 2px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.075);
+}
+
+/* Reliure (dos + double reflet + pli) sur le bord gauche — repris du book
+   panel, écarté du shimmer placeholder (pas de dos sur une cover vide). */
+.book-cover:not(.book-cover-placeholder)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 14%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.4;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.28) 3%,
+    rgba(0, 0, 0, 0.42) 9%,
+    rgba(0, 0, 0, 0.16) 32%,
+    rgba(0, 0, 0, 0.02) 40%,
+    rgba(255, 255, 255, 0.32) 46%,
+    rgba(255, 255, 255, 0.32) 48%,
+    rgba(0, 0, 0, 0.02) 54%,
+    rgba(0, 0, 0, 0.24) 60%,
+    rgba(0, 0, 0, 0.24) 62%,
+    rgba(0, 0, 0, 0) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/* Voile de survol — transparent au repos, s'assombrit légèrement au hover
+   (piloté par .book-card:hover plus haut). Couche au-dessus de l'image. */
+.book-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.2s ease;
 }
 
 /* Cover zone — skeleton shimmer pendant le chargement de l'image. Gradient
@@ -1176,7 +1208,7 @@
   background: rgba(0,0,0,0.20);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 2;
+  z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1208,9 +1240,10 @@
 .book-card.selected .card-checkbox svg,
 .col-card.selected .card-checkbox svg { opacity: 1; }
 
-/* Card body */
+/* Card body — carte sans fond : le texte s'aligne sur les bords de la cover
+   (pas de padding latéral), juste un espace au-dessus. */
 .book-body {
-  padding: 8px 8px 16px 16px;
+  padding: 20px 0 0;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -1222,7 +1255,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-top: 8px;
+  padding-top: 0;
 }
 .book-card .col-card-kebab { flex-shrink: 0; }
 
@@ -1262,27 +1295,16 @@
 
 /* Suppress hover flash on touch devices (invisible on desktop) */
 @media (hover: none) {
-  .book-card:hover {
-    transform: none;
-    border-color: var(--border-subtle);
-    background: var(--card);
-    box-shadow: none;
-  }
-  [data-theme="dark"] .book-card:hover {
-    border-color: var(--border-subtle);
-    background: transparent;
-  }
+  .book-card:hover .book-cover::after { background: rgba(0, 0, 0, 0); }
+  .book-card:hover .book-title { text-decoration: none; }
 }
 
-/* Focus-visible ring (keyboard navigation only) */
-.book-card:focus-visible {
-  outline: none;
-  border-color: var(--primary-50);
-  box-shadow: 0 0 0 3px var(--focus-ring);
-}
-[data-theme="dark"] .book-card:focus-visible {
-  border-color: var(--primary-50);
-  box-shadow: 0 0 0 3px var(--focus-ring);
+/* Focus-visible ring (keyboard) — porté par la cover, puisque la carte n'a
+   plus de bord. Conserve l'ombre livre + anneau de focus. */
+.book-card:focus-visible { outline: none; }
+.book-card:focus-visible .book-cover {
+  outline: 2.5px solid var(--primary-50);
+  outline-offset: 2px;
 }
 /* Extended touch targets (visuellement invisible, zone tappable augmentée) */
 .card-checkbox::before {
@@ -1820,7 +1842,9 @@
   background: var(--bg);
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
-  box-shadow: var(--shadow-xl);
+  /* box-shadow uniquement à l'ouverture : fermé, le panneau est parqué hors
+     écran à droite et son ombre teintée (--shadow-xl, primary, blur 40px)
+     déborderait dans le viewport (band violet au bord droit). Voir .open. */
   transform: translateX(calc(100% + 24px));
   transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 320;
@@ -1849,7 +1873,7 @@
   border-radius: 0;
 }
 
-.book-panel.open { transform: translateX(0); }
+.book-panel.open { transform: translateX(0); box-shadow: var(--shadow-xl); }
 
 [data-theme="dark"] .book-panel {
   background: var(--bg);
@@ -1898,37 +1922,21 @@
 
 /* Corps neutre (tout le reste) : même padding que le header. */
 .panel-body {
-  padding: 96px 32px 72px;
+  padding: 48px 32px 40px;
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
 
-/* ─── Écho flouté de la cover, scopé au header ───────────────────────────────
-   ::before = pochette floutée ; ::after = scrim. inset:0 → remplit le header ;
-   l'overflow:hidden du header donne l'arête franche (plus de mask). */
-.panel-header--echo::before,
-.panel-header--echo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-.panel-header--echo::before {
-  background-image: var(--panel-cover);
-  background-size: cover;
-  background-position: center 20%;
-  filter: blur(28px) saturate(2);
-  transform: scale(1.15);
-  transform-origin: top center;
-  opacity: 0.8;
-}
-.panel-header--echo::after {
-  background: rgba(235,237,255,0.1);
-}
-[data-theme="dark"] .panel-header--echo::after {
-  background: rgba(8,10,26,0.5);
+/* ─── Fond teinté du header : aplat de la couleur dominante de la cover ───────
+   --panel-tint = dominante (posée par BookPanel). Léger dégradé de haut en bas :
+   haut légèrement éclairci (20% blanc), bas = couleur dominante pleine. */
+.panel-header--echo {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--panel-tint) 80%, #fff),
+    var(--panel-tint)
+  );
 }
 
 /* ─── Encre auto-contrastée du header ────────────────────────────────────────
@@ -1936,11 +1944,11 @@
    teinté → texte + boutons + badge en noir ou blanc PUR, en opposition. */
 .panel-header.is-light-bg {
   --ink: var(--dark-100); --ink-inverse: var(--light-100);
-  --ink-soft: rgba(0,0,0,0.62); --ink-line: rgba(0,0,0,0.28);
+  --ink-soft: rgba(0,0,0,0.62); --ink-line: rgba(0,0,0,0.15);
 }
 .panel-header.is-dark-bg {
   --ink: var(--light-100); --ink-inverse: var(--dark-100);
-  --ink-soft: rgba(255,255,255,0.76); --ink-line: rgba(255,255,255,0.42);
+  --ink-soft: rgba(255,255,255,0.76); --ink-line: rgba(255,255,255,0.25);
 }
 .panel-header:is(.is-light-bg,.is-dark-bg) .panel-title { color: var(--ink); }
 .panel-header:is(.is-light-bg,.is-dark-bg) .panel-author,
@@ -1963,17 +1971,26 @@
   border-color: var(--ink);
   background: transparent;
 }
+/* Cancel reading (secondary) : voile d'ENCRE (noir sur fond clair, blanc sur
+   fond sombre) à 0.1 au repos, 0.2 au survol → toujours visible. */
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-actions .btn-secondary {
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.panel-header:is(.is-light-bg,.is-dark-bg) .panel-header-actions .btn-secondary:hover {
+  background: color-mix(in srgb, var(--ink) 20%, transparent);
+}
 /* CTA primaire (Start / Finish / Move) → pilule encre givrée : opacité 0.7 +
    fond flou (backdrop) au repos, pleine opacité au survol. */
 .panel-header:is(.is-light-bg,.is-dark-bg) .panel-move-btn {
-  /* Pilule blanche pleine, texte sombre ; survol léger gris — via tokens. */
-  background: var(--light-100);
-  color: var(--text);
+  /* Pilule contrastée : encre pleine + texte inverse → sombre sur fond clair,
+     claire sur fond sombre. Le CTA ressort dans les deux cas. */
+  background: var(--ink);
+  color: var(--ink-inverse);
   border-color: transparent;
   transition: background 0.15s ease;
 }
 .panel-header:is(.is-light-bg,.is-dark-bg) .panel-move-btn:hover {
-  background: color-mix(in srgb, var(--light-100) 92%, var(--dark-100));
+  background: color-mix(in srgb, var(--ink) 85%, var(--ink-inverse));
 }
 /* Badge « Started on… » → pilule pleine encre, texte inverse */
 .panel-header:is(.is-light-bg,.is-dark-bg) .now-reading-date {
@@ -2030,6 +2047,57 @@
 }
 .panel-cover-empty { background: var(--primary-10); }
 [data-theme="dark"] .panel-cover-empty { background: var(--primary-3); }
+
+/* ─── Effet livre 3D — UNIQUEMENT dans le book panel ─────────────────────────
+   Reliure/dos à gauche + tranche de pages à droite + coins asymétriques (dos
+   serré, ouverture arrondie). Overlays internes (clippés par overflow:hidden). */
+.panel-header .panel-cover-wrap {
+  position: relative;
+  border-radius: 2px 4px 4px 2px;
+}
+.panel-header .panel-cover-wrap::before,
+.panel-header .panel-cover-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.8; /* effet reliure global à -20% */
+}
+/* Dos / reliure à gauche : lignes FINES et nettes (pas de dégradé large qui
+   arrondit) → dos sombre, arête relevée (reflet fin), ligne de PLI, puis
+   couverture plate. Rendu plat façon reliure. */
+.panel-header .panel-cover-wrap::before {
+  left: 0;
+  width: 14%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.28) 0%,  /* 1er reflet — bord extrême gauche */
+    rgba(255, 255, 255, 0.28) 3%,
+    rgba(0, 0, 0, 0.42) 9%,        /* dos sombre */
+    rgba(0, 0, 0, 0.16) 32%,
+    rgba(0, 0, 0, 0.02) 40%,
+    rgba(255, 255, 255, 0.32) 46%, /* 2e reflet — arête relevée */
+    rgba(255, 255, 255, 0.32) 48%,
+    rgba(0, 0, 0, 0.02) 54%,
+    rgba(0, 0, 0, 0.24) 60%,       /* PLI / charnière — ligne fine */
+    rgba(0, 0, 0, 0.24) 62%,
+    rgba(0, 0, 0, 0) 70%,          /* couverture plate */
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+/* Tranche de pages à droite : fine ombre de profondeur. */
+.panel-header .panel-cover-wrap::after {
+  right: 0;
+  width: 5%;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.20) 0%,
+    rgba(0, 0, 0, 0.04) 55%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
 
 .panel-cover-img {
   width: 100%;
@@ -2097,6 +2165,7 @@
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+  padding-top: 12px;
 }
 /* Groups primary actions (e.g. Mark as finished + Cancel reading) as a single
    unit inside .panel-header-actions, so Share stays aligned right via its
@@ -2610,6 +2679,15 @@
   width: 100%;
   gap: 12px;
   flex-wrap: wrap;
+}
+/* Danger zone (BookPanel) : même archi que les autres sections — eyebrow au-dessus
+   du bouton, colonne, gap 16, aligné à gauche. Scopé au body pour ne pas toucher
+   les .panel-actions du QuotePanel. */
+.panel-body .panel-actions {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
 }
 
 .panel-move-btn {
@@ -3844,6 +3922,8 @@
     border-radius: 0;
     box-shadow: none;
   }
+  /* Drawer plein écran : pas d'ombre flottante même ouvert (surclasse .open). */
+  .book-panel.open { box-shadow: none; }
   /* Panel already sits past the notch via top: above — don't re-add env(). */
   .panel-close { top: 16px; }
 
